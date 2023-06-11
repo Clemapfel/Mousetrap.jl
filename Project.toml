@@ -1,0 +1,8 @@
+name = "mousetrap"
+uuid = "5deeb4b9-6e04-4da7-8b7f-c77fb1eae65e"
+authors = ["clem <mail@clemens-cords.com>"]
+version = "0.1.0"
+
+[deps]
+CxxWrap = "1f15a43c-97ca-5a2a-ae31-89f07a497df4"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
