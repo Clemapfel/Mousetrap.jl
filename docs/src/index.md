@@ -1,0 +1,5 @@
+# Test
+
+```@docs
+mousetrap.TypedFunction
+```

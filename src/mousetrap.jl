@@ -1,11 +1,8 @@
-@info "Compiling module `mousetrap`..."
-__mousetrap_compile_time_start = time()
-
 module mousetrap
 
 ####### detail.jl
 
-    @info "Importing `libmousetrap_julia_binding.so`..."
+    @info "Importing `mousetrap_julia_binding` shared library..."
     __cxxwrap_compile_time_start = time()
 
     module detail
