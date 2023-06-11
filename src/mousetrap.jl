@@ -5,13 +5,13 @@ module mousetrap
 
 ####### detail.jl
 
-    @info "Importing `libmousetrap.so`..."
+    @info "Importing `libmousetrap_julia_binding.so`..."
     __cxxwrap_compile_time_start = time()
 
     module detail
-        using CxxWrap
+        using CxxWrap, Pkg.Artifacts
         function __init__() @initcxx end
-        @wrapmodule("libjulia_binding.so")
+        @wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
     end
 
     @info "Done (" * string(round(time() - __cxxwrap_compile_time_start; digits=2)) * "s)"
@@ -92,30 +92,30 @@ module mousetrap
 
     const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN
 
-    macro debug(domain, message)
+    macro log_debug(domain, message)
         return :(mousetrap.detail.log_debug($message, $domain))
     end
-    export debug
+    export log_debug
 
-    macro info(domain, message)
+    macro log_info(domain, message)
         return :(mousetrap.detail.log_info($message, $domain))
     end
-    export info
+    export log_info
 
-    macro warning(domain, message)
+    macro log_warning(domain, message)
         return :(mousetrap.detail.log_warning($message, $domain))
     end
-    export warning
+    export log_warning
 
-    macro critical(domain, message)
+    macro log_critical(domain, message)
         return :(mousetrap.detail.log_critical($message, $domain))
     end
-    export critical
+    export log_critical
 
-    macro fatal(domain, message)
+    macro log_fatal(domain, message)
         return :(mousetrap.detail.log_fatal($message, $domain))
     end
-    export fatal
+    export log_fatal
 
     set_surpress_debug(domain::LogDomain, b::Bool) = detail.log_set_surpress_debug(domain, b)
     export set_surpress_debug
@@ -396,7 +396,7 @@ module mousetrap
         end
     end
 
-    function Base.setproperty!(v::Vector2{T}, symbol::Symbol, value) where T
+    function Base.setproperty!(v::Vector3{T}, symbol::Symbol, value) where T
         if symbol == :x
             v[1] = convert(T, value)
         elseif symbol == :y
@@ -1001,7 +1001,7 @@ module mousetrap
     macro add_signal_swipe(x) return :(@add_signal $x swipe Cvoid Cdouble x_velocity Cdouble y_velocity) end
     macro add_signal_pan(x) return :(@add_signal $x pan Cvoid PanDirection direction Cdouble offset) end
     macro add_signal_paint(x) return :(@add_signal $x paint Cvoid) end
-    macro add_signal_update(x) return :(@add_signal $x paint Cvoid) end
+    macro add_signal_update(x) return :(@add_signal $x update Cvoid) end
     macro add_signal_value_changed(x) return :(@add_signal $x value_changed Cvoid) end
     macro add_signal_wrapped(x) return :(@add_signal $x wrapped Cvoid) end
     macro add_signal_scroll_child(x) return :(@add_signal $x scroll_child Cvoid ScrollType type Bool is_horizontal) end
@@ -2474,9 +2474,7 @@ module mousetrap
     @export_function TextView get_left_margin Cfloat
     @export_function TextView set_right_margin! Cvoid AbstractFloat margin
     @export_function TextView get_right_margin Cfloat
-    @export_function TextView set_left_margin! Cvoid AbstractFloat margin
-    @export_function TextView get_top_margin Cfloat
-    @export_function TextView set_left_margin! Cvoid AbstractFloat margin
+    @export_function TextView set_top_margin! Cvoid AbstractFloat margin
     @export_function TextView get_top_margin Cfloat
     @export_function TextView set_bottom_margin! Cvoid AbstractFloat margin
     @export_function TextView get_bottom_margin Cfloat
@@ -2815,13 +2813,10 @@ module mousetrap
     export shift_pressed
 
     control_pressed(modifier_state::ModifierState) ::Bool = return detail.control_pressed(modifier_state);
-    export shift_pressed
+    export control_pressed
 
     alt_pressed(modifier_state::ModifierState) ::Bool = return detail.alt_pressed(modifier_state);
     export alt_pressed
-
-    shift_pressed(modifier_state::ModifierState) ::Bool = return detail.shift_pressed(modifier_state);
-    export shift_pressed
 
     mouse_button_01_pressed(modifier_state::ModifierState) ::Bool = return detail.mouse_button_01_pressed(modifier_state);
     export mouse_button_01_pressed
@@ -3129,7 +3124,8 @@ module mousetrap
     @export_function Grid set_row_spacing! Cvoid AbstractFloat spacing
     @export_function Grid get_column_spacing Cfloat
     @export_function Grid set_column_spacing! Cvoid AbstractFloat spacing
-    @export_function Grid get_column_spacing Cfloat
+    @export_function Grid get_row_spacing Cfloat
+    @export_function Grid set_row_spacing! Cvoid AbstractFloat spacing
     @export_function Grid set_rows_homogeneous! Cvoid Bool b
     @export_function Grid get_rows_homogeneous Bool
     @export_function Grid set_columns_homogeneous! Cvoid Bool b
@@ -3312,7 +3308,7 @@ module mousetrap
     function push_back_row!(column_view::ColumnView, widgets::Widget...)
 
         if length(widgets) > get_n_columns(column_view)
-            @warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
+            @log_warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
         end
 
         row_i = get_n_rows(column_view)
@@ -3326,7 +3322,7 @@ module mousetrap
     function push_front_row!(column_view::ColumnView, widgets::Widget...)
 
         if length(widgets) > get_n_columns(column_view)
-            @warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
+            @log_warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
         end
 
         row_i = 1
@@ -3340,7 +3336,7 @@ module mousetrap
     function insert_row!(column_view::ColumnView, index::Integer, widgets::Widget...)
 
         if length(widgets) > get_n_columns(column_view)
-            @warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
+            @log_warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
         end
 
         row_i = index
@@ -4260,17 +4256,3 @@ module mousetrap
 end # module mousetrap
 
 @info "Done (" * string(round(time() - __mousetrap_compile_time_start; digits=2)) * "s)"
-
-mt = mousetrap
-mt.main() do app::mt.Application
-
-    window = mt.Window(app)
-
-    spin_button = mt.SpinButton(0.0, 1.0, 0.01)
-    mt.connect_signal_value_changed!(spin_button) do x::mt.SpinButton
-        println(mt.get_value(x))
-    end
-
-    mt.set_child!(window, spin_button)
-    mt.present!(window)
-end
