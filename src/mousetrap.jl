@@ -79,9 +79,6 @@ module mousetrap
     abstract type Widget <: SignalEmitter end
     export Widget
 
-    abstract type EventController <: SignalEmitter end
-    export EventController
-
 ####### log.jl
 
     const LogDomain = String;
@@ -331,13 +328,6 @@ module mousetrap
 
     using StaticArrays
 
-    """
-    # Vector2{T}
-
-    ## Public Fields
-    x::T
-    y::T
-    """
     const Vector2{T} = SVector{2, T}
     export Vector2
 
@@ -373,14 +363,6 @@ module mousetrap
     const Vector2ui = Vector2{Csize_t}
     export Vector2ui
 
-    """
-    # Vector3{T}
-
-    ## Public Fields
-    x::T
-    y::T
-    z::T
-    """
     const Vector3{T} = SVector{3, T}
     export Vector3
 
@@ -420,15 +402,6 @@ module mousetrap
     const Vector3ui = Vector3{Csize_t}
     export Vector3ui
 
-    """
-    # Vector4{T}
-
-    ## Public Fields
-    x::T
-    y::T
-    z::T
-    w::T
-    """
     const Vector4{T} = SVector{4, T}
     export Vector4
 
@@ -1916,7 +1889,7 @@ module mousetrap
 
     is_valid_html_code(code::String) ::Bool = return detail.is_valid_html_code(code)
     export is_valid_html_code
-    
+
 ####### icon.jl
 
     @export_type Icon
@@ -1932,7 +1905,7 @@ module mousetrap
 
     @export_function Icon create_from_file! Bool String path
 
-    function create_from_theme!(icon::Icon, theme::IconTheme, id::IconID, square_resolution::Integer, scale::Integer = 1)
+    function create_from_theme!(icon::Icon, theme::IconTheme, id::IconID, square_resolution::Integer, scale::Integer = 1) ::Bool
         detail.create_from_theme!(icon._internal, theme._internal.cpp_object, id, UInt64(square_resolution), UInt64(scale))
     end
     export create_from_theme!
