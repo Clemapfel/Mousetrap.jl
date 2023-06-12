@@ -76,10 +76,10 @@ module mousetrap
     abstract type SignalEmitter end
     export SignalEmitter
 
-    abstract type Widget end
+    abstract type Widget <: SignalEmitter end
     export Widget
 
-    abstract type EventController end
+    abstract type EventController <: SignalEmitter end
     export EventController
 
 ####### log.jl
@@ -126,7 +126,7 @@ module mousetrap
     get_surpress_info(domain::LogDomain) ::Bool = detail.log_get_surpress_info(domain, b)
     export set_surpress_info
 
-    set_log_file(path::String) = detail.log_set_file(path)
+    set_log_file(path::String) ::Bool = detail.log_set_file(path)
     export set_log_file
 
 ####### common.jl
@@ -341,6 +341,9 @@ module mousetrap
     const Vector2{T} = SVector{2, T}
     export Vector2
 
+    Vector2{T}(x::T, y::T) where T = Vector2{T}(x, y)
+    Vector2{T}(all::T) where T = Vector2{T}(all, all)
+
     function Base.getproperty(v::Vector2{T}, symbol::Symbol) where T
         if symbol == :x
             return v[1]
@@ -380,6 +383,9 @@ module mousetrap
     """
     const Vector3{T} = SVector{3, T}
     export Vector3
+
+    Vector3{T}(x::T, y::T, z::T) where T = Vector3{T}(x, y, z)
+    Vector3{T}(all::T) where T = Vector3{T}(all, all, all)
 
     function Base.getproperty(v::Vector3{T}, symbol::Symbol) where T
         if symbol == :x
@@ -425,6 +431,9 @@ module mousetrap
     """
     const Vector4{T} = SVector{4, T}
     export Vector4
+
+    Vector3{T}(x::T, y::T, z::T, w::T) where T = Vector4{T}(x, y, z, w)
+    Vector4{T}(all::T) where T = Vector4{T}(all, all, all, all)
 
     function Base.getproperty(v::Vector4{T}, symbol::Symbol) where T
         if symbol == :x
@@ -565,10 +574,10 @@ module mousetrap
     radians(x::Number) = return Angle(convert(Cfloat, x))
     export radians
 
-    as_degrees(angle::Angle) = return rad2deg(angle._rads)
+    as_degrees(angle::Angle) ::Cdouble = return rad2deg(angle._rads)
     export as_degrees
 
-    as_radians(angle::Angle) = return angle._rads
+    as_radians(angle::Angle) ::Cdouble = return angle._rads
     export as_radians
 
     import Base: +
@@ -890,41 +899,54 @@ module mousetrap
     macro add_signal_activate_default_widget(x) return :(@add_signal $x activate_default_widget Cvoid) end
     macro add_signal_activate_focused_widget(x) return :(@add_signal $x activate_focused_widget Cvoid) end
     macro add_signal_close_request(x) return :(@add_signal $x close_request WindowCloseRequestResult) end
-    macro add_signal_items_changed(x) return :(@add_signal $x items_changed Cvoid Int32 position Int32 n_removed Int32 n_added) end
+    macro add_signal_items_changed(x) return :(@add_signal $x items_changed Cvoid Integer position Integer n_removed Integer n_added) end
     macro add_signal_closed(x) return :(@add_signal $x closed Cvoid) end
     macro add_signal_text_changed(x) return :(@add_signal $x text_changed Cvoid) end
     # macro add_signal_redo(x) return :(@add_signal $x redo Cvoid) end
     # macro add_signal_undo(x) return :(@add_signal $x undo Cvoid) end
-    macro add_signal_drag_begin(x) return :(@add_signal $x drag_begin Cvoid Cdouble start_x Cdouble start_y) end
-    macro add_signal_drag(x) return :(@add_signal $x drag Cvoid Cdouble offset_x Cdouble offset_y) end
-    macro add_signal_drag_end(x) return :(@add_signal $x drag_end Cvoid Cdouble offset_x Cdouble offset_y) end
-    macro add_signal_click_pressed(x) return :(@add_signal $x click_pressed Cvoid Cint n_press Cdouble x Cdouble y) end
-    macro add_signal_click_released(x) return :(@add_signal $x click_released Cvoid Cint n_press Cdouble x Cdouble y) end
+    
+    macro add_signal_drag_begin(x) return :(@add_signal $x drag_begin Cvoid AbstractFloat start_x AbstractFloat start_y) end
+    macro add_signal_drag(x) return :(@add_signal $x drag Cvoid AbstractFloat offset_x AbstractFloat offset_y) end
+    macro add_signal_drag_end(x) return :(@add_signal $x drag_end Cvoid AbstractFloat offset_x AbstractFloat offset_y) end
+    
+    macro add_signal_click_pressed(x) return :(@add_signal $x click_pressed Cvoid Integer n_press AbstractFloat x AbstractFloat y) end
+    macro add_signal_click_released(x) return :(@add_signal $x click_released Cvoid Integer n_press AbstractFloat x AbstractFloat y) end
     macro add_signal_click_stopped(x) return :(@add_signal $x click_stopped Cvoid) end
+    
     macro add_signal_focus_gained(x) return :(@add_signal $x focus_gained Cvoid) end
     macro add_signal_focus_lost(x) return :(@add_signal $x focus_lost Cvoid) end
-    macro add_signal_pressed(x) return :(@add_signal $x pressed Cvoid Cdouble x Cdouble y) end
+
+    macro add_signal_pressed(x) return :(@add_signal $x pressed Cvoid AbstractFloat x AbstractFloat y) end
     macro add_signal_press_cancelled(x) return :(@add_signal $x press_cancelled Cvoid) end
-    macro add_signal_motion_enter(x) return :(@add_signal $x motion_enter Cvoid Cdouble x Cdouble y) end
-    macro add_signal_motion(x) return :(@add_signal $x motion Cvoid Cdouble x Cdouble y) end
+    
+    macro add_signal_motion_enter(x) return :(@add_signal $x motion_enter Cvoid AbstractFloat x AbstractFloat y) end
+    macro add_signal_motion(x) return :(@add_signal $x motion Cvoid AbstractFloat x AbstractFloat y) end
     macro add_signal_motion_leave(x) return :(@add_signal $x motion_leave Cvoid) end
-    macro add_signal_scale_changed(x) return :(@add_signal $x scale_changed Cvoid Cdouble scale) end
-    macro add_signal_rotation_changed(x) return :(@add_signal $x rotation_changed Cvoid Cdouble angle_absolute_rads Cdouble angle_delta_rads) end
-    macro add_signal_kinetic_scroll_decelerate(x) return :(@add_signal $x scroll_decelerate Cvoid Cdouble x_velocity Cdouble y_velocity) end
+    
+    macro add_signal_scale_changed(x) return :(@add_signal $x scale_changed Cvoid AbstractFloat scale) end
+    macro add_signal_rotation_changed(x) return :(@add_signal $x rotation_changed Cvoid AbstractFloat angle_absolute_rads AbstractFloat angle_delta_rads) end
+    
+    macro add_signal_kinetic_scroll_decelerate(x) return :(@add_signal $x scroll_decelerate Cvoid AbstractFloat x_velocity AbstractFloat y_velocity) end
     macro add_signal_scroll_begin(x) return :(@add_signal $x scroll_begin Cvoid) end
-    macro add_signal_scroll(x) return :(@add_signal $x scroll Bool Cdouble delta_x Cdouble delta_y) end
+    macro add_signal_scroll(x) return :(@add_signal $x scroll Bool AbstractFloat delta_x AbstractFloat delta_y) end
     macro add_signal_scroll_end(x) return :(@add_signal $x scroll_end Cvoid) end
-    macro add_signal_stylus_up(x) return :(@add_signal $x stylus_up Cvoid Cdouble x Cdouble y) end
-    macro add_signal_stylus_down(x) return :(@add_signal $x stylus_down Cvoid Cdouble x Cdouble y) end
-    macro add_signal_proximity(x) return :(@add_signal $x proximity Cvoid Cdouble x Cdouble y) end
-    macro add_signal_swipe(x) return :(@add_signal $x swipe Cvoid Cdouble x_velocity Cdouble y_velocity) end
-    macro add_signal_pan(x) return :(@add_signal $x pan Cvoid PanDirection direction Cdouble offset) end
+   
+    macro add_signal_stylus_up(x) return :(@add_signal $x stylus_up Cvoid AbstractFloat x AbstractFloat y) end
+    macro add_signal_stylus_down(x) return :(@add_signal $x stylus_down Cvoid AbstractFloat x AbstractFloat y) end
+    macro add_signal_proximity(x) return :(@add_signal $x proximity Cvoid AbstractFloat x AbstractFloat y) end
+    
+    macro add_signal_swipe(x) return :(@add_signal $x swipe Cvoid AbstractFloat x_velocity AbstractFloat y_velocity) end
+    macro add_signal_pan(x) return :(@add_signal $x pan Cvoid PanDirection direction AbstractFloat offset) end
+   
     macro add_signal_paint(x) return :(@add_signal $x paint Cvoid) end
     macro add_signal_update(x) return :(@add_signal $x update Cvoid) end
+    
     macro add_signal_value_changed(x) return :(@add_signal $x value_changed Cvoid) end
+    macro add_signal_properties_changed(x) return :(@add_signal $x properties_changed Cvoid) end
+    
     macro add_signal_wrapped(x) return :(@add_signal $x wrapped Cvoid) end
     macro add_signal_scroll_child(x) return :(@add_signal $x scroll_child Cvoid ScrollType type Bool is_horizontal) end
-    macro add_signal_resize(x) return :(@add_signal $x resize Cvoid Cint width Cint height) end
+    macro add_signal_resize(x) return :(@add_signal $x resize Cvoid Integer width Integer height) end
 
     macro add_signal_activated(T)
 
@@ -1135,14 +1157,10 @@ module mousetrap
         return out
     end
 
-    macro add_signal_key_pressed(x) return :(@add_signal $x key_pressed Bool Cint key_value Cint key_code ModifierState modifier) end
-    macro add_signal_key_released(x) return :(@add_signal $x key_released Bool Cint key_value Cint key_code ModifierState modifier) end
-    macro add_signal_modifiers_changed(x) return :(@add_signal $x modifiers_changed Bool Cint key_value Cint key_code ModifierState modifier) end
-    
-
-    macro add_key_event_controller_signal(T, name, return_t)
+    macro add_key_event_controller_signal(T, name, Return_t)
 
         out = Expr(:block)
+        snake_case = name
 
         connect_signal_name = :connect_signal_ * snake_case * :!
 
@@ -1152,7 +1170,7 @@ module mousetrap
         
         arg1_name = :key_code
         arg2_name = :key_value
-        arg3_name = modifier
+        arg3_name = :modifier
 
         push!(out.args, esc(:(
             function $connect_signal_name(f, x::$T)
@@ -1165,7 +1183,7 @@ module mousetrap
 
         push!(out.args, esc(:(
             function $connect_signal_name(f, x::$T, data::Data_t) where Data_t
-                typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t, $Arg2_t, Data_t))
+                typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t, $Arg3_t, Data_t))
                 detail.$connect_signal_name(x._internal, function(x)
                     typed_f($T(x[1][]), x[2], x[4], data)
                 end)
@@ -1175,8 +1193,8 @@ module mousetrap
         emit_signal_name = :emit_signal_ * snake_case
 
         push!(out.args, esc(:(
-            function $emit_signal_name(x::$T, $arg1_name::$Arg1_t, $arg2_name::$Arg2_t) ::$Return_t
-                return convert($Return_t, detail.$emit_signal_name(x._internal, $arg1_name, $arg2_name))
+            function $emit_signal_name(x::$T, $arg1_name::$Arg1_t, $arg3_name::$Arg3_t) ::$Return_t
+                return convert($Return_t, detail.$emit_signal_name(x._internal, $arg1_name, $arg3_name))
             end
         )))
 
@@ -1353,7 +1371,7 @@ module mousetrap
 
     Application(id::String) = Application(detail._Application(id))
 
-    run!(x::Application) = mousetrap.detail.run!(x._internal)
+    run!(app::Application) ::Cint = mousetrap.detail.run!(app._internal)
     export run!
 
     @export_function Application quit! Cvoid
@@ -1398,7 +1416,7 @@ module mousetrap
             quit!(app)
         end
     end
-    # sic, no export
+    export main
 
 ####### window.jl
 
@@ -1441,7 +1459,7 @@ module mousetrap
     @export_function Window set_is_modal! Cvoid Bool b
     @export_function Window get_is_modal Bool
 
-    function set_transient_for(self::Window, other::Window)
+    function set_transient_for!(self::Window, other::Window)
         detail.set_transient_for!(self._itnernal, other._internal)
     end
     export set_transient_for!
@@ -1467,6 +1485,9 @@ module mousetrap
     Base.show(io::IO, x::Window) = show_aux(io, x, :title)
 
 ####### action.jl
+
+    const ShortcutTrigger = String
+    export ShotcutTrigger
 
     @export_type Action SignalEmitter
     Action(id::String, app::Application) = Action(detail._Action(id, app._internal.cpp_object))
@@ -1552,6 +1573,9 @@ module mousetrap
     export set_increment!
 
     Base.show(io::IO, x::Adjustment) = mousetrap.show_aux(io, x, :value, :lower, :upper, :increment)
+
+    @add_signal_value_changed Adjustment
+    @add_signal_properties_changed Adjustment
 
 ####### alignment.jl
 
@@ -1711,9 +1735,9 @@ module mousetrap
     end
     export set_end_child!
 
-    @export_function CenterBox remove_start_widget! Cvoid
-    @export_function CenterBox remove_center_widget! Cvoid
-    @export_function CenterBox remove_end_widget! Cvoid
+    @export_function CenterBox remove_start_child! Cvoid
+    @export_function CenterBox remove_center_child! Cvoid
+    @export_function CenterBox remove_end_child! Cvoid
     @export_function CenterBox get_orientation Orientation
     @export_function CenterBox set_orientation! Cvoid Orientation orientation
 
@@ -1881,12 +1905,18 @@ module mousetrap
     hsva_to_rgba(hsva::HSVA) = detail.hsva_to_rgba(hsva)
     export hsva_to_rgba
 
+    Base.convert(::Type{HSVA}, rgba::RGBA) = rgba_to_hsva(rbga)
+    Base.convert(::Type{RGBA}, hsva::HSVA) = hsva_to_rgba(hsva)
+
     rgba_to_html_code(rgba::RGBA) = convert(String, detail.rgba_to_html_code(rgba))
     export rgba_to_html_code
 
     html_code_to_rgba(code::String) ::RGBA = return detail.html_code_to_rgba(code)
     export html_code_to_rgba
 
+    is_valid_html_code(code::String) ::Bool = return detail.is_valid_html_code(code)
+    export is_valid_html_code
+    
 ####### icon.jl
 
     @export_type Icon
@@ -2799,12 +2829,9 @@ module mousetrap
     const KeyCode = Cint
     export KeyCode
 
-    const KeyValue = Cint
-    export KeyValue
-
-    @add_signal_key_pressed KeyEventController
-    @add_signal_key_released KeyEventController
-    @add_signal_modifiers_changed KeyEventController
+    @add_key_event_controller_signal KeyEventController key_pressed Bool
+    @add_key_event_controller_signal KeyEventController key_released Cvoid
+    @add_key_event_controller_signal KeyEventController modifiers_changed Bool
 
     shift_pressed(modifier_state::ModifierState) ::Bool = return detail.shift_pressed(modifier_state);
     export shift_pressed

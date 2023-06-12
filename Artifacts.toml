@@ -1,7 +1,6 @@
 [mousetrap_julia_binding]
-git-tree-sha1 = "11fcbe048ce01f452f275ba03877db122c32185c"
+git-tree-sha1 = "1c074f7a73c90bc27df91281ec497d280474a75a"
 
     [[mousetrap_julia_binding.download]]
     url = "http://cords.in-berlin.de/mousetrap_julia_binding.tar.gz"
-    sha256 = "4f2b320dee9dd2449f7e1f1a528a3f9cf022bd13f86c6eb0b262d8d1b1ebad1c"
-
+    sha256 = "0793028ce51bcc171a57999fad4f338ded46d395891479412cd822befcf1e87e"
