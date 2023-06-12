@@ -1,5 +1,5 @@
 # Test
 
 ```@docs
-mousetrap.TypedFunction
+test
 ```

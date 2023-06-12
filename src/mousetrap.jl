@@ -869,81 +869,6 @@ module mousetrap
         return out
     end
 
-    macro add_signal(T, snake_case, Return_t, Arg1_t, arg1_name, Arg2_t, arg2_name, Arg3_t, arg3_name, Arg4_t, arg4_name)
-
-        out = Expr(:block)
-
-        connect_signal_name = :connect_signal_ * snake_case * :!
-
-        Arg1_t = esc(Arg1_t)
-        Arg2_t = esc(Arg2_t)
-        Arg3_t = esc(Arg3_t)
-        Arg4_t = esc(Arg4_t)
-
-        arg1_name = esc(arg1_name)
-        arg2_name = esc(arg2_name)
-        arg3_name = esc(arg3_name)
-        arg4_name = esc(arg4_name)
-
-        push!(out.args, esc(:(
-            function $connect_signal_name(f, x::$T)
-                typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t, $Arg2_t, $Arg3_t, $Arg4_t))
-                detail.$connect_signal_name(x._internal, function(x)
-                    typed_f($T(x[1][]), x[2], x[3], x[4], x[5])
-                end)
-            end
-        )))
-
-        push!(out.args, esc(:(
-            function $connect_signal_name(f, x::$T, data::Data_t) where Data_t
-                typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t, $Arg2_t, $Arg3_t, $Arg4_t, Data_t))
-                detail.$connect_signal_name(x._internal, function(x)
-                    typed_f($T(x[1][]), x[2], x[3], x[4], x[5], data)
-                end)
-            end
-        )))
-
-        emit_signal_name = :emit_signal_ * snake_case
-
-        push!(out.args, esc(:(
-            function $emit_signal_name(x::$T, $arg1_name::$Arg1_t, $arg2_name::$Arg2_t, $arg3_name::$Arg3_t, $arg4_name::$Arg4_t) ::$Return_t
-                return convert($Return_t, detail.$emit_signal_name(x._internal, $arg1_name, $arg2_name, $arg3_name, $arg4_name))
-            end
-        )))
-
-        disconnect_signal_name = :disconnect_signal_ * snake_case * :!
-
-        push!(out.args, esc(:(
-            function $disconnect_signal_name(x::$T)
-                detail.$disconnect_signal_name(x._internal)
-            end
-        )))
-
-        set_signal_blocked_name = :set_signal_ * snake_case * :_blocked * :!
-
-        push!(out.args, esc(:(
-            function $set_signal_blocked_name(x::$T, b)
-                detail.$set_signal_blocked_name(x._internal, b)
-            end
-        )))
-
-        get_signal_blocked_name = :get_signal_ * snake_case * :_blocked
-
-        push!(out.args, esc(:(
-            function $get_signal_blocked_name(x::$T)
-                return detail.$get_signal_blocked_name(x._internal)
-            end
-        )))
-
-        push!(out.args, esc(:(export $connect_signal_name)))
-        push!(out.args, esc(:(export $disconnect_signal_name)))
-        push!(out.args, esc(:(export $set_signal_blocked_name)))
-        push!(out.args, esc(:(export $get_signal_blocked_name)))
-        push!(out.args, esc(:(export $emit_signal_name)))
-
-        return out
-    end
-
     macro add_widget_signals(x)
         return quote
             @add_signal $x realize Cvoid
@@ -968,8 +893,8 @@ module mousetrap
     macro add_signal_items_changed(x) return :(@add_signal $x items_changed Cvoid Int32 position Int32 n_removed Int32 n_added) end
     macro add_signal_closed(x) return :(@add_signal $x closed Cvoid) end
     macro add_signal_text_changed(x) return :(@add_signal $x text_changed Cvoid) end
-    macro add_signal_redo(x) return :(@add_signal $x redo Cvoid) end
-    macro add_signal_undo(x) return :(@add_signal $x undo Cvoid) end
+    # macro add_signal_redo(x) return :(@add_signal $x redo Cvoid) end
+    # macro add_signal_undo(x) return :(@add_signal $x undo Cvoid) end
     macro add_signal_drag_begin(x) return :(@add_signal $x drag_begin Cvoid Cdouble start_x Cdouble start_y) end
     macro add_signal_drag(x) return :(@add_signal $x drag Cvoid Cdouble offset_x Cdouble offset_y) end
     macro add_signal_drag_end(x) return :(@add_signal $x drag_end Cvoid Cdouble offset_x Cdouble offset_y) end
@@ -978,9 +903,6 @@ module mousetrap
     macro add_signal_click_stopped(x) return :(@add_signal $x click_stopped Cvoid) end
     macro add_signal_focus_gained(x) return :(@add_signal $x focus_gained Cvoid) end
     macro add_signal_focus_lost(x) return :(@add_signal $x focus_lost Cvoid) end
-    macro add_signal_key_pressed(x) return :(@add_signal $x key_pressed Bool Cint key_value Cint key_code ModifierState modifier) end
-    macro add_signal_key_released(x) return :(@add_signal $x key_released Bool Cint key_value Cint key_code ModifierState modifier) end
-    macro add_signal_modifiers_changed(x) return :(@add_signal $x modifiers_changed Bool Cint key_value Cint key_code ModifierState modifier) end
     macro add_signal_pressed(x) return :(@add_signal $x pressed Cvoid Cdouble x Cdouble y) end
     macro add_signal_press_cancelled(x) return :(@add_signal $x press_cancelled Cvoid) end
     macro add_signal_motion_enter(x) return :(@add_signal $x motion_enter Cvoid Cdouble x Cdouble y) end
@@ -1177,6 +1099,84 @@ module mousetrap
         push!(out.args, esc(:(
             function $emit_signal_name(x::$T, $arg1_name::$Arg1_t, $arg2_name::$Arg2_t) ::$Return_t
                 return convert($Return_t, detail.$emit_signal_name(x._internal, from_julia_index($arg1_name), $arg2_name))
+            end
+        )))
+
+        disconnect_signal_name = :disconnect_signal_ * snake_case * :!
+
+        push!(out.args, esc(:(
+            function $disconnect_signal_name(x::$T)
+                detail.$disconnect_signal_name(x._internal)
+            end
+        )))
+
+        set_signal_blocked_name = :set_signal_ * snake_case * :_blocked * :!
+
+        push!(out.args, esc(:(
+            function $set_signal_blocked_name(x::$T, b)
+                detail.$set_signal_blocked_name(x._internal, b)
+            end
+        )))
+
+        get_signal_blocked_name = :get_signal_ * snake_case * :_blocked
+
+        push!(out.args, esc(:(
+            function $get_signal_blocked_name(x::$T)
+                return detail.$get_signal_blocked_name(x._internal)
+            end
+        )))
+
+        push!(out.args, esc(:(export $connect_signal_name)))
+        push!(out.args, esc(:(export $disconnect_signal_name)))
+        push!(out.args, esc(:(export $set_signal_blocked_name)))
+        push!(out.args, esc(:(export $get_signal_blocked_name)))
+        push!(out.args, esc(:(export $emit_signal_name)))
+
+        return out
+    end
+
+    macro add_signal_key_pressed(x) return :(@add_signal $x key_pressed Bool Cint key_value Cint key_code ModifierState modifier) end
+    macro add_signal_key_released(x) return :(@add_signal $x key_released Bool Cint key_value Cint key_code ModifierState modifier) end
+    macro add_signal_modifiers_changed(x) return :(@add_signal $x modifiers_changed Bool Cint key_value Cint key_code ModifierState modifier) end
+    
+
+    macro add_key_event_controller_signal(T, name, return_t)
+
+        out = Expr(:block)
+
+        connect_signal_name = :connect_signal_ * snake_case * :!
+
+        Arg1_t = Cint
+        Arg2_t = Cint
+        Arg3_t = ModifierState
+        
+        arg1_name = :key_code
+        arg2_name = :key_value
+        arg3_name = modifier
+
+        push!(out.args, esc(:(
+            function $connect_signal_name(f, x::$T)
+                typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t, $Arg3_t))
+                detail.$connect_signal_name(x._internal, function(x)
+                    typed_f($T(x[1][]), x[2], x[4])
+                end)
+            end
+        )))
+
+        push!(out.args, esc(:(
+            function $connect_signal_name(f, x::$T, data::Data_t) where Data_t
+                typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t, $Arg2_t, Data_t))
+                detail.$connect_signal_name(x._internal, function(x)
+                    typed_f($T(x[1][]), x[2], x[4], data)
+                end)
+            end
+        )))
+
+        emit_signal_name = :emit_signal_ * snake_case
+
+        push!(out.args, esc(:(
+            function $emit_signal_name(x::$T, $arg1_name::$Arg1_t, $arg2_name::$Arg2_t) ::$Return_t
+                return convert($Return_t, detail.$emit_signal_name(x._internal, $arg1_name, $arg2_name))
             end
         )))
 
@@ -2477,8 +2477,8 @@ module mousetrap
     @export_function TextView get_bottom_margin Cfloat
 
     @add_widget_signals TextView
-    @add_signal_undo TextView
-    @add_signal_redo TextView
+    # @add_signal_undo TextView
+    # @add_signal_redo TextView
     @add_signal_text_changed TextView
 
 ####### frame.jl
@@ -4250,6 +4250,8 @@ module mousetrap
 
     include("./key_codes.jl")
 
-end # module mousetrap
+###### documentation
 
-@info "Done (" * string(round(time() - __mousetrap_compile_time_start; digits=2)) * "s)"
+    include("./docs.jl")
+
+end # module mousetrap
