@@ -8,7 +8,8 @@ module mousetrap
     module detail
         using CxxWrap, Pkg.Artifacts
         function __init__() @initcxx end
-        @wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
+        #@wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
+        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
     end
 
     @info "Done (" * string(round(time() - __cxxwrap_compile_time_start; digits=2)) * "s)"
@@ -449,13 +450,6 @@ module mousetrap
     Base.show(io::IO, x::Vector3{T}) where T = print(io, "Vector3{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")")
     Base.show(io::IO, x::Vector4{T}) where T = print(io, "Vector4{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ", " * string(x.w) * ")")
 
-####### geometry.jl
-
-    struct Rectangle
-        top_left::Vector2f
-        size::Vector2f
-    end
-    export Rectangle
 
 ####### time.jl
 
@@ -851,19 +845,25 @@ module mousetrap
         return out
     end
 
+    macro add_signal_realize(x) return :(@add_signal $x realize Cvoid) end
+    macro add_signal_unrealize(x) return :(@add_signal $x unrealize Cvoid) end
+    macro add_signal_destroy(x) return :(@add_signal $x destroy Cvoid) end
+    macro add_signal_hide(x) return :(@add_signal $x hide Cvoid) end
+    macro add_signal_show(x) return :(@add_signal $x show Cvoid) end
+    macro add_signal_map(x) return :(@add_signal $x map Cvoid) end
+    macro add_signal_unmap(x) return :(@add_signal $x unmap Cvoid) end
+
     macro add_widget_signals(x)
         return quote
-            @add_signal $x realize Cvoid
-            @add_signal $x unrealize Cvoid
-            @add_signal $x destroy Cvoid
-            @add_signal $x hide Cvoid
-            @add_signal $x show Cvoid
-            @add_signal $x map Cvoid
-            @add_signal $x unmap Cvoid
+            @add_signal_realize($x)
+            @add_signal_unrealize($x)
+            @add_signal_destroy($x)
+            @add_signal_hide($x)
+            @add_signal_show($x)
+            @add_signal_map($x)
+            @add_signal_unmap($x)
         end
     end
-
-    ## TODO: JUMP
 
     macro add_signal_activate(x) return :(@add_signal $x activate Cvoid) end
     macro add_signal_shutdown(x) return :(@add_signal $x shutdown Cvoid) end
@@ -1355,7 +1355,7 @@ module mousetrap
     @export_function Application get_id String
 
     add_action!(app::Application, action::Action) = detail.add_action!(app._internal, action._internal)
-    export add_action
+    export add_action!
 
     get_action(app::Application, id::String) ::Action = return Action(detail.get_action(app._internal, id))
     export get_action
@@ -1460,9 +1460,8 @@ module mousetrap
 ####### action.jl
 
     const ShortcutTrigger = String
-    export ShotcutTrigger
+    export ShortcutTrigger
 
-    @export_type Action SignalEmitter
     Action(id::String, app::Application) = Action(detail._Action(id, app._internal.cpp_object))
 
     @export_function Action get_id String
@@ -1963,7 +1962,7 @@ module mousetrap
     end
     export as_scaled
 
-    function as_cropped(image::Image, offset_x::Integer, offset_y::Integer, new_width::Integer, new_height::Integer)
+    function as_cropped(image::Image, offset_x::Signed, offset_y::Signed, new_width::Integer, new_height::Integer)
         return Image(detail.as_cropped(image._internal, offset_x, offset_y, UInt64(new_width), UInt64(new_height)))
     end
     export as_cropped
@@ -2071,52 +2070,52 @@ module mousetrap
 
     ##
 
-    function get_value(file::KeyFile, type::Type{Bool}, group::GroupID, key::KeyID)
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Bool})
         return detail.get_value_as_bool(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, type::Type{<: AbstractFloat}, group::GroupID, key::KeyID)
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<: AbstractFloat})
         return detail.get_value_as_double(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, type::Type{<: Signed}, group::GroupID, key::KeyID)
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<: Signed})
         return detail.get_value_as_int(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, type::Type{<: Unsigned}, group::GroupID, key::KeyID)
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<: Unsigned})
         return detail.get_value_as_uint(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, type::Type{String}, group::GroupID, key::KeyID)
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{String})
         return detail.get_value_as_string(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, type::Type{RGBA}, group::GroupID, key::KeyID)
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{RGBA})
         vec = get_value(file, Vector{Cfloat}, group, key)
         return RGBA(vec[1], vec[2], vec[3], vec[4])
     end
 
-    function get_value(file::KeyFile, type::Type{Image}, group::GroupID, key::KeyID)
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Image})
         return Image(detail.get_value_as_image(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, type::Type{Vector{Bool}}, group::GroupID, key::KeyID)
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{Bool}})
         return convert(Vector{Bool}, detail.get_value_as_bool_list(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, type::Type{Vector{T}}, group::GroupID, key::KeyID) where T <: AbstractFloat
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T <: AbstractFloat
         return convert(Vector{T}, detail.get_value_as_double_list(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, type::Type{Vector{T}}, group::GroupID, key::KeyID) where T <: Signed
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T <: Signed
         return convert(Vector{T}, detail.get_value_as_int_list(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, type::Type{Vector{T}}, group::GroupID, key::KeyID) where T <: Unsigned
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T <: Unsigned
         return convert(Vector{T}, detail.get_value_as_uint_list(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, type::Type{Vector{String}}, group::GroupID, key::KeyID)
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{String}})
         return convert(Vector{String}, detail.get_value_as_string_list(file._internal, group, key))
     end
 
@@ -2181,6 +2180,7 @@ module mousetrap
     @export_function FileDescriptor get_file_extension String
     @export_function FileDescriptor exists Bool
     @export_function FileDescriptor is_folder Bool
+    @export_function FileDescriptor is_file Bool
     @export_function FileDescriptor is_symlink Bool
 
     read_symlink(self::FileDescriptor) = FileDescriptor(detail.read_symlink(self._internal))
@@ -2200,13 +2200,13 @@ module mousetrap
 
     # File System
 
-    create_file_at(destination::FileDescriptor, replace::Bool) ::Bool = detail.create_file_at(destination._internal)
+    create_file_at!(destination::FileDescriptor, replace::Bool) ::Bool = detail.create_file_at!(destination._internal, replace)
     export create_file_at!
 
-    create_directory_at(destination::FileDescriptor) ::Bool = detail.create_directory_at(destination._internal)
+    create_directory_at!(destination::FileDescriptor) ::Bool = detail.create_directory_at!(destination._internal)
     export create_directory_at!
 
-    delete_at(file::FileDescriptor) ::Bool = detail.delete_at(file._internal)
+    delete_at!(file::FileDescriptor) ::Bool = detail.delete_at!(file._internal)
     export delete_at!
 
     function copy!(from::FileDescriptor, to::FileDescriptor, allow_overwrite::Bool; make_backup::Bool = false, follow_symlink::Bool = false) ::Bool
@@ -2219,7 +2219,7 @@ module mousetrap
     end
     export move!
 
-    move_to_trash!(file::FileDescriptor) = detail.move_to_trash!(file._internal)
+    move_to_trash!(file::FileDescriptor) ::Bool = detail.move_to_trash!(file._internal)
 
 ####### file_chooser.jl
 
@@ -2232,7 +2232,7 @@ module mousetrap
     @export_function FileFilter add_allowed_pattern! Cvoid String pattern
     @export_function FileFilter add_allow_all_supported_image_formats! Cvoid
     @export_function FileFilter add_allowed_suffix! Cvoid String suffix
-    @export_function FileFilter add_allowed_mime_type Cvoid String mime_type_id
+    @export_function FileFilter add_allowed_mime_type! Cvoid String mime_type_id
 
     @export_enum FileChooserAction begin
         FILE_CHOOSER_ACTION_OPEN_FILE
@@ -2289,7 +2289,7 @@ module mousetrap
     ImageDisplay(image::Image) = ImageDisplay(detail._ImageDisplay(image._internal))
     ImageDisplay(icon::Icon) = ImageDisplay(detail._ImageDisplay(icon._internal))
 
-    @export_function ImageDisplay create_from_file! Cvoid String path
+    @export_function ImageDisplay create_from_file! Bool String path
 
     create_from_image!(image_display::ImageDisplay, image::Image) = detail.create_from_image!(image_display._internal, image._internal)
     export create_from_image!
@@ -2297,11 +2297,11 @@ module mousetrap
     create_from_icon!(image_display::ImageDisplay, icon::Icon) = detail.create_from_icon!(image_display._internal, icon._internal)
     export create_from_icon!
 
-    create_as_file_preview!(image_display::ImageDisplay, file::FileDescriptor) = detail.create_as_file_preview!(image_display._internal, file._internal)
+    create_as_file_preview!(image_display::ImageDisplay, file::FileDescriptor) ::Bool = detail.create_as_file_preview!(image_display._internal, file._internal)
     export create_as_file_preview!
 
     @export_function ImageDisplay clear! Cvoid
-    @export_function ImageDisplay set_scale! Cvoid Cint scale
+    @export_function ImageDisplay set_scale! Cvoid Integer scale
 
     @add_widget_signals ImageDisplay
 
@@ -2313,7 +2313,7 @@ module mousetrap
     @export_function Entry get_text String
     @export_function Entry set_text! Cvoid String text
     @export_function Entry set_max_length! Cvoid Integer n
-    @export_function Entry get_max_length Int64
+    @export_function Entry get_max_length Signed
     @export_function Entry set_has_frame! Cvoid Bool b
     @export_function Entry get_has_frame Bool
     @export_function Entry set_text_visible! Cvoid Bool b
@@ -2389,7 +2389,7 @@ module mousetrap
     LevelBar(min::AbstractFloat, max::AbstractFloat) = LevelBar(detail._internal(min, max))
 
     @export_function LevelBar add_marker! Cvoid String name AbstractFloat value
-    @export_function LevelBar remove_marker! Cvoid String name AbstractFloat value
+    @export_function LevelBar remove_marker! Cvoid String name
     @export_function LevelBar set_inverted! Cvoid Bool b
     @export_function LevelBar get_inverted Bool
     @export_function LevelBar set_mode! Cvoid LevelBarMode mode
@@ -2441,7 +2441,7 @@ module mousetrap
     @export_function Label get_wrap_mode LabelWrapMode
     @export_function Label set_justify_mode! Cvoid JustifyMode mode
     @export_function Label get_justify_mode JustifyMode
-    @export_function Label set_max_width_chars! Cvoid Unsigned n
+    @export_function Label set_max_width_chars! Cvoid Integer n
     @export_function Label get_max_width_chars UInt64
     @export_function Label set_x_alignment! Cvoid AbstractFloat x
     @export_function Label get_x_alignment Cfloat
@@ -2510,6 +2510,9 @@ module mousetrap
     set_child!(overlay::Overlay, child::Widget) = detail.set_child!(overlay._internal, child._internal.cpp_object)
     export set_child!
 
+    remove_child!(overlay::Overlay) = detail.remove_child!(overlay._internal, child._internal.cpp_object)
+    export remove_child!
+
     function add_overlay!(overlay::Overlay, child::Widget; include_in_measurement::Bool = true, clip::Bool = true)
         detail.add_overlay!(overlay._internal, child._internal.cpp_object, include_in_measurement, clip)
     end
@@ -2557,7 +2560,7 @@ module mousetrap
     add_submenu!(model::MenuModel, label::String, to_add::MenuModel) = detail.add_submenu!(model._internal, label, to_add._internal)
     export add_submenu!
 
-    add_icon!(model::MenuModel, icon::Icon) = detail.add_icon!(model._internal, icon._internal)
+    add_icon!(model::MenuModel, icon::Icon, action::Action) = detail.add_icon!(model._internal, icon._internal, action._internal)
     export add_icon!
 
     @add_signal_items_changed MenuModel
@@ -2594,7 +2597,7 @@ module mousetrap
     @export_function Popover remove_child! Cvoid
 
     function attach_to!(popover::Popover, attachment::Widget)
-        detail.atach_to!(popover._internal, child._internal.cpp_object)
+        detail.atach_to!(popover._internal, attachment._internal.cpp_object)
     end
     export attach_to!
 
@@ -3118,7 +3121,6 @@ module mousetrap
     remove_column_at!(grid::Grid, column_i::Signed) = detail.remove_column_at!(grid._internal, column_i -1)
     export insert_column_at!
 
-    @export_function Grid set_row_spacing! Cvoid AbstractFloat spacing
     @export_function Grid get_column_spacing Cfloat
     @export_function Grid set_column_spacing! Cvoid AbstractFloat spacing
     @export_function Grid get_row_spacing Cfloat
@@ -4138,7 +4140,13 @@ module mousetrap
     @export_function Shape set_is_visible! Cvoid Bool b
     @export_function Shape get_is_visible Bool
 
-    @export_function Shape get_bounding_box Rectangle
+    struct AxisAlignedRectangle
+        top_left::Vector2f
+        size::Vector2f
+    end
+    export AxisAlignedRectangle
+
+    @export_function Shape get_bounding_box AxisAlignedRectangle
     @export_function Shape get_size Vector2f
 
     @export_function Shape set_centroid! Cvoid Vector2f centroid
@@ -4252,6 +4260,7 @@ module mousetrap
 
 ###### documentation
 
-    include("./docs.jl")
+    #include("./docgen.jl")
+    #include("./docs.jl")
 
 end # module mousetrap
