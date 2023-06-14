@@ -90,27 +90,27 @@ module mousetrap
     macro log_debug(domain, message)
         return :(mousetrap.detail.log_debug($message, $domain))
     end
-    export log_debug
+    export @log_debug
 
     macro log_info(domain, message)
         return :(mousetrap.detail.log_info($message, $domain))
     end
-    export log_info
+    export @log_info
 
     macro log_warning(domain, message)
         return :(mousetrap.detail.log_warning($message, $domain))
     end
-    export log_warning
+    export @log_warning
 
     macro log_critical(domain, message)
         return :(mousetrap.detail.log_critical($message, $domain))
     end
-    export log_critical
+    export @log_critical
 
     macro log_fatal(domain, message)
         return :(mousetrap.detail.log_fatal($message, $domain))
     end
-    export log_fatal
+    export @log_fatal
 
     set_surpress_debug(domain::LogDomain, b::Bool) = detail.log_set_surpress_debug(domain, b)
     export set_surpress_debug
@@ -2374,7 +2374,7 @@ module mousetrap
     export set_child_position!
 
     get_child_position(fixed::Fixed, child::Widget) ::Vector2f = detail.get_child_position(fixed._internal, child._internal.cpp_object)
-    export get_child_position!
+    export get_child_position
 
     @add_widget_signals Fixed
 
@@ -2746,7 +2746,7 @@ module mousetrap
     export get_current_button
 
     set_only_listens_to_button!(gesture::SingleClickGesture, button::ButtonID) = detail.set_only_listens_to_button!(gesture._internal.cpp_object)
-    export set_only_listens_to_button
+    export set_only_listens_to_button!
 
     get_only_listens_to_button(gesture::SingleClickGesture) = return detail.get_only_listens_to_button(gesture._internal.cpp_object)
     export get_only_listens_to_button
@@ -3669,9 +3669,10 @@ module mousetrap
     @export_widget_function set_is_visible! Cvoid Bool b
     @export_widget_function get_is_visible Bool
 
-    @export_widget_function set_tooltip_text Cvoid String text
+    @export_widget_function set_tooltip_text! Cvoid String text
+
     set_tooltip_widget!(widget::Widget, tooltip::Widget) = detail.set_tooltip_widget!(widget._internal.cpp_object, tooltip._internal.cpp_object)
-    export set_tooltip_widget
+    export set_tooltip_widget!
 
     @export_widget_function remove_tooltip_widget! Cvoid
 
@@ -3840,7 +3841,7 @@ module mousetrap
     end
     export rotate!
 
-    function tanslate!(transform::GLTransform, offset::Vector2f)
+    function translate!(transform::GLTransform, offset::Vector2f)
         detail.translate!(transform._internal, offset.x, offset.y)
     end
     export translate!
@@ -4008,7 +4009,7 @@ module mousetrap
     end
     export Rectangle
 
-    as_ellipse!(shape::Shape, center::Vector2f, radius::AbstractFloat, n_outer_vertices::Unsigned) = detail.as_circle!(shape._internal, radius, n_outer_vertices)
+    as_circle!(shape::Shape, center::Vector2f, radius::AbstractFloat, n_outer_vertices::Unsigned) = detail.as_circle!(shape._internal, radius, n_outer_vertices)
     export as_circle!
 
     function Circle(center::Vector2f, radius::AbstractFloat, n_outer_vertices::Unsigned) ::Shape
@@ -4245,7 +4246,7 @@ module mousetrap
     end
     export from_gl_coordinates
 
-    function to_gl_coordiantes(area::RenderArea, absolute_widget_space_coordinates::Vector2f) ::Vector2f
+    function to_gl_coordinates(area::RenderArea, absolute_widget_space_coordinates::Vector2f) ::Vector2f
         return detail.to_gl_coordinates(area._internal, absolute_widget_space_coordinates)
     end
     export to_gl_coordinates
@@ -4260,7 +4261,6 @@ module mousetrap
 
 ###### documentation
 
-    #include("./docgen.jl")
-    #include("./docs.jl")
+    include("./docs.jl")
 
 end # module mousetrap

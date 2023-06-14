@@ -1,11 +1,13 @@
 widgets = Symbol[]
 signal_emitters = Symbol[]
+types = Symbol[]
 functions = Symbol[]
+enums = Symbol[]
+enum_values = Symbol[]
 other = Symbol[]
 
-module mousetrap end
-
 for n in names(mousetrap)
+
     binding = getproperty(mousetrap, n)
 
     if binding isa Type
@@ -13,11 +15,17 @@ for n in names(mousetrap)
             push!(widgets, n)
         elseif binding <: SignalEmitter
             push!(signal_emitters, n)
+        elseif binding <: Int64
+            push!(enums, n)
         else
-            push!(other, n)
+            push!(types, n)
         end
     elseif typeof(binding) <: Function
-        push!(functions, n)
+        if !match(r".*_signal_.*", string(binding)) # filter autogenerate signal functions
+            push!(functions, n)
+        end
+    elseif typeof(binding) <: Int64
+        push!(enum_values, n)
     else
         push!(other, n)
     end
@@ -117,33 +125,7 @@ function generate_signal_table(object_name::Symbol, signal_names::Symbol...) ::S
     return out;
 end
 
-macro signature(return_t, args...)
-    arg_list = ""
-    n_args = length(args)
-    for i in 1:n_args
-        arg_list *= string(args[i])
-        if i != n_args
-            arg_list *= ", "
-        end
-    end
-    return "($arg_list) -> $return_t"
-end
-
-struct SignalDescriptor
-    id::Symbol
-    signature::String
-    emitted_when::String
-end
-
-function generate_signal_table(object_name::Symbol, signal_names::Symbol...) ::String
-    out = "| Signal ID | Signature | Emitted when...|\n|---|---|---|\n"
-    for signal_id in signal_names
-        descriptor = signal_descriptors[signal_id]
-        out *= "| `" * string(descriptor.id) * "` | `(instance::" * string(object_name) * ", " * descriptor.signature * "` | " * descriptor.emitted_when * "|\n"
-    end
-    return out;
-end
-
+## Functions
 
 struct FunctionDescriptor
 
@@ -189,9 +171,11 @@ function expand(f::FunctionDescriptor) ::String
     return out
 end
 
+## Structs
+
 struct TypeDescriptor
     name::Symbol
-    super::Union{Type, Nothing}
+    super::Type
     brief::String
     signals::Vector{Symbol}
     constructors::Vector{String}
@@ -199,7 +183,7 @@ struct TypeDescriptor
     example::String
 
     function TypeDescriptor(name::Symbol;
-        super = nothing,
+        super = Any,
         brief = "",
         signals = Symbol[],
         constructors = String[],
@@ -245,6 +229,8 @@ function expand(type::TypeDescriptor)
 
     return out
 end
+
+## Enums
 
 
 
