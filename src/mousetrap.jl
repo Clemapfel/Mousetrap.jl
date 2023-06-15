@@ -2486,7 +2486,7 @@ module mousetrap
 
 ####### frame.jl
 
-    @export_type Frame
+    @export_type Frame Widget
     Frame() = Frame(detail._Frame())
 
     set_child!(frame::Frame, child::Widget) = detail.set_child!(fixed._internal, child._internal.cpp_object)
@@ -2709,7 +2709,7 @@ module mousetrap
 
 ###### event_controller.jl
 
-    abstract type EventController end
+    abstract type EventController <: SignalEmitter end
     export EventController
 
     abstract type SingleClickGesture <: EventController end

@@ -68,7 +68,7 @@ macro function_docs(name, brief::String, return_t, args...)
     return :(@doc $text $name)
 end
 
-function enum_docs(name, brief, values...)
+function enum_docs(name, brief, values)
     out = "## $(name)\n"
     out *= "$(brief)\n"
     out *= "## Enum Values\n"
@@ -95,15 +95,20 @@ const signal_descriptors = Dict{Symbol, SignalDescriptor}()
 
 function type_signals(name, signals...)
     out = "## Signals\n"
-    out *= "| Signal ID | Signature | Emitted when...|\n|---|---|---|\n"
-    for id in signals
-        descriptor = signal_descriptors[id]
-        out *= "| `" * string(descriptor.id) * "` | `(instance::" * string(name) * ", " * descriptor.signature * "` | " * descriptor.emitted_when * "|\n"
+
+    if isempty(signals)
+        out *= "(no unique signals)"
+    else
+        out *= "| Signal ID | Signature | Emitted when...|\n|---|---|---|\n"
+        for id in signals
+            descriptor = signal_descriptors[id]
+            out *= "| `" * string(descriptor.id) * "` | `(instance::" * string(name) * ", " * descriptor.signature * "` | " * descriptor.emitted_when * "|\n"
+        end
     end
     return out
 end
 
-function type_constructors(ctors...)
+macro type_constructors(constructors...)
     out = "## Constructors\n"
     if !isempty(constructors)
         for constructor in constructors
@@ -114,7 +119,7 @@ function type_constructors(ctors...)
     end
 end
 
-function type_fields(fields...)
+macro type_fields(fields...)
     out = "## Fields\n"
     if !isempty(fields)
         for field in fields
@@ -128,6 +133,22 @@ end
 
 function example(string)
     return "## Example\n```julia\n$string\n```"
+end
+
+using InteractiveUtils
+
+function abstract_type_docs(type_in, super_type, brief)
+
+    type = string(type_in)
+    out = "## $type (abstract type)\n"
+    out *= "$brief\n"
+    out *= "## Supertype\n`$super_type`\n"
+
+    out *= "## Subtypes\n"
+    for t in InteractiveUtilssubtypes(type)
+        out *= "+ `$t`\n"
+    end
+    return out
 end
 
 include("docs/signals.jl")
