@@ -93,7 +93,7 @@ struct SignalDescriptor
 end
 const signal_descriptors = Dict{Symbol, SignalDescriptor}()
 
-function type_signals(name, signals...)
+macro type_signals(name, signals...)
     out = "## Signals\n"
 
     if isempty(signals)
@@ -112,11 +112,12 @@ macro type_constructors(constructors...)
     out = "## Constructors\n"
     if !isempty(constructors)
         for constructor in constructors
-            out *= "+ `" * constructor * "`\n"
+            out *= "+ `" * string(constructor) * "`\n"
         end
     else
         out *= "(no public constructors)\n"
     end
+    return out
 end
 
 macro type_fields(fields...)
@@ -145,7 +146,7 @@ function abstract_type_docs(type_in, super_type, brief)
     out *= "## Supertype\n`$super_type`\n"
 
     out *= "## Subtypes\n"
-    for t in InteractiveUtilssubtypes(type)
+    for t in InteractiveUtils.subtypes(type_in)
         out *= "+ `$t`\n"
     end
     return out

@@ -14,16 +14,16 @@ const _generate_type_docs = quote
 
                 TODO
 
-                \$(type_constructors(
+                \$(@type_constructors(
                 ))
 
-                \$(type_fields(
+                \$(@type_fields(
                 ))
             \"\"\"
             """)
         elseif name in mousetrap.abstract_types
             println("""
-            @document $name abstract_type_docs($name, TODO, \"\"\"
+            @document $name abstract_type_docs($name, Any, \"\"\"
                 TODO
             \"\"\")
             """)            
@@ -46,13 +46,13 @@ const _generate_type_docs = quote
 
                 TODO
 
-                \$(type_constructors(
+                \$(@type_constructors(
                 ))
 
-                \$(type_signals(Widget, 
+                \$(@type_signals(Widget, 
                 ))
 
-                \$(type_fields())
+                \$(@type_fields())
             \"\"\"
             """)
         end
@@ -64,13 +64,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Adjustment """
@@ -78,13 +78,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Angle """
@@ -92,10 +92,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -104,13 +104,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document AspectFrame """
@@ -118,13 +118,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document AxisAlignedRectangle """
@@ -132,10 +132,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -144,13 +144,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Button """
@@ -158,13 +158,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document CenterBox """
@@ -172,13 +172,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document CheckButton """
@@ -186,13 +186,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ClickEventController """
@@ -200,13 +200,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Clipboard """
@@ -214,13 +214,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Clock """
@@ -228,13 +228,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ColumnView """
@@ -242,13 +242,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ColumnViewColumn """
@@ -256,13 +256,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document DragEventController """
@@ -270,13 +270,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document DropDown """
@@ -284,13 +284,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document DropDownItemID """
@@ -298,10 +298,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -310,16 +310,16 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
-@document EventController abstract_type_docs(EventController, SignalEmitter, """
+@document EventController abstract_type_docs(EventController, Any, """
     TODO
 """)
 
@@ -328,13 +328,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document FileChooser """
@@ -342,13 +342,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document FileDescriptor """
@@ -356,13 +356,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document FileFilter """
@@ -370,13 +370,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document FileMonitor """
@@ -384,13 +384,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Fixed """
@@ -398,13 +398,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document FocusEventController """
@@ -412,13 +412,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Frame """
@@ -426,13 +426,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document FrameClock """
@@ -440,13 +440,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document GLTransform """
@@ -454,13 +454,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Grid """
@@ -468,13 +468,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document GridView """
@@ -482,13 +482,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document GroupID """
@@ -496,10 +496,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -508,10 +508,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -520,13 +520,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Icon """
@@ -534,10 +534,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -546,10 +546,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -558,10 +558,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -570,10 +570,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -582,13 +582,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document KeyCode """
@@ -596,10 +596,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -608,13 +608,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document KeyFile """
@@ -622,13 +622,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document KeyID """
@@ -636,10 +636,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -648,13 +648,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document LevelBar """
@@ -662,13 +662,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ListView """
@@ -676,13 +676,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ListViewIterator """
@@ -690,10 +690,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -702,10 +702,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -714,13 +714,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document MenuBar """
@@ -728,13 +728,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document MenuModel """
@@ -742,13 +742,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ModifierState """
@@ -756,10 +756,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -768,13 +768,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Notebook """
@@ -782,13 +782,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Overlay """
@@ -796,13 +796,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document PanEventController """
@@ -810,13 +810,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Paned """
@@ -824,13 +824,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document PinchZoomEventController """
@@ -838,13 +838,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Popover """
@@ -852,13 +852,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document PopoverButton """
@@ -866,13 +866,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document PopoverMenu """
@@ -880,13 +880,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ProgressBar """
@@ -894,13 +894,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document RGBA """
@@ -908,14 +908,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
-        r::Float32,
-        g::Float32,
-        b::Float32,
-        a::Float32,
+    $(@type_fields(
     ))
 """
 
@@ -924,13 +920,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document RenderTask """
@@ -938,13 +934,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document RenderTexture """
@@ -952,13 +948,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Revealer """
@@ -966,13 +962,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document RotateEventController """
@@ -980,13 +976,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Scale """
@@ -994,13 +990,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ScrollEventController """
@@ -1008,13 +1004,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Scrollbar """
@@ -1022,13 +1018,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document SelectionModel """
@@ -1036,13 +1032,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Separator """
@@ -1050,13 +1046,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Shader """
@@ -1064,13 +1060,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Shape """
@@ -1078,13 +1074,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ShortcutEventController """
@@ -1092,13 +1088,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document ShortcutTrigger """
@@ -1106,10 +1102,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1117,8 +1113,8 @@ end
     TODO
 """)
 
-@document SingleClickGesture abstract_type_docs(SingleClickGesture, EventController, """
-    Specifalized form of event controllers thatn handle touchscreen touches and mouse-clicks.
+@document SingleClickGesture abstract_type_docs(SingleClickGesture, Any, """
+    TODO
 """)
 
 @document SpinButton """
@@ -1126,13 +1122,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Spinner """
@@ -1140,13 +1136,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Stack """
@@ -1154,13 +1150,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document StackID """
@@ -1168,10 +1164,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1180,13 +1176,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document StackSwitcher """
@@ -1194,13 +1190,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document StylusEventController """
@@ -1208,13 +1204,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document SwipeEventController """
@@ -1222,13 +1218,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Switch """
@@ -1236,13 +1232,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document TextView """
@@ -1250,13 +1246,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Texture """
@@ -1264,13 +1260,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document Time """
@@ -1278,10 +1274,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1290,13 +1286,13 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
 @document TypedFunction """
@@ -1304,10 +1300,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1316,10 +1312,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1328,10 +1324,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1340,10 +1336,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1352,10 +1348,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1364,10 +1360,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1376,10 +1372,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1388,10 +1384,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1400,10 +1396,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1412,10 +1408,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1424,10 +1420,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1436,10 +1432,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1448,10 +1444,10 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_fields(
+    $(@type_fields(
     ))
 """
 
@@ -1460,21 +1456,17 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
 
-@document Widget abstract_type_docs(Widget, SignalEmitter, """
-    Supetype of all objects that can be rendered on screen. Every widget has 
-    **exactly one parent, another widgets such as `Window`, and a specific
-    numnber of children (including 0).
-
-    For more about widgets, visit the [manual chapter on widgets](TODO)
+@document Widget abstract_type_docs(Widget, Any, """
+    TODO
 """)
 
 @document Window """
@@ -1482,11 +1474,12 @@ end
 
     TODO
 
-    $(type_constructors(
+    $(@type_constructors(
     ))
 
-    $(type_signals(Widget, 
+    $(@type_signals(Widget, 
     ))
 
-    $(type_fields())
+    $(@type_fields())
 """
+
