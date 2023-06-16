@@ -49,7 +49,7 @@ const _generate_type_docs = quote
                 \$(@type_constructors(
                 ))
 
-                \$(@type_signals(Widget, 
+                \$(@type_signals($name, 
                 ))
 
                 \$(@type_fields())
@@ -62,26 +62,49 @@ end
 @document Action """
     ## Action <: SignalEmitter
 
-    TODO
+    Memory-managed object that wraps a function, registered with an `Application`.
+
+    Depending on whether `set_function!` or `set_stateful_function!`
+    was used to register a callback, an action may have an internal
+    boolean state.
+
+    Actions can be enabled and disabled using `set_enabled!`. Disabling 
+    an action also disables all connected buttons and menu items.
 
     $(@type_constructors(
+        Action(::ActionID, ::Application))
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Action, 
+        activated
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    action = Action("example.action", app)
+    set_function!(action) do self::Action
+        println(get_id(self) * " activated.")
+    end
+    activate(action)
+    ```
 """
 
 @document Adjustment """
     ## Adjustment <: SignalEmitter
 
-    TODO
+    Object that represents a range of values. Changing the value or 
+    property of the `Adjusment` will change the value or property of the
+    corresponding widget, and vice-versa.
 
     $(@type_constructors(
+        Adjustment(value::Number, lower::Number, upper::Number, increment::Number)
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Adjusment, 
+        value_changed,
+        properties_changed
     ))
 
     $(@type_fields())
@@ -90,9 +113,12 @@ end
 @document Angle """
     ## Angle
 
-    TODO
+    Represents an angle. Use `as_radians` and `as_degrees` to convert
+    it to a number.
 
     $(@type_constructors(
+        radians(::AbstractFloat) -> Angle,
+        degrees(::AbstractFloat) -> Angle
     ))
 
     $(@type_fields(
@@ -102,26 +128,47 @@ end
 @document Application """
     ## Application <: SignalEmitter
 
-    TODO
+    Used to register an application with the users OS. When all 
+    windows of an application are close, the application exits.
+
+    Note that side effects can occur when two applications with the
+    same ID are registered on the machine at the same time, as both
+    instances may share resources.
 
     $(@type_constructors(
+        Appication(::ApplicationID)
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Application, 
+        activate,
+        shutdown
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    app = Application("example.app")
+    connect_signal_activate!(app) app::Application
+        window = Window(app)
+        present!(window)
+    end
+    run!(app)
+    ```
 """
 
 @document AspectFrame """
     ## AspectFrame <: Widget
 
-    TODO
+    Container widget with a single child, regulates 
+    its childs size such that it always adheres to the given 
+    aspect ratio.
 
     $(@type_constructors(
+        AspectFrame(width_to_height::AbstractFloat)
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(AspectFrame, 
     ))
 
     $(@type_fields())
@@ -130,24 +177,29 @@ end
 @document AxisAlignedRectangle """
     ## AxisAlignedRectangle
 
-    TODO
+    Axis aligned bounding box. Defined by its top-left 
+    corner and its size.
 
     $(@type_constructors(
+        AxisAlignedRectangle(top_left::Vector2f, size::Vector2f)
     ))
 
     $(@type_fields(
+        top_left::Vectorf,
+        size::Vector2f
     ))
 """
 
 @document Box """
     ## Box <: Widget
 
-    TODO
+    Widget that aligns its children in a row (or column).
 
     $(@type_constructors(
+        Box(::Orientation)
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Box, 
     ))
 
     $(@type_fields())
@@ -156,26 +208,44 @@ end
 @document Button """
     ## Button <: Widget
 
-    TODO
+    Widget that, when clicked, invokes its connected 
+    `Action` and/or signal handler. Has exactly one child,
+    which is its label.
 
     $(@type_constructors(
+        Button()
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Button, 
+        activate,
+        clicked
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    button = Button()
+    set_child!(button, Label("Click Me"))
+    connect_signal_clicked!(button) do x::Button
+        println("clicked!")
+    end
+    set_child!(window, button)
+    ```
 """
 
 @document CenterBox """
     ## CenterBox <: Widget
 
-    TODO
+    Widget that aligns exactly 3 widgets in a row (or column),
+    prioritizing keeping the middle widget centered at all
+    times.
 
     $(@type_constructors(
+        CenterBox()
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(CenterBox, 
     ))
 
     $(@type_fields())
@@ -184,110 +254,221 @@ end
 @document CheckButton """
     ## CheckButton <: Widget
 
-    TODO
+    Widget that contains an elemne the user can check or uncheck.
+    For GTK4.8 or later, `CheckButton` furthermore has an optional
+    child, which is displayed next to the check mark element.
 
     $(@type_constructors(
+        CheckButton()
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(CheckButton, 
+        toggled,
+        activated
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    check_button = CheckButton()
+    connect_signal_toggled!(check_button) do self::CheckButton
+        state = get_state(self)
+        print("CheckButton is now: ") 
+        if state == CHECK_BUTTON_STATE_ACTIVE
+            println("active!")
+        elseif state == CHECK_BUTTON_STATE_INACTIVE
+            println("inactive")
+        else # state == CHECK_BUTTON_STATE_INCONSISTENT
+            println("inconsistent")
+        end
+    end
+    set_child!(window, check_button)
+    ```
 """
 
 @document ClickEventController """
     ## ClickEventController <: EventController
 
-    TODO
+    Handles one or more mouse-button or touchpad presses in series. 
 
     $(@type_constructors(
+        ClickEventController()
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(ClickEventController, 
+        click_pressed,
+        click_released,
+        click_stopped
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    click_controller = ClickEventController()
+    connect_signal_click_pressed!(click_controller) do self::ClickEventController, n_presses::Integer, x::Float64, y::Float64
+        if n_presses == 2
+            println("double click registered at position (\$(Int64(x)), \$(Int64(y)))")
+        end
+    end
+    add_controller!(window, click_controller)
+    ```
 """
 
 @document Clipboard """
     ## Clipboard <: SignalEmitter
 
-    TODO
+    Object that allows accessing of the data currently inside the users clipboard. 
+    `Clipboard` supports retreavel as a `String` or as an `Image`.
 
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Clipboard, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    clipboard = get_clipboard(window)
+    get_string(clipboard) do self::Clipboard, value::String
+        println("Value in clipboard: " * value)
+    end
+    ```
 """
 
 @document Clock """
     ## Clock <: SignalEmitter
 
-    TODO
+    Object used to keep track of time. Nanosecond precision
 
     $(@type_constructors(
+        Clock()
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Clock, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    clock = Clock()
+    current = restart!(clock)
+    sleep(1)
+    now = elapsed(clock)
+    println("time delta: \$(as_seconds(now - current))")
+    ```
 """
 
 @document ColumnView """
     ## ColumnView <: Widget
 
-    TODO
+    Widget that arranges its children as a table with a variable number of columns 
+    and rows.
 
     $(@type_constructors(
+        ColumnView([::SelectionMode])
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(ColumnView, 
+        activate
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    column_view = ColumnView(SELECTION_MODE_NONE)
+
+    for column_i in 1:4
+        column = push_back_column!(column_view, "Column #\$1")
+
+        # fill each column with 10 labels
+        for row_i in 1:10
+            set_widget!(column_view, column, row_i, Label("\$row_\$column_i)")
+        end
+    end
+
+    # or append an entire row at once
+    push_back_row!(column_view, Label("01"), Label("02"), Label("03"), Label("04))        
+    ```
 """
 
 @document ColumnViewColumn """
     ## ColumnViewColumn <: SignalEmitter
 
-    TODO
+    Class representing a column of `ColumnView`. Has a label, any number of children 
+    which represent all rows in this column (1-indexed), an optional header menu, 
+    which can be accessed by clicking the columns title.
 
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(ColumnViewColumn, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    # create a new column
+    column = push_back_column!(column_view)
+
+    # set widget in 4th row
+    set_widget!(column, 4, Label("4"))
+
+    # rows 1 - 3 will no be empty, and row 4 will have the label
+    ````
 """
 
 @document DragEventController """
     ## DragEventController <: EventController
 
-    TODO
+    Recongizes drag gesture, a gesture where the user click a 
+    point inside the allocated area of the widget holding this controller,
+    then, while keeping the mouse button depressed, moves the cursor.
 
     $(@type_constructors(
+        DragEventController()
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(DragEventController, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    drag_controller = DragEventController()
+    connect_signal_drag!(drag) self::DragController, x_offset::Float32, y_offset::Float32
+        start::Vector2f = get_start_position(self)
+        current = start + Vector2f(x_offset, y_offset)
+        println("Current cursor position: \$current")
+    end
+
+    add_controller!(widget, drag_controller)
+    ```
 """
 
 @document DropDown """
     ## DropDown <: Widget
 
-    TODO
+    Widget that, when click, presents a vertical list of buttons. If a button 
+    is clicked, its corresponding callback function will be invoked, and the
+    dropdown will selected on that button.
+
+    Each button has two widgets, the **list widget** is displayed while the
+    list of buttons is open, the **label widget** is displayed while the 
+    button is currently selected.
 
     $(@type_constructors(
+        DropDown()
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(DropDown, 
     ))
 
     $(@type_fields())
@@ -313,7 +494,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Entry, 
     ))
 
     $(@type_fields())
@@ -331,7 +512,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Expander, 
     ))
 
     $(@type_fields())
@@ -345,7 +526,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(FileChooser, 
     ))
 
     $(@type_fields())
@@ -359,7 +540,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(FileDescriptor, 
     ))
 
     $(@type_fields())
@@ -373,7 +554,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(FileFilter, 
     ))
 
     $(@type_fields())
@@ -387,7 +568,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(FileMonitor, 
     ))
 
     $(@type_fields())
@@ -401,7 +582,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Fixed, 
     ))
 
     $(@type_fields())
@@ -415,7 +596,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(FocusEventController, 
     ))
 
     $(@type_fields())
@@ -429,7 +610,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Frame, 
     ))
 
     $(@type_fields())
@@ -443,7 +624,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(FrameClock, 
     ))
 
     $(@type_fields())
@@ -457,7 +638,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(GLTransform, 
     ))
 
     $(@type_fields())
@@ -471,7 +652,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Grid, 
     ))
 
     $(@type_fields())
@@ -485,7 +666,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(GridView, 
     ))
 
     $(@type_fields())
@@ -523,7 +704,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(HeaderBar, 
     ))
 
     $(@type_fields())
@@ -585,7 +766,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(ImageDisplay, 
     ))
 
     $(@type_fields())
@@ -611,7 +792,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(KeyEventController, 
     ))
 
     $(@type_fields())
@@ -625,7 +806,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(KeyFile, 
     ))
 
     $(@type_fields())
@@ -651,7 +832,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Label, 
     ))
 
     $(@type_fields())
@@ -665,7 +846,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(LevelBar, 
     ))
 
     $(@type_fields())
@@ -679,7 +860,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(ListView, 
     ))
 
     $(@type_fields())
@@ -717,7 +898,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(LongPressEventController, 
     ))
 
     $(@type_fields())
@@ -731,7 +912,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(MenuBar, 
     ))
 
     $(@type_fields())
@@ -745,7 +926,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(MenuModel, 
     ))
 
     $(@type_fields())
@@ -771,7 +952,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(MotionEventController, 
     ))
 
     $(@type_fields())
@@ -785,7 +966,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Notebook, 
     ))
 
     $(@type_fields())
@@ -799,7 +980,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Overlay, 
     ))
 
     $(@type_fields())
@@ -813,7 +994,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(PanEventController, 
     ))
 
     $(@type_fields())
@@ -827,7 +1008,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Paned, 
     ))
 
     $(@type_fields())
@@ -841,7 +1022,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(PinchZoomEventController, 
     ))
 
     $(@type_fields())
@@ -855,7 +1036,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Popover, 
     ))
 
     $(@type_fields())
@@ -869,7 +1050,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(PopoverButton, 
     ))
 
     $(@type_fields())
@@ -883,7 +1064,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(PopoverMenu, 
     ))
 
     $(@type_fields())
@@ -897,7 +1078,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(ProgressBar, 
     ))
 
     $(@type_fields())
@@ -923,7 +1104,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(RenderArea, 
     ))
 
     $(@type_fields())
@@ -937,7 +1118,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(RenderTask, 
     ))
 
     $(@type_fields())
@@ -951,7 +1132,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(RenderTexture, 
     ))
 
     $(@type_fields())
@@ -965,7 +1146,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Revealer, 
     ))
 
     $(@type_fields())
@@ -979,7 +1160,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(RotateEventController, 
     ))
 
     $(@type_fields())
@@ -993,7 +1174,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Scale, 
     ))
 
     $(@type_fields())
@@ -1007,7 +1188,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(ScrollEventController, 
     ))
 
     $(@type_fields())
@@ -1021,7 +1202,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Scrollbar, 
     ))
 
     $(@type_fields())
@@ -1035,7 +1216,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(SelectionModel, 
     ))
 
     $(@type_fields())
@@ -1049,7 +1230,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Separator, 
     ))
 
     $(@type_fields())
@@ -1063,7 +1244,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Shader, 
     ))
 
     $(@type_fields())
@@ -1077,7 +1258,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Shape, 
     ))
 
     $(@type_fields())
@@ -1091,7 +1272,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(ShortcutEventController, 
     ))
 
     $(@type_fields())
@@ -1125,7 +1306,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(SpinButton, 
     ))
 
     $(@type_fields())
@@ -1139,7 +1320,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Spinner, 
     ))
 
     $(@type_fields())
@@ -1153,7 +1334,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Stack, 
     ))
 
     $(@type_fields())
@@ -1179,7 +1360,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(StackSidebar, 
     ))
 
     $(@type_fields())
@@ -1193,7 +1374,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(StackSwitcher, 
     ))
 
     $(@type_fields())
@@ -1207,7 +1388,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(StylusEventController, 
     ))
 
     $(@type_fields())
@@ -1221,7 +1402,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(SwipeEventController, 
     ))
 
     $(@type_fields())
@@ -1235,7 +1416,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Switch, 
     ))
 
     $(@type_fields())
@@ -1249,7 +1430,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(TextView, 
     ))
 
     $(@type_fields())
@@ -1263,7 +1444,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Texture, 
     ))
 
     $(@type_fields())
@@ -1289,7 +1470,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(ToggleButton, 
     ))
 
     $(@type_fields())
@@ -1298,13 +1479,26 @@ end
 @document TypedFunction """
     ## TypedFunction
 
-    TODO
+    Object used to invoke an arbitrary function using the given signature. This wrapper
+    will automatically convert any arguments and return values to the given types
+    unless impossible, at which point an assertion error will be thrown on instantiation.
+
+    In this way, it can be used to assert a functions signature at compile time.
 
     $(@type_constructors(
     ))
 
     $(@type_fields(
     ))
+
+    ## Example
+
+    ```julia
+    as_typed = TypedFunction(Int64, (Integer,)) do(x::Integer)
+        return string(x)
+    end
+    as_typed(12) # returns 12, because "12" will be converted to given return type, Int64
+    ```
 """
 
 @document Vector2 """
@@ -1459,7 +1653,7 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Viewport, 
     ))
 
     $(@type_fields())
@@ -1477,9 +1671,8 @@ end
     $(@type_constructors(
     ))
 
-    $(@type_signals(Widget, 
+    $(@type_signals(Window, 
     ))
 
     $(@type_fields())
 """
-

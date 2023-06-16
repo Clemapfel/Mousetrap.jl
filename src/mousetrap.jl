@@ -2,8 +2,8 @@ module mousetrap
 
 ####### detail.jl
 
-    @info "Importing `mousetrap_julia_binding` shared library..."
-    __cxxwrap_compile_time_start = time()
+    #@info "Importing `mousetrap_julia_binding` shared library..."
+    #__cxxwrap_compile_time_start = time()
 
     module detail
         using CxxWrap, Pkg.Artifacts
@@ -12,28 +12,10 @@ module mousetrap
         @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
     end
 
-    @info "Done (" * string(round(time() - __cxxwrap_compile_time_start; digits=2)) * "s)"
+    #@info "Done (" * string(round(time() - __cxxwrap_compile_time_start; digits=2)) * "s)"
 
 ####### typed_function.jl
 
-    """
-    # TypedFunction
-
-    Object used to invoke an arbitrary function using the given signature. This wrapper
-    will automatically convert any arguments and return values to the given types
-    unless impossible, at which point an assertion error will be thrown on instantiation.
-
-    In this way, it can be used to assert a functions signature at compile time.
-
-    ### Example
-
-    ```julia
-    as_typed = TypedFunction(Int64, (Integer,)) do(x::Integer)
-        return string(x)
-    end
-    as_typed(12) # returns 12, because "12" will be converted to given return type, Int64
-    ```
-    """
     mutable struct TypedFunction
 
         _apply::Function
@@ -230,7 +212,7 @@ module mousetrap
         out = Expr(:block)
         mousetrap.eval(:(export $name))
         push!(out.args, quote
-            struct $name <: $super
+            mutable struct $name <: $super
                 _internal::detail.$internal_name
             end
         end)
@@ -450,6 +432,9 @@ module mousetrap
     Base.show(io::IO, x::Vector3{T}) where T = print(io, "Vector3{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")")
     Base.show(io::IO, x::Vector4{T}) where T = print(io, "Vector4{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ", " * string(x.w) * ")")
 
+    Base.string(x::Vector2{T}) where T = "Vector2{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ")"
+    Base.string(x::Vector3{T}) where T = "Vector3{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")"
+    Base.string(x::Vector4{T}) where T = "Vector4{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ", " * string(x.w) * ")"
 
 ####### time.jl
 
@@ -1342,6 +1327,9 @@ module mousetrap
     @export_type Application SignalEmitter
     @export_type Action SignalEmitter
 
+    const ApplicationID = String;
+    export ApplicationID
+
     Application(id::String) = Application(detail._Application(id))
 
     run!(app::Application) ::Cint = mousetrap.detail.run!(app._internal)
@@ -1371,7 +1359,7 @@ module mousetrap
     function main(f; application_id::String = "mousetrap.jl") ::Int64
         app = Application(application_id)
         typed_f = TypedFunction(f, Any, (Application,))
-        connect_signal_activate!(app) do app::Application
+        connect_signal_activate!(app)  do app::Application
             try
                 typed_f(app)
             catch(exception)
@@ -1382,12 +1370,7 @@ module mousetrap
                 quit!(app)
             end
         end
-
-        try
-            return run!(app)
-        finally
-            quit!(app)
-        end
+        return run!(app)
     end
     export main
 
@@ -2762,10 +2745,10 @@ module mousetrap
     @export_type DragEventController SingleClickGesture
     DragEventController() = DragEventController(detail._DragEventController())
 
-    get_start_position(controller::DragEventController) = return detail.get_start_position(controller._internal)
+    get_start_position(controller::DragEventController) ::Vector2f = detail.get_start_position(controller._internal)
     export get_start_position
 
-    get_current_offset(controller::DragEventController) = return detail.get_current_offset(controller._internal)
+    get_current_offset(controller::DragEventController) ::Vector2f = detail.get_current_offset(controller._internal)
     export get_current_offset
 
     @add_signal_drag_begin DragEventController
@@ -3274,13 +3257,19 @@ module mousetrap
     @export_type ColumnView Widget
     ColumnView(selection_mode::SelectionMode = SELECTION_MODE_NONE) = ColumnView(detail._ColumnView(selection_mode))
 
-    push_back_column!(column_view::ColumnView, title::String) = detail.push_back_column!(column_view._internal, title)
+    function push_back_column!(column_view::ColumnView, title::String) ::ColumnViewColumn 
+        return ColumnViewColumn(detail.push_back_column!(column_view._internal, title))
+    end
     export push_back_column!
 
-    push_front_column!(column_view::ColumnView, title::String) = detail.push_front_column!(column_view._internal, title)
+    function push_front_column!(column_view::ColumnView, title::String) ::ColumnViewColumn 
+        ColumnViewColumn(detail.push_front_column!(column_view._internal, title))
+    end
     export push_front_column!
 
-    insert_column!(column_view::ColumnView, index::Integer, title::String) = detail.insert_column!(column_view._internal, from_julia_index(index), title)
+    function insert_column!(column_view::ColumnView, index::Integer, title::String) ::ColumnViewColumn 
+        ColumnViewColumn(detail.insert_column!(column_view._internal, from_julia_index(index), title))
+    end
     export insert_column!
 
     remove_column!(column_view::ColumnView, column::ColumnViewColumn) = detail.remove_column!(column_view._internal, column._internal)
@@ -3299,8 +3288,8 @@ module mousetrap
     has_column_with_title(column_view::ColumnView, title::String) ::Bool = return detail.get_column_with_title(column_view._internal, title)
     export has_column_with_title
 
-    function set_widget!(column_view::ColumnView, column::ColumnViewColumn, row_i::Integer, widget::Widget)
-        detail.set_widget!(column_view._internal, column._internal, from_julia_index(row_i), widget._internal.cpp_object)
+    function set_widget!(column::ColumnViewColumn, row_i::Integer, widget::Widget)
+        detail.set_widget!(column._internal, from_julia_index(row_i), widget._internal.cpp_object)
     end
     export set_widget!
 
@@ -3359,6 +3348,10 @@ module mousetrap
     @export_function ColumnView get_single_click_activate Bool
     @export_function ColumnView get_n_rows Int64
     @export_function ColumnView get_n_columns Int64
+
+
+    @add_widget_signals ColumnView
+    @add_signal_activate ColumnView
 
 ###### header_bar.jl
 
@@ -3687,12 +3680,12 @@ module mousetrap
     @export_widget_function show! Cvoid
 
     function add_controller!(widget::Widget, controller::EventController)
-        detail.add_controller(widget._internal.cpp_object, controller._internal.cpp_object)
+        detail.add_controller!(widget._internal.cpp_object, controller._internal.cpp_object)
     end
     export add_controller!
 
     function remove_controller!(widget::Widget, controller::EventController)
-        detail.remove_controller(widget._internal.cpp_object, controller._internal.cpp_object)
+        detail.remove_controller!(widget._internal.cpp_object, controller._internal.cpp_object)
     end
     export remove_controller!
 
@@ -3719,9 +3712,6 @@ module mousetrap
     get_frame_clock(widget::Widget) = FrameClock(detail.get_frame_clock(widget._internal.cpp_object))
     export get_frame_clock
 
-    # TODO: get_clipboard(widget::Widget) = Clipboard(detail.get_clipboard(widget._internal.cpp_object))
-    export get_clipboard
-
     @export_widget_function remove_tick_callback! Cvoid
 
     function set_tick_callback!(f, widget::Widget, data::Data_t) where Data_t
@@ -3741,8 +3731,16 @@ module mousetrap
 ####### clipboard.jl
 
     @export_type Clipboard SignalEmitter
-    @export_function Clipboard is_local Bool
 
+    function Clipboard(internal::Ptr{Cvoid}) 
+        #internal = detail._ref(internal)
+        out = Clipboard(detail._Clipboard(internal))
+        #finalizer(out) do self
+            #detail._unref(out._internal.cpp_object)
+        #end
+    end
+
+    @export_function Clipboard is_local Bool
     @export_function Clipboard contains_string Bool
 
     set_string!(clipboard::Clipboard, string::String) = detail.set_string!(clipboard._internal, string)
@@ -3755,7 +3753,7 @@ module mousetrap
         end)
     end
     function get_string(f, clipboard::Clipboard)
-        typed_f = TypedFunction(f, Cvoid, (Clipboard, String, Data_t))
+        typed_f = TypedFunction(f, Cvoid, (Clipboard, String))
         detail.get_string(clipboard._internal, function(internal_ref, string)
             typed_f(Clipboard(internal_ref[]), String(string))
         end)

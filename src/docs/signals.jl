@@ -32,7 +32,7 @@ add_signal_descriptor(:drag, "x_offset::AbstractFloat, y_offset::AbstractFloat, 
 add_signal_descriptor(:drag_begin, "x_offset::AbstractFloat, y_offset::AbstractFloat, [::Data_t]) -> Nothing", "drag gesture seizes to be active")
 add_signal_descriptor(:click_pressed, "n_presses::Integer, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", "User presses a mouse button or touch-device")
 add_signal_descriptor(:click_released, "n_presses::Integer, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", "User releases a mouse button or touch-device")
-add_signal_descriptor(:clip_stopped, void_signature, "once when a series of clicks ends")
+add_signal_descriptor(:click_stopped, void_signature, "once when a series of clicks ends")
 add_signal_descriptor(:focus_gained, void_signature, "Widget acquires input focus")
 add_signal_descriptor(:focus_lost, void_signature, "Widget looses input focus")
 add_signal_descriptor(:pressed, "x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", "long-press gesture is recognized")

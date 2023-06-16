@@ -65,7 +65,7 @@ macro function_docs(name, brief::String, return_t, args...)
     text *= "```\n"
     text *= "$brief\n"
 
-    return :(@doc $text $name)
+    return text
 end
 
 function enum_docs(name, brief, values)
@@ -120,11 +120,17 @@ macro type_constructors(constructors...)
     return out
 end
 
+macro type_fields()
+    out = "## Fields\n"
+    out *= "(no public fields)\n"   
+    return out
+end
+
 macro type_fields(fields...)
     out = "## Fields\n"
     if !isempty(fields)
         for field in fields
-            out *= "+ `" * string(field[1]) * "::" * string(field[2]) * "`\n"
+            out *= "+ `$field`\n"
         end
     else
         out *= "(no public fields)\n"
@@ -132,7 +138,7 @@ macro type_fields(fields...)
     return out
 end
 
-function example(string)
+macro example(string)
     return "## Example\n```julia\n$string\n```"
 end
 
@@ -151,6 +157,8 @@ function abstract_type_docs(type_in, super_type, brief)
     end
     return out
 end
+
+## include
 
 include("docs/signals.jl")
 include("docs/functions.jl")
