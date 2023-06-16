@@ -8,8 +8,8 @@ module mousetrap
     module detail
         using CxxWrap, Pkg.Artifacts
         function __init__() @initcxx end
-        #@wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
-        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
+        @wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
+        #@wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
     end
 
     #@info "Done (" * string(round(time() - __cxxwrap_compile_time_start; digits=2)) * "s)"
