@@ -5,19 +5,16 @@ Pkg.activate(".")
 using mousetrap 
 @info "Done."
 
+GC.enable(false)
+
 main() do app::Application
     window = Window(app)
 
-    drop_down = DropDown()
-    push_back!(drop_down, Label("Item 01 List Label"), Label("Item 01")) do x::DropDown
-       println("Item 01 selected") 
-       return nothing
+    # list file types of all file in current directory
+    current_dir = FileDescriptor(".")
+    for file in get_children(current_dir)
+        println(get_name(file) * ":\t" * get_content_type(file))
     end
 
-    push_back!(drop_down, Label("Item 02 List Label"), Label("Item 02")) do x::Widget
-        println("Item 02 selected") 
-     end
-    
-    set_child!(window, drop_down)
     present!(window)
 end

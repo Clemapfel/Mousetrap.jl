@@ -15,7 +15,7 @@ module mousetrap
     #@info "Done (" * string(round(time() - __cxxwrap_compile_time_start; digits=2)) * "s)"
 
 ####### typed_function.jl
-
+    
     mutable struct TypedFunction
 
         _apply::Function
@@ -25,30 +25,29 @@ module mousetrap
         function TypedFunction(f::Function, return_t::Type, arg_ts::Tuple)
 
             actual_return_ts = Base.return_types(f, arg_ts)
-            for arg_t in arg_ts
-
-                match_found = false
-                for type in actual_return_ts
-                     if type <: return_t || !isempty(Base.return_types(Base.convert, (Type{return_t}, type)))
-                        match_found = true
-                        break;
-                    end
+            match_found = false
+            for type in actual_return_ts
+                if type <: return_t || !isempty(Base.return_types(Base.convert, (Type{return_t}, type)))
+                    match_found = true
+                    break;
                 end
+            end
 
-                if !match_found
-                     signature = "("
-                     for i in 1:length(arg_ts)
-                        signature = signature * string(arg_ts[i]) * ((i < length(arg_ts)) ? ", " : ")")
-                     end
-                     signature = signature * " -> $return_t"
-                     throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`"))
+            if !match_found
+                signature = "("
+                for i in 1:length(arg_ts)
+                    signature = signature * string(arg_ts[i]) * ((i < length(arg_ts)) ? ", " : ")")
                 end
+                signature = signature * " -> $return_t"
+                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`"))
             end
 
             return new(f, return_t, arg_ts)
         end
     end
     export TypedFunction
+
+    typed_function_refs = Ref{TypedFunction}[]
 
     function (instance::TypedFunction)(args...)
         return Base.convert(instance._return_t, instance._apply([Base.convert(instance._arg_ts[i], args[i]) for i in 1:length(args)]...))
@@ -2177,6 +2176,8 @@ module mousetrap
         return FileDescriptor[FileDescriptor(ptr) for ptr in children]
     end
     export get_children
+
+    Base.show(io::IO, x::FileDescriptor) = print(io, "FileDescriptor(\"" * get_path(x) * "\")")
 
     # File System
 

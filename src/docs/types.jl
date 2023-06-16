@@ -483,7 +483,7 @@ end
 
     push_back!(drop_down, Label("Item 02 List Label"), Label("Item 02")) do x::DropDown
         println("Item 02 selected") 
-     end
+    end
     
     set_child!(window, drop_down)
     ```
@@ -495,7 +495,7 @@ end
     ID of a dropdown item, keep track of this in order to 
     identify items in an position-independent manner
 
-    $(@type_constructors(
+    $(@type_constructors()
     ))
 
     $(@type_fields(
@@ -505,30 +505,39 @@ end
 @document Entry """
     ## Entry <: Widget
 
-    TODO
+    Single-line text entry. Activated when the user 
+    presses the entre key while the cursor is inside 
+    text input area.
 
     $(@type_constructors(
+        Entry()
     ))
 
     $(@type_signals(Entry, 
+        :activate, 
+        :text_changed
     ))
 
     $(@type_fields())
 """
 
 @document EventController abstract_type_docs(EventController, Any, """
-    TODO
+    Superclass of all event controllers. Use `add_controller(::Widget, ::EventController)`
+    to connect an event controller to any widget, in order for it
+    to start receiving events while the widget holds input focus.
 """)
 
 @document Expander """
     ## Expander <: Widget
 
-    TODO
+    Collapsible item, has a label- and child-widget.
 
     $(@type_constructors(
+        Expander()
     ))
 
     $(@type_signals(Expander, 
+        :activate
     ))
 
     $(@type_fields())
@@ -537,49 +546,115 @@ end
 @document FileChooser """
     ## FileChooser <: SignalEmitter
 
-    TODO
+    Pre-made dialog that allows users to pick a file or folder on the 
+    local disk. 
+
+    Connect a function with the signature
+    ```
+    (::FileChooser, files::Vector{FileDescriptor}, [::Data_t]) -> Cvoid
+    ```
+    using `on_accept!`. When the user makes a selection, this function 
+    will be invoked and `files` will contain one or more selected files.
+
+    The file choosers layout and which items the user can select
+    depends on the `FileChooserAction` specified on construction.
 
     $(@type_constructors(
+        FileChooser(::FileChooserAction, [title::String])
     ))
 
     $(@type_signals(FileChooser, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    file_chooser = FileChooser(FILE_CHOOSER_ACTION_OPEN_FILE)
+    
+    on_accept!(file_chooser) do x::FileChooser, files::Vector{FileDescriptor}
+        if !isempty(files)
+            println("Selected file at ", get_path(files[1]))
+        end
+    end
+    
+    on_cancel!(file_chooser) do x::FileChooser
+        println("Canceled.")
+    end
+
+    present!(file_chooser)
+    ```
 """
 
 @document FileDescriptor """
     ## FileDescriptor <: SignalEmitter
 
-    TODO
+    Read-only object that points to a file or folder 
+    at a specific location on disk. Note that there is no 
+    guarantee that file or folder exists.
 
     $(@type_constructors(
+        FileDescriptor(path::String)
     ))
 
     $(@type_signals(FileDescriptor, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    # list file types of all files in current directory
+    current_dir = FileDescriptor(".")
+    for file in get_children(current_dir)
+        println(get_name(file) * ":\t" * get_content_type(file))
+    end
+    ```
 """
 
 @document FileFilter """
     ## FileFilter <: SignalEmitter
 
-    TODO
+    File used for `FileChooser`. Only files that 
+    pass the filter will be available to be selected.
+    If multiple filters are supplied, the user can 
+    select from a list of them using a dropdown in 
+    the `FileChooser` dialog.
 
     $(@type_constructors(
+        FileFilter()
     ))
 
     $(@type_signals(FileFilter, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    filter = FileFilter()
+    add_allowed_suffix!(filter, "jl") # without the `.`
+    ````
 """
 
 @document FileMonitor """
     ## FileMonitor <: SignalEmitter
 
-    TODO
+    Object that monitors a file location on disk. If 
+    anything about that location changes, for example if
+    the content of the file is modified, `FileMonitor` 
+    will invoke the registered callback. We can differentiate
+    between event types using the `FileMonitorEvent` supplied
+    to the callback.
+
+    The callback is registered using `on_file_changed!` and is
+    required to have the following signature:
+
+    ```
+    (::FileMonitor, ::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor, [::Data_t]) -> Cvoid
+    ```
+
+    See the chapter on files for more information.
 
     $(@type_constructors(
     ))
@@ -588,14 +663,29 @@ end
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    file = FileDescriptor("path/to/file.jl")
+    @assert(exists(file))
+    monitor = create_monitor(file)
+    on_file_changed!(monitor) do x::FileMonitor, event_type::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor
+        if event_type == FILE_MONITOR_EVENT_CHANGED
+            println("File at " * get_path(self) * " was modified.")
+        end
+    end
+    ```
 """
 
 @document Fixed """
     ## Fixed <: Widget
 
-    TODO
+    Container widget that places its children at a specified position. 
+    Use of this widget is usually discouraged because it does not allow
+    for automatic resizing or alignment.
 
     $(@type_constructors(
+        Fixed()
     ))
 
     $(@type_signals(Fixed, 
@@ -607,26 +697,39 @@ end
 @document FocusEventController """
     ## FocusEventController <: EventController
 
-    TODO
+    Emits its signals when the controlled widget gains or 
+    looses input focus.
 
     $(@type_constructors(
+        FocusEventController()
     ))
 
     $(@type_signals(FocusEventController, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    focus_controller = FocusEventController()
+    connect_signal_focus_gained(focus_controller) do self::FocusController
+        println("Gained Focus")
+    end
+    add_controller(widget, focus_controller)
+    ```
 """
 
 @document Frame """
     ## Frame <: Widget
 
-    TODO
+    Widget that draws a black outline with rounded corners around
+    its singular child.
 
     $(@type_constructors(
     ))
 
     $(@type_signals(Frame, 
+        Frame()
     ))
 
     $(@type_fields())
@@ -635,7 +738,9 @@ end
 @document FrameClock """
     ## FrameClock <: SignalEmitter
 
-    TODO
+    Signal emitter that emits its signals in a way that 
+    is synchronized with the render cycle of each frame
+    the widget is drawn.
 
     $(@type_constructors(
     ))
@@ -644,45 +749,72 @@ end
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    frame_clock = get_frame_clock(widget)
+    connect_signal_paint(frame_clock) do x::FrameClock
+        println("Widget was drawn.")
+    end
+    ```
 """
 
 @document GLTransform """
     ## GLTransform <: SignalEmitter
 
-    TODO
+    Transform in 3D spaces. Uses OpenGL coordinates, it should 
+    therefore only be used to modify vertices of `Shape`.
+
+    Can be indexed and modified as a 4x4 matrix of `Float32`.
 
     $(@type_constructors(
+        GLTransform()
     ))
 
     $(@type_signals(GLTransform, 
     ))
 
-    $(@type_fields())
+    $(@type_fields(
+    ))
 """
 
 @document Grid """
     ## Grid <: Widget
 
-    TODO
+    Container that arranges its children in a non-uniform grid. 
+    Each child widget has a cell position (1-indexed), a width 
+    and height, measured in number of cells.
 
     $(@type_constructors(
+        Grid()  
     ))
 
     $(@type_signals(Grid, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    grid = Grid()
+    insert!(grid, Label("Label"), 1, 1, 1, 1)
+    insert!(grid, Button(), 1, 2, 1, 1)
+    insert!(grid, Separator, 2, 1, 2, 1)
+    ```
 """
 
 @document GridView """
     ## GridView <: Widget
 
-    TODO
+    Selectable container that arranges its children in an uniform 
+    grid.
 
     $(@type_constructors(
+        GridView(::Orientation, [::SelectionMode])
     ))
 
     $(@type_signals(GridView, 
+        :activate
     ))
 
     $(@type_fields())
@@ -691,7 +823,10 @@ end
 @document GroupID """
     ## GroupID
 
-    TODO
+    ID of a group inside a `KeyFile`. Use `.`
+    to deliminate nested groups, as each key-value
+    pair in a `KeyFile` has to be inside exactly 
+    1 group.
 
     $(@type_constructors(
     ))
@@ -703,21 +838,30 @@ end
 @document HSVA """
     ## HSVA
 
-    TODO
+    Color in hsva format.
 
     $(@type_constructors(
+        HSAV(::AbstractFloat, ::AbstractFloat, ::AbstractFloat, ::AbstractFloat)
     ))
 
     $(@type_fields(
+        h::Float32,
+        s::Float32,
+        v::Float32,
+        a::Float32
     ))
 """
 
 @document HeaderBar """
     ## HeaderBar <: Widget
 
-    TODO
+    Widget usually used as the titlebar widget of a `Window`.
+    Has a centered title, the window control buttons, along with 
+    any number of widgets at the start and at the end of the bar.
 
     $(@type_constructors(
+        HeaderBar(),
+        HeaderBar(layout::String)
     ))
 
     $(@type_signals(HeaderBar, 
