@@ -384,16 +384,18 @@ end
     column_view = ColumnView(SELECTION_MODE_NONE)
 
     for column_i in 1:4
-        column = push_back_column!(column_view, "Column #\$1")
+        column = push_back_column!(column_view, "Column #\$column_i")
 
-        # fill each column with 10 labels
-        for row_i in 1:10
-            set_widget!(column_view, column, row_i, Label("\$row_\$column_i)")
+        # fill each column with labels
+        for row_i in 1:3
+            set_widget!(column_view, column, row_i, Label("\$row_i | \$column_i"))
         end
     end
 
-    # or append an entire row at once
-    push_back_row!(column_view, Label("01"), Label("02"), Label("03"), Label("04))        
+    # or push an entire row at once
+    # any widget can be put into any cell
+    push_back_row!(column_view, Button(), CheckButton(), Entry(), Separator())        
+    set_child!(window, column_view)
     ```
 """
 
@@ -401,7 +403,7 @@ end
     ## ColumnViewColumn <: SignalEmitter
 
     Class representing a column of `ColumnView`. Has a label, any number of children 
-    which represent all rows in this column (1-indexed), an optional header menu, 
+    which represent all rows in this column (1-indexed), and an optional header menu, 
     which can be accessed by clicking the columns title.
 
     $(@type_constructors(
@@ -417,11 +419,9 @@ end
     # create a new column
     column = push_back_column!(column_view)
 
-    # set widget in 4th row
+    # set widget in 4th row, automatically backfills rows 1 - 3
     set_widget!(column, 4, Label("4"))
-
-    # rows 1 - 3 will no be empty, and row 4 will have the label
-    ````
+    ```
 """
 
 @document DragEventController """
@@ -443,13 +443,14 @@ end
     ## Example
     ```julia
     drag_controller = DragEventController()
-    connect_signal_drag!(drag) self::DragController, x_offset::Float32, y_offset::Float32
+    connect_signal_drag!(drag_controller) do self::DragEventController, x_offset, y_offset
+        
         start::Vector2f = get_start_position(self)
         current = start + Vector2f(x_offset, y_offset)
         println("Current cursor position: \$current")
     end
 
-    add_controller!(widget, drag_controller)
+    add_controller!(window, drag_controller)
     ```
 """
 
@@ -460,7 +461,7 @@ end
     is clicked, its corresponding callback function will be invoked, and the
     dropdown will selected on that button.
 
-    Each button has two widgets, the **list widget** is displayed while the
+    Each button has two associated widgets, the **list widget** is displayed while the
     list of buttons is open, the **label widget** is displayed while the 
     button is currently selected.
 
@@ -472,12 +473,27 @@ end
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    drop_down = DropDown()
+    push_back!(drop_down, Label("Item 01 List Label"), Label("Item 01")) do x::DropDown
+       println("Item 01 selected") 
+    end
+
+    push_back!(drop_down, Label("Item 02 List Label"), Label("Item 02")) do x::DropDown
+        println("Item 02 selected") 
+     end
+    
+    set_child!(window, drop_down)
+    ```
 """
 
 @document DropDownItemID """
     ## DropDownItemID
 
-    TODO
+    ID of a dropdown item, keep track of this in order to 
+    identify items in an position-independent manner
 
     $(@type_constructors(
     ))

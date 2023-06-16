@@ -314,7 +314,6 @@ module mousetrap
     const Vector2{T} = SVector{2, T}
     export Vector2
 
-    Vector2{T}(x::T, y::T) where T = Vector2{T}(x, y)
     Vector2{T}(all::T) where T = Vector2{T}(all, all)
 
     function Base.getproperty(v::Vector2{T}, symbol::Symbol) where T
@@ -349,7 +348,6 @@ module mousetrap
     const Vector3{T} = SVector{3, T}
     export Vector3
 
-    Vector3{T}(x::T, y::T, z::T) where T = Vector3{T}(x, y, z)
     Vector3{T}(all::T) where T = Vector3{T}(all, all, all)
 
     function Base.getproperty(v::Vector3{T}, symbol::Symbol) where T
@@ -388,7 +386,6 @@ module mousetrap
     const Vector4{T} = SVector{4, T}
     export Vector4
 
-    Vector3{T}(x::T, y::T, z::T, w::T) where T = Vector4{T}(x, y, z, w)
     Vector4{T}(all::T) where T = Vector4{T}(all, all, all, all)
 
     function Base.getproperty(v::Vector4{T}, symbol::Symbol) where T
@@ -432,9 +429,9 @@ module mousetrap
     Base.show(io::IO, x::Vector3{T}) where T = print(io, "Vector3{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")")
     Base.show(io::IO, x::Vector4{T}) where T = print(io, "Vector4{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ", " * string(x.w) * ")")
 
-    Base.string(x::Vector2{T}) where T = "Vector2{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ")"
-    Base.string(x::Vector3{T}) where T = "Vector3{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")"
-    Base.string(x::Vector4{T}) where T = "Vector4{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ", " * string(x.w) * ")"
+    Base.string(x::Vector2{T}) where T = "(" * string(x.x) * ", " * string(x.y) * ")"
+    Base.string(x::Vector3{T}) where T = "(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")"
+    Base.string(x::Vector4{T}) where T = "(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ", " * string(x.w) * ")"
 
 ####### time.jl
 
@@ -2649,13 +2646,13 @@ module mousetrap
     function push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
         detail.push_back!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
-            f(DropDown(drop_down_internal_ref[]), data)
+            typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
         detail.push_back!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
-            f(DropDown(drop_down_internal_ref[]))
+            typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
     export push_back!
@@ -2663,13 +2660,13 @@ module mousetrap
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
         detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
-            f(DropDown(drop_down_internal_ref[]), data)
+            typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
         detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
-            f(DropDown(drop_down_internal_ref[]))
+            typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
     export push_front!
@@ -2677,13 +2674,13 @@ module mousetrap
     function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
         detail.insert!(drop_down._internal, from_julia_index(index), list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
-            f(DropDown(drop_down_internal_ref[]), data)
+            typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
         detail.insert!(drop_down._internal, from_julia_index(index), list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
-            f(DropDown(drop_down_internal_ref[]))
+            typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
     export insert!
@@ -3288,8 +3285,8 @@ module mousetrap
     has_column_with_title(column_view::ColumnView, title::String) ::Bool = return detail.get_column_with_title(column_view._internal, title)
     export has_column_with_title
 
-    function set_widget!(column::ColumnViewColumn, row_i::Integer, widget::Widget)
-        detail.set_widget!(column._internal, from_julia_index(row_i), widget._internal.cpp_object)
+    function set_widget!(column_view::ColumnView, column::ColumnViewColumn, row_i::Integer, widget::Widget)
+        detail.set_widget!(column_view._internal, column._internal, from_julia_index(row_i), widget._internal.cpp_object)
     end
     export set_widget!
 
@@ -3585,7 +3582,7 @@ module mousetrap
 ###### separator.jl
 
     @export_type Separator Widget
-    Separator(orientation::Orientation = ORIENTATION_HORIZONTAL; opacity::AbstractFloat = 1) = Separator(detail._Separator(opacity, orientation))
+    Separator(orientation::Orientation = ORIENTATION_HORIZONTAL; opacity::AbstractFloat = 1.0) = Separator(detail._Separator(convert(Cfloat, opacity), orientation))
 
     @export_function Separator set_orientation! Cvoid Orientation orientation
     @export_function Separator get_orientation Orientation
@@ -4255,10 +4252,16 @@ module mousetrap
 
 ###### key_code.jl
 
-    include("./key_codes.jl")
+    const skip_keycodes = true
+    if !skip_keycodes
+        include("./key_codes.jl")
+    end
 
 ###### documentation
 
+    const skip_docs = true
+    if !skip_docs
     include("./docs.jl")
+    end
 
 end # module mousetrap
