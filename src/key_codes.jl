@@ -4554,3 +4554,41 @@ const KEY_LogWindowTree = detail.KEY_LogWindowTree
 export KEY_LogWindowTree
 const KEY_LogGrabInfo = detail.KEY_LogGrabInfo
 export KEY_LogGrabInfo
+
+@do_not_compile const to_generate = quote
+    
+    file = open("in.txt") 
+
+    cpp_out = open("out.cpp", "w")
+    jl_binding_out = open("jl_binding.cpp", "w")
+    jl_out = open("out.jl", "w")
+
+    lines = String[]
+    while !eof(file)
+        push!(lines, readline(file))
+    end
+
+    for i in 1:length(lines)
+
+        new_name = ""
+
+        first = true
+        previous_char_is_lowercase = false
+        for c in split(lines[i][1:(end-1)], "GDK_KEY_")[2]
+        
+            #if !first && isletter(c) && isuppercase(c) && previous_char_is_lowercase
+            #    new_name *= '_'
+            #end
+
+            new_name *= c
+            previous_char_is_lowercase = islowercase(c)
+            first = false
+        end
+        
+        name = "KEY_" * (new_name)
+
+        write(cpp_out, replace(lines[i], "TODO" => name) * "\n")
+        write(jl_binding_out, "module.set_const(\"$name\", (guint) mousetrap::$name);\n")
+        write(jl_out, "const $name = detail.$name\nexport $name\n")
+    end
+end
