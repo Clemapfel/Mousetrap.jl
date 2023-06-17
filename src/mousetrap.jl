@@ -1,5 +1,7 @@
 module mousetrap
 
+macro do_not_compile(args...) return :() end
+    
 ####### detail.jl
 
     #@info "Importing `mousetrap_julia_binding` shared library..."
@@ -8,8 +10,8 @@ module mousetrap
     module detail
         using CxxWrap, Pkg.Artifacts
         function __init__() @initcxx end
-        @wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
-        #@wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
+        #@wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
+        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
     end
 
     #@info "Done (" * string(round(time() - __cxxwrap_compile_time_start; digits=2)) * "s)"
@@ -427,10 +429,6 @@ module mousetrap
     Base.show(io::IO, x::Vector2{T}) where T = print(io, "Vector2{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ")")
     Base.show(io::IO, x::Vector3{T}) where T = print(io, "Vector3{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")")
     Base.show(io::IO, x::Vector4{T}) where T = print(io, "Vector4{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ", " * string(x.w) * ")")
-
-    Base.string(x::Vector2{T}) where T = "(" * string(x.x) * ", " * string(x.y) * ")"
-    Base.string(x::Vector3{T}) where T = "(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")"
-    Base.string(x::Vector4{T}) where T = "(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ", " * string(x.w) * ")"
 
 ####### time.jl
 
@@ -902,6 +900,8 @@ module mousetrap
     macro add_signal_scroll_child(x) return :(@add_signal $x scroll_child Cvoid ScrollType type Bool is_horizontal) end
     macro add_signal_resize(x) return :(@add_signal $x resize Cvoid Integer width Integer height) end
 
+    macro add_signal_modifiers_changed(x) return :(@add_signal $x modifiers_changed Cvoid ModifierState state) end
+
     macro add_signal_activated(T)
 
         out = Expr(:block)
@@ -1110,7 +1110,7 @@ module mousetrap
 
         return out
     end
-
+    
     macro add_key_event_controller_signal(T, name, Return_t)
 
         out = Expr(:block)
@@ -1131,6 +1131,7 @@ module mousetrap
                 typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t, $Arg3_t))
                 detail.$connect_signal_name(x._internal, function(x)
                     typed_f($T(x[1][]), x[2], x[4])
+                    return false
                 end)
             end
         )))
@@ -1140,6 +1141,7 @@ module mousetrap
                 typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t, $Arg3_t, Data_t))
                 detail.$connect_signal_name(x._internal, function(x)
                     typed_f($T(x[1][]), x[2], x[4], data)
+                    return false
                 end)
             end
         )))
@@ -1578,240 +1580,6 @@ module mousetrap
     const CURSOR_TYPE_HORIZONTAL_RESIZE = CURSOR_TYPE_ROW_RESIZE
     const CURSOR_TYPE_VERTICAL_RESIZE = CURSOR_TYPE_COLUMN_RESIZE
 
-####### aspect_frame.jl
-
-    @export_type AspectFrame Widget
-    function AspectFrame(ratio::AbstractFloat; child_x_alignment::AbstractFloat = 0.5, child_y_alignment::AbstractFloat = 0.5)
-        return AspectFrame(detail._AspectFrame(ratio, child_x_alignment, child_y_alignment))
-    end
-
-    @export_function AspectFrame set_ratio! Cvoid AbstractFloat ratio
-    @export_function AspectFrame get_ratio Cfloat
-    @export_function AspectFrame set_child_x_alignment! Cvoid AbstractFloat alignment
-    @export_function AspectFrame set_child_y_alignment! Cvoid AbstractFloat alignment
-    @export_function AspectFrame get_child_x_alignment Cfloat
-    @export_function AspectFrame get_child_y_alignment Cfloat
-
-    @export_function AspectFrame remove_child! Cvoid
-
-    set_child!(aspect_frame::AspectFrame, child::Widget) = detail.set_child!(aspect_frame._internal, child._internal.cpp_object)
-    export set_child!
-
-    Base.show(io::IO, x::AspectFrame) = mousetrap.show_aux(io, x, :ratio, :child_x_alignment, :child_y_alignment)
-
-####### box.jl
-
-    @export_type Box Widget
-    Box(orientation::Orientation) = Box(detail._Box(orientation))
-
-    function push_back!(box::Box, widget::Widget)
-        detail.push_back!(box._internal, widget._internal.cpp_object)
-    end
-    export push_back!
-
-    function push_front!(box::Box, widget::Widget)
-        detail.push_front!(box._internal, widget._internal.cpp_object)
-    end
-    export push_front!
-
-    function insert_after!(box::Box, to_append::Widget, after::Widget)
-        detail.push_front!(box._internal, to_append._internal.cpp_object, after._internal.cpp_object)
-    end
-    export insert_after!
-
-    function remove!(box::Box, widget::Widget)
-        detail.remove!(box._internal, widget._internal.cpp_object)
-    end
-    export remove!
-
-    @export_function Box clear Cvoid
-    @export_function Box set_homogeneous! Cvoid Bool b
-    @export_function Box get_homogeneous Bool
-
-    function set_spacing!(box::Box, spacing::Number) ::Cvoid
-        detail.set_spacing!(box._internal, convert(Cfloat, spacing))
-    end
-    export set_spacing!
-
-    @export_function Box get_spacing Cfloat
-    @export_function Box get_n_items Cint
-    @export_function Box get_orientation Orientation
-    @export_function Box set_orientation! Cvoid Orientation orientation
-
-    @add_widget_signals Box
-
-####### button.jl
-
-    @export_type Button Widget
-    Button() = Button(detail._Button())
-
-    @export_function Button set_has_frame! Cvoid Bool b
-    @export_function Button get_has_frame Bool
-    @export_function Button set_is_circular Cvoid Bool b
-    @export_function Button get_is_circular Bool
-
-    function set_child!(button::Button, child::Widget)
-        detail.set_child!(button._internal, child._internal.cpp_object)
-    end
-    export set_child!
-
-    @export_function Button remove_child! Cvoid
-
-    function set_action!(button::Button, action::Action)
-        detail.set_action!(button._internal, action._internal)
-    end
-    export set_action!
-
-    @add_widget_signals Button
-    @add_signal_activate Button
-    @add_signal_clicked Button
-
-####### center_box.jl
-
-    @export_type CenterBox Widget
-    CenterBox(orientation::Orientation) = CenterBox(detail._CenterBox(orientation))
-
-    function set_start_child!(center_box::CenterBox, child::Widget)
-        detail.set_start_child!(center_box._internal, child._internal.cpp_object)
-    end
-    export set_start_child!
-
-    function set_center_child!(center_box::CenterBox, child::Widget)
-        detail.set_center_child!(center_box._internal, child._internal.cpp_object)
-    end
-    export set_center_child!
-
-    function set_end_child!(center_box::CenterBox, child::Widget)
-        detail.set_end_child!(center_box._internal, child._internal.cpp_object)
-    end
-    export set_end_child!
-
-    @export_function CenterBox remove_start_child! Cvoid
-    @export_function CenterBox remove_center_child! Cvoid
-    @export_function CenterBox remove_end_child! Cvoid
-    @export_function CenterBox get_orientation Orientation
-    @export_function CenterBox set_orientation! Cvoid Orientation orientation
-
-    @add_widget_signals CenterBox
-
-####### check_button.jl
-
-    @export_enum CheckButtonState begin
-        CHECK_BUTTON_STATE_ACTIVE
-        CHECK_BUTTON_STATE_INCONSISTENT
-        CHECK_BUTTON_STATE_INACTIVE
-    end
-
-    @export_type CheckButton Widget
-    CheckButton() = CheckButton(detail._CheckButton())
-
-    @export_function CheckButton set_state! Cvoid CheckButtonState state
-    @export_function CheckButton get_state CheckButtonState
-    @export_function CheckButton get_is_active Bool
-
-    if detail.GTK_MINOR_VERSION >= 8
-        function set_child!(check_button::CheckButton, child::Widget)
-            detail.set_child!(check_button._internal, child._internal.cpp_object)
-        end
-        export set_child!
-
-        @export_function CheckButton remove_child! Cvoid
-    end
-
-    @add_widget_signals CheckButton
-    @add_signal_toggled CheckButton
-    @add_signal_activate CheckButton
-
-####### switch.jl
-
-    @export_type Switch Widget
-    Switch() = Switch(detail._Switch())
-
-    @export_function Switch get_is_active Bool
-    @export_function Switch set_is_active! Cvoid Bool b
-
-    @add_widget_signals Switch
-    @add_signal_activate Switch
-
-####### toggle_button.jl
-
-    @export_type ToggleButton Widget
-    ToggleButton() = ToggleButton(detail._ToggleButton())
-
-    @export_function ToggleButton get_is_active Bool
-    @export_function ToggleButton set_is_active! Cvoid Bool b
-
-    @add_widget_signals ToggleButton
-    @add_signal_activate ToggleButton
-    @add_signal_clicked ToggleButton
-    @add_signal_toggled ToggleButton
-
-####### viewport.jl
-
-    @export_enum ScrollbarVisibilityPolicy begin
-        SCROLLBAR_VISIBILITY_POLICY_NEVER
-        SCROLLBAR_VISIBILITY_POLICY_ALWAYS
-        SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC
-    end
-
-    @export_enum CornerPlacement begin
-        CORNER_PLACEMENT_TOP_LEFT
-        CORNER_PLACEMENT_TOP_RIGHT
-        CORNER_PLACEMENT_BOTTOM_LEFT
-        CORNER_PLACEMENT_BOTTOM_RIGHT
-    end
-
-    @export_type Viewport Widget
-    Viewport() = Viewport(detail._Viewport())
-
-    @export_function Viewport set_propagate_natural_height! Cvoid Bool b
-    @export_function Viewport get_propagate_natural_height Bool
-    @export_function Viewport set_propagate_natural_width! Cvoid Bool b
-    @export_function Viewport get_propagate_natural_width Bool
-    @export_function Viewport set_horizontal_scrollbar_policy! Cvoid ScrollbarVisibilityPolicy policy
-    @export_function Viewport set_vertical_scrollbar_policy! Cvoid ScrollbarVisibilityPolicy policy
-    @export_function Viewport get_horizontal_scrollbar_policy ScrollbarVisibilityPolicy
-    @export_function Viewport get_vertical_scrollbar_policy ScrollbarVisibilityPolicy
-    @export_function Viewport set_scrollbar_placement! Cvoid CornerPlacement placement
-    @export_function Viewport get_scrollbar_placement CornerPlacement
-    @export_function Viewport set_has_frame! Cvoid Bool b
-    @export_function Viewport get_has_frame Bool
-    @export_function Viewport set_kinetic_scrolling_enabled! Cvoid Bool b
-    @export_function Viewport get_kinetic_scrolling_enabled Bool
-
-    get_horizontal_adjustment(viewport::Viewport) ::Adjustment = Adjustment(detail.get_horizontal_adjustment(viewport._internal))
-    export get_horizontal_adjustment
-
-    get_vertical_adjustment(viewport::Viewport) ::Adjustment = Adjustment(detail.get_vertical_adjustment(viewport._internal))
-    export get_vertical_adjustment
-
-    set_child!(viewport::Viewport, child::Widget) = detail.set_child(viewport._internal, child._internal.cpp_object)
-    export set_child!
-
-    @export_function Viewport remove_child Cvoid
-
-    @export_enum ScrollType begin
-        SCROLL_TYPE_NONE
-        SCROLL_TYPE_JUMP
-        SCROLL_TYPE_STEP_BACKWARD
-        SCROLL_TYPE_STEP_FORWARD
-        SCROLL_TYPE_STEP_UP
-        SCROLL_TYPE_STEP_DOWN
-        SCROLL_TYPE_STEP_LEFT
-        SCROLL_TYPE_STEP_RIGHT
-        SCROLL_TYPE_PAGE_BACKWARD
-        SCROLL_TYPE_PAGE_FORWARD
-        SCROLL_TYPE_PAGE_UP
-        SCROLL_TYPE_PAGE_DOWN
-        SCROLL_TYPE_PAGE_LEFT
-        SCROLL_TYPE_PAGE_RIGHT
-        SCROLL_TYPE_SCROLL_START
-        SCROLL_TYPE_SCROLL_END
-    end
-
-    @add_widget_signals Viewport
-    @add_signal_scroll_child Viewport
-
 ####### color.jl
 
     abstract type Color end
@@ -1983,6 +1751,10 @@ module mousetrap
     @export_function KeyFile set_comment_above_key! Cvoid GroupID group KeyID key String comment
     @export_function KeyFile get_comment_above_group String GroupID group
     @export_function KeyFile get_comment_above_key String GroupID group KeyID key
+
+    set_comment_above!(file::KeyFile, group::GroupID, key::KeyID, comment::String) = set_comment_above_key!(file, group, key, comment)
+    set_comment_above!(file::KeyFile, group::GroupID, comment::String) = set_comment_above_group!(file, group, key, comment)
+    export set_comment_above!
 
     export set_value!
     export get_value
@@ -2286,6 +2058,254 @@ module mousetrap
 
     @add_widget_signals ImageDisplay
 
+####### aspect_frame.jl
+
+    @export_type AspectFrame Widget
+    function AspectFrame(ratio::AbstractFloat; child_x_alignment::AbstractFloat = 0.5, child_y_alignment::AbstractFloat = 0.5)
+        return AspectFrame(detail._AspectFrame(ratio, child_x_alignment, child_y_alignment))
+    end
+
+    @export_function AspectFrame set_ratio! Cvoid AbstractFloat ratio
+    @export_function AspectFrame get_ratio Cfloat
+    @export_function AspectFrame set_child_x_alignment! Cvoid AbstractFloat alignment
+    @export_function AspectFrame set_child_y_alignment! Cvoid AbstractFloat alignment
+    @export_function AspectFrame get_child_x_alignment Cfloat
+    @export_function AspectFrame get_child_y_alignment Cfloat
+
+    @export_function AspectFrame remove_child! Cvoid
+
+    set_child!(aspect_frame::AspectFrame, child::Widget) = detail.set_child!(aspect_frame._internal, child._internal.cpp_object)
+    export set_child!
+
+    Base.show(io::IO, x::AspectFrame) = mousetrap.show_aux(io, x, :ratio, :child_x_alignment, :child_y_alignment)
+
+####### box.jl
+
+    @export_type Box Widget
+    Box(orientation::Orientation) = Box(detail._Box(orientation))
+
+    function push_back!(box::Box, widget::Widget)
+        detail.push_back!(box._internal, widget._internal.cpp_object)
+    end
+    export push_back!
+
+    function push_front!(box::Box, widget::Widget)
+        detail.push_front!(box._internal, widget._internal.cpp_object)
+    end
+    export push_front!
+
+    function insert_after!(box::Box, to_append::Widget, after::Widget)
+        detail.push_front!(box._internal, to_append._internal.cpp_object, after._internal.cpp_object)
+    end
+    export insert_after!
+
+    function remove!(box::Box, widget::Widget)
+        detail.remove!(box._internal, widget._internal.cpp_object)
+    end
+    export remove!
+
+    @export_function Box clear Cvoid
+    @export_function Box set_homogeneous! Cvoid Bool b
+    @export_function Box get_homogeneous Bool
+
+    function set_spacing!(box::Box, spacing::Number) ::Cvoid
+        detail.set_spacing!(box._internal, convert(Cfloat, spacing))
+    end
+    export set_spacing!
+
+    @export_function Box get_spacing Cfloat
+    @export_function Box get_n_items Cint
+    @export_function Box get_orientation Orientation
+    @export_function Box set_orientation! Cvoid Orientation orientation
+
+    @add_widget_signals Box
+
+####### button.jl
+
+    @export_type Button Widget
+    Button() = Button(detail._Button())
+
+    @export_function Button set_has_frame! Cvoid Bool b
+    @export_function Button get_has_frame Bool
+    @export_function Button set_is_circular Cvoid Bool b
+    @export_function Button get_is_circular Bool
+
+    function set_child!(button::Button, child::Widget)
+        detail.set_child!(button._internal, child._internal.cpp_object)
+    end
+    export set_child!
+
+    function set_icon!(button::Button, icon::Icon)
+        detail.set_icon!(button._internal, icon._internal)
+    end
+    export set_icon!
+
+    @export_function Button remove_child! Cvoid
+
+    function set_action!(button::Button, action::Action)
+        detail.set_action!(button._internal, action._internal)
+    end
+    export set_action!
+
+    @add_widget_signals Button
+    @add_signal_activate Button
+    @add_signal_clicked Button
+
+####### center_box.jl
+
+    @export_type CenterBox Widget
+    CenterBox(orientation::Orientation) = CenterBox(detail._CenterBox(orientation))
+
+    function set_start_child!(center_box::CenterBox, child::Widget)
+        detail.set_start_child!(center_box._internal, child._internal.cpp_object)
+    end
+    export set_start_child!
+
+    function set_center_child!(center_box::CenterBox, child::Widget)
+        detail.set_center_child!(center_box._internal, child._internal.cpp_object)
+    end
+    export set_center_child!
+
+    function set_end_child!(center_box::CenterBox, child::Widget)
+        detail.set_end_child!(center_box._internal, child._internal.cpp_object)
+    end
+    export set_end_child!
+
+    @export_function CenterBox remove_start_child! Cvoid
+    @export_function CenterBox remove_center_child! Cvoid
+    @export_function CenterBox remove_end_child! Cvoid
+    @export_function CenterBox get_orientation Orientation
+    @export_function CenterBox set_orientation! Cvoid Orientation orientation
+
+    @add_widget_signals CenterBox
+
+####### check_button.jl
+
+    @export_enum CheckButtonState begin
+        CHECK_BUTTON_STATE_ACTIVE
+        CHECK_BUTTON_STATE_INCONSISTENT
+        CHECK_BUTTON_STATE_INACTIVE
+    end
+
+    @export_type CheckButton Widget
+    CheckButton() = CheckButton(detail._CheckButton())
+
+    @export_function CheckButton set_state! Cvoid CheckButtonState state
+    @export_function CheckButton get_state CheckButtonState
+    @export_function CheckButton get_is_active Bool
+
+    if detail.GTK_MINOR_VERSION >= 8
+        function set_child!(check_button::CheckButton, child::Widget)
+            detail.set_child!(check_button._internal, child._internal.cpp_object)
+        end
+        export set_child!
+
+        @export_function CheckButton remove_child! Cvoid
+    end
+
+    @add_widget_signals CheckButton
+    @add_signal_toggled CheckButton
+    @add_signal_activate CheckButton
+
+####### switch.jl
+
+    @export_type Switch Widget
+    Switch() = Switch(detail._Switch())
+
+    @export_function Switch get_is_active Bool
+    @export_function Switch set_is_active! Cvoid Bool b
+
+    @add_widget_signals Switch
+    @add_signal_activate Switch
+
+####### toggle_button.jl
+
+    @export_type ToggleButton Widget
+    ToggleButton() = ToggleButton(detail._ToggleButton())
+
+    @export_function ToggleButton set_is_active! Cvoid Bool b
+    @export_function ToggleButton get_is_active Bool
+    @export_function ToggleButton set_is_circular Cvoid Bool b
+    @export_function ToggleButton get_is_circular Bool
+
+    function set_child!(toggle_button::ToggleButton, child::Widget)
+        detail.set_child!(toggle_button._internal, child._internal.cpp_object)
+    end
+    export set_child!
+
+    @export_function ToggleButton remove_child! Cvoid
+
+    @add_widget_signals ToggleButton
+    @add_signal_activate ToggleButton
+    @add_signal_clicked ToggleButton
+    @add_signal_toggled ToggleButton
+
+####### viewport.jl
+
+    @export_enum ScrollbarVisibilityPolicy begin
+        SCROLLBAR_VISIBILITY_POLICY_NEVER
+        SCROLLBAR_VISIBILITY_POLICY_ALWAYS
+        SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC
+    end
+
+    @export_enum CornerPlacement begin
+        CORNER_PLACEMENT_TOP_LEFT
+        CORNER_PLACEMENT_TOP_RIGHT
+        CORNER_PLACEMENT_BOTTOM_LEFT
+        CORNER_PLACEMENT_BOTTOM_RIGHT
+    end
+
+    @export_type Viewport Widget
+    Viewport() = Viewport(detail._Viewport())
+
+    @export_function Viewport set_propagate_natural_height! Cvoid Bool b
+    @export_function Viewport get_propagate_natural_height Bool
+    @export_function Viewport set_propagate_natural_width! Cvoid Bool b
+    @export_function Viewport get_propagate_natural_width Bool
+    @export_function Viewport set_horizontal_scrollbar_policy! Cvoid ScrollbarVisibilityPolicy policy
+    @export_function Viewport set_vertical_scrollbar_policy! Cvoid ScrollbarVisibilityPolicy policy
+    @export_function Viewport get_horizontal_scrollbar_policy ScrollbarVisibilityPolicy
+    @export_function Viewport get_vertical_scrollbar_policy ScrollbarVisibilityPolicy
+    @export_function Viewport set_scrollbar_placement! Cvoid CornerPlacement placement
+    @export_function Viewport get_scrollbar_placement CornerPlacement
+    @export_function Viewport set_has_frame! Cvoid Bool b
+    @export_function Viewport get_has_frame Bool
+    @export_function Viewport set_kinetic_scrolling_enabled! Cvoid Bool b
+    @export_function Viewport get_kinetic_scrolling_enabled Bool
+
+    get_horizontal_adjustment(viewport::Viewport) ::Adjustment = Adjustment(detail.get_horizontal_adjustment(viewport._internal))
+    export get_horizontal_adjustment
+
+    get_vertical_adjustment(viewport::Viewport) ::Adjustment = Adjustment(detail.get_vertical_adjustment(viewport._internal))
+    export get_vertical_adjustment
+
+    set_child!(viewport::Viewport, child::Widget) = detail.set_child(viewport._internal, child._internal.cpp_object)
+    export set_child!
+
+    @export_function Viewport remove_child Cvoid
+
+    @export_enum ScrollType begin
+        SCROLL_TYPE_NONE
+        SCROLL_TYPE_JUMP
+        SCROLL_TYPE_STEP_BACKWARD
+        SCROLL_TYPE_STEP_FORWARD
+        SCROLL_TYPE_STEP_UP
+        SCROLL_TYPE_STEP_DOWN
+        SCROLL_TYPE_STEP_LEFT
+        SCROLL_TYPE_STEP_RIGHT
+        SCROLL_TYPE_PAGE_BACKWARD
+        SCROLL_TYPE_PAGE_FORWARD
+        SCROLL_TYPE_PAGE_UP
+        SCROLL_TYPE_PAGE_DOWN
+        SCROLL_TYPE_PAGE_LEFT
+        SCROLL_TYPE_PAGE_RIGHT
+        SCROLL_TYPE_SCROLL_START
+        SCROLL_TYPE_SCROLL_END
+    end
+
+    @add_widget_signals Viewport
+    @add_signal_scroll_child Viewport
+
 ####### entry.jl
 
     @export_type Entry Widget
@@ -2494,7 +2514,7 @@ module mousetrap
     remove_child!(overlay::Overlay) = detail.remove_child!(overlay._internal, child._internal.cpp_object)
     export remove_child!
 
-    function add_overlay!(overlay::Overlay, child::Widget; include_in_measurement::Bool = true, clip::Bool = true)
+    function add_overlay!(overlay::Overlay, child::Widget; include_in_measurement::Bool = true, clip::Bool = false)
         detail.add_overlay!(overlay._internal, child._internal.cpp_object, include_in_measurement, clip)
     end
     export add_overlay!
@@ -2786,9 +2806,9 @@ module mousetrap
     const KeyCode = Cint
     export KeyCode
 
-    @add_key_event_controller_signal KeyEventController key_pressed Bool
+    @add_key_event_controller_signal KeyEventController key_pressed Cvoid
     @add_key_event_controller_signal KeyEventController key_released Cvoid
-    @add_key_event_controller_signal KeyEventController modifiers_changed Bool
+    @add_signal_modifiers_changed KeyEventController
 
     shift_pressed(modifier_state::ModifierState) ::Bool = return detail.shift_pressed(modifier_state);
     export shift_pressed
@@ -2918,7 +2938,7 @@ module mousetrap
 ###### swipe_event_controller.jl
 
     @export_type SwipeEventController SingleClickGesture
-    SwipeEventController(orientation::Orientation) = SwipeEventController(detail._SwipeEventController(orientation))
+    SwipeEventController() = SwipeEventController(detail._SwipeEventController())
 
     get_velocity(swipe_controller::SwipeEventController) ::Vector2f = return detail.get_velocity(swipe_controller._internal)
     export get_velocity
@@ -2983,16 +3003,16 @@ module mousetrap
     end
     export ListViewIterator
 
-    push_back!(list_view::ListView, widget::Widget) = detail.push_back!(list_view._internal, widget._internal.cpp_object, Ptr{Cvoid}())
-    push_back!(list_view::ListView, widget::Widget, iterator::ListViewIterator) = detail.push_back!(list_view._internal, widget._internal.cpp_object, iterator._internal)
+    push_back!(list_view::ListView, widget::Widget) = ListViewIterator(detail.push_back!(list_view._internal, widget._internal.cpp_object, Ptr{Cvoid}()))
+    push_back!(list_view::ListView, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.push_back!(list_view._internal, widget._internal.cpp_object, iterator._internal))
     export push_back!
 
-    push_front!(list_view::ListView, widget::Widget) = detail.push_front!(list_view._internal, widget._internal.cpp_object, Ptr{Cvoid}())
-    push_front!(list_view::ListView, widget::Widget, iterator::ListViewIterator) =detail.push_front!(list_view._internal, widget._internal.cpp_object, iterator._internal)
+    push_front!(list_view::ListView, widget::Widget) = ListViewIterator(detail.push_front!(list_view._internal, widget._internal.cpp_object, Ptr{Cvoid}()))
+    push_front!(list_view::ListView, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.push_front!(list_view._internal, widget._internal.cpp_object, iterator._internal))
     export push_front!
 
-    insert!(list_view::ListView, widget::Widget, index::Integer) = detail.insert!(list_view._internal, from_julia_index(index), widget._internal.cpp_object, Ptr{Cvoid}())
-    insert!(list_view::ListView, widget::Widget, index::Integer, iterator::ListViewIterator) = detail.insert!(list_view._internal, from_julia_index(index), widget._internal.cpp_object, iterator._internal)
+    insert!(list_view::ListView, widget::Widget, index::Integer) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), widget._internal.cpp_object, Ptr{Cvoid}()))
+    insert!(list_view::ListView, widget::Widget, index::Integer, iterator::ListViewIterator) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), widget._internal.cpp_object, iterator._internal))
     export insert!
 
     remove!(list_view::ListView, index::Integer) = detail.remove!(list_view._internal, from_julia_index(index), Ptr{Cvoid}())
@@ -3027,6 +3047,7 @@ module mousetrap
 
     @export_type GridView Widget
     GridView(orientation::Orientation, selection_mode::SelectionMode = SELECTION_MODE_NONE) = GridView(detail._GridView(orientation, selection_mode))
+    GridView(selection_mode::SelectionMode) = GridView(ORIENTATION_VERTICAL, selection_mode)
 
     push_back!(grid_view::GridView, widget::Widget) = detail.push_back!(grid_view._internal, widget._internal.cpp_object)
     export push_back!
@@ -3105,7 +3126,7 @@ module mousetrap
     @export_function Grid get_column_spacing Cfloat
     @export_function Grid set_column_spacing! Cvoid AbstractFloat spacing
     @export_function Grid get_row_spacing Cfloat
-    @export_function Grid set_row_spacing! Cvoid AbstractFloat spacing
+    @export_function Grid set_row_spacing! Cvoid AbstractFloat spacingadd
     @export_function Grid set_rows_homogeneous! Cvoid Bool b
     @export_function Grid get_rows_homogeneous Bool
     @export_function Grid set_columns_homogeneous! Cvoid Bool b
@@ -3629,6 +3650,7 @@ module mousetrap
     end
 
     @export_widget_function activate! Cvoid
+    @export_widget_function set_size_request! Cvoid Vector2f size
     @export_widget_function get_size_request Vector2f
 
     @export_widget_function set_margin_top! Cvoid AbstractFloat margin
@@ -3789,6 +3811,7 @@ module mousetrap
 
     @export_enum BlendMode begin
         BLEND_MODE_NONE
+        BLEND_MODE_NORMAL
         BLEND_MODE_ADD
         BLEND_MODE_SUBTRACT
         BLEND_MODE_REVERSE_SUBTRACT
@@ -3863,13 +3886,13 @@ module mousetrap
     @export_function Shader get_fragment_shader_id Cuint
     @export_function Shader get_vertex_shader_id Cuint
 
-    function create_from_string!(shader::Shader, code::String) ::Bool
-        return detail.create_from_string!(shader._internal, code)
+    function create_from_string!(shader::Shader, type::ShaderType, glsl_code::String) ::Bool
+        return detail.create_from_string!(shader._internal, type, code)
     end
     export create_from_string!
 
-    function create_from_file!(shader::Shader, file::String) ::Bool
-        return detail.create_from_file!(shader._internal, file)
+    function create_from_file!(shader::Shader, type::ShaderType, file::String) ::Bool
+        return detail.create_from_file!(shader._internal, type, file)
     end
     export create_from_file!
 
@@ -3932,8 +3955,8 @@ module mousetrap
     unbind(texture::TextureObject) = detail.texture_unbind(texture._internal.cpp_object)
     export unbind
 
-    create_from_image!(texture::TextureObject) = detail::texture_create_from_image!(texture._internal.cpp_object)
-    export create_from_image!
+    create!(texture::TextureObject, width::Integer, height::Integer) = detail.texture_create!(texture._internal.cpp_object, width, height)
+    export create!
 
     create_from_image!(texture::TextureObject, image::Image) = detail.texture_create_from_image(texture._internal.cpp_object, image._internal)
     export create_from_image!
@@ -3955,6 +3978,12 @@ module mousetrap
 
     get_native_handle(texture::TextureObject) ::Cuint = detail.texture_get_native_handle(texture._internal.cpp_object)
     export get_native_handle
+
+    bind_as_render_target(render_texture::RenderTexture) = detail.render_texture_bind_as_render_target(render_texture._internal.cpp_object)
+    export bind_as_render_target
+
+    unbind_as_render_target(render_texture::RenderTexture) = detail.render_texture_unbind_as_render_target(render_texture._internal.cpp_object)
+    export unbind_as_render_target
 
 ###### shape.jl
 
@@ -4005,20 +4034,20 @@ module mousetrap
     end
     export Rectangle
 
-    as_circle!(shape::Shape, center::Vector2f, radius::AbstractFloat, n_outer_vertices::Unsigned) = detail.as_circle!(shape._internal, radius, n_outer_vertices)
+    as_circle!(shape::Shape, center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer) = detail.as_circle!(shape._internal, center, convert(Cfloat, radius), n_outer_vertices)
     export as_circle!
 
-    function Circle(center::Vector2f, radius::AbstractFloat, n_outer_vertices::Unsigned) ::Shape
+    function Circle(center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer) ::Shape
         out = Shape()
         as_circle!(out, center, radius, n_outer_vertices)
         return out
     end
     export Circle
 
-    as_ellipse!(shape::Shape, center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Unsigned) = detail.as_ellipse!(shape._internal, x_radius, y_radius, n_outer_vertices)
+    as_ellipse!(shape::Shape, center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) = detail.as_ellipse!(shape._internal, x_radius, y_radius, n_outer_vertices)
     export as_ellipse!
 
-    function Circle(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Unsigned) ::Shape
+    function Circle(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) ::Shape
         out = Shape()
         as_ellipse!(out, x_radius, y_radius, n_outer_vertices)
         return out
@@ -4057,7 +4086,7 @@ module mousetrap
     as_polygon!(shape::Shape, points::Vector{Vector2f}) = detail.as_polygon!(shape._internal, points)
     export as_polygon!
 
-    function Polygon(points::Vector2{Vector2f})
+    function Polygon(points::Vector{Vector2f})
         out = Shape()
         as_polygon!(out, points)
         return out
@@ -4076,12 +4105,12 @@ module mousetrap
     end
     export RectangularFrame
 
-    function as_circular_ring!(shape::Shape, center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Unsigned)
+    function as_circular_ring!(shape::Shape, center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer)
         detail.as_circular_ring!(shape._internal, center, outer_radius, thickness, n_outer_vertices)
     end
     export as_circular_ring!
 
-    function CircularRing(center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Unsigned)
+    function CircularRing(center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer)
         out = Shape()
         as_circular_ring!(shape, center, outer_radius, thickness, n_outer_vertices)
         return out
@@ -4233,6 +4262,7 @@ module mousetrap
     @export_function RenderArea clear_render_tasks! Cvoid
 
     @export_function RenderArea make_current Cvoid
+    @export_function RenderArea queue_render Cvoid
     @export_function RenderArea clear Cvoid
     @export_function RenderArea render_render_tasks Cvoid
     @export_function RenderArea flush Cvoid
@@ -4253,16 +4283,13 @@ module mousetrap
 
 ###### key_code.jl
 
-    const skip_keycodes = true
-    if !skip_keycodes
-        include("./key_codes.jl")
-    end
+    include("./key_codes.jl")
 
 ###### documentation
 
-    const skip_docs = true
+    const skip_docs = false
     if !skip_docs
-    include("./docs.jl")
+        include("./docs.jl")
     end
 
 end # module mousetrap
