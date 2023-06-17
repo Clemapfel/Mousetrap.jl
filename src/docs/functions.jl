@@ -2837,6 +2837,13 @@ this messages is printed, runtime will exit.
     Cvoid, x::TODO
 )
 
+@document set_comment_above! @function_docs(set_comment_above!,
+    """
+    TODO
+    """,
+    Cvoid, x::TODO
+)
+
 @document set_comment_above_group! @function_docs(set_comment_above_group!,
     """
     TODO
@@ -3104,6 +3111,13 @@ this messages is printed, runtime will exit.
 )
 
 @document set_horizontal_scrollbar_policy! @function_docs(set_horizontal_scrollbar_policy!,
+    """
+    TODO
+    """,
+    Cvoid, x::TODO
+)
+
+@document set_icon! @function_docs(set_icon!,
     """
     TODO
     """,

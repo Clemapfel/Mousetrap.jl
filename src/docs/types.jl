@@ -288,7 +288,7 @@ end
 """
 
 @document ClickEventController """
-    ## ClickEventController <: EventController
+    ## ClickEventController <: SingleClickGesture <: EventController
 
     Handles one or more mouse-button or touchpad presses in series. 
 
@@ -425,7 +425,7 @@ end
 """
 
 @document DragEventController """
-    ## DragEventController <: EventController
+    ## DragEventController <: SingleClickGesture <: EventController
 
     Recongizes drag gesture, a gesture where the user click a 
     point inside the allocated area of the widget holding this controller,
@@ -514,14 +514,16 @@ end
     ))
 
     $(@type_signals(Entry, 
-        :activate, 
-        :text_changed
+        activate, 
+        text_changed
     ))
 
     $(@type_fields())
 """
 
 @document EventController abstract_type_docs(EventController, Any, """
+    ## EventController <: SignalEmitter
+
     Superclass of all event controllers. Use `add_controller(::Widget, ::EventController)`
     to connect an event controller to any widget, in order for it
     to start receiving events while the widget holds input focus.
@@ -537,7 +539,7 @@ end
     ))
 
     $(@type_signals(Expander, 
-        :activate
+        activate
     ))
 
     $(@type_fields())
@@ -726,10 +728,10 @@ end
     its singular child.
 
     $(@type_constructors(
+        Frame()
     ))
 
     $(@type_signals(Frame, 
-        Frame()
     ))
 
     $(@type_fields())
@@ -814,7 +816,7 @@ end
     ))
 
     $(@type_signals(GridView, 
-        :activate
+        activate
     ))
 
     $(@type_fields())
@@ -823,10 +825,11 @@ end
 @document GroupID """
     ## GroupID
 
-    ID of a group inside a `KeyFile`. Use `.`
-    to deliminate nested groups, as each key-value
-    pair in a `KeyFile` has to be inside exactly 
-    1 group.
+    ID of a group inside a `KeyFile`. May not start with a number, 
+    only roman letter, 0-9, `_`, `-`, and `.` may be used.
+
+    Use `.` to deliminate nested groups, as each key-value pair can
+    only belong to exactly one group.
 
     $(@type_constructors(
     ))
@@ -868,14 +871,28 @@ end
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    # Layout syntax
+    # any element left of `:` is displayed left of the the title
+    # only `close`, `minimize`, `maximize` are valid layout elements
+
+    header_bar = HeaderBar("close:title,minimize,maximize")
+    push_front!(header_bar, Button())
+    set_titlebar_widget!(window, header_bar)
+    ```
 """
 
 @document Icon """
     ## Icon
 
-    TODO
+    Object managing an image file on disk that can be used 
+    as an icon. Usually, these should be a vector graphics 
+    or .ico file, though any image file can be loaded.
 
     $(@type_constructors(
+        Icon()
     ))
 
     $(@type_fields(
@@ -885,45 +902,50 @@ end
 @document IconID """
     ## IconID
 
-    TODO
+    ID of an icon, used by `IconTheme` to refer to icons in 
+    a file-agnostic way.
 
     $(@type_constructors(
     ))
 
-    $(@type_fields(
-    ))
+    $(@type_fields()))
 """
 
 @document IconTheme """
     ## IconTheme
 
-    TODO
+    Manages a folder that strictly adheres to the [freedesktop icon theme specifications](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
 
     $(@type_constructors(
     ))
 
-    $(@type_fields(
-    ))
+    $(@type_fields())
 """
 
 @document Image """
     ## Image
 
-    TODO
+    2D image data. Pixel-index are 1-based.
 
     $(@type_constructors(
+        Image(),
+        Image(path::String),
+        Image(width::Integer, height::Integer, [::RGBA])
     ))
 
-    $(@type_fields(
-    ))
+    $(@type_fields())
 """
 
 @document ImageDisplay """
     ## ImageDisplay <: Widget
 
-    TODO
+    Widget that displays an `Image`, `Icon`, or image file. Once
+    constructed, the image data is deep-copied.
 
     $(@type_constructors(
+        ImageDisplay(path::String),
+        ImageDisplay(::Image),
+        ImageDisplay(::Icon)
     ))
 
     $(@type_signals(ImageDisplay, 
@@ -935,7 +957,8 @@ end
 @document KeyCode """
     ## KeyCode
 
-    TODO
+    Identifier of a key. Used for `ShortcutTrigger` syntax 
+    and when recognizing keys using `KeyEventController`.
 
     $(@type_constructors(
     ))
@@ -947,35 +970,79 @@ end
 @document KeyEventController """
     ## KeyEventController <: EventController
 
-    TODO
+    Recognizes keyboard key strokes.
 
     $(@type_constructors(
+        KeyEventController()
     ))
 
     $(@type_signals(KeyEventController, 
+        key_pressed,
+        key_released,
+        modifiers_changed
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    key_controller = KeyEventController()
+    connect_signal_key_pressed!(key_controller) do self::KeyEventController, key::KeyCode, modifier::ModifierState
+        if key == KEY_space
+            println("space bar pressed")
+        end
+    end
+    add_controller!(window, key_controller)
+    ```
 """
 
 @document KeyFile """
     ## KeyFile <: SignalEmitter
 
-    TODO
+    GLiba keyfile, allows storing various types
+    by serializing them.
+
+    The following types can be (de)serialized this way:
+    + `Bool`, `Vector{Bool}`
+    + `AbstractFloat`, `Vector{AbstractFloat}`
+    + `Signed`, `Vector{Signed}`
+    + `Unsigned`, `Vector{Unsigned}`
+    + `String`, `Vector{String}`
+    + `RGBA`
+    + `HSVA`
+    + `Image`
+
+    All key-values pairs have to be in exactly one group.
 
     $(@type_constructors(
+        KeyFile(),
+        KeyFile(path::String)
     ))
 
     $(@type_signals(KeyFile, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    key_file = KeyFile()
+    set_value!(key_file, "group_id", "key_id", [123, 456, 789])
+    set_comment_above!(key_file, "group_id", "key_id", "An example key-value pair")
+    println(as_string(key_file))
+    ```
+    ```
+    [group_id]
+    # An example key-value pair
+    key_id=123;456;789;
+    ````
 """
 
 @document KeyID """
     ## KeyID
 
-    TODO
+    ID of `KeyFile` key-value-pair. My not start with a number, and only 
+    roman letter, 0-9, and '_' may be used.
 
     $(@type_constructors(
     ))
@@ -987,9 +1054,15 @@ end
 @document Label """
     ## Label <: Widget
 
-    TODO
+    Static text, multi-or single line. Using `set_ellipsize_mode!`,
+    `set_wrap_mode!`, and `set_justify_mode!` to influence how text 
+    is displayed.
+
+    Supports [pango markup](https://docs.gtk.org/Pango/pango_markup.html)
 
     $(@type_constructors(
+        Label(),
+        Label(markup_string::String)
     ))
 
     $(@type_signals(Label, 
@@ -1001,9 +1074,11 @@ end
 @document LevelBar """
     ## LevelBar <: Widget
 
-    TODO
+    Bar displaying fraction of a range. If the fraction reaches 75%,
+    the color of the bar changes. 
 
     $(@type_constructors(
+        LevelBar(min::AbstractFloat, max::AbstractFloat)
     ))
 
     $(@type_signals(LevelBar, 
@@ -1015,21 +1090,39 @@ end
 @document ListView """
     ## ListView <: Widget
 
-    TODO
-
+    Selectable widget that arranges its children in a (possibly nested) list.
+    
     $(@type_constructors(
+        ListView(::Orientation, [::SelectionMode])
     ))
 
     $(@type_signals(ListView, 
+        selection_changed
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    list_view = ListView(ORIENTATION_VERTICAL)
+    
+    item_01_iterator = push_back!(list_view, Label("Item 01"))
+    push_back!(list_view, Label("Item 02"))
+    push_back!(list_view, Label("Imte 03"))
+
+    push_back!(list_view, Label("Nested Item 01"), item_01_iterator)
+    push_back!(list_view, Label("Nested Item 02"), item_01_iterator)
+    
+    set_child!(window, list_view)
+    ```
 """
 
 @document ListViewIterator """
     ## ListViewIterator
 
-    TODO
+    Iterator returned when inserting an item into a `ListView`. Use this
+    iterator as an additional argument to insert any item in a nested list
+    which is a child of the initial top-level item.
 
     $(@type_constructors(
     ))
@@ -1041,9 +1134,11 @@ end
 @document LogDomain """
     ## LogDomain
 
-    TODO
+    Domain of log messages, this will be used to associate log 
+    message with a specific application or library.
 
     $(@type_constructors(
+        LogDomain(::String)
     ))
 
     $(@type_fields(
@@ -1051,42 +1146,85 @@ end
 """
 
 @document LongPressEventController """
-    ## LongPressEventController <: EventController
+    ## LongPressEventController <: SingleClickGesture <: EventController
 
-    TODO
+    Recognizes long-press gestures, in which the users 
+    presses a mouse button or touchscreen, then holds that 
+    press without moving the cursor.
 
     $(@type_constructors(
+        LongPressEventController()
     ))
 
     $(@type_signals(LongPressEventController, 
+        pressed,
+        press_cancelled
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    long_press_controller = LongPressEventController()
+    connect_signal_pressed!(long_press_controller) do self::LongPressEventController, x::AbstractFloat, y::AbstractFloat 
+        println("long press recognized at (\$x, \$y)")
+    end
+    add_controller!(window, long_press_controller)
+    ```
 """
 
 @document MenuBar """
     ## MenuBar <: Widget
 
-    TODO
+    View that displays a `MenuModel` as a horizontal bar. 
+    The `MenuModel` has to have the following structure:
+    + all top-level items have to be of type "submenu"
 
     $(@type_constructors(
+        HeaderBar(::MenuModel)
     ))
 
     $(@type_signals(MenuBar, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    action = Action("example.action", app)
+    set_function!(action) do action::Action
+        println(get_id(action), " activate.")
+    end
+
+    outer_model = MenuModel()
+    inner_model = MenuModel()
+    add_action!(inner_model, "Trigger Action", action)
+    add_submenu!(outer_model, "Submenu", inner_model)
+
+    menu_bar = MenuBar(outer_model)
+    set_child!(window, menu_bar)
+    ```
 """
 
 @document MenuModel """
     ## MenuModel <: SignalEmitter
 
-    TODO
+    Model that holds information about how to 
+    construct a menu. 
+
+    Use `MenuBar` or `PopoverMenu` to display the
+    menu to the user.
+
+    The type of menu item is determined by which function
+    is called to add the item. See the manual chapter on menus
+    for more information.
 
     $(@type_constructors(
+        MenuModel()
     ))
 
     $(@type_signals(MenuModel, 
+        items_changed
     ))
 
     $(@type_fields())
@@ -1095,77 +1233,159 @@ end
 @document ModifierState """
     ## ModifierState
 
-    TODO
+    Holds information about which modifier keys (Control, Alt, Shift)
+    are currently pressed.
 
     $(@type_constructors(
     ))
 
     $(@type_fields(
     ))
+
+    ## Example
+    ```julia
+    key_controller = KeyEventController()
+    connect_signal_modifiers_changed!(key_controller) do self::KeyEventController, modifiers::ModifierState
+        if shift_pressed(modifiers)
+            println("Shift was pressed")
+        end
+    end
+    add_controller!(window, key_controller)
+    ```
 """
 
 @document MotionEventController """
     ## MotionEventController <: EventController
 
-    TODO
+    Captures cursor motion events.
 
     $(@type_constructors(
+        MotionEventController()
     ))
 
     $(@type_signals(MotionEventController, 
+        motion_enter,
+        motion,
+        motion_leave
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    motion_controller = MotionEventController()
+    connect_signal_motion!(motion_controller) do self::MotionEventController, x::AbstractFloat, y::AbstractFloat
+        println("recognized motion at (\$(Int64(round(x))), \$(Int64(round(y))))")
+    end
+    add_controller!(window, motion_controller)
+    ```
 """
 
 @document Notebook """
     ## Notebook <: Widget
 
-    TODO
+    Widget that arranges its children as a list of pages. Each page
+    has exactly one child widget and an optional label widget. Pages
+    can be freely reordered by the user, and one page can be drag-and-dropped
+    from one `Notebook` instace to another.
 
     $(@type_constructors(
+        Notebook()
     ))
 
     $(@type_signals(Notebook, 
+        page_added,
+        page_removed,
+        page_reordered,
+        page_selection_changed
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    notebook = Notebook()
+    push_back!(notebook, Separator(), Label("Page 01"))
+    push_back!(notebook, Separator(), Label("Page 02"))
+
+    connect_signal_page_selection_changed!(notebook) do x::Notebook, index::Integer
+        println("Page #\$index is now selected")
+    end
+
+    set_child!(window, notebook)
+    ```
 """
 
 @document Overlay """
     ## Overlay <: Widget
 
-    TODO
+    Widget that has exaclty one "base" child, set via `set_child!`, 
+    and any number of "overlay" children, added via `add_overlay!`,
+    which are rendered on top.
+
+    If two interactable widgets overlap, only the top-most widget can
+    receive input events. Using `set_can_respond_to_input!` to disable 
+    the upper widget, at which point the lower widget underneath can
+    be interacted with.
 
     $(@type_constructors(
+        Overlay()
     ))
 
     $(@type_signals(Overlay, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    overlay = Overlay()
+    set_child!(overlay, Separator())
+    add_overlay!(overlay, Label("On Top"))    
+    set_child!(window, overlay)
+    ```
 """
 
 @document PanEventController """
-    ## PanEventController <: EventController
+    ## PanEventController <: SingleClickGesture <: EventController
 
-    TODO
+    Recognizes pan gestures, in which the user drags 
+    the cursor of a mouse or touchscreen alonge either horizontal
+    or vertical axis.
 
     $(@type_constructors(
+        PanEventController(::Orientation)
     ))
 
     $(@type_signals(PanEventController, 
+        pan
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    connect_signal_pan!(pan_controller) do self::PanEventController, direction::PanDirection, offset::AbstractFloat
+        if direction == PAN_DIRECTION_LEFT
+            println("panning left")
+        elseif direction == PAN_DIRECTION_RIGHT
+            println("panning right")
+        end
+        println("x-offset from start position: \$offset")
+    end
+    add_controller!(window, pan_controller)
+    ```
 """
 
 @document Paned """
     ## Paned <: Widget
 
-    TODO
+    Widget with exactly two children, set with `set_start_child!` and `set_end_child!`. 
+    Draws a solid border between the two, which the user can drag to 
+    one side or the other to resize both widgets at the same time.
 
     $(@type_constructors(
+        Paned()
     ))
 
     $(@type_signals(Paned, 
@@ -1177,65 +1397,128 @@ end
 @document PinchZoomEventController """
     ## PinchZoomEventController <: EventController
 
-    TODO
+    Controller recognizing touch-screen only 2-finger pinch-zoom gestures.
 
     $(@type_constructors(
+        PinchZoomEventController()
     ))
 
     $(@type_signals(PinchZoomEventController, 
+        scale_changed
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    pinch_zoom_controller = PinchZoomEventController()
+    connect_signal_scale_changed!(pinch_zoom_controller) do self::PinchZoomEventController, scale::AbstractFloat
+        println("current scale: \$scale")
+    end
+    add_controller!(window, pinch_zoom_controller)
+    ```
 """
 
 @document Popover """
     ## Popover <: Widget
 
-    TODO
+    Specialized type of window with exactly on child. It needs to be 
+    attach to a different widget, at which point `popup!` and `popdown!`
+    can be called to present or hide the popover from the user.
+
+    `PopoverButton` provides an automated way of showing/hiding the popover.
 
     $(@type_constructors(
+        Popover()
     ))
 
     $(@type_signals(Popover, 
+        closed
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    popover = Popover()
+    set_child!(popover, Label("Popover!"))
+
+    popover_button = PopoverButton()
+    set_popover!(popover_button, popover)
+
+    set_child!(window, popover_button)
+    ```
 """
 
 @document PopoverButton """
     ## PopoverButton <: Widget
 
-    TODO
+    Button that has a pre-build way of revealing a `Popover` or `PopoverMenu`
+    when clicked. 
 
     $(@type_constructors(
+        PopoverButton()
     ))
 
     $(@type_signals(PopoverButton, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    popover = Popover()
+    set_child!(popover, Label("Popover!"))
+
+    popover_button = PopoverButton()
+    set_popover!(popover_button, popover)
+
+    set_child!(window, popover_button)
+    ```
 """
 
 @document PopoverMenu """
     ## PopoverMenu <: Widget
 
-    TODO
+    Menu view that display its model in a popover window. Use `PopoverButton`
+    for an automated way of revealing the popover.
 
     $(@type_constructors(
+        PopoverMenu(::MenuModel)
     ))
 
     $(@type_signals(PopoverMenu, 
+        closed
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    action = Action("example.action", app)
+    set_function!(action) do x::Action
+        println("Action activated")
+    end
+
+    model = MenuModel()
+    add_action!(model, "Trigger Example", action)
+
+    popover_menu = PopoverMenu(model)
+    popover_button = PopoverButton()
+    set_popover_menu!(popover_button, popover_menu)
+ 
+    set_child!(window, popover_button)
+    ```
 """
 
 @document ProgressBar """
     ## ProgressBar <: Widget
 
-    TODO
+    Loading bar, using `set_fraction!`, which accepts a float in `[0, 1]`
+    to set the current percentage.
 
     $(@type_constructors(
+        ProgressBar()
     ))
 
     $(@type_signals(ProgressBar, 
@@ -1247,66 +1530,166 @@ end
 @document RGBA """
     ## RGBA
 
-    TODO
+    Color representation in rgba. All components 
+    are `Float32` in [0, 1].
 
     $(@type_constructors(
+        RGBA(r::AbstractFloat, g::AbstractFloat, b::AbstractFloat, a::AbstractFloat)
     ))
 
     $(@type_fields(
+        r::Float32,
+        g::Float32,
+        b::Float32,
+        a::Flota32
     ))
 """
 
 @document RenderArea """
     ## RenderArea <: Widget
 
-    TODO
+    OpenGL canvas. See the manual chapter on native rendering for more
+    information.
 
     $(@type_constructors(
+        RenderArea()
     ))
 
-    $(@type_signals(RenderArea, 
+    $(@type_signals(RenderArea,
+        render,
+        resize 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    render_area = RenderArea()
+    rectangle = Rectangle(Vector2f(-0.5, -0.5), Vector2f(1, 1))
+    add_render_task!(render_area, RenderTask(rectangle))
+    set_size_request!(render_area, Vector2f(150, 150))
+    set_child!(window, render_area)
+    ```
 """
 
 @document RenderTask """
     ## RenderTask <: SignalEmitter
 
-    TODO
+    Task that groups a `Shape`, `Shader`, `GLTransform`, and `BlendMode`,
+    allowing them to be bound for rendering. 
+        
+    If no shader, transform, and/or blend mode is specified, 
+    the default shader, identity transform and `BLEND_MODE_NORMAL` will 
+    be used, respectively.
+
+    Use `add_render_task!` to add the task to a `RenderArea`, 
+    after which it will be automatically be rendered every frame 
+    the `RenderArea` is visible.
 
     $(@type_constructors(
+        RenderTask(::Shape ; [shader::Union{Shader, Nothing}, transform::Union{GLTransform, Nothing}, blend_mode::BlendMode])
     ))
 
     $(@type_signals(RenderTask, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    shape = Rectangle(Vector2f(-0.5, -0.5), Vector2f(1, 1))
+    task = RenderTask(shape)
+
+    # euivalent to
+
+    task = RenderTask(shape;
+        shader = nothing,
+        transform = nothing,
+        blend_mode = BLEND_MODE_NORMAL
+    )
+    ```
 """
 
 @document RenderTexture """
     ## RenderTexture <: SignalEmitter
 
-    TODO
+    Texture that can be bound as a render target. See the 
+    manual chapter on native rendering for more information.
 
     $(@type_constructors(
+        RenderTexture()
     ))
 
     $(@type_signals(RenderTexture, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    # TODO THIS DOES NOT CURRENTLY WORK
+
+    using mousetrap
+    main() do app::Application
+
+        window = Window(app)
+    
+        render_area = RenderArea()
+        set_size_request!(render_area, Vector2f(150, 150))
+    
+        # stuff we want to render to the texture
+    
+        shape = Circle(Vector2f(0, 0), 1.0, 16)
+        shape_task = RenderTask(shape)
+    
+        # all objects necessary to render the render texture itself, so we can see its contents
+    
+        render_texture = RenderTexture()
+        render_texture_shape = Rectangle(Vector2f(-1, -1), Vector2f(2, 2))
+        set_texture!(render_texture_shape, render_texture)
+        render_texture_task = RenderTask(render_texture_shape)
+    
+        connect_signal_resize!(render_area, render_texture) do self::RenderArea, width::Integer, height::Integer, texture
+            create!(texture, width, height)
+            queue_render(self)
+        end
+    
+        connect_signal_render!(render_area) do self::RenderArea
+    
+            # render to exture
+    
+            #bind_as_render_target(render_texture)
+    
+            clear(self)
+            render(shape_task)
+            flush(self)
+    
+            #unbind_as_render_target(render_texture)
+    
+            # now render entire texture to screen
+    
+            #clear(self)
+            #render(render_texture_task)
+            #flush(self)
+        end
+    
+        set_child!(window, render_area)
+        present!(window)
+    end
+    ```
 """
 
 @document Revealer """
     ## Revealer <: Widget
 
-    TODO
+    Container that plays an animation reveal or hide its singular child.
 
     $(@type_constructors(
+        Revealer(::RevealerTransitionType)
     ))
 
     $(@type_signals(Revealer, 
+        revealed
     ))
 
     $(@type_fields())
@@ -1315,26 +1698,40 @@ end
 @document RotateEventController """
     ## RotateEventController <: EventController
 
-    TODO
+    Controller recognizing touch-only 2-finger rotate gestures.
 
     $(@type_constructors(
+        RotateEventController()
     ))
 
     $(@type_signals(RotateEventController, 
+        rotation_changed
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    rotate_controller = RotateEventController()
+    connect_signal_rotation_changed!(rotate_controller) do self::RotateEventController, angle_absolute::AbstractFloat, angle_dela::AbstractFloat
+        println("angle is now: " * as_degrees(radians(angle_absolute)) * "°")
+    end
+    add_controller!(window, rotate_controller)
+    ```
 """
 
 @document Scale """
     ## Scale <: Widget
 
-    TODO
+    Widget that allows users to select a value from a range by 
+    sliding a scale.
 
     $(@type_constructors(
+        Scale(lower::AbstractFloat, upper::AbstractFloat, step_increment::AbstractFloat, [::Orientation])
     ))
 
     $(@type_signals(Scale, 
+        value_changed
     ))
 
     $(@type_fields())
@@ -1343,23 +1740,42 @@ end
 @document ScrollEventController """
     ## ScrollEventController <: EventController
 
-    TODO
+    Controll regognizing mouse-scroll-wheel- and 2-finger touchscreen scrolling
+    
 
     $(@type_constructors(
+        ScrollEventController()
     ))
 
     $(@type_signals(ScrollEventController, 
+        scroll_begin,
+        scroll,
+        scroll_end,
+        kinetic_scroll_decelerate
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    scroll_controller = ScrollEventController()
+    connect_signal_scroll!(scroll_controller) do self::ScrollEventController, delta_x::AbstractFloat, delta_y::AbstractFloat
+        println("current scroll offset: (\$delta_x, \$delta_y)")
+        return false # do not prevent default handlers from being invoked
+    end
+    add_controller!(window, scroll_controller)
+    ```
 """
 
 @document Scrollbar """
     ## Scrollbar <: Widget
 
-    TODO
+    Widget usually used to scroll a window or view. Connect to 
+    the signals of the `Adjusment` obtained using `get_adjustment`
+    to react to the user changing the position of the scrollbar
 
     $(@type_constructors(
+        Scrollbar()
     ))
 
     $(@type_signals(Scrollbar, 
@@ -1371,23 +1787,43 @@ end
 @document SelectionModel """
     ## SelectionModel <: SignalEmitter
 
-    TODO
+    Model that governs the current selection of a selectable widget,
+    such as `GridView`, `ListView`, or `Stack`.
+
+    Only if the selection mode is set to anything other than `SELECTION_MODE_NONE`
+    will the selection model emit signals.
 
     $(@type_constructors(
     ))
 
     $(@type_signals(SelectionModel, 
+        selection_changed
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    grid_view = GridView(SELECTION_MODE_SINGLE)
+    for i in 1:4
+        push_back!(grid_view, Label("0\$i"))
+    end
+
+    selection_model = get_selection_model(grid_view)
+    connect_signal_selection_changed!(selection_model) do x::SelectionModel, position::Integer, n_items::Integer
+        println("selected item is now: \$position")
+    end
+    set_child!(window, grid_view)
+    ```
 """
 
 @document Separator """
     ## Separator <: Widget
 
-    TODO
+    Simple spacer, fills its allocated area with a solid color.
 
     $(@type_constructors(
+        Separator([::Orientation, opacity::AbstractFloat = 1.0])
     ))
 
     $(@type_signals(Separator, 
@@ -1399,9 +1835,18 @@ end
 @document Shader """
     ## Shader <: SignalEmitter
 
-    TODO
+    Represent an OpenGL shader program, which has a bound
+    vertex and fragment shader. If a shader is not specified 
+    for one or more of these, the default shader will be used.
+
+    To use a shader, it needs to be bound to a `RenderTask` along with 
+    a shape. Then, when the task is rendered, the shader will be applied
+    to all vertices / fragments of the shape.
+
+    See the manual section on native rendering for more information.
 
     $(@type_constructors(
+        Shader()
     ))
 
     $(@type_signals(Shader, 
@@ -1413,9 +1858,31 @@ end
 @document Shape """
     ## Shape <: SignalEmitter
 
-    TODO
+    Represents an OpenGL vertex buffer. A wide variety of 
+    pre-made shapes are available.
+
+    Shapes use the GL coordinate system and need to be bound
+    to a `RenderTask` in order to be displayed. 
+    
+    See the manual section on native rendering for more information.
 
     $(@type_constructors(
+        Shape(),
+        Point(::Vector2f),
+        Points(::Vector{Vector2f}),
+        Triangle(::Vector2f, ::Vector2f, ::Vector2f),
+        Rectangle(top_left::Vecto2f, size::Vector2f),
+        Circle(center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer),
+        Ellipse(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices),
+        Line(::Vector2f, ::Vector2f),
+        Lines(::Vector{Pair{Vector2f, Vector2f}}),
+        LineStrip(::Vector2{Vector2f}),
+        Polygon(::Vector{Vector2f}),
+        RectangularFrame(top_left::Vector2f, outer_size::Vector2f, x_width::AbstractFloat, y_width::AbstractFloat),
+        CircularRing(center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer),
+        EllipticalRing(center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Unsigned),
+        Wireframe(::Vector{Vector2f}),
+        Outline(other_shape::Shape)
     ))
 
     $(@type_signals(Shape, 
@@ -1427,23 +1894,52 @@ end
 @document ShortcutEventController """
     ## ShortcutEventController <: EventController
 
-    TODO
+    Eventcontroller that listens for shortcut key combinations. If one 
+    is recognized, the corresponding action will be invoked.
+
+    It emits no signals, instead, `add_action!` will register and
+    `Action` with the controller, at which point the controller 
+    will listen to any shortcuts of the action specified with 
+    `add_shortcut!(::Action, ::ShortcutTrigger`.
 
     $(@type_constructors(
+        ShortcutEventController()
     ))
 
     $(@type_signals(ShortcutEventController, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    action = Action("example.action", app)
+    set_function!(action) do x::Action
+        println("example.action activated")
+    end
+
+    add_shortcut!(action, "<Control>space")
+    # activate action when the user presses Control + Space
+
+    shortcut_controller = ShortcutEventController()
+    add_action!(shortcut_controller, action)
+
+    add_controller!(window, shortcut_controller)
+    ```
 """
 
 @document ShortcutTrigger """
     ## ShortcutTrigger
 
-    TODO
+    String expressing a combination of zero or more modifier 
+    keys, enclosed in `<>`, follow by exactly one non-modifier 
+    key. 
+    
+    See the section on `ShortctuEventController` in the manual
+    chapter on event handling for more information.
 
     $(@type_constructors(
+        ShortcutTrigger(::String)
     ))
 
     $(@type_fields(
@@ -1451,22 +1947,38 @@ end
 """
 
 @document SignalEmitter abstract_type_docs(SignalEmitter, Any, """
-    TODO
+    ## SignalEmitter <: Any
+
+    Object that can emit signals, though it may not necessarily do so.
+    
+    Additionally, any `SignalEmitter` sub-class is memory-managed completely independently 
+    of Julia. The Julia-side class is only a thin wrapper that allows us to 
+    interact with the underlying internal object. This underlying object 
+    is only finalized when its internal reference count reaches zero.
+
+    Because of this, users don't have to worry about keeping track of widgets
+    or other signal emitters, their life-time is managed automatically.
 """)
 
 @document SingleClickGesture abstract_type_docs(SingleClickGesture, Any, """
-    TODO
+    ## SingleClickGesture <: EventController
+
+    Specialized type of `EventController` that allows uses to check 
+    or determine, which mouse button or touchscreen triggered the 1-finger event.
 """)
 
 @document SpinButton """
     ## SpinButton <: Widget
 
-    TODO
+    Widget that contains a number entry and two buttons, which 
+    allows users to pick an exact value from a range.
 
     $(@type_constructors(
+        SpinButton(lower::AbstractFloat, upper::AbstractFloat, step_increment::AbstractFloat, [orientation::Orientation])
     ))
 
     $(@type_signals(SpinButton, 
+        value_changed
     ))
 
     $(@type_fields())
@@ -1475,9 +1987,12 @@ end
 @document Spinner """
     ## Spinner <: Widget
 
-    TODO
+    Graphical widget that signifies that a process is busy by 
+    playing a spinning animation. Use `set_is_spinning!` to 
+    start or stop the animation.
 
     $(@type_constructors(
+        Spinner()
     ))
 
     $(@type_signals(Spinner, 
@@ -1489,21 +2004,49 @@ end
 @document Stack """
     ## Stack <: Widget
 
-    TODO
+    Selectable widget that always shows exactly one of its children. 
+    Use `StackSwitcher` or `StackSidebar` to provide a user interface 
+    for `Stack`. Each stack page has a unique title, which will be 
+    used to allow the user to pick on of the pages.
+
+    Connect to the signals of the `SelectionModel` provided by `get_selection_model!`
+    to track which stack page is currently selected.
+
+    Whenever the stack switches from one page to another, an animation is 
+    plays. A huge number of animations are available, cf. @ref`StackTransitionType`
+    for more information.
 
     $(@type_constructors(
+        Stack()
     ))
 
     $(@type_signals(Stack, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    stack = Stack()
+
+    add_child!(stack, Label("Page 01"), "Page 01")
+    add_child!(stack, Label("Page 02"), "Page 02")
+    add_child!(stack, Label("Page 03"), "Page 03")
+
+    stack_switcher = StackSwitcher(stack)
+    
+    box = Box(ORIENTATION_VERTICAL)
+    push_back!(box, stack)
+    push_back!(box, stack_switcher)
+    set_child!(window, box)
+    ```
 """
 
 @document StackID """
     ## StackID
 
-    TODO
+    ID of a `Stack` page. Will be used for `StackSwitcher` and `StackSidebar`, 
+    and when referring to a page in a position-independent manner.
 
     $(@type_constructors(
     ))
@@ -1515,9 +2058,10 @@ end
 @document StackSidebar """
     ## StackSidebar <: Widget
 
-    TODO
+    Widget that allows users to select a page of a `Stack`.
 
     $(@type_constructors(
+        StackSidebar(::Stack)
     ))
 
     $(@type_signals(StackSidebar, 
@@ -1529,9 +2073,10 @@ end
 @document StackSwitcher """
     ## StackSwitcher <: Widget
 
-    TODO
+    Widget that allows users to select a page of a `Stack`.
 
     $(@type_constructors(
+        StackSwitcher(::Stack)
     ))
 
     $(@type_signals(StackSwitcher, 
@@ -1541,42 +2086,83 @@ end
 """
 
 @document StylusEventController """
-    ## StylusEventController <: EventController
+    ## StylusEventController <: SingleClickGesture <: EventController
 
-    TODO
+    Controller handling events from a stylus device, such as a touchpad 
+    pen.
 
     $(@type_constructors(
+        StylusEventController()
     ))
 
     $(@type_signals(StylusEventController, 
+        stylus_up,
+        stylus_down,
+        proximity,
+        motion
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    stylus_controller = StylusEventController()
+    connect_signal_motion!(stylus_controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
+        println("stylus position detected at (\$x, \$y)")
+    end
+    add_controller!(window, stylus_controller)
+    ```
 """
 
 @document SwipeEventController """
-    ## SwipeEventController <: EventController
+    ## SwipeEventController <: SingleClickGesture <: EventController
 
-    TODO
+    Controller capable of recognizing swipe touchscreen events
 
     $(@type_constructors(
+        SwipeEventController())
     ))
 
     $(@type_signals(SwipeEventController, 
+        swipe
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    swipe_controller = SwipeEventController()
+    connect_signal_swipe!(swipe_controller) do self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat
+        print("swiping ")
+        
+        if (y_velocity < 0)
+            print("up ")
+        elseif (y_velocity > 0)
+            print("down ")
+        end
+        
+        if (x_velocity < 0)
+            println("left")
+        elseif (x_velocity > 0)
+            println("right")
+        end
+    end
+    add_controller!(window, swipe_controller)
+    ```
 """
 
 @document Switch """
     ## Switch <: Widget
 
-    TODO
+    Ligthswitch-like widget indicating a boolean state. When the switch 
+    is toggled, signal `activate` is emitted.
 
     $(@type_constructors(
+        Switch()
     ))
 
     $(@type_signals(Switch, 
+        activate
     ))
 
     $(@type_fields())
@@ -1585,12 +2171,19 @@ end
 @document TextView """
     ## TextView <: Widget
 
-    TODO
+    Multi-line text entry. Unlike `Entry`, this 
+    widget cannot emit signal `activate`. Pressing enter
+    will create a newline.
+
+    Additional, basic text-editor features such as text justification 
+    and undo/redo are supported.
 
     $(@type_constructors(
+        TextVew()
     ))
 
     $(@type_signals(TextView, 
+        text_changed
     ))
 
     $(@type_fields())
@@ -1599,9 +2192,14 @@ end
 @document Texture """
     ## Texture <: SignalEmitter
 
-    TODO
+    OpenGL Texture. Needs to be bound to a shape 
+    in order to be rendered.
+
+    Textures support a wrap- and scale-mode, see the 
+    manual section on native rendering for more information.
 
     $(@type_constructors(
+        Texture()
     ))
 
     $(@type_signals(Texture, 
@@ -1613,27 +2211,47 @@ end
 @document Time """
     ## Time
 
-    TODO
+    Object representing a duration in time, nanoseconds precision.
 
     $(@type_constructors(
     ))
 
     $(@type_fields(
     ))
+
+    ## Example
+    ```julia
+    # convert seconds to microseconds
+    println(as_microseconds(seconds(3.14159)))
+    ```
 """
 
 @document ToggleButton """
     ## ToggleButton <: Widget
 
-    TODO
+    Button that will stay toggled when clicked, emitting the 
+    `toggled` signals.
+
+    Like `Button`, it has exactly one child and can optionally
+    be made circular.
 
     $(@type_constructors(
+        ToggleButton()
     ))
 
     $(@type_signals(ToggleButton, 
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    toggle_button = ToggleButton()
+    connect_signal_toggled!(toggle_button) do self::ToggleButton
+        println("state is now: " get_is_activate(self))
+    end
+    set_child!(window, toggle_button)
+    ```
 """
 
 @document TypedFunction """
@@ -1662,177 +2280,155 @@ end
 """
 
 @document Vector2 """
-    ## Vector2
+    ## Vector2{T}
 
-    TODO
+    Vector with 2 components.
 
     $(@type_constructors(
+        Vector2{T}(::T, ::T),
+        Vector2{T}(both::T)
     ))
 
     $(@type_fields(
-    ))
-"""
-
-@document Vector2f """
-    ## Vector2f
-
-    TODO
-
-    $(@type_constructors(
-    ))
-
-    $(@type_fields(
-    ))
-"""
-
-@document Vector2i """
-    ## Vector2i
-
-    TODO
-
-    $(@type_constructors(
-    ))
-
-    $(@type_fields(
-    ))
-"""
-
-@document Vector2ui """
-    ## Vector2ui
-
-    TODO
-
-    $(@type_constructors(
-    ))
-
-    $(@type_fields(
+        x::T,
+        y::T
     ))
 """
 
 @document Vector3 """
-    ## Vector3
+    ## Vector3{T}
 
-    TODO
+    Vector with 3 components.
 
     $(@type_constructors(
+        Vector3{T}(::T, ::T, ::T),
+        Vector3{T}(all::T)
     ))
 
     $(@type_fields(
-    ))
-"""
-
-@document Vector3f """
-    ## Vector3f
-
-    TODO
-
-    $(@type_constructors(
-    ))
-
-    $(@type_fields(
-    ))
-"""
-
-@document Vector3i """
-    ## Vector3i
-
-    TODO
-
-    $(@type_constructors(
-    ))
-
-    $(@type_fields(
-    ))
-"""
-
-@document Vector3ui """
-    ## Vector3ui
-
-    TODO
-
-    $(@type_constructors(
-    ))
-
-    $(@type_fields(
+        x::T
+        y::T
+        z::T
     ))
 """
 
 @document Vector4 """
-    ## Vector4
+    ## Vector4{T}
 
-    TODO
+    Vector with 4 components.
 
     $(@type_constructors(
+        Vector4{T}(::T, ::T, ::T, ::T)
+        Vector4{T}(all::T)
     ))
 
     $(@type_fields(
-    ))
-"""
-
-@document Vector4f """
-    ## Vector4f
-
-    TODO
-
-    $(@type_constructors(
-    ))
-
-    $(@type_fields(
-    ))
-"""
-
-@document Vector4i """
-    ## Vector4i
-
-    TODO
-
-    $(@type_constructors(
-    ))
-
-    $(@type_fields(
-    ))
-"""
-
-@document Vector4ui """
-    ## Vector4ui
-
-    TODO
-
-    $(@type_constructors(
-    ))
-
-    $(@type_fields(
+        x::T,
+        y::T,
+        z::T,
+        w::T
     ))
 """
 
 @document Viewport """
     ## Viewport <: Widget
 
-    TODO
+    Container that displays part of its singular child. The 
+    allocated size of the `Viewport` is independent of that
+    of its child. 
+    
+    The user can control which part is shown 
+    by operating two scrollbars. These  will automatically hide 
+    or show themself when the users cursor enters the viewport.
+    This behavior can be influenced by setting the 
+    `ScrollbarPolicy` for one or both of the scrollbars.
+
+    `Viewport` can be forced to obey the width and/or height 
+    of its child by setting `set_propagate_natural_width!` and/or
+    `set_propagate_natural_height!` to `true`.
+
+    The placement of both scrollbars can be set by calling `set_scrollbar_placement!`,
+    which takes a `CornerPlacement`.
+
+    Connect to the `value_changed` signal of each of the scrollbars `Adjustment`
+    in order to react to the user scrolling the `Viewport`.
 
     $(@type_constructors(
+        Viewport()
     ))
 
     $(@type_signals(Viewport, 
+        scroll_child
     ))
 
     $(@type_fields())
 """
 
 @document Widget abstract_type_docs(Widget, Any, """
-    TODO
+    ## Widget <: SignalEmitter
+
+    Superclass of all renderable entities in mousetrap. Like all
+    `SignalEmitter`s, a widgets lifetime is managed automatically.
+
+    Widgets have a large number of properties that influence their 
+    size and position on screen. See the manual chapter on widgets 
+    for more information.
+
+    All widgets share the following signals, where `T` is the subclass 
+    of `Widget`. For example, signal `realize` of class `Label` has the 
+    signature `(::Label, [::Data_t]) -> Cvoid`.
+
+    $(@type_signals(T,
+        realize,
+        unrealize,
+        destroy,
+        hide,
+        show,
+        map,
+        unmape
+    ))
 """)
 
 @document Window """
     ## Window <: Widget
 
-    TODO
+    Top-level window, associated with an `Application`. If all windows
+    of an application are closed, it will request to exit.
+
+    `Window` is the only widget that does not have a parent.
+
+    Windows have a singular child, and an optional titlebar widget, 
+    which will be inserted into the area in the header bar. This will 
+    usually be a `HeaderBar`, though any widget can be put there.
+
+    When the users window manager requests for a `Window` to close,
+    signal `close_request` will be emitted, whose return value will
+    either be `WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE` or `WINDOW_CLOSE_REQUEST_RESULT_DISALLOW_CLOSE`,
+    the latter of which will prevent the window from closing.
+
+    Each window can have a designated default widget, set via `set_default_widget!`.
+    This widget will be activated when the user activates the window itself. This 
+    can be useful when constructing dialogs, the "ok" button can be designated 
+    as the default widget, then, when the dialog is presented to the user,
+    the user can press enter to immedaitely trigger that button.
 
     $(@type_constructors(
+        Window(app::Application)
     ))
 
     $(@type_signals(Window, 
+        close_request,
+        activate_default_widget,
+        activate_focused_widget
     ))
 
     $(@type_fields())
+
+    ## Example
+    ```julia
+    main() do app::Application
+        window = Window(app)
+        present!(window)
+    end
+    ```
 """
