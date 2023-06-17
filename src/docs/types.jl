@@ -2306,8 +2306,8 @@ end
     ))
 
     $(@type_fields(
-        x::T
-        y::T
+        x::T,
+        y::T,
         z::T
     ))
 """
@@ -2318,7 +2318,7 @@ end
     Vector with 4 components.
 
     $(@type_constructors(
-        Vector4{T}(::T, ::T, ::T, ::T)
+        Vector4{T}(::T, ::T, ::T, ::T),
         Vector4{T}(all::T)
     ))
 
@@ -2385,7 +2385,7 @@ end
         hide,
         show,
         map,
-        unmape
+        unmap
     ))
 """)
 
