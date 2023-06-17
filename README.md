@@ -14,14 +14,14 @@ Mousetrap is a GUI library for `Julia`. It is based on the [C++-component of the
 + Automatic memory management independent of Julia, reducing the likelyhood of crashes and errors
 + Fully abstracted OpenGL interface, allowing high-performance, hardware-accelerated rendering
 + Verbose logging and error propagation, aids in debugging
-+ hand-written manual introducing newcomers to GUI programming and signal architecture
++ hand-written manual, also introducing newcomers to GUI programming in general
 + every exported symbol is documented
 
 ## Planned Features
 (in order of priority, highest first)
 + Simplify installation process to `] add mousetrap`
-+ Enable CI for C++- and Julia-components
-+ Allow bundling of the Julia runtime and all necessary binary dependencies into a portable C++ executable
++ Implement CI for C++- and Julia-components
++ Allow bundling of the Julia runtime and all necessary binary dependencies into a portable C++ executable using the `GResource` system
 + Add an `EventController` to capture controller / joystick events
 + 3D native rendering
 
@@ -47,7 +47,7 @@ end
 list = ListView()
 push_back!(list_view, Button())
 push_back!(list_view, Entry())
-push_back!(list_view, ListView())
+push_back!(list_view, ListView()) 
 ```
 ![](todo)
 
@@ -106,9 +106,3 @@ The Julia- and C++-component of mousetrap were designed and implement by [C.Cord
 ## License
 
 Mousetrap is distributed under [lgpl-3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html). This means it can be freely used in both free open-source, as well as commercial, closed-source projects.
-
-
-
-
-
-
