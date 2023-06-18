@@ -806,14 +806,14 @@ Get whether all columns should allocate the same widget.
 
 @document get_comment_above_group """
 ```
-get_comment_above_group(::KeyFile, group::String) -> String
+get_comment_above_group(::KeyFile, group::GroupID) -> String
 ```
 Get comment above a group declaration. 
 """
 
 @document get_comment_above_key """
 ```
-get_comment_above_key(::KeyFile, group::String, key::String) -> String
+get_comment_above_key(::KeyFile, group::GroupID, key::KeyID) -> String
 ```
 Get comment above a key-value pair in group.
 """
@@ -1226,7 +1226,7 @@ Get currently used justify mode.
 
 @document get_keys """
 ```
-get_keys(::KeyFile, group::String) -> Vector{KeyID}
+get_keys(::KeyFile, group::GroupID) -> Vector{KeyID}
 ```
 Get all keys in group.
 """
@@ -2010,18 +2010,18 @@ Get current value of the underlying adjustment.
 ---
 
 ```
-get_value(file::KeyFile, group::String, key::String, type::Type{<:AbstractFloat}) 
-get_value(file::KeyFile, group::String, key::String, type::Type{<:Signed}) 
-get_value(file::KeyFile, group::String, key::String, type::Type{<:Unsigned}) 
-get_value(file::KeyFile, group::String, key::String, type::Type{Vector{T}}) where T<:AbstractFloat 
-get_value(file::KeyFile, group::String, key::String, type::Type{Vector{T}}) where T<:Signed 
-get_value(file::KeyFile, group::String, key::String, type::Type{Vector{T}}) where T<:Unsigned 
-get_value(file::KeyFile, group::String, key::String, type::Type{Bool}) 
-get_value(file::KeyFile, group::String, key::String, type::Type{String}) 
-get_value(file::KeyFile, group::String, key::String, type::Type{RGBA}) 
-get_value(file::KeyFile, group::String, key::String, type::Type{Image}) 
-get_value(file::KeyFile, group::String, key::String, type::Type{Vector{Bool}}) 
-get_value(file::KeyFile, group::String, key::String, type::Type{Vector{String}}) 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<:AbstractFloat}) 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<:Signed}) 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<:Unsigned}) 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T<:AbstractFloat 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T<:Signed 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T<:Unsigned 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Bool}) 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{String}) 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{RGBA}) 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Image}) 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{Bool}}) 
+get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{String}}) 
 ```
 Deserialize a value from the keyfile. Returns a default value if the key-value pair or group does not
 """
@@ -2166,250 +2166,288 @@ Check whether an action with the given ID is registered.
 
 @document has_axis """
 ```
-has_axis(::StylusEventController, axis::mousetrap.detail._DeviceAxis) 
+has_axis(::StylusEventController, ::DeviceAxis) -> Bool
 ```
-TODO
+Check whether a stylus-device supports the given axis.
 """
 
 @document has_column_with_title """
 ```
-has_column_with_title(column_view::ColumnView, title::String) 
+has_column_with_title(::ColumnView, title::String) -> Bool
 ```
-TODO
+Check whether column view has a column with the given title.
 """
 
 @document has_group """
 ```
-has_group(::KeyFile, group::String) 
+has_group(::KeyFile, group::GroupID) -> Bool
 ```
-TODO
+Check if key file has a group with given id.
 """
 
 @document has_icon """
 ```
-has_icon(theme::IconTheme, icon::Icon) 
-has_icon(theme::IconTheme, id::String) 
+has_icon(::IconTheme, icon::Icon) -> Bool
+has_icon(::IconTheme, id::String) -> Bool
 ```
-TODO
+Check whether icon theme has an icon.
 """
 
 @document has_key """
 ```
-has_key(::KeyFile, group::String, key::String) 
+has_key(::KeyFile, group::GroupID, key::KeyID) -> Bool
 ```
-TODO
+Check whether key file has a group with given ID, an that group has a key with given ID:
 """
 
 @document hide! """
 ```
 hide!(::Widget) 
 ```
-TODO
+Hide the widget, this means its allocated size will become `0` and all of its children will be hidden.
 """
 
 @document hold! """
 ```
 hold!(::Application) 
 ```
-TODO
+Prevent the application from closing. Use `release!` to undo this.
 """
 
 @document hsva_to_rgba """
 ```
 hsva_to_rgba(hsva::HSVA) 
 ```
-TODO
+Convert HSVA to RGBA.
 """
 
 @document html_code_to_rgba """
 ```
 html_code_to_rgba(code::String) 
 ```
-TODO
+Read an html color code of the form `#RRGGBB` or `#RRGGBBAA`, in hexadecimal.
 """
 
 @document insert! """
 ```
-insert!(f, drop_down::DropDown, inde::Integer, list_::Widget, label_::Widget) 
-insert!(f, drop_down::DropDown, inde::Integer, list_::Widget, label_::Widget, data::Data_t) where Data_t 
-insert!(list_view::ListView, ::Widget, inde::Integer) 
-insert!(list_view::ListView, ::Widget, inde::Integer, iterator::ListViewIterator) 
-insert!(grid_view::GridView, inde::Integer, ::Widget) 
-insert!(grid::Grid, ::Widget, row_i::Signed, column_i::Signed; n_horizontal_cells, n_vertical_cells) 
-insert!(notebook::Notebook, inde::Integer, child_::Widget, label_::Widget) 
+insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
 ```
-TODO
+Add an item to the drop down at given index. When it is selected `label_widget` will appear as the 
+child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
+
+`f` is called when the corresponding item is select. `f` is required to be invocable as a function with the signature
+```
+(::DropDown, [::Data_t]) -> Cvoid
+```
+Returns a unique ID identifying the inserted item.
+---
+```
+insert!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget) 
+```
+Insert a page at the given position, where `child_widget` is the widget used as the page, and `label_widget` is the 
+widget displayed in the tab bar.
+---
+```
+insert!(::ListView, ::Widget, index::Integer, [::ListViewIterator]) -> ListViewIterator
+insert!(::GridView, inde::Integer, ::Widget) -> Cvoid
+insert!(::Grid, ::Widget, row_i::Signed, column_i::Signed ; n_horizontal_cells:Unsigned = 1, n_vertical_cells::Unsigned = 1) -> Cvoid
+```
+Insert a widget at the given position.
 """
 
 @document insert_after! """
 ```
-insert_after!(bo::Box, to_append::Widget, after::Widget) 
+insert_after!(::Box, to_append::Widget, after::Widget) 
 ```
-TODO
+Insert `to_append` such that it comes right after `after`.
 """
 
 @document insert_column! """
 ```
-insert_column!(column_view::ColumnView, inde::Integer, title::String) 
+insert_column!(column_view::ColumnView, index::Integer, title::String) 
 ```
-TODO
+Insert a column at the given index.
 """
 
 @document insert_column_at! """
 ```
 insert_column_at!(grid::Grid, column_i::Signed) 
 ```
-TODO
+Insert an empty column after the given index, may be negative.
 """
 
 @document insert_row_at! """
 ```
 insert_row_at!(grid::Grid, row_i::Signed) 
 ```
-TODO
+Insert an empty row after the given index, may be negative.
 """
 
 @document is_cancelled """
 ```
-is_cancelled(::FileMonitor) 
+is_cancelled(::FileMonitor) -> Bool
 ```
-TODO
+Check whether the file monitor has be cancelled.
 """
 
 @document is_file """
 ```
-is_file(::FileDescriptor) 
+is_file(::FileDescriptor) -> Bool
 ```
-TODO
+Check whether the location on disk contains points to a valid file (not folder).
 """
 
 @document is_folder """
 ```
-is_folder(::FileDescriptor) 
+is_folder(::FileDescriptor) -> Bool
 ```
-TODO
+Check whether the location on disk contains points to a valid folder (not file).
 """
 
 @document is_local """
 ```
-is_local(::Clipboard) 
+is_local(::Clipboard) -> Bool
 ```
-TODO
+Check whether the content of the cliboard was set from within the currently active mousetrap application.
 """
 
 @document is_symlink """
 ```
-is_symlink(::FileDescriptor) 
+is_symlink(::FileDescriptor) -> Bool
 ```
-TODO
+Get whether location on disk is a valid symbolic link.
 """
 
 @document is_valid_html_code """
 ```
-is_valid_html_code(code::String) 
+is_valid_html_code(code::String) -> Bool
 ```
-TODO
+Check whether `code` is a string that can be converted to a color using `html_code_to_rgba`.
 """
 
 @document main """
 ```
-main(f; application_id) 
+main(f; application_id::ApplicationID) 
 ```
-TODO
+Run `f`, it is required to be invocable as a function with signature
+```
+(::Application, [::Data_t]) -> Cvoid
+```
+
+This functions automatically creates an application with given ID and starts the main loop. If an error occurrs
+during `f`, the application safely exits.
+
+## Example
+```julia
+using mousetrap
+main() do app::Application
+    window = Window(app)
+    present!(window)
+end
 """
 
 @document make_current """
 ```
 make_current(::RenderArea) 
 ```
-TODO
+Bind the associated frame buffer as the one currently being rendered to. This is usually not necessary.
 """
 
 @document mark_as_busy! """
 ```
 mark_as_busy!(::Application) 
 ```
-TODO
+Mark the application as busy, this will tell the OS that the application is currently processing something.
 """
 
 @document microseconds """
 ```
-microseconds(n::AbstractFloat) 
+microseconds(n::AbstractFloat) -> Time
 ```
-TODO
+Create time from number of microseconds.
 """
 
 @document milliseconds """
 ```
-milliseconds(n::AbstractFloat) 
+milliseconds(n::AbstractFloat) -> Time
 ```
-TODO
+Create time from number of milliseconds.
 """
 
 @document minutes """
 ```
-minutes(n::AbstractFloat) 
+minutes(n::AbstractFloat) -> Time
 ```
-TODO
+Create time from number of minutes.
 """
 
 @document mouse_button_01_pressed """
 ```
-mouse_button_01_pressed(modifier_state::mousetrap.detail._ModifierState) 
+mouse_button_01_pressed(::ModifierState) -> Bool
 ```
-TODO
+Check whether the left mouse button is currently pressed.
 """
 
 @document mouse_button_02_pressed """
 ```
-mouse_button_02_pressed(modifier_state::mousetrap.detail._ModifierState) 
+mouse_button_02_pressed(::ModifierState) -> Bool
 ```
-TODO
+Check whether the right mouse button is currently pressed.
 """
 
 @document move! """
 ```
-move!(from::FileDescriptor, to::FileDescriptor, allow_overwrite::Bool; make_backup, follow_symlink) 
+move!(from::FileDescriptor, to::FileDescriptor, allow_overwrite::Bool ; [make_backup::Bool = false, follow_symlink::Bool = true]) -> Bool 
 ```
-TODO
+Move file to a different location. Returns `true` if the operation was succesfull.
 """
 
 @document nanoseconds """
 ```
-nanoseconds(n::Int64) 
+nanoseconds(n::Int64) -> Time
 ```
-TODO
+Create time from number of nanoseconds.
 """
 
 @document next_page! """
 ```
 next_page!(::Notebook) 
 ```
-TODO
+Go to the next page, or do not do anything if the current page is already the last page.
 """
 
 @document on_accept! """
 ```
-on_accept!(f, chooser::FileChooser) 
-on_accept!(f, chooser::FileChooser, data::Data_t) where Data_t 
+on_accept!(f, chooser::FileChooser, [::Data_t]) 
 ```
-TODO
+Register a callback to be called when the user clicks the "accept" button f the file chooser. 
+`f` is required to be invocable as a function with signature
+```
+(::FileChooser, ::Vector{FileDescriptor}, [::Data_t]) -> Cvoid
+```
 """
 
 @document on_cancel! """
 ```
-on_cancel!(f, chooser::FileChooser) 
-on_cancel!(f, chooser::FileChooser, data::Data_t) where Data_t 
+on_cancel!(f, chooser::FileChooser, [::Data_t]) 
 ```
-TODO
+Register a callback to be called when the user clicks the "cancel" button f the file chooser. 
+`f` is required to be invocable as a function with signature
+```
+(::FileChooser, [::Data_t]) -> Cvoid
+```
 """
 
 @document on_file_changed! """
 ```
-on_file_changed!(f, monitor::FileMonitor) 
-on_file_changed!(f, monitor::FileMonitor, data::Data_t) where Data_t 
+on_file_changed!(f, monitor::FileMonitor, [::Data_t]) 
 ```
-TODO
+Register a callback t be called when the monitored file is modified. `f` is required to be 
+invocable as a function with signature 
+```
+(::FileMonitor, ::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor) -> Cvoid
+```
+Where `other` may not point to a valid file, depending on the event type.
 """
 
 @document popdown! """
@@ -2417,21 +2455,15 @@ TODO
 popdown!(::Popover) 
 popdown!(::PopoverButton) 
 ```
-TODO
-"""
-
-@document popoup! """
-```
-popoup!(::PopoverButton) 
-```
-TODO
+Close the popover window.
 """
 
 @document popup! """
 ```
 popup!(::Popover) 
+popup!(::PopoverButton) 
 ```
-TODO
+Present the popover window
 """
 
 @document present! """
@@ -2440,166 +2472,192 @@ present!(::Window)
 present!(::FileChooser) 
 present!(::Popover) 
 ```
-TODO
+Show the window to the user.
 """
 
 @document previous_page! """
 ```
 previous_page!(::Notebook) 
 ```
-TODO
+Go to the previous page, or do nothing if the current page is already the first page.
 """
 
 @document pulse """
 ```
 pulse(::ProgressBar) 
 ```
-TODO
+Trigger an animation that signifies to the user that progress has been made. This does not actually increase 
+the displayed ratio of the progress bar.
 """
 
 @document push_back! """
 ```
-push_back!(bo::Box, ::Widget) 
-push_back!(f, drop_down::DropDown, list_::Widget, label_::Widget) 
-push_back!(f, drop_down::DropDown, list_::Widget, label_::Widget, data::Data_t) where Data_t 
-push_back!(list_view::ListView, ::Widget) 
-push_back!(list_view::ListView, ::Widget, iterator::ListViewIterator) 
-push_back!(grid_view::GridView, ::Widget) 
-push_back!(notebook::Notebook, child_::Widget, label_::Widget) 
-push_back!(header_bar::HeaderBar, ::Widget) 
+push_back!(::Box, ::Widget) -> Cvoid
+push_back!(::ListView, ::Widget, [::ListViewIterator]) -> ListViewIterator 
+push_back!(::GridView, ::Widget) -> Cvoid
+push_back!(::HeaderBar, ::Widget) -> Cvoid
 ```
-TODO
+Add a widget to the end of the container.
+---
+```
+push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
+```
+Add an item to the end of the drop down. When it is selected `label_widget` will appear as the 
+child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
+
+`f` is called when the corresponding item is select. `f` is required to be invocable as a function with the signature
+```
+(::DropDown, [::Data_t]) -> Cvoid
+```
+Returns a unique ID identifying the inserted item.
+---
+```
+push_back!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget) 
+```
+Insert a page at the end of the notebook, where `child_widget` is the widget used as the page, and `label_widget` is the 
+widget displayed in the tab bar.
 """
 
 @document push_back_column! """
 ```
-push_back_column!(column_view::ColumnView, title::String) 
+push_back_column!(::ColumnView, title::String) -> ColumnViewColumn
 ```
-TODO
+Add a column to the end of the column view.
 """
 
 @document push_back_row! """
 ```
-push_back_row!(column_view::ColumnView, widgets::Widget...) 
+push_back_row!(column_view::ColumnView, widgets::Widget...) -> Cvoid
 ```
-TODO
+Add a number of widgets to the end of the rows, inserting them into the corresponding column. If the number of widgets is
+lower than the number of columns, the leftover columns will contain an empty cell in that row. 
 """
 
-@document push_front! """
+@document push_front """
 ```
-push_front!(bo::Box, ::Widget) 
-push_front!(f, drop_down::DropDown, list_::Widget, label_::Widget) 
-push_front!(f, drop_down::DropDown, list_::Widget, label_::Widget, data::Data_t) where Data_t 
-push_front!(list_view::ListView, ::Widget) 
-push_front!(list_view::ListView, ::Widget, iterator::ListViewIterator) 
-push_front!(grid_view::GridView, ::Widget) 
-push_front!(notebook::Notebook, child_::Widget, label_::Widget) 
-push_front!(header_bar::HeaderBar, ::Widget) 
+push_front!(::Box, ::Widget) -> Cvoid
+push_front!(::ListView, ::Widget, [::ListViewIterator]) -> ListViewIterator 
+push_front!(::GridView, ::Widget) -> Cvoid
+push_front!(::HeaderBar, ::Widget) -> Cvoid
 ```
-TODO
+Add a widget to the start of the container.
+---
+```
+push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
+```
+Add an item to the start of the drop down. When it is selected `label_widget` will appear as the 
+child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
+
+`f` is called when the corresponding item is select. `f` is required to be invocable as a function with the signature
+```
+(::DropDown, [::Data_t]) -> Cvoid
+```
+Returns a unique ID identifying the inserted item.
+---
+```
+push_front!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget) 
+```
+Insert a page at the start of the notebook, where `child_widget` is the widget used as the page, and `label_widget` is the 
+widget displayed in the tab bar.
 """
 
 @document push_front_column! """
 ```
-push_front_column!(column_view::ColumnView, title::String) 
+push_front_column!(column_view::ColumnView, title::String) -> ColumnViewColumn
 ```
-TODO
+Add a column to the start of the column view.
 """
 
 @document push_front_row! """
 ```
-push_front_row!(column_view::ColumnView, widgets::Widget...) 
+push_front_row!(column_view::ColumnView, widgets::Widget...) -> Cvoid
 ```
-TODO
+Add a number of widgets to the start of the rows, inserting them into the corresponding column. If the number of widgets is
+lower than the number of columns, the leftover columns will contain an empty cell in that row. 
 """
 
 @document query_info """
 ```
-query_info(::FileDescriptor) 
+query_info(::FileDescriptor, attribute_id::String) -> String
 ```
-TODO
+Access metadata info about a file. A list of attribute IDs can be found [here](https://docs.gtk.org/gio/index.html#constants).
+Note that there is no guaruantee that a file will contain a value for any of these attributes.
 """
 
 @document queue_render """
 ```
 queue_render(::RenderArea) 
 ```
-TODO
+Request for the render area to flush the current framebuffer to the screen. There is no guaruantee that this 
+will happen immediately.
 """
 
 @document quit! """
 ```
 quit!(::Application) 
 ```
-TODO
+Exit the application.
 """
 
 @document radians """
 ```
-radians(::Number) 
+radians(::Number) -> Angle
 ```
-TODO
+Construct angle from radians.
 """
 
 @document read_symlink """
 ```
-read_symlink(self::FileDescriptor) 
+read_symlink(self::FileDescriptor) -> FileDescriptor
 ```
-TODO
+If the pointed to file is a valid symlink, follow that symlink and return the resulting file.
 """
 
 @document redo! """
 ```
 redo!(::TextView) 
 ```
-TODO
+Invoke the "redo!" keybinding signal manual. If there is no action on the undo stack, this function does nothing.
 """
 
 @document release! """
 ```
 release!(::Application) 
 ```
-TODO
+Release an application that is currently being prevented from exiting because `hold!` was called before.
 """
 
 @document remove! """
 ```
-remove!(bo::Box, ::Widget) 
-remove!(list_view::ListView, inde::Integer) 
-remove!(list_view::ListView, inde::Integer, iterator::ListViewIterator) 
-remove!(grid_view::GridView, ::Widget) 
-remove!(grid::Grid, ::Widget) 
-remove!(header_bar::HeaderBar, ::Widget) 
-remove!(::DropDown, id::String) 
-remove!(::Notebook, position::Int64) 
+remove!(::Box, ::Widget) -> Cvoid
+remove!(::ListView, index::Integer, [::ListViewIterator]) -> Cvoid 
+remove!(::GridView, ::Widget) -> Cvoid
+remove!(::Grid, ::Widget) -> Cvoid
+remove!(::HeaderBar, ::Widget) -> Cvoid
+remove!(::DropDown, item_id::DropDownItemID) -> Cvoid
+remove!(::Notebook, position::Integer) -> Cvoid
 ```
-TODO
+Remove an item from the container.
 """
 
 @document remove_action! """
 ```
 remove_action!(::Application, id::String) 
 ```
-TODO
+Unregister an action from the application. Any connected widgets such as `Button` or `MenuModel` 
+will be disabled.
 """
 
 @document remove_center_child! """
 ```
 remove_center_child!(::CenterBox) 
 ```
-TODO
-"""
-
-@document remove_child """
-```
-remove_child(::Viewport) 
-```
-TODO
+Remove the middle child of the center box.
 """
 
 @document remove_child! """
 ```
-remove_child!(fixed::Fixed, child::Widget) 
+remove_child!(::Fixed, child::Widget) 
 remove_child!(::Window) 
 remove_child!(::AspectFrame) 
 remove_child!(::Button) 
@@ -2607,41 +2665,37 @@ remove_child!(::CheckButton)
 remove_child!(::ToggleButton) 
 remove_child!(::Expander) 
 remove_child!(::Frame) 
-remove_child!(overlay::Overlay) 
+remove_child!(::Overlay) 
 remove_child!(::Popover) 
 remove_child!(::PopoverButton) 
-remove_child!(stack::Stack, id::String) 
+remove_child!(::Stack, id::String) 
 remove_child!(::Revealer) 
+remove_child!(::Viewport) 
+
 ```
-TODO
+Remove the widget singular child, such that it is now empty.
 """
 
 @document remove_column! """
 ```
 remove_column!(column_view::ColumnView, column::ColumnViewColumn) 
 ```
-TODO
+Remove a column from the column view.
 """
 
 @document remove_controller! """
 ```
 remove_controller!(::Widget, controller::EventController) 
 ```
-TODO
-"""
-
-@document remove_end_child """
-```
-remove_end_child(::Paned) 
-```
-TODO
+Disconnect an event controller.
 """
 
 @document remove_end_child! """
 ```
 remove_end_child!(::CenterBox) 
+remove_end_child!(::Paned) 
 ```
-TODO
+Remove the latter child of the widget.
 """
 
 @document remove_label_widget! """
@@ -2656,77 +2710,72 @@ TODO
 ```
 remove_marker!(::LevelBar, name::String) 
 ```
-TODO
+Remove a marker with given label from the level bar.
 """
 
 @document remove_overlay! """
 ```
-remove_overlay!(overlay::Overlay, child::Widget) 
+remove_overlay!(overlay::Overlay, overlayed::Widget) 
 ```
-TODO
+Remove an overlay widget added via `add_overlay!`
 """
 
 @document remove_popover! """
 ```
 remove_popover!(::PopoverButton) 
 ```
-TODO
+Remove the connected `Popover` or `PopoverMenu`.
 """
 
 @document remove_primary_icon! """
 ```
 remove_primary_icon!(::Entry) 
 ```
-TODO
+Remove the left icon of the entry.
 """
 
 @document remove_row_at! """
 ```
 remove_row_at!(grid::Grid, row_i::Signed) 
 ```
-TODO
+Remove a row at specified position (1-based), this may cause children of the row to move to another.
 """
 
 @document remove_secondary_icon! """
 ```
 remove_secondary_icon!(::Entry) 
 ```
-TODO
-"""
-
-@document remove_start_child """
-```
-remove_start_child(::Paned) 
-```
-TODO
+Remove the right icon of the entry.
 """
 
 @document remove_start_child! """
 ```
+remove_start_child!(::Paned) 
 remove_start_child!(::CenterBox) 
 ```
-TODO
+Remove the start child such that the widget is now empty at that position
 """
 
 @document remove_tick_callback! """
 ```
 remove_tick_callback!(::Widget) 
 ```
-TODO
+Remove a registered tick callback. Usually, this should be done by returning `TICK_CALLBACK_RESULT_DISCONTINUE` from
+within the tick callback function.
 """
 
 @document remove_titlebar_widget! """
 ```
 remove_titlebar_widget!(::Window) 
 ```
-TODO
+Reset the titlebar widget such that the default window decoration is used instead.
 """
 
 @document remove_tooltip_widget! """
 ```
 remove_tooltip_widget!(::Widget) 
 ```
-TODO
+Remove the tooltip widget. The widget will now no longer display a tooltip-
 """
 
 @document render """
@@ -2993,22 +3042,22 @@ TODO
 
 @document set_comment_above! """
 ```
-set_comment_above!(file::KeyFile, group::String, comment::String) 
-set_comment_above!(file::KeyFile, group::String, key::String, comment::String) 
+set_comment_above!(file::KeyFile, group::GroupID, comment::String) 
+set_comment_above!(file::KeyFile, group::GroupID, key::KeyID, comment::String) 
 ```
 TODO
 """
 
 @document set_comment_above_group! """
 ```
-set_comment_above_group!(::KeyFile, group::String, comment::String) 
+set_comment_above_group!(::KeyFile, group::GroupID, comment::String) 
 ```
 TODO
 """
 
 @document set_comment_above_key! """
 ```
-set_comment_above_key!(::KeyFile, group::String, key::String, comment::String) 
+set_comment_above_key!(::KeyFile, group::GroupID, key::KeyID, comment::String) 
 ```
 TODO
 """
@@ -4176,18 +4225,18 @@ TODO
 set_value!(::SpinButton, value::AbstractFloat) 
 set_value!(::Scale, value::AbstractFloat) 
 set_value!(::LevelBar, value::AbstractFloat) 
-set_value!(file::KeyFile, group::String, key::String, value::AbstractFloat) 
-set_value!(file::KeyFile, group::String, key::String, value::Signed) 
-set_value!(file::KeyFile, group::String, key::String, value::Unsigned) 
-set_value!(file::KeyFile, group::String, key::String, value::Vector{<:AbstractFloat}) 
-set_value!(file::KeyFile, group::String, key::String, value::Vector{<:Signed}) 
-set_value!(file::KeyFile, group::String, key::String, value::Vector{<:Unsigned}) 
-set_value!(file::KeyFile, group::String, key::String, value::Bool) 
-set_value!(file::KeyFile, group::String, key::String, value::String) 
-set_value!(file::KeyFile, group::String, key::String, value::RGBA) 
-set_value!(file::KeyFile, group::String, key::String, value::Image) 
-set_value!(file::KeyFile, group::String, key::String, value::Vector{Bool}) 
-set_value!(file::KeyFile, group::String, key::String, value::Vector{String}) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::AbstractFloat) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Signed) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Unsigned) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{<:AbstractFloat}) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{<:Signed}) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{<:Unsigned}) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Bool) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::String) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::RGBA) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Image) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{Bool}) 
+set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{String}) 
 set_value!(adjustment::Adjustment, ::Number) 
 ```
 TODO

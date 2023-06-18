@@ -1979,7 +1979,7 @@ macro do_not_compile(args...) return :() end
     export read_symlink
 
     @export_function FileDescriptor get_content_type String
-    @export_function FileDescriptor query_info String
+    @export_function FileDescriptor query_info String String info_id
 
     create_monitor(descriptor::FileDescriptor) ::FileMonitor = FileMonitor(detail._FileMonitor(detail.create_monitor(descriptor._internal)))
     export create_monitor
@@ -2323,7 +2323,7 @@ macro do_not_compile(args...) return :() end
     set_child!(viewport::Viewport, child::Widget) = detail.set_child(viewport._internal, child._internal.cpp_object)
     export set_child!
 
-    @export_function Viewport remove_child Cvoid
+    @export_function Viewport remove_child! Cvoid
 
     @export_enum ScrollType begin
         SCROLL_TYPE_NONE
@@ -2680,7 +2680,7 @@ macro do_not_compile(args...) return :() end
     @export_function PopoverButton get_always_show_arrow Bool
     @export_function PopoverButton set_has_frame Cvoid Bool b
     @export_function PopoverButton get_has_frame Bool
-    @export_function PopoverButton popoup! Cvoid
+    @export_function PopoverButton popup! Cvoid
     @export_function PopoverButton popdown! Cvoid
     @export_function PopoverButton set_is_circular! Cvoid Bool b
     @export_function PopoverButton get_is_circular Bool
@@ -2706,14 +2706,13 @@ macro do_not_compile(args...) return :() end
     export get_item_at
 
     function push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
-        typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
-        detail.push_back!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.push_back!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
-        detail.push_back!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.push_back!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -2721,13 +2720,13 @@ macro do_not_compile(args...) return :() end
 
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
-        detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
-        detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -2735,13 +2734,13 @@ macro do_not_compile(args...) return :() end
 
     function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
-        detail.insert!(drop_down._internal, from_julia_index(index), list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.insert!(drop_down._internal, from_julia_index(index), list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
-        detail.insert!(drop_down._internal, from_julia_index(index), list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.insert!(drop_down._internal, from_julia_index(index), list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -3272,7 +3271,7 @@ macro do_not_compile(args...) return :() end
     end
     export insert!
 
-    @export_function Notebook remove! Cvoid Int64 position
+    @export_function Notebook remove! Cvoid Integer position
     @export_function Notebook next_page! Cvoid
     @export_function Notebook previous_page! Cvoid
     @export_function Notebook goto_page! Cvoid Integer position
@@ -3461,7 +3460,7 @@ macro do_not_compile(args...) return :() end
     set_start_child!(paned::Paned, child::Widget) = detail.set_start_child!(paned._internal, child._internal.cpp_object)
     export set_start_child!
 
-    @export_function Paned remove_start_child Cvoid
+    @export_function Paned remove_start_child! Cvoid
 
     @export_function Paned set_end_child_resizable! Cvoid Bool b
     @export_function Paned get_end_child_resizable Bool
@@ -3471,7 +3470,7 @@ macro do_not_compile(args...) return :() end
     set_end_child!(paned::Paned, child::Widget) = detail.set_end_child!(paned._internal, child._internal.cpp_object)
     export set_end_child!
 
-    @export_function Paned remove_end_child Cvoid
+    @export_function Paned remove_end_child! Cvoid
 
 ###### progress_bar.jl
 
