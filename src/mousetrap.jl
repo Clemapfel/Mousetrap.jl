@@ -70,26 +70,62 @@ macro do_not_compile(args...) return :() end
 
     const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN
 
+    """
+    ```
+    @log_debug(domain::LogDomain, message::Message)
+    ```
+    Send a log message with log level "DEBUG". Messages of
+    this level will only be displayed once `set_surpress_debug`
+    is set to `false` for this log domain.
+    """
     macro log_debug(domain, message)
         return :(mousetrap.detail.log_debug($message, $domain))
     end
     export @log_debug
 
+    """
+    ```
+    @log_info(domain::LogDomain, message::Message)
+    ```
+
+    Send a log message with log level "INFO". Messages of
+    this level will only be displayed once `set_surpress_info`
+    is set to `false` for this log domain.
+    """
     macro log_info(domain, message)
         return :(mousetrap.detail.log_info($message, $domain))
     end
     export @log_info
 
+    """
+    ```
+    @log_warning(domain::LogDomain, message::Message)
+    ```
+    Send a log message with log level "WARNING".
+    """
     macro log_warning(domain, message)
         return :(mousetrap.detail.log_warning($message, $domain))
     end
     export @log_warning
 
+    """
+    ```
+    @log_critical(domain::LogDomain, message::Message)
+    ```
+    Send a log message with log level "CRITICAL".
+    """
     macro log_critical(domain, message)
         return :(mousetrap.detail.log_critical($message, $domain))
     end
     export @log_critical
 
+    """
+    ```
+    @log_fatal(domain::LogDomain, message::Message)
+    ```
+    Send a log mess with log level "FATAL". Immediately after
+    this messages is printed, runtime will exit.
+    """
     macro log_fatal(domain, message)
         return :(mousetrap.detail.log_fatal($message, $domain))
     end
@@ -1444,6 +1480,11 @@ macro do_not_compile(args...) return :() end
     export ShortcutTrigger
 
     Action(id::String, app::Application) = Action(detail._Action(id, app._internal.cpp_object))
+    function Action(f, id::String, app::Application)
+        out = Action(id, app)
+        set_function!(f, out)
+        return out
+    end
 
     @export_function Action get_id String
     @export_function Action set_state! Cvoid Bool b
@@ -1511,7 +1552,7 @@ macro do_not_compile(args...) return :() end
     @export_function Adjustment get_lower Float32
     @export_function Adjustment get_upper Float32
     @export_function Adjustment get_value Float32
-    @export_function Adjustment get_increment Float32
+    @export_function Adjustment get_step_increment Float32
 
     set_lower!(adjustment::Adjustment, x::Number) = detail.set_lower!(adjustment._internal, convert(Cfloat, x))
     export set_lower!
@@ -1522,8 +1563,8 @@ macro do_not_compile(args...) return :() end
     set_value!(adjustment::Adjustment, x::Number) = detail.set_value!(adjustment._internal, convert(Cfloat, x))
     export set_value!
 
-    set_increment!(adjustment::Adjustment, x::Number) = detail.set_increment!(adjustment._internal, convert(Cfloat, x))
-    export set_increment!
+    set_step_increment!(adjustment::Adjustment, x::Number) = detail.set_step_increment!(adjustment._internal, convert(Cfloat, x))
+    export set_step_increment!
 
     Base.show(io::IO, x::Adjustment) = mousetrap.show_aux(io, x, :value, :lower, :upper, :increment)
 
@@ -2104,7 +2145,7 @@ macro do_not_compile(args...) return :() end
     end
     export remove!
 
-    @export_function Box clear Cvoid
+    @export_function Box clear! Cvoid
     @export_function Box set_homogeneous! Cvoid Bool b
     @export_function Box get_homogeneous Bool
 
@@ -2883,8 +2924,8 @@ macro do_not_compile(args...) return :() end
 
     @export_enum ShortcutScope begin
         SHORTCUT_SCOPE_LOCAL
-        SHORTCUT_SCOPE_MANAGED
         SHORTCUT_SCOPE_GLOBAL
+        #SHORTCUT_SCOPE_MANAGED
     end
 
     set_scope!(controller::ShortcutEventController, scope::ShortcutScope) = detail.set_scope!(controller._internal, scope)
@@ -3067,6 +3108,8 @@ macro do_not_compile(args...) return :() end
     @export_function GridView get_n_items Int64
     @export_function GridView set_enable_rubberband_selection Cvoid Bool b
     @export_function GridView get_enabled_rubberband_selection Bool
+    @export_function GridView get_single_click_activate Bool
+    @export_function GridView set_single_click_activate! Cvoid Bool b
 
     set_max_n_columns!(grid_view::GridView, n::Integer) = detail.set_max_n_columns!(grid_view._internal, UInt64(n))
     export set_max_n_columns!
@@ -3232,7 +3275,7 @@ macro do_not_compile(args...) return :() end
     @export_function Notebook remove! Cvoid Int64 position
     @export_function Notebook next_page! Cvoid
     @export_function Notebook previous_page! Cvoid
-    @export_function Notebook goto_page! Cvoid Int64 position
+    @export_function Notebook goto_page! Cvoid Integer position
 
     @export_function Notebook get_current_page Int64
     @export_function Notebook get_n_pages Int64
@@ -3243,7 +3286,7 @@ macro do_not_compile(args...) return :() end
     @export_function Notebook set_tabs_visible! Cvoid Bool b
     @export_function Notebook get_tabs_visible Bool
     @export_function Notebook set_quick_change_menu_enabled! Cvoid Bool b
-    @export_function Notebook get_quick_change_menu_enabled Cvoid Bool b
+    @export_function Notebook get_quick_change_menu_enabled Cvoid
     @export_function Notebook set_tab_position! Cvoid RelativePosition relative_position
     @export_function Notebook get_tab_position RelativePosition
     @export_function Notebook set_tabs_reorderable! Cvoid Bool b
@@ -3926,7 +3969,8 @@ macro do_not_compile(args...) return :() end
 ###### texture.jl
 
     abstract type TextureObject <: SignalEmitter end
-
+    export TextureObject
+    
     @export_enum TextureWrapMode begin
         TEXTURE_WRAP_MODE_ZERO
         TEXTURE_WRAP_MODE_ONE
@@ -4158,7 +4202,7 @@ macro do_not_compile(args...) return :() end
     @export_function Shape get_vertex_texture_coordinate Vector2f Integer index
     @export_function Shape set_vertex_texture_coordinate Cvoid Integer index Vector2f coordinate
 
-    @export_function Shape get_vertex_position Vector3f
+    @export_function Shape get_vertex_position Vector3f Integer index
     @export_function Shape set_vertex_position! Cvoid Integer index Vector3f position
 
     @export_function Shape get_n_vertices Int64

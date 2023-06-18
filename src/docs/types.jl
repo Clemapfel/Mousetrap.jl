@@ -72,7 +72,8 @@ end
     an action also disables all connected buttons and menu items.
 
     $(@type_constructors(
-        Action(::ActionID, ::Application))
+        Action(::ActionID, ::Application)
+        Action(stateless_function, ::ActionID, ::Application)
     ))
 
     $(@type_signals(Action, 
@@ -2206,6 +2207,13 @@ end
     ))
 
     $(@type_fields())
+"""
+
+@document TextureObject """
+    ## TextureObject
+
+    Object that can be bound as a texture. Use `set_texture!(::Shape, ::TextureObject)` to associate 
+    it with a shape, then the texture can be rendered using `RenderArea`.
 """
 
 @document Time """

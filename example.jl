@@ -10,22 +10,27 @@ main() do app::Application
 
     window = Window(app)
 
-    swipe_controller = SwipeEventController()
-    connect_signal_swipe!(swipe_controller) do self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat
-        print("swiping ")
+    model = MenuModel()
+    section = MenuModel()
 
-        if (y_velocity < 0)
-            print("up ")
-        elseif (y_velocity > 0)
-            print("down ")
-        end
+    add_action!(section, "01", Action("example.action_01", app) do x::Action
+        println("02")
+    end)
 
-        if (x_velocity < 0)
-            println("left")
-        elseif (x_velocity > 0)
-            println("right")
-        end
-    end
-    add_controller!(window, swipe_controller)
+    add_action!(section, "02", Action("example.action_02", app) do x::Action
+        println("02")
+    end)
+
+    add_action!(section, "03", Action("example.action_03", app) do x::Action
+        println("03")
+    end)
+
+    add_section!(model, "section", section, SECTION_FORMAT_INLINE_BUTTONS)
+
+    popover_menu = PopoverMenu(model)
+    button = PopoverButton()
+    set_popover_menu!(button, popover_menu)
+    set_child!(window, button)
+
     present!(window)
 end

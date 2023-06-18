@@ -47,27 +47,6 @@ macro document(name, string)
     :(@doc $string $name)
 end
 
-macro function_docs(name, brief::String, return_t, args...)
-   
-    arg_list = ""
-    n_args = length(args)
-    for i in 1:n_args
-        arg_list *= string(args[i])
-        if i != n_args
-            arg_list *= ", "
-        end
-    end
-    signature = "($arg_list) -> $return_t"
-   
-    text = ""
-    text *= "```\n"
-    text *= "$name$signature\n"
-    text *= "```\n"
-    text *= "$brief\n"
-
-    return text
-end
-
 function enum_docs(name, brief, values)
     out = "## $(name)\n"
     out *= "$(brief)\n"
