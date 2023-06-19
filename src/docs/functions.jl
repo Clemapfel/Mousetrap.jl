@@ -1,27 +1,3 @@
-@do_not_compile const _generate_function_docs = quote
-
-    for name in mousetrap.functions
-
-        method_list = ""
-        method_table = methods(getproperty(mousetrap, name))
-        for i in eachindex(method_table)
-            as_string = string(method_table[i])
-            method_list *= as_string[1:match(r" \@.*", as_string).offset]
-            if i != length(method_table)
-                method_list *= "\n"
-            end
-        end
-
-        println("""
-        @document $name \"\"\"
-        ```
-        $method_list
-        ```
-        TODO
-        \"\"\"
-        """)
-    end
-end
 
 # Note: @doc can't document macros, apparently, done inline in `mousetrap.jl`
 # @document @log_info 
@@ -100,6 +76,7 @@ Allow all files with the given suffix. The suffix should **not** contain a dot, 
 add_child!(fixed::Fixed, ::Widget, position::Vector2f) 
 ```
 Add a child at given position, in absolute widget coodinates.
+
 ---
 
 ```
@@ -1451,6 +1428,7 @@ get_orientation(::Scrollbar) -> Orientation
 get_orientation(::Separator) -> Orientation 
 ```
 Get whether the widget is oriented horizontally or vertically.
+
 ---
 
 ```
@@ -1492,12 +1470,16 @@ Get pixel at given position, 1-indexed.
 get_position(::Widget) -> Vector2f
 ```
 Get current position in screen, relative to the toplevel widgets origin, in pixels.
+
 ---
+
 ```
 get_position(::Grid, ::Widget) -> Vector2i
 ```
 Get row- and column-index of widget, 1-indexed.
+
 ---
+
 ```
 get_position(::Paned) -> Int32
 ```
@@ -1727,7 +1709,9 @@ Get resolution of the underlying image.
 get_size(::Grid, ::Widget) -> Vector2i
 ```
 Get number of rows and columns.
+
 ---
+
 ```
 get_size(::Shape) -> Vector2f
 ```
@@ -1774,6 +1758,7 @@ Get position at which the drag gesture was first recognized, in pixels, relative
 get_state(::Action) -> Bool
 ```
 If the action is stateful, get the underlying state, otherwise returns `false`.
+
 ---
 
 ```
@@ -1850,6 +1835,7 @@ get_text(::TextView) -> String
 Get the content of the underlying text buffer.
 
 ---
+
 ```
 get_text(::ProgressBar) -> String
 ```
@@ -1875,7 +1861,9 @@ Get the actual duration of the last rendered frame.
 get_title(::Window) -> String
 ```
 Get window title.
+
 ---
+
 ```
 get_title(::ColumnViewColumn) -> String 
 ```
@@ -2136,7 +2124,9 @@ Get whether the "was modified" flag of a textview was set to `true`.
 get_wrap_mode(::TextureObject) -> TextureWrapMode
 ```
 Get OpenGL texture wrap mode.
+
 ---
+
 ```
 get_wrap_mode(::Label) -> LabelWrapMode
 ```
@@ -2254,13 +2244,17 @@ child of the drop down, while `list_widget` will be used as the widget displayed
 (::DropDown, [::Data_t]) -> Cvoid
 ```
 Returns a unique ID identifying the inserted item.
+
 ---
+
 ```
 insert!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget) 
 ```
 Insert a page at the given position, where `child_widget` is the widget used as the page, and `label_widget` is the 
 widget displayed in the tab bar.
+
 ---
+
 ```
 insert!(::ListView, ::Widget, index::Integer, [::ListViewIterator]) -> ListViewIterator
 insert!(::GridView, inde::Integer, ::Widget) -> Cvoid
@@ -2512,7 +2506,9 @@ push_back!(::GridView, ::Widget) -> Cvoid
 push_back!(::HeaderBar, ::Widget) -> Cvoid
 ```
 Add a widget to the end of the container.
+
 ---
+
 ```
 push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
 ```
@@ -2524,7 +2520,9 @@ child of the drop down, while `list_widget` will be used as the widget displayed
 (::DropDown, [::Data_t]) -> Cvoid
 ```
 Returns a unique ID identifying the inserted item.
+
 ---
+
 ```
 push_back!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget) 
 ```
@@ -2555,7 +2553,9 @@ push_front!(::GridView, ::Widget) -> Cvoid
 push_front!(::HeaderBar, ::Widget) -> Cvoid
 ```
 Add a widget to the start of the container.
+
 ---
+
 ```
 push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
 ```
@@ -2567,7 +2567,9 @@ child of the drop down, while `list_widget` will be used as the widget displayed
 (::DropDown, [::Data_t]) -> Cvoid
 ```
 Returns a unique ID identifying the inserted item.
+
 ---
+
 ```
 push_front!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget) 
 ```
@@ -2887,7 +2889,9 @@ save_to_file(::Image, path::String) -> Bool
 Save the image to a file, the file format is automatically determined based on the extension of the given path.
 
 Returns `true` if the operation was successfull.
+
 ---
+
 ```
 save_to_file(::KeyFile, path::String) -> Bool
 ```
@@ -3471,12 +3475,16 @@ Set whether all pages of the stack should allocate the same height.
 set_is_visible!(::Widget, ::Bool) 
 ```
 Set whether the widget is hidden.
+
 ---
+
 ```
 set_is_visible!(::Shape, ::Bool) 
 ```
 Set whether the shape and any associated render tasks should be rendered.
+
 ---
+
 ```
 set_is_visible!(::ColumnViewColumn, ::Bool) 
 ```
@@ -3682,13 +3690,6 @@ set_opacity!(::Widget, opacity::AbstractFloat)
 Set the opacity of the widget, if the opacity is `0`, the widget will be hidden.
 """
 
-@document set_orientation """
-```
-
-```
-Set orientation of the widgets.
-"""
-
 @document set_orientation! """
 ```
 set_orientation!(::Box, orientation::Orientation) 
@@ -3703,7 +3704,9 @@ set_orientation!(::GridView, orientation::Orientation)
 set_orientation!(::Paned, orientation::Orientation) 
 ```
 Set orientation of the widget, this governs along which axis it aligns itself and its children.
+
 ---
+
 ```
 set_orientation!(::PanEventController) 
 ```
@@ -3979,7 +3982,9 @@ Register an ID to be used to send a notification when the window is first shown.
 set_state!(::Action, ::Bool) 
 ```
 If the action is stateful, override its internal state.
+
 ---
+
 ```
 set_state!(::CheckButton, state::CheckButtonState) 
 ```
@@ -4063,7 +4068,9 @@ set_text!(::Label, text::String)
 set_text!(::TextView, text::String) 
 ```
 Override the content of the internal text buffer.
+
 ---
+
 ```
 set_text!(::ProgressBar, text::String) 
 ```
@@ -4128,7 +4135,9 @@ end
 set_title!(::Window, title::String) 
 ```
 Set windows title, which will be shown in its titlebar.
+
 ---
+
 ```
 set_title!(::ColumnViewColumn, title::String) 
 ```
@@ -4321,7 +4330,9 @@ set_value!(adjustment::Adjustment, ::Number)
 ```
 Set current value of the underlying range, clamped to `[lower, upper]`.
 ```
+
 ---
+
 ```
 set_value!(file::KeyFile, ::GroupID, ::KeyID, ::AbstractFloat) 
 set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Vector{<:AbstractFloat}) 
@@ -4337,7 +4348,6 @@ set_value!(file::KeyFile, ::GroupID, ::KeyID, ::RGBA)
 set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Image) 
 ```
 Serialize a value and save it to a key-value pair in given group. If the group or key does not yet exist, it is created.
----
 """
 
 @document set_value_to_text_function! """
@@ -4431,7 +4441,9 @@ Replace the widget at given position.
 set_wrap_mode!(::Label, mode::LabelWrapMode) 
 ```
 Set wrap mode, this determines at which point of a line a linebreak will be inserted.
+
 ---
+
 ```
 set_wrap_mode!(::TextureObject, mode::TextureWrapMode) 
 ```

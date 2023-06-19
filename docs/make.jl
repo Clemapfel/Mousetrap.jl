@@ -1,11 +1,6 @@
-using Documenter
+using Documenter, Pkg
 
-push!(LOAD_PATH, "../src")
+Pkg.activate(".")
 using mousetrap
 
-#module mousetrap
-#    include("../src/docs.jl")
-#end
-#using .mousetrap
-
-makedocs(sitename="DOCS")
+makedocs(sitename="mousetrap")
