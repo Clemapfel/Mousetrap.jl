@@ -699,13 +699,6 @@ get_allow_only_numeric(::SpinButton) -> Bool
 Get whether the spin button only accepts numerical values for its text-entry.
 """
 
-@document get_always_show_arrow """
-```
-get_always_show_arrow(::PopoverButton) -> Bool
-```
-Get whether the popover button should display an arrow next to its label.
-"""
-
 @document get_autohide """
 ```
 get_autohide(::Popover) -> Bool
@@ -804,18 +797,12 @@ get_columns_homogeneous(::Grid) -> Bool
 Get whether all columns should allocate the same widget.
 """
 
-@document get_comment_above_group """
+@document get_comment_above """
 ```
-get_comment_above_group(::KeyFile, group::GroupID) -> String
+get_comment_above(::KeyFile, group::GroupID) -> String
+get_comment_above(::KeyFile, group::GroupID, key::KeyID) -> String
 ```
-Get comment above a group declaration. 
-"""
-
-@document get_comment_above_key """
-```
-get_comment_above_key(::KeyFile, group::GroupID, key::KeyID) -> String
-```
-Get comment above a key-value pair in group.
+Get comment above a group or key declaration. 
 """
 
 @document get_content_type """
@@ -942,9 +929,9 @@ Get the file extension of the file. This will be the any character after the las
 
 @document get_fixed_width """
 ```
-get_fixed_width(::ColumnViewColumn) -> Bool
+get_fixed_width(::ColumnViewColumn) -> Float32
 ```
-Get whether the column should always allocate the specified width.
+Get the target width of the column, in pixels, or `-1` if unlimited.
 """
 
 @document get_focus_on_click """
@@ -1045,14 +1032,14 @@ Get whether the barrier in between the paneds two children is wide or thin.
 ```
 get_hide_on_overflow(::Widget) -> Bool
 ```
-Get whether any are of the widget that goes outside of its allocate space should be drawn or clipped.
+Get whether any area of the widget that goes outside of its allocate space should be drawn (as opposed to clipped).
 """
 
 @document get_homogeneous """
 ```
 get_homogeneous(::Box) -> Bool
 ```
-Get whether all of the boxes children should be allocated the same size.
+Get whether all of the boxes children should be allocated the same width (or height, if orientation is vertical).
 """
 
 @document get_horizontal_adjustment """
@@ -1089,6 +1076,28 @@ get_id(::Application) -> ApplicationID
 get_id(::Action) -> ActionID
 ```
 Access the ID specified during the objects construction.
+"""
+
+@document get_image """
+```
+get_image(f, ::Clipboard, [::Data_t])
+```
+Register a callback to read an image from the clipboad. Once the clipboard is ready, the callback will be invoked.
+
+`f` is required to be invocable as a function with signature
+```julia
+(::Clipboard, ::Image) -> Cvoid
+```
+
+## Example
+```julia
+clipboard = get_clipboard(window)
+if contains_image(clipboard)
+    get_image(clipboard) do x::Clipboard, image::Image
+        # use image here
+    end
+end
+```
 """
 
 @document get_inverted """
@@ -1235,7 +1244,7 @@ Get all keys in group.
 ```
 get_kinetic_scrolling_enabled(::Viewport) -> Bool
 ```
-Get whether the widget should continue scrolling, simulating "inertia".
+Get whether the widget should continue scrolling simulating "inertia" once the user stopped operating the mouse wheel or touchscreen
 """
 
 @document get_label_x_alignment! """
@@ -1296,13 +1305,6 @@ get_margin_top(::Widget) -> Float32
 Get top margin of the widget, in pixels.
 """
 
-@document get_max_length """
-```
-get_max_length(::Entry) -> Signed
-```
-Get maximum number of characters, or `-1` if unlimited.
-"""
-
 @document get_max_n_columns """
 ```
 get_max_n_columns(grid_view::GridView) -> Signed
@@ -1312,6 +1314,7 @@ Get maximum number of columns, or `-1` if unlimited.
 
 @document get_max_width_chars """
 ```
+get_max_width_chars(::Entry) -> Signed
 get_max_width_chars(::Label) -> Signed
 ```
 Get maximum number of characters for which the label should allocate horizontal space, or `-1` if unlimited.
@@ -1342,7 +1345,7 @@ Get the minimum possible size the widget would have to allocate in order for it 
 ```
 get_mode(::LevelBar) -> LevelBarMode
 ```
-Get display mode of level bar.
+Get whether the level bar should display its value continuous or segmented.
 """
 
 @document get_n_columns """
@@ -1667,11 +1670,12 @@ get_should_wrap(::SpinButton) -> Bool
 Get whether the spin button should over- / underflow when reaching the upper or lower end of its range.
 """
 
-@document get_show_arrow """
+@document get_always_show_arrow """
 ```
-get_show_arrow(::DropDown) -> Bool
+get_always_show_arrow(::DropDown) -> Bool
+get_always_show_arrow(::PopoverButton) -> Bool
 ```
-Get whether an arrow should be drawn next to the widget of the currently selected item.
+Get whether an arrow should be drawn next to the label.
 """
 
 @document get_show_column_separators """
@@ -1708,7 +1712,7 @@ get_single_click_activate(::ListView) -> Bool
 get_single_click_activate(::GridView) -> Bool
 get_single_click_activate(::ColumnView) -> Bool
 ```
-Get whether simply hovering above a child will select it.
+Get whether only hovering about an item selects it.
 """
 
 @document get_size """
@@ -1797,6 +1801,16 @@ Register a callback with the signature:
 ```
 When a string is read from the clipboard, the callback will be invoked and the string will be provided as the 
 an argument for the callback.
+
+## Example
+```julia
+clipboard = get_clipboard(window)
+if contains_string(clipboard)
+    get_string(clipboard) do x::Clipboard, string::String
+        # use string here
+    end
+end
+```
 """
 
 @document get_tab_position """
@@ -2010,18 +2024,18 @@ Get current value of the underlying adjustment.
 ---
 
 ```
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<:AbstractFloat}) 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<:Signed}) 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<:Unsigned}) 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T<:AbstractFloat 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T<:Signed 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T<:Unsigned 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Bool}) 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{String}) 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{RGBA}) 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Image}) 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{Bool}}) 
-get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{String}}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:AbstractFloat}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T<:AbstractFloat 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:Signed}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T<:Signed 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:Unsigned}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T<:Unsigned 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Bool}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{Bool}}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{String}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{String}}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{RGBA}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Image}) 
 ```
 Deserialize a value from the keyfile. Returns a default value if the key-value pair or group does not
 """
@@ -2775,1180 +2789,1220 @@ Reset the titlebar widget such that the default window decoration is used instea
 ```
 remove_tooltip_widget!(::Widget) 
 ```
-Remove the tooltip widget. The widget will now no longer display a tooltip-
+Remove the tooltip widget. The widget will now no longer display a tooltip.
 """
 
 @document render """
 ```
-render(shape::Shape, shader::Shader, transform::GLTransform) 
 render(::RenderTask) 
+render(shape::Shape, shader::Shader, transform::GLTransform) 
 ```
-TODO
+Draw a shape to the currently bound framebuffer, forwarding the transform to the vertex shader and applying the
+fragment shader to all fragments of the shape.
+
+Note that calling this function is usually not necessary, instead, regsiter a `RenderTask` with a `RenderArea` 
+using `add_render_task!`, after which the task will be automatically rendered every frame, unless a custom
+signal handler was connected to `RenderArea`s signal `render`
 """
 
 @document render_render_tasks """
 ```
 render_render_tasks(::RenderArea) 
 ```
-TODO
+Render all registered render tasks. This is only necessary when a custom signal handler is connect to the areas
+signal `render`.
 """
 
 @document reset! """
 ```
 reset!(::GLTransform) 
 ```
-TODO
+Override the transform such that it is now the identity transform.
 """
 
 @document reset_text_to_value_function! """
 ```
 reset_text_to_value_function!(::SpinButton) 
 ```
-TODO
+Reset the function registered using `set_text_to_value_function!`, using the default handler instead.
 """
 
 @document reset_value_to_text_function! """
 ```
 reset_value_to_text_function!(::SpinButton) 
 ```
-TODO
+Reset the function registered using `set_value_to_text_function!`, using the default handler instead.
 """
 
 @document restart! """
 ```
-restart!(clock::Clock) 
+restart!(clock::Clock) -> Time
 ```
-TODO
+Restart the clock and return the elapsed time since the last restart.
 """
 
 @document rgba_to_hsva """
 ```
 rgba_to_hsva(rgba::RGBA) 
 ```
-TODO
+Convert RGBA to HSVA color representation.
 """
 
 @document rgba_to_html_code """
 ```
 rgba_to_html_code(rgba::RGBA) 
 ```
-TODO
+Convert the color to an html-style hexadecimal string of the form `#RRGGBB`. The alpha component is ignored.
 """
 
 @document rotate! """
 ```
-rotate!(transform::GLTransform, angle::Angle) 
-rotate!(transform::GLTransform, angle::Angle, origin::Vector2f) 
-rotate!(::Shape, angle::Angle) 
-rotate!(::Shape, angle::Angle, origin::Vector2f) 
+rotate!(::GLTransform, angle::Angle, [origin::Vector2f]) 
+rotate!(::Shape, angle::Angle, [origin::Vector2f]) 
 ```
-TODO
+Rotate around a point.
 """
 
 @document run! """
 ```
-run!(app::Application) 
+run!(app::Application) -> Cint
 ```
-TODO
+Start the main loop, initializing the internal state and triggering `Application`s signal `activate`. Note that 
+no part of mousetrap should be used or initialized before this function is called.
+
+## Example
+```julia
+app = Application("example.app")
+connect_signal_activate!(app) app::app
+    # all initialization should happen here
+end
+run(app) # start the main loop
+```
 """
 
 @document save_to_file """
 ```
-save_to_file(::Image, path::String) 
-save_to_file(::KeyFile, path::String) 
+save_to_file(::Image, path::String) -> Bool
 ```
-TODO
+Save the image to a file, the file format is automatically determined based on the extension of the given path.
+
+Returns `true` if the operation was successfull.
+---
+```
+save_to_file(::KeyFile, path::String) -> Bool
+```
+Serialize the key file to a string and save that string to a file. Usually, the extension for this file should be set as `.ini`.
+
+Returns `true` if the operation was successfull
 """
 
 @document scale! """
 ```
-scale!(transform::GLTransform, x_scale::AbstractFloat, y_scale::AbstractFloat) 
+scale!(::GLTransform, x_scale::AbstractFloat, y_scale::AbstractFloat) 
 ```
-TODO
+Combine the transform with a scale transform. To scale around a point, first `translate!` the transform to that point, 
+then apply `scale!`, then `translate!` the transform back to origin.
+
+Note that this transform uses the OpenGL coordinate system.
 """
 
 @document seconds """
 ```
-seconds(n::AbstractFloat) 
+seconds(n::AbstractFloat) -> Time
 ```
-TODO
+Create time as number of seconds.
 """
 
 @document select! """
 ```
-select!(model::SelectionModel, i::Integer) 
-select!(model::SelectionModel, i::Integer, unselect_others::Bool) 
+select!(::SelectionModel, i::Integer, [unselect_others::Bool = true]) 
 ```
-TODO
+Select item at given position, this will emit signal `selection_changed`.
 """
 
 @document select_all! """
 ```
 select_all!(::SelectionModel) 
 ```
-TODO
+Select all items, triggering emission of signal `selection_changed`. This is only possible if the selection mode is `SELECTION_MODE_MULTIPLE`.
 """
 
 @document self_is_focused """
 ```
-self_is_focused(::FocusEventController) 
+self_is_focused(::FocusEventController) -> Bool
 ```
-TODO
+Check if the widget the controller was added to currently holds focus. 
 """
 
 @document self_or_child_is_focused """
 ```
-self_or_child_is_focused(::FocusEventController) 
+self_or_child_is_focused(::FocusEventController) -> Bool
 ```
-TODO
+Check if the widget the controller was added to, or any of the widgets children currently hold focus.
 """
 
 @document set_acceleration_rate! """
 ```
 set_acceleration_rate!(::SpinButton, factor::AbstractFloat) 
 ```
-TODO
+Multiply the default acceleration rate by given factor. This is the speed at which numbers increase when one of the buttons of a spin button is held down.
 """
 
 @document set_accept_label! """
 ```
 set_accept_label!(::FileChooser, label::String) 
 ```
-TODO
+Set the label used for the "accept" button of the file chooser.
 """
 
 @document set_action! """
 ```
-set_action!(button::Button, action::Action) 
+set_action!(::Button, ::Action) 
 ```
-TODO
+Connect an action to the button. When the button is clicked, the action is activated. When the action is disabled, the button is also disabled.
+
+Note that a button can have both an action and a signal handler connected. If this is the case and the button is clicked, both 
+are executed.
 """
 
 @document set_alignment! """
 ```
-set_alignment!(::Widget, both::mousetrap.detail._Alignment) 
+set_alignment!(::Widget, both::Alignment) 
 ```
-TODO
+Set both the horizontal and vertical alignment of a widget.
 """
 
 @document set_allow_only_numeric! """
 ```
-set_allow_only_numeric!(::SpinButton, b::Bool) 
+set_allow_only_numeric!(::SpinButton, ::Bool) 
 ```
-TODO
+Set whether the spin button should only accept numeric text entry, as opposed to alphanumeric.
 """
 
 @document set_always_show_arrow! """
 ```
-set_always_show_arrow!(::PopoverButton, b::Bool) 
+set_always_show_arrow!(::DropDown, ::Bool) 
+set_always_show_arrow!(::PopoverButton, ::Bool) 
 ```
-TODO
+Set wether an arrow should be drawn next to the label.
 """
 
 @document set_application! """
 ```
 set_application!(window::Window, app::Application) 
 ```
-TODO
+Register the window with the application. This is usually not necessary.
 """
 
 @document set_autohide! """
 ```
-set_autohide!(::Popover, b::Bool) 
+set_autohide!(::Popover, ::Bool) 
 ```
-TODO
+Set whether the popover should hide itself when the attached widget looses focus.
 """
 
 @document set_bottom_margin! """
 ```
 set_bottom_margin!(::TextView, margin::AbstractFloat) 
 ```
-TODO
+Set margin between the bottom of the text and the text views frame.
 """
 
 @document set_can_respond_to_input! """
 ```
-set_can_respond_to_input!(::Widget, b::Bool) 
+set_can_respond_to_input!(::Widget, ::Bool) 
 ```
-TODO
+Set whether the widget can receive input events. If set to `false`, the widget may appear "greyed out", signaling to the user that it is inactive.
 """
 
 @document set_center_child! """
 ```
-set_center_child!(center_bo::CenterBox, child::Widget) 
+set_center_child!(::CenterBox, ::Widget) 
 ```
-TODO
+Set the middle child of the center box
 """
 
 @document set_centroid! """
 ```
 set_centroid!(::Shape, centroid::Vector2f) 
 ```
-TODO
+Move the shape such that its centroid is now at given position, in OpenGL coordinates.
 """
 
 @document set_child! """
 ```
-set_child!(window::Window, child::Widget) 
-set_child!(aspect_frame::AspectFrame, child::Widget) 
-set_child!(button::Button, child::Widget) 
-set_child!(check_button::CheckButton, child::Widget) 
-set_child!(toggle_button::ToggleButton, child::Widget) 
-set_child!(viewport::Viewport, child::Widget) 
-set_child!(expander::Expander, child::Widget) 
-set_child!(frame::Frame, child::Widget) 
-set_child!(overlay::Overlay, child::Widget) 
-set_child!(popover::Popover, child::Widget) 
-set_child!(popover_button::PopoverButton, child::Widget) 
-set_child!(revealer::Revealer, child::Widget) 
+set_child!(::Window, child::Widget) 
+set_child!(::AspectFrame, child::Widget) 
+set_child!(::Button, child::Widget) 
+set_child!(::CheckButton, child::Widget) 
+set_child!(::ToggleButton, child::Widget) 
+set_child!(::Viewport, child::Widget) 
+set_child!(::Expander, child::Widget) 
+set_child!(::Frame, child::Widget) 
+set_child!(::Overlay, child::Widget) 
+set_child!(::Popover, child::Widget) 
+set_child!(::PopoverButton, child::Widget) 
+set_child!(::Revealer, child::Widget) 
 ```
-TODO
+Set the widgets singular child.
 """
 
 @document set_child_position! """
 ```
-set_child_position!(fixed::Fixed, child::Widget, position::Vector2f) 
+set_child_position!(::Fixed, child::Widget, position::Vector2f) 
 ```
-TODO
+Set fixed position of the child, in absolute coordinates relative to the `Fixed`s origin.
 """
 
 @document set_child_x_alignment! """
 ```
 set_child_x_alignment!(::AspectFrame, alignment::AbstractFloat) 
 ```
-TODO
+Set horizontal alignment of the aspect frames child. `0.5` by default.
 """
 
 @document set_child_y_alignment! """
 ```
 set_child_y_alignment!(::AspectFrame, alignment::AbstractFloat) 
 ```
-TODO
+Set vertical alignment of the aspect frames child. `0.5` by default.
 """
 
 @document set_column_spacing! """
 ```
 set_column_spacing!(::Grid, spacing::AbstractFloat) 
 ```
-TODO
+Set spacing between two columns of the grid, in pixels.
 """
 
 @document set_columns_homogeneous! """
 ```
-set_columns_homogeneous!(::Grid, b::Bool) 
+set_columns_homogeneous!(::Grid, ::Bool) 
 ```
-TODO
+Set whether all columns of the grid should be the same width.
 """
 
 @document set_comment_above! """
 ```
-set_comment_above!(file::KeyFile, group::GroupID, comment::String) 
-set_comment_above!(file::KeyFile, group::GroupID, key::KeyID, comment::String) 
+set_comment_above!(::KeyFile, ::GroupID, comment::String) 
+set_comment_above!(::KeyFile, ::GroupID, ::KeyID, comment::String) 
 ```
-TODO
-"""
-
-@document set_comment_above_group! """
-```
-set_comment_above_group!(::KeyFile, group::GroupID, comment::String) 
-```
-TODO
-"""
-
-@document set_comment_above_key! """
-```
-set_comment_above_key!(::KeyFile, group::GroupID, key::KeyID, comment::String) 
-```
-TODO
+Set the comment above a group or key-value pair in the file.
 """
 
 @document set_current_blend_mode """
 ```
-set_current_blend_mode(blend_mode::mousetrap.detail._BlendMode; allow_alpha_blending) 
+set_current_blend_mode(::BlendMode; allow_alpha_blending::Bool = true) 
 ```
-TODO
+Enable blending and set the current OpenGL blend mode. If `allow_alpha_blending` is set to `false`, 
+only the rgb components of a fragments color will participate in blending.
 """
 
 @document set_cursor! """
 ```
-set_cursor!(::Widget, cursor::mousetrap.detail._CursorType) 
+set_cursor!(::Widget, cursor::CursorType) 
 ```
-TODO
+Set which cursor shape should be used when the cursor is over the allocated area of the widget.
 """
 
 @document set_cursor_from_image! """
 ```
-set_cursor_from_image!(::Widget, image::Image, offset::StaticArraysCore.SVector{2, Int32}) 
+set_cursor_from_image!(::Widget, image::Image, offset::Vector2i) 
 ```
-TODO
+Set which image should be displayed when the cursor is over the allocated area of the widget. `offset` 
+determines the vertical and horizontal offset of the center of the image, relative to the cursor position, in pixels.
 """
 
 @document set_cursor_visible! """
 ```
-set_cursor_visible!(::TextView, b::Bool) 
+set_cursor_visible!(::TextView, ::Bool) 
 ```
-TODO
+Set whether the text caret is visible.
 """
 
 @document set_default_widget! """
 ```
 set_default_widget!(window::Window, ::Widget) 
 ```
-TODO
+Designate a widget as the default widget. When the widget is activated, for example by the user 
+pressing the enter key, the default widget is activated.
 """
 
 @document set_delay_factor """
 ```
 set_delay_factor(::LongPressEventController, factor::AbstractFloat) 
 ```
-TODO
+Set a factor that multiplies the default delay after which a longpress gesture is recognized.
 """
 
 @document set_destroy_with_parent! """
 ```
-set_destroy_with_parent!(::Window, n::Bool) 
+set_destroy_with_parent!(::Window, ::Bool) 
 ```
-TODO
+Set whether the wind should close and be destroyed when the toplevel window is closed.
 """
 
 @document set_display_mode! """
 ```
-set_display_mode!(::ProgressBar, mode::mousetrap.detail._ProgressBarDisplayMode) 
+set_display_mode!(::ProgressBar, mode::ProgressBarDisplayMode) 
 ```
-TODO
+Set whether the progress bar should display a percentage or custom text.
 """
 
 @document set_editable! """
 ```
-set_editable!(::TextView, b::Bool) 
+set_editable!(::TextView, ::Bool) 
 ```
-TODO
+Set whether the user can edit the text in the text view.
 """
 
 @document set_ellipsize_mode! """
 ```
-set_ellipsize_mode!(::Label, mode::mousetrap.detail._EllipsizeMode) 
+set_ellipsize_mode!(::Label, mode::EllipsizeMode) 
 ```
-TODO
+Set the ellipsize mode of a label, `ELLIPSIZE_MODE_NONE` by default.
 """
 
 @document set_enable_rubberband_selection """
 ```
-set_enable_rubberband_selection(::ListView, b::Bool) 
-set_enable_rubberband_selection(::GridView, b::Bool) 
-set_enable_rubberband_selection(::ColumnView, b::Bool) 
+set_enable_rubberband_selection(::ListView, ::Bool) 
+set_enable_rubberband_selection(::GridView, ::Bool) 
+set_enable_rubberband_selection(::ColumnView, ::Bool) 
 ```
-TODO
+Set whether the user can select multiple children by holding down the mouse button. The selectable widgets
+selection mode has to be `SELECTION_MODE_MULTIPLE` in order for this to be possible.
 """
 
 @document set_enabled! """
 ```
-set_enabled!(::Action, b::Bool) 
+set_enabled!(::Action, ::Bool) 
 ```
-TODO
+Set whether the action is enabled. If set to `false`, all connected buttons and menu items 
+will be disabled as well.
 """
 
 @document set_end_child! """
 ```
-set_end_child!(center_bo::CenterBox, child::Widget) 
-set_end_child!(paned::Paned, child::Widget) 
+set_end_child!(::CenterBox, child::Widget) 
+set_end_child!(::Paned, child::Widget) 
 ```
-TODO
+Set the latter child of the widget.
 """
 
 @document set_end_child_resizable! """
 ```
-set_end_child_resizable!(::Paned, b::Bool) 
+set_end_child_resizable!(::Paned, ::Bool) 
 ```
-TODO
+Set whether the end child should resize when the `Paned` is resized.
 """
 
 @document set_end_child_shrinkable """
 ```
-set_end_child_shrinkable(::Paned, b::Bool) 
+set_end_child_shrinkable(::Paned, ::Bool) 
 ```
-TODO
+Set whether the user can resize the end child such that its allocated area inside the paned is smaller than the natural size of the widget.
 """
 
 @document set_expand! """
 ```
-set_expand!(::Widget, b::Bool) 
+set_expand!(::Widget, ::Bool) 
 ```
-TODO
+Set whether the widget should expand along both the horizontal and vertical axis.
 """
 
 @document set_expand_horizontally! """
 ```
-set_expand_horizontally!(::Widget, b::Bool) 
+set_expand_horizontally!(::Widget, ::Bool) 
 ```
-TODO
+Set whether the widget should expand along the x-axis.
 """
 
 @document set_expand_vertically! """
 ```
-set_expand_vertically!(::Widget, b::Bool) 
+set_expand_vertically!(::Widget, ::Bool) 
 ```
-TODO
+Set whether the widget should expand along the y-axis.
 """
 
 @document set_file! """
 ```
-set_file!(clipboard::Clipboard, file::FileDescriptor) 
+set_file!(::Clipboard, file::FileDescriptor) 
 ```
-TODO
+Override the content of the clipboard with a path to a file. Use `get_string(f, ::Clipboard)` to retrieve it.
 """
 
 @document set_fixed_width """
 ```
 set_fixed_width(::ColumnViewColumn, width::AbstractFloat) 
 ```
-TODO
+Set the fixed width of the column, in pixels, or `-1` if unlimited.
 """
 
 @document set_focus_on_click! """
 ```
-set_focus_on_click!(::Widget, b::Bool) 
+set_focus_on_click!(::Widget, ::Bool) 
 ```
-TODO
+Set whether the widget should attempt to grap focus when it is clicked.
 """
 
 @document set_focus_visible! """
 ```
-set_focus_visible!(::Window, b::Bool) 
+set_focus_visible!(::Window, ::Bool) 
 ```
-TODO
+Set whether which widget currently holds input focus should be highlighted using a border.
 """
 
 @document set_fraction! """
 ```
 set_fraction!(::ProgressBar, zero_to_one::AbstractFloat) 
 ```
-TODO
+Set the currently displayed fraction of the progress bar, in `[0, 1]`.
 """
 
 @document set_fullscreen! """
 ```
 set_fullscreen!(::Window) 
 ```
-TODO
+Request for the window manager to enter fullscreen mode. This may fail.
 """
 
 @document set_function! """
 ```
-set_function!(f, action::Action) 
-set_function!(f, action::Action, data::Data_t) where Data_t 
+set_function!(f, action::Action, [::Data_t]) 
 ```
-TODO
+Register a callback that should be called when the action is activated.
+
+## Example
+```julia
+action = Action("example.action")
+set_function!(action) do x::Action
+    println(get_id(x) * " called")
+end
+```
 """
 
 @document set_has_base_arrow! """
 ```
-set_has_base_arrow!(::Popover, b::Bool) 
+set_has_base_arrow!(::Popover, ::Bool) 
 ```
-TODO
+Set whether the "tail" of the popover pointing to the attachment visible should be visited.
 """
 
 @document set_has_border! """
 ```
-set_has_border!(::Notebook, b::Bool) 
+set_has_border!(::Notebook, ::Bool) 
 ```
-TODO
+Set whether a border should be drawn around the notebooks perimeter.
 """
 
 @document set_has_close_button! """
 ```
-set_has_close_button!(::Window, b::Bool) 
+set_has_close_button!(::Window, ::Bool) 
 ```
-TODO
-"""
-
-@document set_has_frame """
-```
-set_has_frame(::PopoverButton, b::Bool) 
-```
-TODO
+Set whether the "X" button is present.
 """
 
 @document set_has_frame! """
 ```
-set_has_frame!(::Button, b::Bool) 
-set_has_frame!(::Viewport, b::Bool) 
-set_has_frame!(::Entry, b::Bool) 
+set_has_frame!(::Button, ::Bool) 
+set_has_frame!(::Viewport, ::Bool) 
+set_has_frame!(::Entry, ::Bool) 
+set_has_frame!(::PopoverButton, ::Bool) 
 ```
-TODO
+Set whether the widgets outline should be displayed. This does not impact the widgets interactability.
 """
 
 @document set_has_wide_handle """
 ```
-set_has_wide_handle(::Paned, b::Bool) 
+set_has_wide_handle!(::Paned, ::Bool) 
 ```
-TODO
+Set whether the barrier in between the paneds two children is wide or thin.
 """
 
 @document set_header_menu! """
 ```
-set_header_menu!(column::ColumnViewColumn, model::MenuModel) 
+set_header_menu!(::ColumnViewColumn, model::MenuModel) 
 ```
-TODO
+Add a menu model to be used as the columns header menu. The use can access it by 
+clicking the columns title.
 """
 
 @document set_hide_on_close! """
 ```
-set_hide_on_close!(::Window, b::Bool) 
+set_hide_on_close!(::Window, ::Bool) 
 ```
-TODO
+If set to to `true`, the window will hidden when it is closed, if set to `false`, the window 
+is destroyed when closed. 
 """
 
 @document set_hide_on_overflow! """
 ```
-set_hide_on_overflow!(::Widget, b::Bool) 
+set_hide_on_overflow!(::Widget, ::Bool) 
 ```
-TODO
+Set whether any area of the widget that goes outside of its allocate space should be drawn (as opposed to clipped).
 """
 
 @document set_homogeneous! """
 ```
-set_homogeneous!(::Box, b::Bool) 
+set_homogeneous!(::Box, ::Bool) 
 ```
-TODO
+Set whether the box
 """
 
 @document set_horizontal_alignment! """
 ```
 set_horizontal_alignment!(::Widget, alignment::mousetrap.detail._Alignment) 
 ```
-TODO
+Set whether all of the boxes children should be allocated the same width (or height, if orientation is vertical).
 """
 
 @document set_horizontal_scrollbar_policy! """
 ```
-set_horizontal_scrollbar_policy!(::Viewport, policy::mousetrap.detail._ScrollbarVisibilityPolicy) 
+set_horizontal_scrollbar_policy!(::Viewport, policy::ScrollbarVisibilityPolicy) 
 ```
-TODO
+Set the policy that determines when / if the horizontal scrollbar of the viewport hides.
 """
 
 @document set_icon! """
 ```
-set_icon!(button::Button, icon::Icon) 
+set_icon!(::Button, icon::Icon) 
 ```
-TODO
+Replace the buttons label with an icon.
 """
 
 @document set_image! """
 ```
-set_image!(clipboard::Clipboard, image::Image) 
+set_image!(::Clipboard, image::Image) 
 ```
-TODO
+Override the clipboards content with an image. Use `get_image` to retrieve it.
 """
 
 @document set_inverted! """
 ```
-set_inverted!(::LevelBar, b::Bool) 
+set_inverted!(::LevelBar, ::Bool) 
 ```
 TODO
 """
 
 @document set_is_active! """
 ```
-set_is_active!(::Switch, b::Bool) 
-set_is_active!(::ToggleButton, b::Bool) 
+set_is_active!(::Switch, ::Bool) 
+set_is_active!(::ToggleButton, ::Bool) 
+set_is_active!(::CheckMark, ::Bool)
 ```
-TODO
+Set the internal state of the widget.
 """
 
 @document set_is_circular """
 ```
-set_is_circular(::Button, b::Bool) 
-set_is_circular(::ToggleButton, b::Bool) 
+set_is_circular!(::Button, ::Bool) 
+set_is_circular!(::ToggleButton, ::Bool) 
+set_is_circular!(::PopoverButton, ::Bool) 
 ```
-TODO
-"""
-
-@document set_is_circular! """
-```
-set_is_circular!(::PopoverButton, b::Bool) 
-```
-TODO
+Set whether the button should be rounde, as opposed to rectangular.
 """
 
 @document set_is_decorated! """
 ```
-set_is_decorated!(::Window, b::Bool) 
+set_is_decorated!(::Window, ::Bool) 
 ```
-TODO
+Set whether the titlebar of the window is visible.
 """
 
 @document set_is_focusable! """
 ```
-set_is_focusable!(::Widget, b::Bool) 
+set_is_focusable!(::Widget, ::Bool) 
 ```
-TODO
+Set whether the widget can retrieve input focus. Most widgets that support interaction by default are already focusable.
 """
 
 @document set_is_horizontally_homogeneous """
 ```
-set_is_horizontally_homogeneous(::Stack, b::Bool) 
+set_is_horizontally_homogeneous(::Stack, ::Bool) 
 ```
-TODO
+Set whether the stack should allocate the same width for all of its pages.
 """
 
 @document set_is_inverted! """
 ```
-set_is_inverted!(::ProgressBar, b::Bool) 
+set_is_inverted!(::ProgressBar, ::Bool) 
 ```
-TODO
+Set whether the progressbar should be mirrored.
 """
 
 @document set_is_modal! """
 ```
-set_is_modal!(::Window, b::Bool) 
-set_is_modal!(::FileChooser, modal::Bool) 
+set_is_modal!(::Window, ::Bool) 
+set_is_modal!(::FileChooser, ::Bool) 
 ```
-TODO
+Set whether all others windows should be paused while the window is active.
 """
 
 @document set_is_resizable! """
 ```
-set_is_resizable!(::ColumnViewColumn, b::Bool) 
+set_is_resizable!(::ColumnViewColumn, ::Bool) 
 ```
-TODO
+Set whether the column can be resized. If set to `false`, the size set via `set_fixed_width!` will be used.
 """
 
 @document set_is_scrollable! """
 ```
-set_is_scrollable!(::Notebook, b::Bool) 
+set_is_scrollable!(::Notebook, ::Bool) 
 ```
-TODO
+Set whether the user can scroll between pages using the mouse scroll wheel or touchscreen.
 """
 
 @document set_is_spinning! """
 ```
-set_is_spinning!(::Spinner, b::Bool) 
+set_is_spinning!(::Spinner, ::Bool) 
 ```
-TODO
+Set whether the spinner is currently playing its animation.
 """
 
 @document set_is_vertically_homogeneous """
 ```
-set_is_vertically_homogeneous(::Stack, b::Bool) 
+set_is_vertically_homogeneous(::Stack, ::Bool) 
 ```
-TODO
+Set whether all pages of the stack should allocate the same height.
 """
 
 @document set_is_visible! """
 ```
-set_is_visible!(::Widget, b::Bool) 
-set_is_visible!(::ColumnViewColumn, b::Bool) 
-set_is_visible!(::Shape, b::Bool) 
+set_is_visible!(::Widget, ::Bool) 
 ```
-TODO
+Set whether the widget is hidden.
+---
+```
+set_is_visible!(::Shape, ::Bool) 
+```
+Set whether the shape and any associated render tasks should be rendered.
+---
+```
+set_is_visible!(::ColumnViewColumn, ::Bool) 
+```
+Temporarily remove the column and all its rows from the column view.
 """
 
 @document set_justify_mode! """
 ```
-set_justify_mode!(::Label, mode::mousetrap.detail._JustifyMode) 
-set_justify_mode!(::TextView, mode::mousetrap.detail._JustifyMode) 
+set_justify_mode!(::Label, mode::JustifyMode) 
+set_justify_mode!(::TextView, mode:JustifyMode) 
 ```
-TODO
+Set text justification mode.
 """
 
 @document set_kinetic_scrolling_enabled! """
 ```
-set_kinetic_scrolling_enabled!(::Viewport, b::Bool) 
+set_kinetic_scrolling_enabled!(::Viewport, ::Bool) 
 ```
-TODO
+Set whether the widget should continue scrolling simulating "inertia" once the user stopped operating the mouse wheel or touchscreen
 """
 
 @document set_label_widget! """
 ```
-set_label_widget!(expander::Expander, child::Widget) 
-set_label_widget!(frame::Frame, label::Widget) 
+set_label_widget!(::Expander, label::Widget) 
+set_label_widget!(::Frame, label::Widget) 
 ```
-TODO
+Choose a widget as the label.
 """
 
 @document set_label_x_alignment! """
 ```
 set_label_x_alignment!(::Frame, ::AbstractFloat) 
 ```
-TODO
+Set horizontal alignment of the label widget (if present). In `[0, 1]`
 """
 
 @document set_layout! """
 ```
 set_layout!(::HeaderBar, layout::String) 
 ```
-TODO
+Set layout string of the header bar.
+
+This is a list of button IDs. Valid IDs are limited to:
+
++ `maximize`: Maximize Button
++ `minimize`: Minimize Button
++ `close`: Close Button
+
+Any object left of `:` will be placed left of the title, any after `:` will be place right of the title. Object are deliminated by `,`
+
+## Example
+
+Place close button left of the title, maximize and minimize buttons right of the title
+```julia
+header_bar = HeaderBar()
+set_layout!(header_bar, "close:maximize,minimize")
 """
 
 @document set_left_margin! """
 ```
 set_left_margin!(::TextView, margin::AbstractFloat) 
 ```
-TODO
+Set distance between the left end of the text and the text views frame.
 """
 
 @document set_log_file """
 ```
-set_log_file(path::String) 
+set_log_file(path::String) -> Bool
 ```
-TODO
+Set file at `path` as the log file. Any logging will be pushed to the file as opposed to being printed to the console. The file
+will be created if it does not exist. If it does exist, the file will be appended to, as opposed to being override.
+
+Return `true` if the file was succesfully opened.
 """
 
 @document set_lower! """
 ```
-set_lower!(adjustment::Adjustment, ::Number) 
-set_lower!(::Scale, value::AbstractFloat) 
-set_lower!(::SpinButton, value::AbstractFloat) 
+set_lower!(::Adjustment, ::Number) 
+set_lower!(::Scale, ::Number) 
+set_lower!(::SpinButton, ::Number) 
 ```
-TODO
+Set lower bound of the underlying adjustment.
 """
 
 @document set_margin_bottom! """
 ```
 set_margin_bottom!(::Widget, margin::AbstractFloat) 
 ```
-TODO
+Set distance between the bottom of the text and the text views frame, in pixels.
 """
 
 @document set_margin_end! """
 ```
 set_margin_end!(::Widget, margin::AbstractFloat) 
 ```
-TODO
+Set right margin of the widget, in pixels.
 """
 
 @document set_margin_horizontal! """
 ```
 set_margin_horizontal!(::Widget, margin::AbstractFloat) 
 ```
-TODO
+Set both the left and right margin of the widget, in pixels.
 """
 
-@document set_margin_margin! """
+@document set_margin! """
 ```
-set_margin_margin!(::Widget, margin::AbstractFloat) 
+set_margin!(::Widget, margin::AbstractFloat) 
 ```
-TODO
+Set both the left, right, top and bottom margin of the widget, in pixels.
 """
 
 @document set_margin_start! """
 ```
 set_margin_start!(::Widget, margin::AbstractFloat) 
 ```
-TODO
+Set left margin of the widget, in pixels.
 """
 
 @document set_margin_top! """
 ```
 set_margin_top!(::Widget, margin::AbstractFloat) 
 ```
-TODO
+Set top margin of the widget, in pixels.
 """
 
 @document set_margin_vertical! """
 ```
 set_margin_vertical!(::Widget, margin::AbstractFloat) 
 ```
-TODO
-"""
-
-@document set_max_length! """
-```
-set_max_length!(::Entry, n::Integer) 
-```
-TODO
+Set both the top and bottom margin of the widget, in pixels.
 """
 
 @document set_max_n_columns! """
 ```
 set_max_n_columns!(grid_view::GridView, n::Integer) 
 ```
-TODO
+Limit the number of columns (or rows, if horizontal) to given number, or `-1` if unlimited.
 """
 
 @document set_max_value! """
 ```
 set_max_value!(::LevelBar, value::AbstractFloat) 
 ```
-TODO
+Set upper limit of the underlying range.
 """
 
 @document set_max_width_chars! """
 ```
 set_max_width_chars!(::Label, n::Integer) 
+set_max_width_chars!(::Entry, n::Integer) 
 ```
-TODO
+Set the number of characters that the widget should make space for, or `-1` if unlimited.
 """
 
 @document set_maximized! """
 ```
-set_maximized!(::Window) 
+set_maximized!(::Window, ::Bool) 
 ```
-TODO
+Attempt to maximize or unmaximize the window.
 """
 
 @document set_min_n_columns! """
 ```
 set_min_n_columns!(grid_view::GridView, n::Integer) 
 ```
-TODO
+Limit the minimum number of columns, or unlimited if `-1`.
 """
 
 @document set_min_value! """
 ```
 set_min_value!(::LevelBar, value::AbstractFloat) 
 ```
-TODO
+Set lower bound of the underlying range.
 """
 
 @document set_mode! """
 ```
-set_mode!(::LevelBar, mode::mousetrap.detail._LevelBarMode) 
+set_mode!(::LevelBar, mode::LevelBarMode) 
 ```
-TODO
+Set whether the level bar should display its value continuous or segmented.
 """
 
 @document set_n_digits! """
 ```
 set_n_digits!(::SpinButton, n::Integer) 
 ```
-TODO
+Set number of digits after the decimal point. This only affects the visual display of the number, the internal value of the 
+range is unaffected.
 """
 
 @document set_only_listens_to_button! """
 ```
-set_only_listens_to_button!(gesture::SingleClickGesture, button::mousetrap.detail._ButtonID) 
+set_only_listens_to_button!(::SingleClickGesture, button::ButtonID) 
 ```
-TODO
+Set which buttons the event controller should listen to, or `BUTTON_ID_ANY` to listen to all buttons.
 """
 
 @document set_opacity! """
 ```
 set_opacity!(::Widget, opacity::AbstractFloat) 
 ```
-TODO
+Set the opacity of the widget, if the opacity is `0`, the widget will be hidden.
 """
 
 @document set_orientation """
 ```
-set_orientation(::ListView, orientation::mousetrap.detail._Orientation) 
-set_orientation(::GridView, orientation::mousetrap.detail._Orientation) 
-set_orientation(::Paned, orientation::mousetrap.detail._Orientation) 
+
 ```
-TODO
+Set orientation of the widgets.
 """
 
 @document set_orientation! """
 ```
-set_orientation!(::Box, orientation::mousetrap.detail._Orientation) 
-set_orientation!(::CenterBox, orientation::mousetrap.detail._Orientation) 
-set_orientation!(::LevelBar, orientation::mousetrap.detail._Orientation) 
-set_orientation!(pan_controller::PanEventController) 
-set_orientation!(::Grid, orientation::mousetrap.detail._Orientation) 
-set_orientation!(::ProgressBar, orientation::mousetrap.detail._Orientation) 
-set_orientation!(::Scrollbar, orientation::mousetrap.detail._Orientation) 
-set_orientation!(::Separator, orientation::mousetrap.detail._Orientation) 
+set_orientation!(::Box, orientation::Orientation) 
+set_orientation!(::CenterBox, orientation::Orientation) 
+set_orientation!(::LevelBar, orientation::Orientation) 
+set_orientation!(::Grid, orientation::Orientation) 
+set_orientation!(::ProgressBar, orientation::Orientation) 
+set_orientation!(::Scrollbar, orientation::Orientation) 
+set_orientation!(::Separator, orientation::Orientation) 
+set_orientation!(::ListView, orientation::Orientation) 
+set_orientation!(::GridView, orientation::Orientation) 
+set_orientation!(::Paned, orientation::Orientation) 
 ```
-TODO
+Set orientation of the widget, this governs along which axis it aligns itself and its children.
+---
+```
+set_orientation!(::PanEventController) 
+```
+Set along which axis the event controller should listen for pan gestures.
 """
 
 @document set_pixel! """
 ```
-set_pixel!(image::Image, ::Integer, y::Integer, color::RGBA) 
-set_pixel!(image::Image, ::Integer, y::Integer, color::HSVA) 
+set_pixel!(image::Image, x::Integer, y::Integer, color::RGBA) 
+set_pixel!(image::Image, x::Integer, y::Integer, color::HSVA) 
 ```
-TODO
+Override the color of a pixel, 1-based indexing.
 """
 
 @document set_popover! """
 ```
-set_popover!(popover_button::PopoverButton, popover::Popover) 
+set_popover!(::PopoverButton, popover::Popover) 
 ```
-TODO
+Attach a popover to the popover button. This will detach any already attached `Popover` or `PopoverMenu`.
 """
 
 @document set_popover_menu! """
 ```
 set_popover_menu!(popover_button::PopoverButton, popover_menu::PopoverMenu) 
 ```
-TODO
-"""
-
-@document set_popover_position! """
-```
-set_popover_position!(::PopoverButton, position::mousetrap.detail._RelativePosition) 
-```
-TODO
+Attach a popover to the popover button. This will detach any already attached `Popover` or `PopoverMenu`.
 """
 
 @document set_position! """
 ```
 set_position!(::Paned, position::Integer) 
 ```
-TODO
+Set position of the paned handle, relative to the `Paned`s origin, in pixels.
 """
 
 @document set_primary_icon! """
 ```
-set_primary_icon!(entry::Entry, icon::Icon) 
+set_primary_icon!(::Entry, icon::Icon) 
 ```
-TODO
+Set left icon of the entry.
 """
 
 @document set_propagate_natural_height! """
 ```
-set_propagate_natural_height!(::Viewport, b::Bool) 
+set_propagate_natural_height!(::Viewport, ::Bool) 
 ```
-TODO
+Set whether the viewport should assume the width of its child. This will usually hide the vertical scrollbar.
 """
 
 @document set_propagate_natural_width! """
 ```
-set_propagate_natural_width!(::Viewport, b::Bool) 
+set_propagate_natural_width!(::Viewport, ::Bool) 
 ```
-TODO
+Set whether the viewport should assume the height of its child. This will usually hide the horizontal scrollbar.
 """
 
 @document set_propagation_phase! """
 ```
 set_propagation_phase!(controller::EventController) 
 ```
-TODO
+Set at which 
 """
 
 @document set_quick_change_menu_enabled! """
 ```
-set_quick_change_menu_enabled!(::Notebook, b::Bool) 
+set_quick_change_menu_enabled!(::Notebook, ::Bool) 
 ```
-TODO
+Set phase at which the event controller will capture events.
 """
 
 @document set_ratio! """
 ```
 set_ratio!(::AspectFrame, ratio::AbstractFloat) 
 ```
-TODO
+Set width-to-height aspect ratio.
 """
 
 @document set_relative_position! """
 ```
-set_relative_position!(::Popover, position::mousetrap.detail._RelativePosition) 
+set_relative_position!(::Popover, position::RelativePosition) 
+set_relative_position!(::PopoverButton, position::RelativePosition) 
 ```
-TODO
+Set position of the popover relative to its attachment.
 """
 
 @document set_resource_path! """
 ```
 set_resource_path!(::IconTheme, path::String) 
 ```
-TODO
+Override all resource paths with the given path. The pointed-to folder has to adhere to the [Freedesktop icon theme specificatins](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
 """
 
 @document set_revealed! """
 ```
 set_revealed!(::Revealer, child_visible::Bool) 
 ```
-TODO
+Set whether the revealers child should be visible. If the visibility changes, an animation is played.
 """
 
 @document set_right_margin! """
 ```
 set_right_margin!(::TextView, margin::AbstractFloat) 
 ```
-TODO
+Set margin between the right end of the text and the text views frame.
 """
 
 @document set_row_spacing! """
 ```
-set_row_spacing!(::Grid, spacingadd::AbstractFloat) 
+set_row_spacing!(::Grid, spacing::AbstractFloat) 
 ```
-TODO
+Set spacing between rows of the grid.
 """
 
 @document set_rows_homogeneous! """
 ```
-set_rows_homogeneous!(::Grid, b::Bool) 
+set_rows_homogeneous!(::Grid, ::Bool) 
 ```
-TODO
+Set whether all rows should allocated the same height.
 """
 
 @document set_scale! """
 ```
 set_scale!(::ImageDisplay, scale::Integer) 
 ```
-TODO
+Scale image by a constant factor.
 """
 
 @document set_scale_mode! """
 ```
-set_scale_mode!(texture::mousetrap.TextureObject, mode::mousetrap.detail._TextureWrapMode) 
+set_scale_mode!(texture::mousetrap.TextureObject, mode::TextureWrapMode) 
 ```
-TODO
+Set OpenGL scale mode the texture uses.
 """
 
 @document set_scope! """
 ```
-set_scope!(controller::ShortcutEventController, scope::mousetrap.detail._ShortcutScope) 
+set_scope!(::ShortcutEventController, scope::ShortcutScope) 
 ```
-TODO
+Set scope in which the event controller listen for shortcut event.
 """
 
 @document set_scrollbar_placement! """
 ```
-set_scrollbar_placement!(::Viewport, placement::mousetrap.detail._CornerPlacement) 
+set_scrollbar_placement!(::Viewport, placement::CornerPlacement) 
 ```
-TODO
+Set placement of both scrollbars relative to the viewports center
 """
 
 @document set_secondary_icon! """
 ```
 set_secondary_icon!(entry::Entry, icon::Icon) 
 ```
-TODO
+Set right icon of the entry.
 """
 
 @document set_selectable! """
 ```
-set_selectable!(::Label, b::Bool) 
+set_selectable!(::Label, ::Bool) 
 ```
-TODO
+Set whether the user can select part of the label, as would be needed to copy its text.
 """
 
 @document set_selected """
 ```
-set_selected(::DropDown, id::String) 
+set_selected(::DropDown, id::DropDownItemID) 
 ```
-TODO
+Make the item identified by the given ID the currently selected item. This will invoke its associated callback.
 """
 
 @document set_should_interpolate_size """
 ```
-set_should_interpolate_size(::Stack, b::Bool) 
+set_should_interpolate_size(::Stack, ::Bool) 
 ```
-TODO
+Set whether the stack should slowly transition its size when switching from one page to another.
 """
 
 @document set_should_snap_to_ticks! """
 ```
-set_should_snap_to_ticks!(::SpinButton, b::Bool) 
+set_should_snap_to_ticks!(::SpinButton, ::Bool) 
 ```
-TODO
+Set whether when the user enters a value using the spin buttons text entry, that value should be clamped to the nearest tick.
 """
 
 @document set_should_wrap! """
 ```
-set_should_wrap!(::SpinButton, b::Bool) 
+set_should_wrap!(::SpinButton, ::Bool) 
 ```
-TODO
-"""
-
-@document set_show_arrow! """
-```
-set_show_arrow!(::DropDown, b::Bool) 
-```
-TODO
+Set whether the spin button should over- / underflow when reaching the upper or lower end of its range.
 """
 
 @document set_show_column_separators """
 ```
-set_show_column_separators(::ColumnView, b::Bool) 
+set_show_column_separators(::ColumnView, ::Bool) 
 ```
-TODO
+Set whether separators should be drawn between each column.
 """
 
 @document set_show_row_separators """
 ```
-set_show_row_separators(::ColumnView, b::Bool) 
+set_show_row_separators(::ColumnView, ::Bool) 
 ```
-TODO
+Set whether separators should be drawn between each row.
 """
 
 @document set_show_separators """
 ```
-set_show_separators(::ListView, b::Bool) 
+set_show_separators(::ListView, ::Bool) 
 ```
-TODO
+Set whether separators should be drawn between two items.
 """
 
 @document set_show_title_buttons! """
 ```
-set_show_title_buttons!(::HeaderBar, b::Bool) 
+set_show_title_buttons!(::HeaderBar, ::Bool) 
 ```
-TODO
-"""
-
-@document set_single_click_activate """
-```
-set_single_click_activate(::ListView, b::Bool) 
-```
-TODO
+If set to `false`, the "close", "minimize" and "maximize" buttons will be hidden.
 """
 
 @document set_single_click_activate! """
 ```
-set_single_click_activate!(::ColumnView, b::Bool) 
+set_single_click_activate!(::ListView, ::Bool) 
+set_single_click_activate!(::ColumnView, ::Bool) 
+set_single_click_activate!(::GridView, ::Bool) 
 ```
-TODO
+Set whether only hovering about an item selects it.
 """
 
 @document set_size_request! """
 ```
 set_size_request!(::Widget, size::Vector2f) 
 ```
-TODO
+Set size request, this is minimum amount of space the widget will attempt to allocate, or `(0, 0)` for no size request.
 """
 
 @document set_spacing! """
 ```
-set_spacing!(bo::Box, spacing::Number) 
+set_spacing!(::Box, spacing::Number) 
 ```
-TODO
+Set spacing drawn between two items, in pixels.
 """
 
 @document set_start_child! """
 ```
-set_start_child!(center_bo::CenterBox, child::Widget) 
-set_start_child!(paned::Paned, child::Widget) 
+set_start_child!(::CenterBox, child::Widget) 
+set_start_child!(::Paned, child::Widget) 
 ```
-TODO
+Set first child of the container.
 """
 
 @document set_start_child_resizable! """
 ```
-set_start_child_resizable!(::Paned, b::Bool) 
+set_start_child_resizable!(::Paned, ::Bool) 
 ```
-TODO
+Set whether the first child should resize when the `Paned` is resized.
 """
 
 @document set_start_child_shrinkable """
 ```
-set_start_child_shrinkable(::Paned, b::Bool) 
+set_start_child_shrinkable(::Paned, ::Bool) 
 ```
-TODO
+Set whether the user can resize the first child such that its allocated area inside the paned is smaller than the natural size of the widget.
 """
 
 @document set_startup_notification_identifier! """
 ```
 set_startup_notification_identifier!(::Window, id::String) 
 ```
-TODO
+Register an ID to be used to send a notification when the window is first shown. There is no guaruantee that the users operating system supports this feature.
 """
 
 @document set_state! """
 ```
-set_state!(::Action, b::Bool) 
-set_state!(::CheckButton, state::mousetrap.detail._CheckButtonState) 
+set_state!(::Action, ::Bool) 
 ```
-TODO
+If the action is stateful, override its internal state.
+---
+```
+set_state!(::CheckButton, state::CheckButtonState) 
+```
+Set the state of the check button, this will change its visual element and emit the `toggled` signal.
 """
 
 @document set_stateful_function! """
 ```
-set_stateful_function!(f, action::Action) 
-set_stateful_function!(f, action::Action, data::Data_t) where Data_t 
+set_stateful_function!(f, action::Action, [::Data_t]) 
 ```
-TODO
+Set the actions function, after which the action is considered stateful. `f` is required to be invocable as a function with signature
+```
+(::Action, ::Bool) -> Bool
+```
+
+## Example
+```
+action = Action("example.stateful_action")
+set_stateful_function!(action) do self::Action, current_state::Bool
+    println("Activated " * get_id(self))
+    next_state = !current_state
+    return next_state
+end
 """
 
 @document set_step_increment! """
@@ -3957,49 +4011,49 @@ set_step_increment!(::Adjustment, value::AbstractFloat)
 set_step_increment!(::Scale, value::AbstractFloat) 
 set_step_increment!(::SpinButton, value::AbstractFloat) 
 ```
-TODO
+Set minimum distance between two discrete values of the underlying range.
 """
 
 @document set_string! """
 ```
-set_string!(clipboard::Clipboard, string::String) 
+set_string!(::Clipboard, string::String) 
 ```
-TODO
+Override the clipboards contents with a string. Use `get_string` to retrieve it.
 """
 
 @document set_surpress_debug """
 ```
-set_surpress_debug(domain::String, b::Bool) 
+set_surpress_debug(domain::String, ::Bool) 
 ```
-TODO
+If set to `false`, log messages with log-level `DEBUG` will no be printed to console or the log file.
 """
 
 @document set_surpress_info """
 ```
-set_surpress_info(domain::String, b::Bool) 
+set_surpress_info(domain::String, ::Bool) 
 ```
-TODO
+If set to `false`, log message with log-level `INFO` will now be printed to console or the log file.
 """
 
 @document set_tab_position! """
 ```
-set_tab_position!(::Notebook, relative_position::mousetrap.detail._RelativePosition) 
+set_tab_position!(::Notebook, relative_position::RelativePosition) 
 ```
-TODO
+Set position of the tab bar relative to the notebooks center.
 """
 
 @document set_tabs_reorderable! """
 ```
-set_tabs_reorderable!(::Notebook, b::Bool) 
+set_tabs_reorderable!(::Notebook, ::Bool) 
 ```
-TODO
+Set whether the user can rerder tabs by dragging them.
 """
 
 @document set_tabs_visible! """
 ```
-set_tabs_visible!(::Notebook, b::Bool) 
+set_tabs_visible!(::Notebook, ::Bool) 
 ```
-TODO
+Set whether the tab bar should be displayed
 """
 
 @document set_text! """
@@ -4007,146 +4061,171 @@ TODO
 set_text!(::Entry, text::String) 
 set_text!(::Label, text::String) 
 set_text!(::TextView, text::String) 
+```
+Override the content of the internal text buffer.
+---
+```
 set_text!(::ProgressBar, text::String) 
 ```
-TODO
+Set text that will be displayed instead of the percentage when the progress bars display mode is set to `PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT`.
 """
 
 @document set_text_to_value_function! """
 ```
-set_text_to_value_function!(f, spin_button::SpinButton) 
-set_text_to_value_function!(f, spin_button::SpinButton, data::Data_t) where Data_t 
+set_text_to_value_function!(f, spin_button::SpinButton, [::Data_t]) 
 ```
-TODO
+Set function that converts the text in the spin buttons text entry to a value. `f` is required to be invocable as a function with signature
+```
+(::SpinButton, text::String) -> Float32
+```
+## Example
+```
+spin_button = SpinButton(0, 1, 0.001)
+set_text_to_value_function!(spin_button) do self::SpinButton, text::String
+    value::Float32 = 0
+    # process string here
+    return value
+end
+```
 """
 
 @document set_text_visible! """
 ```
-set_text_visible!(::Entry, b::Bool) 
+set_text_visible!(::Entry, ::Bool) 
 ```
-TODO
+Set whether the entry should enter password mode.
 """
 
 @document set_texture! """
 ```
-set_texture!(::Shape, texture::mousetrap.TextureObject) 
+set_texture!(::Shape, texture::TextureObject) 
 ```
-TODO
+Set the texture of the shape. It will be automatically bound when rendering.
 """
 
 @document set_tick_callback! """
 ```
-set_tick_callback!(f, ::Widget) 
-set_tick_callback!(f, ::Widget, data::Data_t) where Data_t 
+set_tick_callback!(f, ::Widget, [::Data_t]) 
 ```
-TODO
-"""
+Register a function that will be invoced exactly once per frame while the widget is shown. `f` is required to be invocable as a function with signature
+```
+(::FrameClock, [::Data_t]) -> TickCallbackResult
+```
+The callback will be removed when `f` returns `TICK_CALLBACK_RESULT_DISCONTINUE`.
 
-@document set_title """
+## Example
+```julia
+set_tick_callback!(widget) do clock::FrameClock
+    frame_duration = as_seconds(get_time_since_last_frame(clock))
+    println("It has been \$frame_duration seconds since widget was last rendered")
+    return TICK_CALLBACK_RESULT_CONTINUE
+end
 ```
-set_title(::ColumnViewColumn, title::String) 
-```
-TODO
 """
 
 @document set_title! """
 ```
 set_title!(::Window, title::String) 
 ```
-TODO
+Set windows title, which will be shown in its titlebar.
+---
+```
+set_title!(::ColumnViewColumn, title::String) 
+```
+Set the columns title, which will uniquely identify that column.
 """
 
 @document set_title_widget! """
 ```
 set_title_widget!(header_bar::HeaderBar, ::Widget) 
 ```
-TODO
+Replace the default title with a custom widget.
 """
 
 @document set_titlebar_widget! """
 ```
 set_titlebar_widget!(window::Window, titlebar::Widget) 
 ```
-TODO
+Set a widget used as the titlebar. This will usually be a `HeaderBar`.
 """
 
 @document set_tooltip_text! """
 ```
 set_tooltip_text!(::Widget, text::String) 
 ```
-TODO
+Create a simple text tooltip. It will be automatically shown when the user hovers above the widgets allocated area for a certain duration.
 """
 
 @document set_tooltip_widget! """
 ```
 set_tooltip_widget!(::Widget, tooltip::Widget) 
 ```
-TODO
+Set a custom widget as the widgets tooltip. It will be automatically shown when the user hovers above the widgets allocated area for a certain duration.
+
+This widget should not be interactable.
 """
 
 @document set_top_left! """
 ```
 set_top_left!(::Shape, top_left::Vector2f) 
 ```
-TODO
+Move the shape such that the top left corner of its axis-aligned bounding box is at given position, in OpenGL coordinates.
 """
 
 @document set_top_margin! """
 ```
 set_top_margin!(::TextView, margin::AbstractFloat) 
 ```
-TODO
+Set margin between the top of the text and the text views frame, in pixels.
 """
 
 @document set_touch_only! """
 ```
-set_touch_only!(gesture::SingleClickGesture) 
+set_touch_only!(::SingleClickGesture) 
 ```
-TODO
+Make it such that the event controller will exclusively listen to events emitted by touch-devices.
 """
 
 @document set_transient_for! """
 ```
 set_transient_for!(self::Window, other::Window) 
 ```
-TODO
+Make it such that if `self` is and `other` overlap, `self` will always be shown on top.
 """
 
 @document set_transition_duration! """
 ```
-set_transition_duration!(stack::Stack, duration::Time) 
-set_transition_duration!(revealer::Revealer, duration::Time) 
+set_transition_duration!(::Stack, duration::Time) 
+set_transition_duration!(::Revealer, duration::Time) 
 ```
-TODO
-"""
-
-@document set_transition_type """
-```
-set_transition_type(::Stack, transition::mousetrap.detail._StackTransitionType) 
-```
-TODO
+Choose the duration of time the animation should take. This changes the animation speed.
 """
 
 @document set_transition_type! """
 ```
-set_transition_type!(::Revealer, type::mousetrap.detail._RevealerTransitionType) 
+set_transition_type!(::Stack, transition::StackTransitionType) 
+set_transition_type!(::Revealer, type::RevealerTransitionType) 
 ```
-TODO
+Set the type of animation used.
 """
 
 @document set_uniform_float! """
 ```
-set_uniform_float!(::Shader, name::String, float::Float32) 
-set_uniform_float!(::RenderTask, name::String, v::Float32) 
+set_uniform_float!(::Shader, name::String, v::Cfloat) 
+set_uniform_float!(::RenderTask, name::String, v::Cfloat) 
 ```
-TODO
+Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+
+This value will be a `float` in GLSL.
 """
 
 @document set_uniform_hsva! """
 ```
 set_uniform_hsva!(task::RenderTask, name::String, hsva::RGBA) 
 ```
-TODO
+Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+
+This value will be a `vec4` in GLSL.
 """
 
 @document set_uniform_int! """
@@ -4154,22 +4233,28 @@ TODO
 set_uniform_int!(::Shader, name::String, float::Int32) 
 set_uniform_int!(::RenderTask, name::String, v::Int32) 
 ```
-TODO
+Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+
+This value will be a `int` in GLSL.
 """
 
 @document set_uniform_rgba! """
 ```
-set_uniform_rgba!(task::RenderTask, name::String, rgba::RGBA) 
+set_uniform_rgba!(::RenderTask, name::String, rgba::RGBA) 
 ```
-TODO
+Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+
+This value will be a `vec4` in GLSL.
 """
 
 @document set_uniform_transform! """
 ```
-set_uniform_transform!(shader::Shader, name::String, transform::GLTransform) 
-set_uniform_transform!(task::RenderTask, name::String, transform::GLTransform) 
+set_uniform_transform!(::Shader, name::String, transform::GLTransform) 
+set_uniform_transform!(::RenderTask, name::String, transform::GLTransform) 
 ```
-TODO
+Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+
+This value will be a `mat4x4` in GLSL.
 """
 
 @document set_uniform_uint! """
@@ -4177,69 +4262,82 @@ TODO
 set_uniform_uint!(::Shader, name::String, float::UInt32) 
 set_uniform_uint!(::RenderTask, name::String, v::UInt32) 
 ```
-TODO
+Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+
+This value will be a `uint` in GLSL.
 """
 
 @document set_uniform_vec2! """
 ```
-set_uniform_vec2!(shader::Shader, name::String, vec2::Vector2f) 
-set_uniform_vec2!(task::RenderTask, name::String, v::Vector2f) 
+set_uniform_vec2!(::Shader, name::String, vec2::Vector2f) 
+set_uniform_vec2!(::RenderTask, name::String, v::Vector2f) 
 ```
-TODO
+Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+
+This value will be a `vec2` in GLSL.
 """
 
 @document set_uniform_vec3! """
 ```
-set_uniform_vec3!(shader::Shader, name::String, vec2::Vector2f) 
-set_uniform_vec3!(task::RenderTask, name::String, v::StaticArraysCore.SVector{3, Float32}) 
+set_uniform_vec3!(::Shader, name::String, vec2::Vector2f) 
+set_uniform_vec3!(::RenderTask, name::String, v::StaticArraysCore.SVector{3, Float32}) 
 ```
-TODO
+Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+
+This value will be a `vec3` in GLSL.
 """
 
 @document set_uniform_vec4! """
 ```
-set_uniform_vec4!(shader::Shader, name::String, vec2::Vector2f) 
-set_uniform_vec4!(task::RenderTask, name::String, v::StaticArraysCore.SVector{4, Float32}) 
+set_uniform_vec4!(::Shader, name::String, vec2::Vector2f) 
+set_uniform_vec4!(::RenderTask, name::String, v::StaticArraysCore.SVector{4, Float32}) 
 ```
-TODO
+Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+
+This value will be a `vec4` in GLSL.
 """
 
 @document set_upper! """
 ```
-set_upper!(adjustment::Adjustment, ::Number) 
-set_upper!(::Scale, value::AbstractFloat) 
-set_upper!(::SpinButton, value::AbstractFloat) 
+set_upper!(::Adjustment, ::Number) 
+set_upper!(::Scale, ::Number) 
+set_upper!(::SpinButton, ::Number) 
 ```
-TODO
+Set upper bound of th underlying adjustment.
 """
 
 @document set_use_markup! """
 ```
-set_use_markup!(::Label, b::Bool) 
+set_use_markup!(::Label, ::Bool) 
 ```
 TODO
 """
 
 @document set_value! """
 ```
-set_value!(::SpinButton, value::AbstractFloat) 
-set_value!(::Scale, value::AbstractFloat) 
-set_value!(::LevelBar, value::AbstractFloat) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::AbstractFloat) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Signed) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Unsigned) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{<:AbstractFloat}) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{<:Signed}) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{<:Unsigned}) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Bool) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::String) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::RGBA) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Image) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{Bool}) 
-set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Vector{String}) 
+set_value!(::SpinButton, value::Number) 
+set_value!(::Scale, value::Number) 
 set_value!(adjustment::Adjustment, ::Number) 
 ```
-TODO
+Set current value of the underlying range, clamped to `[lower, upper]`.
+```
+---
+```
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::AbstractFloat) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Vector{<:AbstractFloat}) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Signed) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Vector{<:Signed}) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Unsigned) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Vector{<:Unsigned}) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Bool) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Vector{Bool}) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::String) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Vector{String}) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::RGBA) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Image) 
+```
+Serialize a value and save it to a key-value pair in given group. If the group or key does not yet exist, it is created.
+---
 """
 
 @document set_value_to_text_function! """
@@ -4247,189 +4345,211 @@ TODO
 set_value_to_text_function!(f, spin_button::SpinButton) 
 set_value_to_text_function!(f, spin_button::SpinButton, data::Data_t) where Data_t 
 ```
-TODO
+Register a function that converts the value of the underyling range to the text displayed in the text-entry area of the spin button.
+`f` is required to be invocable as a function with signature
+```
+(::SpinButton, ::AbstractFloat) -> String
+```
+
+## Example
+```julia
+spin_button = SpinButton(0, 1, 0.001)
+set_value_to_text_function!(spin_button) do self::SpinButton, value::AbstractFloat
+    result = ""
+    # generate string here
+    return result
+end
+```
 """
 
 @document set_vertex_color! """
 ```
-set_vertex_color!(::Shape, inde::Integer, color::RGBA) 
+set_vertex_color!(::Shape, index::Integer, color::RGBA) 
 ```
-TODO
+Set color of a specific vertex.
 """
 
 @document set_vertex_position! """
 ```
-set_vertex_position!(::Shape, inde::Integer, position::StaticArraysCore.SVector{3, Float32}) 
+set_vertex_position!(::Shape, index::Integer, position::Vector3f) 
 ```
-TODO
+Set position of a specific vertex, in 3D OpenGL coordinates.
 """
 
 @document set_vertex_texture_coordinate """
 ```
 set_vertex_texture_coordinate(::Shape, inde::Integer, coordinate::Vector2f) 
 ```
-TODO
+Set texture coordinate of a specific vertex.
 """
 
 @document set_vertical_alignment! """
 ```
-set_vertical_alignment!(::Widget, alignment::mousetrap.detail._Alignment) 
+set_vertical_alignment!(::Widget, alignment::Alignment) 
 ```
-TODO
+Set widget alignment along the y-axis.
 """
 
 @document set_vertical_scrollbar_policy! """
 ```
-set_vertical_scrollbar_policy!(::Viewport, policy::mousetrap.detail._ScrollbarVisibilityPolicy) 
+set_vertical_scrollbar_policy!(::Viewport, policy::ScrollbarVisibilityPolicy) 
 ```
-TODO
+Set policy of vertical scrollbar, this determines when/if the scrollbar is shown.
 """
 
 @document set_visible_child! """
 ```
-set_visible_child!(stack::Stack, id::String) 
+set_visible_child!(stack::Stack, id::StackID) 
 ```
-TODO
+Make the current page of the stack to that identified by ID.
 """
 
 @document set_was_modified! """
 ```
-set_was_modified!(::TextView, b::Bool) 
+set_was_modified!(::TextView, ::Bool) 
 ```
-TODO
+Set the flag indicating that a text buffer was modified.
 """
 
 @document set_widget! """
 ```
-set_widget!(column_view::ColumnView, column::ColumnViewColumn, row_i::Integer, ::Widget) 
+set_widget!(::ColumnView, ::ColumnViewColumn, row_i::Integer, ::Widget) 
 ```
-TODO
+Insert a widget in column at given row. If the row does not yet exist, empty rows will be inserted until thet column view 
+has enough rows to accomodate the row index.
 """
 
 @document set_widget_at! """
 ```
-set_widget_at!(list_view::ListView, inde::Integer, ::Widget) 
-set_widget_at!(list_view::ListView, inde::Integer, ::Widget, iterator::ListViewIterator) 
+set_widget_at!(::ListView, index::Integer, ::Widget, [::ListViewIterator]) 
 ```
-TODO
+Replace the widget at given position.
 """
 
 @document set_wrap_mode! """
 ```
-set_wrap_mode!(texture::mousetrap.TextureObject, mode::mousetrap.detail._TextureWrapMode) 
-set_wrap_mode!(::Label, mode::mousetrap.detail._LabelWrapMode) 
+set_wrap_mode!(::Label, mode::LabelWrapMode) 
 ```
-TODO
+Set wrap mode, this determines at which point of a line a linebreak will be inserted.
+---
+```
+set_wrap_mode!(::TextureObject, mode::TextureWrapMode) 
+```
+Set OpenGL texture wrap mode.
 """
 
 @document set_x_alignment! """
 ```
 set_x_alignment!(::Label, ::AbstractFloat) 
 ```
-TODO
+Set horizontal alignment of the label, in `[0, 1]`.
 """
 
 @document set_y_alignment! """
 ```
 set_y_alignment!(::Label, ::AbstractFloat) 
 ```
-TODO
+Set vertical alignment of the label, in `[0, 1]`.
 """
 
 @document shift_pressed """
 ```
-shift_pressed(modifier_state::mousetrap.detail._ModifierState) 
+shift_pressed(modifier_state::ModifierState) -> Bool
 ```
-TODO
+Check whether the shift or caps key is currently down.
 """
 
 @document should_shortcut_trigger_trigger """
 ```
-should_shortcut_trigger_trigger(::KeyEventController, trigger::String) 
+should_shortcut_trigger_trigger(::KeyEventController, trigger::String) -> Bool
 ```
-TODO
+Text whether the currently active event should trigger the shortcut trigger. This function 
+should only be called from within signal `key_pressed` or `modifiers_changed`.
+
+This is usually not necessary, use `ShortcutEventController` to listen for shortcuts instead.
 """
 
 @document show! """
 ```
 show!(::Widget) 
 ```
-TODO
+Reveal the widget if it is currently hidden. This will emit signal `show`.
 """
 
 @document start! """
 ```
 start!(::Spinner) 
 ```
-TODO
+Start the spinning animation if it is currently stopped.
 """
 
 @document stop! """
 ```
 stop!(::Spinner) 
 ```
-TODO
+Stop the spinning animation if it is currently playing.
 """
 
 @document to_gl_coordinates """
 ```
-to_gl_coordinates(area::RenderArea, absolute_widget_space_coordinates::Vector2f) 
+to_gl_coordinates(area::RenderArea, absolute_widget_space_coordinates::Vector2f) -> Vector2f
 ```
-TODO
+Convert absolute, widget-space coordinates relative to the `RenderArea`s origin to OpenGL coordinates.
 """
 
 @document translate! """
 ```
 translate!(transform::GLTransform, offset::Vector2f) 
 ```
-TODO
+Translate the transform by the given offset, in OpenGL coordinates.
 """
 
 @document unbind """
 ```
-unbind(texture::mousetrap.TextureObject) 
+unbind(::TextureObject) 
 ```
-TODO
+Unbind a texture from rendering. This is usually done automatically.
 """
 
 @document unbind_as_render_target """
 ```
 unbind_as_render_target(render_texture::RenderTexture) 
 ```
-TODO
+Make it such that the render texture is no longe the current render target. This will restore the framebuffer that
+was active when `bind_as_render_target` was called.
 """
 
 @document undo! """
 ```
 undo!(::TextView) 
 ```
-TODO
+Trigger an undo step.
 """
 
 @document unmark_as_busy! """
 ```
 unmark_as_busy!(::Application) 
 ```
-TODO
+Undo the effect of `mark_as_busy!`.
 """
 
 @document unparent! """
 ```
 unparent!(::Widget) 
 ```
-TODO
+Remove the widget from its parent.
 """
 
 @document unselect! """
 ```
 unselect!(model::SelectionModel, i::Integer) 
 ```
-TODO
+Make item at given position no longer selected.
 """
 
 @document unselect_all! """
 ```
 unselect_all!(::SelectionModel) 
 ```
-TODO
+Make it such that no item is selected, the selection mode allows for that. 
 """

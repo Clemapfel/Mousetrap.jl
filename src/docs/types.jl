@@ -72,7 +72,7 @@ end
     an action also disables all connected buttons and menu items.
 
     $(@type_constructors(
-        Action(::ActionID, ::Application)
+        Action(::ActionID, ::Application),
         Action(stateless_function, ::ActionID, ::Application)
     ))
 
@@ -1975,7 +1975,7 @@ end
     allows users to pick an exact value from a range.
 
     $(@type_constructors(
-        SpinButton(lower::AbstractFloat, upper::AbstractFloat, step_increment::AbstractFloat, [orientation::Orientation])
+        SpinButton(lower::Number, upper::Number, step_increment::Number, [orientation::Orientation])
     ))
 
     $(@type_signals(SpinButton, 

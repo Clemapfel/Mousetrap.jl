@@ -1423,7 +1423,7 @@ macro do_not_compile(args...) return :() end
     end
     export set_application!
 
-    @export_function Window set_maximized! Cvoid
+    @export_function Window set_maximized! Cvoid Bool b
     @export_function Window set_fullscreen! Cvoid
     @export_function Window present! Cvoid
     @export_function Window set_hide_on_close! Cvoid Bool b
@@ -1788,14 +1788,16 @@ macro do_not_compile(args...) return :() end
     @export_function KeyFile get_keys Vector{KeyID} GroupID group
     @export_function KeyFile has_key Bool GroupID group KeyID key
     @export_function KeyFile has_group Bool GroupID group
-    @export_function KeyFile set_comment_above_group! Cvoid GroupID group String comment
-    @export_function KeyFile set_comment_above_key! Cvoid GroupID group KeyID key String comment
     @export_function KeyFile get_comment_above_group String GroupID group
     @export_function KeyFile get_comment_above_key String GroupID group KeyID key
 
-    set_comment_above!(file::KeyFile, group::GroupID, key::KeyID, comment::String) = set_comment_above_key!(file, group, key, comment)
-    set_comment_above!(file::KeyFile, group::GroupID, comment::String) = set_comment_above_group!(file, group, key, comment)
+    set_comment_above!(file::KeyFile, group::GroupID, key::KeyID, comment::String) = detail.set_comment_above_key!(file._internal, group, key, comment)
+    set_comment_above!(file::KeyFile, group::GroupID, comment::String) = detail.set_comment_above_group!(file._internal, group, comment)
     export set_comment_above!
+
+    get_comment_above!(file::KeyFile, group::GroupID) ::String = detail.get_comment_above_group(file._internal, group)
+    get_comment_above!(file::KeyFile, group::GroupID, key::KeyID) ::String = detail.get_comment_above_key(file._internal, group, key)
+    export get_comment_above!
 
     export set_value!
     export get_value
@@ -2168,7 +2170,7 @@ macro do_not_compile(args...) return :() end
 
     @export_function Button set_has_frame! Cvoid Bool b
     @export_function Button get_has_frame Bool
-    @export_function Button set_is_circular Cvoid Bool b
+    @export_function Button set_is_circular! Cvoid Bool b
     @export_function Button get_is_circular Bool
 
     function set_child!(button::Button, child::Widget)
@@ -2235,6 +2237,9 @@ macro do_not_compile(args...) return :() end
     @export_function CheckButton get_state CheckButtonState
     @export_function CheckButton get_is_active Bool
 
+    set_active!(button::CheckButton, b::Bool) = set_state!(button, b ? CHECK_BUTTON_STATE_ACTIVE : CHECK_BUTTON_STATE_INACTIVE)
+    export set_active!
+
     if detail.GTK_MINOR_VERSION >= 8
         function set_child!(check_button::CheckButton, child::Widget)
             detail.set_child!(check_button._internal, child._internal.cpp_object)
@@ -2266,7 +2271,7 @@ macro do_not_compile(args...) return :() end
 
     @export_function ToggleButton set_is_active! Cvoid Bool b
     @export_function ToggleButton get_is_active Bool
-    @export_function ToggleButton set_is_circular Cvoid Bool b
+    @export_function ToggleButton set_is_circular! Cvoid Bool b
     @export_function ToggleButton get_is_circular Bool
 
     function set_child!(toggle_button::ToggleButton, child::Widget)
@@ -2354,8 +2359,8 @@ macro do_not_compile(args...) return :() end
 
     @export_function Entry get_text String
     @export_function Entry set_text! Cvoid String text
-    @export_function Entry set_max_length! Cvoid Integer n
-    @export_function Entry get_max_length Signed
+    @export_function Entry set_max_width_chars! Cvoid Integer n
+    @export_function Entry get_max_width_chars Signed
     @export_function Entry set_has_frame! Cvoid Bool b
     @export_function Entry get_has_frame Bool
     @export_function Entry set_text_visible! Cvoid Bool b
@@ -2678,7 +2683,7 @@ macro do_not_compile(args...) return :() end
     @export_function PopoverButton get_relative_position RelativePosition
     @export_function PopoverButton set_always_show_arrow! Cvoid Bool b
     @export_function PopoverButton get_always_show_arrow Bool
-    @export_function PopoverButton set_has_frame Cvoid Bool b
+    @export_function PopoverButton set_has_frame! Cvoid Bool b
     @export_function PopoverButton get_has_frame Bool
     @export_function PopoverButton popup! Cvoid
     @export_function PopoverButton popdown! Cvoid
@@ -2697,8 +2702,8 @@ macro do_not_compile(args...) return :() end
     export DropDownItemID
 
     @export_function DropDown remove! Cvoid DropDownItemID id
-    @export_function DropDown set_show_arrow! Cvoid Bool b
-    @export_function DropDown get_show_arrow Bool
+    @export_function DropDown set_always_show_arrow! Cvoid Bool b
+    @export_function DropDown get_always_show_arrow Bool
     @export_function DropDown set_selected Cvoid DropDownItemID id
     @export_function DropDown get_selected DropDownItemID
 
@@ -3074,10 +3079,10 @@ macro do_not_compile(args...) return :() end
     @export_function ListView get_enabled_rubberband_selection Bool
     @export_function ListView set_show_separators Cvoid Bool b
     @export_function ListView get_show_separators Bool
-    @export_function ListView set_single_click_activate Cvoid Bool b
+    @export_function ListView set_single_click_activate! Cvoid Bool b
     @export_function ListView get_single_click_activate Bool
     @export_function ListView get_n_items Cuint
-    @export_function ListView set_orientation Cvoid Orientation orientation
+    @export_function ListView set_orientation! Cvoid Orientation orientation
     @export_function ListView get_orientation Orientation
 
     @add_widget_signals ListView
@@ -3122,7 +3127,7 @@ macro do_not_compile(args...) return :() end
     get_min_n_columns(grid_view::GridView) ::Int64 = detail.get_min_n_columns(grid_view._internal)
     export get_min_n_columns
 
-    @export_function GridView set_orientation Cvoid Orientation orientation
+    @export_function GridView set_orientation! Cvoid Orientation orientation
     @export_function GridView get_orientation Orientation
 
     get_selection_model(grid_view::GridView) ::SelectionModel = SelectionModel(detail.get_selection_model(grid_view._internal))
@@ -3231,7 +3236,7 @@ macro do_not_compile(args...) return :() end
     get_visible_child(stack::Stack) ::StackID = detail.get_visible_child(stack._internal)
     export get_visible_child
 
-    @export_function Stack set_transition_type Cvoid StackTransitionType transition
+    @export_function Stack set_transition_type! Cvoid StackTransitionType transition
     @export_function Stack get_transition_type StackTransitionType
 
     set_transition_duration!(stack::Stack, duration::Time) = detail.set_transition_duration!(stack._internal, as_microseconds(duration))
@@ -3302,7 +3307,7 @@ macro do_not_compile(args...) return :() end
     @export_type ColumnViewColumn SignalEmitter
     ColumnViewColumn(internal::Ptr{Cvoid}) = ColumnViewColumn(detail._ColumnViewColumn(internal))
 
-    @export_function ColumnViewColumn set_title Cvoid String title
+    @export_function ColumnViewColumn set_title! Cvoid String title
     @export_function ColumnViewColumn get_title String
     @export_function ColumnViewColumn set_fixed_width Cvoid AbstractFloat width
     @export_function ColumnViewColumn get_fixed_width Cfloat
@@ -3447,9 +3452,9 @@ macro do_not_compile(args...) return :() end
     @export_function Paned get_position Cint
     @export_function Paned set_position! Cvoid Integer position
 
-    @export_function Paned set_has_wide_handle Cvoid Bool b
+    @export_function Paned set_has_wide_handle! Cvoid Bool b
     @export_function Paned get_has_wide_handle Bool
-    @export_function Paned set_orientation Cvoid Orientation orientation
+    @export_function Paned set_orientation! Cvoid Orientation orientation
     @export_function Paned get_orientation Orientation
 
     @export_function Paned set_start_child_resizable! Cvoid Bool b
@@ -3555,10 +3560,10 @@ macro do_not_compile(args...) return :() end
     @export_function Scale get_step_increment Cfloat
     @export_function Scale get_value Cfloat
 
-    @export_function Scale set_lower! Cvoid AbstractFloat value
-    @export_function Scale set_upper! Cvoid AbstractFloat value
+    @export_function Scale set_lower! Cvoid Number value
+    @export_function Scale set_upper! Cvoid Number value
     @export_function Scale set_step_increment! Cvoid AbstractFloat value
-    @export_function Scale set_value! Cvoid AbstractFloat value
+    @export_function Scale set_value! Cvoid Number value
 
     @add_widget_signals Scale
     @add_signal_value_changed Scale
@@ -3566,8 +3571,8 @@ macro do_not_compile(args...) return :() end
 ###### spin_button.jl
 
     @export_type SpinButton Widget
-    function SpinButton(lower::AbstractFloat, upper::AbstractFloat, step_increment::AbstractFloat, orientation::Orientation = ORIENTATION_HORIZONTAL)
-        return SpinButton(detail._SpinButton(Cfloat(lower), Cfloat(upper), Cfloat(step_increment), orientation))
+    function SpinButton(lower::Number, upper::Number, step_increment::Number, orientation::Orientation = ORIENTATION_HORIZONTAL)
+        return SpinButton(detail._SpinButton(convert(Cfloat, lower), convert(Cfloat, upper), convert(Cfloat, step_increment), orientation))
     end
 
     get_adjustment(spin_button::SpinButton) ::Adjustment = return Adjustment(detail.get_adjustment(spin_button._internal))
@@ -3578,10 +3583,10 @@ macro do_not_compile(args...) return :() end
     @export_function SpinButton get_step_increment Cfloat
     @export_function SpinButton get_value Cfloat
 
-    @export_function SpinButton set_lower! Cvoid AbstractFloat value
-    @export_function SpinButton set_upper! Cvoid AbstractFloat value
-    @export_function SpinButton set_step_increment! Cvoid AbstractFloat value
-    @export_function SpinButton set_value! Cvoid AbstractFloat value
+    @export_function SpinButton set_lower! Cvoid Number value
+    @export_function SpinButton set_upper! Cvoid Number value
+    @export_function SpinButton set_step_increment! Cvoid Number value
+    @export_function SpinButton set_value! Cvoid Number value
 
     @export_function SpinButton set_n_digits! Cvoid Integer n
     @export_function SpinButton get_n_digits Int64
@@ -3595,12 +3600,14 @@ macro do_not_compile(args...) return :() end
     @export_function SpinButton get_allow_only_numeric Bool
 
     function set_text_to_value_function!(f, spin_button::SpinButton, data::Data_t) where Data_t
+        set_allow_only_numeric!(spin_button, false)
         typed_f = TypedFunction(f, AbstractFloat, (SpinButton, String, Data_t))
         detail.set_text_to_value_function!(spin_button._internal, function (spin_button_ref, text::String)
             return typed_f(SpinButton(spin_button_ref[]), text, data)
         end)
     end
     function set_text_to_value_function!(f, spin_button::SpinButton)
+        set_allow_only_numeric!(spin_button, false)
         typed_f = TypedFunction(f, AbstractFloat, (SpinButton, String))
         detail.set_text_to_value_function!(spin_button._internal, function (spin_button_ref, text::String)
             return typed_f(SpinButton(spin_button_ref[]), text)
@@ -3611,12 +3618,14 @@ macro do_not_compile(args...) return :() end
     @export_function SpinButton reset_value_to_text_function! Cvoid
 
     function set_value_to_text_function!(f, spin_button::SpinButton, data::Data_t) where Data_t
+        set_allow_only_numeric!(spin_button, false)
         typed_f = TypedFunction(f, String, (SpinButton, AbstractFloat, Data_t))
         detail.set_value_to_text_function!(spin_button._internal, function (spin_button_ref, value::Cfloat)
             return typed_f(SpinButton(spin_button_ref[]), value, data)
         end)
     end
     function set_value_to_text_function!(f, spin_button::SpinButton)
+        set_allow_only_numeric!(spin_button, false)
         typed_f = TypedFunction(f, String, (SpinButton, AbstractFloat))
         detail.set_value_to_text_function!(spin_button._internal, function (spin_button_ref, value::Cfloat)
             return typed_f(SpinButton(spin_button_ref[]), value)
@@ -3705,7 +3714,7 @@ macro do_not_compile(args...) return :() end
     @export_widget_function get_margin_end Cfloat
     @export_widget_function set_margin_horizontal! Cvoid AbstractFloat margin
     @export_widget_function set_margin_vertical! Cvoid AbstractFloat margin
-    @export_widget_function set_margin_margin! Cvoid AbstractFloat margin
+    @export_widget_function set_margin! Cvoid AbstractFloat margin
 
     @export_widget_function set_expand_horizontally! Cvoid Bool b
     @export_widget_function get_expand_horizontally Bool
@@ -3839,7 +3848,7 @@ macro do_not_compile(args...) return :() end
             typed_f(Clipboard(internal_ref[], Image(image_ref[])))
         end)
     end
-    export get_string
+    export get_image
 
     @export_function Clipboard contains_file Bool
 
