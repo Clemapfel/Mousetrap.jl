@@ -296,8 +296,8 @@ macro do_not_compile(args...) return :() end
         end
 
         to_int_name = Symbol(enum) * :_to_int
-        push!(out.args, :(Base.string(x::$enum) = return string(mousetrap.detail.$to_int_name(x))))
-        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = return Integer(mousetrap.detail.to_int_name(x))))
+        push!(out.args, :(Base.string(x::$enum) = string(mousetrap.detail.$to_int_name(x))))
+        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(mousetrap.detail.to_int_name(x))))
 
         return out
     end
@@ -330,7 +330,7 @@ macro do_not_compile(args...) return :() end
     end
 
     import Base: *
-    *(x::Symbol, y::Symbol) = return Symbol(string(x) * string(y))
+    *(x::Symbol, y::Symbol) = Symbol(string(x) * string(y))
 
     import Base: clamp
     clamp(x::AbstractFloat, lower::AbstractFloat, upper::AbstractFloat) = if x < lower return lower elseif x > upper return upper else return x end
@@ -550,35 +550,35 @@ macro do_not_compile(args...) return :() end
     end
     export Angle
 
-    degrees(x::Number) = return Angle(convert(Cfloat, deg2rad(x)))
+    degrees(x::Number) = Angle(convert(Cfloat, deg2rad(x)))
     export degrees
 
-    radians(x::Number) = return Angle(convert(Cfloat, x))
+    radians(x::Number) = Angle(convert(Cfloat, x))
     export radians
 
-    as_degrees(angle::Angle) ::Cdouble = return rad2deg(angle._rads)
+    as_degrees(angle::Angle) ::Cdouble = rad2deg(angle._rads)
     export as_degrees
 
-    as_radians(angle::Angle) ::Cdouble = return angle._rads
+    as_radians(angle::Angle) ::Cdouble = angle._rads
     export as_radians
 
     import Base: +
-    +(a::Angle, b::Angle) = return Angle(a._rads + b._rads)
+    +(a::Angle, b::Angle) = Angle(a._rads + b._rads)
 
     import Base: -
-    -(a::Angle, b::Angle) = return Angle(a._rads - b._rads)
+    -(a::Angle, b::Angle) = Angle(a._rads - b._rads)
 
     import Base: *
-    *(a::Angle, b::Angle) = return Angle(a._rads * b._rads)
+    *(a::Angle, b::Angle) = Angle(a._rads * b._rads)
 
     import Base: /
-    /(a::Angle, b::Angle) = return Angle(a._rads / b._rads)
+    /(a::Angle, b::Angle) = Angle(a._rads / b._rads)
 
     import Base: ==
-    ==(a::Angle, b::Angle) = return a._rads == b._rads
+    ==(a::Angle, b::Angle) = a._rads == b._rads
 
     import Base: !=
-    !=(a::Angle, b::Angle) = return a._rads != b._rads
+    !=(a::Angle, b::Angle) = a._rads != b._rads
 
 ####### signal_components.jl
 
@@ -890,9 +890,7 @@ macro do_not_compile(args...) return :() end
     macro add_signal_items_changed(x) return :(@add_signal $x items_changed Cvoid Integer position Integer n_removed Integer n_added) end
     macro add_signal_closed(x) return :(@add_signal $x closed Cvoid) end
     macro add_signal_text_changed(x) return :(@add_signal $x text_changed Cvoid) end
-    # macro add_signal_redo(x) return :(@add_signal $x redo Cvoid) end
-    # macro add_signal_undo(x) return :(@add_signal $x undo Cvoid) end
-    
+     
     macro add_signal_drag_begin(x) return :(@add_signal $x drag_begin Cvoid AbstractFloat start_x AbstractFloat start_y) end
     macro add_signal_drag(x) return :(@add_signal $x drag Cvoid AbstractFloat offset_x AbstractFloat offset_y) end
     macro add_signal_drag_end(x) return :(@add_signal $x drag_end Cvoid AbstractFloat offset_x AbstractFloat offset_y) end
@@ -1379,7 +1377,7 @@ macro do_not_compile(args...) return :() end
     add_action!(app::Application, action::Action) = detail.add_action!(app._internal, action._internal)
     export add_action!
 
-    get_action(app::Application, id::String) ::Action = return Action(detail.get_action(app._internal, id))
+    get_action(app::Application, id::String) ::Action = Action(detail.get_action(app._internal, id))
     export get_action
 
     @export_function Application remove_action! Cvoid String id
@@ -1492,7 +1490,7 @@ macro do_not_compile(args...) return :() end
     @export_function Action activate Cvoid
     @export_function Action add_shortcut! Cvoid String shortcut
 
-    get_shortcuts(action::Action) ::Vector{String} = return detail.get_shortcuts(action._internal)[]
+    get_shortcuts(action::Action) ::Vector{String} = detail.get_shortcuts(action._internal)[]
     export get_shortcuts
 
     @export_function Action clear_shortcuts! Cvoid
@@ -1671,10 +1669,10 @@ macro do_not_compile(args...) return :() end
     rgba_to_html_code(rgba::RGBA) = convert(String, detail.rgba_to_html_code(rgba))
     export rgba_to_html_code
 
-    html_code_to_rgba(code::String) ::RGBA = return detail.html_code_to_rgba(code)
+    html_code_to_rgba(code::String) ::RGBA = detail.html_code_to_rgba(code)
     export html_code_to_rgba
 
-    is_valid_html_code(code::String) ::Bool = return detail.is_valid_html_code(code)
+    is_valid_html_code(code::String) ::Bool = detail.is_valid_html_code(code)
     export is_valid_html_code
 
 ####### icon.jl
@@ -1700,10 +1698,10 @@ macro do_not_compile(args...) return :() end
     @export_function Icon get_name IconID
 
     import Base.==
-    ==(a::Icon, b::Icon) = return detail.compare_icons(a._internal, b_internal)
+    ==(a::Icon, b::Icon) = detail.compare_icons(a._internal, b_internal)
 
     import Base.!=
-    !=(a::Icon, b::Icon) = return !Base.==(a, b)
+    !=(a::Icon, b::Icon) = !Base.==(a, b)
 
     @export_function Icon get_size Vector2i
 
@@ -1788,9 +1786,7 @@ macro do_not_compile(args...) return :() end
     @export_function KeyFile get_keys Vector{KeyID} GroupID group
     @export_function KeyFile has_key Bool GroupID group KeyID key
     @export_function KeyFile has_group Bool GroupID group
-    @export_function KeyFile get_comment_above_group String GroupID group
-    @export_function KeyFile get_comment_above_key String GroupID group KeyID key
-
+   
     set_comment_above!(file::KeyFile, group::GroupID, key::KeyID, comment::String) = detail.set_comment_above_key!(file._internal, group, key, comment)
     set_comment_above!(file::KeyFile, group::GroupID, comment::String) = detail.set_comment_above_group!(file._internal, group, comment)
     export set_comment_above!
@@ -1957,7 +1953,7 @@ macro do_not_compile(args...) return :() end
     ==(a::FileDescriptor, b::FileDescriptor) = detail.file_descriptor_equal(a._internal, b._internal)
 
     import Base.!=
-    !=(a::FileDescriptor, b::FileDescriptor) = return !(a == b)
+    !=(a::FileDescriptor, b::FileDescriptor) = !(a == b)
 
     @export_function FileDescriptor create_from_path! Bool String path
     @export_function FileDescriptor create_from_uri! Bool String uri
@@ -2039,7 +2035,7 @@ macro do_not_compile(args...) return :() end
     end
 
     @export_type FileChooser SignalEmitter
-    FileChooser(action::FileChooserAction; title::String = "") = FileChooser(detail._FileChooser(action, title))
+    FileChooser(action::FileChooserAction = FILE_CHOOSER_ACTION_OPEN_FILE, title::String = "") = FileChooser(detail._FileChooser(action, title))
 
     @export_function FileChooser set_accept_label! Cvoid String label
     @export_function FileChooser get_accept_label String
@@ -2679,7 +2675,7 @@ macro do_not_compile(args...) return :() end
     export set_popover_menu!
 
     @export_function PopoverButton remove_popover! Cvoid
-    @export_function PopoverButton set_popover_position! Cvoid RelativePosition position
+    @export_function PopoverButton set_relative_position! Cvoid RelativePosition position
     @export_function PopoverButton get_relative_position RelativePosition
     @export_function PopoverButton set_always_show_arrow! Cvoid Bool b
     @export_function PopoverButton get_always_show_arrow Bool
@@ -2721,10 +2717,20 @@ macro do_not_compile(args...) return :() end
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
+    function push_back!(f, drop_down::DropDown, label::String, data::Data_t) where Data_t
+        return detail.push_back!(drop_down._internal, detail._Label(label).cpp_object, detail._Label(label).cpp_object, function (drop_down_internal_ref)
+            typed_f(DropDown(drop_down_internal_ref[]), data)
+        end)
+    end
+    function push_back!(f, drop_down::DropDown, label::String)
+        typed_f = TypedFunction(f, Cvoid, (DropDown,))
+        return detail.push_back!(drop_down._internal, detail._Label(label).cpp_object, detail._Label(label).cpp_object, function (drop_down_internal_ref)
+            typed_f(DropDown(drop_down_internal_ref[]))
+        end)
+    end
     export push_back!
 
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
-        typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
         return detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
@@ -2732,6 +2738,17 @@ macro do_not_compile(args...) return :() end
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
         return detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+            typed_f(DropDown(drop_down_internal_ref[]))
+        end)
+    end
+    function push_front!(f, drop_down::DropDown, label::String, data::Data_t) where Data_t
+        return detail.push_front!(drop_down._internal, detail._Label(label).cpp_object, detail._Label(label).cpp_object, function (drop_down_internal_ref)
+            typed_f(DropDown(drop_down_internal_ref[]), data)
+        end)
+    end
+    function push_front!(f, drop_down::DropDown, label::String)
+        typed_f = TypedFunction(f, Cvoid, (DropDown,))
+        return detail.push_front!(drop_down._internal, detail._Label(label).cpp_object, detail._Label(label).cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -2749,7 +2766,21 @@ macro do_not_compile(args...) return :() end
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
+    function insert!(f, drop_down::DropDown, index::Integer, label::String, data::Data_t) where Data_t
+        typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
+        return detail.insert!(drop_down._internal, from_julia_index(index), detail._Label(label).cpp_object, detail._Label(label).cpp_object, function (drop_down_internal_ref)
+            typed_f(DropDown(drop_down_internal_ref[]), data)
+        end)
+    end
+    function insert!(f, drop_down::DropDown, index::Integer, label::String)
+        typed_f = TypedFunction(f, Cvoid, (DropDown,))
+        return detail.insert!(drop_down._internal, from_julia_index(index), detail._Label(label).cpp_object, detail._Label(label).cpp_object, function (drop_down_internal_ref)
+            typed_f(DropDown(drop_down_internal_ref[]))
+        end)
+    end
     export insert!
+
+
 
     @add_widget_signals DropDown
 
@@ -2771,7 +2802,7 @@ macro do_not_compile(args...) return :() end
     set_propagation_phase!(controller::EventController) = detail.set_propagation_phase!(controller._internal.cpp_object)
     export set_propagation_phase!
 
-    get_propagation_phase(controller::EventController) = return detail.get_propagation_phase(controller._internal.cpp_object)
+    get_propagation_phase(controller::EventController) = detail.get_propagation_phase(controller._internal.cpp_object)
     export get_propagation_phase
 
     @export_enum ButtonID begin
@@ -2788,13 +2819,13 @@ macro do_not_compile(args...) return :() end
         BUTTON_ID_BUTTON_09
     end
 
-    get_current_button(gesture::SingleClickGesture) ::ButtonID = return detail.get_current_button(gesture._internal.cpp_object)
+    get_current_button(gesture::SingleClickGesture) ::ButtonID = detail.get_current_button(gesture._internal.cpp_object)
     export get_current_button
 
     set_only_listens_to_button!(gesture::SingleClickGesture, button::ButtonID) = detail.set_only_listens_to_button!(gesture._internal.cpp_object)
     export set_only_listens_to_button!
 
-    get_only_listens_to_button(gesture::SingleClickGesture) = return detail.get_only_listens_to_button(gesture._internal.cpp_object)
+    get_only_listens_to_button(gesture::SingleClickGesture) = detail.get_only_listens_to_button(gesture._internal.cpp_object)
     export get_only_listens_to_button
 
     set_touch_only!(gesture::SingleClickGesture) = detail.set_touch_only!(gesture._internal.cpp_object)
@@ -2855,19 +2886,19 @@ macro do_not_compile(args...) return :() end
     @add_key_event_controller_signal KeyEventController key_released Cvoid
     @add_signal_modifiers_changed KeyEventController
 
-    shift_pressed(modifier_state::ModifierState) ::Bool = return detail.shift_pressed(modifier_state);
+    shift_pressed(modifier_state::ModifierState) ::Bool = detail.shift_pressed(modifier_state);
     export shift_pressed
 
-    control_pressed(modifier_state::ModifierState) ::Bool = return detail.control_pressed(modifier_state);
+    control_pressed(modifier_state::ModifierState) ::Bool = detail.control_pressed(modifier_state);
     export control_pressed
 
-    alt_pressed(modifier_state::ModifierState) ::Bool = return detail.alt_pressed(modifier_state);
+    alt_pressed(modifier_state::ModifierState) ::Bool = detail.alt_pressed(modifier_state);
     export alt_pressed
 
-    mouse_button_01_pressed(modifier_state::ModifierState) ::Bool = return detail.mouse_button_01_pressed(modifier_state);
+    mouse_button_01_pressed(modifier_state::ModifierState) ::Bool = detail.mouse_button_01_pressed(modifier_state);
     export mouse_button_01_pressed
 
-    mouse_button_02_pressed(modifier_state::ModifierState) ::Bool = return detail.mouse_button_02_pressed(modifier_state);
+    mouse_button_02_pressed(modifier_state::ModifierState) ::Bool = detail.mouse_button_02_pressed(modifier_state);
     export mouse_button_02_pressed
 
 ###### long_press_event_controller.jl
@@ -2904,7 +2935,8 @@ macro do_not_compile(args...) return :() end
     @export_type RotateEventController EventController
     RotateEventController() = RotateEventController(detail._RotateEventController())
 
-    get_angle_delta(controller::RotateEventController) ::Angle = return radians(detail.get_angle_delta(controller._internal))
+    get_angle_delta(controller::RotateEventController) ::Angle = radians(detail.get_angle_delta(controller._internal))
+    export get_angle_delta
 
     @add_signal_rotation_changed RotateEventController
 
@@ -2935,7 +2967,7 @@ macro do_not_compile(args...) return :() end
     set_scope!(controller::ShortcutEventController, scope::ShortcutScope) = detail.set_scope!(controller._internal, scope)
     export set_scope!
 
-    get_scope(controller::ShortcutEventController) ::ShortcutScope = return detail.get_scope(controller._internal)
+    get_scope(controller::ShortcutEventController) ::ShortcutScope = detail.get_scope(controller._internal)
     export get_scope
 
 ###### stylus_event_controller.jl
@@ -2985,7 +3017,7 @@ macro do_not_compile(args...) return :() end
     @export_type SwipeEventController SingleClickGesture
     SwipeEventController() = SwipeEventController(detail._SwipeEventController())
 
-    get_velocity(swipe_controller::SwipeEventController) ::Vector2f = return detail.get_velocity(swipe_controller._internal)
+    get_velocity(swipe_controller::SwipeEventController) ::Vector2f = detail.get_velocity(swipe_controller._internal)
     export get_velocity
 
     @add_signal_swipe SwipeEventController
@@ -3351,7 +3383,7 @@ macro do_not_compile(args...) return :() end
     end
     export get_column_with_title
 
-    has_column_with_title(column_view::ColumnView, title::String) ::Bool = return detail.get_column_with_title(column_view._internal, title)
+    has_column_with_title(column_view::ColumnView, title::String) ::Bool = detail.get_column_with_title(column_view._internal, title)
     export has_column_with_title
 
     function set_widget!(column_view::ColumnView, column::ColumnViewColumn, row_i::Integer, widget::Widget)
@@ -3552,7 +3584,7 @@ macro do_not_compile(args...) return :() end
         return Scale(detail._Scale(lower, upper, step_increment, orientation))
     end
 
-    get_adjustment(scale::Scale) ::Adjustment = return Adjustment(detail.get_adjustment(scale._internal))
+    get_adjustment(scale::Scale) ::Adjustment = Adjustment(detail.get_adjustment(scale._internal))
     export get_adjustment
 
     @export_function Scale get_lower Cfloat
@@ -3575,7 +3607,7 @@ macro do_not_compile(args...) return :() end
         return SpinButton(detail._SpinButton(convert(Cfloat, lower), convert(Cfloat, upper), convert(Cfloat, step_increment), orientation))
     end
 
-    get_adjustment(spin_button::SpinButton) ::Adjustment = return Adjustment(detail.get_adjustment(spin_button._internal))
+    get_adjustment(spin_button::SpinButton) ::Adjustment = Adjustment(detail.get_adjustment(spin_button._internal))
     export get_adjustment
 
     @export_function SpinButton get_lower Cfloat
@@ -3644,7 +3676,7 @@ macro do_not_compile(args...) return :() end
     @export_type Scrollbar Widget
     Scrollbar() = Scrollbar(detail._ScrollBar)
 
-    get_adjustment(scrollbar::Scrollbar) ::Adjustment = return Adjustment(detail.get_adjustment(scrollbar._internal))
+    get_adjustment(scrollbar::Scrollbar) ::Adjustment = Adjustment(detail.get_adjustment(scrollbar._internal))
     export get_adjustment
 
     @export_function Scrollbar set_orientation! Cvoid Orientation orientation
@@ -3899,8 +3931,8 @@ macro do_not_compile(args...) return :() end
         return detail.setindex(transform._internal, from_julia_index(x), from_julia_index(y))
     end
 
-    apply_to(transform::GLTransform, v::Vector2f) ::Vector2f = return detail.apply_to_2f(transform, v.x, v.y)
-    apply_to(transform::GLTransform, v::Vector3f) ::Vector3f = return detail.apply_to_3f(transform, v.x, v.y, v.z)
+    apply_to(transform::GLTransform, v::Vector2f) ::Vector2f = detail.apply_to_2f(transform, v.x, v.y)
+    apply_to(transform::GLTransform, v::Vector3f) ::Vector3f = detail.apply_to_3f(transform, v.x, v.y, v.z)
     export apply_to
 
     combine_with(self::GLTransform, other::GLTransform) = GLTransform(detail.combin_with(self._internal, other._internal))
@@ -3965,13 +3997,13 @@ macro do_not_compile(args...) return :() end
     set_uniform_transform!(shader::Shader, name::String, transform::GLTransform) = detail.set_uniform_transform!(shader._internal, name, transform._internal)
     export set_uniform_transform!
 
-    get_vertex_position_location() = return detail.shader_get_vertex_position_location()
+    get_vertex_position_location() = detail.shader_get_vertex_position_location()
     export get_vertex_position_location
 
-    get_vertex_color_location() = return detail.shader_get_vertex_color_location()
+    get_vertex_color_location() = detail.shader_get_vertex_color_location()
     export get_vertex_color_location
 
-    get_vertex_texture_coordinate_location() = return detail.shader_get_vertex_texture_coordinate_location()
+    get_vertex_texture_coordinate_location() = detail.shader_get_vertex_texture_coordinate_location()
     export get_vertex_texture_coordinate_location
 
 ###### texture.jl
@@ -4099,12 +4131,12 @@ macro do_not_compile(args...) return :() end
     as_ellipse!(shape::Shape, center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) = detail.as_ellipse!(shape._internal, x_radius, y_radius, n_outer_vertices)
     export as_ellipse!
 
-    function Circle(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) ::Shape
+    function Ellipse(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) ::Shape
         out = Shape()
         as_ellipse!(out, x_radius, y_radius, n_outer_vertices)
         return out
     end
-    export Circle
+    export Ellipse
 
     as_line!(shape::Shape, a::Vector2f, b::Vector2f) = detail.as_line!(shape._internal, a, b)
     export as_line!

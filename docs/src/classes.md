@@ -1,1622 +1,1401 @@
+# Classes
 ## Action
 ```@docs
 Action
-activate
-add_action!
-add_icon!
-add_shortcut!
-clear_shortcuts!
-get_enabled
-get_id
-get_is_stateful
-get_shortcuts
-get_state
-set_action!
-set_enabled!
-set_function!
-set_state!
-set_stateful_function!
 ```
+#### Functions referencing this class:
++ [`activate`](@ref)
++ [`add_action!`](@ref)
++ [`add_icon!`](@ref)
++ [`add_shortcut!`](@ref)
++ [`clear_shortcuts!`](@ref)
++ [`get_enabled`](@ref)
++ [`get_id`](@ref)
++ [`get_is_stateful`](@ref)
++ [`get_shortcuts`](@ref)
++ [`get_state`](@ref)
++ [`set_action!`](@ref)
++ [`set_enabled!`](@ref)
++ [`set_function!`](@ref)
++ [`set_state!`](@ref)
++ [`set_stateful_function!`](@ref)
 ---
-
 ## Adjustment
 ```@docs
 Adjustment
-get_lower
-get_step_increment
-get_upper
-get_value
-set_lower!
-set_step_increment!
-set_upper!
-set_value!
 ```
+#### Functions referencing this class:
++ [`get_lower`](@ref)
++ [`get_step_increment`](@ref)
++ [`get_upper`](@ref)
++ [`get_value`](@ref)
++ [`set_lower!`](@ref)
++ [`set_step_increment!`](@ref)
++ [`set_upper!`](@ref)
++ [`set_value!`](@ref)
 ---
-
-## Alignment
-```@docs
-Alignment
-set_alignment!
-set_horizontal_alignment!
-set_vertical_alignment!
-```
----
-
 ## Angle
 ```@docs
 Angle
-as_degrees
-as_radians
-rotate!
 ```
+#### Functions referencing this class:
++ [`as_degrees`](@ref)
++ [`as_radians`](@ref)
++ [`rotate!`](@ref)
 ---
-
 ## Application
 ```@docs
 Application
-add_action!
-get_action
-get_id
-has_action
-hold!
-mark_as_busy!
-quit!
-release!
-remove_action!
-run!
-set_application!
-unmark_as_busy!
 ```
+#### Functions referencing this class:
++ [`add_action!`](@ref)
++ [`get_action`](@ref)
++ [`get_id`](@ref)
++ [`has_action`](@ref)
++ [`hold!`](@ref)
++ [`mark_as_busy!`](@ref)
++ [`quit!`](@ref)
++ [`release!`](@ref)
++ [`remove_action!`](@ref)
++ [`run!`](@ref)
++ [`set_application!`](@ref)
++ [`unmark_as_busy!`](@ref)
 ---
-
 ## ApplicationID
 ```@docs
 ApplicationID
 ```
+#### Functions referencing this class:
 ---
-
 ## AspectFrame
 ```@docs
 AspectFrame
-get_child_x_alignment
-get_child_y_alignment
-get_ratio
-remove_child!
-set_child!
-set_child_x_alignment!
-set_child_y_alignment!
-set_ratio!
 ```
+#### Functions referencing this class:
++ [`get_child_x_alignment`](@ref)
++ [`get_child_y_alignment`](@ref)
++ [`get_ratio`](@ref)
++ [`remove_child!`](@ref)
++ [`set_child!`](@ref)
++ [`set_child_x_alignment!`](@ref)
++ [`set_child_y_alignment!`](@ref)
++ [`set_ratio!`](@ref)
 ---
-
 ## AxisAlignedRectangle
 ```@docs
 AxisAlignedRectangle
 ```
+#### Functions referencing this class:
 ---
-
-## BlendMode
-```@docs
-BlendMode
-set_current_blend_mode
-```
----
-
 ## Box
 ```@docs
 Box
-clear!
-get_homogeneous
-get_n_items
-get_orientation
-get_spacing
-insert_after!
-push_back!
-push_front!
-remove!
-set_homogeneous!
-set_orientation!
-set_spacing!
 ```
+#### Functions referencing this class:
++ [`clear!`](@ref)
++ [`get_homogeneous`](@ref)
++ [`get_n_items`](@ref)
++ [`get_orientation`](@ref)
++ [`get_spacing`](@ref)
++ [`insert_after!`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`set_homogeneous!`](@ref)
++ [`set_orientation!`](@ref)
++ [`set_spacing!`](@ref)
 ---
-
 ## Button
 ```@docs
 Button
-get_has_frame
-get_is_circular
-remove_child!
-set_action!
-set_child!
-set_has_frame!
-set_icon!
-set_is_circular!
 ```
+#### Functions referencing this class:
++ [`get_has_frame`](@ref)
++ [`get_is_circular`](@ref)
++ [`remove_child!`](@ref)
++ [`set_action!`](@ref)
++ [`set_child!`](@ref)
++ [`set_has_frame!`](@ref)
++ [`set_icon!`](@ref)
++ [`set_is_circular!`](@ref)
 ---
-
-## ButtonID
-```@docs
-ButtonID
-set_only_listens_to_button!
-```
----
-
 ## CenterBox
 ```@docs
 CenterBox
-get_orientation
-remove_center_child!
-remove_end_child!
-remove_start_child!
-set_center_child!
-set_end_child!
-set_orientation!
-set_start_child!
 ```
+#### Functions referencing this class:
++ [`get_orientation`](@ref)
++ [`remove_center_child!`](@ref)
++ [`remove_end_child!`](@ref)
++ [`remove_start_child!`](@ref)
++ [`set_center_child!`](@ref)
++ [`set_end_child!`](@ref)
++ [`set_orientation!`](@ref)
++ [`set_start_child!`](@ref)
 ---
-
 ## CheckButton
 ```@docs
 CheckButton
-get_is_active
-get_state
-remove_child!
-set_active!
-set_child!
-set_state!
 ```
+#### Functions referencing this class:
++ [`get_is_active`](@ref)
++ [`get_state`](@ref)
++ [`remove_child!`](@ref)
++ [`set_active!`](@ref)
++ [`set_child!`](@ref)
++ [`set_state!`](@ref)
 ---
-
-## CheckButtonState
-```@docs
-CheckButtonState
-set_state!
-```
----
-
 ## ClickEventController
 ```@docs
 ClickEventController
 ```
+#### Functions referencing this class:
 ---
-
 ## Clipboard
 ```@docs
 Clipboard
-contains_file
-contains_image
-contains_string
-get_image
-get_string
-is_local
-set_file!
-set_image!
-set_string!
 ```
+#### Functions referencing this class:
++ [`contains_file`](@ref)
++ [`contains_image`](@ref)
++ [`contains_string`](@ref)
++ [`get_image`](@ref)
++ [`get_string`](@ref)
++ [`is_local`](@ref)
++ [`set_file!`](@ref)
++ [`set_image!`](@ref)
++ [`set_string!`](@ref)
 ---
-
 ## Clock
 ```@docs
 Clock
-elapsed
-restart!
 ```
+#### Functions referencing this class:
++ [`elapsed`](@ref)
++ [`restart!`](@ref)
 ---
-
 ## ColumnView
 ```@docs
 ColumnView
-get_column_at
-get_column_with_title
-get_enabled_rubberband_selection
-get_n_columns
-get_n_rows
-get_selection_model
-get_show_column_separators
-get_show_row_separators
-get_single_click_activate
-has_column_with_title
-insert_column!
-push_back_column!
-push_back_row!
-push_front_column!
-push_front_row!
-remove_column!
-set_enable_rubberband_selection
-set_show_column_separators
-set_show_row_separators
-set_single_click_activate!
-set_widget!
 ```
+#### Functions referencing this class:
++ [`get_column_at`](@ref)
++ [`get_column_with_title`](@ref)
++ [`get_enabled_rubberband_selection`](@ref)
++ [`get_n_columns`](@ref)
++ [`get_n_rows`](@ref)
++ [`get_selection_model`](@ref)
++ [`get_show_column_separators`](@ref)
++ [`get_show_row_separators`](@ref)
++ [`get_single_click_activate`](@ref)
++ [`has_column_with_title`](@ref)
++ [`insert_column!`](@ref)
++ [`push_back_column!`](@ref)
++ [`push_back_row!`](@ref)
++ [`push_front_column!`](@ref)
++ [`push_front_row!`](@ref)
++ [`remove_column!`](@ref)
++ [`set_enable_rubberband_selection`](@ref)
++ [`set_show_column_separators`](@ref)
++ [`set_show_row_separators`](@ref)
++ [`set_single_click_activate!`](@ref)
++ [`set_widget!`](@ref)
 ---
-
 ## ColumnViewColumn
 ```@docs
 ColumnViewColumn
-get_fixed_width
-get_is_resizable
-get_is_visible
-get_title
-remove_column!
-set_fixed_width
-set_header_menu!
-set_is_resizable!
-set_is_visible!
-set_title!
-set_widget!
 ```
+#### Functions referencing this class:
++ [`get_fixed_width`](@ref)
++ [`get_is_resizable`](@ref)
++ [`get_is_visible`](@ref)
++ [`get_title`](@ref)
++ [`remove_column!`](@ref)
++ [`set_fixed_width`](@ref)
++ [`set_header_menu!`](@ref)
++ [`set_is_resizable!`](@ref)
++ [`set_is_visible!`](@ref)
++ [`set_title!`](@ref)
++ [`set_widget!`](@ref)
 ---
-
-## CornerPlacement
-```@docs
-CornerPlacement
-set_scrollbar_placement!
-```
----
-
-## CursorType
-```@docs
-CursorType
-set_cursor!
-```
----
-
-## DeviceAxis
-```@docs
-DeviceAxis
-device_axis_to_string
-has_axis
-```
----
-
 ## DragEventController
 ```@docs
 DragEventController
-get_current_offset
-get_start_position
 ```
+#### Functions referencing this class:
++ [`get_current_offset`](@ref)
++ [`get_start_position`](@ref)
 ---
-
 ## DropDown
 ```@docs
 DropDown
-get_always_show_arrow
-get_item_at
-get_selected
-push_back!
-push_front!
-remove!
-set_always_show_arrow!
-set_selected
 ```
+#### Functions referencing this class:
++ [`get_always_show_arrow`](@ref)
++ [`get_item_at`](@ref)
++ [`get_selected`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`set_always_show_arrow!`](@ref)
++ [`set_selected`](@ref)
 ---
-
 ## DropDownItemID
 ```@docs
 DropDownItemID
 ```
+#### Functions referencing this class:
 ---
-
-## EllipsizeMode
-```@docs
-EllipsizeMode
-set_ellipsize_mode!
-```
----
-
 ## Entry
 ```@docs
 Entry
-get_has_frame
-get_max_width_chars
-get_text
-get_text_visible
-remove_primary_icon!
-remove_secondary_icon!
-set_has_frame!
-set_max_width_chars!
-set_primary_icon!
-set_secondary_icon!
-set_text!
-set_text_visible!
 ```
+#### Functions referencing this class:
++ [`get_has_frame`](@ref)
++ [`get_max_width_chars`](@ref)
++ [`get_text`](@ref)
++ [`get_text_visible`](@ref)
++ [`remove_primary_icon!`](@ref)
++ [`remove_secondary_icon!`](@ref)
++ [`set_has_frame!`](@ref)
++ [`set_max_width_chars!`](@ref)
++ [`set_primary_icon!`](@ref)
++ [`set_secondary_icon!`](@ref)
++ [`set_text!`](@ref)
++ [`set_text_visible!`](@ref)
 ---
-
 ## EventController
 ```@docs
 EventController
-add_controller!
-get_propagation_phase
-remove_controller!
-set_propagation_phase!
 ```
+#### Functions referencing this class:
++ [`add_controller!`](@ref)
++ [`get_propagation_phase`](@ref)
++ [`remove_controller!`](@ref)
++ [`set_propagation_phase!`](@ref)
 ---
-
 ## Expander
 ```@docs
 Expander
-remove_child!
-remove_label_widget!
-set_child!
-set_label_widget!
 ```
+#### Functions referencing this class:
++ [`remove_child!`](@ref)
++ [`remove_label_widget!`](@ref)
++ [`set_child!`](@ref)
++ [`set_label_widget!`](@ref)
 ---
-
 ## FileChooser
 ```@docs
 FileChooser
-cancel!
-get_accept_label
-get_is_modal
-on_accept!
-on_cancel!
-present!
-set_accept_label!
-set_is_modal!
 ```
+#### Functions referencing this class:
++ [`cancel!`](@ref)
++ [`get_accept_label`](@ref)
++ [`get_is_modal`](@ref)
++ [`on_accept!`](@ref)
++ [`on_cancel!`](@ref)
++ [`present!`](@ref)
++ [`set_accept_label!`](@ref)
++ [`set_is_modal!`](@ref)
 ---
-
-## FileChooserAction
-```@docs
-FileChooserAction
-```
----
-
 ## FileDescriptor
 ```@docs
 FileDescriptor
-create_as_file_preview!
-create_directory_at!
-create_file_at!
-create_from_path!
-create_from_uri!
-create_monitor
-delete_at!
-exists
-get_children
-get_content_type
-get_file_extension
-get_name
-get_parent
-get_path
-get_path_relative_to
-get_uri
-is_file
-is_folder
-is_symlink
-move!
-query_info
-read_symlink
-set_file!
 ```
+#### Functions referencing this class:
++ [`create_as_file_preview!`](@ref)
++ [`create_directory_at!`](@ref)
++ [`create_file_at!`](@ref)
++ [`create_from_path!`](@ref)
++ [`create_from_uri!`](@ref)
++ [`create_monitor`](@ref)
++ [`delete_at!`](@ref)
++ [`exists`](@ref)
++ [`get_children`](@ref)
++ [`get_content_type`](@ref)
++ [`get_file_extension`](@ref)
++ [`get_name`](@ref)
++ [`get_parent`](@ref)
++ [`get_path`](@ref)
++ [`get_path_relative_to`](@ref)
++ [`get_uri`](@ref)
++ [`is_file`](@ref)
++ [`is_folder`](@ref)
++ [`is_symlink`](@ref)
++ [`move!`](@ref)
++ [`query_info`](@ref)
++ [`read_symlink`](@ref)
++ [`set_file!`](@ref)
 ---
-
 ## FileFilter
 ```@docs
 FileFilter
-add_allow_all_supported_image_formats!
-add_allowed_mime_type!
-add_allowed_pattern!
-add_allowed_suffix!
-get_name
 ```
+#### Functions referencing this class:
++ [`add_allow_all_supported_image_formats!`](@ref)
++ [`add_allowed_mime_type!`](@ref)
++ [`add_allowed_pattern!`](@ref)
++ [`add_allowed_suffix!`](@ref)
++ [`get_name`](@ref)
 ---
-
 ## FileMonitor
 ```@docs
 FileMonitor
-cancel!
-is_cancelled
-on_file_changed!
 ```
+#### Functions referencing this class:
++ [`cancel!`](@ref)
++ [`is_cancelled`](@ref)
++ [`on_file_changed!`](@ref)
 ---
-
-## FileMonitorEvent
-```@docs
-FileMonitorEvent
-```
----
-
 ## Fixed
 ```@docs
 Fixed
-add_child!
-get_child_position
-remove_child!
-set_child_position!
 ```
+#### Functions referencing this class:
++ [`add_child!`](@ref)
++ [`get_child_position`](@ref)
++ [`remove_child!`](@ref)
++ [`set_child_position!`](@ref)
 ---
-
 ## FocusEventController
 ```@docs
 FocusEventController
-self_is_focused
-self_or_child_is_focused
 ```
+#### Functions referencing this class:
++ [`self_is_focused`](@ref)
++ [`self_or_child_is_focused`](@ref)
 ---
-
 ## Frame
 ```@docs
 Frame
-get_label_x_alignment!
-remove_child!
-remove_label_widget!
-set_child!
-set_label_widget!
-set_label_x_alignment!
 ```
+#### Functions referencing this class:
++ [`get_label_x_alignment!`](@ref)
++ [`remove_child!`](@ref)
++ [`remove_label_widget!`](@ref)
++ [`set_child!`](@ref)
++ [`set_label_widget!`](@ref)
++ [`set_label_x_alignment!`](@ref)
 ---
-
 ## FrameClock
 ```@docs
 FrameClock
-get_target_frame_duration
-get_time_since_last_frame
 ```
+#### Functions referencing this class:
++ [`get_target_frame_duration`](@ref)
++ [`get_time_since_last_frame`](@ref)
 ---
-
 ## GLTransform
 ```@docs
 GLTransform
-apply_to
-combine_with
-render
-reset!
-rotate!
-scale!
-set_uniform_transform!
-translate!
 ```
+#### Functions referencing this class:
++ [`apply_to`](@ref)
++ [`combine_with`](@ref)
++ [`render`](@ref)
++ [`reset!`](@ref)
++ [`rotate!`](@ref)
++ [`scale!`](@ref)
++ [`set_uniform_transform!`](@ref)
++ [`translate!`](@ref)
 ---
-
 ## Grid
 ```@docs
 Grid
-get_column_spacing
-get_columns_homogeneous
-get_orientation
-get_position
-get_row_spacing
-get_rows_homogeneous
-get_size
-insert_column_at!
-insert_row_at!
-remove!
-remove_row_at!
-set_column_spacing!
-set_columns_homogeneous!
-set_orientation!
-set_row_spacing!
-set_rows_homogeneous!
 ```
+#### Functions referencing this class:
++ [`get_column_spacing`](@ref)
++ [`get_columns_homogeneous`](@ref)
++ [`get_orientation`](@ref)
++ [`get_position`](@ref)
++ [`get_row_spacing`](@ref)
++ [`get_rows_homogeneous`](@ref)
++ [`get_size`](@ref)
++ [`insert_column_at!`](@ref)
++ [`insert_row_at!`](@ref)
++ [`remove!`](@ref)
++ [`remove_row_at!`](@ref)
++ [`set_column_spacing!`](@ref)
++ [`set_columns_homogeneous!`](@ref)
++ [`set_orientation!`](@ref)
++ [`set_row_spacing!`](@ref)
++ [`set_rows_homogeneous!`](@ref)
 ---
-
 ## GridView
 ```@docs
 GridView
-clear!
-get_enabled_rubberband_selection
-get_max_n_columns
-get_min_n_columns
-get_n_items
-get_orientation
-get_selection_model
-get_single_click_activate
-push_back!
-push_front!
-remove!
-set_enable_rubberband_selection
-set_max_n_columns!
-set_min_n_columns!
-set_orientation!
-set_single_click_activate!
 ```
+#### Functions referencing this class:
++ [`clear!`](@ref)
++ [`get_enabled_rubberband_selection`](@ref)
++ [`get_max_n_columns`](@ref)
++ [`get_min_n_columns`](@ref)
++ [`get_n_items`](@ref)
++ [`get_orientation`](@ref)
++ [`get_selection_model`](@ref)
++ [`get_single_click_activate`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`set_enable_rubberband_selection`](@ref)
++ [`set_max_n_columns!`](@ref)
++ [`set_min_n_columns!`](@ref)
++ [`set_orientation!`](@ref)
++ [`set_single_click_activate!`](@ref)
 ---
-
 ## GroupID
 ```@docs
 GroupID
 ```
+#### Functions referencing this class:
 ---
-
 ## HSVA
 ```@docs
 HSVA
-hsva_to_rgba
-set_pixel!
 ```
+#### Functions referencing this class:
++ [`hsva_to_rgba`](@ref)
++ [`set_pixel!`](@ref)
 ---
-
 ## HeaderBar
 ```@docs
 HeaderBar
-get_layout
-get_show_title_buttons
-push_back!
-push_front!
-remove!
-set_layout!
-set_show_title_buttons!
-set_title_widget!
 ```
+#### Functions referencing this class:
++ [`get_layout`](@ref)
++ [`get_show_title_buttons`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`set_layout!`](@ref)
++ [`set_show_title_buttons!`](@ref)
++ [`set_title_widget!`](@ref)
 ---
-
 ## Icon
 ```@docs
 Icon
-add_icon!
-create_from_file!
-create_from_icon!
-create_from_theme!
-get_name
-get_size
-has_icon
-set_icon!
-set_primary_icon!
-set_secondary_icon!
 ```
+#### Functions referencing this class:
++ [`add_icon!`](@ref)
++ [`create_from_file!`](@ref)
++ [`create_from_icon!`](@ref)
++ [`create_from_theme!`](@ref)
++ [`get_name`](@ref)
++ [`get_size`](@ref)
++ [`has_icon`](@ref)
++ [`set_icon!`](@ref)
++ [`set_primary_icon!`](@ref)
++ [`set_secondary_icon!`](@ref)
 ---
-
 ## IconID
 ```@docs
 IconID
 ```
+#### Functions referencing this class:
 ---
-
 ## IconTheme
 ```@docs
 IconTheme
-add_resource_path!
-create_from_theme!
-get_icon_names
-has_icon
-set_resource_path!
 ```
+#### Functions referencing this class:
++ [`add_resource_path!`](@ref)
++ [`create_from_theme!`](@ref)
++ [`get_icon_names`](@ref)
++ [`has_icon`](@ref)
++ [`set_resource_path!`](@ref)
 ---
-
 ## Image
 ```@docs
 Image
-as_cropped
-as_scaled
-create!
-create_from_file!
-create_from_image!
-get_n_pixels
-get_pixel
-get_size
-save_to_file
-set_cursor_from_image!
-set_image!
-set_pixel!
-set_value!
 ```
+#### Functions referencing this class:
++ [`as_cropped`](@ref)
++ [`as_scaled`](@ref)
++ [`create!`](@ref)
++ [`create_from_file!`](@ref)
++ [`create_from_image!`](@ref)
++ [`get_n_pixels`](@ref)
++ [`get_pixel`](@ref)
++ [`get_size`](@ref)
++ [`save_to_file`](@ref)
++ [`set_cursor_from_image!`](@ref)
++ [`set_image!`](@ref)
++ [`set_pixel!`](@ref)
++ [`set_value!`](@ref)
 ---
-
 ## ImageDisplay
 ```@docs
 ImageDisplay
-clear!
-create_as_file_preview!
-create_from_file!
-create_from_icon!
-create_from_image!
-set_scale!
 ```
+#### Functions referencing this class:
++ [`clear!`](@ref)
++ [`create_as_file_preview!`](@ref)
++ [`create_from_file!`](@ref)
++ [`create_from_icon!`](@ref)
++ [`create_from_image!`](@ref)
++ [`set_scale!`](@ref)
 ---
-
-## InterpolationType
-```@docs
-InterpolationType
-as_scaled
-```
----
-
-## JustifyMode
-```@docs
-JustifyMode
-set_justify_mode!
-```
----
-
 ## KeyCode
 ```@docs
 KeyCode
-set_uniform_int!
 ```
+#### Functions referencing this class:
++ [`set_uniform_int!`](@ref)
 ---
-
 ## KeyEventController
 ```@docs
 KeyEventController
-should_shortcut_trigger_trigger
 ```
+#### Functions referencing this class:
++ [`should_shortcut_trigger_trigger`](@ref)
 ---
-
 ## KeyFile
 ```@docs
 KeyFile
-as_string
-create_from_file!
-create_from_string!
-get_comment_above!
-get_comment_above_group
-get_comment_above_key
-get_groups
-get_keys
-get_value
-has_group
-has_key
-save_to_file
-set_comment_above!
-set_value!
 ```
+#### Functions referencing this class:
++ [`as_string`](@ref)
++ [`create_from_file!`](@ref)
++ [`create_from_string!`](@ref)
++ [`get_comment_above!`](@ref)
++ [`get_groups`](@ref)
++ [`get_keys`](@ref)
++ [`get_value`](@ref)
++ [`has_group`](@ref)
++ [`has_key`](@ref)
++ [`save_to_file`](@ref)
++ [`set_comment_above!`](@ref)
++ [`set_value!`](@ref)
 ---
-
 ## KeyID
 ```@docs
 KeyID
 ```
+#### Functions referencing this class:
 ---
-
 ## Label
 ```@docs
 Label
-get_ellipsize_mode
-get_justify_mode
-get_max_width_chars
-get_selectable
-get_text
-get_use_markup
-get_wrap_mode
-get_x_alignment
-get_y_alignment
-set_ellipsize_mode!
-set_justify_mode!
-set_max_width_chars!
-set_selectable!
-set_text!
-set_use_markup!
-set_wrap_mode!
-set_x_alignment!
-set_y_alignment!
 ```
+#### Functions referencing this class:
++ [`get_ellipsize_mode`](@ref)
++ [`get_justify_mode`](@ref)
++ [`get_max_width_chars`](@ref)
++ [`get_selectable`](@ref)
++ [`get_text`](@ref)
++ [`get_use_markup`](@ref)
++ [`get_wrap_mode`](@ref)
++ [`get_x_alignment`](@ref)
++ [`get_y_alignment`](@ref)
++ [`set_ellipsize_mode!`](@ref)
++ [`set_justify_mode!`](@ref)
++ [`set_max_width_chars!`](@ref)
++ [`set_selectable!`](@ref)
++ [`set_text!`](@ref)
++ [`set_use_markup!`](@ref)
++ [`set_wrap_mode!`](@ref)
++ [`set_x_alignment!`](@ref)
++ [`set_y_alignment!`](@ref)
 ---
-
-## LabelWrapMode
-```@docs
-LabelWrapMode
-set_wrap_mode!
-```
----
-
 ## LevelBar
 ```@docs
 LevelBar
-add_marker!
-get_inverted
-get_min_value
-get_mode
-get_orientation
-get_value
-remove_marker!
-set_inverted!
-set_max_value!
-set_min_value!
-set_mode!
-set_orientation!
-set_value!
 ```
+#### Functions referencing this class:
++ [`add_marker!`](@ref)
++ [`get_inverted`](@ref)
++ [`get_min_value`](@ref)
++ [`get_mode`](@ref)
++ [`get_orientation`](@ref)
++ [`get_value`](@ref)
++ [`remove_marker!`](@ref)
++ [`set_inverted!`](@ref)
++ [`set_max_value!`](@ref)
++ [`set_min_value!`](@ref)
++ [`set_mode!`](@ref)
++ [`set_orientation!`](@ref)
++ [`set_value!`](@ref)
 ---
-
-## LevelBarMode
-```@docs
-LevelBarMode
-set_mode!
-```
----
-
 ## ListView
 ```@docs
 ListView
-clear!
-get_enabled_rubberband_selection
-get_n_items
-get_orientation
-get_selection_model
-get_show_separators
-get_single_click_activate
-push_back!
-push_front!
-remove!
-set_enable_rubberband_selection
-set_orientation!
-set_show_separators
-set_single_click_activate!
-set_widget_at!
 ```
+#### Functions referencing this class:
++ [`clear!`](@ref)
++ [`get_enabled_rubberband_selection`](@ref)
++ [`get_n_items`](@ref)
++ [`get_orientation`](@ref)
++ [`get_selection_model`](@ref)
++ [`get_show_separators`](@ref)
++ [`get_single_click_activate`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`set_enable_rubberband_selection`](@ref)
++ [`set_orientation!`](@ref)
++ [`set_show_separators`](@ref)
++ [`set_single_click_activate!`](@ref)
++ [`set_widget_at!`](@ref)
 ---
-
 ## ListViewIterator
 ```@docs
 ListViewIterator
-clear!
-push_back!
-push_front!
-remove!
-set_widget_at!
 ```
+#### Functions referencing this class:
++ [`clear!`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`set_widget_at!`](@ref)
 ---
-
 ## LogDomain
 ```@docs
 LogDomain
 ```
+#### Functions referencing this class:
 ---
-
 ## LongPressEventController
 ```@docs
 LongPressEventController
-get_delay_factor
-set_delay_factor
 ```
+#### Functions referencing this class:
++ [`get_delay_factor`](@ref)
++ [`set_delay_factor`](@ref)
 ---
-
 ## MenuBar
 ```@docs
 MenuBar
 ```
+#### Functions referencing this class:
 ---
-
 ## MenuModel
 ```@docs
 MenuModel
-add_action!
-add_icon!
-add_section!
-add_submenu!
-add_widget!
-set_header_menu!
 ```
+#### Functions referencing this class:
++ [`add_action!`](@ref)
++ [`add_icon!`](@ref)
++ [`add_section!`](@ref)
++ [`add_submenu!`](@ref)
++ [`add_widget!`](@ref)
++ [`set_header_menu!`](@ref)
 ---
-
 ## ModifierState
 ```@docs
 ModifierState
-alt_pressed
-control_pressed
-mouse_button_01_pressed
-mouse_button_02_pressed
-shift_pressed
 ```
+#### Functions referencing this class:
++ [`alt_pressed`](@ref)
++ [`control_pressed`](@ref)
++ [`mouse_button_01_pressed`](@ref)
++ [`mouse_button_02_pressed`](@ref)
++ [`shift_pressed`](@ref)
 ---
-
 ## MotionEventController
 ```@docs
 MotionEventController
 ```
+#### Functions referencing this class:
 ---
-
 ## Notebook
 ```@docs
 Notebook
-get_current_page
-get_has_border
-get_is_scrollable
-get_n_pages
-get_quick_change_menu_enabled
-get_tab_position
-get_tabs_reorderable
-get_tabs_visible
-goto_page!
-next_page!
-previous_page!
-push_back!
-push_front!
-remove!
-set_has_border!
-set_is_scrollable!
-set_quick_change_menu_enabled!
-set_tab_position!
-set_tabs_reorderable!
-set_tabs_visible!
 ```
+#### Functions referencing this class:
++ [`get_current_page`](@ref)
++ [`get_has_border`](@ref)
++ [`get_is_scrollable`](@ref)
++ [`get_n_pages`](@ref)
++ [`get_quick_change_menu_enabled`](@ref)
++ [`get_tab_position`](@ref)
++ [`get_tabs_reorderable`](@ref)
++ [`get_tabs_visible`](@ref)
++ [`goto_page!`](@ref)
++ [`next_page!`](@ref)
++ [`previous_page!`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`set_has_border!`](@ref)
++ [`set_is_scrollable!`](@ref)
++ [`set_quick_change_menu_enabled!`](@ref)
++ [`set_tab_position!`](@ref)
++ [`set_tabs_reorderable!`](@ref)
++ [`set_tabs_visible!`](@ref)
 ---
-
-## Orientation
-```@docs
-Orientation
-set_orientation!
-```
----
-
 ## Overlay
 ```@docs
 Overlay
-add_overlay!
-remove_child!
-remove_overlay!
-set_child!
 ```
+#### Functions referencing this class:
++ [`add_overlay!`](@ref)
++ [`remove_child!`](@ref)
++ [`remove_overlay!`](@ref)
++ [`set_child!`](@ref)
 ---
-
-## PanDirection
-```@docs
-PanDirection
-```
----
-
 ## PanEventController
 ```@docs
 PanEventController
-get_orientation
-set_orientation!
 ```
+#### Functions referencing this class:
++ [`get_orientation`](@ref)
++ [`set_orientation!`](@ref)
 ---
-
 ## Paned
 ```@docs
 Paned
-get_end_child_resizable
-get_end_child_shrinkable
-get_has_wide_handle
-get_orientation
-get_position
-get_start_child_resizable
-get_start_child_shrinkable
-remove_end_child!
-remove_start_child!
-set_end_child!
-set_end_child_resizable!
-set_end_child_shrinkable
-set_has_wide_handle!
-set_orientation!
-set_position!
-set_start_child!
-set_start_child_resizable!
-set_start_child_shrinkable
 ```
+#### Functions referencing this class:
++ [`get_end_child_resizable`](@ref)
++ [`get_end_child_shrinkable`](@ref)
++ [`get_has_wide_handle`](@ref)
++ [`get_orientation`](@ref)
++ [`get_position`](@ref)
++ [`get_start_child_resizable`](@ref)
++ [`get_start_child_shrinkable`](@ref)
++ [`remove_end_child!`](@ref)
++ [`remove_start_child!`](@ref)
++ [`set_end_child!`](@ref)
++ [`set_end_child_resizable!`](@ref)
++ [`set_end_child_shrinkable`](@ref)
++ [`set_has_wide_handle!`](@ref)
++ [`set_orientation!`](@ref)
++ [`set_position!`](@ref)
++ [`set_start_child!`](@ref)
++ [`set_start_child_resizable!`](@ref)
++ [`set_start_child_shrinkable`](@ref)
 ---
-
 ## PinchZoomEventController
 ```@docs
 PinchZoomEventController
-get_scale_delta
 ```
+#### Functions referencing this class:
++ [`get_scale_delta`](@ref)
 ---
-
 ## Popover
 ```@docs
 Popover
-attach_to!
-get_autohide
-get_has_base_arrow
-get_relative_position
-popdown!
-popup!
-present!
-remove_child!
-set_autohide!
-set_child!
-set_has_base_arrow!
-set_popover!
-set_relative_position!
 ```
+#### Functions referencing this class:
++ [`attach_to!`](@ref)
++ [`get_autohide`](@ref)
++ [`get_has_base_arrow`](@ref)
++ [`get_relative_position`](@ref)
++ [`popdown!`](@ref)
++ [`popup!`](@ref)
++ [`present!`](@ref)
++ [`remove_child!`](@ref)
++ [`set_autohide!`](@ref)
++ [`set_child!`](@ref)
++ [`set_has_base_arrow!`](@ref)
++ [`set_popover!`](@ref)
++ [`set_relative_position!`](@ref)
 ---
-
 ## PopoverButton
 ```@docs
 PopoverButton
-get_always_show_arrow
-get_has_frame
-get_is_circular
-get_relative_position
-popdown!
-popup!
-remove_child!
-remove_popover!
-set_always_show_arrow!
-set_child!
-set_has_frame!
-set_is_circular!
-set_popover!
-set_popover_menu!
-set_popover_position!
 ```
+#### Functions referencing this class:
++ [`get_always_show_arrow`](@ref)
++ [`get_has_frame`](@ref)
++ [`get_is_circular`](@ref)
++ [`get_relative_position`](@ref)
++ [`popdown!`](@ref)
++ [`popup!`](@ref)
++ [`remove_child!`](@ref)
++ [`remove_popover!`](@ref)
++ [`set_always_show_arrow!`](@ref)
++ [`set_child!`](@ref)
++ [`set_has_frame!`](@ref)
++ [`set_is_circular!`](@ref)
++ [`set_popover!`](@ref)
++ [`set_popover_menu!`](@ref)
++ [`set_relative_position!`](@ref)
 ---
-
 ## PopoverMenu
 ```@docs
 PopoverMenu
-set_popover_menu!
 ```
+#### Functions referencing this class:
++ [`set_popover_menu!`](@ref)
 ---
-
 ## ProgressBar
 ```@docs
 ProgressBar
-get_display_mode
-get_fraction
-get_is_inverted
-get_orientation
-get_text
-pulse
-set_display_mode!
-set_fraction!
-set_is_inverted!
-set_orientation!
-set_text!
 ```
+#### Functions referencing this class:
++ [`get_display_mode`](@ref)
++ [`get_fraction`](@ref)
++ [`get_is_inverted`](@ref)
++ [`get_orientation`](@ref)
++ [`get_text`](@ref)
++ [`pulse`](@ref)
++ [`set_display_mode!`](@ref)
++ [`set_fraction!`](@ref)
++ [`set_is_inverted!`](@ref)
++ [`set_orientation!`](@ref)
++ [`set_text!`](@ref)
 ---
-
-## ProgressBarDisplayMode
-```@docs
-ProgressBarDisplayMode
-set_display_mode!
-```
----
-
-## PropagationPhase
-```@docs
-PropagationPhase
-```
----
-
 ## RGBA
 ```@docs
 RGBA
-create!
-rgba_to_hsva
-rgba_to_html_code
-set_pixel!
-set_uniform_hsva!
-set_uniform_rgba!
-set_value!
-set_vertex_color!
 ```
+#### Functions referencing this class:
++ [`create!`](@ref)
++ [`rgba_to_hsva`](@ref)
++ [`rgba_to_html_code`](@ref)
++ [`set_pixel!`](@ref)
++ [`set_uniform_hsva!`](@ref)
++ [`set_uniform_rgba!`](@ref)
++ [`set_value!`](@ref)
++ [`set_vertex_color!`](@ref)
 ---
-
-## RelativePosition
-```@docs
-RelativePosition
-set_popover_position!
-set_relative_position!
-set_tab_position!
-```
----
-
 ## RenderArea
 ```@docs
 RenderArea
-add_render_task!
-clear
-clear_render_tasks!
-from_gl_coordinates
-make_current
-queue_render
-render_render_tasks
-to_gl_coordinates
 ```
+#### Functions referencing this class:
++ [`add_render_task!`](@ref)
++ [`clear`](@ref)
++ [`clear_render_tasks!`](@ref)
++ [`from_gl_coordinates`](@ref)
++ [`make_current`](@ref)
++ [`queue_render`](@ref)
++ [`render_render_tasks`](@ref)
++ [`to_gl_coordinates`](@ref)
 ---
-
 ## RenderTask
 ```@docs
 RenderTask
-add_render_task!
-get_uniform_float
-get_uniform_int
-get_uniform_rgba
-get_uniform_transform
-get_uniform_uint
-get_uniform_vec2
-get_uniform_vec3
-get_uniform_vec4
-render
-set_uniform_float!
-set_uniform_hsva!
-set_uniform_int!
-set_uniform_rgba!
-set_uniform_transform!
-set_uniform_uint!
-set_uniform_vec2!
-set_uniform_vec3!
-set_uniform_vec4!
 ```
+#### Functions referencing this class:
++ [`add_render_task!`](@ref)
++ [`get_uniform_float`](@ref)
++ [`get_uniform_int`](@ref)
++ [`get_uniform_rgba`](@ref)
++ [`get_uniform_transform`](@ref)
++ [`get_uniform_uint`](@ref)
++ [`get_uniform_vec2`](@ref)
++ [`get_uniform_vec3`](@ref)
++ [`get_uniform_vec4`](@ref)
++ [`render`](@ref)
++ [`set_uniform_float!`](@ref)
++ [`set_uniform_hsva!`](@ref)
++ [`set_uniform_int!`](@ref)
++ [`set_uniform_rgba!`](@ref)
++ [`set_uniform_transform!`](@ref)
++ [`set_uniform_uint!`](@ref)
++ [`set_uniform_vec2!`](@ref)
++ [`set_uniform_vec3!`](@ref)
++ [`set_uniform_vec4!`](@ref)
 ---
-
 ## RenderTexture
 ```@docs
 RenderTexture
-bind_as_render_target
-unbind_as_render_target
 ```
+#### Functions referencing this class:
++ [`bind_as_render_target`](@ref)
++ [`unbind_as_render_target`](@ref)
 ---
-
 ## Revealer
 ```@docs
 Revealer
-get_revealed
-get_transition_duration
-get_transition_type
-remove_child!
-set_child!
-set_revealed!
-set_transition_duration!
-set_transition_type!
 ```
+#### Functions referencing this class:
++ [`get_revealed`](@ref)
++ [`get_transition_duration`](@ref)
++ [`get_transition_type`](@ref)
++ [`remove_child!`](@ref)
++ [`set_child!`](@ref)
++ [`set_revealed!`](@ref)
++ [`set_transition_duration!`](@ref)
++ [`set_transition_type!`](@ref)
 ---
-
-## RevealerTransitionType
-```@docs
-RevealerTransitionType
-set_transition_type!
-```
----
-
 ## RotateEventController
 ```@docs
 RotateEventController
 ```
+#### Functions referencing this class:
++ [`get_angle_delta`](@ref)
 ---
-
 ## Scale
 ```@docs
 Scale
-get_adjustment
-get_lower
-get_step_increment
-get_upper
-get_value
-set_lower!
-set_step_increment!
-set_upper!
-set_value!
 ```
+#### Functions referencing this class:
++ [`get_adjustment`](@ref)
++ [`get_lower`](@ref)
++ [`get_step_increment`](@ref)
++ [`get_upper`](@ref)
++ [`get_value`](@ref)
++ [`set_lower!`](@ref)
++ [`set_step_increment!`](@ref)
++ [`set_upper!`](@ref)
++ [`set_value!`](@ref)
 ---
-
 ## ScrollEventController
 ```@docs
 ScrollEventController
 ```
+#### Functions referencing this class:
 ---
-
-## ScrollType
-```@docs
-ScrollType
-```
----
-
 ## Scrollbar
 ```@docs
 Scrollbar
-get_adjustment
-get_orientation
-set_orientation!
 ```
+#### Functions referencing this class:
++ [`get_adjustment`](@ref)
++ [`get_orientation`](@ref)
++ [`set_orientation!`](@ref)
 ---
-
-## ScrollbarVisibilityPolicy
-```@docs
-ScrollbarVisibilityPolicy
-set_horizontal_scrollbar_policy!
-set_vertical_scrollbar_policy!
-```
----
-
-## SectionFormat
-```@docs
-SectionFormat
-add_section!
-```
----
-
-## SelectionMode
-```@docs
-SelectionMode
-```
----
-
 ## SelectionModel
 ```@docs
 SelectionModel
-get_selection
-select!
-select_all!
-unselect!
-unselect_all!
 ```
+#### Functions referencing this class:
++ [`get_selection`](@ref)
++ [`select!`](@ref)
++ [`select_all!`](@ref)
++ [`unselect!`](@ref)
++ [`unselect_all!`](@ref)
 ---
-
 ## Separator
 ```@docs
 Separator
-get_orientation
-set_orientation!
 ```
+#### Functions referencing this class:
++ [`get_orientation`](@ref)
++ [`set_orientation!`](@ref)
 ---
-
 ## Shader
 ```@docs
 Shader
-create_from_file!
-create_from_string!
-get_fragment_shader_id
-get_program_id
-get_uniform_location
-get_vertex_shader_id
-render
-set_uniform_float!
-set_uniform_int!
-set_uniform_transform!
-set_uniform_uint!
-set_uniform_vec2!
-set_uniform_vec3!
-set_uniform_vec4!
 ```
+#### Functions referencing this class:
++ [`create_from_file!`](@ref)
++ [`create_from_string!`](@ref)
++ [`get_fragment_shader_id`](@ref)
++ [`get_program_id`](@ref)
++ [`get_uniform_location`](@ref)
++ [`get_vertex_shader_id`](@ref)
++ [`render`](@ref)
++ [`set_uniform_float!`](@ref)
++ [`set_uniform_int!`](@ref)
++ [`set_uniform_transform!`](@ref)
++ [`set_uniform_uint!`](@ref)
++ [`set_uniform_vec2!`](@ref)
++ [`set_uniform_vec3!`](@ref)
++ [`set_uniform_vec4!`](@ref)
 ---
-
-## ShaderType
-```@docs
-ShaderType
-create_from_file!
-create_from_string!
-```
----
-
 ## Shape
 ```@docs
 Shape
-Outline
-as_circle!
-as_circular_ring!
-as_ellipse!
-as_elliptical_ring!
-as_line!
-as_line_strip!
-as_lines!
-as_outline!
-as_point!
-as_points!
-as_polygon!
-as_rectangle!
-as_rectangular_frame!
-as_triangle!
-as_wireframe!
-get_bounding_box
-get_centroid
-get_is_visible
-get_n_vertices
-get_native_handle
-get_size
-get_top_left
-get_vertex_color
-get_vertex_position
-get_vertex_texture_coordinate
-render
-rotate!
-set_centroid!
-set_is_visible!
-set_texture!
-set_top_left!
-set_vertex_color!
-set_vertex_position!
-set_vertex_texture_coordinate
 ```
+#### Functions referencing this class:
++ [`Outline`](@ref)
++ [`as_circle!`](@ref)
++ [`as_circular_ring!`](@ref)
++ [`as_ellipse!`](@ref)
++ [`as_elliptical_ring!`](@ref)
++ [`as_line!`](@ref)
++ [`as_line_strip!`](@ref)
++ [`as_lines!`](@ref)
++ [`as_outline!`](@ref)
++ [`as_point!`](@ref)
++ [`as_points!`](@ref)
++ [`as_polygon!`](@ref)
++ [`as_rectangle!`](@ref)
++ [`as_rectangular_frame!`](@ref)
++ [`as_triangle!`](@ref)
++ [`as_wireframe!`](@ref)
++ [`get_bounding_box`](@ref)
++ [`get_centroid`](@ref)
++ [`get_is_visible`](@ref)
++ [`get_n_vertices`](@ref)
++ [`get_native_handle`](@ref)
++ [`get_size`](@ref)
++ [`get_top_left`](@ref)
++ [`get_vertex_color`](@ref)
++ [`get_vertex_position`](@ref)
++ [`get_vertex_texture_coordinate`](@ref)
++ [`render`](@ref)
++ [`rotate!`](@ref)
++ [`set_centroid!`](@ref)
++ [`set_is_visible!`](@ref)
++ [`set_texture!`](@ref)
++ [`set_top_left!`](@ref)
++ [`set_vertex_color!`](@ref)
++ [`set_vertex_position!`](@ref)
++ [`set_vertex_texture_coordinate`](@ref)
 ---
-
 ## ShortcutEventController
 ```@docs
 ShortcutEventController
-add_action!
-get_scope
-set_scope!
 ```
+#### Functions referencing this class:
++ [`add_action!`](@ref)
++ [`get_scope`](@ref)
++ [`set_scope!`](@ref)
 ---
-
-## ShortcutScope
-```@docs
-ShortcutScope
-set_scope!
-```
----
-
 ## ShortcutTrigger
 ```@docs
 ShortcutTrigger
 ```
+#### Functions referencing this class:
 ---
-
 ## SignalEmitter
 ```@docs
 SignalEmitter
 ```
+#### Functions referencing this class:
 ---
-
 ## SingleClickGesture
 ```@docs
 SingleClickGesture
-get_current_button
-get_only_listens_to_button
-get_touch_only
-set_only_listens_to_button!
-set_touch_only!
 ```
+#### Functions referencing this class:
++ [`get_current_button`](@ref)
++ [`get_only_listens_to_button`](@ref)
++ [`get_touch_only`](@ref)
++ [`set_only_listens_to_button!`](@ref)
++ [`set_touch_only!`](@ref)
 ---
-
 ## SpinButton
 ```@docs
 SpinButton
-get_acceleration_rate
-get_adjustment
-get_allow_only_numeric
-get_lower
-get_n_digits
-get_should_snap_to_ticks
-get_should_wrap
-get_step_increment
-get_upper
-get_value
-reset_text_to_value_function!
-reset_value_to_text_function!
-set_acceleration_rate!
-set_allow_only_numeric!
-set_lower!
-set_n_digits!
-set_should_snap_to_ticks!
-set_should_wrap!
-set_step_increment!
-set_text_to_value_function!
-set_upper!
-set_value!
-set_value_to_text_function!
 ```
+#### Functions referencing this class:
++ [`get_acceleration_rate`](@ref)
++ [`get_adjustment`](@ref)
++ [`get_allow_only_numeric`](@ref)
++ [`get_lower`](@ref)
++ [`get_n_digits`](@ref)
++ [`get_should_snap_to_ticks`](@ref)
++ [`get_should_wrap`](@ref)
++ [`get_step_increment`](@ref)
++ [`get_upper`](@ref)
++ [`get_value`](@ref)
++ [`reset_text_to_value_function!`](@ref)
++ [`reset_value_to_text_function!`](@ref)
++ [`set_acceleration_rate!`](@ref)
++ [`set_allow_only_numeric!`](@ref)
++ [`set_lower!`](@ref)
++ [`set_n_digits!`](@ref)
++ [`set_should_snap_to_ticks!`](@ref)
++ [`set_should_wrap!`](@ref)
++ [`set_step_increment!`](@ref)
++ [`set_text_to_value_function!`](@ref)
++ [`set_upper!`](@ref)
++ [`set_value!`](@ref)
++ [`set_value_to_text_function!`](@ref)
 ---
-
 ## Spinner
 ```@docs
 Spinner
-get_is_spinning
-set_is_spinning!
-start!
-stop!
 ```
+#### Functions referencing this class:
++ [`get_is_spinning`](@ref)
++ [`set_is_spinning!`](@ref)
++ [`start!`](@ref)
++ [`stop!`](@ref)
 ---
-
 ## Stack
 ```@docs
 Stack
-add_child!
-get_is_horizontally_homogeneous
-get_is_vertically_homogeneous
-get_selection_model
-get_should_interpolate_size
-get_transition_duration
-get_transition_type
-get_visible_child
-remove_child!
-set_is_horizontally_homogeneous
-set_is_vertically_homogeneous
-set_should_interpolate_size
-set_transition_duration!
-set_transition_type!
-set_visible_child!
 ```
+#### Functions referencing this class:
++ [`add_child!`](@ref)
++ [`get_is_horizontally_homogeneous`](@ref)
++ [`get_is_vertically_homogeneous`](@ref)
++ [`get_selection_model`](@ref)
++ [`get_should_interpolate_size`](@ref)
++ [`get_transition_duration`](@ref)
++ [`get_transition_type`](@ref)
++ [`get_visible_child`](@ref)
++ [`remove_child!`](@ref)
++ [`set_is_horizontally_homogeneous`](@ref)
++ [`set_is_vertically_homogeneous`](@ref)
++ [`set_should_interpolate_size`](@ref)
++ [`set_transition_duration!`](@ref)
++ [`set_transition_type!`](@ref)
++ [`set_visible_child!`](@ref)
 ---
-
 ## StackID
 ```@docs
 StackID
 ```
+#### Functions referencing this class:
 ---
-
 ## StackSidebar
 ```@docs
 StackSidebar
 ```
+#### Functions referencing this class:
 ---
-
 ## StackSwitcher
 ```@docs
 StackSwitcher
 ```
+#### Functions referencing this class:
 ---
-
-## StackTransitionType
-```@docs
-StackTransitionType
-set_transition_type!
-```
----
-
 ## StylusEventController
 ```@docs
 StylusEventController
-get_hardware_id
-get_tool_type
-has_axis
 ```
+#### Functions referencing this class:
++ [`get_hardware_id`](@ref)
++ [`get_tool_type`](@ref)
++ [`has_axis`](@ref)
 ---
-
 ## SwipeEventController
 ```@docs
 SwipeEventController
-get_velocity
 ```
+#### Functions referencing this class:
++ [`get_velocity`](@ref)
 ---
-
 ## Switch
 ```@docs
 Switch
-get_is_active
-set_is_active!
 ```
+#### Functions referencing this class:
++ [`get_is_active`](@ref)
++ [`set_is_active!`](@ref)
 ---
-
 ## TextView
 ```@docs
 TextView
-get_bottom_margin
-get_cursor_visible
-get_editable
-get_justify_mode
-get_left_margin
-get_right_margin
-get_text
-get_top_margin
-get_was_modified
-redo!
-set_bottom_margin!
-set_cursor_visible!
-set_editable!
-set_justify_mode!
-set_left_margin!
-set_right_margin!
-set_text!
-set_top_margin!
-set_was_modified!
-undo!
 ```
+#### Functions referencing this class:
++ [`get_bottom_margin`](@ref)
++ [`get_cursor_visible`](@ref)
++ [`get_editable`](@ref)
++ [`get_justify_mode`](@ref)
++ [`get_left_margin`](@ref)
++ [`get_right_margin`](@ref)
++ [`get_text`](@ref)
++ [`get_top_margin`](@ref)
++ [`get_was_modified`](@ref)
++ [`redo!`](@ref)
++ [`set_bottom_margin!`](@ref)
++ [`set_cursor_visible!`](@ref)
++ [`set_editable!`](@ref)
++ [`set_justify_mode!`](@ref)
++ [`set_left_margin!`](@ref)
++ [`set_right_margin!`](@ref)
++ [`set_text!`](@ref)
++ [`set_top_margin!`](@ref)
++ [`set_was_modified!`](@ref)
++ [`undo!`](@ref)
 ---
-
 ## Texture
 ```@docs
 Texture
 ```
+#### Functions referencing this class:
 ---
-
 ## TextureObject
 ```@docs
 TextureObject
-create!
-create_from_image!
-get_native_handle
-get_scale_mode
-get_size
-get_wrap_mode
-set_scale_mode!
-set_texture!
-set_wrap_mode!
-unbind
 ```
+#### Functions referencing this class:
++ [`create!`](@ref)
++ [`create_from_image!`](@ref)
++ [`get_native_handle`](@ref)
++ [`get_scale_mode`](@ref)
++ [`get_size`](@ref)
++ [`get_wrap_mode`](@ref)
++ [`set_scale_mode!`](@ref)
++ [`set_texture!`](@ref)
++ [`set_wrap_mode!`](@ref)
++ [`unbind`](@ref)
 ---
-
-## TextureScaleMode
-```@docs
-TextureScaleMode
-```
----
-
-## TextureWrapMode
-```@docs
-TextureWrapMode
-set_scale_mode!
-set_wrap_mode!
-```
----
-
-## TickCallbackResult
-```@docs
-TickCallbackResult
-```
----
-
 ## Time
 ```@docs
 Time
-as_microseconds
-as_milliseconds
-as_minutes
-as_nanoseconds
-as_seconds
-set_transition_duration!
 ```
+#### Functions referencing this class:
++ [`as_microseconds`](@ref)
++ [`as_milliseconds`](@ref)
++ [`as_minutes`](@ref)
++ [`as_nanoseconds`](@ref)
++ [`as_seconds`](@ref)
++ [`set_transition_duration!`](@ref)
 ---
-
 ## ToggleButton
 ```@docs
 ToggleButton
-get_is_active
-get_is_circular
-remove_child!
-set_child!
-set_is_active!
-set_is_circular!
 ```
+#### Functions referencing this class:
++ [`get_is_active`](@ref)
++ [`get_is_circular`](@ref)
++ [`remove_child!`](@ref)
++ [`set_child!`](@ref)
++ [`set_is_active!`](@ref)
++ [`set_is_circular!`](@ref)
 ---
-
-## ToolType
-```@docs
-ToolType
-```
----
-
 ## TypedFunction
 ```@docs
 TypedFunction
 ```
+#### Functions referencing this class:
 ---
-
 ## Vector2
 ```@docs
 Vector2
 ```
+#### Functions referencing this class:
 ---
-
 ## Vector3
 ```@docs
 Vector3
 ```
+#### Functions referencing this class:
 ---
-
 ## Vector4
 ```@docs
 Vector4
 ```
+#### Functions referencing this class:
 ---
-
 ## Viewport
 ```@docs
 Viewport
-get_has_frame
-get_horizontal_adjustment
-get_horizontal_scrollbar_policy
-get_kinetic_scrolling_enabled
-get_propagate_natural_height
-get_propagate_natural_width
-get_scrollbar_placement
-get_vertical_adjustment
-get_vertical_scrollbar_policy
-remove_child!
-set_child!
-set_has_frame!
-set_horizontal_scrollbar_policy!
-set_kinetic_scrolling_enabled!
-set_propagate_natural_height!
-set_propagate_natural_width!
-set_scrollbar_placement!
-set_vertical_scrollbar_policy!
 ```
+#### Functions referencing this class:
++ [`get_has_frame`](@ref)
++ [`get_horizontal_adjustment`](@ref)
++ [`get_horizontal_scrollbar_policy`](@ref)
++ [`get_kinetic_scrolling_enabled`](@ref)
++ [`get_propagate_natural_height`](@ref)
++ [`get_propagate_natural_width`](@ref)
++ [`get_scrollbar_placement`](@ref)
++ [`get_vertical_adjustment`](@ref)
++ [`get_vertical_scrollbar_policy`](@ref)
++ [`remove_child!`](@ref)
++ [`set_child!`](@ref)
++ [`set_has_frame!`](@ref)
++ [`set_horizontal_scrollbar_policy!`](@ref)
++ [`set_kinetic_scrolling_enabled!`](@ref)
++ [`set_propagate_natural_height!`](@ref)
++ [`set_propagate_natural_width!`](@ref)
++ [`set_scrollbar_placement!`](@ref)
++ [`set_vertical_scrollbar_policy!`](@ref)
 ---
-
 ## Widget
 ```@docs
 Widget
-activate!
-add_child!
-add_controller!
-add_overlay!
-add_widget!
-attach_to!
-get_allocated_size
-get_can_respond_to_input
-get_child_position
-get_clipboard
-get_expand_horizontally
-get_expand_vertically
-get_focus_on_click
-get_frame_clock
-get_has_focus
-get_hide_on_overflow
-get_horizontal_alignemtn
-get_is_focusable
-get_is_realized
-get_is_visible
-get_margin_bottom
-get_margin_end
-get_margin_start
-get_margin_top
-get_minimum_size
-get_natural_size
-get_opacity
-get_position
-get_size
-get_size_request
-get_vertical_alignment
-grab_focus!
-hide!
-insert_after!
-push_back!
-push_front!
-remove!
-remove_child!
-remove_controller!
-remove_overlay!
-remove_tick_callback!
-remove_tooltip_widget!
-set_alignment!
-set_can_respond_to_input!
-set_center_child!
-set_child!
-set_child_position!
-set_cursor!
-set_cursor_from_image!
-set_default_widget!
-set_end_child!
-set_expand!
-set_expand_horizontally!
-set_expand_vertically!
-set_focus_on_click!
-set_hide_on_overflow!
-set_horizontal_alignment!
-set_is_focusable!
-set_is_visible!
-set_label_widget!
-set_margin!
-set_margin_bottom!
-set_margin_end!
-set_margin_horizontal!
-set_margin_start!
-set_margin_top!
-set_margin_vertical!
-set_opacity!
-set_size_request!
-set_start_child!
-set_tick_callback!
-set_title_widget!
-set_titlebar_widget!
-set_tooltip_text!
-set_tooltip_widget!
-set_vertical_alignment!
-set_widget!
-set_widget_at!
-show!
-unparent!
 ```
+#### Functions referencing this class:
++ [`activate!`](@ref)
++ [`add_child!`](@ref)
++ [`add_controller!`](@ref)
++ [`add_overlay!`](@ref)
++ [`add_widget!`](@ref)
++ [`attach_to!`](@ref)
++ [`get_allocated_size`](@ref)
++ [`get_can_respond_to_input`](@ref)
++ [`get_child_position`](@ref)
++ [`get_clipboard`](@ref)
++ [`get_expand_horizontally`](@ref)
++ [`get_expand_vertically`](@ref)
++ [`get_focus_on_click`](@ref)
++ [`get_frame_clock`](@ref)
++ [`get_has_focus`](@ref)
++ [`get_hide_on_overflow`](@ref)
++ [`get_horizontal_alignemtn`](@ref)
++ [`get_is_focusable`](@ref)
++ [`get_is_realized`](@ref)
++ [`get_is_visible`](@ref)
++ [`get_margin_bottom`](@ref)
++ [`get_margin_end`](@ref)
++ [`get_margin_start`](@ref)
++ [`get_margin_top`](@ref)
++ [`get_minimum_size`](@ref)
++ [`get_natural_size`](@ref)
++ [`get_opacity`](@ref)
++ [`get_position`](@ref)
++ [`get_size`](@ref)
++ [`get_size_request`](@ref)
++ [`get_vertical_alignment`](@ref)
++ [`grab_focus!`](@ref)
++ [`hide!`](@ref)
++ [`insert_after!`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`remove_child!`](@ref)
++ [`remove_controller!`](@ref)
++ [`remove_overlay!`](@ref)
++ [`remove_tick_callback!`](@ref)
++ [`remove_tooltip_widget!`](@ref)
++ [`set_alignment!`](@ref)
++ [`set_can_respond_to_input!`](@ref)
++ [`set_center_child!`](@ref)
++ [`set_child!`](@ref)
++ [`set_child_position!`](@ref)
++ [`set_cursor!`](@ref)
++ [`set_cursor_from_image!`](@ref)
++ [`set_default_widget!`](@ref)
++ [`set_end_child!`](@ref)
++ [`set_expand!`](@ref)
++ [`set_expand_horizontally!`](@ref)
++ [`set_expand_vertically!`](@ref)
++ [`set_focus_on_click!`](@ref)
++ [`set_hide_on_overflow!`](@ref)
++ [`set_horizontal_alignment!`](@ref)
++ [`set_is_focusable!`](@ref)
++ [`set_is_visible!`](@ref)
++ [`set_label_widget!`](@ref)
++ [`set_margin!`](@ref)
++ [`set_margin_bottom!`](@ref)
++ [`set_margin_end!`](@ref)
++ [`set_margin_horizontal!`](@ref)
++ [`set_margin_start!`](@ref)
++ [`set_margin_top!`](@ref)
++ [`set_margin_vertical!`](@ref)
++ [`set_opacity!`](@ref)
++ [`set_size_request!`](@ref)
++ [`set_start_child!`](@ref)
++ [`set_tick_callback!`](@ref)
++ [`set_title_widget!`](@ref)
++ [`set_titlebar_widget!`](@ref)
++ [`set_tooltip_text!`](@ref)
++ [`set_tooltip_widget!`](@ref)
++ [`set_vertical_alignment!`](@ref)
++ [`set_widget!`](@ref)
++ [`set_widget_at!`](@ref)
++ [`show!`](@ref)
++ [`unparent!`](@ref)
 ---
-
 ## Window
 ```@docs
 Window
-close!
-get_destroy_with_parent
-get_focus_visible
-get_has_close_button
-get_is_decorated
-get_is_modal
-get_title
-present!
-remove_child!
-remove_titlebar_widget!
-set_application!
-set_child!
-set_default_widget!
-set_destroy_with_parent!
-set_focus_visible!
-set_fullscreen!
-set_has_close_button!
-set_hide_on_close!
-set_is_decorated!
-set_is_modal!
-set_maximized!
-set_startup_notification_identifier!
-set_title!
-set_titlebar_widget!
-set_transient_for!
 ```
----
-
-## WindowCloseRequestResult
-```@docs
-WindowCloseRequestResult
-```
+#### Functions referencing this class:
++ [`close!`](@ref)
++ [`get_destroy_with_parent`](@ref)
++ [`get_focus_visible`](@ref)
++ [`get_has_close_button`](@ref)
++ [`get_is_decorated`](@ref)
++ [`get_is_modal`](@ref)
++ [`get_title`](@ref)
++ [`present!`](@ref)
++ [`remove_child!`](@ref)
++ [`remove_titlebar_widget!`](@ref)
++ [`set_application!`](@ref)
++ [`set_child!`](@ref)
++ [`set_default_widget!`](@ref)
++ [`set_destroy_with_parent!`](@ref)
++ [`set_focus_visible!`](@ref)
++ [`set_fullscreen!`](@ref)
++ [`set_has_close_button!`](@ref)
++ [`set_hide_on_close!`](@ref)
++ [`set_is_decorated!`](@ref)
++ [`set_is_modal!`](@ref)
++ [`set_maximized!`](@ref)
++ [`set_startup_notification_identifier!`](@ref)
++ [`set_title!`](@ref)
++ [`set_titlebar_widget!`](@ref)
++ [`set_transient_for!`](@ref)
 ---

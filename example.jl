@@ -10,10 +10,15 @@ main() do app::Application
 
     window = Window(app)
     
-    spin_button = SpinButton(0, 1, 0.001)
-    connect_signal_realize!(spin_button) do x::Widget
-        println("realize")
+    drop_down = DropDown()
+    push_back!(drop_down, "Item 01") do x::DropDown
+        println("Item 01 selected") 
     end
-    set_child!(window, spin_button)
+    
+    push_back!(drop_down, "Item 02") do x::DropDown
+        println("Item 02 selected") 
+    end
+    
+    set_child!(window, drop_down)
     present!(window)
 end

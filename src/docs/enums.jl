@@ -1,35 +1,3 @@
-@do_not_compile const _generate_enum_docs = quote
-    for enum_name in mousetrap.enums
-        enum = getproperty(mousetrap, enum_name)
-        values = []
-        for value_name in mousetrap.enum_values
-            if typeof(getproperty(mousetrap, value_name)) <: enum
-                push!(values, value_name)
-            end
-        end
-
-        value_string = ""
-        for i in 1:length(values)
-            value_string *= "    :" * string(values[i])
-            if i != length(values)
-                value_string *= ","
-            end
-            value_string *= "\n"
-        end
-
-        println("""
-        @document $enum_name enum_docs(:$enum_name,
-            "TODO", [
-        $value_string])""")
-
-        for value in values
-           println("@document $value \"TODO\"")
-        end
-
-        println()
-    end
-end
-
 @document Alignment enum_docs(:Alignment,
     "Determines alignment of widgets along the horizontal or vertical axis.", [
     :ALIGNMENT_CENTER,
@@ -50,6 +18,7 @@ end
     :BLEND_MODE_REVERSE_SUBTRACT,
     :BLEND_MODE_SUBTRACT
 ])
+@document BLEND_MODE_NORMAL "Traditional alpha blending, alpha component of both colors is treated as emission."
 @document BLEND_MODE_ADD "result = source.rgb + destination.rgb"
 @document BLEND_MODE_MAX "result = max(source.rgb, destination.rgb)"
 @document BLEND_MODE_MIN "result = min(source.rgb, destination.rgb)"

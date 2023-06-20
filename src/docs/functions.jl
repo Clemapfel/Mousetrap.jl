@@ -5,6 +5,99 @@
 # @document @log_critical 
 # @document @log_fatal 
 
+@document Circle """
+```
+Circle(center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer) -> Shape
+```
+Create a shape as a circle at given position.
+"""
+
+@document Ellipse """
+```
+Ellipse(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) -> Shape
+```
+Create a shape as an ellipse at given position, where `x_radius` is half the width, `y_radius` half the height of the ellipse.
+"""
+
+@document CircularRing """
+```
+CircularRing(center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer) -> Shape 
+```
+Create a shape as a circular ring, where `outer_radius` is the distance between the center and the outer perimeter of the shape.
+"""
+
+@document EllipticalRing """
+```
+EllipticalRing(center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Unsigned) -> Shape
+```
+Create a shape as an elliptical ring, where `outer_x_radius` is half the width, `outer_y_radius` half the height of the outer permeter of the shape.
+"""
+
+@document Line """
+```
+Line(a::Vector2f, b::Vector2f) -> Shape
+```
+Create a shape as a 1-fragment thick line between two points.
+"""
+
+@document LineStrip """
+```
+LineStrip(points::StaticArraysCore.SVector{2, Vector2f}) -> Shape
+```
+Create a shape as a line-strip. For points `{a1, a2, ..., an}`, 
+lines `{a1, a2}, {a2, a3}, ..., {an-1, an}` will be drawn.
+"""
+
+@document Outline """
+```
+Outline(other::Shape) -> Shape
+```
+Create a shape as an outline of another shape.
+"""
+
+@document Point """
+```
+Point(position::Vector2f) -> Shape
+```
+Create a shape as 1-fragment point.
+"""
+
+@document Polygon """
+```
+Polygon(points::Vector{Vector2f}) -> Shape
+```
+Create a shape as a convex polygon.
+"""
+
+@document Rectangle """
+```
+Rectangle(top_left::Vector2f, size::Vector2f) -> Shape
+```
+Create a shape as an axis-aligned rectangle.
+"""
+
+@document RectangularFrame """
+```
+RectangularFrame(top_left::Vector2f, outer_size::Vector2f, x_width::AbstractFloat, y_width::AbstractFloat) -> Shape
+```
+Create a shape as a rectangular frame, where `x_width`, `y_width` are the "thickness" of the frames filled area.
+"""
+
+@document Triangle """
+```
+Triangle(a::Vector2f, b::Vector2f, c::Vector2f) -> Shape
+```
+Create a shape as a triangle.
+"""
+
+@document Wireframe """
+```
+Wireframe(points::Vector{Vector2f}) -> Shape
+```
+Create a shape as a wire-frame. For points `{a1, a2, a3, ..., an}`, the shape
+will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a1}`
+"""
+
 @document activate """
 ```
 activate(::Action) 
@@ -355,7 +448,7 @@ Initialize the shape as a triangle.
 ```
 as_wireframe!(::Shape, points::Vector{Vector2f}) 
 ```
-Initialize the shape a wire-frame. For points `{a1, a2, a3, ..., an}`, the shape
+Initialize the shape as a wire-frame. For points `{a1, a2, a3, ..., an}`, the shape
 will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a1}`
 """
 
@@ -674,6 +767,13 @@ Get the size the widget currently occupies on screen. If the widget is not curre
 get_allow_only_numeric(::SpinButton) -> Bool
 ```
 Get whether the spin button only accepts numerical values for its text-entry.
+"""
+
+@document get_angle_delta """
+```
+get_angle_delta(::RotateEventController) -> Angle
+```
+Get the difference between the current angle and the angle recognized when the gesture started.
 """
 
 @document get_autohide """
@@ -2235,6 +2335,7 @@ Read an html color code of the form `#RRGGBB` or `#RRGGBBAA`, in hexadecimal.
 @document insert! """
 ```
 insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
+insert!(f, drop_down::DropDown, index::Integer, label_for_both::String, [::Data_t])
 ```
 Add an item to the drop down at given index. When it is selected `label_widget` will appear as the 
 child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
@@ -2511,6 +2612,7 @@ Add a widget to the end of the container.
 
 ```
 push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
+push_back!(f, drop_down::DropDown, label_for_both::String, [::Data_t])
 ```
 Add an item to the end of the drop down. When it is selected `label_widget` will appear as the 
 child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
@@ -2558,6 +2660,7 @@ Add a widget to the start of the container.
 
 ```
 push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
+push_front!(f, drop_down::DropDown, label_for_both::String, [::Data_t])
 ```
 Add an item to the start of the drop down. When it is selected `label_widget` will appear as the 
 child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
@@ -2969,6 +3072,13 @@ Note that a button can have both an action and a signal handler connected. If th
 are executed.
 """
 
+@document set_active! """
+```
+set_active!(::CheckButton, ::Bool)
+```
+If `true`, set the check button state to [`CHECK_BUTTON_STATE_ACTIVE`](@ref), otherwise set to [`CHECK_BUTTON_STATE_INACTIVE`](@ref).
+"""
+
 @document set_alignment! """
 ```
 set_alignment!(::Widget, both::Alignment) 
@@ -3316,7 +3426,7 @@ set_has_frame!(::PopoverButton, ::Bool)
 Set whether the widgets outline should be displayed. This does not impact the widgets interactability.
 """
 
-@document set_has_wide_handle """
+@document set_has_wide_handle! """
 ```
 set_has_wide_handle!(::Paned, ::Bool) 
 ```
@@ -3397,7 +3507,7 @@ set_is_active!(::CheckMark, ::Bool)
 Set the internal state of the widget.
 """
 
-@document set_is_circular """
+@document set_is_circular! """
 ```
 set_is_circular!(::Button, ::Bool) 
 set_is_circular!(::ToggleButton, ::Bool) 
@@ -3767,7 +3877,7 @@ Set whether the viewport should assume the height of its child. This will usuall
 ```
 set_propagation_phase!(controller::EventController) 
 ```
-Set at which 
+Set at which phase during event propagation the event controller should capture the event.
 """
 
 @document set_quick_change_menu_enabled! """
@@ -4319,7 +4429,7 @@ Set upper bound of th underlying adjustment.
 ```
 set_use_markup!(::Label, ::Bool) 
 ```
-TODO
+Set whether the label should respect [pango markup syntax](https://docs.gtk.org/Pango/pango_markup.html).
 """
 
 @document set_value! """
@@ -4329,7 +4439,6 @@ set_value!(::Scale, value::Number)
 set_value!(adjustment::Adjustment, ::Number) 
 ```
 Set current value of the underlying range, clamped to `[lower, upper]`.
-```
 
 ---
 

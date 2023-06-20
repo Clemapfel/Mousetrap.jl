@@ -418,11 +418,11 @@ $(@type_fields())
 # Example
 ```julia
 drop_down = DropDown()
-push_back!(drop_down, Label("Item 01 List Label"), Label("Item 01")) do x::DropDown
+push_back!(drop_down, "Item 01") do x::DropDown
     println("Item 01 selected") 
 end
 
-push_back!(drop_down, Label("Item 02 List Label"), Label("Item 02")) do x::DropDown
+push_back!(drop_down, "Item 02") do x::DropDown
     println("Item 02 selected") 
 end
 
@@ -434,7 +434,7 @@ set_child!(window, drop_down)
 # DropDownItemID
 
 ID of a dropdown item, keep track of this in order to 
-identify items in an position-independent manner
+identify items in an position-independent manner.
 
 $(@type_constructors()
 ))
@@ -447,7 +447,7 @@ $(@type_fields(
 # Entry <: Widget
 
 Single-line text entry. Activated when the user 
-presses the entre key while the cursor is inside 
+presses the enter key while the cursor is inside 
 text input area.
 
 $(@type_constructors(
@@ -1681,11 +1681,10 @@ $(@type_fields())
 @document ScrollEventController """
 # ScrollEventController <: EventController
 
-Controll regognizing mouse-scroll-wheel- and 2-finger touchscreen scrolling
-
+Controller recognizing mouse-scroll-wheel and 2-finger touchscreen scrolling events.
 
 $(@type_constructors(
-    ScrollEventController()
+    ScrollEventController(; [emit_vertical::Bool = true, emit_horizontal::Bool = true])
 ))
 
 $(@type_signals(ScrollEventController, 
