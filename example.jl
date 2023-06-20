@@ -5,20 +5,26 @@ Pkg.activate(".")
 using mousetrap 
 @info "Done."
 
-
 main() do app::Application
 
     window = Window(app)
     
-    drop_down = DropDown()
-    push_back!(drop_down, "Item 01") do x::DropDown
-        println("Item 01 selected") 
+    # declare two buttons
+    button_01 = Button()
+    button_02 = Button()
+
+    # when button 01 is clicked, 02 is triggered programmatically
+    connect_signal_clicked!(button_01) do self::Button#, button_02::Button
+        println("01 clicked")
+        activate!(button_02)
+    end
+
+    # when button 02 is clicked, 01 is triggered programmatically
+    connect_signal_clicked!(button_02) do self::Button#, button_01::Button
+        println("02 clicked")
+        activate!(button_01)
     end
     
-    push_back!(drop_down, "Item 02") do x::DropDown
-        println("Item 02 selected") 
-    end
-    
-    set_child!(window, drop_down)
+    set_child!(window, hbox(button_01, button_02))
     present!(window)
 end

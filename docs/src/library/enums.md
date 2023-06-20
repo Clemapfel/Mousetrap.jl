@@ -1,5 +1,5 @@
 # Enums
-# Alignment
+## Alignment
 ```@docs
 Alignment
 ALIGNMENT_CENTER
@@ -7,7 +7,7 @@ ALIGNMENT_END
 ALIGNMENT_START
 ```
 ---
-# BlendMode
+## BlendMode
 ```@docs
 BlendMode
 BLEND_MODE_ADD
@@ -20,7 +20,7 @@ BLEND_MODE_REVERSE_SUBTRACT
 BLEND_MODE_SUBTRACT
 ```
 ---
-# ButtonID
+## ButtonID
 ```@docs
 ButtonID
 BUTTON_ID_ANY
@@ -36,7 +36,7 @@ BUTTON_ID_BUTTON_09
 BUTTON_ID_NONE
 ```
 ---
-# CheckButtonState
+## CheckButtonState
 ```@docs
 CheckButtonState
 CHECK_BUTTON_STATE_ACTIVE
@@ -44,7 +44,7 @@ CHECK_BUTTON_STATE_INACTIVE
 CHECK_BUTTON_STATE_INCONSISTENT
 ```
 ---
-# CornerPlacement
+## CornerPlacement
 ```@docs
 CornerPlacement
 CORNER_PLACEMENT_BOTTOM_LEFT
@@ -53,7 +53,7 @@ CORNER_PLACEMENT_TOP_LEFT
 CORNER_PLACEMENT_TOP_RIGHT
 ```
 ---
-# CursorType
+## CursorType
 ```@docs
 CursorType
 CURSOR_TYPE_ALL_SCROLL
@@ -85,7 +85,7 @@ CURSOR_TYPE_ZOOM_IN
 CURSOR_TYPE_ZOOM_OUT
 ```
 ---
-# DeviceAxis
+## DeviceAxis
 ```@docs
 DeviceAxis
 DEVICE_AXIS_DELTA_X
@@ -101,7 +101,7 @@ DEVICE_AXIS_Y
 DEVICE_AXIS_Y_TILT
 ```
 ---
-# EllipsizeMode
+## EllipsizeMode
 ```@docs
 EllipsizeMode
 ELLIPSIZE_MODE_END
@@ -110,7 +110,7 @@ ELLIPSIZE_MODE_NONE
 ELLIPSIZE_MODE_START
 ```
 ---
-# FileChooserAction
+## FileChooserAction
 ```@docs
 FileChooserAction
 FILE_CHOOSER_ACTION_OPEN_FILE
@@ -120,7 +120,7 @@ FILE_CHOOSER_ACTION_SELECT_FOLDER
 FILE_CHOOSER_ACTION_SELECT_MULTIPLE_FOLDERS
 ```
 ---
-# FileMonitorEvent
+## FileMonitorEvent
 ```@docs
 FileMonitorEvent
 FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED
@@ -133,7 +133,7 @@ FILE_MONITOR_EVENT_MOVED_OUT
 FILE_MONITOR_EVENT_RENAMED
 ```
 ---
-# InterpolationType
+## InterpolationType
 ```@docs
 InterpolationType
 INTERPOLATION_TYPE_BILINEAR
@@ -142,7 +142,7 @@ INTERPOLATION_TYPE_NEAREST
 INTERPOLATION_TYPE_TILES
 ```
 ---
-# JustifyMode
+## JustifyMode
 ```@docs
 JustifyMode
 JUSTIFY_MODE_CENTER
@@ -151,7 +151,7 @@ JUSTIFY_MODE_LEFT
 JUSTIFY_MODE_RIGHT
 ```
 ---
-# LabelWrapMode
+## LabelWrapMode
 ```@docs
 LabelWrapMode
 LABEL_WRAP_MODE_NONE
@@ -160,21 +160,21 @@ LABEL_WRAP_MODE_ONLY_ON_WORD
 LABEL_WRAP_MODE_WORD_OR_CHAR
 ```
 ---
-# LevelBarMode
+## LevelBarMode
 ```@docs
 LevelBarMode
 LEVEL_BAR_MODE_CONTINUOUS
 LEVEL_BAR_MODE_DISCRETE
 ```
 ---
-# Orientation
+## Orientation
 ```@docs
 Orientation
 ORIENTATION_HORIZONTAL
 ORIENTATION_VERTICAL
 ```
 ---
-# PanDirection
+## PanDirection
 ```@docs
 PanDirection
 PAN_DIRECTION_DOWN
@@ -183,14 +183,14 @@ PAN_DIRECTION_RIGHT
 PAN_DIRECTION_UP
 ```
 ---
-# ProgressBarDisplayMode
+## ProgressBarDisplayMode
 ```@docs
 ProgressBarDisplayMode
 PROGRESS_BAR_DISPLAY_MODE_SHOW_PERCENTAGE
 PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT
 ```
 ---
-# PropagationPhase
+## PropagationPhase
 ```@docs
 PropagationPhase
 PROPAGATION_PHASE_BUBBLE
@@ -199,7 +199,7 @@ PROPAGATION_PHASE_NONE
 PROPAGATION_PHASE_TARGET
 ```
 ---
-# RelativePosition
+## RelativePosition
 ```@docs
 RelativePosition
 RELATIVE_POSITION_ABOVE
@@ -208,7 +208,7 @@ RELATIVE_POSITION_LEFT_OF
 RELATIVE_POSITION_RIGHT_OF
 ```
 ---
-# RevealerTransitionType
+## RevealerTransitionType
 ```@docs
 RevealerTransitionType
 REVEALER_TRANSITION_TYPE_CROSSFADE
@@ -223,7 +223,7 @@ REVEALER_TRANSITION_TYPE_SWING_RIGHT
 REVEALER_TRANSITION_TYPE_SWING_UP
 ```
 ---
-# ScrollType
+## ScrollType
 ```@docs
 ScrollType
 SCROLL_TYPE_JUMP
@@ -244,7 +244,7 @@ SCROLL_TYPE_STEP_RIGHT
 SCROLL_TYPE_STEP_UP
 ```
 ---
-# ScrollbarVisibilityPolicy
+## ScrollbarVisibilityPolicy
 ```@docs
 ScrollbarVisibilityPolicy
 SCROLLBAR_VISIBILITY_POLICY_ALWAYS
@@ -252,7 +252,7 @@ SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC
 SCROLLBAR_VISIBILITY_POLICY_NEVER
 ```
 ---
-# SectionFormat
+## SectionFormat
 ```@docs
 SectionFormat
 SECTION_FORMAT_CIRCULAR_BUTTONS
@@ -263,7 +263,7 @@ SECTION_FORMAT_INLINE_BUTTONS
 SECTION_FORMAT_NORMAL
 ```
 ---
-# SelectionMode
+## SelectionMode
 ```@docs
 SelectionMode
 SELECTION_MODE_MULTIPLE
@@ -271,21 +271,21 @@ SELECTION_MODE_NONE
 SELECTION_MODE_SINGLE
 ```
 ---
-# ShaderType
+## ShaderType
 ```@docs
 ShaderType
 SHADER_TYPE_FRAGMENT
 SHADER_TYPE_VERTEX
 ```
 ---
-# ShortcutScope
+## ShortcutScope
 ```@docs
 ShortcutScope
 SHORTCUT_SCOPE_GLOBAL
 SHORTCUT_SCOPE_LOCAL
 ```
 ---
-# StackTransitionType
+## StackTransitionType
 ```@docs
 StackTransitionType
 STACK_TRANSITION_TYPE_CROSSFADE
@@ -311,14 +311,14 @@ STACK_TRANSITION_TYPE_UNDER_RIGHT
 STACK_TRANSITION_TYPE_UNDER_UP
 ```
 ---
-# TextureScaleMode
+## TextureScaleMode
 ```@docs
 TextureScaleMode
 TEXTURE_SCALE_MODE_LINEAR
 TEXTURE_SCALE_MODE_NEAREST
 ```
 ---
-# TextureWrapMode
+## TextureWrapMode
 ```@docs
 TextureWrapMode
 TEXTURE_WRAP_MODE_MIRROR
@@ -328,14 +328,14 @@ TEXTURE_WRAP_MODE_STRETCH
 TEXTURE_WRAP_MODE_ZERO
 ```
 ---
-# TickCallbackResult
+## TickCallbackResult
 ```@docs
 TickCallbackResult
 TICK_CALLBACK_RESULT_CONTINUE
 TICK_CALLBACK_RESULT_DISCONTINUE
 ```
 ---
-# ToolType
+## ToolType
 ```@docs
 ToolType
 TOOL_TYPE_AIRBRUSH
@@ -348,7 +348,7 @@ TOOL_TYPE_PENCIL
 TOOL_TYPE_UNKNOWN
 ```
 ---
-# WindowCloseRequestResult
+## WindowCloseRequestResult
 ```@docs
 WindowCloseRequestResult
 WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE

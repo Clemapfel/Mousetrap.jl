@@ -2304,6 +2304,13 @@ has_key(::KeyFile, group::GroupID, key::KeyID) -> Bool
 Check whether key file has a group with given ID, an that group has a key with given ID:
 """
 
+@document hbox """
+```
+hbox(::Widget...) -> Box
+```
+Convenience functions that wraps list of a widget in a horizonally oriented box. 
+"""
+
 @document hide! """
 ```
 hide!(::Widget) 
@@ -2647,7 +2654,7 @@ Add a number of widgets to the end of the rows, inserting them into the correspo
 lower than the number of columns, the leftover columns will contain an empty cell in that row. 
 """
 
-@document push_front """
+@document push_front! """
 ```
 push_front!(::Box, ::Widget) -> Cvoid
 push_front!(::ListView, ::Widget, [::ListViewIterator]) -> ListViewIterator 
@@ -4673,4 +4680,11 @@ Make item at given position no longer selected.
 unselect_all!(::SelectionModel) 
 ```
 Make it such that no item is selected, the selection mode allows for that. 
+"""
+
+@document vbox """
+```
+vbox(::Widget...) -> Box
+```
+Convenience function that wraps list of widgets in a vertically oriented box.
 """

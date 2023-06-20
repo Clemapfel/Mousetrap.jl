@@ -1791,9 +1791,9 @@ macro do_not_compile(args...) return :() end
     set_comment_above!(file::KeyFile, group::GroupID, comment::String) = detail.set_comment_above_group!(file._internal, group, comment)
     export set_comment_above!
 
-    get_comment_above!(file::KeyFile, group::GroupID) ::String = detail.get_comment_above_group(file._internal, group)
-    get_comment_above!(file::KeyFile, group::GroupID, key::KeyID) ::String = detail.get_comment_above_key(file._internal, group, key)
-    export get_comment_above!
+    get_comment_above(file::KeyFile, group::GroupID) ::String = detail.get_comment_above_group(file._internal, group)
+    get_comment_above(file::KeyFile, group::GroupID, key::KeyID) ::String = detail.get_comment_above_key(file._internal, group, key)
+    export get_comment_above
 
     export set_value!
     export get_value
@@ -2122,6 +2122,24 @@ macro do_not_compile(args...) return :() end
 
     @export_type Box Widget
     Box(orientation::Orientation) = Box(detail._Box(orientation))
+
+    function hbox(widgets::Widget...) 
+        out = Box(ORIENTATION_HORIZONTAL)
+        for widget in widgets
+            push_back!(out, widget)
+        end
+        return out
+    end
+    export hbox
+
+    function vbox(widgets::Widget...) 
+        out = Box(ORIENTATION_VERTICAL)
+        for widget in widgets
+            push_back!(out, widget)
+        end
+        return out
+    end
+    export vbox
 
     function push_back!(box::Box, widget::Widget)
         detail.push_back!(box._internal, widget._internal.cpp_object)
