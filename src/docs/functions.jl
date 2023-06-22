@@ -98,18 +98,19 @@ Create a shape as a wire-frame. For points `{a1, a2, a3, ..., an}`, the shape
 will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a1}`
 """
 
-@document activate """
-```
-activate(::Action) 
-```
-Trigger the actions callback. This will also emit signal `activated`.
-"""
-
 @document activate! """
 ```
 activate!(::Widget)
 ```
 If the widget is activatable, trigger it. This will cause it to emit signal `activate`, as well as possibly changings its state and playing an animation on screen.
+
+---
+
+```
+activate!(::Action) 
+```
+Trigger the actions callback. This will also emit signal `activated`.
+
 """
 
 @document add_action! """

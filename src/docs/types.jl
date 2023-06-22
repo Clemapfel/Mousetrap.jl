@@ -54,12 +54,15 @@ $(@type_fields())
 @document Angle """
 # Angle
 
-Represents an angle. Use `as_radians` and `as_degrees` to convert
-it to a number.
+Represents an angle. 
+
+Use [`radians`](@ref) or [`degrees`](@ref) to construct
+an object of this type.
+
+[`as_radians`](@ref) and [`as_degrees`](@ref) allow for 
+converting an angle to the respective unit.
 
 $(@type_constructors(
-    radians(::AbstractFloat) -> Angle,
-    degrees(::AbstractFloat) -> Angle
 ))
 
 $(@type_fields(
@@ -648,6 +651,8 @@ $(@type_constructors(
 ))
 
 $(@type_signals(FocusEventController, 
+    focus_gained,
+    focus_lost
 ))
 
 $(@type_fields())

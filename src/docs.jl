@@ -73,7 +73,7 @@ end
 const signal_descriptors = Dict{Symbol, SignalDescriptor}()
 
 macro type_signals(name, signals...)
-    out = "# Signals\n"
+    out = "";# Signals\n"
 
     if isempty(signals)
         out *= "(no unique signals)"

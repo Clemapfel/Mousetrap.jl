@@ -1487,7 +1487,7 @@ macro do_not_compile(args...) return :() end
     @export_function Action get_id String
     @export_function Action set_state! Cvoid Bool b
     @export_function Action get_state Bool
-    @export_function Action activate Cvoid
+    @export_function Action activate! Cvoid
     @export_function Action add_shortcut! Cvoid String shortcut
 
     get_shortcuts(action::Action) ::Vector{String} = detail.get_shortcuts(action._internal)[]

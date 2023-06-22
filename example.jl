@@ -8,23 +8,15 @@ using mousetrap
 main() do app::Application
 
     window = Window(app)
-    
-    # declare two buttons
-    button_01 = Button()
-    button_02 = Button()
 
-    # when button 01 is clicked, 02 is triggered programmatically
-    connect_signal_clicked!(button_01) do self::Button#, button_02::Button
-        println("01 clicked")
-        activate!(button_02)
+    let action = Action("example.print_clicked", app)
+        set_function!(action) do x::Action
+            println("clicked")
+        end
     end
 
-    # when button 02 is clicked, 01 is triggered programmatically
-    connect_signal_clicked!(button_02) do self::Button#, button_01::Button
-        println("02 clicked")
-        activate!(button_01)
-    end
-    
-    set_child!(window, hbox(button_01, button_02))
+    # action is no longer defined here, instead, we can do:
+    activate!(get_action(app, "example.print_clicked"))
+
     present!(window)
 end
