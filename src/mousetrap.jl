@@ -1488,7 +1488,7 @@ macro do_not_compile(args...) return :() end
     @export_function Action set_state! Cvoid Bool b
     @export_function Action get_state Bool
     @export_function Action activate! Cvoid
-    @export_function Action add_shortcut! Cvoid String shortcut
+    @export_function Action add_shortcut! Cvoid ShortcutTrigger shortcut
 
     get_shortcuts(action::Action) ::Vector{String} = detail.get_shortcuts(action._internal)[]
     export get_shortcuts
@@ -3848,6 +3848,11 @@ macro do_not_compile(args...) return :() end
         end)
     end
     export set_tick_callback!
+
+    function set_listens_for_shortcut_action!(widget::Widget, action::Action) ::Cvoid
+        detail.set_listens_for_shortcut_action!(widget._internal.cpp_object, action._internal)
+    end
+    export set_listens_for_shortcut_action!
 
 ####### clipboard.jl
 

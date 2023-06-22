@@ -3687,6 +3687,14 @@ set_lower!(::SpinButton, ::Number)
 Set lower bound of the underlying adjustment.
 """
 
+@document set_listens_for_shortcut_action! """
+```
+set_listens_for_shortcut_action!(::Widget, ::Action)
+```
+Adds the action to the widgets internal shortcut event controller. While the widget holds focus,
+if the user presses the actions associated shortcut, the action will trigger.
+"""
+
 @document set_margin_bottom! """
 ```
 set_margin_bottom!(::Widget, margin::AbstractFloat) 

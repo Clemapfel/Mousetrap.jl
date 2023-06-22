@@ -7,16 +7,20 @@ using mousetrap
 
 main() do app::Application
 
+    # create a window
     window = Window(app)
 
-    let action = Action("example.print_clicked", app)
-        set_function!(action) do x::Action
-            println("clicked")
-        end
+    # create an action that prints "activated"
+    action = Action("example.print_activated", app) do action::Action
+        println("activated.")
     end
 
-    # action is no longer defined here, instead, we can do:
-    activate!(get_action(app, "example.print_clicked"))
+    # add the shortcut `Control + Space`
+    add_shortcut!(action, "<Control>space")
+    
+    # make `window` listen for shortcuts of `action`
+    set_listens_for_shortcut_action!(window, action)
 
+    # show the window to the user
     present!(window)
 end
