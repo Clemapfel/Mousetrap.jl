@@ -998,6 +998,13 @@ get_expand_vertically(::Widget) -> Bool
 Get whether the widget can expand along the y-axis.
 """
 
+@document get_expanded """
+```
+get_expanded(::Expander) -> Bool
+```
+Get whether the expanders child is currently visible.
+"""
+
 @document get_file_extension """
 ```
 get_file_extension(::FileDescriptor) -> String
@@ -3331,6 +3338,14 @@ set_expand!(::Widget, ::Bool)
 ```
 Set whether the widget should expand along both the horizontal and vertical axis.
 """
+
+@document set_expanded! """
+```
+set_expanded(::Expander, ::Bool) 
+```
+Automatically expand or hide the expanders child.
+"""
+
 
 @document set_expand_horizontally! """
 ```

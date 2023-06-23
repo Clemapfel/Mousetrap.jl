@@ -174,7 +174,7 @@ A modifier is one of the following:
 + `Alt`
 
 !!! Note 
-    Additional modifiers include `AltGr`, `Meta`, `Apple` and `Win`. These are keyboard-layout and/or OS-specific. See [here](https://docs.gtk.org/gdk4/flags.ModifierType.html) for more information.
+    Additional modifiers include `CapsLock`, `AltGr`, `Meta`, `Apple` and `Win`. These are keyboard-layout and/or OS-specific. See [here](https://docs.gtk.org/gdk4/flags.ModifierType.html) for more information.
 
 A non-modifier, then, is any key that is not a modifiers. 
 
@@ -185,22 +185,22 @@ A keybinding, or shortcut trigger, henceforth called "shortcut", is the combinat
 + `<Alt><Control><Shift>` is **not** a shortcut, because it does not contain a non-modifier
 + `<Control>xy` (that is the `X` key *and* the `Y` key) is **not** a shortcut, because it contains more than one non-modifier key
 
-Shortcuts are represented as strings, which have a specific syntax. As seen above, each modifier is enclosed in `<``>`, with no spaces. After the group of modifiers, the non-modifier key is placed after the last modifiers `>`. Some more examples:
+Shortcuts are represented as c-strings, which have a specific syntax. As seen above, each modifier is enclosed in `<``>`, with no spaces. After the group of modifiers, the non-modifier key is placed after the last modifiers `>`. Some more examples:
 
 + "Control + C" is written `<Control>c`
 + "Alt + LeftArrow" is written as `<Alt>Left` (sic, `L` is capitalized)
 + "Shift + 1" is written as `exclam`
 
-That last one requires explanation. On most keyboard layouts, to type `!`, the user has to press the shift modifier key, then press the `1` key. When "Shift + 1" is pressed, mousetrap does not receive this keyboard key event as-is, instead, it receives a single key event for the `!` key, with no modifiers. The identification of `!` is `exclam`, hence why "Shift + 1" is written as `exclam`.
+That last one requires explanation. On most keyboard layouts, to type `!`, the user has to press the shift modifier key, then press the `1` key. When "Shift + 1" is pressed, mousetrap does not receive this keyboard key event as-is, instead, it receives a single key event for the `!` key, with no modifiers. The identifier of `!` is `exclam`, hence why "Shift + 1" is written as `exclam`.
 
 !!! Note "Hint: Looking up Key Identifiers"
 
-    An example on how to look up the key identifier as a string will be performed here.
+    An example on how to look up the key identifier will be performed here.
 
     Let's say we want to write the shortcut "Control + Space". We know that we can write "Control" as `<Control>`. Next, we navigate to https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl, 
-    which has a list of all keys recognized by mousetrap. In [line 1039](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L1039), we find that the constant for the space key is called `KEY_space`. The identifier of a key used for shortcuts is this name, minus the `KEY_`. For the space key, the identifier is therefore `space`.
+    which has a list of all keys recognized by mousetrap. In [line 1039](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L1039), we find that the constant for the space key is called `KEY_space`. The identifier of a key used for shortcuts is this name, minus the `KEY_`. For the spacebar key, the identifier is therefore `space`.
 
-    One more obscure example, to write "Alt + Beta", that is the `β` key on the somewhat rare greek keyboard layout, we find the constant named `KEY_Greek_BETA` in [line 3034](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L3034). Erasing `KEY_` again, the key's string identifier is `Greek_BETA`. "Alt + Beta" is therefore written as `<Alt>Greek_BETA`
+    One more obscure example, to write "Alt + Beta", that is the `β` key on the somewhat rare greek keyboard layout, we find the constant named `KEY_Greek_BETA` in [line 3034](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L3034). Erasing `KEY_` again, the keys identifier is `Greek_BETA`. "Alt + Beta" is therefore written as `<Alt>Greek_BETA`
 
     If we make an error and use the wrong identifier, a soft warning will be printed at runtime, informing us of this. 
 
@@ -215,7 +215,7 @@ add_shortcut!(shortcut_action, "<Control>space")
 
 An action can have multiple shortcuts, and one shortcut can be associated with two or more actions, though this is usually not recommended.
 
-We need one more thing before we can trigger our action: an object that can receive keyboard key events. We will learn much more about the event model in [its own dedicated chapter](./05_event_handling.md), for now, we can use [`set_listens_for_shortcut_action!`](@ref) on our top-level window. This makes the window instance listen for any keyboard presses. If it recognizes that a keybinding associated with an action was pressed, it will trigger that action.
+We need one more thing before we can trigger our action: an object that can receive keyboard key events. We will learn much more about the event model in [its own dedicated chapter](./05_event_handling.md), for now, we can use [`set_listens_for_shortcut_action!`](@ref) on our top-level window. This makes the window instance listen for any keyboard presses. If it recognizes that a keybinding associated with an action it is listening for was pressed, it will trigger that action.
 
 A complete `.jl` file showing how to trigger an action using a shortcut is given here:
 
@@ -235,7 +235,7 @@ main() do app::Application
     # add the shortcut `Control + Space`
     add_shortcut!(action, "<Control>space")
     
-    # make `window` listen for shortcuts of `action`
+    # make `window` listen for all shortcuts of `action`
     set_listens_for_shortcut_action!(window, action)
 
     # show the window to the user

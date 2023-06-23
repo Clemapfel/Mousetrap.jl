@@ -304,29 +304,27 @@ macro do_not_compile(args...) return :() end
 
     function show_aux(io::IO, x::T, fields::Symbol...) where T
 
-        out = ""
+        out = string(typeof(x)) * "("
+        for i in 1:length(fields)
 
-        tostring(x) = string(x)
-        tostring(x::String) = "\"" * x * "\""
+            field = fields[i]
 
-        super = ""
-        if T <: SignalEmitter
-            super = tostring(SignalEmitter)
-        elseif T <: Widget
-            super = tostring(Widget)
-        elseif T <: EventController
-            super = tostring(EventController)
+            get_field = :get_ * field
+            value = eval(:($get_field($x)))
+
+            if typeof(value) == String
+                out *= "$field = \"$value\""
+            else
+                out *= "$field = $value"
+            end
+
+            if i != length(fields)
+                out *= ", "
+            end
         end
 
-        out *= "mousetrap." * tostring(T) * (!isempty(super) ? " <: " * super : "") * "\n"
-        #out *= "  " * "internal" * " = @" * tostring(x._internal.cpp_object) * "\n"
-
-        for field in fields
-            getter = getproperty(mousetrap, Symbol("get_") * field)
-            out *= "  " * tostring(field) * " = " * tostring(getter(x)) * "\n"
-        end
-
-        print(io, out, "end\n")
+        out *= ")"
+        print(io, out)
     end
 
     import Base: *
@@ -533,6 +531,8 @@ macro do_not_compile(args...) return :() end
     Base.convert(::Type{Dates.Millisecond}, time::Time) = Dates.Millisecond(as_millisecond(time))
     Base.convert(::Type{Dates.Microsecond}, time::Time) = Dates.Microsecond(as_microsecond(time))
     Base.convert(::Type{Dates.Nanosecond}, time::Time) = Dates.Nanosecond(as_nanoseconds(time))
+    
+    Base.show(io::IO, x::Time) = print(io, "Time($(as_seconds(x)))")
 
     @export_type Clock SignalEmitter
     Clock() = Clock(detail._Clock())
@@ -542,6 +542,8 @@ macro do_not_compile(args...) return :() end
 
     elapsed(clock::Clock) ::Time = microseconds(detail.elapsed(clock._internal))
     export elapsed
+
+    Base.show(io, x::Clock) = print(io, "Clock($(elapsed(x))s)")
 
 ####### angle.jl
 
@@ -579,6 +581,8 @@ macro do_not_compile(args...) return :() end
 
     import Base: !=
     !=(a::Angle, b::Angle) = a._rads != b._rads
+
+    Base.show(io::IO, x::Angle) = print(io, "Angle($(as_degrees(angle))°)")
 
 ####### signal_components.jl
 
@@ -1370,8 +1374,10 @@ macro do_not_compile(args...) return :() end
     @export_function Application quit! Cvoid
     @export_function Application hold! Cvoid
     @export_function Application release! Cvoid
+    @export_function Application get_is_holding Bool
     @export_function Application mark_as_busy! Cvoid
     @export_function Application unmark_as_busy! Cvoid
+    @export_function Application get_is_marked_as_busy Bool
     @export_function Application get_id String
 
     add_action!(app::Application, action::Action) = detail.add_action!(app._internal, action._internal)
@@ -1385,8 +1391,6 @@ macro do_not_compile(args...) return :() end
 
     @add_signal_activate Application
     @add_signal_shutdown Application
-
-    Base.show(io::IO, x::Application) = show_aux(x, :id)
 
     function main(f; application_id::String = "mousetrap.jl") ::Int64
         app = Application(application_id)
@@ -1405,6 +1409,8 @@ macro do_not_compile(args...) return :() end
         return run!(app)
     end
     export main
+
+    Base.show(io::IO, x::Application) = show_aux(io, x, :is_holding, :is_marked_as_busy)
 
 ####### window.jl
 
@@ -1470,7 +1476,7 @@ macro do_not_compile(args...) return :() end
     @add_signal_activate_default_widget Window
     @add_signal_activate_focused_widget Window
 
-    Base.show(io::IO, x::Window) = show_aux(io, x, :title)
+    Base.show(io::IO, x::Window) = Base.show_aux(io, x, :title)
 
 ####### action.jl
 
@@ -1530,7 +1536,7 @@ macro do_not_compile(args...) return :() end
 
     @add_signal_activated Action
 
-    Base.show(io::IO, x::Action) = mousetrap.show_aux(io, x, :id, :enabled, :shortcuts, :is_stateful, :state)
+    Base.show(io::IO, x::Action) = show_aux(io, x, :id, :enabled, :is_stateful, :state)
 
 ####### adjustment.jl
 
@@ -1564,10 +1570,10 @@ macro do_not_compile(args...) return :() end
     set_step_increment!(adjustment::Adjustment, x::Number) = detail.set_step_increment!(adjustment._internal, convert(Cfloat, x))
     export set_step_increment!
 
-    Base.show(io::IO, x::Adjustment) = mousetrap.show_aux(io, x, :value, :lower, :upper, :increment)
-
     @add_signal_value_changed Adjustment
     @add_signal_properties_changed Adjustment
+
+    Base.show(io::IO, x::Adjustment) = show_aux(io, x, :value, :lower, :upper, :step_increment)
 
 ####### alignment.jl
 
@@ -1675,6 +1681,9 @@ macro do_not_compile(args...) return :() end
     is_valid_html_code(code::String) ::Bool = detail.is_valid_html_code(code)
     export is_valid_html_code
 
+    Base.show(io::IO, x::RGBA) = print(io, "RGBA($(x.r), $(x.g), $(x.b), $(x.a))")
+    Base.show(io::IO, x::HSVA) = print(io, "HSVA($(x.h), $(x.s), $(x.v), $(x.a))")
+
 ####### icon.jl
 
     @export_type Icon
@@ -1705,6 +1714,8 @@ macro do_not_compile(args...) return :() end
 
     @export_function Icon get_size Vector2i
 
+    Base.show(io::IO, x::Icon) = show_aux(io, x, :name)
+
     # IconTheme
 
     function get_icon_names(theme::IconTheme) ::Vector{String}
@@ -1718,6 +1729,8 @@ macro do_not_compile(args...) return :() end
 
     @export_function IconTheme add_resource_path! Cvoid String path
     @export_function IconTheme set_resource_path! Cvoid String path
+
+    Base.show(io::IO, x::IconTheme) = show_aux(io, x)
 
 ####### image.jl
 
@@ -1765,6 +1778,8 @@ macro do_not_compile(args...) return :() end
         return detail.get_pixel(image._internal, from_julia_index(x), from_julia_index(y))
     end
     export get_pixel
+
+    Base.show(io::IO, x::Image) = show_aux(io, x, :size)
 
 ####### key_file.jl
 
@@ -1909,6 +1924,8 @@ macro do_not_compile(args...) return :() end
         return convert(Vector{String}, detail.get_value_as_string_list(file._internal, group, key))
     end
 
+    Base.show(io::IO, x::KeyFile) = show_aux(io, x, :groups)
+
 ####### file_descriptor.jl
 
     @export_type FileMonitor SignalEmitter
@@ -1943,6 +1960,8 @@ macro do_not_compile(args...) return :() end
         end)
     end
     export on_file_changed!
+
+    Base.show(io::IO, x::FileMonitor) = print(io, "FileMonitor(cancelled = $(is_cancelled(x)))")
 
     # Descriptor
 
@@ -1988,8 +2007,6 @@ macro do_not_compile(args...) return :() end
     end
     export get_children
 
-    Base.show(io::IO, x::FileDescriptor) = print(io, "FileDescriptor(\"" * get_path(x) * "\")")
-
     # File System
 
     create_file_at!(destination::FileDescriptor, replace::Bool) ::Bool = detail.create_file_at!(destination._internal, replace)
@@ -2012,6 +2029,8 @@ macro do_not_compile(args...) return :() end
     export move!
 
     move_to_trash!(file::FileDescriptor) ::Bool = detail.move_to_trash!(file._internal)
+
+    Base.show(io::IO, x::FileDescriptor) = show_aux(io, x, :path)
 
 ####### file_chooser.jl
 
@@ -2074,6 +2093,8 @@ macro do_not_compile(args...) return :() end
     end
     export on_cancel!
 
+    Base.show(io::IO, x::FileChooser) = show_aux(io, x)
+
 ####### image_display.jl
 
     @export_type ImageDisplay Widget
@@ -2094,8 +2115,11 @@ macro do_not_compile(args...) return :() end
 
     @export_function ImageDisplay clear! Cvoid
     @export_function ImageDisplay set_scale! Cvoid Integer scale
+    @export_function ImageDisplay get_size Vector2f
 
     @add_widget_signals ImageDisplay
+
+    Base.show(io::IO, x::ImageDisplay) = show_aux(io, x, :size)
 
 ####### aspect_frame.jl
 
@@ -2116,7 +2140,7 @@ macro do_not_compile(args...) return :() end
     set_child!(aspect_frame::AspectFrame, child::Widget) = detail.set_child!(aspect_frame._internal, child._internal.cpp_object)
     export set_child!
 
-    Base.show(io::IO, x::AspectFrame) = mousetrap.show_aux(io, x, :ratio, :child_x_alignment, :child_y_alignment)
+    Base.show(io::IO, x::AspectFrame) = show_aux(io, x, :ratio)
 
 ####### box.jl
 
@@ -2177,6 +2201,8 @@ macro do_not_compile(args...) return :() end
 
     @add_widget_signals Box
 
+    Base.show(io::IO, x::Box) = show_aux(io, x, :n_items)
+
 ####### button.jl
 
     @export_type Button Widget
@@ -2208,6 +2234,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_activate Button
     @add_signal_clicked Button
 
+    Base.show(io::IO, x::Button) = show_aux(io, x)
+
 ####### center_box.jl
 
     @export_type CenterBox Widget
@@ -2235,6 +2263,8 @@ macro do_not_compile(args...) return :() end
     @export_function CenterBox set_orientation! Cvoid Orientation orientation
 
     @add_widget_signals CenterBox
+
+    Base.show(io::IO, x::CenterBox) = show_aux(io, x)
 
 ####### check_button.jl
 
@@ -2267,6 +2297,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_toggled CheckButton
     @add_signal_activate CheckButton
 
+    Base.show(io::IO, x::CheckButton) = show_aux(io, x, :state)
+
 ####### switch.jl
 
     @export_type Switch Widget
@@ -2277,6 +2309,8 @@ macro do_not_compile(args...) return :() end
 
     @add_widget_signals Switch
     @add_signal_activate Switch
+
+    Base.show(io::IO, x::Switch) = show_aux(io, x, :is_active)
 
 ####### toggle_button.jl
 
@@ -2299,6 +2333,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_activate ToggleButton
     @add_signal_clicked ToggleButton
     @add_signal_toggled ToggleButton
+
+    Base.show(io::IO, x::ToggleButton) = show_aux(io, x, :is_active)
 
 ####### viewport.jl
 
@@ -2366,6 +2402,11 @@ macro do_not_compile(args...) return :() end
     @add_widget_signals Viewport
     @add_signal_scroll_child Viewport
 
+    Base.show(io::IO, x::Viewport) = show_aux(io, x, 
+        :propagate_natural_height, 
+        :propagate_natural_widget
+    )
+
 ####### entry.jl
 
     @export_type Entry Widget
@@ -2398,6 +2439,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_activate Entry
     @add_signal_text_changed Entry
 
+    Base.show(io::IO, x::Entry) = show_aux(io, x, :text)
+
 ####### expander.jl
 
     @export_type Expander Widget
@@ -2416,9 +2459,13 @@ macro do_not_compile(args...) return :() end
     export set_label_widget!
 
     @export_function Expander remove_label_widget! Cvoid
+    @export_function Expander set_expanded! Cvoid Bool b
+    @export_function Expander get_expanded Bool
 
     @add_widget_signals Expander
     @add_signal_activate Expander
+
+    Base.show(io::IO, x::Expander) = show_aux(io, x, :expanded)
 
 ####### fixed.jl
 
@@ -2438,6 +2485,8 @@ macro do_not_compile(args...) return :() end
     export get_child_position
 
     @add_widget_signals Fixed
+
+    Base.show(io::IO, x::Fixed) = show_aux(io, x)
 
 ####### level_bar.jl
 
@@ -2464,6 +2513,8 @@ macro do_not_compile(args...) return :() end
     @export_function LevelBar get_orientation Orientation
 
     @add_widget_signals LevelBar
+
+    Base.show(io::IO, x::LevelBar) = show_aux(io, x, :orientation, :value, :min_value, :max_value)
 
 ####### label.jl
 
@@ -2503,7 +2554,7 @@ macro do_not_compile(args...) return :() end
     @export_function Label set_justify_mode! Cvoid JustifyMode mode
     @export_function Label get_justify_mode JustifyMode
     @export_function Label set_max_width_chars! Cvoid Integer n
-    @export_function Label get_max_width_chars UInt64
+    @export_function Label get_max_width_chars Int64
     @export_function Label set_x_alignment! Cvoid AbstractFloat x
     @export_function Label get_x_alignment Cfloat
     @export_function Label set_y_alignment! Cvoid AbstractFloat x
@@ -2512,6 +2563,13 @@ macro do_not_compile(args...) return :() end
     @export_function Label get_selectable Bool
 
     @add_widget_signals Label
+
+    Base.show(io::IO, x::Label) = show_aux(io, x, 
+        :text,    
+        :ellipsize_mode, 
+        :wrap_mode, 
+        :justify_mode
+    )
 
 ####### text_view.jl
 
@@ -2545,6 +2603,11 @@ macro do_not_compile(args...) return :() end
     # @add_signal_redo TextView
     @add_signal_text_changed TextView
 
+    Base.show(io::IO, x::TextView) = show_aux(io, x, 
+        :text, 
+        :was_modified
+    )
+
 ####### frame.jl
 
     @export_type Frame Widget
@@ -2562,6 +2625,8 @@ macro do_not_compile(args...) return :() end
     @export_function Frame get_label_x_alignment! Cfloat
 
     @add_widget_signals Frame
+
+    Base.show(io::IO, x::Frame) = show_aux(io, x)
 
 ####### overlay.jl
 
@@ -2583,6 +2648,8 @@ macro do_not_compile(args...) return :() end
     export remove_overlay!
 
     @add_widget_signals Overlay
+
+    Base.show(io::IO, x::Overlay) = show_aux(io, x)
 
 ####### relative_position.jl
 
@@ -2626,12 +2693,16 @@ macro do_not_compile(args...) return :() end
 
     @add_signal_items_changed MenuModel
 
+    Base.show(io::IO, x::MenuModel) = show_aux(io, x)
+
 ###### menubar.jl
 
     @export_type MenuBar Widget
     MenuBar(model::MenuModel) = MenuBar(detail._MenuBar(model._internal))
 
     @add_widget_signals MenuBar
+
+    Base.show(io::IO, x::MenuBar) = show_aux(io, x)
 
 ####### popover_menu.jl
 
@@ -2640,6 +2711,8 @@ macro do_not_compile(args...) return :() end
 
     @add_widget_signals PopoverMenu
     @add_signal_closed PopoverMenu
+
+    Base.show(io::IO, x::PopoverMenu) = show_aux(io, x)
 
 ###### popover.jl
 
@@ -2671,6 +2744,8 @@ macro do_not_compile(args...) return :() end
 
     @add_widget_signals Popover
     @add_signal_closed Popover
+
+    Base.show(io::IO, x::Popover) = show_aux(io, x)
 
 ###### popover_button.jl
 
@@ -2706,6 +2781,8 @@ macro do_not_compile(args...) return :() end
 
     @add_widget_signals PopoverButton
     @add_signal_activate PopoverButton
+
+    Base.show(io::IO, x::PopoverButton) = show_aux(io, x)
 
 ###### drop_down.jl
 
@@ -2798,9 +2875,9 @@ macro do_not_compile(args...) return :() end
     end
     export insert!
 
-
-
     @add_widget_signals DropDown
+
+    Base.show(io::IO, x::DropDown) = show_aux(io, x, :selected)
 
 ###### event_controller.jl
 
@@ -2867,6 +2944,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_drag DragEventController
     @add_signal_drag_end DragEventController
 
+    Base.show(io::IO, x::DragEventController) = show_aux(io, x)
+
 ###### click_event_controller.jl
 
     @export_type ClickEventController SingleClickGesture
@@ -2875,6 +2954,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_click_pressed ClickEventController
     @add_signal_click_released ClickEventController
     @add_signal_click_stopped ClickEventController
+
+    Base.show(io::IO, x::ClickEventController) = show_aux(io, x)
 
 ###### focus_event_controller.jl
 
@@ -2886,6 +2967,8 @@ macro do_not_compile(args...) return :() end
 
     @add_signal_focus_gained FocusEventController
     @add_signal_focus_lost FocusEventController
+
+    Base.show(io::IO, x::FocusEventController) = show_aux(io, x)
 
 ###### key_event_controller.jl
 
@@ -2919,6 +3002,8 @@ macro do_not_compile(args...) return :() end
     mouse_button_02_pressed(modifier_state::ModifierState) ::Bool = detail.mouse_button_02_pressed(modifier_state);
     export mouse_button_02_pressed
 
+    Base.show(io::IO, x::KeyEventController) = show_aux(io, x)
+
 ###### long_press_event_controller.jl
 
     @export_type LongPressEventController SingleClickGesture
@@ -2930,6 +3015,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_pressed LongPressEventController
     @add_signal_press_cancelled LongPressEventController
 
+    Base.show(io::IO, x::LongPressEventController) = show_aux(io, x)
+
 ###### motion_event_controller.jl
 
     @export_type MotionEventController EventController
@@ -2939,6 +3026,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_motion MotionEventController
     @add_signal_motion_leave MotionEventController
 
+    Base.show(io::IO, x::MotionEventController) = show_aux(io, x)
+
 ###### pinch_zoom_event_controller.jl
 
     @export_type PinchZoomEventController EventController
@@ -2947,6 +3036,8 @@ macro do_not_compile(args...) return :() end
     @export_function PinchZoomEventController get_scale_delta Cfloat
 
     @add_signal_scale_changed PinchZoomEventController
+
+    Base.show(io::IO, x::PinchZoomEventController) = show_aux(io, x)
 
 ###### rotate_event_controller.jl
 
@@ -2958,6 +3049,8 @@ macro do_not_compile(args...) return :() end
 
     @add_signal_rotation_changed RotateEventController
 
+    Base.show(io::IO, x::RotateEventController) = show_aux(io, x)
+
 ###### scroll_event_controller.jl
 
     @export_type ScrollEventController EventController
@@ -2967,6 +3060,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_scroll_begin ScrollEventController
     @add_signal_scroll ScrollEventController
     @add_signal_scroll_end ScrollEventController
+
+    Base.show(io::IO, x::ScrollEventController) = show_aux(io, x)
 
 ###### shortcut_event_controller.jl
 
@@ -2987,6 +3082,8 @@ macro do_not_compile(args...) return :() end
 
     get_scope(controller::ShortcutEventController) ::ShortcutScope = detail.get_scope(controller._internal)
     export get_scope
+
+    Base.show(io::IO, x::ShortcutEventController) = show_aux(io, x, :scope)
 
 ###### stylus_event_controller.jl
 
@@ -3030,6 +3127,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_proximity StylusEventController
     @add_signal_motion StylusEventController
 
+    Base.show(io::IO, x::StylusEventController) = show_aux(io, x, :hardware_id)
+
 ###### swipe_event_controller.jl
 
     @export_type SwipeEventController SingleClickGesture
@@ -3039,6 +3138,8 @@ macro do_not_compile(args...) return :() end
     export get_velocity
 
     @add_signal_swipe SwipeEventController
+
+    Base.show(io::IO, x::SwipeEventController) = show_aux(io, x)
 
 ###### pan_event_controller.jl
 
@@ -3059,6 +3160,8 @@ macro do_not_compile(args...) return :() end
     export get_orientation
 
     @add_signal_pan PanEventController
+
+    Base.show(io::IO, x::PanEventController) = show_aux(io, x, :orientation)
 
 ###### selection_model.jl
 
@@ -3087,6 +3190,8 @@ macro do_not_compile(args...) return :() end
     export unselect!
 
     @add_signal_selection_changed SelectionModel
+
+    Base.show(io::IO, x::SelectionModel) = show_aux(io, x, :selection_mode)
 
 ###### list_view.jl
 
@@ -3138,6 +3243,8 @@ macro do_not_compile(args...) return :() end
     @add_widget_signals ListView
     @add_signal_activate ListView
 
+    Base.show(io::IO, x::ListView) = show_aux(io, x, :selection_model, :orientation)
+
 ###### grid_view.jl
 
     @export_type GridView Widget
@@ -3186,6 +3293,8 @@ macro do_not_compile(args...) return :() end
     @add_widget_signals GridView
     @add_signal_activate GridView
 
+    Base.show(io::IO, x::GridView) = show_aux(io, x, :selection_model)
+
 ###### grid.jl
 
     @export_type Grid Widget
@@ -3232,6 +3341,8 @@ macro do_not_compile(args...) return :() end
     @export_function Grid get_orientation Orientation
 
     @add_widget_signals Grid
+
+    Base.show(io::IO, x::Grid) = show_aux(io, x, :orientation)
 
 ###### stack.jl
 
@@ -3306,6 +3417,8 @@ macro do_not_compile(args...) return :() end
     @add_widget_signals StackSidebar
     @add_widget_signals StackSwitcher
 
+    Base.show(io::IO, x::Stack) = show_aux(io, x, :selection_model, :transition_type)
+
 ###### notebook.jl
 
     @export_type Notebook Widget
@@ -3351,6 +3464,8 @@ macro do_not_compile(args...) return :() end
     @add_notebook_signal Notebook page_reordered
     @add_notebook_signal Notebook page_removed
     @add_notebook_signal Notebook page_selection_changed
+
+    Base.show(io::IO, x::Notebook) = show_aux(io, x, :current_page, :n_pages)
 
 ###### column_view.jl
 
@@ -3465,9 +3580,10 @@ macro do_not_compile(args...) return :() end
     @export_function ColumnView get_n_rows Int64
     @export_function ColumnView get_n_columns Int64
 
-
     @add_widget_signals ColumnView
     @add_signal_activate ColumnView
+
+    Base.show(io:IO, x::ColumnView) = show_aux(io, x, :n_rows, :n_columns)
 
 ###### header_bar.jl
 
@@ -3493,6 +3609,8 @@ macro do_not_compile(args...) return :() end
     export remove!
 
     @add_widget_signals HeaderBar
+
+    Base.show(io::IO, x::HeaderBar) = show_aux(io, x, :layout)
 
 ###### paned.jl
 
@@ -3527,6 +3645,8 @@ macro do_not_compile(args...) return :() end
 
     @export_function Paned remove_end_child! Cvoid
 
+    Base.show(io::IO, x::Paned) = show_aux(io, x, :start_child_resizable, :start_child_shrinkable, :end_child_resizable, :end_child_shrinkable)
+
 ###### progress_bar.jl
 
     @export_type ProgressBar Widget
@@ -3549,6 +3669,8 @@ macro do_not_compile(args...) return :() end
     @export_function ProgressBar set_orientation! Cvoid Orientation orientation
     @export_function ProgressBar get_orientation Orientation
 
+    Base.show(io::IO, x::ProgressBar) = show_aux(io, x, :fraction, :orientation, :display_mode)
+
 ###### spinner.jl
 
     @export_type Spinner Widget
@@ -3558,6 +3680,8 @@ macro do_not_compile(args...) return :() end
     @export_function Spinner get_is_spinning Bool
     @export_function Spinner start! Cvoid
     @export_function Spinner stop! Cvoid
+
+    Base.show(io::IO, x::Spinner) = show_aux(io, x)
 
 ###### revealer.jl
 
@@ -3595,6 +3719,8 @@ macro do_not_compile(args...) return :() end
     @add_widget_signals Revealer
     @add_signal_revealed Revealer
 
+    Base.show(io::IO, x::Revealer) = show_aux(io, x, :revealed, :transition_type)
+
 ###### scale.jl
 
     @export_type Scale Widget
@@ -3617,6 +3743,8 @@ macro do_not_compile(args...) return :() end
 
     @add_widget_signals Scale
     @add_signal_value_changed Scale
+
+    Base.show(io::IO, x::Scale) = show_aux(io, x, :value, :lower, :upper, :step_increment)
 
 ###### spin_button.jl
 
@@ -3689,6 +3817,8 @@ macro do_not_compile(args...) return :() end
     @add_signal_value_changed SpinButton
     @add_signal_wrapped SpinButton
 
+    Base.show(io::IO, x::SpinButton) = show_aux(io, x, :value, :lower, :upper, :step_increment, :orientation)
+
 ###### scrollbar.jl
 
     @export_type Scrollbar Widget
@@ -3702,6 +3832,8 @@ macro do_not_compile(args...) return :() end
 
     @add_widget_signals Scrollbar
 
+    Base.show(io::IO, x::Scrollbar) = show_aux(io, x, :orientation, :adjustment)
+
 ###### separator.jl
 
     @export_type Separator Widget
@@ -3709,6 +3841,8 @@ macro do_not_compile(args...) return :() end
 
     @export_function Separator set_orientation! Cvoid Orientation orientation
     @export_function Separator get_orientation Orientation
+
+    Base.show(io::IO, x::Separator) = show_aux(io, x)
 
 ####### frame_clock.jl
 
@@ -3723,6 +3857,8 @@ macro do_not_compile(args...) return :() end
 
     @add_signal_update FrameClock
     @add_signal_paint FrameClock
+
+    Base.show(io::IO, x::FrameClock) = show_aux(io, x, :time_since_last_frame)
 
 ####### widget.jl
 
@@ -3913,6 +4049,8 @@ macro do_not_compile(args...) return :() end
     get_clipboard(widget::Widget) ::Clipboard = Clipboard(detail.get_clipboard(widget._internal.cpp_object))
     export get_clipboard
 
+    Base.show(io::IO, x::Clipboard) = show_aux(io, x, :contains_image, :contains_string, :contains_file)
+
 ####### blend_mode.jl
 
     @export_enum BlendMode begin
@@ -3978,6 +4116,8 @@ macro do_not_compile(args...) return :() end
 
     @export_function GLTransform reset! Cvoid
 
+    Base.show(io::IO, x::GLTransform) = show_aux(io, x)
+
 ###### shader.jl
 
     @export_type Shader SignalEmitter
@@ -4028,6 +4168,8 @@ macro do_not_compile(args...) return :() end
 
     get_vertex_texture_coordinate_location() = detail.shader_get_vertex_texture_coordinate_location()
     export get_vertex_texture_coordinate_location
+
+    Base.show(io::IO, x::Shader) = show_aux(io, x)
 
 ###### texture.jl
 
@@ -4091,6 +4233,8 @@ macro do_not_compile(args...) return :() end
 
     unbind_as_render_target(render_texture::RenderTexture) = detail.render_texture_unbind_as_render_target(render_texture._internal.cpp_object)
     export unbind_as_render_target
+
+    Base.show(io::IO, x::TextureObject) = show_aux(io, x, :native_handle)
 
 ###### shape.jl
 
@@ -4295,6 +4439,8 @@ macro do_not_compile(args...) return :() end
     set_texture!(shape::Shape, texture::TextureObject) = detail.set_texture!(shape._internal, texture._internal.cpp_object)
     export set_texture!
 
+    Base.show(io::IO, x::Shape) = show_aux(io, x, :native_handle)
+
 ###### render_task.jl
 
     @export_type RenderTask SignalEmitter
@@ -4358,6 +4504,8 @@ macro do_not_compile(args...) return :() end
     get_uniform_transform(task::RenderTask, name::String) ::GLTransform = GLTransform(detail.get_uniform_transform(task._internal, name))
     export get_uniform_transform
 
+    Base.show(io::IO, x::RenderTask) = show_aux(io, x)
+
 ###### render_area.jl
 
     @export_type RenderArea Widget
@@ -4388,7 +4536,9 @@ macro do_not_compile(args...) return :() end
     @add_signal_resize RenderArea
     @add_signal_render RenderArea
 
-###### key_code.jl
+    Base.show(io::IO, x::RenderArea) = show_aux(io, x)
+
+###### key_codes.jl
 
     include("./key_codes.jl")
 
