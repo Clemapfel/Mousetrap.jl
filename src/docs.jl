@@ -59,12 +59,6 @@ function enum_docs(name, brief, values)
     return out
 end
 
-function type_brief(name, super, brief)
-    out = "# $name <: $super\n"
-    out *= "$brief\n"
-    return out
-end
-
 struct SignalDescriptor
     id::Symbol
     signature::String
@@ -117,10 +111,6 @@ macro type_fields(fields...)
         out *= "(no public fields)\n"
     end
     return out
-end
-
-macro example(string)
-    return "# Example\n```julia\n$string\n```"
 end
 
 using InteractiveUtils

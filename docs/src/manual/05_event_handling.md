@@ -206,14 +206,18 @@ add_controller!(window, motion_controller)
 
 With cursor movement taken care of, we now turn our attention to handling the other type of mouse event: button presses.
 
-A mouse button is... any button on a mouse. Mice are hugely varied, with some having exactly one button, while some mice have 6 or more buttons. If the user uses no mouse at all, for example when choosing to control the app with a trackpad or touchscreen, touchscreen "taps" will be registered as if the left mouse button was pressed.
+A mouse button is... any button on a mouse, which is less intuitive than it sounds. Mice are hugely varied, with some having exactly one button, while some mice have 6 or more buttons. If the user uses no mouse at all, for example when choosing to control the app with a trackpad or touchscreen, touchscreen "taps" will be registered as if the left mouse button was pressed.
 
-We track mouse button presses with \a{ClickEventController} which has 3 signals:
+We track mouse button presses with [`ClickEventController`](@ref) which has 3 signals:
 
-\signals
-\signal_click_pressed{ClickEventController}
-\signal_click_released{ClickEventController}
-\signal_click_stopped{ClickEventController}
+```@eval
+include("signals.jl")
+return @type_signals(ClickEventController,
+    click_pressed,
+    click_released,
+    click_stopped
+)
+```
 
 Much like with `MotionEventController`, the signals provides the handler with `x` and `y`, the absolute position of the cursor at the time the click happened, in widget-space.
 
@@ -230,7 +234,7 @@ This allows us to easily handle double-clicks without any external function keep
 
 ### Differentiating Mouse Buttons
 
-`ClickEventController` is one of a few event controllers that inherit from \a{SingleClickGesture}. \link mousetrap::SingleClickGesture This interface\endlink provides functionality that lets us distinguish between different mouse buttons. Mousetrap supports up to 9 different mouse buttons, identified by `mousetrap::ButtonID`:
+`ClickEventController` is one of a few event controllers that are also a subytpe of from [`SingleClickGesture`](@ref). This interface provides functionality that lets us distinguish between different mouse buttons. Mousetrap supports up to 9 different mouse buttons, identified by the enum [`ButtonID`](@ref):
 
 + ButtonID::BUTTON_01 is usually the left mouse button (or a touchpad tap)
 + ButtonID::BUTTON_02 is usually the right mouse button
@@ -238,33 +242,38 @@ This allows us to easily handle double-clicks without any external function keep
 + ButtonID::BUTTON_03 - BUTTON_09 are additional mouse-model-specific buttons
 + ButtonID::NONE is none of the above
 
-To check which mouse button was pressed, we use `ClickEventController::get_current_button` from within the signal handler, which returns an ID as stated above.
+To check which mouse button was pressed, we use [`get_current_button`](@ref) on the event controller instance from within the signal handler, which returns an ID as stated above.
 
-If we only want signals to be emitted for certain buttons, we can use `ClickEventController::set_only_listens_to_button` to restrict the choice of button. `ClickEventController::set_touch_only` filters all click events except those coming from touch devices.
+If we only want signals to be emitted for certain buttons, we can use `set_only_listens_to_button!`](@ref) to restrict the choice of button. [`set_touch_only!`](@ref) filters all click events except those coming from touch devices.
 
-If we want to activate an action when a widget `some_widget`, is clicked twice with the left mouse button specifically, we can do the following:
+As an example, if we want to check if the user pressed the left mouse button twice, we can do the following:
 
-```cpp
-auto click_controller = ClickEventController();
-click_controller.connect_signal_click_pressed([](ClickEventController& controller, int32_t n_presses, double x, double y){
-    if (n_pressed == 2 and controller->get_current_button() == ButtonID::BUTTON_01)
-        std::cout << "double click registered at: " << x << " " << y << std::endl;
-});
-some_widget.add_controller(click_controller);
+```julia
+click_controller = ClickEventController()
+connect_signal_clicked!(click_controller) do self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat
+    if n_pressed == 2 && get_current_button(self) == BUTTON_ID_01
+        println("double click registered at ($x, $y)")
+    end
+end
+add_controller(window, click_controller)
 ```
 
-While `ClickEventController` gives us full control over one or multiple clicks, there is a more specialized
-controller for a similar, but different purpose: *long presses*.
+While `ClickEventController` gives us full control over one or more clicks, there is a more specialized
+controller for a similar, but slightly different gesture: *long presses*.
 
 ---
 
 ## Long-Presses: LongPressEventController
 
-\a{LongPressEventController} reacts to a specific sequence of events, called a **long press**. A long press happens when the users presses a mouse button, then keeps that button depressed without moving the cursor. After enough time has passed, `LongPressEventController` will emit its signals:
+[`LongPressEventController`](@ref) reacts to a specific sequence of events, called a **long press** gesture. This gesture is recognized when the users presses a mouse button, then keeps that button depressed without moving the cursor. After enough time has passed, `LongPressEventController` will emit its signals:
 
-\signals
-\signal_pressed{LongPressEventController}
-\signal_press_cancelled{LongPressEventController}
+```@eval
+include("signals.jl")
+return @type_signals(LongPressEventController,
+    pressed,
+    press_cancelled
+)
+```
 
 Where `pressed` is emitted the first frame the long press is recognized, `press_cancelled` is emitted once the user releases the mouse button.
 
