@@ -3583,7 +3583,7 @@ macro do_not_compile(args...) return :() end
     @add_widget_signals ColumnView
     @add_signal_activate ColumnView
 
-    Base.show(io:IO, x::ColumnView) = show_aux(io, x, :n_rows, :n_columns)
+    Base.show(io::IO, x::ColumnView) = show_aux(io, x, :n_rows, :n_columns)
 
 ###### header_bar.jl
 

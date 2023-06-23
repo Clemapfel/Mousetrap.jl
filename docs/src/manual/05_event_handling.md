@@ -9,17 +9,17 @@ In this chapter, we will learn:
 
 ## Introduction: Event Model
 
-So far, we were able to react to a user interacting with the GUI through widgets. For example, if the user pressed the left mouse button while hovering over a `Button`, that button will emit the signal `clicked`, which can trigger our custom behavior. While this mechanism works, is can also be fairly limiting. Pre-defined widgets will only have pre-defined way of interacting with them. We cannot react to the user pressing a keyboard key using just `Button`. To do that, we will need an **event controller**. 
+So far, we were able to react to a user interacting with the GUI through widgets. For example, if the user pressed the left mouse button while hovering over a `Button`, that button will emit the signal `clicked`, which can trigger our custom behavior. While this mechanism works, it can also be fairly limiting. Pre-defined widgets will only have pre-defined way of interacting with them. We cannot react to the user pressing a keyboard key using just `Button`. To do that, we will need an **event controller**. 
 
 ### What is an Event?
 
-When the user interacts with a computer in the physical world, they will control some kind of device, for example a mouse, keyboard, touchpad, webcam, stylus, etc. Through a driver, the device will react to user behavior in the physical world and send data to the operating system, which then processes the data into what is called an **event**. 
+When the user interacts with a computer in the physical world, they will control some kind of device, for example a mouse, keyboard, touchpad, webcam, stylus, etc. Through a driver, the device will react to user behavior and send data to the operating system, which then processes the data into what is called an **event**. 
 
 Pressing a keyboard key is an event, releasing the key is a new event. Moving the cursor by one unit is an event, pressing a stylus against a touchpad is an event, etc. Mousetrap is based on GTK4, which has very powerful and versatile event abstraction. We don't have to deal with OS-specific events directly, instead, the GTK backend will automatically transform and distribute events for us, regardless of the operating system or peripheral.
 
-To receive events, we need an [`EventController`]. The `EventController` type is abstract, meaning we cannot use it directly. Instead, we deal with one or more of its subtypes. Each child class handles one one conceptual type of event. 
+To receive events, we need an [`EventController`](@ref). The `EventController` type is abstract, meaning we cannot use it directly. Instead, we deal with one or more of its subtypes. Each child class handles one one conceptual type of event. 
 
-**In order for an event controller to be able to capture events, it needs to be connected to a widget**. Then, when the widget holds **input focus**, events are forwarded to the event controller, whose signals we can then connect custom behavior to.
+**In order for an event controller to be able to capture events, it needs to be connected to a widget**. Once connected, if the widget holds **input focus**, events are forwarded to the event controller, whose signals we can then connect custom behavior to.
 
 ## Input Focus
 
@@ -38,12 +38,12 @@ using `set_is_focusable!`.
 
 ### Requesting Focus
 
-[`grab_focus!`](@ref) will make a widget attempt to gain input focus, stealing it from whatever other widget is currently focused. If this is impossible, for example because the widget is disabled or not yet shown, nothing will happen. We can check if a widget currently has focus by calling [`get_has_focus`](@ref).
+[`grab_focus!`](@ref) will make a widget attempt to gain input focus, stealing it from whatever other widget is currently focused. If this is impossible, for example because the widget is disabled, not yet shown, or is not focusable, nothing will happen. We can check if a widget currently has focus by calling [`get_has_focus`](@ref).
 
-Many widgets will automatically grab focus if interacted with, for example, if the user places the text cursor inside an `Entry`, that entry will grab focus. Pressing enter now `activate`s the entry, even if another widget held focus before. If a `Button` is clicked, it will usually grab focus. We can make any widget, even those that do not require interaction, grab focus when clicked by setting [`set_focus_on_click!`](@ref) to `true`.
+Many widgets will automatically grab focus if interacted with, for example, if the user places the text cursor inside an `Entry`, that entry will grab focus. Pressing enter now activates the entry, even if another widget held focus before. If a `Button` is clicked, it will usually grab focus. We can make any widget, even those that do not require interaction, grab focus when clicked by setting [`set_focus_on_click!`](@ref) to `true`.
 
 The user can also decide which widget should hold focus, usually by pressing the tab key. If [`set_focus_visible!`](@ref) was set to `true` for the toplevel window, the focused widget 
-will highlighted, usually using a transparent border.
+will be highlighted using a transparent border.
 
 ## Event Controllers
 
@@ -51,7 +51,7 @@ will highlighted, usually using a transparent border.
 
 Using our newly gained knowledge about focus, we'll create our first event controller: `FocusEventController`. This controller reacts to a widget gaining or loosing input focus.
 
-After creating an event controller, it will not yet react to any events. We need to **add the controller to a widget**. For this chapter, we will assume that this widget is the top-level window, called `window` in the code snippet in this chapter.
+After creating an event controller, it will not yet react to any events. We need to **add the controller to a widget**. For this chapter, we will assume that this widget is the top-level window, called `window` in the code snippets in this chapter.
 
 We create and connect a `FocusEventController` like so:
 
@@ -60,38 +60,28 @@ focus_controller = FocusEventController()
 add_controller!(window, focus_controller)
 ```
 
-While the controller will now receive, nothing will happen. We need to connect to one of more of its signals, using the familiar signal handler callback mechanism.
+While the controller will now receive events, nothing else will happen. We need to connect to one of more of its signals, using the familiar signal handler callback mechanism.
 
 ## Gaining / Loosing Focus: FocusEventController
 
 `FocusEventController` has two signals:
 
 ```@eval
-import Pkg; Pkg.activate(pwd() * "../../../../.")
-using mousetrap
-mousetrap.@type_signals(FocusEventController,
+include("signals.jl")
+return @type_signals(FocusEventController,
     focus_gained,
     focus_lost
 )
 ```
-
 After connecting to these signals:
 
-\cpp_code_begin
-```cpp
-auto focus_controller = FocusEventController();
-
-focus_controller.connect_signal_focus_gained([](FocusEventController*){
-    std::cout << "focus gained" << std::endl;
-});
-
-focus_controller.connect_signal_focus_lost([](FocusEventController*) {
-    std::cout << "focus lost" << std::endl;
-});
-
-window.add_controller(focus_controller);
+```julia
+focus_controller = FocusEventController()
+connect_signal_focus_gained!(focus_controller) do self::FocusController
+    println("focus gained")
+end
+add_controller(window, focus_controller)
 ```
-\cpp_code_end
 
 we have succesfully created our first event controller and can now react to input focus. 
 
@@ -99,127 +89,76 @@ we have succesfully created our first event controller and can now react to inpu
 
 ## Keyboard Keys: KeyEventController
 
-Monitoring focus is rarely necessary, for something much more commonly used, we turn to keyboard key strokes. We capture events of this type using  `KeyEventController`. 
+Monitoring focus is rarely necessary, for something much more commonly used, we turn to keyboard key strokes, which is whenever a button on keyboard goes from not-pressed to pressed (down), or pressed to not-pressed (up). We capture events of this type using  `KeyEventController`. 
 
 Before we can talk about the controller itself, we need to talk about keyboard keys:
 
-### Keys & Modifiers
-
-Mousetrap splits keys into two groups: **regular keys** and **modifiers**.
-
-A modifier is one of the following:
-+ `Shift`
-+ `Control`
-+ `Alt`
-
-\note Additional modifiers include `AltGr`, `Meta` and `Win`. These are keyboard-layout and/or OS-specific. See [here](https://docs.gtk.org/gdk4/flags.ModifierType.html) for more information.
-
-Modifiers are not tracked directly, rather, they *modify* the state of another key. For example, the key `C` can be pressed, not pressed, pressed while only `Shift` is held, pressed while `Shift` and `Àlt` are held, etc. To express all these options, mousetrap provides \a{ModifierState}, which holds information about which modifier keys are currently pressed.
-
-To query the modifier state, we use a static functions of `KeyEventController`. A static function is a function that can be invoked without instantiating the class, meaning we do not need a `KeyEventController` to call them. The functions
-
-+ \link mousetrap::KeyEventController::shift_pressed shift_pressed <br>
-+ \link mousetrap::KeyEventController::control_pressed control_pressed <br>
-+ \link mousetrap::KeyEventController::alt_pressed alt_pressed <br>
-
-query whether the corresponding modifier key is currently down. We access the modifier state from within signal handlers, as we will see soon.
-
 ### Key Identification
 
-Mousetrap uses two kinds of identifiers for keys, `KeyValue`s and `KeyCode`s. For most purposes, only the first is relevant. `KeyCode` is a 32-bit integer
-designating the internal identifier of the key, as the user's OS designates it. `KeyValue` identifies the key in a platform-independent manner, which is why it should be used instead.
+From the [chapter on actions](./03_actions.md) we recall that keyboard keys are split into two groups, **modifiers** and **non-modifiers**. Like with shortcut triggers,
+these are handled separately.
 
-GTK4 provides key identifiers for almost every keyboard layout, a list of identifiers can be found [here](https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gdk/gdkkeysyms.h#L38).
+Each non-modifier key has a key-code, which will be a constant defined by `mousetrap`. A full list of constants is available [here](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl). They provide a nice, human-readable way to identify keys. To refer to the space key, mousetrap uses a hard-coded integer, but for us humans all way have to remember is the name of the constant: `KEY_space`.
 
-Now that we know how to identify a key, we can look at the three signals of `KeyEventController`:
+### KeyEventController Signals
 
-\signals
-\signal_key_pressed{KeyEventController}
-\signal_key_released{KeyEventController}
-\signal_modifiers_changed{KeyEventController}
+Now that we know how to identify keys, we can instance `KeyEventController`, which has 3 signals:
 
-We see that pressing and releasing a non-modifier key are separate events. These can be used to track whether a key is currently up or down.
-
-Through the arguments of each signal, we get access to the key value, the less relevant key code, and the modifier state, which we can query using `KeyEventController`s static functions.
-
-As an example, to test whether the user presses the space key (while `window` holds input focus):
-
-```cpp
-auto key_controller = KeyEventController();
-key_controller.connect_signal_key_pressed([](KeyEventController& instance, int32_t key_value, int32_t, ModifierState state){
-    if (key_value == GDK_KEY_space)
-        std::cout << "space pressed" << std::endl;
-});
-window.add_controller(key_controller);
+```@eval
+include("signals.jl")
+return @type_signals(KeyEventController,
+    key_pressed,
+    key_released,
+    modifiers_changed
+)
 ```
 
-Where we choose to ignore the second `int32_t`, which is the os-specific key code.
+We see that pressing and releasing a non-modifier key are handled in separate signals. These can be used to track whether a key is currently up or down. Lastly, pressing or releasing any modifier key (such as control, alt, shift, etc.) is handled by the `modifiers_changed` signal.
 
-\warning `KeyEventController` **should not be used to detect whether the user pressed a combination of keys**. To react to the user pressing, for example, `Control + C`, we should use the action and keyboard shortcut architecture, along with the next event controller.
+The signal handler for any of the three signals is handed to arguments, a `KeyCode`, which is the key code constant of the keyboard key that triggered the signals, as well as `ModifierState`. This is an object that holds information about which modifiers are currently pressed. To query it, we use [`control_pressed`](@ref), [`shift_pressed](@ref), and [`alt_pressed`](@ref), which return `true` or `false` depending on whether the modifier key is currently down.
+
+For example, to test whether the user pressed the space key while shift is held, we would do:
+
+```julia
+key_controller = KeyEventController()
+connect_signal_key_pressed(key_controller) do self::KeyController, code::KeyCode, modifier_state::ModifierState
+    if code == KEY_space && shift_pressed(modifier_state)
+        println("shift + space pressed")
+    end
+end
+```
+
+`KeyEventController` should be used if we have to monitor both pressing and releasing a key or key combination. If all we want to do is trigger behavior when the user presses a key or key combination once, we should use `ShortcutEventController` instead:
 
 ## Detecting Key Bindings: ShortcutEventController
 
-We learned in the [chapter on actions](03_actions.md) that any functionality of an application should be wrapped in an `Action`. We can trigger actions using `Action::activate()` or with certain widgets, such as `Button` or menus. Recall that we can assign each action a shortcut using `Action::add_shortcut`. This shortcut will be automatically displayed in menus while the menu is open. To allow users to trigger the action anytime, not just when a menu is open, we use `ShortcutEventController`.
+Recall that in the [chapter on actions](./03_actions.md), we learned that a shortcut trigger, or keybinding, is made up of any number of modifier keys, along with exactly one non-modifier. 
 
-### Shortcut Trigger Syntax
+To react to the user pressing such a shortcut, we should use `ShortcutEventController`, which has an easier-to-use and more flexibl interface as compared to `KeyEventController`. 
 
-A **shortcut*, or **keybinding**, has the intuitive meaning of "any button combination". A shortcut in mousetrap is more limited, however.
+We first need an `Action`, which we assign a shortcut trigger;
 
-Recall that keys in mousetrap are split into two groups, modifiers and non-modifiers. A
-shortcut is a combination of **any number of modifiers**, including none, followed by **exactly one non-modifiers**. A few examples:
-
-+ `a` (that is the `A` keyboard key) is a shortcut
-+ `<Control><Shift>plus` (that is the `+` keyboard key) is a shortcut
-+ `<Alt><Control><Shift>` is **not** a shortcut, because it does not contain a non-modifier
-+ `<Control>xy` (that is the `X` key *and* the `Y` key) is **not** a shortcut, because it contains more than one non-modifier key
-
-Shortcuts are represented as strings, which have a specific syntax. As seen above, each modifier is enclosed in `<``>`, with no spaces. After the group of modifiers, the non-modifier key identifier is placed after the last modifiers `>`. Some more examples:
-
-+ "Control + C" is written `<Control>c`
-+ "Alt + LeftArrow" is written as `<Alt>Left` (sic, `L` is capitalized)
-+ "Shift + 1" is written as `exclam`
-
-That last one requires explanation. On most keyboard layouts, to type `!` the user has to press the shift modifier key, then press the `1` key. When "Shift + 1" is pressed, mousetrap does not receive this keyboard key event as-is, instead, it receives a single key event for the `!` key, with no modifiers. The identification of `!` is `exclam`, hence why "Shift + 1" is written as `exclam`.
-
-\collapsible_note_begin{Hint: Looking up Key Identifiers}
-
-An example on how to look up the key identifier as a string will be performed here.
-
-Let's say we want to write the shortcut "Control + Space". We know that we can write "Control" as `<Control>`. Next, we navigate to https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gdk/gdkkeysyms.h#L384, which, in line 384, says `GDK_KEY_space`. The identifier name is the last part of the constant name as a string, without the `"GDK_KEY_"`. So for this constant `GDK_KEY_space`, the id is `space`. Therefore, we write "Control + Space" as `<Control>space`. For the left arrow, the constant is named `GDK_KEY_Left`, therefore its identifier is `Left`, with a capitel `L`.
-
-One more obscure example, to write "Alt + Beta", that is the `β` key on the somewhat rare greek keyboard layout, we find the constant named `GDK_KEY_Greek_BETA` in [line 1049](https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gdk/gdkkeysyms.h#L1049). Erasing `GDK_KEY_` again, the key's string identifier is `Greek_BETA`. "Alt + Beta Key" is therefore written as `<Alt>Greek_BETA`
-
-If we make an error and use the wrong identifier, a soft warning will be printed at runtime, informing us of this fact.
-
-\collapsible_note_end
-
-### Assigning a Shortcut to an Action
-
-Unlike `KeyEventController`, \a{ShortcutEventController} does not have any signals to connect to. Instead, it will monitor key events automatically. If it recognizes a keyboard shortcut, it will trigger the corresponding action automatically. All we have to do is tell it to listen for keyboard shortcuts for a specific action. To do this, we have to call `ShortcutEventController::add_action`, which takes a reference to the corresponding action as the argument. Recall that we can always get a reference to an action from the actions ID using `Application::get_action`.
-
-```cpp
-// 1. initialize action
-auto action = Action("example.action", app);
-action.set_function([](Action&){
-   std::cout << "triggered" << std::endl; 
-});
-
-// 2: assign action a shortcut Control + T
-action.add_shortcut("<Control>t");
-
-// 3: create shortcut controller
-auto shortcut_controller = ShortcutEventController();
-
-// 4. make shortcut controller listen for shortcut of our action
-shortcut_controller.add_action(action);
-
-// 5. add shortcut controller to a widget to start receiving events
-window.add_controller(controller);
+```julia
+action = Action("shortcut_controller.example", app) do self::Action
+    println("shift + space pressed")
+end
+add_shortcut!(action, "<Shift>space")
 ```
 
-While this may seem like a lot of steps, it is many times less work than scanning signals of `KeyboadEventController` manually. Furthermore, if we change the keyboard shortcut of an action or disable it, `ShortcutEventController` will automatically respect this change.
+Where `app` is an `Application` instance.
 
-For global shortcuts, we can often get away with having a single `ShortcutEventController` that was added to the top-level window. Any action added via `ShortcutEventController::add_action` will be triggered, regardless of which widget holds focus this way.
+We can then create a `ShortcutEventController` instance, and call `add_action!`, after which it will listen for the associated keybinding of that action. Any number of actions can be added to a `ShortcutEventController`, and it's common to have a global one that simply monitors keyboard key events.
+
+In order for it to start receiving these events, we - just like before - need to connect it to a widget:
+
+```julia
+shortcut_controller = ShortcutEventController()
+add_action!(shortcut_controller, action)
+add_controller!(window, shortcut_controller)
+```
+Where `window` is the top-level window.
+
+This mechanism is far more automated than having to manually check from within a `KeyEventController` signal handler if the current combination of buttons should trigger a shortcut action, which is why `ShortcutEventController` should be preferred in situations where we do not care about individual key strokes.
 
 ---
 
@@ -228,35 +167,38 @@ For global shortcuts, we can often get away with having a single `ShortcutEventC
 Now that we know how to handle keyboard events, we will turn our attention to mouse-based events. There are two types
 of events a mouse can emit, **cursor motion**  and **mouse button presses**. These are handled by two different controllers.
 
-For cursor motion, the event controller is \a{MotionEventController}, which has 3 signals:
+For cursor motion, the event controller is [`MotionEventController`](@ref), which has 3 signals:
 
-\signals
-\signal_motion_enter{MotionEventController}
-\siganl_motion{MotionEventController}
-\signal_motion_leave{MotionEventController}
-
-`motion_enter` and `motion` supply the signal handler with two additional arguments, `x` and `y`. These are the absolute position of the cursor in widget-space, in pixels.
-
-\collapsible_note_begin{Hint: Widget-Space Coordinates}
-In mousetrap, the coordinate system used for the cursor position is anchored at the top left corner of the widgets' allocation. This means the top-left-most pixel of a widgets' allocated space is coordinate `(0, 0)`. The top-right-most pixel is `(0, width)`, where `width` is the absolute width of the widget, in pixels. The bottom-right-most pixel is `(width, height)`, while the bottom-left one is `(0, height)`.
-
-If `motion` supplies us with values `x = 250` and `y = 400`, and our widget has the size `500x800`, then `(x, y)` is at the center of the widgets' allocation. We can check a widgets current allocated size using \link mousetrap::Widget::get_allocation `Widget::get_allocation`\endlink.
-
-\collapsible_note_end
-
-Note that `motion` is only emitted when the cursor is inside the controlled widgets allocated space on screen. We cannot track a cursor that is outside the widget that has the `MotionEventController` connected. To track **all** cursor movement, we would have to connect the controller to a window, then make that window cover the entire screen.
-
-We can track movement of the cursor as it moves over our example widget, `window`, like so:
-
-```cpp
-auto motion_controller = MotionEventController();
-motion_controller.connect_signal_motion([](MotionEventController&, double x, double y){
-   std::cout << "Cursor Position: " << x << " " << y << std::endl;  
-});
-window.add_controller(motion_controller);
+```@eval
+include("signals.jl")
+return @type_signals(MotionEventController,
+    motion_enter,
+    motion,
+    motion_leave
+)
 ```
 
-`motion_enter` and `motion_leave` will notify us the first and last frame a cursor is inside a widget. Note that, the same frame `motion_enter` is emitted, `motion` will also be emitted.
+`motion_enter` is emitted once when the cursor enters the widgets are, then, once per frame, `motion` is emitted to update us about the current cursor position. Lastly, when the cursor leaves the widgets allocated area, `motion_leave` is emitted exactly once.
+
+`motion_enter` and `motion` supply us with the current cursor position, which is relative to the current widgets origin, in pixels.
+
+That is, for a widget whose top-left corner (it's origin) is at position `(widget_position_x, widget_position_y)`,  if the coordinate supplied by the signals is `(x, y)`, then the cursor is at position `(widget_position_x + x, widget_position_y + y)`, in pixels. 
+
+Printed here is an example of how to connect to these signals, where we forwarded `window`, the host widget of the controller, as the `data` argument of signal `motion`, in order to calculate the absolute position of the cursor on screen.
+
+```julia
+function on_motion(self::MotionEventController, x::AbstractFloat, y::AbstractFloat, instance::Widget)
+    widget_position = get_position(instance)
+    cursor_position = Vector2f(x, y)
+
+    println("Absolute Cursor Position: $(widget_position + cursor_position)")
+end
+
+window = Window(app)
+motion_controller = MotionEventController()
+connect_signal_motion!(on_motion, motion_controller, window)
+add_controller!(window, motion_controller)
+```
 
 ---
 
