@@ -28,7 +28,7 @@
 @document BLEND_MODE_SUBTRACT "result = destination.rgb - source.rgb"
 
 @document ButtonID enum_docs(:ButtonID,
-    "ID of a mouse button, not drivers support all of these ids.", [
+    "ID of a mouse button, manufacturer-specific.", [
     :BUTTON_ID_ANY,
     :BUTTON_ID_BUTTON_01,
     :BUTTON_ID_BUTTON_02,
@@ -54,7 +54,7 @@
 @document BUTTON_ID_NONE "No button, regardless of ID"
 
 @document CheckButtonState enum_docs(:CheckButtonState,
-    "State of a `CheckButton`, determines graphical element on screen", [
+    "State of a [`CheckButton`](@ref)", [
     :CHECK_BUTTON_STATE_ACTIVE,
     :CHECK_BUTTON_STATE_INACTIVE,
     :CHECK_BUTTON_STATE_INCONSISTENT
@@ -105,33 +105,33 @@
     :CURSOR_TYPE_ZOOM_IN,
     :CURSOR_TYPE_ZOOM_OUT
 ])
-@document CURSOR_TYPE_ALL_SCROLL "no visible cursor"
-@document CURSOR_TYPE_CELL "used for selected cells from a table"
-@document CURSOR_TYPE_COLUMN_RESIZE "left-right arrow"
-@document CURSOR_TYPE_CONTEXT_MENU "instructs the user that clicking will open a context menu"
-@document CURSOR_TYPE_CROSSHAIR "used for making pixel-perfect selections"
-@document CURSOR_TYPE_DEFAULT "default arrow pointer"
-@document CURSOR_TYPE_EAST_RESIZE "left arrow"
-@document CURSOR_TYPE_GRAB "hand, not yet grabbing"
-@document CURSOR_TYPE_GRABBING "hand, currently grabbing"
-@document CURSOR_TYPE_HELP "questionmark, instructs the user that clicking or hovering above this element will open a help menu"
+@document CURSOR_TYPE_ALL_SCROLL "No visible cursor"
+@document CURSOR_TYPE_CELL "Cross, used for selecting cells from a table"
+@document CURSOR_TYPE_COLUMN_RESIZE "Left-right arrow"
+@document CURSOR_TYPE_CONTEXT_MENU "Questionmark, instructs the user that clicking will open a context menu"
+@document CURSOR_TYPE_CROSSHAIR "Crosshair, used for making pixel-perfect selections"
+@document CURSOR_TYPE_DEFAULT "Default arrow pointer"
+@document CURSOR_TYPE_EAST_RESIZE "Left arrow"
+@document CURSOR_TYPE_GRAB "Hand, not yet grabbing"
+@document CURSOR_TYPE_GRABBING "Hand, currently grabbing"
+@document CURSOR_TYPE_HELP "Questionmark, instructs the user that clicking or hovering above this element will open a help menu"
 @document CURSOR_TYPE_MOVE "4-directional arrow"
-@document CURSOR_TYPE_NONE "invisible cursor"
-@document CURSOR_TYPE_NORTH_EAST_RESIZE "up-left arrow"
-@document CURSOR_TYPE_NORTH_RESIZE "up-arrow"
-@document CURSOR_TYPE_NORTH_WEST_RESIZE "up-right arrow"
-@document CURSOR_TYPE_NOT_ALLOWED "instructs the user that this action is currently disabled"
-@document CURSOR_TYPE_POINTER "hand pointing"
-@document CURSOR_TYPE_PROGRESS "spinning animation, signifies that the object is currently busy"
-@document CURSOR_TYPE_ROW_RESIZE "up-down arrow"
-@document CURSOR_TYPE_SOUTH_EAST_RESIZE "down-left arrow"
-@document CURSOR_TYPE_SOUTH_RESIZE "down arrow"
-@document CURSOR_TYPE_SOUTH_WEST_RESIZE "down-right arrow"
-@document CURSOR_TYPE_TEXT "caret"
-@document CURSOR_TYPE_WAIT "instructs the user that an action will become available soon"
-@document CURSOR_TYPE_WEST_RESIZE "right arrow"
-@document CURSOR_TYPE_ZOOM_IN "lens, usually with a plus icon"
-@document CURSOR_TYPE_ZOOM_OUT "lens, usually with a minus icon"
+@document CURSOR_TYPE_NONE "Invisible cursor"
+@document CURSOR_TYPE_NORTH_EAST_RESIZE "Up-left arrow"
+@document CURSOR_TYPE_NORTH_RESIZE "Up-arrow"
+@document CURSOR_TYPE_NORTH_WEST_RESIZE "Up-right arrow"
+@document CURSOR_TYPE_NOT_ALLOWED "Instructs the user that this action is currently disabled"
+@document CURSOR_TYPE_POINTER "Hand pointing"
+@document CURSOR_TYPE_PROGRESS "Spinning animation, signifies that the object is currently busy"
+@document CURSOR_TYPE_ROW_RESIZE "Up-down arrow"
+@document CURSOR_TYPE_SOUTH_EAST_RESIZE "Down-left arrow"
+@document CURSOR_TYPE_SOUTH_RESIZE "Down arrow"
+@document CURSOR_TYPE_SOUTH_WEST_RESIZE "Down-right arrow"
+@document CURSOR_TYPE_TEXT "Caret"
+@document CURSOR_TYPE_WAIT "Loading animation, Instructs the user that an action will become available soon"
+@document CURSOR_TYPE_WEST_RESIZE "Right arrow"
+@document CURSOR_TYPE_ZOOM_IN "Lens, usually with a plus icon"
+@document CURSOR_TYPE_ZOOM_OUT "Lens, usually with a minus icon"
 
 @document DeviceAxis enum_docs(:DeviceAxis,
     "Axes of stylus- and touchpad device, capture by `StylusEventController`. Not all manufactures support all or even any of these.", [
@@ -147,17 +147,17 @@
     :DEVICE_AXIS_Y,
     :DEVICE_AXIS_Y_TILT
 ])
-@document DEVICE_AXIS_DELTA_X "horizontal offset"
-@document DEVICE_AXIS_DELTA_Y "vertical offset"
-@document DEVICE_AXIS_DISTANCE "distance between the stylus' tip and the touchpad"
-@document DEVICE_AXIS_PRESSURE "current pressure of the stylus"
-@document DEVICE_AXIS_ROTATION "rotation of the stylus, usually in radians"
-@document DEVICE_AXIS_SLIDER "state of the stylus slider"
-@document DEVICE_AXIS_WHEEL "state of the stylus scroll wheel"
-@document DEVICE_AXIS_X "x-position of the stylus"
-@document DEVICE_AXIS_X_TILT "tilt along the horizontal axis"
-@document DEVICE_AXIS_Y "y-position of the stylus"
-@document DEVICE_AXIS_Y_TILT "til along the vertical axis"
+@document DEVICE_AXIS_DELTA_X "Horizontal offset"
+@document DEVICE_AXIS_DELTA_Y "Vertical offset"
+@document DEVICE_AXIS_DISTANCE "Distance between the stylus' tip and the touchpad"
+@document DEVICE_AXIS_PRESSURE "Current pressure of the stylus"
+@document DEVICE_AXIS_ROTATION "Rotation of the stylus, usually in radians"
+@document DEVICE_AXIS_SLIDER "State of the stylus slider"
+@document DEVICE_AXIS_WHEEL "State of the stylus scroll wheel"
+@document DEVICE_AXIS_X "X-position of the stylus"
+@document DEVICE_AXIS_X_TILT "Tilt along the horizontal axis"
+@document DEVICE_AXIS_Y "Y-position of the stylus"
+@document DEVICE_AXIS_Y_TILT "Tilt along the vertical axis"
 
 @document EllipsizeMode enum_docs(:EllipsizeMode,
     "Determines how ellipses are inserted when a `Label`s allocated area exceeds the space it is allowed to allocated", [
@@ -172,7 +172,7 @@
 @document ELLIPSIZE_MODE_START "Insert at the start: `...text`"
 
 @document FileChooserAction enum_docs(:FileChooserAction,
-    "Determines layout, which, and how many files/folders a user can select when using `FileChooser`", [
+    "Determines layout, which, and how many files/folders a user can select when using [`FileChooser`](@ref)", [
     :FILE_CHOOSER_ACTION_OPEN_FILE,
     :FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FILES,
     :FILE_CHOOSER_ACTION_SAVE,
@@ -182,11 +182,11 @@
 @document FILE_CHOOSER_ACTION_OPEN_FILE "Select exactly one file"
 @document FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FILES "Select one or more files"
 @document FILE_CHOOSER_ACTION_SAVE "Choose a name and location"
-@document FILE_CHOOSER_ACTION_SELECT_FOLDER "Select exactly on folder"
+@document FILE_CHOOSER_ACTION_SELECT_FOLDER "Select exactly one folder"
 @document FILE_CHOOSER_ACTION_SELECT_MULTIPLE_FOLDERS "Select one or more folders"
 
 @document FileMonitorEvent enum_docs(:FileMonitorEvent,
-    "Classifies operation that invoked the callback of  `FileMonitor`", [
+    "Classifies user behavior that triggered the callback of [`FileMonitor`](@ref)", [
     :FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED,
     :FILE_MONITOR_EVENT_CHANGED,
     :FILE_MONITOR_EVENT_CHANGES_DONE_HINT,
@@ -206,19 +206,19 @@
 @document FILE_MONITOR_EVENT_RENAMED "File or folder was renamed"
 
 @document InterpolationType enum_docs(:InterpolationType,
-    "Determines interpolation algorithm used when scaling `Image`", [
+    "Determines interpolation algorithm used when scaling [`Image`](@ref)", [
     :INTERPOLATION_TYPE_BILINEAR,
     :INTERPOLATION_TYPE_HYPERBOLIC,
     :INTERPOLATION_TYPE_NEAREST,
     :INTERPOLATION_TYPE_TILES
 ])
 @document INTERPOLATION_TYPE_BILINEAR "Linear interpolation, adequate speed and quality"
-@document INTERPOLATION_TYPE_HYPERBOLIC "Hyperbolic interpolation, slow speed, high quality"
+@document INTERPOLATION_TYPE_HYPERBOLIC "Cubic interpolation, slow speed, high quality"
 @document INTERPOLATION_TYPE_NEAREST "Nearest neigbhor interpolation, fastest but no filtering takes place"
 @document INTERPOLATION_TYPE_TILES "Linear when scaling down, nearest neighbor when scaling up."
 
 @document JustifyMode enum_docs(:JustifyMode,
-    "Determines how words are arranged along the horizontal axis of a `Label` or `TextView`", [
+    "Determines how words are arranged along the horizontal axis of a [`Label`](@ref) or [`TextView`](@ref)", [
     :JUSTIFY_MODE_CENTER,
     :JUSTIFY_MODE_FILL,
     :JUSTIFY_MODE_LEFT,
@@ -236,17 +236,17 @@
     :LABEL_WRAP_MODE_ONLY_ON_WORD,
     :LABEL_WRAP_MODE_WORD_OR_CHAR
 ])
-@document LABEL_WRAP_MODE_NONE "Never wrap, `Label` will always be exactly one line"
+@document LABEL_WRAP_MODE_NONE "Never wrap, will always be exactly one line"
 @document LABEL_WRAP_MODE_ONLY_ON_CHAR "Insert linebreaks after a character"
 @document LABEL_WRAP_MODE_ONLY_ON_WORD "Insert linebreaks before a space between two words"
 @document LABEL_WRAP_MODE_WORD_OR_CHAR "Insert linebreak after a character or before the space between two words"
 
 @document LevelBarMode enum_docs(:LevelBarMode,
-    "Determines how a `LevelBar` displays its fraction", [
+    "Determines how a [`LevelBar`](@ref) displays its fraction", [
     :LEVEL_BAR_MODE_CONTINUOUS,
     :LEVEL_BAR_MODE_DISCRETE
 ])
-@document LEVEL_BAR_MODE_CONTINUOUS "Non-segmented bar, displays floating point value"
+@document LEVEL_BAR_MODE_CONTINUOUS "Continuous bar, displays floating point value"
 @document LEVEL_BAR_MODE_DISCRETE "Segmented bar, displays integer value"
 
 @document Orientation enum_docs(:Orientation,
@@ -258,7 +258,7 @@
 @document ORIENTATION_VERTICAL "Align top-to-bottom along the y-axis"
 
 @document PanDirection enum_docs(:PanDirection,
-    "Direction of a pan gestured recognized by `PanEventController`", [
+    "Direction of a pan gesture recognized by [`PanEventController`](@ref)", [
     :PAN_DIRECTION_DOWN,
     :PAN_DIRECTION_LEFT,
     :PAN_DIRECTION_RIGHT,
@@ -270,22 +270,22 @@
 @document PAN_DIRECTION_UP "Pen down-up"
 
 @document ProgressBarDisplayMode enum_docs(:ProgressBarDisplayMode,
-    "Determines whether a `ProgressBar` should displays text or a percentage, showing the current fraction", [
+    "Determines whether a [`ProgressBar`](@ref) should displays text or a percentage, showing the current fraction", [
     :PROGRESS_BAR_DISPLAY_MODE_SHOW_PERCENTAGE,
     :PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT
 ])
 @document PROGRESS_BAR_DISPLAY_MODE_SHOW_PERCENTAGE "Show a percentage"
-@document PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT "Show custom text set via `set_text!`"
+@document PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT "Show custom text set via [`set_text!`](@ref)"
 
 @document PropagationPhase enum_docs(:PropagationPhase,
-    "Determines at which part during the main loop event propgataion a event controller will consume the event, cf. https://developer-old.gnome.org/gtk4/stable/event-propagation.html", [
+    "Determines at which part during the main loop event propgataion an event controller will consume the event, cf. https://developer-old.gnome.org/gtk4/stable/event-propagation.html", [
     :PROPAGATION_PHASE_BUBBLE,
     :PROPAGATION_PHASE_CAPTURE,
     :PROPAGATION_PHASE_NONE,
     :PROPAGATION_PHASE_TARGET
 ])
-@document PROPAGATION_PHASE_BUBBLE "Consume event during propagation \"up\", from child to parent"
-@document PROPAGATION_PHASE_CAPTURE "Consume event during progagation \"down\", from parent to child"
+@document PROPAGATION_PHASE_BUBBLE "Consume event during propagation \"upwards\", from child to parent"
+@document PROPAGATION_PHASE_CAPTURE "Consume event during progagation \"downwards\", from parent to child"
 @document PROPAGATION_PHASE_NONE "Do not capture events"
 @document PROPAGATION_PHASE_TARGET "Consume events when the widget targets its event controllers with events"
 
@@ -302,7 +302,7 @@
 @document RELATIVE_POSITION_RIGHT_OF "Object is right of another"
 
 @document RevealerTransitionType enum_docs(:RevealerTransitionType,
-    "Determines animation type when a `Revealer` reveals or hides its child", [
+    "Determines animation type when of [`Revealer`] showing or hiding its child", [
     :REVEALER_TRANSITION_TYPE_CROSSFADE,
     :REVEALER_TRANSITION_TYPE_NONE,
     :REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
@@ -314,7 +314,7 @@
     :REVEALER_TRANSITION_TYPE_SWING_RIGHT,
     :REVEALER_TRANSITION_TYPE_SWING_UP
 ])
-@document REVEALER_TRANSITION_TYPE_CROSSFADE "Crossfade, slowly increasin opacity"
+@document REVEALER_TRANSITION_TYPE_CROSSFADE "Crossfade, slowly increasing / decreasing opacity"
 @document REVEALER_TRANSITION_TYPE_NONE "Instantly reveal the widget"
 @document REVEALER_TRANSITION_TYPE_SLIDE_DOWN "Slide from top to bottom"
 @document REVEALER_TRANSITION_TYPE_SLIDE_LEFT "Slide from right to left"
@@ -326,7 +326,7 @@
 @document REVEALER_TRANSITION_TYPE_SWING_UP "Swing from bottom to top"
 
 @document ScrollType enum_docs(:ScrollType,
-    "Classification of keyboard event that triggered the `scroll_child` event of a `Viewport", [
+    "Classification of keyboard event that triggered the `scroll_child` event of a [`Viewport`](@ref)", [
     :SCROLL_TYPE_JUMP,
     :SCROLL_TYPE_NONE,
     :SCROLL_TYPE_PAGE_BACKWARD,
@@ -362,17 +362,17 @@
 @document SCROLL_TYPE_STEP_UP "Move on scroll step vertically up"
 
 @document ScrollbarVisibilityPolicy enum_docs(:ScrollbarVisibilityPolicy,
-    "Determines when / if a scrollbar of a `Viewport` reveal themself", [
+    "Determines when / if a scrollbar of a [`Viewport`](@ref) reveals itself", [
     :SCROLLBAR_VISIBILITY_POLICY_ALWAYS,
     :SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC,
     :SCROLLBAR_VISIBILITY_POLICY_NEVER
 ])
 @document SCROLLBAR_VISIBILITY_POLICY_ALWAYS "Stay revealed at all times"
-@document SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC "Reveal when the users cursor enters the `Viewport`, hide when it exits"
-@document SCROLLBAR_VISIBILITY_POLICY_NEVER "Sty hidden at all times"
+@document SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC "Reveal when the users cursor enters the [`Viewport`](@ref), hide when it exits"
+@document SCROLLBAR_VISIBILITY_POLICY_NEVER "Stay hidden at all times"
 
 @document SectionFormat enum_docs(:SectionFormat,
-    "Visual layout of a `MenuModel` \"section\" item", [
+    "Visual layout of a [`MenuModel`](@ref) \"section\"-type item", [
     :SECTION_FORMAT_CIRCULAR_BUTTONS,
     :SECTION_FORMAT_HORIZONTAL_BUTTONS,
     :SECTION_FORMAT_HORIZONTAL_BUTTONS_LEFT_TO_RIGHT,
@@ -411,12 +411,12 @@
     :SHORTCUT_SCOPE_LOCAL
     #:SHORTCUT_SCOPE_MANAGED
 ])
-@document SHORTCUT_SCOPE_GLOBAL "If the top-level window holds focus, the shortcut is captured"
+@document SHORTCUT_SCOPE_GLOBAL "If the most top-level parent of the widget holds focus, the shortcut is captured"
 @document SHORTCUT_SCOPE_LOCAL "If the widget the event controller was added to holds focus, the shortcut is captured"
 # @document SHORTCUT_SCOPE_MANAGED ""
 
 @document StackTransitionType enum_docs(:StackTransitionType,
-    "Determines animation that plays when a `Stack` switches from one of its pages to another", [
+    "Determines animation that plays when a [`Stack`](@ref) switches from one of its pages to another", [
     :STACK_TRANSITION_TYPE_CROSSFADE,
     :STACK_TRANSITION_TYPE_NONE,
     :STACK_TRANSITION_TYPE_OVER_DOWN,
@@ -462,12 +462,12 @@
 @document STACK_TRANSITION_TYPE_UNDER_UP "Slide next page under current, from bottom to top"
 
 @document TextureScaleMode enum_docs(:TextureScaleMode,
-    "Determines how `Texture` filters when scaled", [
+    "Determines how [`Texture`](@ref) filters when scaled", [
     :TEXTURE_SCALE_MODE_LINEAR,
     :TEXTURE_SCALE_MODE_NEAREST
 ])
 @document TEXTURE_SCALE_MODE_LINEAR "Linear interpolation"
-@document TEXTURE_SCALE_MODE_NEAREST "Nearest neighbor interploation"
+@document TEXTURE_SCALE_MODE_NEAREST "Nearest-neighbor interploation"
 
 @document TextureWrapMode enum_docs(:TextureWrapMode,
     "Determines content of fragments with a texture coordinate outside of `[0, 1]`", [
@@ -477,14 +477,14 @@
     :TEXTURE_WRAP_MODE_STRETCH,
     :TEXTURE_WRAP_MODE_ZERO
 ])
-@document TEXTURE_WRAP_MODE_MIRROR "Mirror along the closed edge"
+@document TEXTURE_WRAP_MODE_MIRROR "Mirror along the closest edge"
 @document TEXTURE_WRAP_MODE_ONE "RGBA(1, 1, 1, 1)"
-@document TEXTURE_WRAP_MODE_REPEAT "Repeat along the closed edge"
+@document TEXTURE_WRAP_MODE_REPEAT "Repeat along the closest edge"
 @document TEXTURE_WRAP_MODE_STRETCH "Stretch the outermost fragment of the closest edge"
 @document TEXTURE_WRAP_MODE_ZERO "RGBA(0, 0, 0, 0)"
 
 @document TickCallbackResult enum_docs(:TickCallbackResult,
-    "Return value of a callback registered via `set_tick_callback!`. Determines whether the callback should be removed.", [
+    "Return value of a callback registered via [`set_tick_callback!`](@ref). Determines whether the callback should be removed.", [
     :TICK_CALLBACK_RESULT_CONTINUE,
     :TICK_CALLBACK_RESULT_DISCONTINUE
 ])
@@ -512,7 +512,7 @@
 @document TOOL_TYPE_UNKNOWN "None of the other values of `ToolType`"
 
 @document WindowCloseRequestResult enum_docs(:WindowCloseRequestResult,
-    "Return value of signal `close_request` of window. Determines whether the window should be allowed to close.", [
+    "Return value of signal `close_request` of [`Window`](@ref). Determines whether the window should close when requested to.", [
     :WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE,
     :WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE
 ])
