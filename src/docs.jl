@@ -48,9 +48,9 @@ macro document(name, string)
 end
 
 function enum_docs(name, brief, values)
-    out = "## $(name)\n"
+    out = "# $(name)\n"
     out *= "$(brief)\n"
-    out *= "### Enum Values\n"
+    out *= "## Enum Values\n"
 
     for value in values
         out *= "+ `$value`\n"
@@ -60,7 +60,7 @@ function enum_docs(name, brief, values)
 end
 
 macro type_constructors(constructors...)
-    out = "### Constructors\n"
+    out = "## Constructors\n"
     if !isempty(constructors)
         out *= "```\n"
         for constructor in constructors
@@ -74,13 +74,13 @@ macro type_constructors(constructors...)
 end
 
 macro type_fields()
-    out = "### Fields\n"
+    out = "## Fields\n"
     out *= "(no public fields)\n"   
     return out
 end
 
 macro type_fields(fields...)
-    out = "### Fields\n"
+    out = "## Fields\n"
     if !isempty(fields)
         for field in fields
             out *= "+ `$field`\n"
@@ -97,9 +97,9 @@ function abstract_type_docs(type_in, super_type, brief)
 
     type = string(type_in)
     out = "$brief\n"
-    out *= "### Supertype\n`$super_type`\n"
+    out *= "## Supertype\n`$super_type`\n"
 
-    out *= "### Subtypes\n"
+    out *= "## Subtypes\n"
     for t in InteractiveUtils.subtypes(type_in)
         out *= "+ `$t`\n"
     end
