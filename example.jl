@@ -7,17 +7,15 @@ using mousetrap
 
 main() do app::Application
 
-    function on_motion(self::MotionEventController, x::AbstractFloat, y::AbstractFloat, instance::Widget)
-        widget_position = get_position(instance)
-        cursor_position = Vector2f(x, y)
-    
-        println("Absolute Cursor Position: $(widget_position + cursor_position)")
-    end
-    
     window = Window(app)
-    motion_controller = MotionEventController()
-    connect_signal_motion!(on_motion, motion_controller, window)
-    add_controller!(window, motion_controller)
 
+    distance_scrolled = Vector2f(0);
+    scroll_controller = ScrollEventController()
+    connect_signal_scroll!(scroll_controller) do self::ScrollEventController, delta_x::AbstractFloat, delta_y::AbstractFloat
+        global distance_scrolled += Vector2f(delta_x, delta_y)
+        println("Distanc scrolled: $distance_scrolled")
+    end
+    add_controller(window, scroll_controller)
+    
     present!(window)
 end

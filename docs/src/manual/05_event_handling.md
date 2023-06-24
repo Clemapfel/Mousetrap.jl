@@ -334,147 +334,175 @@ add_controller(window, drag_controller)
 
 **Panning**  is similar to dragging, in that the user presses the mouse button (or touchscreen), then holds it down while moving the cursor to a different location. The difference between panning and click-dragging is that panning can only occur along exactly one of the two axis: left-right (the x-axis) or top-bottom (the y-axis). This is commonly seen in touchscreen UIs, for example, the user may scroll horizontally by using the pan gesture as opposed to a scroll wheel.
 
-Panning is handled by the appropriately named \a{PanEventController}, which is the first controller in this chapter that takes an argument to its constructor. We supply a `mousetrap::Orientation`, which decides along which axis the controller should listen to panning for, `HORIZONTAL` for the x-axis, `VERTICAL` for the y-axis.
+Panning is handled by the appropriately named [`PanEventController`](@ref), which is the first controller in this chapter that takes an argument to its constructor. We supply an [`Orientation`](@ref), which decides along which axis the controller should listen to panning for, `ORIENTATION_HORIZONTAL` for the x-axis, `ORIENTATION_VERTICAL` for the y-axis.
 
-A controller cannot listen to both axis at once, though we can connect two controllers, one for each axis, to the same widget to emulate this behavior.
+A pan controller cannot listen to both axes at once, though we can connect two controllers, one for each axis, to the same widget to emulate this behavior.
 
-This controller only has one signal:
+`PanEventController` only has one signal:
 
-\signals
-\signal_pan{PanEventController}
-
-Where `PanDirection` is an enum with four values: `LEFT`, `RIGHT`, `UP` and `DOWN`. If the orientation was set to `HORIZONTAL`, only `LEFT` and  `RIGHT` can occur, and vice-versa for `VERTICAL`.
-
-```cpp
-auto pan = PanEventController(Orientation::HORIZONTAL);
-pan.connect_signal_pan([](PanEventController*, PanDirection direction, double offset){
-    if (direction == PanDirection::LEFT)
-        // move widget left
-    else if (direction == PanDirection::RIGHT)
-        // move widget right
-});
+```@eval
+include("signals.jl")
+return @type_signals(PanEventController,
+    pan
+)
 ```
+
+Which is emitted once per frame while the gesture is active.
+
+Where `PanDirection` is an enum with four values: `PAN_DIRECTION_LEFT`, `PAN_DIRECTION_RIGHT`, `PAN_DIRECTION_UP` and `PAN_DIRECTION_DOWN`. If the orientation was set to `ORIENTATION_HORIZONTAL`, only left and right can occur, and vice-versa for `ORIENTATION_VERTICAL`.
+
+The second argumnet is the current offset, that is, the distance between the current position of the cursor and the position at which the gesture was first recognized, in pixels.
+
+```julia
+pan_controller = PanEventController(ORIENTATION_HORIZONTAL)
+connect_signal_pan!(pan_controller) do self::PanEventController, direction::PanDirection, offset::AbstractFloat
+    if direction == PanDirection::LEFT
+        println("panning left by $offset")
+    elseif direction == PanDirection::RIGHT
+        println("panning right by $offset")
+    end
+end
+add_controller!(window, pan_controller)
+```
+
 ---
 
 ## Mousewheel-Scrolling: ScrollEventController
 
-Other than clicking and cursor movement, many mice have a third function: scrolling. This is usually done with a designated wheel, though some operating systems also recognize scroll gestures using a trackpad or touchscreen. Either way, scroll events are registered by \a{ScrollEventController}, which has four signals:
+Other than clicking and cursor movement, many mice have a third function: scrolling. This is usually done with a designated wheel, though some operating systems also recognize scroll gestures using a trackpad or touchscreen. Either way, scroll events are registered by [`ScrollEventController`](@ref), which has four signals:
 
-\signals
-\signal_scroll_begin{ScrollEventController}
-\signal_scroll{ScrollEventController}
-\signal_scroll_end{ScrollEventController}
-\signal_kinetic_scroll_decelerate{ScrollEventController}
+```@eval
+include("signals.jl")
+return @type_signals(ScrollEventController,
+    scroll_begin,
+    scroll,
+    scroll_end,
+    kinetic_scroll_decelerate
+)
+```
 
-Three of these are fairly straighforward, when the user starts scrolling, `scroll_begin` is emitted. As the user keeps scrolling, `scroll` is emitted every frame, updating us about current position of the scroll wheel. The two additional arguments to the `scroll` signal handler, `delta_x` and `delta_y`, inform us about the distance of the scroll. Many systems support both vertical and horizontal scrolling (usually by clicking the mouse scroll wheel). When the user stops scrolling, `scroll_end` is emitted once.
+Three of these are fairly straighforward, when the user starts scrolling, `scroll_begin` is emitted. As the user keeps scrolling, `scroll` is emitted every frame, updating us about current position of the scroll wheel. The two additional arguments to the `scroll` signal handler, `delta_x` and `delta_y` are the vertical- and horizontal offset, relative to the position at which the scroll gesture was first recognized. 
+
+Many systems support both vertical and horizontal scrolling (usually by clicking the mouse scroll wheel), which is why we get two offsets. 
+
+When the user stops scrolling, `scroll_end` is emitted once.
 
 ### Kinetic Scrolling
 
-`ScrollEventController` has a fourth signal which reacts to **kinetic scrolling**. Kinetic scrolling is a feature of modern UI, where the scroll movement simulates inertia. When the user triggers scrolling, usually through a swipe on a touchscreen, the widget being scrolled will continue scrolling even when the user is no longer touching the screen. The "friction" of the scrolling widget will slowly reduce the scroll speed, until it comes to a stop. `kinetic_scroll_decelerate` is emitted during this period, after the user has stopped touching the screen, but before the widget has a scroll speed of 0. Its additional arguments `x_velocity` and `y_velocity` are equal to the conceptual speed the widget currently should be scrolling at.
+`ScrollEventController` has a fourth signal which reacts to **kinetic scrolling**. Kinetic scrolling is a feature of modern UI, where the scroll movement simulates inertia. When the user triggers scrolling, usually through a swipe on a touchscreen, the widget being scrolled will continue scrolling even when the user is no longer touching the screen. The "friction" of the scrolling widget will slowly reduce the scroll speed, until it comes to a stop. `kinetic_scroll_decelerate` is emitted during this period, after the user has stopped touching the screen, but before the widget has a scroll speed of 0. Its additional arguments `x_velocity` and `y_velocity` are equal to the conceptual speed the widget should be scrolling at.
 
 If we want to keep track of how far the user has scrolled a widget that had a `ScrollEventController` connect, we do the following:
 
-```cpp
-static Vector2f distance_scrolled = 0;
-
-auto scroll = ScrollEventController();
-scroll.connect_signal_scroll([](ScrollEventController*, double delta_x, double delta_y)-> bool {
-    distance_scrolled.x += delta_x;
-    distance_scrolled.y += delta_y;
-    return false;
-});
-window.add_controller(scroll);
+```julia
+distance_scrolled = Vector2f(0);
+scroll_controller = ScrollEventController()
+connect_signal_scroll!(scroll_controller) do self::ScrollEventController, delta_x::AbstractFloat, delta_y::AbstractFloat
+    global distance_scrolled += Vector2f(delta_x, delta_y)
+    println("Distanc scrolled: $distance_scrolled")
+end
+add_controller(window, scroll_controller)
 ```
-Where the return value `false` means the default handlers connected to signal `scroll` should not be surpressed, that is, any widget in `window` should still scroll graphically, just as if no event controller is connected at all. If we want to control the connect widget manually, returning `true` will prevent any default behavior from occurring.
 
 ---
 
 ## Pinch-Zoom: PinchZoomEventController
 
-While `MotionEventController`, `ClickEventController`, etc. recognize both a mouse and touchscreen, mousetrap offers some touch-only gestures, though many trackpads also support them. These are usually gestures performed using two fingers, the first of which is **pinch-zoom**. Pinch-zoom is when the user places two fingers on the touchscreen, then moves either, such that the distance between the fingers changes. This gesture is commonly used to zoom a view in or out. It is recognized by `PinchZoomEventController`, which only has one signal:
+While `MotionEventController`, `ClickEventController`, etc. recognize both a mouse and touchscreen, mousetrap offers some touch-only gestures, though many trackpads also support them. These are usually gestures performed using two fingers, the first of which is **pinch-zoom**. Pinch-zoom is when the user places two fingers on the touchscreen, then moves either, such that the distance between the fingers changes. This gesture is commonly used to zoom a view in or out. It is recognized by [`PinchZoomEventController`](@ref), which only has one signal:
 
-\signals
-\signal_scale_changed{PinchZoomEventController}
+```@eval
+include("signals.jl")
+return @type_signals(PinchZoomEventController,
+    scale_changed
+)
+```
 
 The argument `scale` is a *relative* scale, where `1` means no change between the distance of the fingers when compared to the distance at the start of the gesture, `0.5` means the distance halved, `2` means the distance doubled.
 
-`scale_changed` is usually emitted one time per frame once the gesture starts. Applications should react to every tick, as opposed to only the last. This will make the application feel more responsive and create a better user experience.
+`scale_changed` is usually emitted one time per frame once the gesture is recognized. Applications should react to every tick, as opposed to only the last. This will make the application feel more responsive and create a better user experience.
 
-To detect whether a user is currently zooming out (pinching) or zooming in, we do the following:
+To detect whether a user is currently zooming out (pinching) or zooming in, we could do the following:
 
-```cpp
-auto zoom_controller = PinchZoomController();
-zoom_controller.connect_signal_scale_changed([](PinchZoomController&, double scale){
-    if (scale < 1)
-        std::cout << "zooming in" << std::endl;
-    else if (scale > 1)
-        std::cout << "zooming out" << std::endl;
-});
-window.add_controller(zoom_controller);
+```julia
+zoom_controller = PinchZoomController()
+connect_signal_scale_changed!(zoom_controller) do self::PinchZoomController, scale::AbstractFloat
+    if scale < 1
+        println("zooming in")
+    elseif scale > 1
+        pintln("zooming out")
+    end
+end
+add_controller!(window, zoom_controller)
 ```
+
 ---
 
 ## 2-Finger Rotate: RotateEventController
 
-Another touch-only gesture is the **two-finger-rotate**. With this gesture, the user places both fingers on the touchscreen, then rotates them around a constant point in between the two fingers. This gesture is commonly used to rotate a view, for example an in an image editor.
+Another touch-only gesture is the **two-finger-rotate**. With this gesture, the user places both fingers on the touchscreen, then rotates them around a constant point in between the two fingers.
 
-This gesture is handled by `RotateEventController`, which has one signal:
+This gesture is handled by [`RotateEventController`](@ref), which has one signal:
 
-\signals
-\signal_rotation_changed{RotateEventController}
-
-It takes two arguments: `angle_absolute` and `angle_delta`. `angle_absolute` provides the current angle between the two fingers. `angle_delta` is the difference between the current angle and the angle at the start of the gesture.  Both `angle_absolute` and `angle_delta` are provided in radians, to convert them we can use \a{Angle}:
-
-```cpp
-auto rotation_controller = RotationEventController();
-rotation_controller.connect_signal_rotation_changed([](RotationEventController&, double angle_absolute_rad, double angle_delta_rad){
-    
-    Angle absolute = mousetrap::radians(angle_absolute_rad);
-    Angle delta = mousetrap::radians(angle_delta_rad);
-    
-    std::cout << "Current Angle: " << absolute.as_degrees() << "°" << std::endl;
-});
-window.add_controller(rotation_controller);
+```@eval
+include("signals.jl")
+return @type_signals(RotateEventController,
+    rotation_changed
+)
 ```
+
+It takes two arguments: `angle_absolute` and `angle_delta`. `angle_absolute` provides the current angle between the two fingers. `angle_delta` is the difference between the current angle and the angle at the start of the gesture.  Both `angle_absolute` and `angle_delta` are provided in radians, to convert them we can use [`Angle`](@ref):
+
+
+```julia
+rotate_controller = RotationEventController()
+connect_signal_rotation_changed!(rotate_controller) do self::RotateEventController, angle_delta, angle_absolute
+    
+    absolute = radians(angle_absolute)
+    delta = radians(angle_delta)
+
+    println("Current Angle: $(as_degrees(absolute))°")
+end
+```
+
 ---
 
 ## Swipe: SwipeEventController
 
-The last touch-only gesture is **swiping**, which is very similar to a click-dragging, only with two fingers. Swiping is often used to "flick" through pages, for example those of a `Stack`.
+The last touch-only gesture is **swiping**, which is very similar to click-dragging, except with two fingers. Swiping is often used to "flick" through pages, for example those of a `Stack`.
 
-Swiping is recognized by `SwipeEventController`, which also only has one signal:
+Swiping is recognized by [`SwipeEventController`](@ref), which also only has one signal:
 
-\signals
-\signal_swipe{SwipeEventController}
+```@eval
+include("signals.jl")
+return @type_signals(SwipeEventController,
+    swipe
+)
+```
 
-The signal handler provides two arguments `x_velocity` and `y_velocity`, which describe the velocity along both the x and y axis. The vector `(x_velocity, y_velocity)` describes the direction of the swipe in 2D widget space.
+The signal handler provides two arguments `x_velocity` and `y_velocity`, which describe the velocity along both the x and y axis. The vector `(x_velocity, y_velocity)` describes the direction of the swipe in 2D widget space, in pixels.
 
 To illustrate how to deduce the direction of the swipe, consider this example:
 
-```cpp
-auto swipe_controller = SwipeEventController();
-swipe_controller.connect_signal_swipe([](SwipeEventController*, double x_velocity, double y_velocity){
+```julia
+swipe_controller = SwipeEventController()
+connect_signal_swipe!(swipe_controller) do self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat
+    print("swiping ")
     
-    // determine direction
-    std::string x_direction = "";
-    std::string y_direction = "";
+    if (y_velocity < 0)
+        print("up ")
+    elseif (y_velocity > 0)
+        print("down ")
+    end
     
-    if (x_velocity < 0) 
-        x_direction = "LEFT";
-    else if (x_velocity > 0) // if velocity is == 0, string stays empy
-        x_direction = "RIGHT";
-    
-    if (y_velocity < 0) 
-        y_direction = "UP";
-    else if (y_velocity > 0)
-        y_direction = "DOWN";
-        
-    std::cout << "swiping " << y_direction << " " << x_direction < std::endl;
-});
-window.add(swipe_controller);
+    if (x_velocity < 0)
+        println("left")
+    elseif (x_velocity > 0)
+        println("right")
+    end
+end
+add_controller!(window, swipe_controller)
 ```
 
-UIs should react to both the direction and magnitude of the vector, as the latter makes for a smoother user experience.
+UIs should react to both the direction and magnitude of the vector, even though the latter is ignored in this example.
 
 ---
 
@@ -482,9 +510,9 @@ UIs should react to both the direction and magnitude of the vector, as the latte
 
 Lastly, we have a highly specialized event controller. Common in illustration/animation, the **touchpad stylus** is usually a pen-like device which is used along with a **touchpad**, which may or may not be the screen of the device. 
 
-Like with mice, there is a huge variety of stylus models. Shared among all models is a detection mechanism for whether the pen is **currently touching**, **not touching**, or **about to touch** the touchpad. 
+Like with mice, there is a huge variety of stylus models. Shared among all models is a detection mechanism for whether the pen is **currently touching**, **not touching**, or **about to touch** the touchpad, along with a way to determine the position of the tip of the stylus.
 
-A dditional features such as pressure- or angle-detected are manufacturer-specific. Many of these additional features are also recognized by \a{StylusEventController}, the event controller used to handle these kind of devices.
+Additional features such as pressure- or angle-detection are manufacturer-specific. Many of these additional features are also recognized by [`StylusEventController`](@ref), the event controller used to handle these kind of devices.
 
 `StylusEventController` has four signals:
 
@@ -494,15 +522,27 @@ A dditional features such as pressure- or angle-detected are manufacturer-specif
 \signal_proximity{StylusEventController}
 \signal_motion{StylusEventController}
 
-We recognize signal `motion` from `MotionEventController`. It behaves [exactly the same](#cursor-motion--motioneventcontroller), where `x` and `y` are the cursor position in absolute widget space. 
+```@eval
+include("signals.jl")
+return @type_signals(StylusEventController,
+    stylus_up,
+    stylus_down,
+    proximity,
+    motion
+)
+```
 
-The three other signals should be used to react to the physical distance between the stylus and touchpad. `stylus_down` is emitted when the pens tip makes contact with the touchpad, `stylus_up` is emitted when this contact is broken, `proximity` is emitted when the stylus about to touch the touchpad, or just left the touchpad.
+We recognize signal `motion` from `MotionEventController`. It behaves [exactly the same](#cursor-motion-motioneventcontroller), where `x` and `y` are the cursor position in absolute widget space. 
+
+The three other signals are used to react to the physical distance between the stylus and touchpad. `stylus_down` is emitted when the pens tip makes contact with the touchpad, `stylus_up` is emitted when this contact is broken, `proximity` is emitted when the stylus about to touch the touchpad, or just left the touchpad.
 
 ### Stylus Axis
 
-None of the above mentioned signals provide information about additionals stylus sensors. Because not all devices share these features, the mechanism for querying these is different. Each sensor provides a floating point value inside a given range. This is called a **device axis**. Axes are identified by the enum `DeviceAxis`, which has a value for all sensor types recognized by mousetrap.
+None of the above mentioned signals provide information about additionals stylus sensors. Because not all devices share these features, the mechanism for querying these is different. Each sensor provides a floating point value inside a given range. This is called a **device axis**. Axes are identified by the enum [`DeviceAxis`](@ref), whose values identify all types of axes recognized by mousetrap.
 
-We can query the value of each axis using `mousetrap::StylusEventController::get_axis_value`. This function will return 0 if the axis is not present, otherwise it will return the device-supplied axis-specific value. To check whether a device has a specific axis we use `mousetrap::StylusEventController::has_axis`.
+We can query the value of each axis using [`get_axis_value`](@ref). This function will return 0 if the axis is not present, otherwise it will return the device-supplied axis-specific value. 
+
+To check whether a device has a specific axis we use [`has_axis`](@ref).
 
 Mousetrap recognizes the following axes:
 
@@ -513,8 +553,8 @@ Mousetrap recognizes the following axes:
 | `DELTA_X`          | delta of horizontal scrolling                                     |
 | `DELTA_Y`          | delta of vertical scrolling                                       |
 | `PRESSURE`         | pressure sensor of the styus' tip                                 |
-| `X_TILT`           | angle along the x-axis                                            | 
-| `Y_TILT`           | angle along the y-axis                                            |
+| `X_TILT`           | angle relative to the screen, x-axis                                            | 
+| `Y_TILT`           | angle relative to the screen, y-axis                                            |
 | `WHEEL`            | state of the stylus' wheel (if present)                           | 
 | `DISTANCE`         | current distance between the touchpad surface and the stylus' tip |
  | `ROTATION`         | angle of the pen around the normal                                |
@@ -522,7 +562,7 @@ Mousetrap recognizes the following axes:
 
 ### Stylus Mode
 
-Some stylus' have a "mode" function, where the user can choose between differen pen modes. This is driver specific, and not all devices support this feature. For those that do, we can use `StylusEventController::get_device_type` to check which mode is currently selected. The recognized modes are:
+Some stylus' have a "mode" function, where the user can choose between differen pen modes. This is driver specific, and not all devices support this feature. For those that do, we can use [`get_device_type`](@ref) to check which mode is currently selected. The recognized modes are:
 
 | `DeviceAxis` value | Meaning                   | 
 |--------------------|---------------------------|

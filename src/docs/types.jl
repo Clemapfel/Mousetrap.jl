@@ -1,6 +1,6 @@
 
 @document Action """
-# Action <: SignalEmitter
+## Action <: SignalEmitter
 
 Memory-managed object that wraps a function, registered with an `Application`.
 
@@ -22,7 +22,7 @@ activated
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 action = Action("example.action", app)
 set_function!(action) do self::Action
@@ -33,7 +33,7 @@ activate(action)
 """
 
 @document Adjustment """
-# Adjustment <: SignalEmitter
+## Adjustment <: SignalEmitter
 
 Object that represents a range of values. Changing the value or 
 property of the `Adjusment` will change the value or property of the
@@ -52,7 +52,7 @@ $(@type_fields())
 """
 
 @document Angle """
-# Angle
+## Angle
 
 Represents an angle. 
 
@@ -70,7 +70,7 @@ $(@type_fields(
 """
 
 @document Application """
-# Application <: SignalEmitter
+## Application <: SignalEmitter
 
 Used to register an application with the users OS. When all 
 windows of an application are close, the application exits.
@@ -90,7 +90,7 @@ $(@type_signals(Application,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 app = Application("example.app")
 connect_signal_activate!(app) app::Application
@@ -102,7 +102,7 @@ run!(app)
 """
 
 @document AspectFrame """
-# AspectFrame <: Widget
+## AspectFrame <: Widget
 
 Container widget with a single child, regulates 
 its childs size such that it always adheres to the given 
@@ -119,7 +119,7 @@ $(@type_fields())
 """
 
 @document AxisAlignedRectangle """
-# AxisAlignedRectangle
+## AxisAlignedRectangle
 
 Axis aligned bounding box. Defined by its top-left 
 corner and its size.
@@ -135,7 +135,7 @@ $(@type_fields(
 """
 
 @document Box """
-# Box <: Widget
+## Box <: Widget
 
 Widget that aligns its children in a row (or column).
 
@@ -150,7 +150,7 @@ $(@type_fields())
 """
 
 @document Button """
-# Button <: Widget
+## Button <: Widget
 
 Widget that, when clicked, invokes its connected 
 `Action` and/or signal handler. Has exactly one child,
@@ -167,7 +167,7 @@ $(@type_signals(Button,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 button = Button()
 set_child!(button, Label("Click Me"))
@@ -179,7 +179,7 @@ set_child!(window, button)
 """
 
 @document CenterBox """
-# CenterBox <: Widget
+## CenterBox <: Widget
 
 Widget that aligns exactly 3 widgets in a row (or column),
 prioritizing keeping the middle widget centered at all
@@ -196,7 +196,7 @@ $(@type_fields())
 """
 
 @document CheckButton """
-# CheckButton <: Widget
+## CheckButton <: Widget
 
 Widget that contains an elemne the user can check or uncheck.
 For GTK4.8 or later, `CheckButton` furthermore has an optional
@@ -213,7 +213,7 @@ $(@type_signals(CheckButton,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 check_button = CheckButton()
 connect_signal_toggled!(check_button) do self::CheckButton
@@ -232,7 +232,7 @@ set_child!(window, check_button)
 """
 
 @document ClickEventController """
-# ClickEventController <: SingleClickGesture <: EventController
+## ClickEventController <: SingleClickGesture <: EventController
 
 Handles one or more mouse-button or touchpad presses in series. 
 
@@ -248,7 +248,7 @@ $(@type_signals(ClickEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 click_controller = ClickEventController()
 connect_signal_click_pressed!(click_controller) do self::ClickEventController, n_presses::Integer, x::Float64, y::Float64
@@ -261,7 +261,7 @@ add_controller!(window, click_controller)
 """
 
 @document Clipboard """
-# Clipboard <: SignalEmitter
+## Clipboard <: SignalEmitter
 
 Object that allows accessing of the data currently inside the users clipboard. 
 `Clipboard` supports retreavel as a `String` or as an `Image`.
@@ -274,7 +274,7 @@ $(@type_signals(Clipboard,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 clipboard = get_clipboard(window)
 get_string(clipboard) do self::Clipboard, value::String
@@ -284,7 +284,7 @@ end
 """
 
 @document Clock """
-# Clock <: SignalEmitter
+## Clock <: SignalEmitter
 
 Object used to keep track of time. Nanosecond precision
 
@@ -297,7 +297,7 @@ $(@type_signals(Clock,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 clock = Clock()
 current = restart!(clock)
@@ -308,7 +308,7 @@ println("time delta: \$(as_seconds(now - current))")
 """
 
 @document ColumnView """
-# ColumnView <: Widget
+## ColumnView <: Widget
 
 Widget that arranges its children as a table with a variable number of columns 
 and rows.
@@ -323,7 +323,7 @@ $(@type_signals(ColumnView,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 column_view = ColumnView(SELECTION_MODE_NONE)
 
@@ -344,7 +344,7 @@ set_child!(window, column_view)
 """
 
 @document ColumnViewColumn """
-# ColumnViewColumn <: SignalEmitter
+## ColumnViewColumn <: SignalEmitter
 
 Class representing a column of `ColumnView`. Has a label, any number of children 
 which represent all rows in this column (1-indexed), and an optional header menu, 
@@ -358,7 +358,7 @@ $(@type_signals(ColumnViewColumn,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 # create a new column
 column = push_back_column!(column_view)
@@ -369,7 +369,7 @@ set_widget!(column, 4, Label("4"))
 """
 
 @document DragEventController """
-# DragEventController <: SingleClickGesture <: EventController
+## DragEventController <: SingleClickGesture <: EventController
 
 Recongizes drag gesture, a gesture where the user click a 
 point inside the allocated area of the widget holding this controller,
@@ -384,7 +384,7 @@ $(@type_signals(DragEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 drag_controller = DragEventController()
 connect_signal_drag!(drag_controller) do self::DragEventController, x_offset, y_offset
@@ -399,7 +399,7 @@ add_controller!(window, drag_controller)
 """
 
 @document DropDown """
-# DropDown <: Widget
+## DropDown <: Widget
 
 Widget that, when click, presents a vertical list of buttons. If a button 
 is clicked, its corresponding callback function will be invoked, and the
@@ -418,7 +418,7 @@ $(@type_signals(DropDown,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 drop_down = DropDown()
 push_back!(drop_down, "Item 01") do x::DropDown
@@ -434,7 +434,7 @@ set_child!(window, drop_down)
 """
 
 @document DropDownItemID """
-# DropDownItemID
+## DropDownItemID
 
 ID of a dropdown item, keep track of this in order to 
 identify items in an position-independent manner.
@@ -447,7 +447,7 @@ $(@type_fields(
 """
 
 @document Entry """
-# Entry <: Widget
+## Entry <: Widget
 
 Single-line text entry. Activated when the user 
 presses the enter key while the cursor is inside 
@@ -466,7 +466,7 @@ $(@type_fields())
 """
 
 @document EventController abstract_type_docs(EventController, Any, """
-# EventController <: SignalEmitter
+## EventController <: SignalEmitter
 
 Superclass of all event controllers. Use `add_controller(::Widget, ::EventController)`
 to connect an event controller to any widget, in order for it
@@ -474,7 +474,7 @@ to start receiving events while the widget holds input focus.
 """)
 
 @document Expander """
-# Expander <: Widget
+## Expander <: Widget
 
 Collapsible item, has a label- and child-widget.
 
@@ -490,7 +490,7 @@ $(@type_fields())
 """
 
 @document FileChooser """
-# FileChooser <: SignalEmitter
+## FileChooser <: SignalEmitter
 
 Pre-made dialog that allows users to pick a file or folder on the 
 local disk. 
@@ -514,7 +514,7 @@ $(@type_signals(FileChooser,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 file_chooser = FileChooser(FILE_CHOOSER_ACTION_OPEN_FILE)
 
@@ -533,7 +533,7 @@ present!(file_chooser)
 """
 
 @document FileDescriptor """
-# FileDescriptor <: SignalEmitter
+## FileDescriptor <: SignalEmitter
 
 Read-only object that points to a file or folder 
 at a specific location on disk. Note that there is no 
@@ -548,7 +548,7 @@ $(@type_signals(FileDescriptor,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 # list file types of all files in current directory
 current_dir = FileDescriptor(".")
@@ -559,7 +559,7 @@ end
 """
 
 @document FileFilter """
-# FileFilter <: SignalEmitter
+## FileFilter <: SignalEmitter
 
 File used for `FileChooser`. Only files that 
 pass the filter will be available to be selected.
@@ -576,7 +576,7 @@ $(@type_signals(FileFilter,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 filter = FileFilter()
 add_allowed_suffix!(filter, "jl") # without the `.`
@@ -584,7 +584,7 @@ add_allowed_suffix!(filter, "jl") # without the `.`
 """
 
 @document FileMonitor """
-# FileMonitor <: SignalEmitter
+## FileMonitor <: SignalEmitter
 
 Object that monitors a file location on disk. If 
 anything about that location changes, for example if
@@ -610,7 +610,7 @@ $(@type_signals(FileMonitor,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 file = FileDescriptor("path/to/file.jl")
 @assert(exists(file))
@@ -624,7 +624,7 @@ end
 """
 
 @document Fixed """
-# Fixed <: Widget
+## Fixed <: Widget
 
 Container widget that places its children at a specified position. 
 Use of this widget is usually discouraged because it does not allow
@@ -641,7 +641,7 @@ $(@type_fields())
 """
 
 @document FocusEventController """
-# FocusEventController <: EventController
+## FocusEventController <: EventController
 
 Emits its signals when the controlled widget gains or 
 looses input focus.
@@ -657,7 +657,7 @@ $(@type_signals(FocusEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 focus_controller = FocusEventController()
 connect_signal_focus_gained(focus_controller) do self::FocusController
@@ -668,7 +668,7 @@ add_controller(widget, focus_controller)
 """
 
 @document Frame """
-# Frame <: Widget
+## Frame <: Widget
 
 Widget that draws a black outline with rounded corners around
 its singular child.
@@ -684,7 +684,7 @@ $(@type_fields())
 """
 
 @document FrameClock """
-# FrameClock <: SignalEmitter
+## FrameClock <: SignalEmitter
 
 Signal emitter that emits its signals in a way that 
 is synchronized with the render cycle of each frame
@@ -698,7 +698,7 @@ $(@type_signals(FrameClock,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 frame_clock = get_frame_clock(widget)
 connect_signal_paint(frame_clock) do x::FrameClock
@@ -708,7 +708,7 @@ end
 """
 
 @document GLTransform """
-# GLTransform <: SignalEmitter
+## GLTransform <: SignalEmitter
 
 Transform in 3D spaces. Uses OpenGL coordinates, it should 
 therefore only be used to modify vertices of `Shape`.
@@ -727,7 +727,7 @@ $(@type_fields(
 """
 
 @document Grid """
-# Grid <: Widget
+## Grid <: Widget
 
 Container that arranges its children in a non-uniform grid. 
 Each child widget has a cell position (1-indexed), a width 
@@ -742,7 +742,7 @@ $(@type_signals(Grid,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 grid = Grid()
 insert!(grid, Label("Label"), 1, 1, 1, 1)
@@ -752,7 +752,7 @@ insert!(grid, Separator, 2, 1, 2, 1)
 """
 
 @document GridView """
-# GridView <: Widget
+## GridView <: Widget
 
 Selectable container that arranges its children in an uniform 
 grid.
@@ -769,7 +769,7 @@ $(@type_fields())
 """
 
 @document GroupID """
-# GroupID
+## GroupID
 
 ID of a group inside a `KeyFile`. May not start with a number, 
 only roman letter, 0-9, `_`, `-`, and `.` may be used.
@@ -785,7 +785,7 @@ $(@type_fields(
 """
 
 @document HSVA """
-# HSVA
+## HSVA
 
 Color in hsva format.
 
@@ -802,7 +802,7 @@ $(@type_fields(
 """
 
 @document HeaderBar """
-# HeaderBar <: Widget
+## HeaderBar <: Widget
 
 Widget usually used as the titlebar widget of a `Window`.
 Has a centered title, the window control buttons, along with 
@@ -818,7 +818,7 @@ $(@type_signals(HeaderBar,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 # Layout syntax
 # any element left of `:` is displayed left of the the title
@@ -831,7 +831,7 @@ set_titlebar_widget!(window, header_bar)
 """
 
 @document Icon """
-# Icon
+## Icon
 
 Object managing an image file on disk that can be used 
 as an icon. Usually, these should be a vector graphics 
@@ -846,7 +846,7 @@ $(@type_fields(
 """
 
 @document IconID """
-# IconID
+## IconID
 
 ID of an icon, used by `IconTheme` to refer to icons in 
 a file-agnostic way.
@@ -858,7 +858,7 @@ $(@type_fields()))
 """
 
 @document IconTheme """
-# IconTheme
+## IconTheme
 
 Manages a folder that strictly adheres to the [freedesktop icon theme specifications](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
 
@@ -869,7 +869,7 @@ $(@type_fields())
 """
 
 @document Image """
-# Image
+## Image
 
 2D image data. Pixel-index are 1-based.
 
@@ -883,7 +883,7 @@ $(@type_fields())
 """
 
 @document ImageDisplay """
-# ImageDisplay <: Widget
+## ImageDisplay <: Widget
 
 Widget that displays an `Image`, `Icon`, or image file. Once
 constructed, the image data is deep-copied.
@@ -901,7 +901,7 @@ $(@type_fields())
 """
 
 @document KeyCode """
-# KeyCode
+## KeyCode
 
 Identifier of a key. Used for `ShortcutTrigger` syntax 
 and when recognizing keys using `KeyEventController`.
@@ -914,7 +914,7 @@ $(@type_fields(
 """
 
 @document KeyEventController """
-# KeyEventController <: EventController
+## KeyEventController <: EventController
 
 Recognizes keyboard key strokes.
 
@@ -930,7 +930,7 @@ $(@type_signals(KeyEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 key_controller = KeyEventController()
 connect_signal_key_pressed!(key_controller) do self::KeyEventController, key::KeyCode, modifier::ModifierState
@@ -943,7 +943,7 @@ add_controller!(window, key_controller)
 """
 
 @document KeyFile """
-# KeyFile <: SignalEmitter
+## KeyFile <: SignalEmitter
 
 GLiba keyfile, allows storing various types
 by serializing them.
@@ -970,7 +970,7 @@ $(@type_signals(KeyFile,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 key_file = KeyFile()
 set_value!(key_file, "group_id", "key_id", [123, 456, 789])
@@ -985,7 +985,7 @@ key_id=123;456;789;
 """
 
 @document KeyID """
-# KeyID
+## KeyID
 
 ID of `KeyFile` key-value-pair. My not start with a number, and only 
 roman letter, 0-9, and '_' may be used.
@@ -998,7 +998,7 @@ $(@type_fields(
 """
 
 @document Label """
-# Label <: Widget
+## Label <: Widget
 
 Static text, multi-or single line. Using `set_ellipsize_mode!`,
 `set_wrap_mode!`, and `set_justify_mode!` to influence how text 
@@ -1018,7 +1018,7 @@ $(@type_fields())
 """
 
 @document LevelBar """
-# LevelBar <: Widget
+## LevelBar <: Widget
 
 Bar displaying fraction of a range. If the fraction reaches 75%,
 the color of the bar changes. 
@@ -1034,7 +1034,7 @@ $(@type_fields())
 """
 
 @document ListView """
-# ListView <: Widget
+## ListView <: Widget
 
 Selectable widget that arranges its children in a (possibly nested) list.
 
@@ -1048,7 +1048,7 @@ $(@type_signals(ListView,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 list_view = ListView(ORIENTATION_VERTICAL)
 
@@ -1064,7 +1064,7 @@ set_child!(window, list_view)
 """
 
 @document ListViewIterator """
-# ListViewIterator
+## ListViewIterator
 
 Iterator returned when inserting an item into a `ListView`. Use this
 iterator as an additional argument to insert any item in a nested list
@@ -1078,7 +1078,7 @@ $(@type_fields(
 """
 
 @document LogDomain """
-# LogDomain
+## LogDomain
 
 Domain of log messages, this will be used to associate log 
 message with a specific application or library.
@@ -1092,7 +1092,7 @@ $(@type_fields(
 """
 
 @document LongPressEventController """
-# LongPressEventController <: SingleClickGesture <: EventController
+## LongPressEventController <: SingleClickGesture <: EventController
 
 Recognizes long-press gestures, in which the users 
 presses a mouse button or touchscreen, then holds that 
@@ -1109,7 +1109,7 @@ $(@type_signals(LongPressEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 long_press_controller = LongPressEventController()
 connect_signal_pressed!(long_press_controller) do self::LongPressEventController, x::AbstractFloat, y::AbstractFloat 
@@ -1120,7 +1120,7 @@ add_controller!(window, long_press_controller)
 """
 
 @document MenuBar """
-# MenuBar <: Widget
+## MenuBar <: Widget
 
 View that displays a `MenuModel` as a horizontal bar. 
 The `MenuModel` has to have the following structure:
@@ -1135,7 +1135,7 @@ $(@type_signals(MenuBar,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 action = Action("example.action", app)
 set_function!(action) do action::Action
@@ -1153,7 +1153,7 @@ set_child!(window, menu_bar)
 """
 
 @document MenuModel """
-# MenuModel <: SignalEmitter
+## MenuModel <: SignalEmitter
 
 Model that holds information about how to 
 construct a menu. 
@@ -1177,7 +1177,7 @@ $(@type_fields())
 """
 
 @document ModifierState """
-# ModifierState
+## ModifierState
 
 Holds information about which modifier keys (Control, Alt, Shift)
 are currently pressed.
@@ -1188,7 +1188,7 @@ $(@type_constructors(
 $(@type_fields(
 ))
 
-# Example
+### Example
 ```julia
 key_controller = KeyEventController()
 connect_signal_modifiers_changed!(key_controller) do self::KeyEventController, modifiers::ModifierState
@@ -1201,7 +1201,7 @@ add_controller!(window, key_controller)
 """
 
 @document MotionEventController """
-# MotionEventController <: EventController
+## MotionEventController <: EventController
 
 Captures cursor motion events.
 
@@ -1217,7 +1217,7 @@ $(@type_signals(MotionEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 motion_controller = MotionEventController()
 connect_signal_motion!(motion_controller) do self::MotionEventController, x::AbstractFloat, y::AbstractFloat
@@ -1228,7 +1228,7 @@ add_controller!(window, motion_controller)
 """
 
 @document Notebook """
-# Notebook <: Widget
+## Notebook <: Widget
 
 Widget that arranges its children as a list of pages. Each page
 has exactly one child widget and an optional label widget. Pages
@@ -1248,7 +1248,7 @@ $(@type_signals(Notebook,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 notebook = Notebook()
 push_back!(notebook, Separator(), Label("Page 01"))
@@ -1263,7 +1263,7 @@ set_child!(window, notebook)
 """
 
 @document Overlay """
-# Overlay <: Widget
+## Overlay <: Widget
 
 Widget that has exaclty one "base" child, set via `set_child!`, 
 and any number of "overlay" children, added via `add_overlay!`,
@@ -1283,7 +1283,7 @@ $(@type_signals(Overlay,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 overlay = Overlay()
 set_child!(overlay, Separator())
@@ -1293,7 +1293,7 @@ set_child!(window, overlay)
 """
 
 @document PanEventController """
-# PanEventController <: SingleClickGesture <: EventController
+## PanEventController <: SingleClickGesture <: EventController
 
 Recognizes pan gestures, in which the user drags 
 the cursor of a mouse or touchscreen alonge either horizontal
@@ -1309,7 +1309,7 @@ $(@type_signals(PanEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 connect_signal_pan!(pan_controller) do self::PanEventController, direction::PanDirection, offset::AbstractFloat
     if direction == PAN_DIRECTION_LEFT
@@ -1324,7 +1324,7 @@ add_controller!(window, pan_controller)
 """
 
 @document Paned """
-# Paned <: Widget
+## Paned <: Widget
 
 Widget with exactly two children, set with `set_start_child!` and `set_end_child!`. 
 Draws a solid border between the two, which the user can drag to 
@@ -1341,7 +1341,7 @@ $(@type_fields())
 """
 
 @document PinchZoomEventController """
-# PinchZoomEventController <: EventController
+## PinchZoomEventController <: EventController
 
 Controller recognizing touch-screen only 2-finger pinch-zoom gestures.
 
@@ -1355,7 +1355,7 @@ $(@type_signals(PinchZoomEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 pinch_zoom_controller = PinchZoomEventController()
 connect_signal_scale_changed!(pinch_zoom_controller) do self::PinchZoomEventController, scale::AbstractFloat
@@ -1366,7 +1366,7 @@ add_controller!(window, pinch_zoom_controller)
 """
 
 @document Popover """
-# Popover <: Widget
+## Popover <: Widget
 
 Specialized type of window with exactly on child. It needs to be 
 attach to a different widget, at which point `popup!` and `popdown!`
@@ -1384,7 +1384,7 @@ $(@type_signals(Popover,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 popover = Popover()
 set_child!(popover, Label("Popover!"))
@@ -1397,7 +1397,7 @@ set_child!(window, popover_button)
 """
 
 @document PopoverButton """
-# PopoverButton <: Widget
+## PopoverButton <: Widget
 
 Button that has a pre-build way of revealing a `Popover` or `PopoverMenu`
 when clicked. 
@@ -1411,7 +1411,7 @@ $(@type_signals(PopoverButton,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 popover = Popover()
 set_child!(popover, Label("Popover!"))
@@ -1424,7 +1424,7 @@ set_child!(window, popover_button)
 """
 
 @document PopoverMenu """
-# PopoverMenu <: Widget
+## PopoverMenu <: Widget
 
 Menu view that display its model in a popover window. Use `PopoverButton`
 for an automated way of revealing the popover.
@@ -1439,7 +1439,7 @@ $(@type_signals(PopoverMenu,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 action = Action("example.action", app)
 set_function!(action) do x::Action
@@ -1458,7 +1458,7 @@ set_child!(window, popover_button)
 """
 
 @document ProgressBar """
-# ProgressBar <: Widget
+## ProgressBar <: Widget
 
 Loading bar, using `set_fraction!`, which accepts a float in `[0, 1]`
 to set the current percentage.
@@ -1474,7 +1474,7 @@ $(@type_fields())
 """
 
 @document RGBA """
-# RGBA
+## RGBA
 
 Color representation in rgba. All components 
 are `Float32` in [0, 1].
@@ -1492,7 +1492,7 @@ $(@type_fields(
 """
 
 @document RenderArea """
-# RenderArea <: Widget
+## RenderArea <: Widget
 
 OpenGL canvas. See the manual chapter on native rendering for more
 information.
@@ -1508,7 +1508,7 @@ $(@type_signals(RenderArea,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 render_area = RenderArea()
 rectangle = Rectangle(Vector2f(-0.5, -0.5), Vector2f(1, 1))
@@ -1519,7 +1519,7 @@ set_child!(window, render_area)
 """
 
 @document RenderTask """
-# RenderTask <: SignalEmitter
+## RenderTask <: SignalEmitter
 
 Task that groups a `Shape`, `Shader`, `GLTransform`, and `BlendMode`,
 allowing them to be bound for rendering. 
@@ -1541,7 +1541,7 @@ $(@type_signals(RenderTask,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 shape = Rectangle(Vector2f(-0.5, -0.5), Vector2f(1, 1))
 task = RenderTask(shape)
@@ -1557,7 +1557,7 @@ task = RenderTask(shape;
 """
 
 @document RenderTexture """
-# RenderTexture <: SignalEmitter
+## RenderTexture <: SignalEmitter
 
 Texture that can be bound as a render target. See the 
 manual chapter on native rendering for more information.
@@ -1571,7 +1571,7 @@ $(@type_signals(RenderTexture,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 # TODO THIS DOES NOT CURRENTLY WORK
 
@@ -1626,7 +1626,7 @@ end
 """
 
 @document Revealer """
-# Revealer <: Widget
+## Revealer <: Widget
 
 Container that plays an animation reveal or hide its singular child.
 
@@ -1642,7 +1642,7 @@ $(@type_fields())
 """
 
 @document RotateEventController """
-# RotateEventController <: EventController
+## RotateEventController <: EventController
 
 Controller recognizing touch-only 2-finger rotate gestures.
 
@@ -1656,7 +1656,7 @@ $(@type_signals(RotateEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 rotate_controller = RotateEventController()
 connect_signal_rotation_changed!(rotate_controller) do self::RotateEventController, angle_absolute::AbstractFloat, angle_dela::AbstractFloat
@@ -1667,7 +1667,7 @@ add_controller!(window, rotate_controller)
 """
 
 @document Scale """
-# Scale <: Widget
+## Scale <: Widget
 
 Widget that allows users to select a value from a range by 
 sliding a scale.
@@ -1684,7 +1684,7 @@ $(@type_fields())
 """
 
 @document ScrollEventController """
-# ScrollEventController <: EventController
+## ScrollEventController <: EventController
 
 Controller recognizing mouse-scroll-wheel and 2-finger touchscreen scrolling events.
 
@@ -1701,7 +1701,7 @@ $(@type_signals(ScrollEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 scroll_controller = ScrollEventController()
 connect_signal_scroll!(scroll_controller) do self::ScrollEventController, delta_x::AbstractFloat, delta_y::AbstractFloat
@@ -1713,7 +1713,7 @@ add_controller!(window, scroll_controller)
 """
 
 @document Scrollbar """
-# Scrollbar <: Widget
+## Scrollbar <: Widget
 
 Widget usually used to scroll a window or view. Connect to 
 the signals of the `Adjusment` obtained using `get_adjustment`
@@ -1730,7 +1730,7 @@ $(@type_fields())
 """
 
 @document SelectionModel """
-# SelectionModel <: SignalEmitter
+## SelectionModel <: SignalEmitter
 
 Model that governs the current selection of a selectable widget,
 such as `GridView`, `ListView`, or `Stack`.
@@ -1747,7 +1747,7 @@ $(@type_signals(SelectionModel,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 grid_view = GridView(SELECTION_MODE_SINGLE)
 for i in 1:4
@@ -1763,7 +1763,7 @@ set_child!(window, grid_view)
 """
 
 @document Separator """
-# Separator <: Widget
+## Separator <: Widget
 
 Simple spacer, fills its allocated area with a solid color.
 
@@ -1778,7 +1778,7 @@ $(@type_fields())
 """
 
 @document Shader """
-# Shader <: SignalEmitter
+## Shader <: SignalEmitter
 
 Represent an OpenGL shader program, which has a bound
 vertex and fragment shader. If a shader is not specified 
@@ -1801,7 +1801,7 @@ $(@type_fields())
 """
 
 @document Shape """
-# Shape <: SignalEmitter
+## Shape <: SignalEmitter
 
 Represents an OpenGL vertex buffer. A wide variety of 
 pre-made shapes are available.
@@ -1837,7 +1837,7 @@ $(@type_fields())
 """
 
 @document ShortcutEventController """
-# ShortcutEventController <: EventController
+## ShortcutEventController <: EventController
 
 Eventcontroller that listens for shortcut key combinations. If one 
 is recognized, the corresponding action will be invoked.
@@ -1856,7 +1856,7 @@ $(@type_signals(ShortcutEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 action = Action("example.action", app)
 set_function!(action) do x::Action
@@ -1874,7 +1874,7 @@ add_controller!(window, shortcut_controller)
 """
 
 @document ShortcutTrigger """
-# ShortcutTrigger
+## ShortcutTrigger
 
 String expressing a combination of zero or more modifier 
 keys, enclosed in `<>`, follow by exactly one non-modifier 
@@ -1892,7 +1892,7 @@ $(@type_fields(
 """
 
 @document SignalEmitter abstract_type_docs(SignalEmitter, Any, """
-# SignalEmitter <: Any
+## SignalEmitter <: Any
 
 Object that can emit signals, though it may not necessarily do so.
 
@@ -1906,14 +1906,14 @@ or other signal emitters, their life-time is managed automatically.
 """)
 
 @document SingleClickGesture abstract_type_docs(SingleClickGesture, Any, """
-# SingleClickGesture <: EventController
+## SingleClickGesture <: EventController
 
 Specialized type of `EventController` that allows uses to check 
 or determine, which mouse button or touchscreen triggered the 1-finger event.
 """)
 
 @document SpinButton """
-# SpinButton <: Widget
+## SpinButton <: Widget
 
 Widget that contains a number entry and two buttons, which 
 allows users to pick an exact value from a range.
@@ -1930,7 +1930,7 @@ $(@type_fields())
 """
 
 @document Spinner """
-# Spinner <: Widget
+## Spinner <: Widget
 
 Graphical widget that signifies that a process is busy by 
 playing a spinning animation. Use `set_is_spinning!` to 
@@ -1947,7 +1947,7 @@ $(@type_fields())
 """
 
 @document Stack """
-# Stack <: Widget
+## Stack <: Widget
 
 Selectable widget that always shows exactly one of its children. 
 Use `StackSwitcher` or `StackSidebar` to provide a user interface 
@@ -1970,7 +1970,7 @@ $(@type_signals(Stack,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 stack = Stack()
 
@@ -1988,7 +1988,7 @@ set_child!(window, box)
 """
 
 @document StackID """
-# StackID
+## StackID
 
 ID of a `Stack` page. Will be used for `StackSwitcher` and `StackSidebar`, 
 and when referring to a page in a position-independent manner.
@@ -2001,7 +2001,7 @@ $(@type_fields(
 """
 
 @document StackSidebar """
-# StackSidebar <: Widget
+## StackSidebar <: Widget
 
 Widget that allows users to select a page of a `Stack`.
 
@@ -2016,7 +2016,7 @@ $(@type_fields())
 """
 
 @document StackSwitcher """
-# StackSwitcher <: Widget
+## StackSwitcher <: Widget
 
 Widget that allows users to select a page of a `Stack`.
 
@@ -2031,7 +2031,7 @@ $(@type_fields())
 """
 
 @document StylusEventController """
-# StylusEventController <: SingleClickGesture <: EventController
+## StylusEventController <: SingleClickGesture <: EventController
 
 Controller handling events from a stylus device, such as a touchpad 
 pen.
@@ -2049,7 +2049,7 @@ $(@type_signals(StylusEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 stylus_controller = StylusEventController()
 connect_signal_motion!(stylus_controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
@@ -2060,7 +2060,7 @@ add_controller!(window, stylus_controller)
 """
 
 @document SwipeEventController """
-# SwipeEventController <: SingleClickGesture <: EventController
+## SwipeEventController <: SingleClickGesture <: EventController
 
 Controller capable of recognizing swipe touchscreen events
 
@@ -2074,7 +2074,7 @@ $(@type_signals(SwipeEventController,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 swipe_controller = SwipeEventController()
 connect_signal_swipe!(swipe_controller) do self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat
@@ -2097,7 +2097,7 @@ add_controller!(window, swipe_controller)
 """
 
 @document Switch """
-# Switch <: Widget
+## Switch <: Widget
 
 Ligthswitch-like widget indicating a boolean state. When the switch 
 is toggled, signal `activate` is emitted.
@@ -2114,7 +2114,7 @@ $(@type_fields())
 """
 
 @document TextView """
-# TextView <: Widget
+## TextView <: Widget
 
 Multi-line text entry. Unlike `Entry`, this 
 widget cannot emit signal `activate`. Pressing enter
@@ -2135,7 +2135,7 @@ $(@type_fields())
 """
 
 @document Texture """
-# Texture <: SignalEmitter
+## Texture <: SignalEmitter
 
 OpenGL Texture. Needs to be bound to a shape 
 in order to be rendered.
@@ -2154,14 +2154,14 @@ $(@type_fields())
 """
 
 @document TextureObject """
-# TextureObject
+## TextureObject
 
 Object that can be bound as a texture. Use `set_texture!(::Shape, ::TextureObject)` to associate 
 it with a shape, then the texture can be rendered using `RenderArea`.
 """
 
 @document Time """
-# Time
+## Time
 
 Object representing a duration in time, nanoseconds precision.
 
@@ -2171,7 +2171,7 @@ $(@type_constructors(
 $(@type_fields(
 ))
 
-# Example
+### Example
 ```julia
 # convert seconds to microseconds
 println(as_microseconds(seconds(3.14159)))
@@ -2179,7 +2179,7 @@ println(as_microseconds(seconds(3.14159)))
 """
 
 @document ToggleButton """
-# ToggleButton <: Widget
+## ToggleButton <: Widget
 
 Button that will stay toggled when clicked, emitting the 
 `toggled` signals.
@@ -2196,7 +2196,7 @@ $(@type_signals(ToggleButton,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 toggle_button = ToggleButton()
 connect_signal_toggled!(toggle_button) do self::ToggleButton
@@ -2207,7 +2207,7 @@ set_child!(window, toggle_button)
 """
 
 @document TypedFunction """
-# TypedFunction
+## TypedFunction
 
 Object used to invoke an arbitrary function using the given signature. This wrapper
 will automatically convert any arguments and return values to the given types
@@ -2221,7 +2221,7 @@ $(@type_constructors(
 $(@type_fields(
 ))
 
-# Example
+### Example
 
 ```julia
 as_typed = TypedFunction(Int64, (Integer,)) do(x::Integer)
@@ -2232,7 +2232,7 @@ as_typed(12) # returns 12, because "12" will be converted to given return type, 
 """
 
 @document Vector2 """
-# Vector2{T}
+## Vector2{T}
 
 Vector with 2 components.
 
@@ -2248,7 +2248,7 @@ $(@type_fields(
 """
 
 @document Vector3 """
-# Vector3{T}
+## Vector3{T}
 
 Vector with 3 components.
 
@@ -2265,7 +2265,7 @@ $(@type_fields(
 """
 
 @document Vector4 """
-# Vector4{T}
+## Vector4{T}
 
 Vector with 4 components.
 
@@ -2283,7 +2283,7 @@ $(@type_fields(
 """
 
 @document Viewport """
-# Viewport <: Widget
+## Viewport <: Widget
 
 Container that displays part of its singular child. The 
 allocated size of the `Viewport` is independent of that
@@ -2317,7 +2317,7 @@ $(@type_fields())
 """
 
 @document Widget abstract_type_docs(Widget, Any, """
-# Widget <: SignalEmitter
+## Widget <: SignalEmitter
 
 Superclass of all renderable entities in mousetrap. Like all
 `SignalEmitter`s, a widgets lifetime is managed automatically.
@@ -2342,7 +2342,7 @@ $(@type_signals(T,
 """)
 
 @document Window """
-# Window <: Widget
+## Window <: Widget
 
 Top-level window, associated with an `Application`. If all windows
 of an application are closed, it will request to exit.
@@ -2376,7 +2376,7 @@ $(@type_signals(Window,
 
 $(@type_fields())
 
-# Example
+### Example
 ```julia
 main() do app::Application
     window = Window(app)
