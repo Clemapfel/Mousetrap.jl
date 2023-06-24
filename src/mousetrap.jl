@@ -916,7 +916,7 @@ macro do_not_compile(args...) return :() end
     macro add_signal_scale_changed(x) return :(@add_signal $x scale_changed Cvoid AbstractFloat scale) end
     macro add_signal_rotation_changed(x) return :(@add_signal $x rotation_changed Cvoid AbstractFloat angle_absolute_rads AbstractFloat angle_delta_rads) end
     
-    macro add_signal_kinetic_scroll_decelerate(x) return :(@add_signal $x scroll_decelerate Cvoid AbstractFloat x_velocity AbstractFloat y_velocity) end
+    macro add_signal_kinetic_scroll_decelerate(x) return :(@add_signal $x kinetic_scroll_decelerate Cvoid AbstractFloat x_velocity AbstractFloat y_velocity) end
     macro add_signal_scroll_begin(x) return :(@add_signal $x scroll_begin Cvoid) end
     macro add_signal_scroll(x) return :(@add_signal $x scroll Bool AbstractFloat delta_x AbstractFloat delta_y) end
     macro add_signal_scroll_end(x) return :(@add_signal $x scroll_end Cvoid) end
@@ -3121,7 +3121,8 @@ macro do_not_compile(args...) return :() end
     @export_function StylusEventController get_hardware_id Csize_t
     @export_function StylusEventController get_tool_type ToolType
     @export_function StylusEventController has_axis Bool DeviceAxis axis
-
+    @export_function StylusEventController get_axis_value Float64 DeviceAxis axis
+    
     @add_signal_stylus_up StylusEventController
     @add_signal_stylus_down StylusEventController
     @add_signal_proximity StylusEventController
@@ -4543,10 +4544,7 @@ macro do_not_compile(args...) return :() end
     include("./key_codes.jl")
 
 ###### documentation
-
-    const skip_docs = false
-    if !skip_docs
-        include("./docs.jl")
-    end
+        
+    include("./docs.jl")
 
 end # module mousetrap

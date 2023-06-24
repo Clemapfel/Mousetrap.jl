@@ -3,243 +3,243 @@ const signal_descriptors = Dict([
 
     :activate => (
         void_signature, 
-        "`Widget::activate()` is called or the widget is otherwise activated"
+        "Emitted when [`activate!`](@ref) is called or an activatble widget is otherwise activated, for example by the user clicking the widget or pressing enter while the widget has keyboard focus."
     ),
     :startup => (
         void_signature, 
-        "`Application` is in the process of initializing"
+        "Emitted when an [`Application`](@ref) instance has initialized the backend."
     ),
     :shutdown => (
         void_signature, 
-        "`Application` is done initializing and will now start the main render loop"
+        "Emitted when an [`Appication`](@ref) is exiting the main loop and attempting to shut down."
     ),
     :update => (
         void_signature, 
-        "once per frame, at the start of each render loop"
+        "Emitted exactly once per frame, when the widget the `FrameClock` is associated with updates its properties at the start of the frame."
     ),
     :paint => (
         void_signature, 
-        "once per frame, right before the associated widget is drawn"
+        "Emitted exactly once per frame, when the widget the `FrameClock` is associated with is drawn."
     ),
     :realize => (
         void_signature, 
-        "widget is fully initialized and about to be rendered for the first time"
+        "Emitted when a widget is done initializing and is shown for the first time."
     ),
     :unrealize => (
         void_signature, 
-        "widget was hidden and will seize being displayed"
+        "Emitted when a widget is hidden or otherwise made inactive, at which point it will free associated objects and free it's allocated area."
     ),
     :destroy => (
         void_signature, 
-        "A widgets ref count reaches 0 and its finalizer is called"
+        "Emitted when a widgets reference count reaches 0 and it should be finalized and deleted."
     ),
     :hide => (
         void_signature, 
-        "`Widget::hide``is called or a widget becomes no longer visible otherwise"
+        "Emitted when [`hide!`](@ref) is called or a widget is otherwise hidden from view, at which point it will no longer allocate any area on screen."
     ),
     :show => (
         void_signature, 
-        "widget is rendered to the screen for the first time"
+        "Emitted when [`show!`](@ref) is called or a widget is otherwise made visible for the first time."
     ),
     :map => (
         void_signature, 
-        "widgets size allocation was assigned"
+        "Emitted when a widget has chosen its final size allocation and is assuming its size and position on screen."
     ),
     :unmap => (
         void_signature, 
-        "widget or one of its parents is hidden"
+        "Emitted when a widget looses its current size allocation, usually in the process of being hidden or destroyed."
     ),
     :close_request => (
-        "[::Data_t]) -> allow_close::WindowCloseRequestResult", 
-        "mousetrap or the users operating system requests for a window to close"
+        "(::T, [::Data_t]) -> WindowCloseRequestResult", 
+        "The window or the users operating system requests the window to close. Return [`WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE`](@ref) or [`WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE`](@ref) to control whether this is permitted"
     ),
     :closed => (
         void_signature, 
-        "popover is closed"
+        "A [`Popover`](@ref) window is closed, either by automatcally closing or when [`popdown!`](@ref) was called."
     ),
     :activate_default_widget => (
         void_signature, 
-        "widget assigned via Window::set_default_widget is activated is activated"
+        "The widget assigned via [`set_default_widget!`](@ref) emits its `activate` signal."
     ),
     :activate_focused_widget => (
         void_signature, 
-        "widget that currently holds focus is activated"
+        "Widget that is a direct or indirect child of this window and holds input focus emits its `activate` signal."
     ),
     :clicked => (
         void_signature, 
-        "user activates the widget by clicking it with a mouse or touch-device"
+        "The widget is clicked by the user, either with a mouse or touch-device"
     ),
     :toggled => (
         void_signature, 
-        "buttons internal state changes"
+        "The buttons internal state goes from active to inactive or vice-versa."
     ),
     :text_changed => (
         void_signature, 
-        "underlying text buffer is modified in any way"
+        "The underlying text buffer is modified in any way."
     ),
     :selection_changed => (
         "(::T, position::Integer, n_items::Integer, [::Data_t]) -> Nothing", 
-        "number or index of selected elements changes"
+        "The number or position of one or more selected items has changed, where `position` is the item index that was modifier, and `n_items` is the number of items currently selected."
     ),
     :key_pressed => (
         "(::T, code::KeyCode, modifiers::ModifierState, [::Data_t]) -> Nothing", 
-        "user pressed a non-modifier key"
+        "The user presses a non-modifier key that is currently not pressed."
     ),
     :key_released => (
         "(::T, code::KeyCode, modifiers::ModifierState, [::Data_t]) -> Nothing", 
-        "user releases a non-modifier key"
+        "The user releaes a non-modifier key that is currently pressed."
     ),
     :modifiers_changed => (
         "(::T, code::KeyCode, modifiers::ModifierState, [::Data_t]) -> Nothing", 
-        "user presses or releases a modifier key"
+        "The set of depresses modifier keys changes in any way."
     ),
     :drag_begin => (
         "(::T, start_x::AbstractFloat, start_y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "first frame at which a drag gesture is recognized"
+        "Emitted exaclty once, on the first frame a drag gesture is recognized. `start_y` and `start_x` are intial position of the cursor, in pixels."
     ),
     :drag => (
         "(::T, x_offset::AbstractFloat, y_offset::AbstractFloat, [::Data_t]) -> Nothing", 
-        "once per frame while a drag gesture is active"
+        "Emitted once per frame while a drag gesture is active, where `x_offset` and `y_offset` are the distance form the current position to the cursor to the position at the start of the drag gesture."
     ),
-    :drag_begin => (
+    :drag_end => (
         "(::T, x_offset::AbstractFloat, y_offset::AbstractFloat, [::Data_t]) -> Nothing", 
-        "drag gesture seizes to be active"
+        "Emitted exactly once, when the drag gesture seizes to be active, where where `x_offset` and `y_offset` are the distance form the current position to the cursor to the position at the start of the drag gesture."
     ),
     :click_pressed => (
         "(::T, n_presses::Integer, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "User presses a mouse button or touch-device"
+        "User presses a mouse button that is currently up, or presses a touch device, where `n_presses` is the number of clicks in the current sequence, `x` and `y` are the current cursor position."
     ),
     :click_released => (
         "(::T, n_presses::Integer, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "User releases a mouse button or touch-device"
+        "User releaes a mouse button that is currently down, or seizes to press a touch device, where `n_presses` is the number of clicks in the current sequence, `x` and `y` are the current cursor position."
     ),
     :click_stopped => (
         void_signature, 
-        "once when a series of clicks ends"
+        "Emitted exactly once to signal that a series of clicks ended."
     ),
     :focus_gained => (
         void_signature, 
-        "Widget acquires input focus"
+        "Emitted once when a widget grabs input focus."
     ),
     :focus_lost => (
         void_signature, 
-        "Widget looses input focus"
+        "Emitted once when a widget looses input focus."
     ),
     :pressed => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "long-press gesture is recognized"
+        "Emitted once when a long-press gesture is recognized, where `x` and `y` are the current position of the cursor."
     ),
     :press_cancelled => (
         void_signature, 
-        "long-press gesture seizes to be active"
+        "Emitted once a long-press gesture seizes, usually when the users stops keeping the button or touchscreen depressed."
     ),
     :motion_enter => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "cursor enters allocated area of the widget for the first time"
+        "Emitted exactly once when the users cursor first enters the allocated area of the widget, where `x` and `y` are the current position of the cursor."
     ),
     :motion => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "once per frame while cursor is inside allocated area of the widget"
+        "Emitted once per frame, while the cursor is inside the allocated area of the widget, where `x` and `y` are the current cursor position"
     ),
     :motion_leave => (
         void_signature, 
-        "cursor leaves allocated area of the widget"
+        "Emitted exactly once when the cursor leaves the allocated area of the widget."
     ),
     :scale_changed => (
         "(::T, scale::AbstractFloat, [::Data_t]) -> Nothing", 
-        "distance between two fingers recognized as a pinch-zoom-gesture changes"
+        "Emitted anytime the distance between the two fingers of the pinch-zoom-gesture changes, where `scale` is factor by which the current scale is different than the distance between the two fingers at the start of the gesture."
     ),
     :rotation_changed => (
         "(::T, angle_absolute::AbstractFloat, angle_delta::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "angle between two fingers recognized as a rotate-gesture changes"
+        "Emitted when the angle between the two finger sof a rotate-gesture changes, where `angle_delta` is the offset and `angle_absolute` the current angle, both in radians."
     ),
     :scroll_begin => (
         void_signature, 
-        "user initiates a scroll gesture using the mouse scrollwheel or a touch-device"
+        "Emitted exaclty once when a scroll gesture is first recognized."
     ),
     :scroll => (
         "(::T, x_delta::AbstractFloat, y_delta::AbstractFloat, [::Data_t]) -> also_invoke_default_handlers::Bool", 
-        "once per frame while scroll gesture is active"
+        "Emitted once per frame while a scroll gesture is active, where `x_delta` and `y_delta` are the offset along the horizontal and vertical axis, in pixels."
     ),
     :scroll_end => (
         void_signature, 
-        "user seizes scrolling"
+        "Emitted exactly once when a scroll gesture ends."
     ),
     :kinetic_scroll_decelerate => (
         "(::T, x_velocity::AbstractFloat, y_velocity::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "widget is still scrolling due to scrolling \"inertia\""
+        "Emitted once per frame while kinetic scrolling is active, see the manual on `ScrollEventController` for more information."
     ),
     :stylus_down => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "stylus makes physical contact with the touchpad"
+        "Emitted once when the stylus first makes contact with the touchpad, where `x` and `y` is the cursor position in widget-space."
     ),
     :stylus_up => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "stylus seizes to make contact with the touchpad"
+        "Emitted once when the stylus seizes to be in physical contact with the touchpad, where `x` and `y` is the cursor position in widget-space."
     ),
     :proximity => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "stylus enters or leaves maximum distance recognized by the touchpad"
+        "Emitted anytime the stylus enters or exits the distance recognized by the touchpad. This will usually precede a `stylus_down` signal and follow a `stylus_up` signal."
     ),
     :swipe => (
         "(::T, x_velocity::AbstractFloat, y_velocity::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "swipe gesture is recognized"
+        "Emitted once per frame while a swipe gesture is active, where `x_velocity` and `y_velocity` are the current velocity of the swipe, in pixels."
     ),
     :pan => (
         "(::T, ::PanDirection, offset::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "pan gesture is recognized"
+        "Emitted once per frame while a pan gesture is active, where `offset` is the distance between the current position of the cursor and the position at the start of the gesture."
     ),
     :value_changed => (
         void_signature, 
-        "`value` property of underlying adjustment changes"
+        "Emitted when the `value` property of the [`Adjustment`](@ref) changes."
     ),
     :properties_changed => (
         void_signature, 
-        "any property other than `value` of underlying adjustment changes"
+        "Emitted when any property of the [`Adjustment`](@ref) other than `value` changes."
     ),
     :wrapped => (
-        void_signature, 
-        "`SpinButton` for whom `is_wrapped` is enabled has its value increased or decreased past the given range"
+        void_signature,
+        "Emitted when a `SpinButton`s value wraps from the minimum to the maximum or vice-versa. For this signal to be emitted, [`set_should_wrap!`](@ref) needs to be set to `true` first." 
     ),
     :scroll_child => (
-        "(::T, ::ScrollType, is_horizontal::Bool, [::Data_t]) -> Cvoid", 
-        "user triggers a scroll action"
+        "(::T, scroll_type::ScrollType, is_horizontal::Bool, [::Data_t]) -> Cvoid", 
+        "Emitted anytime a user triggers a scroll action that moves one or both of the [`Viewport`]s scrollbars. `scroll_type` identifies the type of action that triggered the scrolling, while `is_horizontal` can be determined whether the horizontal or vertical scrollbar was operated."
     ),
     :render => (
         void_signature, 
-        "`RenderArea` is requested to draw the the screens framebuffer"
+        "Emitted once per frame, right before [`RenderArea`](@ref) pushes the current frame buffer to the monitor."
     ),
     :resize => (
         "(::T, width::Integer, height::Integer, [::Data_t]) -> void", 
-        "allocated size of `RenderArea` changes while it is realized"
+        "Emitted whenver the allocated area of a [`RenderArea`](@ref) changes, where `width` and `height` are the new size, in pixels. Emission of this signal usually means the OpenGL viewport size changed as well."
     ),
     :activated => (
         void_signature, 
-        "`Action` is activated"
+        "Emitted when [`activate!`](@ref) is called or the [`Action`](@ref) is otherwise activated."
     ),
     :revealed => (
         void_signature, 
-        "child is fully revealed (after the animation has finished)"
+        "Emitted once when a [`Revealer`](@ref)s child goes from hidden to shown or shown to hidden, and the corresponding animation has finished playing."
     ),
     :page_reordered => (
         "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
-        "page of `Notebook` changes position"
+        "Emitted when a page of a [`Notebook`](@ref) changes position, where `page_index` is the new position of the page."
     ),
     :page_added => (
         "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
-        "number of pages increases while the widget is realized"
+        "Emitted when the total number of pages of a [`Notebook`](@ref) increases, where `page_index` is the position of the page that was inserted."
     ),
     :page_removed => (
         "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
-        "number of pages decreases while the widget is realized"
+        "Emitted when a page is removed from the [`Notebook`](@ref), where `page_index` is the old index of the page that was removed."
     ),
     :page_selection_changed => (
         "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
-        "currently visible page changes"
+        "Emitted when the currently active page changes by any means, where `page_index is the index of the now-visible page." 
     ),
     :items_changed => (
         "(::T, position::Integer, n_removed::Integer, n_added::Integet, [::Data_t]) -> Cvoid", 
-        "list of items is modified"
+        "The number of menu items or any property of any menu item already inside the [`MenuModel`](@ref) is modified."
     )
 ])
 
@@ -278,24 +278,106 @@ macro type_signals(T, signals...)
         signature = replace(signal_descriptors[id][1], "T" => string(T))
         description = signal_descriptors[id][2]
 
-        if i == n_signals
-            push!(out, """
-            > **$id**
-            > > ```
-            > > $signature
-            > > ```
-            > $description
-            """)
-        else
-            push!(out, """
-            > **$id**
-            > > ```
-            > > $signature
-            > > ```
-            > $description
-            ---
-            """)
-        end
+        push!(out, """
+        ### $id
+        > > ```
+        > > $signature
+        > > ```
+        > $description
+
+        """)
     end
     return join(out)
+end
+
+macro generate_signal_function_docs(snake_case)
+
+    out = Expr(:toplevel)
+
+    id = snake_case
+
+    signature = signal_descriptors[snake_case][1]
+    connect_signal_name = :connect_signal_ * snake_case * :!
+    
+    connect_signal_string = """
+        ```
+        $connect_signal_name(f, ::T, [::Data_t]) -> Cvoid
+        ```
+        Connect to signal `$id`, where `T` is a signal emitter instance that supports this signal
+
+        `Data_t` is an optional argument, which, if specified, will be forwarded to the signal handler.
+        
+        `f` is required to be invocable as a function with signature:
+        ```
+        $signature
+        ```
+        Where `T` is the type of the signal emitter instance.
+        """
+
+    push!(out.args, :(@document $connect_signal_name $connect_signal_string))
+
+    ###
+
+    emit_signal_name = :emit_signal_ * snake_case
+
+    return_t = match(r" -> .*", signature).match
+    arg_ts = signature[(match(r"::T, ", signature).offset + 5):(match(r", \[::Data_t\]", signature).offset - 1)]
+
+    emit_signal_string = """
+        ```
+        $emit_signal_name(::T, $arg_ts)$return_t
+        ```
+        Manually emit signal `$id`, where `T` is a signal emitter that supports this signal.
+        The arguments will forwarded to the signal handler.
+        """
+   
+    emit_signal_name = :emit_signal_ * snake_case
+
+    push!(out.args, :(@document $emit_signal_name $emit_signal_string))
+
+    ### 
+    
+    disconnect_signal_name = :disconnect_signal_ * snake_case * :!
+
+    disconnect_signal_string = """
+        ```
+        $disconnect_signal_name(::T)
+        ```
+        Permanently disconnect a signal, where `T` is a signal emitter that supports signal `$id`. 
+        """
+
+    push!(out.args, :(@document $disconnect_signal_name $disconnect_signal_string))
+
+    ###
+
+    set_signal_blocked_name = :set_signal_ * snake_case * :_blocked * :!
+
+    set_signal_blocked_string = """
+        ```
+        $set_signal_blocked_name(::T, ::Bool)
+        ```
+        If set to `true`, blocks emission of this signal until turned back on, where `T` is a signal emitter that supports signal `$id`.
+        """
+
+    push!(out.args, :(@document $set_signal_blocked_name $set_signal_blocked_string))
+
+    ###
+
+    get_signal_blocked_name = :get_signal_ * snake_case * :_blocked
+
+    get_signal_blocked_string = """
+        ```
+        $get_signal_blocked_name(::T) -> Bool
+        ```
+        Get whether the signal is currently blocked, where `T` is a signal emitter that supports signal `$id`.
+        """
+
+    push!(out.args, :(@document $get_signal_blocked_name $get_signal_blocked_string))
+
+    return out
+end
+
+for pair in signal_descriptors
+    id = pair[1]
+    eval(:(@generate_signal_function_docs $id))
 end

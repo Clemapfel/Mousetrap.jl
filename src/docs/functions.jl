@@ -784,6 +784,13 @@ get_autohide(::Popover) -> Bool
 Get whether the popover should automatically hide when it looses focus
 """
 
+@document get_axis_value """
+```
+get_axis_value(::StylusEventController, ::DeviceAxis) -> Float32
+```
+Get value for the devices axis, or 0 if no such axis is present.
+"""
+
 @document get_bottom_margin """
 ```
 get_bottom_margin(::TextView) -> Float32
@@ -1224,6 +1231,13 @@ get_is_focusable(::Widget) -> Bool
 Get whether the widget can hold input focus.
 """
 
+@document get_is_holding """
+```
+get_is_holding(::Application) -> Bool
+```
+Get whether [`hold`](@ref) was called and the application currently blocks attempts at exiting.
+"""
+
 @document get_is_horizontally_homogeneous """
 ```
 get_is_horizontally_homogeneous(::Stack) -> Bool
@@ -1244,6 +1258,13 @@ get_is_modal(::Window) -> Bool
 get_is_modal(::FileChooser) -> Bool
 ```
 Get whether all other windows should be paused while this window is active.
+"""
+
+@document get_is_marked_as_busy """
+```
+get_is_marked_as_busy(::Application) -> Bool
+```
+Returns `true` if [`mark_as_busy!`](@ref) was called before.
 """
 
 @document get_is_realized """

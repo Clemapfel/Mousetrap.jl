@@ -1,4 +1,4 @@
-# Functions
+# Index: Functions
 ## `@log_critical`
 ```@docs
 mousetrap.@log_critical
@@ -70,10 +70,6 @@ mousetrap.Triangle
 ## `Wireframe`
 ```@docs
 mousetrap.Wireframe
-```
-## `activate`
-```@docs
-mousetrap.activate
 ```
 ## `activate!`
 ```@docs
@@ -291,6 +287,242 @@ mousetrap.close!
 ```@docs
 mousetrap.combine_with
 ```
+## `connect_signal_activate!`
+```@docs
+mousetrap.connect_signal_activate!
+```
+## `connect_signal_activate_default_widget!`
+```@docs
+mousetrap.connect_signal_activate_default_widget!
+```
+## `connect_signal_activate_focused_widget!`
+```@docs
+mousetrap.connect_signal_activate_focused_widget!
+```
+## `connect_signal_activated!`
+```@docs
+mousetrap.connect_signal_activated!
+```
+## `connect_signal_click_pressed!`
+```@docs
+mousetrap.connect_signal_click_pressed!
+```
+## `connect_signal_click_released!`
+```@docs
+mousetrap.connect_signal_click_released!
+```
+## `connect_signal_click_stopped!`
+```@docs
+mousetrap.connect_signal_click_stopped!
+```
+## `connect_signal_clicked!`
+```@docs
+mousetrap.connect_signal_clicked!
+```
+## `connect_signal_close_request!`
+```@docs
+mousetrap.connect_signal_close_request!
+```
+## `connect_signal_closed!`
+```@docs
+mousetrap.connect_signal_closed!
+```
+## `connect_signal_destroy!`
+```@docs
+mousetrap.connect_signal_destroy!
+```
+## `connect_signal_drag!`
+```@docs
+mousetrap.connect_signal_drag!
+```
+## `connect_signal_drag_begin!`
+```@docs
+mousetrap.connect_signal_drag_begin!
+```
+## `connect_signal_drag_end!`
+```@docs
+mousetrap.connect_signal_drag_end!
+```
+## `connect_signal_focus_gained!`
+```@docs
+mousetrap.connect_signal_focus_gained!
+```
+## `connect_signal_focus_lost!`
+```@docs
+mousetrap.connect_signal_focus_lost!
+```
+## `connect_signal_hide!`
+```@docs
+mousetrap.connect_signal_hide!
+```
+## `connect_signal_items_changed!`
+```@docs
+mousetrap.connect_signal_items_changed!
+```
+## `connect_signal_key_pressed!`
+```@docs
+mousetrap.connect_signal_key_pressed!
+```
+## `connect_signal_key_released!`
+```@docs
+mousetrap.connect_signal_key_released!
+```
+## `connect_signal_kinetic_scroll_decelerate!`
+```@docs
+mousetrap.connect_signal_kinetic_scroll_decelerate!
+```
+## `connect_signal_map!`
+```@docs
+mousetrap.connect_signal_map!
+```
+## `connect_signal_modifiers_changed!`
+```@docs
+mousetrap.connect_signal_modifiers_changed!
+```
+## `connect_signal_motion!`
+```@docs
+mousetrap.connect_signal_motion!
+```
+## `connect_signal_motion_enter!`
+```@docs
+mousetrap.connect_signal_motion_enter!
+```
+## `connect_signal_motion_leave!`
+```@docs
+mousetrap.connect_signal_motion_leave!
+```
+## `connect_signal_page_added!`
+```@docs
+mousetrap.connect_signal_page_added!
+```
+## `connect_signal_page_removed!`
+```@docs
+mousetrap.connect_signal_page_removed!
+```
+## `connect_signal_page_reordered!`
+```@docs
+mousetrap.connect_signal_page_reordered!
+```
+## `connect_signal_page_selection_changed!`
+```@docs
+mousetrap.connect_signal_page_selection_changed!
+```
+## `connect_signal_paint!`
+```@docs
+mousetrap.connect_signal_paint!
+```
+## `connect_signal_pan!`
+```@docs
+mousetrap.connect_signal_pan!
+```
+## `connect_signal_press_cancelled!`
+```@docs
+mousetrap.connect_signal_press_cancelled!
+```
+## `connect_signal_pressed!`
+```@docs
+mousetrap.connect_signal_pressed!
+```
+## `connect_signal_properties_changed!`
+```@docs
+mousetrap.connect_signal_properties_changed!
+```
+## `connect_signal_proximity!`
+```@docs
+mousetrap.connect_signal_proximity!
+```
+## `connect_signal_realize!`
+```@docs
+mousetrap.connect_signal_realize!
+```
+## `connect_signal_render!`
+```@docs
+mousetrap.connect_signal_render!
+```
+## `connect_signal_resize!`
+```@docs
+mousetrap.connect_signal_resize!
+```
+## `connect_signal_revealed!`
+```@docs
+mousetrap.connect_signal_revealed!
+```
+## `connect_signal_rotation_changed!`
+```@docs
+mousetrap.connect_signal_rotation_changed!
+```
+## `connect_signal_scale_changed!`
+```@docs
+mousetrap.connect_signal_scale_changed!
+```
+## `connect_signal_scroll!`
+```@docs
+mousetrap.connect_signal_scroll!
+```
+## `connect_signal_scroll_begin!`
+```@docs
+mousetrap.connect_signal_scroll_begin!
+```
+## `connect_signal_scroll_child!`
+```@docs
+mousetrap.connect_signal_scroll_child!
+```
+## `connect_signal_scroll_end!`
+```@docs
+mousetrap.connect_signal_scroll_end!
+```
+## `connect_signal_selection_changed!`
+```@docs
+mousetrap.connect_signal_selection_changed!
+```
+## `connect_signal_show!`
+```@docs
+mousetrap.connect_signal_show!
+```
+## `connect_signal_shutdown!`
+```@docs
+mousetrap.connect_signal_shutdown!
+```
+## `connect_signal_stylus_down!`
+```@docs
+mousetrap.connect_signal_stylus_down!
+```
+## `connect_signal_stylus_up!`
+```@docs
+mousetrap.connect_signal_stylus_up!
+```
+## `connect_signal_swipe!`
+```@docs
+mousetrap.connect_signal_swipe!
+```
+## `connect_signal_text_changed!`
+```@docs
+mousetrap.connect_signal_text_changed!
+```
+## `connect_signal_toggled!`
+```@docs
+mousetrap.connect_signal_toggled!
+```
+## `connect_signal_unmap!`
+```@docs
+mousetrap.connect_signal_unmap!
+```
+## `connect_signal_unrealize!`
+```@docs
+mousetrap.connect_signal_unrealize!
+```
+## `connect_signal_update!`
+```@docs
+mousetrap.connect_signal_update!
+```
+## `connect_signal_value_changed!`
+```@docs
+mousetrap.connect_signal_value_changed!
+```
+## `connect_signal_wrapped!`
+```@docs
+mousetrap.connect_signal_wrapped!
+```
 ## `contains_file`
 ```@docs
 mousetrap.contains_file
@@ -371,6 +603,242 @@ mousetrap.delete_at!
 ```@docs
 mousetrap.device_axis_to_string
 ```
+## `disconnect_signal_activate!`
+```@docs
+mousetrap.disconnect_signal_activate!
+```
+## `disconnect_signal_activate_default_widget!`
+```@docs
+mousetrap.disconnect_signal_activate_default_widget!
+```
+## `disconnect_signal_activate_focused_widget!`
+```@docs
+mousetrap.disconnect_signal_activate_focused_widget!
+```
+## `disconnect_signal_activated!`
+```@docs
+mousetrap.disconnect_signal_activated!
+```
+## `disconnect_signal_click_pressed!`
+```@docs
+mousetrap.disconnect_signal_click_pressed!
+```
+## `disconnect_signal_click_released!`
+```@docs
+mousetrap.disconnect_signal_click_released!
+```
+## `disconnect_signal_click_stopped!`
+```@docs
+mousetrap.disconnect_signal_click_stopped!
+```
+## `disconnect_signal_clicked!`
+```@docs
+mousetrap.disconnect_signal_clicked!
+```
+## `disconnect_signal_close_request!`
+```@docs
+mousetrap.disconnect_signal_close_request!
+```
+## `disconnect_signal_closed!`
+```@docs
+mousetrap.disconnect_signal_closed!
+```
+## `disconnect_signal_destroy!`
+```@docs
+mousetrap.disconnect_signal_destroy!
+```
+## `disconnect_signal_drag!`
+```@docs
+mousetrap.disconnect_signal_drag!
+```
+## `disconnect_signal_drag_begin!`
+```@docs
+mousetrap.disconnect_signal_drag_begin!
+```
+## `disconnect_signal_drag_end!`
+```@docs
+mousetrap.disconnect_signal_drag_end!
+```
+## `disconnect_signal_focus_gained!`
+```@docs
+mousetrap.disconnect_signal_focus_gained!
+```
+## `disconnect_signal_focus_lost!`
+```@docs
+mousetrap.disconnect_signal_focus_lost!
+```
+## `disconnect_signal_hide!`
+```@docs
+mousetrap.disconnect_signal_hide!
+```
+## `disconnect_signal_items_changed!`
+```@docs
+mousetrap.disconnect_signal_items_changed!
+```
+## `disconnect_signal_key_pressed!`
+```@docs
+mousetrap.disconnect_signal_key_pressed!
+```
+## `disconnect_signal_key_released!`
+```@docs
+mousetrap.disconnect_signal_key_released!
+```
+## `disconnect_signal_kinetic_scroll_decelerate!`
+```@docs
+mousetrap.disconnect_signal_kinetic_scroll_decelerate!
+```
+## `disconnect_signal_map!`
+```@docs
+mousetrap.disconnect_signal_map!
+```
+## `disconnect_signal_modifiers_changed!`
+```@docs
+mousetrap.disconnect_signal_modifiers_changed!
+```
+## `disconnect_signal_motion!`
+```@docs
+mousetrap.disconnect_signal_motion!
+```
+## `disconnect_signal_motion_enter!`
+```@docs
+mousetrap.disconnect_signal_motion_enter!
+```
+## `disconnect_signal_motion_leave!`
+```@docs
+mousetrap.disconnect_signal_motion_leave!
+```
+## `disconnect_signal_page_added!`
+```@docs
+mousetrap.disconnect_signal_page_added!
+```
+## `disconnect_signal_page_removed!`
+```@docs
+mousetrap.disconnect_signal_page_removed!
+```
+## `disconnect_signal_page_reordered!`
+```@docs
+mousetrap.disconnect_signal_page_reordered!
+```
+## `disconnect_signal_page_selection_changed!`
+```@docs
+mousetrap.disconnect_signal_page_selection_changed!
+```
+## `disconnect_signal_paint!`
+```@docs
+mousetrap.disconnect_signal_paint!
+```
+## `disconnect_signal_pan!`
+```@docs
+mousetrap.disconnect_signal_pan!
+```
+## `disconnect_signal_press_cancelled!`
+```@docs
+mousetrap.disconnect_signal_press_cancelled!
+```
+## `disconnect_signal_pressed!`
+```@docs
+mousetrap.disconnect_signal_pressed!
+```
+## `disconnect_signal_properties_changed!`
+```@docs
+mousetrap.disconnect_signal_properties_changed!
+```
+## `disconnect_signal_proximity!`
+```@docs
+mousetrap.disconnect_signal_proximity!
+```
+## `disconnect_signal_realize!`
+```@docs
+mousetrap.disconnect_signal_realize!
+```
+## `disconnect_signal_render!`
+```@docs
+mousetrap.disconnect_signal_render!
+```
+## `disconnect_signal_resize!`
+```@docs
+mousetrap.disconnect_signal_resize!
+```
+## `disconnect_signal_revealed!`
+```@docs
+mousetrap.disconnect_signal_revealed!
+```
+## `disconnect_signal_rotation_changed!`
+```@docs
+mousetrap.disconnect_signal_rotation_changed!
+```
+## `disconnect_signal_scale_changed!`
+```@docs
+mousetrap.disconnect_signal_scale_changed!
+```
+## `disconnect_signal_scroll!`
+```@docs
+mousetrap.disconnect_signal_scroll!
+```
+## `disconnect_signal_scroll_begin!`
+```@docs
+mousetrap.disconnect_signal_scroll_begin!
+```
+## `disconnect_signal_scroll_child!`
+```@docs
+mousetrap.disconnect_signal_scroll_child!
+```
+## `disconnect_signal_scroll_end!`
+```@docs
+mousetrap.disconnect_signal_scroll_end!
+```
+## `disconnect_signal_selection_changed!`
+```@docs
+mousetrap.disconnect_signal_selection_changed!
+```
+## `disconnect_signal_show!`
+```@docs
+mousetrap.disconnect_signal_show!
+```
+## `disconnect_signal_shutdown!`
+```@docs
+mousetrap.disconnect_signal_shutdown!
+```
+## `disconnect_signal_stylus_down!`
+```@docs
+mousetrap.disconnect_signal_stylus_down!
+```
+## `disconnect_signal_stylus_up!`
+```@docs
+mousetrap.disconnect_signal_stylus_up!
+```
+## `disconnect_signal_swipe!`
+```@docs
+mousetrap.disconnect_signal_swipe!
+```
+## `disconnect_signal_text_changed!`
+```@docs
+mousetrap.disconnect_signal_text_changed!
+```
+## `disconnect_signal_toggled!`
+```@docs
+mousetrap.disconnect_signal_toggled!
+```
+## `disconnect_signal_unmap!`
+```@docs
+mousetrap.disconnect_signal_unmap!
+```
+## `disconnect_signal_unrealize!`
+```@docs
+mousetrap.disconnect_signal_unrealize!
+```
+## `disconnect_signal_update!`
+```@docs
+mousetrap.disconnect_signal_update!
+```
+## `disconnect_signal_value_changed!`
+```@docs
+mousetrap.disconnect_signal_value_changed!
+```
+## `disconnect_signal_wrapped!`
+```@docs
+mousetrap.disconnect_signal_wrapped!
+```
 ## `download`
 ```@docs
 mousetrap.download
@@ -378,6 +846,242 @@ mousetrap.download
 ## `elapsed`
 ```@docs
 mousetrap.elapsed
+```
+## `emit_signal_activate`
+```@docs
+mousetrap.emit_signal_activate
+```
+## `emit_signal_activate_default_widget`
+```@docs
+mousetrap.emit_signal_activate_default_widget
+```
+## `emit_signal_activate_focused_widget`
+```@docs
+mousetrap.emit_signal_activate_focused_widget
+```
+## `emit_signal_activated`
+```@docs
+mousetrap.emit_signal_activated
+```
+## `emit_signal_click_pressed`
+```@docs
+mousetrap.emit_signal_click_pressed
+```
+## `emit_signal_click_released`
+```@docs
+mousetrap.emit_signal_click_released
+```
+## `emit_signal_click_stopped`
+```@docs
+mousetrap.emit_signal_click_stopped
+```
+## `emit_signal_clicked`
+```@docs
+mousetrap.emit_signal_clicked
+```
+## `emit_signal_close_request`
+```@docs
+mousetrap.emit_signal_close_request
+```
+## `emit_signal_closed`
+```@docs
+mousetrap.emit_signal_closed
+```
+## `emit_signal_destroy`
+```@docs
+mousetrap.emit_signal_destroy
+```
+## `emit_signal_drag`
+```@docs
+mousetrap.emit_signal_drag
+```
+## `emit_signal_drag_begin`
+```@docs
+mousetrap.emit_signal_drag_begin
+```
+## `emit_signal_drag_end`
+```@docs
+mousetrap.emit_signal_drag_end
+```
+## `emit_signal_focus_gained`
+```@docs
+mousetrap.emit_signal_focus_gained
+```
+## `emit_signal_focus_lost`
+```@docs
+mousetrap.emit_signal_focus_lost
+```
+## `emit_signal_hide`
+```@docs
+mousetrap.emit_signal_hide
+```
+## `emit_signal_items_changed`
+```@docs
+mousetrap.emit_signal_items_changed
+```
+## `emit_signal_key_pressed`
+```@docs
+mousetrap.emit_signal_key_pressed
+```
+## `emit_signal_key_released`
+```@docs
+mousetrap.emit_signal_key_released
+```
+## `emit_signal_kinetic_scroll_decelerate`
+```@docs
+mousetrap.emit_signal_kinetic_scroll_decelerate
+```
+## `emit_signal_map`
+```@docs
+mousetrap.emit_signal_map
+```
+## `emit_signal_modifiers_changed`
+```@docs
+mousetrap.emit_signal_modifiers_changed
+```
+## `emit_signal_motion`
+```@docs
+mousetrap.emit_signal_motion
+```
+## `emit_signal_motion_enter`
+```@docs
+mousetrap.emit_signal_motion_enter
+```
+## `emit_signal_motion_leave`
+```@docs
+mousetrap.emit_signal_motion_leave
+```
+## `emit_signal_page_added`
+```@docs
+mousetrap.emit_signal_page_added
+```
+## `emit_signal_page_removed`
+```@docs
+mousetrap.emit_signal_page_removed
+```
+## `emit_signal_page_reordered`
+```@docs
+mousetrap.emit_signal_page_reordered
+```
+## `emit_signal_page_selection_changed`
+```@docs
+mousetrap.emit_signal_page_selection_changed
+```
+## `emit_signal_paint`
+```@docs
+mousetrap.emit_signal_paint
+```
+## `emit_signal_pan`
+```@docs
+mousetrap.emit_signal_pan
+```
+## `emit_signal_press_cancelled`
+```@docs
+mousetrap.emit_signal_press_cancelled
+```
+## `emit_signal_pressed`
+```@docs
+mousetrap.emit_signal_pressed
+```
+## `emit_signal_properties_changed`
+```@docs
+mousetrap.emit_signal_properties_changed
+```
+## `emit_signal_proximity`
+```@docs
+mousetrap.emit_signal_proximity
+```
+## `emit_signal_realize`
+```@docs
+mousetrap.emit_signal_realize
+```
+## `emit_signal_render`
+```@docs
+mousetrap.emit_signal_render
+```
+## `emit_signal_resize`
+```@docs
+mousetrap.emit_signal_resize
+```
+## `emit_signal_revealed`
+```@docs
+mousetrap.emit_signal_revealed
+```
+## `emit_signal_rotation_changed`
+```@docs
+mousetrap.emit_signal_rotation_changed
+```
+## `emit_signal_scale_changed`
+```@docs
+mousetrap.emit_signal_scale_changed
+```
+## `emit_signal_scroll`
+```@docs
+mousetrap.emit_signal_scroll
+```
+## `emit_signal_scroll_begin`
+```@docs
+mousetrap.emit_signal_scroll_begin
+```
+## `emit_signal_scroll_child`
+```@docs
+mousetrap.emit_signal_scroll_child
+```
+## `emit_signal_scroll_end`
+```@docs
+mousetrap.emit_signal_scroll_end
+```
+## `emit_signal_selection_changed`
+```@docs
+mousetrap.emit_signal_selection_changed
+```
+## `emit_signal_show`
+```@docs
+mousetrap.emit_signal_show
+```
+## `emit_signal_shutdown`
+```@docs
+mousetrap.emit_signal_shutdown
+```
+## `emit_signal_stylus_down`
+```@docs
+mousetrap.emit_signal_stylus_down
+```
+## `emit_signal_stylus_up`
+```@docs
+mousetrap.emit_signal_stylus_up
+```
+## `emit_signal_swipe`
+```@docs
+mousetrap.emit_signal_swipe
+```
+## `emit_signal_text_changed`
+```@docs
+mousetrap.emit_signal_text_changed
+```
+## `emit_signal_toggled`
+```@docs
+mousetrap.emit_signal_toggled
+```
+## `emit_signal_unmap`
+```@docs
+mousetrap.emit_signal_unmap
+```
+## `emit_signal_unrealize`
+```@docs
+mousetrap.emit_signal_unrealize
+```
+## `emit_signal_update`
+```@docs
+mousetrap.emit_signal_update
+```
+## `emit_signal_value_changed`
+```@docs
+mousetrap.emit_signal_value_changed
+```
+## `emit_signal_wrapped`
+```@docs
+mousetrap.emit_signal_wrapped
 ```
 ## `exists`
 ```@docs
@@ -547,6 +1251,10 @@ mousetrap.get_expand_horizontally
 ```@docs
 mousetrap.get_expand_vertically
 ```
+## `get_expanded`
+```@docs
+mousetrap.get_expanded
+```
 ## `get_file_extension`
 ```@docs
 mousetrap.get_file_extension
@@ -659,6 +1367,10 @@ mousetrap.get_is_decorated
 ```@docs
 mousetrap.get_is_focusable
 ```
+## `get_is_holding`
+```@docs
+mousetrap.get_is_holding
+```
 ## `get_is_horizontally_homogeneous`
 ```@docs
 mousetrap.get_is_horizontally_homogeneous
@@ -666,6 +1378,10 @@ mousetrap.get_is_horizontally_homogeneous
 ## `get_is_inverted`
 ```@docs
 mousetrap.get_is_inverted
+```
+## `get_is_marked_as_busy`
+```@docs
+mousetrap.get_is_marked_as_busy
 ```
 ## `get_is_modal`
 ```@docs
@@ -951,6 +1667,242 @@ mousetrap.get_show_separators
 ```@docs
 mousetrap.get_show_title_buttons
 ```
+## `get_signal_activate_blocked`
+```@docs
+mousetrap.get_signal_activate_blocked
+```
+## `get_signal_activate_default_widget_blocked`
+```@docs
+mousetrap.get_signal_activate_default_widget_blocked
+```
+## `get_signal_activate_focused_widget_blocked`
+```@docs
+mousetrap.get_signal_activate_focused_widget_blocked
+```
+## `get_signal_activated_blocked`
+```@docs
+mousetrap.get_signal_activated_blocked
+```
+## `get_signal_click_pressed_blocked`
+```@docs
+mousetrap.get_signal_click_pressed_blocked
+```
+## `get_signal_click_released_blocked`
+```@docs
+mousetrap.get_signal_click_released_blocked
+```
+## `get_signal_click_stopped_blocked`
+```@docs
+mousetrap.get_signal_click_stopped_blocked
+```
+## `get_signal_clicked_blocked`
+```@docs
+mousetrap.get_signal_clicked_blocked
+```
+## `get_signal_close_request_blocked`
+```@docs
+mousetrap.get_signal_close_request_blocked
+```
+## `get_signal_closed_blocked`
+```@docs
+mousetrap.get_signal_closed_blocked
+```
+## `get_signal_destroy_blocked`
+```@docs
+mousetrap.get_signal_destroy_blocked
+```
+## `get_signal_drag_begin_blocked`
+```@docs
+mousetrap.get_signal_drag_begin_blocked
+```
+## `get_signal_drag_blocked`
+```@docs
+mousetrap.get_signal_drag_blocked
+```
+## `get_signal_drag_end_blocked`
+```@docs
+mousetrap.get_signal_drag_end_blocked
+```
+## `get_signal_focus_gained_blocked`
+```@docs
+mousetrap.get_signal_focus_gained_blocked
+```
+## `get_signal_focus_lost_blocked`
+```@docs
+mousetrap.get_signal_focus_lost_blocked
+```
+## `get_signal_hide_blocked`
+```@docs
+mousetrap.get_signal_hide_blocked
+```
+## `get_signal_items_changed_blocked`
+```@docs
+mousetrap.get_signal_items_changed_blocked
+```
+## `get_signal_key_pressed_blocked`
+```@docs
+mousetrap.get_signal_key_pressed_blocked
+```
+## `get_signal_key_released_blocked`
+```@docs
+mousetrap.get_signal_key_released_blocked
+```
+## `get_signal_kinetic_scroll_decelerate_blocked`
+```@docs
+mousetrap.get_signal_kinetic_scroll_decelerate_blocked
+```
+## `get_signal_map_blocked`
+```@docs
+mousetrap.get_signal_map_blocked
+```
+## `get_signal_modifiers_changed_blocked`
+```@docs
+mousetrap.get_signal_modifiers_changed_blocked
+```
+## `get_signal_motion_blocked`
+```@docs
+mousetrap.get_signal_motion_blocked
+```
+## `get_signal_motion_enter_blocked`
+```@docs
+mousetrap.get_signal_motion_enter_blocked
+```
+## `get_signal_motion_leave_blocked`
+```@docs
+mousetrap.get_signal_motion_leave_blocked
+```
+## `get_signal_page_added_blocked`
+```@docs
+mousetrap.get_signal_page_added_blocked
+```
+## `get_signal_page_removed_blocked`
+```@docs
+mousetrap.get_signal_page_removed_blocked
+```
+## `get_signal_page_reordered_blocked`
+```@docs
+mousetrap.get_signal_page_reordered_blocked
+```
+## `get_signal_page_selection_changed_blocked`
+```@docs
+mousetrap.get_signal_page_selection_changed_blocked
+```
+## `get_signal_paint_blocked`
+```@docs
+mousetrap.get_signal_paint_blocked
+```
+## `get_signal_pan_blocked`
+```@docs
+mousetrap.get_signal_pan_blocked
+```
+## `get_signal_press_cancelled_blocked`
+```@docs
+mousetrap.get_signal_press_cancelled_blocked
+```
+## `get_signal_pressed_blocked`
+```@docs
+mousetrap.get_signal_pressed_blocked
+```
+## `get_signal_properties_changed_blocked`
+```@docs
+mousetrap.get_signal_properties_changed_blocked
+```
+## `get_signal_proximity_blocked`
+```@docs
+mousetrap.get_signal_proximity_blocked
+```
+## `get_signal_realize_blocked`
+```@docs
+mousetrap.get_signal_realize_blocked
+```
+## `get_signal_render_blocked`
+```@docs
+mousetrap.get_signal_render_blocked
+```
+## `get_signal_resize_blocked`
+```@docs
+mousetrap.get_signal_resize_blocked
+```
+## `get_signal_revealed_blocked`
+```@docs
+mousetrap.get_signal_revealed_blocked
+```
+## `get_signal_rotation_changed_blocked`
+```@docs
+mousetrap.get_signal_rotation_changed_blocked
+```
+## `get_signal_scale_changed_blocked`
+```@docs
+mousetrap.get_signal_scale_changed_blocked
+```
+## `get_signal_scroll_begin_blocked`
+```@docs
+mousetrap.get_signal_scroll_begin_blocked
+```
+## `get_signal_scroll_blocked`
+```@docs
+mousetrap.get_signal_scroll_blocked
+```
+## `get_signal_scroll_child_blocked`
+```@docs
+mousetrap.get_signal_scroll_child_blocked
+```
+## `get_signal_scroll_end_blocked`
+```@docs
+mousetrap.get_signal_scroll_end_blocked
+```
+## `get_signal_selection_changed_blocked`
+```@docs
+mousetrap.get_signal_selection_changed_blocked
+```
+## `get_signal_show_blocked`
+```@docs
+mousetrap.get_signal_show_blocked
+```
+## `get_signal_shutdown_blocked`
+```@docs
+mousetrap.get_signal_shutdown_blocked
+```
+## `get_signal_stylus_down_blocked`
+```@docs
+mousetrap.get_signal_stylus_down_blocked
+```
+## `get_signal_stylus_up_blocked`
+```@docs
+mousetrap.get_signal_stylus_up_blocked
+```
+## `get_signal_swipe_blocked`
+```@docs
+mousetrap.get_signal_swipe_blocked
+```
+## `get_signal_text_changed_blocked`
+```@docs
+mousetrap.get_signal_text_changed_blocked
+```
+## `get_signal_toggled_blocked`
+```@docs
+mousetrap.get_signal_toggled_blocked
+```
+## `get_signal_unmap_blocked`
+```@docs
+mousetrap.get_signal_unmap_blocked
+```
+## `get_signal_unrealize_blocked`
+```@docs
+mousetrap.get_signal_unrealize_blocked
+```
+## `get_signal_update_blocked`
+```@docs
+mousetrap.get_signal_update_blocked
+```
+## `get_signal_value_changed_blocked`
+```@docs
+mousetrap.get_signal_value_changed_blocked
+```
+## `get_signal_wrapped_blocked`
+```@docs
+mousetrap.get_signal_wrapped_blocked
+```
 ## `get_single_click_activate`
 ```@docs
 mousetrap.get_single_click_activate
@@ -1194,6 +2146,10 @@ mousetrap.has_icon
 ## `has_key`
 ```@docs
 mousetrap.has_key
+```
+## `hbox`
+```@docs
+mousetrap.hbox
 ```
 ## `hide!`
 ```@docs
@@ -1675,6 +2631,10 @@ mousetrap.set_expand_horizontally!
 ```@docs
 mousetrap.set_expand_vertically!
 ```
+## `set_expanded!`
+```@docs
+mousetrap.set_expanded!
+```
 ## `set_file!`
 ```@docs
 mousetrap.set_file!
@@ -1830,6 +2790,10 @@ mousetrap.set_layout!
 ## `set_left_margin!`
 ```@docs
 mousetrap.set_left_margin!
+```
+## `set_listens_for_shortcut_action!`
+```@docs
+mousetrap.set_listens_for_shortcut_action!
 ```
 ## `set_log_file`
 ```@docs
@@ -2030,6 +2994,242 @@ mousetrap.set_show_separators
 ## `set_show_title_buttons!`
 ```@docs
 mousetrap.set_show_title_buttons!
+```
+## `set_signal_activate_blocked!`
+```@docs
+mousetrap.set_signal_activate_blocked!
+```
+## `set_signal_activate_default_widget_blocked!`
+```@docs
+mousetrap.set_signal_activate_default_widget_blocked!
+```
+## `set_signal_activate_focused_widget_blocked!`
+```@docs
+mousetrap.set_signal_activate_focused_widget_blocked!
+```
+## `set_signal_activated_blocked!`
+```@docs
+mousetrap.set_signal_activated_blocked!
+```
+## `set_signal_click_pressed_blocked!`
+```@docs
+mousetrap.set_signal_click_pressed_blocked!
+```
+## `set_signal_click_released_blocked!`
+```@docs
+mousetrap.set_signal_click_released_blocked!
+```
+## `set_signal_click_stopped_blocked!`
+```@docs
+mousetrap.set_signal_click_stopped_blocked!
+```
+## `set_signal_clicked_blocked!`
+```@docs
+mousetrap.set_signal_clicked_blocked!
+```
+## `set_signal_close_request_blocked!`
+```@docs
+mousetrap.set_signal_close_request_blocked!
+```
+## `set_signal_closed_blocked!`
+```@docs
+mousetrap.set_signal_closed_blocked!
+```
+## `set_signal_destroy_blocked!`
+```@docs
+mousetrap.set_signal_destroy_blocked!
+```
+## `set_signal_drag_begin_blocked!`
+```@docs
+mousetrap.set_signal_drag_begin_blocked!
+```
+## `set_signal_drag_blocked!`
+```@docs
+mousetrap.set_signal_drag_blocked!
+```
+## `set_signal_drag_end_blocked!`
+```@docs
+mousetrap.set_signal_drag_end_blocked!
+```
+## `set_signal_focus_gained_blocked!`
+```@docs
+mousetrap.set_signal_focus_gained_blocked!
+```
+## `set_signal_focus_lost_blocked!`
+```@docs
+mousetrap.set_signal_focus_lost_blocked!
+```
+## `set_signal_hide_blocked!`
+```@docs
+mousetrap.set_signal_hide_blocked!
+```
+## `set_signal_items_changed_blocked!`
+```@docs
+mousetrap.set_signal_items_changed_blocked!
+```
+## `set_signal_key_pressed_blocked!`
+```@docs
+mousetrap.set_signal_key_pressed_blocked!
+```
+## `set_signal_key_released_blocked!`
+```@docs
+mousetrap.set_signal_key_released_blocked!
+```
+## `set_signal_kinetic_scroll_decelerate_blocked!`
+```@docs
+mousetrap.set_signal_kinetic_scroll_decelerate_blocked!
+```
+## `set_signal_map_blocked!`
+```@docs
+mousetrap.set_signal_map_blocked!
+```
+## `set_signal_modifiers_changed_blocked!`
+```@docs
+mousetrap.set_signal_modifiers_changed_blocked!
+```
+## `set_signal_motion_blocked!`
+```@docs
+mousetrap.set_signal_motion_blocked!
+```
+## `set_signal_motion_enter_blocked!`
+```@docs
+mousetrap.set_signal_motion_enter_blocked!
+```
+## `set_signal_motion_leave_blocked!`
+```@docs
+mousetrap.set_signal_motion_leave_blocked!
+```
+## `set_signal_page_added_blocked!`
+```@docs
+mousetrap.set_signal_page_added_blocked!
+```
+## `set_signal_page_removed_blocked!`
+```@docs
+mousetrap.set_signal_page_removed_blocked!
+```
+## `set_signal_page_reordered_blocked!`
+```@docs
+mousetrap.set_signal_page_reordered_blocked!
+```
+## `set_signal_page_selection_changed_blocked!`
+```@docs
+mousetrap.set_signal_page_selection_changed_blocked!
+```
+## `set_signal_paint_blocked!`
+```@docs
+mousetrap.set_signal_paint_blocked!
+```
+## `set_signal_pan_blocked!`
+```@docs
+mousetrap.set_signal_pan_blocked!
+```
+## `set_signal_press_cancelled_blocked!`
+```@docs
+mousetrap.set_signal_press_cancelled_blocked!
+```
+## `set_signal_pressed_blocked!`
+```@docs
+mousetrap.set_signal_pressed_blocked!
+```
+## `set_signal_properties_changed_blocked!`
+```@docs
+mousetrap.set_signal_properties_changed_blocked!
+```
+## `set_signal_proximity_blocked!`
+```@docs
+mousetrap.set_signal_proximity_blocked!
+```
+## `set_signal_realize_blocked!`
+```@docs
+mousetrap.set_signal_realize_blocked!
+```
+## `set_signal_render_blocked!`
+```@docs
+mousetrap.set_signal_render_blocked!
+```
+## `set_signal_resize_blocked!`
+```@docs
+mousetrap.set_signal_resize_blocked!
+```
+## `set_signal_revealed_blocked!`
+```@docs
+mousetrap.set_signal_revealed_blocked!
+```
+## `set_signal_rotation_changed_blocked!`
+```@docs
+mousetrap.set_signal_rotation_changed_blocked!
+```
+## `set_signal_scale_changed_blocked!`
+```@docs
+mousetrap.set_signal_scale_changed_blocked!
+```
+## `set_signal_scroll_begin_blocked!`
+```@docs
+mousetrap.set_signal_scroll_begin_blocked!
+```
+## `set_signal_scroll_blocked!`
+```@docs
+mousetrap.set_signal_scroll_blocked!
+```
+## `set_signal_scroll_child_blocked!`
+```@docs
+mousetrap.set_signal_scroll_child_blocked!
+```
+## `set_signal_scroll_end_blocked!`
+```@docs
+mousetrap.set_signal_scroll_end_blocked!
+```
+## `set_signal_selection_changed_blocked!`
+```@docs
+mousetrap.set_signal_selection_changed_blocked!
+```
+## `set_signal_show_blocked!`
+```@docs
+mousetrap.set_signal_show_blocked!
+```
+## `set_signal_shutdown_blocked!`
+```@docs
+mousetrap.set_signal_shutdown_blocked!
+```
+## `set_signal_stylus_down_blocked!`
+```@docs
+mousetrap.set_signal_stylus_down_blocked!
+```
+## `set_signal_stylus_up_blocked!`
+```@docs
+mousetrap.set_signal_stylus_up_blocked!
+```
+## `set_signal_swipe_blocked!`
+```@docs
+mousetrap.set_signal_swipe_blocked!
+```
+## `set_signal_text_changed_blocked!`
+```@docs
+mousetrap.set_signal_text_changed_blocked!
+```
+## `set_signal_toggled_blocked!`
+```@docs
+mousetrap.set_signal_toggled_blocked!
+```
+## `set_signal_unmap_blocked!`
+```@docs
+mousetrap.set_signal_unmap_blocked!
+```
+## `set_signal_unrealize_blocked!`
+```@docs
+mousetrap.set_signal_unrealize_blocked!
+```
+## `set_signal_update_blocked!`
+```@docs
+mousetrap.set_signal_update_blocked!
+```
+## `set_signal_value_changed_blocked!`
+```@docs
+mousetrap.set_signal_value_changed_blocked!
+```
+## `set_signal_wrapped_blocked!`
+```@docs
+mousetrap.set_signal_wrapped_blocked!
 ```
 ## `set_single_click_activate!`
 ```@docs
@@ -2314,4 +3514,8 @@ mousetrap.unselect!
 ## `unselect_all!`
 ```@docs
 mousetrap.unselect_all!
+```
+## `vbox`
+```@docs
+mousetrap.vbox
 ```

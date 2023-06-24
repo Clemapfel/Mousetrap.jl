@@ -1,4 +1,4 @@
-# Enums
+# Index: Enums
 ## Alignment
 ```@docs
 Alignment
