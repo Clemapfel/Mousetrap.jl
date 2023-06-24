@@ -277,52 +277,57 @@ return @type_signals(LongPressEventController,
 
 Where `pressed` is emitted the first frame the long press is recognized, `press_cancelled` is emitted once the user releases the mouse button.
 
-Similar to `clicked`, `LongPressEventController` provides us with the location of the cursor in widget-space coordinates.
+Similar to `clicked`, `LongPressEventController` provides us with the location of the cursor, in widget-space coordinates.
 
 `LongPressEventController`, like `ClickEventController`, inherits from `SingleClickGesture`, which allows us to differentiate between different mouse buttons or a touchscreen, just as before.
 
-We would check whether the user has held down the left mouse button like so:
+To react to the event controller recogizing user behavior as a long press, we would do:
 
-```cpp
-auto long_press = LongPressEventController();
-long_press.connect_signal_pressed([](LongPressEventController& controller, double x, double y){
-if (controller->get_current_button() == ButtonID::BUTTON_01)
-    std::cout << "long press registered at " << x << " " << y << std::endl;
-});
-window.add_controller(long_press);
+```julia
+long_press_controller = LongPressEventController()
+connect_signal_pressed!(long_press_controller) do self::LongPressEventController, x::AbstractFloat, y::AbstractFloat
+    println("long press registered at ($x, $y)")
+end
+add_controller(window, long_press_controller)
 ```
 
 ---
 
 ## Click-Dragging: DragEventController
 
-We recall that a long press is a gesture in which a user clicks a mouse button, does not move the cursor, then **holds that position** for an amount of time. In contrast, **click-dragging** is very similar, the user clicks a mouse button, holds it, but **does move the cursor**. This is often used to "drag and drop" an UI element, such as dragging a file icon from one location to another, or dragging the knob of a `Scale`.
+A long press is a gesture in which a user clicks a mouse button, does not move the cursor, then **holds that position** for an amount of time. In contrast, **click-dragging** is very similar: the user clicks a mouse button, holds it, but **does move the cursor**. This is often used to "drag and drop" an UI element, such as dragging a file icon from one location to another, or dragging the knob of a `Scale`.
 
-Click-dragging is automatically recognized by \a{DragEventController}, which has three signals:
+Click-dragging gestures are automatically recognized by [`DragEventController`](@ref), which has three signals:
 
-\signals
-\signal_drag_begin{DragEventController}
-\signal_drag{DragEventController}
-\signal_drag_end{DragEventController}
+```@eval
+include("signals.jl")
+return @type_signals(DragEventController,
+    drag_begin,
+    drag,
+    drag_end
+)
+```
 
-When a click-drag is first recognized, `drag_begin` is emitted. Each frame the drag is taking place, `drag` is emitted once per frame to update us about the cursor position. Once the gesture ends, `drag_end` is emitted. All three signals supply two additional arguments with signal-specific meaning:
+When a click-drag is first recognized, `drag_begin` is emitted. Each frame the drag is taking place, `drag` is emitted once per frame to update us about the cursor position. Once the gesture ends, `drag_end` is emitted exactly once. 
+
+All three signals supply two additional arguments with signal-specific meaning:
 
 + `scroll_begin` supplies the absolute widget-space coordinate of the cursor location
 + `scroll` and `scroll_end` supply the **offset** between the current cursor position and the start
 
-To get the current position of the cursor, we have to add the offset from `scroll` or `scroll_end` to the initial position. We can get the initial position either in `scroll_begin` or through the member function `ScrollEventController::get_start_position`:
+To get the current position of the cursor, we have to add the offset from `scroll` or `scroll_end` to the initial position. We can get the initial position either in `scroll_begin` or through by calling [`get_start_position`]:
 
-```cpp
-auto drag_controller = DragEventController();
-drag_controller.connect_signal_drag([](DragEventController* instance, double x_offset, double y_offset){
-    
-    float cursor_position_x = instance->get_start_position().x + x_offset; 
-    float cursor_position_y = instance->get_start_position().y + y_offset;
-    
-    std::cout << "Current cursor position: " << cursor_position_x << " " << cursor_position_y << std::endl;
-});
-window.add_controller(drag_controller);
+```julia
+drag_controller = DragEventController()
+connect_signal_drag!(drag_controller) do self::DragEventController, x_offset::AbstractFloat, y_offset::AbstractFloat
+    offset = Vector2f(x_offset, y_offset)
+    start = get_start_position(self)
+    current = start + offset
+    println("Current cursor position: ($(current.x), $(current.y)))")
+end
+add_controller(window, drag_controller)
 ```
+
 ---
 
 ## Panning: PanEventController
