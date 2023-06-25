@@ -2547,6 +2547,13 @@ move!(from::FileDescriptor, to::FileDescriptor, allow_overwrite::Bool ; [make_ba
 Move file to a different location. Returns `true` if the operation was succesfull.
 """
 
+@document move_to_trash! """
+```
+move_to_trash!(file::FileDescriptor) ::Bool
+```
+Safely move the file to the operating system garbage bin. This operation can be undone by the user. Returns `true` if the operation was succesfull.
+"""
+
 @document nanoseconds """
 ```
 nanoseconds(n::Int64) -> Time

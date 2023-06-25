@@ -1585,22 +1585,15 @@ module mousetrap
 
     Adjustment(internal::Ptr{Cvoid}) = Adjustment(detail._Adjustment(internal))
 
-    @export_function Adjustment get_lower Float32
-    @export_function Adjustment get_upper Float32
-    @export_function Adjustment get_value Float32
-    @export_function Adjustment get_step_increment Float32
+    @export_function Adjustment get_lower Cfloat
+    @export_function Adjustment get_upper Cfloat
+    @export_function Adjustment get_value Cfloat
+    @export_function Adjustment get_step_increment Cfloat
 
-    set_lower!(adjustment::Adjustment, x::Number) = detail.set_lower!(adjustment._internal, convert(Cfloat, x))
-    export set_lower!
-
-    set_upper!(adjustment::Adjustment, x::Number) = detail.set_upper!(adjustment._internal, convert(Cfloat, x))
-    export set_upper!
-
-    set_value!(adjustment::Adjustment, x::Number) = detail.set_value!(adjustment._internal, convert(Cfloat, x))
-    export set_value!
-
-    set_step_increment!(adjustment::Adjustment, x::Number) = detail.set_step_increment!(adjustment._internal, convert(Cfloat, x))
-    export set_step_increment!
+    @export_function Adjustment set_lower! Cvoid Number => Cfloat value
+    @export_function Adjustment set_upper! Cvoid Number => Cfloat value
+    @export_function Adjustment set_value! Cvoid Number => Cfloat value
+    @export_function Adjustment set_step_increment! Cvoid Number => Cfloat value
 
     @add_signal_value_changed Adjustment
     @add_signal_properties_changed Adjustment
@@ -2061,6 +2054,7 @@ module mousetrap
     export move!
 
     move_to_trash!(file::FileDescriptor) ::Bool = detail.move_to_trash!(file._internal)
+    export move_to_trash!
 
     Base.show(io::IO, x::FileDescriptor) = show_aux(io, x, :path)
 
@@ -2160,10 +2154,10 @@ module mousetrap
         return AspectFrame(detail._AspectFrame(ratio, child_x_alignment, child_y_alignment))
     end
 
-    @export_function AspectFrame set_ratio! Cvoid AbstractFloat ratio
+    @export_function AspectFrame set_ratio! Cvoid AbstractFloat => Cfloat ratio
     @export_function AspectFrame get_ratio Cfloat
-    @export_function AspectFrame set_child_x_alignment! Cvoid AbstractFloat alignment
-    @export_function AspectFrame set_child_y_alignment! Cvoid AbstractFloat alignment
+    @export_function AspectFrame set_child_x_alignment! Cvoid AbstractFloat => Cfloat alignment
+    @export_function AspectFrame set_child_y_alignment! Cvoid AbstractFloat => Cfloat alignment
     @export_function AspectFrame get_child_x_alignment Cfloat
     @export_function AspectFrame get_child_y_alignment Cfloat
 
@@ -2528,18 +2522,18 @@ module mousetrap
     end
 
     @export_type LevelBar Widget
-    LevelBar(min::AbstractFloat, max::AbstractFloat) = LevelBar(detail._internal(min, max))
+    LevelBar(min::Number, max::Number) = LevelBar(detail._LevelBar(convert(Cfloat, min), convert(Cfloat, max)))
 
-    @export_function LevelBar add_marker! Cvoid String name AbstractFloat value
+    @export_function LevelBar add_marker! Cvoid String name AbstractFloat => Cfloat value
     @export_function LevelBar remove_marker! Cvoid String name
     @export_function LevelBar set_inverted! Cvoid Bool b
     @export_function LevelBar get_inverted Bool
     @export_function LevelBar set_mode! Cvoid LevelBarMode mode
     @export_function LevelBar get_mode LevelBarMode
-    @export_function LevelBar set_min_value! Cvoid AbstractFloat value
+    @export_function LevelBar set_min_value! Cvoid Number => Cfloat value
     @export_function LevelBar get_min_value Cfloat
-    @export_function LevelBar set_max_value! Cvoid AbstractFloat value
-    @export_function LevelBar set_value! Cvoid AbstractFloat value
+    @export_function LevelBar set_max_value! Cvoid Number => Cfloat value
+    @export_function LevelBar set_value! Cvoid Number => Cfloat value
     @export_function LevelBar get_value Cfloat
     @export_function LevelBar set_orientation! Cvoid Orientation orientation
     @export_function LevelBar get_orientation Orientation
@@ -2587,9 +2581,9 @@ module mousetrap
     @export_function Label get_justify_mode JustifyMode
     @export_function Label set_max_width_chars! Cvoid Integer n
     @export_function Label get_max_width_chars Int64
-    @export_function Label set_x_alignment! Cvoid AbstractFloat x
+    @export_function Label set_x_alignment! Cvoid AbstractFloat => Cfloat x
     @export_function Label get_x_alignment Cfloat
-    @export_function Label set_y_alignment! Cvoid AbstractFloat x
+    @export_function Label set_y_alignment! Cvoid AbstractFloat => Cfloat x
     @export_function Label get_y_alignment Cfloat
     @export_function Label set_selectable! Cvoid Bool b
     @export_function Label get_selectable Bool
@@ -2606,7 +2600,6 @@ module mousetrap
 ####### text_view.jl
 
     @export_type TextView Widget
-
     TextView() = TextView(detail._TextView())
 
     @export_function TextView get_text String
@@ -2621,13 +2614,13 @@ module mousetrap
     @export_function TextView get_editable Bool
     @export_function TextView set_justify_mode! Cvoid JustifyMode mode
     @export_function TextView get_justify_mode JustifyMode
-    @export_function TextView set_left_margin! Cvoid AbstractFloat margin
+    @export_function TextView set_left_margin! Cvoid Number => Cfloat margin
     @export_function TextView get_left_margin Cfloat
-    @export_function TextView set_right_margin! Cvoid AbstractFloat margin
+    @export_function TextView set_right_margin! Cvoid Number => Cfloat margin
     @export_function TextView get_right_margin Cfloat
-    @export_function TextView set_top_margin! Cvoid AbstractFloat margin
+    @export_function TextView set_top_margin! Cvoid Number => Cfloat margin
     @export_function TextView get_top_margin Cfloat
-    @export_function TextView set_bottom_margin! Cvoid AbstractFloat margin
+    @export_function TextView set_bottom_margin! Cvoid Number => Cfloat margin
     @export_function TextView get_bottom_margin Cfloat
 
     @add_widget_signals TextView
@@ -2653,7 +2646,7 @@ module mousetrap
 
     @export_function Frame remove_child! Cvoid
     @export_function Frame remove_label_widget! Cvoid
-    @export_function Frame set_label_x_alignment! Cvoid AbstractFloat x
+    @export_function Frame set_label_x_alignment! Cvoid AbstractFloat => Cfloat x
     @export_function Frame get_label_x_alignment! Cfloat
 
     @add_widget_signals Frame
@@ -3041,7 +3034,7 @@ module mousetrap
     @export_type LongPressEventController SingleClickGesture
     LongPressEventController() = LongPressEventController(detail._LongPressEventController())
 
-    @export_function LongPressEventController set_delay_factor Cvoid AbstractFloat factor
+    @export_function LongPressEventController set_delay_factor! Cvoid Number => Cfloat factor
     @export_function LongPressEventController get_delay_factor Cfloat
 
     @add_signal_pressed LongPressEventController
@@ -3281,7 +3274,7 @@ module mousetrap
 ###### grid_view.jl
 
     @export_type GridView Widget
-    GridView(orientation::Orientation, selection_mode::SelectionMode = SELECTION_MODE_NONE) = GridView(detail._GridView(orientation, selection_mode))
+    GridView(orientation::Orientation = ORIENTATION_VERTICAL, selection_mode::SelectionMode = SELECTION_MODE_NONE) = GridView(detail._GridView(orientation, selection_mode))
     GridView(selection_mode::SelectionMode) = GridView(ORIENTATION_VERTICAL, selection_mode)
 
     push_back!(grid_view::GridView, widget::Widget) = detail.push_back!(grid_view._internal, widget._internal.cpp_object)
@@ -3363,9 +3356,9 @@ module mousetrap
     export insert_column_at!
 
     @export_function Grid get_column_spacing Cfloat
-    @export_function Grid set_column_spacing! Cvoid AbstractFloat spacing
+    @export_function Grid set_column_spacing! Cvoid Number => Cfloat spacing
     @export_function Grid get_row_spacing Cfloat
-    @export_function Grid set_row_spacing! Cvoid AbstractFloat spacingadd
+    @export_function Grid set_row_spacing! Cvoid Number => Cfloat spacing
     @export_function Grid set_rows_homogeneous! Cvoid Bool b
     @export_function Grid get_rows_homogeneous Bool
     @export_function Grid set_columns_homogeneous! Cvoid Bool b
@@ -3507,7 +3500,7 @@ module mousetrap
 
     @export_function ColumnViewColumn set_title! Cvoid String title
     @export_function ColumnViewColumn get_title String
-    @export_function ColumnViewColumn set_fixed_width Cvoid AbstractFloat width
+    @export_function ColumnViewColumn set_fixed_width Cvoid Number => Cfloat width
     @export_function ColumnViewColumn get_fixed_width Cfloat
 
     set_header_menu!(column::ColumnViewColumn, model::MenuModel) = detail.set_header_menu!(column._internal, model._internal)
@@ -3691,7 +3684,7 @@ module mousetrap
     end
 
     @export_function ProgressBar pulse Cvoid
-    @export_function ProgressBar set_fraction! Cvoid AbstractFloat zero_to_one
+    @export_function ProgressBar set_fraction! Cvoid AbstractFloat => Cfloat zero_to_one
     @export_function ProgressBar get_fraction Cfloat
     @export_function ProgressBar set_is_inverted! Cvoid Bool b
     @export_function ProgressBar get_is_inverted Bool
@@ -3757,8 +3750,13 @@ module mousetrap
 ###### scale.jl
 
     @export_type Scale Widget
-    function Scale(lower::AbstractFloat, upper::AbstractFloat, step_increment::AbstractFloat, orientation::Orientation = ORIENTATION_HORIZONTAL)
-        return Scale(detail._Scale(lower, upper, step_increment, orientation))
+    function Scale(lower::Number, upper::Number, step_increment::Number, orientation::Orientation = ORIENTATION_HORIZONTAL)
+        return Scale(detail._Scale(
+            convert(Cfloat, lower),
+            convert(Cfloat, upper),
+            convert(Cfloat, step_increment),
+            orientation
+        ))
     end
 
     get_adjustment(scale::Scale) ::Adjustment = Adjustment(detail.get_adjustment(scale._internal))
@@ -3783,7 +3781,12 @@ module mousetrap
 
     @export_type SpinButton Widget
     function SpinButton(lower::Number, upper::Number, step_increment::Number, orientation::Orientation = ORIENTATION_HORIZONTAL)
-        return SpinButton(detail._SpinButton(convert(Cfloat, lower), convert(Cfloat, upper), convert(Cfloat, step_increment), orientation))
+        return SpinButton(detail._SpinButton(
+            convert(Cfloat, lower), 
+            convert(Cfloat, upper), 
+            convert(Cfloat, step_increment), 
+            orientation
+        ))
     end
 
     get_adjustment(spin_button::SpinButton) ::Adjustment = Adjustment(detail.get_adjustment(spin_button._internal))
@@ -3794,16 +3797,16 @@ module mousetrap
     @export_function SpinButton get_step_increment Cfloat
     @export_function SpinButton get_value Cfloat
 
-    @export_function SpinButton set_lower! Cvoid Number value
-    @export_function SpinButton set_upper! Cvoid Number value
-    @export_function SpinButton set_step_increment! Cvoid Number value
-    @export_function SpinButton set_value! Cvoid Number value
+    @export_function SpinButton set_lower! Cvoid Number => Cfloat value
+    @export_function SpinButton set_upper! Cvoid Number => Cfloat value
+    @export_function SpinButton set_step_increment! Cvoid Number => Cfloat value
+    @export_function SpinButton set_value! Cvoid Number => Cfloat value
 
     @export_function SpinButton set_n_digits! Cvoid Integer n
     @export_function SpinButton get_n_digits Int64
     @export_function SpinButton set_should_wrap! Cvoid Bool b
     @export_function SpinButton get_should_wrap Bool
-    @export_function SpinButton set_acceleration_rate! Cvoid AbstractFloat factor
+    @export_function SpinButton set_acceleration_rate! Cvoid Number => Cfloat factor
     @export_function SpinButton get_acceleration_rate Cfloat
     @export_function SpinButton set_should_snap_to_ticks! Cvoid Bool b
     @export_function SpinButton get_should_snap_to_ticks Bool
@@ -3906,11 +3909,18 @@ module mousetrap
     macro export_widget_function(name, return_t, arg1_type, arg1_name)
 
         return_t = esc(return_t)
+        
+        if arg1_type isa Expr
+            arg1_origin_type = arg1_type.args[2]
+            arg1_destination_type = arg1_type.args[3]
+        else
+            arg1_origin_type = arg1_type
+            arg1_destination_type = arg1_type
+        end
         arg1_name = esc(arg1_name)
-        arg1_type = esc(arg1_type)
 
         mousetrap.eval(:(export $name))
-        out = :($name(widget::Widget, $arg1_name::$arg1_type) = Base.convert($return_t, detail.$name(widget._internal.cpp_object, $arg1_name)))
+        out = :($name(widget::Widget, $arg1_name::$arg1_origin_type) = Base.convert($return_t, detail.$name(widget._internal.cpp_object, convert($arg1_destination_type, $arg1_name))))
         return out
     end
 
@@ -3923,17 +3933,17 @@ module mousetrap
     @export_widget_function set_size_request! Cvoid Vector2f size
     @export_widget_function get_size_request Vector2f
 
-    @export_widget_function set_margin_top! Cvoid AbstractFloat margin
+    @export_widget_function set_margin_top! Cvoid Number => Cfloat margin
     @export_widget_function get_margin_top Cfloat
-    @export_widget_function set_margin_bottom! Cvoid AbstractFloat margin
+    @export_widget_function set_margin_bottom! Cvoid Number => Cfloat margin
     @export_widget_function get_margin_bottom Cfloat
-    @export_widget_function set_margin_start! Cvoid AbstractFloat margin
+    @export_widget_function set_margin_start! Cvoid Number => Cfloat margin
     @export_widget_function get_margin_start Cfloat
-    @export_widget_function set_margin_end! Cvoid AbstractFloat margin
+    @export_widget_function set_margin_end! Cvoid Number => Cfloat margin
     @export_widget_function get_margin_end Cfloat
-    @export_widget_function set_margin_horizontal! Cvoid AbstractFloat margin
-    @export_widget_function set_margin_vertical! Cvoid AbstractFloat margin
-    @export_widget_function set_margin! Cvoid AbstractFloat margin
+    @export_widget_function set_margin_horizontal! Cvoid Number => Cfloat margin
+    @export_widget_function set_margin_vertical! Cvoid Number => Cfloat margin
+    @export_widget_function set_margin! Cvoid Number => Cfloat margin
 
     @export_widget_function set_expand_horizontally! Cvoid Bool b
     @export_widget_function get_expand_horizontally Bool
@@ -3947,7 +3957,7 @@ module mousetrap
     @export_widget_function get_vertical_alignment Alignment
     @export_widget_function set_alignment! Cvoid Alignment both
 
-    @export_widget_function set_opacity! Cvoid AbstractFloat opacity
+    @export_widget_function set_opacity! Cvoid AbstractFloat => Cfloat opacity
     @export_widget_function get_opacity Cfloat
     @export_widget_function set_is_visible! Cvoid Bool b
     @export_widget_function get_is_visible Bool
@@ -4028,11 +4038,7 @@ module mousetrap
     @export_type Clipboard SignalEmitter
 
     function Clipboard(internal::Ptr{Cvoid}) 
-        #internal = detail._ref(internal)
         out = Clipboard(detail._Clipboard(internal))
-        #finalizer(out) do self
-            #detail._unref(out._internal.cpp_object)
-        #end
     end
 
     @export_function Clipboard is_local Bool

@@ -27,7 +27,7 @@ main() do app::Application
     box = Box(ORIENTATION_HORIZONTAL)
     push_back!(box, Label("Choose Value:  "))
     push_back!(box, SpinButton(0, 1, 0.01))
-    #set_margin!(box, 10.0)
+    set_margin_horizontal!(box, 10)
 
     add_widget!(widget_model, box)
     add_submenu!(root, "Widgets", widget_model)
