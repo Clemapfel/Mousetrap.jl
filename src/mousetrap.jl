@@ -194,70 +194,155 @@ module mousetrap
     macro export_function(type, name, return_t, arg1_type, arg1_name)
 
         return_t = esc(return_t)
+
+        if arg1_type isa Expr
+            arg1_origin_type = arg1_type.args[2]
+            arg1_destination_type = arg1_type.args[3]
+        else
+            arg1_origin_type = arg1_type
+            arg1_destination_type = arg1_type
+        end
         arg1_name = esc(arg1_name)
-        arg1_type = esc(arg1_type)
 
         mousetrap.eval(:(export $name))
-        out = :($name(x::$type, $arg1_name::$arg1_type) = Base.convert($return_t, detail.$name(x._internal, $arg1_name)))
-        return out
+        return :($name(
+                x::$type,
+                $arg1_name::$arg1_origin_type
+            ) = Base.convert($return_t, detail.$name(x._internal, 
+                convert($arg1_destination_type, $arg1_name)
+            )))
     end
 
     macro export_function(type, name, return_t, arg1_type, arg1_name, arg2_type, arg2_name)
 
         return_t = esc(return_t)
-        arg1_name = esc(arg1_name)
-        arg1_type = esc(arg1_type)
-        arg2_name = esc(arg2_name)
-        arg2_type = esc(arg2_type)
 
-        out = Expr(:block)
+        if arg1_type isa Expr
+            arg1_origin_type = arg1_type.args[2]
+            arg1_destination_type = arg1_type.args[3]
+        else
+            arg1_origin_type = arg1_type
+            arg1_destination_type = arg1_type
+        end
+        arg1_name = esc(arg1_name)
+
+        if arg2_type isa Expr
+            arg2_origin_type = arg2_type.args[2]
+            arg2_destination_type = arg2_type.args[3]
+        elseif arg2_type isa Symbol
+            arg2_origin_type = arg2_type
+            arg2_destination_type = arg2_type
+        end
+        arg2_name = esc(arg2_name)
+
         mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
-                $arg1_name::$arg1_type,
-                $arg2_name::$arg2_type
-            ) = Base.convert(return_t, detail.$name(x._internal, $arg1_name, $arg2_name)))
+                $arg1_name::$arg1_origin_type,
+                $arg2_name::$arg2_origin_type
+            ) = Base.convert($return_t, detail.$name(x._internal, 
+                convert($arg1_destination_type, $arg1_name), 
+                convert($arg2_destination_type, $arg2_name)
+            )))
     end
 
     macro export_function(type, name, return_t, arg1_type, arg1_name, arg2_type, arg2_name, arg3_type, arg3_name)
 
         return_t = esc(return_t)
+
+        if arg1_type isa Expr
+            arg1_origin_type = arg1_type.args[2]
+            arg1_destination_type = arg1_type.args[3]
+        else
+            arg1_origin_type = arg1_type
+            arg1_destination_type = arg1_type
+        end
         arg1_name = esc(arg1_name)
-        arg1_type = esc(arg1_type)
+
+        if arg2_type isa Expr
+            arg2_origin_type = arg2_type.args[2]
+            arg2_destination_type = arg2_type.args[3]
+        elseif arg2_type isa Symbol
+            arg2_origin_type = arg2_type
+            arg2_destination_type = arg2_type
+        end
         arg2_name = esc(arg2_name)
-        arg2_type = esc(arg2_type)
+
+        if arg3_type isa Expr
+            arg3_origin_type = arg3_type.args[2]
+            arg3_destination_type = arg3_type.args[3]
+        else
+            arg3_origin_type = arg3_type
+            arg3_destination_type = arg3_type
+        end
         arg3_name = esc(arg3_name)
-        arg3_type = esc(arg3_type)
 
         mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
-                $arg1_name::$arg1_type,
-                $arg2_name::$arg2_type,
-                $arg3_name::$arg3_type
-            )  = Base.convert($return_t, detail.$name(x._internal, $arg1_name, $arg2_name, $arg3_name)))
+                $arg1_name::$arg1_origin_type,
+                $arg2_name::$arg2_origin_type,
+                $arg3_name::$arg3_origin_type
+            ) = Base.convert($return_t, detail.$name(x._internal, 
+                convert($arg1_destination_type, $arg1_name), 
+                convert($arg2_destination_type, $arg2_name), 
+                convert($arg3_destination_type, $arg3_name), 
+            )))
     end
 
     macro export_function(type, name, return_t, arg1_type, arg1_name, arg2_type, arg2_name, arg3_type, arg3_name, arg4_type, arg4_name)
 
         return_t = esc(return_t)
+
+        if arg1_type isa Expr
+            arg1_origin_type = arg1_type.args[2]
+            arg1_destination_type = arg1_type.args[3]
+        else
+            arg1_origin_type = arg1_type
+            arg1_destination_type = arg1_type
+        end
         arg1_name = esc(arg1_name)
-        arg1_type = esc(arg1_type)
+
+        if arg2_type isa Expr
+            arg2_origin_type = arg2_type.args[2]
+            arg2_destination_type = arg2_type.args[3]
+        elseif arg2_type isa Symbol
+            arg2_origin_type = arg2_type
+            arg2_destination_type = arg2_type
+        end
         arg2_name = esc(arg2_name)
-        arg2_type = esc(arg2_type)
+
+        if arg3_type isa Expr
+            arg3_origin_type = arg3_type.args[2]
+            arg3_destination_type = arg3_type.args[3]
+        else
+            arg3_origin_type = arg3_type
+            arg3_destination_type = arg3_type
+        end
         arg3_name = esc(arg3_name)
-        arg3_type = esc(arg3_type)
+
+        if arg4_type isa Expr
+            arg4_origin_type = arg4_type.args[2]
+            arg4_destination_type = arg4_type.args[3]
+        else
+            arg4_origin_type = arg4_type
+            arg4_destination_type = arg4_type
+        end
         arg4_name = esc(arg4_name)
-        arg4_type = esc(arg4_type)
 
         mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
-                $arg1_name::$arg1_type,
-                $arg2_name::$arg2_type,
-                $arg3_name::$arg3_type,
-                $arg4_name::$arg4_type
-            )  = Base.convert($return_t, detail.$name(x._internal, $arg1_name, $arg2_name, $arg3_name, $arg4_name)))
+                $arg1_name::$arg1_origin_type,
+                $arg2_name::$arg2_origin_type,
+                $arg3_name::$arg3_origin_type,
+                $arg4_name::$arg4_origin_type
+            ) = Base.convert($return_t, detail.$name(x._internal, 
+                convert($arg1_destination_type, $arg1_name), 
+                convert($arg2_destination_type, $arg2_name), 
+                convert($arg3_destination_type, $arg3_name), 
+                convert($arg4_destination_type, $arg4_name)
+            )))
     end
 
     macro export_type(name, super)
@@ -442,7 +527,7 @@ module mousetrap
 ####### time.jl
 
     struct Time
-        _ns::UInt64
+        _ns::Int64
     end
     export Time
 
@@ -473,7 +558,7 @@ module mousetrap
     microseconds(n::AbstractFloat) = Time(detail.microseconds_to_ns(n))
     export microseconds
 
-    nanoseconds(n::Int64) = Time(n)
+    nanoseconds(n::Integer) = Time(n)
     export nanoseconds
 
     Base.:(+)(a::Time, b::Time) = Time(a._ns + b._ns)
@@ -522,23 +607,12 @@ module mousetrap
     as_radians(angle::Angle) ::Cdouble = angle._rads
     export as_radians
 
-    import Base: +
-    +(a::Angle, b::Angle) = Angle(a._rads + b._rads)
-
-    import Base: -
-    -(a::Angle, b::Angle) = Angle(a._rads - b._rads)
-
-    import Base: *
-    *(a::Angle, b::Angle) = Angle(a._rads * b._rads)
-
-    import Base: /
-    /(a::Angle, b::Angle) = Angle(a._rads / b._rads)
-
-    import Base: ==
-    ==(a::Angle, b::Angle) = a._rads == b._rads
-
-    import Base: !=
-    !=(a::Angle, b::Angle) = a._rads != b._rads
+    Base.:(+)(a::Angle, b::Angle) = Angle(a._rads + b._rads)
+    Base.:(-)(a::Angle, b::Angle) = Angle(a._rads - b._rads)
+    Base.:(*)(a::Angle, b::Angle) = Angle(a._rads * b._rads)
+    Base.:(/)(a::Angle, b::Angle) = Angle(a._rads / b._rads)
+    Base.:(==)(a::Angle, b::Angle) = a._rads == b._rads
+    Base.:(!=)(a::Angle, b::Angle) = !(a._rads == b._rads)
 
     Base.show(io::IO, x::Angle) = print(io, "Angle($(as_degrees(angle))°)")
 
@@ -2571,7 +2645,7 @@ module mousetrap
     @export_type Frame Widget
     Frame() = Frame(detail._Frame())
 
-    set_child!(frame::Frame, child::Widget) = detail.set_child!(fixed._internal, child._internal.cpp_object)
+    set_child!(frame::Frame, child::Widget) = detail.set_child!(frame._internal, child._internal.cpp_object)
     export set_child!
 
     set_label_widget!(frame::Frame, label::Widget) = detail.set_label_widget!(frame._internal, label._internal.cpp_object)
@@ -3695,10 +3769,10 @@ module mousetrap
     @export_function Scale get_step_increment Cfloat
     @export_function Scale get_value Cfloat
 
-    @export_function Scale set_lower! Cvoid Number value
-    @export_function Scale set_upper! Cvoid Number value
-    @export_function Scale set_step_increment! Cvoid AbstractFloat value
-    @export_function Scale set_value! Cvoid Number value
+    @export_function Scale set_lower! Cvoid Number => Cfloat value
+    @export_function Scale set_upper! Cvoid Number => Cfloat value
+    @export_function Scale set_step_increment! Cvoid Number => Cfloat value
+    @export_function Scale set_value! Cvoid Number => Cfloat value
 
     @add_widget_signals Scale
     @add_signal_value_changed Scale
