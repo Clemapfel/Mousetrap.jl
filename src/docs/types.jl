@@ -2209,10 +2209,10 @@ See the chapter on native rendering for more information.
 Object representing duration in time, nanoseconds precision, may be negative.
 
 $(@type_constructors(
-    nanoseconds(::Int64)
-    microseconds(::Number)
-    milliseconds(::Number)
-    seconds(::Number)
+    nanoseconds(::Int64),
+    microseconds(::Number),
+    milliseconds(::Number),
+    seconds(::Number),
     minutes(::Number)
 ))
 
@@ -2282,7 +2282,7 @@ as_typed(12) # returns 12, because "12" will be converted to given return type, 
 @document Vector2 """
 # Vector2{T}
 
-Vector with 2 components.
+Vector with 2 components, all operations are component-wise, which mimicks GLSL.
 
 $(@type_constructors(
     Vector2{T}(::T, ::T),
@@ -2298,7 +2298,7 @@ $(@type_fields(
 @document Vector3 """
 # Vector3{T}
 
-Vector with 3 components.
+Vector with 4 components, all operations are component-wise, which mimicks GLSL.
 
 $(@type_constructors(
     Vector3{T}(::T, ::T, ::T),
@@ -2315,7 +2315,7 @@ $(@type_fields(
 @document Vector4 """
 # Vector4{T}
 
-Vector with 4 components.
+Vector with 4 components, all operations are component-wise, which mimicks GLSL.
 
 $(@type_constructors(
     Vector4{T}(::T, ::T, ::T, ::T),

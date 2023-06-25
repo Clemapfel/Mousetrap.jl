@@ -1,20 +1,43 @@
 module mousetrap
 
-macro do_not_compile(args...) return :() end
+    const VERSION = v"0.1.0"
+
+    macro do_not_compile(args...) return :() end
     
 ####### detail.jl
-
-    #@info "Importing `mousetrap_julia_binding` shared library..."
-    #__cxxwrap_compile_time_start = time()
 
     module detail
         using CxxWrap, Pkg.Artifacts
         function __init__() @initcxx end
         #@wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
         @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
-    end
 
-    #@info "Done (" * string(round(time() - __cxxwrap_compile_time_start; digits=2)) * "s)"
+        set_gtk_uninitialized_message("""
+        Attempting to construct a widget, but the GTK4 backend has not yet been initialized. Make sure that, for all widgets, the widgets constructor is called **after** `Application` has emitted its `activate` signal.
+
+        A typical `.jl` file using mousetrap should look like this:
+        ```julia
+        using mousetrap
+        main() do app::Application
+            # all construction of widgets should happen here
+        end
+        ```
+        You have most likely attempted to construct a widget outside of the `activate` signal handler.
+        """)
+
+        set_gl_uninitialized_message("""
+        Attempting to interact with the global OpenGL context, but it has not yet been initialized. Make sure that any OpenGL-related objects are constructed **after** `Application` has emitted its `activate` signal.
+        
+        A typical `.jl` file using mousetrap should look like this:
+        ```julia
+        using mousetrap
+        main() do app::Application
+            # all OpenGL-related activity should happen here
+        end
+        ```
+        You have most likely attempted to construct an OpenGL-relatved object outside the `activate` signal handler.
+        """)
+    end
 
 ####### typed_function.jl
     
@@ -333,7 +356,6 @@ macro do_not_compile(args...) return :() end
     import Base: clamp
     clamp(x::AbstractFloat, lower::AbstractFloat, upper::AbstractFloat) = if x < lower return lower elseif x > upper return upper else return x end
 
-
     function from_julia_index(x::Integer) ::UInt64
         return x - 1
     end
@@ -344,121 +366,74 @@ macro do_not_compile(args...) return :() end
 
 ###### vector.jl
 
-    using StaticArrays
+    mutable struct Vector2{T <: Number}
+        x::T
+        y::T
 
-    const Vector2{T} = SVector{2, T}
+        Vector2{T}(all::Number) where T = new{T}(convert(T, all), convert(T, all))
+        Vector2{T}(x::Number, y::Number) where T = new{T}(convert(T, x), convert(T, y))
+    end
     export Vector2
 
-    Vector2{T}(all::T) where T = Vector2{T}(all, all)
-
-    function Base.getproperty(v::Vector2{T}, symbol::Symbol) where T
-        if symbol == :x
-            return v[1]
-        elseif symbol == :y
-            return v[2]
-        else
-            throw(ErrorException("type Vector2 has no field " * string(symbol)))
-        end
-    end
-
-    function Base.setproperty!(v::Vector2{T}, symbol::Symbol, value) where T
-        if symbol == :x
-            v[1] = convert(T, value)
-        elseif symbol == :y
-            v[2] = convert(T, value)
-        else
-            throw(ErrorException("type Vector2 has no field " * string(symbol)))
-        end
-    end
+    Base.:(+)(a::Vector2{T}, b::Vector2{T}) where T = Vector2{T}(a.x + b.x, a.y + b.y)
+    Base.:(-)(a::Vector2{T}, b::Vector2{T}) where T = Vector2{T}(a.x - b.x, a.y - b.y)
+    Base.:(*)(a::Vector2{T}, b::Vector2{T}) where T = Vector2{T}(a.x * b.x, a.y * b.y)
+    Base.:(/)(a::Vector2{T}, b::Vector2{T}) where T = Vector2{T}(a.x / b.x, a.y / b.y)
+    Base.:(==)(a::Vector2{T}, b::Vector2{T}) where T = a.x == b.x && a.y == b.y
+    Base.:(!=)(a::Vector2{T}, b::Vector2{T}) where T = !(a == b)
 
     const Vector2f = Vector2{Cfloat}
-    export Vector2f
-
     const Vector2i = Vector2{Cint}
-    export Vector2i
-
     const Vector2ui = Vector2{Csize_t}
-    export Vector2ui
 
-    const Vector3{T} = SVector{3, T}
+    export Vector2f, Vector2i, Vector2ui
+
+    mutable struct Vector3{T <: Number}
+        x::T
+        y::T
+        z::T
+        
+        Vector3{T}(all::Number) where T = new{T}(convert(T, all), convert(T, all), convert(T, all))
+        Vector3{T}(x::Number, y::Number, z::Number) where T = new{T}(convert(T, x), convert(T, y), convert(T, z))
+    end
     export Vector3
 
-    Vector3{T}(all::T) where T = Vector3{T}(all, all, all)
-
-    function Base.getproperty(v::Vector3{T}, symbol::Symbol) where T
-        if symbol == :x
-            return v[1]
-        elseif symbol == :y
-            return v[2]
-        elseif symbol == :z
-            return v[3]
-        else
-            throw(ErrorException("type Vector3 has no field " * string(symbol)))
-        end
-    end
-
-    function Base.setproperty!(v::Vector3{T}, symbol::Symbol, value) where T
-        if symbol == :x
-            v[1] = convert(T, value)
-        elseif symbol == :y
-            v[2] = convert(T, value)
-        elseif symbol == :z
-            v[3] = convert(T, value)
-        else
-            throw(ErrorException("type Vector2 has no field " * string(symbol)))
-        end
-    end
+    Base.:(+)(a::Vector3{T}, b::Vector3{T}) where T = Vector3{T}(a.x + b.x, a.y + b.y, a.z + b.z)
+    Base.:(-)(a::Vector3{T}, b::Vector3{T}) where T = Vector3{T}(a.x - b.x, a.y - b.y, a.z - b.z)
+    Base.:(*)(a::Vector3{T}, b::Vector3{T}) where T = Vector3{T}(a.x * b.x, a.y * b.y, a.z * b.z)
+    Base.:(/)(a::Vector3{T}, b::Vector3{T}) where T = Vector3{T}(a.x / b.x, a.y / b.y, a.z / b.z)
+    Base.:(==)(a::Vector3{T}, b::Vector3{T}) where T = a.x == b.x && a.y == b.y && a.z == b.z
+    Base.:(!=)(a::Vector3{T}, b::Vector3{T}) where T = !(a == b)
 
     const Vector3f = Vector3{Cfloat}
-    export Vector3f
-
     const Vector3i = Vector3{Cint}
-    export Vector3i
-
     const Vector3ui = Vector3{Csize_t}
-    export Vector3ui
 
-    const Vector4{T} = SVector{4, T}
+    export Vector3, Vector3f, Vector3i, Vector3ui
+
+    mutable struct Vector4{T <: Number}
+        x::T
+        y::T
+        z::T
+        w::T
+        
+        Vector4{T}(all::Number) where T = new{T}(convert(T, all), convert(T, all), convert(T, all), convert(T, all))
+        Vector4{T}(x::Number, y::Number, z::Number) where T = new{T}(convert(T, x), convert(T, y), convert(T, z), convert(T, w))
+    end
     export Vector4
 
-    Vector4{T}(all::T) where T = Vector4{T}(all, all, all, all)
-
-    function Base.getproperty(v::Vector4{T}, symbol::Symbol) where T
-        if symbol == :x
-            return v[1]
-        elseif symbol == :y
-            return v[2]
-        elseif symbol == :z
-            return v[3]
-        elseif symbol == :w
-            return v[4]
-        else
-            throw(ErrorException("type Vector4 has no field " * string(symbol)))
-        end
-    end
-
-    function Base.setproperty!(v::Vector4{T}, symbol::Symbol, value) where T
-        if symbol == :x
-            v[1] = convert(T, value)
-        elseif symbol == :y
-            v[2] = convert(T, value)
-        elseif symbol == :z
-            v[3] = convert(T, value)
-        elseif symbol == :w
-            v[4] = convert(T, value)
-        else
-            throw(ErrorException("type Vector4 has no field " * string(symbol)))
-        end
-    end
+    Base.:(+)(a::Vector4{T}, b::Vector4{T}) where T = Vector4{T}(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w)
+    Base.:(-)(a::Vector4{T}, b::Vector4{T}) where T = Vector4{T}(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w)
+    Base.:(*)(a::Vector4{T}, b::Vector4{T}) where T = Vector4{T}(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w)
+    Base.:(/)(a::Vector4{T}, b::Vector4{T}) where T = Vector4{T}(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w)
+    Base.:(==)(a::Vector4{T}, b::Vector4{T}) where T = a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w
+    Base.:(!=)(a::Vector4{T}, b::Vector4{T}) where T = !(a == b)
 
     const Vector4f = Vector4{Cfloat}
-    export Vector4f
-
     const Vector4i = Vector4{Cint}
-    export Vector4i
-
     const Vector4ui = Vector4{Csize_t}
-    export Vector4ui
+
+    export Vector3, Vector3f, Vector3i, Vector3ui
 
     Base.show(io::IO, x::Vector2{T}) where T = print(io, "Vector2{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ")")
     Base.show(io::IO, x::Vector3{T}) where T = print(io, "Vector3{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")")
@@ -501,29 +476,12 @@ macro do_not_compile(args...) return :() end
     nanoseconds(n::Int64) = Time(n)
     export nanoseconds
 
-    import Base.+
-    +(a::Time, b::Time) = Time(a._ns + b._ns)
-
-    import Base.-
-    -(a::Time, b::Time) = Time(a._ns - b._ns)
-
-    import Base.==
-    ==(a::Time, b::Time) = a._ns == b._ns
-
-    import Base.!=
-    !=(a::Time, b::Time) = a._ns != b._ns
-
-    import Base.<
-    <(a::Time, b::Time) = a._ns < b._ns
-
-    import Base.<=
-    <=(a::Time, b::Time) = a._ns <= b._ns
-
-    import Base.>
-    >(a::Time, b::Time) = a._ns > b._ns
-
-    import Base.>=
-    >=(a::Time, b::Time) = a._ns >= b._ns
+    Base.:(+)(a::Time, b::Time) = Time(a._ns + b._ns)
+    Base.:(-)(a::Time, b::Time) = Time(a._ns - b._ns)
+    Base.:(==)(a::Time, b::Time) = a._ns == b._ns
+    Base.:(!=)(a::Time, b::Time) = !(a == b)
+    Base.:(<)(a::Time, b::Time) = a._ns < b._ns
+    Base.:(>)(a::Time, b::Time) = a._ns > b._ns
 
     import Dates
     Base.convert(::Type{Dates.Minute}, time::Time) = Dates.Minute(as_minutes(time))
@@ -4328,7 +4286,7 @@ macro do_not_compile(args...) return :() end
     as_line_strip!(shape::Shape, points::Vector{Vector2f}) = detail.as_line_strip!(shape._internal, points)
     export as_line_strip!
 
-    function LineStrip(points::Vector2{Vector2f})
+    function LineStrip(points::Vector{Vector2f})
         out = Shape()
         as_line_strip!(out, points)
         return out
