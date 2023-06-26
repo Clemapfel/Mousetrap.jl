@@ -854,6 +854,13 @@ get_clipboard(::Widget) -> Clipboard
 Retrieve the clipboard of a widget. This will usually be the top-level window.
 """
 
+@document get_color """
+```
+get_color(::ColorChooser) -> RGBA
+```
+Get the currently selected color.
+"""
+
 @document get_column_at """
 ```
 get_column_at(column_view::ColumnView, index::Integer) -> ColumnViewColumn
@@ -1256,6 +1263,8 @@ Get whether the progress bar should fill from right-to-left, instead of left-to-
 ```
 get_is_modal(::Window) -> Bool
 get_is_modal(::FileChooser) -> Bool
+get_is_modal(::ColorChooser) -> Bool
+get_is_modal(::AlertDialog) -> Bool
 ```
 Get whether all other windows should be paused while this window is active.
 """
@@ -2577,6 +2586,16 @@ Register a callback to be called when the user clicks the "accept" button f the 
 ```
 (::FileChooser, ::Vector{FileDescriptor}, [::Data_t]) -> Cvoid
 ```
+
+---
+
+```
+on_accept!(f, chooser::ColorChooser, [::Data_t]) 
+```
+Register a callback to be called when the users makes a color selection. `f` is required to be invocable as a function with signature:
+```
+(::FileChooser, ::RGBA, [::Data_t]) -> Cvoid
+```
 """
 
 @document on_cancel! """
@@ -2585,6 +2604,16 @@ on_cancel!(f, chooser::FileChooser, [::Data_t])
 ```
 Register a callback to be called when the user clicks the "cancel" button f the file chooser. 
 `f` is required to be invocable as a function with signature
+```
+(::FileChooser, [::Data_t]) -> Cvoid
+```
+
+---
+
+```
+on_cancel!(f, chooser::ColorChooser, [::Data_t]) 
+```
+Register a callback to be called the users cancels color selection or otherwise closes the dialog. `f` is required to be invocable as a function with signature:
 ```
 (::FileChooser, [::Data_t]) -> Cvoid
 ```
@@ -2600,6 +2629,20 @@ invocable as a function with signature
 (::FileMonitor, ::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor) -> Cvoid
 ```
 Where `other` may not point to a valid file, depending on the event type.
+"""
+
+@document open_file """
+```
+open_file(::FileDescriptor) -> Cvoid
+```
+Asynchronously launch the default application to open the file or folder. May present the users with a list of applications they can choose from.
+"""
+
+@document open_url """
+```
+open_url(uri::String) -> Cvoid
+```
+Asynchronously launch the default application to open the uri. This will usually be the users web browser
 """
 
 @document popdown! """
@@ -2621,8 +2664,9 @@ Present the popover window
 @document present! """
 ```
 present!(::Window) 
-present!(::FileChooser) 
 present!(::Popover) 
+present!(::FileChooser) 
+present!(::ColorChooser)
 ```
 Show the window to the user.
 """
@@ -3599,6 +3643,8 @@ Set whether the progressbar should be mirrored.
 ```
 set_is_modal!(::Window, ::Bool) 
 set_is_modal!(::FileChooser, ::Bool) 
+set_is_modal!(::ColorChooser, ::Bool) 
+set_is_modal!(::AlertDialog, ::Bool) 
 ```
 Set whether all others windows should be paused while the window is active.
 """
@@ -4654,6 +4700,13 @@ This is usually not necessary, use `ShortcutEventController` to listen for short
 show!(::Widget) 
 ```
 Reveal the widget if it is currently hidden. This will emit signal `show`.
+"""
+
+@document show_in_file_explorer """
+```
+show_in_file_explorer(::FileDescriptor) -> Cvoid
+```
+Asynchronously open the users file explorer application to show the folder containing the given file.
 """
 
 @document start! """

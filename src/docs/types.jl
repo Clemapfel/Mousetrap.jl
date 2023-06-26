@@ -320,6 +320,36 @@ println("time delta: \$(as_seconds(now - current))")
 ```
 """
 
+@document ColorChooser """
+# ColorChooser <: SignalEmitter
+
+Dialog that allows a user to choose a color.
+
+!!! Note
+    This widget is only available if GTK4.10 or later is installed
+
+$(@type_constructors(
+    ColorChooser([title::String, modal::Bool])
+))
+
+$(@type_signals(ColorChooser, 
+))
+
+$(@type_fields())
+
+## Example
+```julia
+color_chooser = ColorChooser()
+on_accept!(color_chooser) do self::ColorChooser, color::RGBA
+    println("Selected \$color")
+end
+on_cancel!(color_chooser) do self::ColorChooser
+    println("color selection canceleld")
+end
+pesent!(color_chooser)
+```
+"""
+
 @document ColumnView """
 # ColumnView <: Widget
 
@@ -865,7 +895,9 @@ as an icon. Usually, these should be a vector graphics
 or .ico file, though any image file can be loaded.
 
 $(@type_constructors(
-    Icon()
+    Icon(),
+    Icon(path::String),
+    Icon(theme::IconTheme, id::IconID, square_resolution::Integer)
 ))
 
 $(@type_fields(

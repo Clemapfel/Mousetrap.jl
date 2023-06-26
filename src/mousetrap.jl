@@ -1711,14 +1711,26 @@ module mousetrap
 
 ####### icon.jl
 
-    @export_type Icon
-    Icon() = Icon(detail._Icon())
-
     @export_type IconTheme
     IconTheme(window::Window) = IconTheme(detail._IconTheme(window._internal))
 
     const IconID = String
     export IconID
+
+    @export_type Icon
+    Icon() = Icon(detail._Icon())
+    
+    function Icon(path::String)
+        out = Icon()
+        create_from_file!(out, path)
+        return out
+    end
+
+    function Icon(theme::IconTheme, id::IconID, square_resolution::Integer)
+        out = Icon()
+        create_from_theme!(out, theme, id, square_resolution)
+        return out
+    end
 
     # Icon
 
@@ -2056,6 +2068,15 @@ module mousetrap
     move_to_trash!(file::FileDescriptor) ::Bool = detail.move_to_trash!(file._internal)
     export move_to_trash!
 
+    open_file(file::FileDescriptor) ::Cvoid = detail.open_file(file._internal)
+    export open_file
+
+    show_in_file_explorer(file::FileDescriptor) ::Cvoid = detail.show_in_file_explorer(file._internal)
+    export show_in_file_explorer
+
+    open_url(file::FileDescriptor) ::Cvoid = detail.open_url(file._internal)
+    export open_url
+
     Base.show(io::IO, x::FileDescriptor) = show_aux(io, x, :path)
 
 ####### file_chooser.jl
@@ -2120,6 +2141,54 @@ module mousetrap
     export on_cancel!
 
     Base.show(io::IO, x::FileChooser) = show_aux(io, x)
+
+####### color_chooser.jl
+
+    if detail.GTK_MINOR_VERSION >= 10
+
+    @export_type ColorChooser SignalEmitter
+    ColorChooser(title::String = "", modal::Bool = false) = ColorChooser(detail._ColorChooser(title, modal))
+
+    get_color(color_chooser::ColorChooser) ::RGBA = return detail.get_color(color_chooser._internal)
+    export get_color
+
+    present!(color_chooser::ColorChooser) = detail.present!(color_chooser._internal)
+    export present!
+
+    @export_function ColorChooser set_is_modal! Cvoid Bool b
+    @export_function ColorChooser get_is_modal Bool
+
+    function on_accept!(f, chooser::ColorChooser, data::Data_t) where Data_t
+        typed_f = TypedFunction(f, Cvoid, (ColorChooser, RGBA, Data_t))
+        detail.on_accept!(chooser._internal, function(color_chooser_ref, rgba::RGBA)
+            typed_f(ColorChooser(color_chooser_ref[]), rgba, data)
+        end)
+    end
+    function on_accept!(f, chooser::ColorChooser)
+        typed_f = TypedFunction(f, Cvoid, (ColorChooser, RGBA))
+        detail.on_accept!(chooser._internal, function(color_chooser_ref, rgba::RGBA)
+            typed_f(ColorChooser(color_chooser_ref[]), rgba)
+        end)
+    end
+    export on_accept!
+
+    function on_cancel!(f, chooser::ColorChooser, data::Data_t) where Data_t
+        typed_f = TypedFunction(f, Cvoid, (ColorChooser, Data_t))
+        detail.on_cancel!(chooser._internal, function(color_chooser_ref)
+            typed_f(ColorChooser(color_chooser_ref[]), data)
+        end)
+    end
+    function on_cancel!(f, chooser::ColorChooser)
+        typed_f = TypedFunction(f, Cvoid, (ColorChooser,))
+        detail.on_cancel!(chooser._internal, function(color_chooser_ref)
+            typed_f(ColorChooser(color_chooser_ref[]))
+        end)
+    end
+    export on_cancel!
+
+    Base.show(io::IO, x::ColorChooser) = show_aux(io, x, :color)
+
+    end
 
 ####### image_display.jl
 
@@ -2776,6 +2845,18 @@ module mousetrap
 
     @export_type PopoverButton Widget
     PopoverButton() = PopoverButton(detail._PopoverButton())
+
+    function PopoverButton(popover_menu::PopoverMenu)
+        out = PopoverButton()
+        set_popover_menu!(out, popover_menu)
+        return out
+    end
+
+    function PopoverButton(popover::Popover)
+        out = PopoverButton()
+        set_popover!(out, popover)
+        return out
+    end
 
     set_child!(popover_button::PopoverButton, child::Widget) = detail.set_child!(popover_button._internal, child._internal.cpp_object)
     export set_child!
