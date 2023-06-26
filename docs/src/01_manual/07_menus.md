@@ -105,7 +105,7 @@ Where `submenu_content()` returns a simple place-holder widget.
 
 ### Item Type #4: Icons
 
-A prettier analog to the "action"-type menu item, an "icon"-type, added via [`add_icon!`](@ref) takes an [`Icon`](@ref), along with an action. The entire menu item will be just the icon, it may not have any text. If the icon is clicked, the action is executed.
+A prettier analog to the "action"-type menu item, an "icon"-type item, added via [`add_icon!`](@ref) takes an [`Icon`](@ref), along with an action. The entire menu item will be just the icon, it may not have any text. If the icon is clicked, the action is executed.
 
 ```julia
 add_icon!(model, Icon(#=...=#), action)
@@ -131,9 +131,9 @@ We add a "section"-type item using [`add_section!`](@ref), which takes another m
 
 ```julia
 section = MenuModel()
-add_action!(section, "Section Item #01", action)
-add_action!(section, "Section Item #02", action)
-add_action!(section, "Section Item #03", action)
+add_action!(section, "Section Item #01", #= action =#)
+add_action!(section, "Section Item #02", #= action =#)
+add_action!(section, "Section Item #03", #= action =#)
 add_section!(model, "Section Label", section)
 ```
 ![](../resources/menu_model_section.png)
@@ -209,42 +209,40 @@ The `PopoverMenu`-`PopoverButton` combo should be reserved for **context menus**
 
 Familiar to any user of a modern desktop GUI, [`MenuBar`] is a widget that is usually displayed at the top of the main application window:
 
-
-
-\image html menus_menubar.html
+![](../resources/menu_bar.png)
 
 We see `MenuBar` it is a horizontal list of items. When the user clicks on one of the items, a nested menu opens. Just like before, menus can be nested a theoretically infinite amount of times.
 
 Unlike `PopoverMenu`, `MenuBar` requires its `MenuModel` to have a certain structure: **all top-level items have to be submenus**.
 
-What does this mean? Let's work through the menu shown in the image above. We created it like so using the following snippet:
+What does this mean? Let's work through the menu shown in the image above. We created it using the following snippet:
 
-```cpp
-auto model = MenuModel();
+```julia
+root = MenuModel()
 
-auto file_submenu = MenuModel();
-file_submenu.add_action("Open", /* action */);
+file_submenu = MenuModel()
+add_action!(file_submenu, "Open", #= action =#)    
 
-auto file_recent_submenu = MenuModel();
-file_recent_submenu.add_action("Project 01", /* action */);
-file_recent_submenu.add_action("Project 02", /* action */);
-file_recent_submenu.add_action("Other...", /* action */);
-file_submenu.add_submenu("Recent...", file_recent_submenu);
+file_recent_submenu = MenuModel()
+add_action!(file_recent_submenu, "Project 01", #= action =#)
+add_action!(file_recent_submenu, "Project 02", #= action =#)
+add_action!(file_recent_submenu, "Other...", #= action =#)
+add_submenu!(file_submenu, "Recent...", file_recent_submenu)
 
-file_submenu.add_action("Save", /* action */);
-file_submenu.add_action("Save As", /* action */);
-file_submenu.add_action("Exit", /* action */);
+add_action!(file_submenu, "Save", #= action =#)
+add_action!(file_submenu, "Save As...", #= action =#)
+add_action!(file_submenu, "Exit", #= action =#)
 
-auto help_submenu = MenuModel();
-model.add_submenu("File", file_submenu);
-model.add_submenu("Help", help_submenu);
+help_submenu = MenuModel()
+add_submenu!(root, "File", file_submenu)
+add_submenu!(root, "Help", help_submenu)
 
-auto menubar = MenuBar(model);
+menubar = MenuBar(model)
 ```
 
 Where, in a real application, each item will have a different action.
 
-To make the nesting easier to understand, we can write the structure of the model similar to how we would describe a folder structure:
+This code can be quite hard to read, to make the nesting easier to understand, we'll write it out as if it where a file system folder structure:
 
 ```
 model \
@@ -263,41 +261,45 @@ model \
 
 Where any line suffixed with a `\` is a submenu.
 
-We see that we have four models in total. The top-most menu model is called `model`, it is what `MenuBar` will be initialized with.
+We see that we have four models in total. The top-most menu model is called `root`, it is what `MenuBar` will be initialized with.
 Next, we have the model called `file_submenu`, which has the title `File`. It containes five items, titled `Open`, `Recent...`, `Save`, `Save As` and `Exit`. `Recent...` is a submenu-type item, created from a `MenuModel` called `file_recent_submenu` in the above code. This model, in turn, has three items.  On the same level as `File`, we have a second menu `Help`.
 
-The **top-level** menu is `model`. It is used as the argument for the constructor of `MenuBar`. We see that all direct children of `model` (`File` and `Help`) **are themself submenus** (they were added using `add_submenu`). No direct child of `model` is an action-, widget- or section-type item. This is what is required for `MenuBar`. All top-level items have to be submenus.
+The **top-level** menu is `root`. It is used as the argument for the constructor of `MenuBar`. We see that all direct children of `root` (`File` and `Help`) **are themself submenus** (they were added using `add_submenu!`). 
 
-Apart from this requirement, the rest of the menu can have any arbitrary structure.
+No direct child of `root` is an "action"-, "widget"-, "icon"- or "section"-type item. This is what is required for `MenuBar`. All top-level items have to be submenus.
 
-In summary:
+!!! Warning
+    Due to a bug in the backend, as of version 0.1.0, a menu model used for a `MenuBar` **may not have a "widget"-type item in a submenu of a submenu**.
 
-+ For `MenuBar`, the toplevel menu can only have submenus as direct children
-+ For `PopoverMenu`, there are no requirements
+    This means we *can* add a widget to any submenu of `root`, but we may not add 
+    a widget to any submenu that is nested deeper.
 
-This, along with the aesthetic difference, makes both types of menu model view suited for different purposes. Usually, an application will only have a single `MenuBar` at the top of the main menu, while it may have many different `PopoverMenu`s all over.
+    This bug does not affect `PopoverMenu`, for whom we can put a widget at any 
+    depth. `PopoverMenu` has no requirement as to the structure of its menu model, while `MenuBar` requires that all toplevel items are submenus, and that now submenu of a submenu may have a "widget"-type item.
 
 ---
 
 ## Style Endnote
 
-Menus are extremely powerful and, conversely, they are complex to understand. With practice and good software / UI design, we can create deep, complex menus that are still easy to understand and use. We, as developers, should make this our first priority. The action-interface and model-view design are nice, but first and foremost our menus should be stable and easy to use by end users.
+Menus are extremely powerful and, conversely, they are complex to construct. With practice and good software / UI design, we can create deep, complex menus that are still easy to understand and use. We, as developers, should make this our first priority. The action-interface and model-view design are nice, but first and foremost our menus should be stable and easy to use by end users.
 
 Some additional notes:
 
 ### Ellipses
 
-Some may be curious as to why some menu items have `...` added at the end of their labels, while some have not. This is not a universal standard, but it is common for `...` to indicate that clicking this item will open another window, menu, or dialog. If clicking an item simply triggers an action (such as `Save` or `Exit`), `...` is ommitted. If the item opens a window, widget, or submenu, `...` is appended to the menu label, as is the case with `Recent...` above.
+Some may be curious as to why some menu items have `...` added at the end of their labels, while some have not. This is not a universal standard, but it is common for `...` to indicate that clicking this item will open another window, submenu, or dialog. If clicking an item simply triggers an action (such as `Save` or `Exit`), `...` is ommitted. If the item opens a window, widget, or submenu, `...` is appended to the menu label, as is the case with `Recent...` above.
 
 ### Maximum Menu Depth
 
-Regarding menu depth, best practice is to never go deeper than 3 levels. The above example with `File > Recent... > Project 01` shows a good situation in which a 3-level-deep menu may be justified. Going any deeper is rarely advice, adding a section should always be considered before adding a submenu.
+Regarding menu depth, best practice is to never go deeper than 3 levels. The above example with `File > Recent... > Project 01` shows a good situation in which a 3-level-deep menu may be justified. Going any deeper is rarely advice, adding a section should always be considered **before** deciding to add a submenu.
 
 ### Section Grouping
 
-Lastly, some schools of UI design believe that **every menu item should be inside a section**. For example, if we were to follow this philosophy for our above example, we would redesign it like so:
+Lastly, some schools of UI design believe that **every menu item should be inside a section**. For example, if we were to follow this philosophy for our above `MenuBar` example, we would redesign it like so:
 
-\image html menus_menubar_with_sections.html
+![](../resources/menu_bar_with_sections.png)
 
-This adds considerable complexity to the code (adding 4 models, one for each section, making our total 8). In return, items are grouped logically and each item gets a "heading", which helps make long menus easier to understand. Every developer has to decide for themself whether this is a good choice or not. What all should agree on, however, is that if something makes the developers job harder but makes the users experience better, it is worth the effort.
+This adds considerable complexity to the code (adding 4 models, one for each section, making our total 8). In return, items are grouped logically and each item gets a "heading", which helps make long menus easier to understand, which for this small example is most likely unnecessary, but will be more attractive for a menubar with dozens of tiems.
+
+In the end, each UI designer should decide for themself which technique to use, what all should agree on, however, is that ease-of-use for the end-user is the most important thing, and should trump ease-of-development anytime. If something is harder for us developers but makes the user experience better, it should always be done.
 

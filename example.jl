@@ -112,7 +112,24 @@ main() do app::Application
 
     # menu bar example
 
-    
+    root = MenuModel()
+
+    file_submenu = MenuModel()
+    add_action!(file_submenu, "Open", action)    
+
+    file_recent_submenu = MenuModel()
+    add_action!(file_recent_submenu, "Project 01", action)
+    add_action!(file_recent_submenu, "Project 02", action)
+    add_action!(file_recent_submenu, "Other...", action)
+    add_submenu!(file_submenu, "Recent...", file_recent_submenu)
+
+    add_action!(file_submenu, "Save", action)
+    add_action!(file_submenu, "Save As...", action)
+    add_action!(file_submenu, "Exit", action)
+
+    help_submenu = MenuModel()
+    add_submenu!(root, "File", file_submenu)
+    add_submenu!(root, "Help", help_submenu)
 
     separator = Separator()
     set_expand_vertically!(separator, true)
