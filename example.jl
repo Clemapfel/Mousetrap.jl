@@ -71,8 +71,20 @@ main() do app::Application
         add_icon!(model, Icon(theme, "weather-storm-large", resolution), action)    
         add_submenu!(root, "Icons", model)
     end
+
+    # section
+
+    let model = MenuModel()
+        section = MenuModel()
+        add_action!(section, "Section Item #01", action)
+        add_action!(section, "Section Item #02", action)
+        add_action!(section, "Section Item #03", action)
+        add_section!(model, "Section Label", section)
+
+        add_submenu!(root, "Sections", model)
+    end
     
-    # sections
+    # section format
 
     function add_icon_section(title::String, format::SectionFormat)
         
@@ -91,11 +103,23 @@ main() do app::Application
     add_icon_section("Inline Buttons:  ", SECTION_FORMAT_INLINE_BUTTONS)
     add_icon_section("Circular Buttons", SECTION_FORMAT_CIRCULAR_BUTTONS)
    
-    add_submenu!(root, "Sections", icon_model)
+    add_submenu!(root, "Section Formats", icon_model)
     
     # display
 
     view = PopoverButton(PopoverMenu(root))
     set_child!(window, view)
+
+    # menu bar example
+
+    
+
+    separator = Separator()
+    set_expand_vertically!(separator, true)
+
+    menubar = MenuBar(root)
+    set_expand_vertically!(menubar, false)
+
+    set_child!(window, vbox(menubar, separator))
     present!(window)
 end

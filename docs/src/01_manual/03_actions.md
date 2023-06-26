@@ -1,4 +1,4 @@
-# Chapter 03: Actions
+# Chapter 3: Actions
 
 In this chapter, we will learn:
 + How and why to use the command pattern to encapsulate application functionality
