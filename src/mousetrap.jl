@@ -2142,6 +2142,54 @@ module mousetrap
 
     Base.show(io::IO, x::FileChooser) = show_aux(io, x)
 
+####### alert_dialog.jl
+
+    @export_type AlertDialog SignalEmitter
+    AlertDialog(buttons::Vector{String}, message::String, detailed_message::String = "") = AlertDialog(detail._AlertDialog(buttons, message, detailed_message))
+
+    function add_button!(dialog::AlertDialog, index::Integer, label::String)
+        detail.add_button!(dialog._internal, from_julia_index(index), label)
+    end
+    export add_button!
+
+    function remove_button!(dialog::AlertDialog, index::Integer)
+        detail.remove_button!(dialog._internal, from_julia_index(index))
+    end
+    export remove_button!
+
+    function set_button_label!(dialog::AlertDialog, index::Integer, label::String)
+        detail.set_button_label(dialog, from_julia_index(index), label)
+    end
+    export set_button_label!
+
+    function get_button_label!(dialog::AlertDialog, index::Integer) ::String
+        detail.get_button_label!(dialog._internal, from_julia_index(index))
+    end
+    export get_button_label!
+
+    @export_function AlertDialog get_n_buttons Integer
+    @export_function AlertDialog get_message String
+    @export_function AlertDialog set_message! Cvoid String message
+    @export_function AlertDialog get_detailed_description String
+    @export_function AlertDialog set_detailed_description! Cvoid String message
+    @export_function AlertDialog set_is_modal! Cvoid Bool b
+    @export_function AlertDialog get_is_modal Bool
+    @export_function AlertDialog present! Cvoid
+
+    function on_selection!(f, dialog::AlertDialog, data::Data_t) where Data_t
+        typed_f = TypedFunction(f, Cvoid, (AlertDialog, Integer, Data_t))
+        detail.on_selection!(dialog._internal, function(dialog_ref, index)
+        typed_f(AlertDialog(dialog_ref[]), Signed(to_julia_index(index)), data)
+        end)
+    end
+    function on_selection!(f, dialog::AlertDialog)
+        typed_f = TypedFunction(f, Cvoid, (AlertDialog, Signed))
+        detail.on_selection!(dialog._internal, function(dialog_ref, index)
+            typed_f(AlertDialog(dialog_ref[]), Signed(to_julia_index(index)))
+        end)
+    end
+    export on_selection!
+
 ####### color_chooser.jl
 
     if detail.GTK_MINOR_VERSION >= 10

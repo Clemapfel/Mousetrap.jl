@@ -165,6 +165,13 @@ add_allowed_suffix!(::FileFilter, suffix::String)
 Allow all files with the given suffix. The suffix should **not** contain a dot, e.g. `"jl"`, rather than `".jl"`.
 """
 
+@document add_button! """
+```
+add_button!(::AlertDialog, index::Signed, label::String) -> Cvoid
+```
+Insert a button with given label after the given index (1-based), or 0 to insert it at the beginning.
+"""
+
 @document add_child! """
 ```
 add_child!(fixed::Fixed, ::Widget, position::Vector2f) 
@@ -791,6 +798,13 @@ get_axis_value(::StylusEventController, ::DeviceAxis) -> Float32
 Get value for the devices axis, or 0 if no such axis is present.
 """
 
+@document get_button_label """
+```
+get_button_label(::AlertDialog, index::Integer) -> String
+```
+Get label of button at given index (1-based).
+"""
+
 @document get_bottom_margin """
 ```
 get_bottom_margin(::TextView) -> Float32
@@ -944,6 +958,13 @@ Get multiplier that determines after how much time a long press gesture is recog
 get_destroy_with_parent(::Window) -> Bool
 ```
 Get whether the window should be closed and deallocated when its parent window is.
+"""
+
+@document get_detailed_description """
+```
+get_detailed_description(::AlertDIalog) -> String
+```
+Get detailed message, this is the text shown below the dialogs title.
 """
 
 @document get_display_mode """
@@ -1435,6 +1456,13 @@ get_max_width_chars(::Label) -> Signed
 Get maximum number of characters for which the label should allocate horizontal space, or `-1` if unlimited.
 """
 
+@document get_message """
+```
+get_message(::AlertDialog) -> String
+```
+Get the current message, this is the title of the dialog.
+"""
+
 @document get_min_n_columns """
 ```
 get_min_n_columns(grid_view::GridView) -> Signed
@@ -1461,6 +1489,13 @@ Get the minimum possible size the widget would have to allocate in order for it 
 get_mode(::LevelBar) -> LevelBarMode
 ```
 Get whether the level bar should display its value continuous or segmented.
+"""
+
+@document get_n_buttons """
+```
+get_n_buttons(::AlertDialog) -> Int64
+```
+Get number of buttons the dialog currently has.
 """
 
 @document get_n_columns """
@@ -2623,12 +2658,36 @@ Register a callback to be called the users cancels color selection or otherwise 
 ```
 on_file_changed!(f, monitor::FileMonitor, [::Data_t]) 
 ```
-Register a callback t be called when the monitored file is modified. `f` is required to be 
+Register a callback to be called when the monitored file is modified. `f` is required to be 
 invocable as a function with signature 
 ```
 (::FileMonitor, ::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor) -> Cvoid
 ```
 Where `other` may not point to a valid file, depending on the event type.
+"""
+
+@document on_selection! """
+```
+on_selection!(f, ::AlertDialog, [::Data_t])
+```
+Register a callback to be called when the user clicks one of the dialogs buttons, or dismisses the dialog. `f` is required to be invocable as a function with signature
+```
+(::AlertDialog, button_index::Signed, [::Data_t]) -> Cvoid
+```
+Where `button_index` is the index of the current button (1-based), or `0` if the dialog was dismissed.
+
+## Example
+```
+alert_dialog = AlertDialog(["Yes", "No"], "Is this is a dialog?")
+on_selection!(alert_dialog) do self::AlertDialog, button_index::Signed
+    if button_index == 0
+        println("User dismissed the dialog")
+    else
+        println("User chose \$(get_button_label(self, button_index))")
+    end
+end
+present!(alert_dialog)
+```
 """
 
 @document open_file """
@@ -2667,6 +2726,7 @@ present!(::Window)
 present!(::Popover) 
 present!(::FileChooser) 
 present!(::ColorChooser)
+present!(::AlertDialog)
 ```
 Show the window to the user.
 """
@@ -2852,6 +2912,13 @@ remove_action!(::Application, id::String)
 ```
 Unregister an action from the application. Any connected widgets such as `Button` or `MenuModel` 
 will be disabled.
+"""
+
+@document remove_button! """
+```
+remove_button!(::AlertDialog, index::Signed) 
+```
+Remove button at given position (1-based), this means all buttons after its have their index shifted. 
 """
 
 @document remove_center_child! """
@@ -3202,6 +3269,13 @@ set_autohide!(::Popover, ::Bool)
 Set whether the popover should hide itself when the attached widget looses focus.
 """
 
+@document set_button_label! """
+```
+set_button_label!(::AlertDialog, index::Integer, label::String)
+```
+Replace the label of button at given position (1-based)
+"""
+
 @document set_bottom_margin! """
 ```
 set_bottom_margin!(::TextView, margin::AbstractFloat) 
@@ -3341,6 +3415,13 @@ Set a factor that multiplies the default delay after which a longpress gesture i
 set_destroy_with_parent!(::Window, ::Bool) 
 ```
 Set whether the wind should close and be destroyed when the toplevel window is closed.
+"""
+
+@document set_detailed_description! """
+```
+set_detailed_description(::AlertDialog, message::String)
+```
+Set the detail message, this is the text shown below the dialogs title.
 """
 
 @document set_display_mode! """
@@ -3860,6 +3941,13 @@ Set the number of characters that the widget should make space for, or `-1` if u
 set_maximized!(::Window, ::Bool) 
 ```
 Attempt to maximize or unmaximize the window.
+"""
+
+@document set_message! """
+```
+set_message!(::AlertDialog, ::String)
+```
+Set the main message of the dialog, this will be used as the dialogs title.
 """
 
 @document set_min_n_columns! """

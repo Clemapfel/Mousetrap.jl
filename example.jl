@@ -137,6 +137,19 @@ main() do app::Application
     menubar = MenuBar(root)
     set_expand_vertically!(menubar, false)
 
+   
+    alert_dialog = AlertDialog(["Yes", "No"], "Is this is a dialog?")
+    on_selection!(alert_dialog) do self::AlertDialog, button_index::Signed
+        if button_index == 1
+            println("User chose `Yes`")
+        elseif button_index == 2
+            println("User chose `No`")
+        elseif button_index == 0
+            println("User dismissed the dialog")
+        end
+    end
+    present!(alert_dialog)
+
     set_child!(window, vbox(menubar, separator))
     present!(window)
 end

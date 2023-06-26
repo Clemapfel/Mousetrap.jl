@@ -57,6 +57,36 @@ $(@type_signals(Adjusment,
 $(@type_fields())
 """
 
+@document AlertDialog """
+# AlertDialog <: SignalEmitter
+
+Simple dialog that presents the user with a selection of labeled buttons. 
+
+$(@type_constructors(
+    AlertDialog(button_labels::Vector{String}, message::String, [detailed_message::String])
+))
+
+$(@type_signals(AlertDialog, 
+))
+
+$(@type_fields())
+
+## Example
+```julia
+alert_dialog = AlertDialog(["Yes", "No"], "Is this is a dialog?")
+on_selection!(alert_dialog) do self::AlertDialog, button_index::Signed
+    if button_index == 1
+        println("User chose `Yes`")
+    elseif button_index == 2
+        println("User chose `No`")
+    elseif button_index == 0
+        println("User dismissed the dialog")
+    end
+end
+present!(alert_dialog)
+```
+"""
+
 @document Angle """
 # Angle
 
