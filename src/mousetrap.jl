@@ -2201,13 +2201,13 @@ module mousetrap
     function on_selection!(f, dialog::AlertDialog, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (AlertDialog, Integer, Data_t))
         detail.on_selection!(dialog._internal, function(dialog_ref, index)
-        typed_f(AlertDialog(dialog_ref[]), Signed(to_julia_index(index)), data)
+        typed_f(AlertDialog(dialog_ref[]), convert(UInt32, to_julia_index(index)), data)
         end)
     end
     function on_selection!(f, dialog::AlertDialog)
         typed_f = TypedFunction(f, Cvoid, (AlertDialog, Signed))
         detail.on_selection!(dialog._internal, function(dialog_ref, index)
-            typed_f(AlertDialog(dialog_ref[]), Signed(to_julia_index(index)))
+            typed_f(AlertDialog(dialog_ref[]), convert(UInt32, to_julia_index(index)))
         end)
     end
     export on_selection!

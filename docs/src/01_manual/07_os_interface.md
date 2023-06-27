@@ -387,7 +387,7 @@ While we could `present!` this dialog to the user now
 We haven't yet connected any behavior to the user pressing a button. To do this, we use `on_selection!`, which takes a callback with the following signature:
 
 ```
-(::AlertDialog, button_index::Int32, [::Data_t]) -> Cvoid
+(::AlertDialog, button_index::Integer, [::Data_t]) -> Cvoid
 ```
 
 Where `button_index` is the index of the button, from left to right (1-based), or `0` if the dialog was dismissed without pressing a button.
@@ -395,20 +395,23 @@ Where `button_index` is the index of the button, from left to right (1-based), o
 Continuing our example of warning the user when they're about to overwrite a file, we could do the following:
 
 ```julia
+# create the dialog
 overwrite_file_warning_dialog = AlertDialog(
     ["Continue", "Cancel"],  # buttons
     "A file with this name already exists, continue?", # message
     "The original file will be overridden, this cannot be undone." # detail description
 )
 
-on_selection!(overwrite_file_warning_dialog) do self::AlertDialog, button_index::Int32
-    if (button_index == 1) # "Continue" pressed
+# add a callback
+on_selection!(overwrite_file_warning_dialog) do self::AlertDialog, button_index::Integer
+    if button_index == 1 # "Continue" pressed
         # write file
     else  # "Cancel" pressed or otherwise dismissed
         # do not write file
     end
 end
 
+# show the dialog, because it is modal, this will pause all other windows
 present!(overwrite_file_warning_dialog)
 ```
 
