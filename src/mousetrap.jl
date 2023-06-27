@@ -1688,10 +1688,10 @@ module mousetrap
         )
     end
 
-    rgba_to_hsva(rgba::RGBA) = detail.rgba_to_hsva(rgba)
+    rgba_to_hsva(rgba::RGBA) ::HSVA = detail.rgba_to_hsva(rgba)
     export rgba_to_hsva
 
-    hsva_to_rgba(hsva::HSVA) = detail.hsva_to_rgba(hsva)
+    hsva_to_rgba(hsva::HSVA) ::RGBA = detail.hsva_to_rgba(hsva)
     export hsva_to_rgba
 
     Base.convert(::Type{HSVA}, rgba::RGBA) = rgba_to_hsva(rbga)
@@ -2195,9 +2195,9 @@ module mousetrap
     if detail.GTK_MINOR_VERSION >= 10
 
     @export_type ColorChooser SignalEmitter
-    ColorChooser(title::String = "", modal::Bool = false) = ColorChooser(detail._ColorChooser(title, modal))
+    ColorChooser(title::String = "") = ColorChooser(detail._ColorChooser(title))
 
-    get_color(color_chooser::ColorChooser) ::RGBA = return detail.get_color(color_chooser._internal)
+    get_color(color_chooser::ColorChooser) ::RGBA = detail.get_color(color_chooser._internal)
     export get_color
 
     present!(color_chooser::ColorChooser) = detail.present!(color_chooser._internal)
@@ -2236,7 +2236,7 @@ module mousetrap
 
     Base.show(io::IO, x::ColorChooser) = show_aux(io, x, :color)
 
-    end
+    end # GTK_MINOR_VERSION >= 10
 
 ####### image_display.jl
 
@@ -2956,6 +2956,7 @@ module mousetrap
     export get_item_at
 
     function push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
+        typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
         return detail.push_back!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
@@ -2977,6 +2978,10 @@ module mousetrap
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
+    
+    push_back!(drop_down::DropDown, list_widget::Widget, label_widget::Widget) = push_back!((_::DropDown) -> (), list_widget, label_widget)
+    push_back!(drop_down::DropDown, label::String) = push_back!((_::DropDown) -> (), drop_down, label)
+
     export push_back!
 
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t

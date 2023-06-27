@@ -376,7 +376,7 @@ end
 on_cancel!(color_chooser) do self::ColorChooser
     println("color selection canceleld")
 end
-pesent!(color_chooser)
+present!(color_chooser)
 ```
 """
 

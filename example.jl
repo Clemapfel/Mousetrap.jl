@@ -8,7 +8,34 @@ using mousetrap
 main() do app::Application
 
     window = Window(app)
-    root = MenuModel()
+
+    entry = Entry()
+    connect_signal_activate!(entry) do self::Entry
+        text = get_text(self)
+        println(text)
+        if is_valid_html_code(text)
+            println("User entered: $(html_code_to_rgba(text))")
+        else
+            println("error")
+        end
+    end
+
+    set_child!(window, entry)
+
+    color_chooser = ColorChooser("Choose Color")
+    on_accept!(color_chooser) do self::ColorChooser, color::RGBA
+        println("Selected $color")
+    end
+    on_cancel!(color_chooser) do self::ColorChooser
+        println("color selection canceleld")
+    end
+    present!(color_chooser)
+
+    present!(window)
+end
+
+#=
+root = MenuModel()
 
     action = Action("dummy.action", app) do x 
         println("triggered.")
@@ -151,5 +178,4 @@ main() do app::Application
     present!(alert_dialog)
 
     set_child!(window, vbox(menubar, separator))
-    present!(window)
-end
+    =#
