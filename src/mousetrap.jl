@@ -2032,6 +2032,7 @@ module mousetrap
     read_symlink(self::FileDescriptor) = FileDescriptor(detail.read_symlink(self._internal))
     export read_symlink
 
+    @export_function FileDescriptor is_executable Bool
     @export_function FileDescriptor get_content_type String
     @export_function FileDescriptor query_info String String info_id
 
@@ -2046,7 +2047,7 @@ module mousetrap
 
     # File System
 
-    create_file_at!(destination::FileDescriptor, replace::Bool) ::Bool = detail.create_file_at!(destination._internal, replace)
+    create_file_at!(destination::FileDescriptor; replace::Bool) ::Bool = detail.create_file_at!(destination._internal, replace)
     export create_file_at!
 
     create_directory_at!(destination::FileDescriptor) ::Bool = detail.create_directory_at!(destination._internal)
@@ -2139,6 +2140,27 @@ module mousetrap
         end)
     end
     export on_cancel!
+
+    @export_function FileChooser set_file_chooser_action! Cvoid FileChooserAction action
+    @export_function FileChooser get_file_chooser_action FileChooserAction
+
+    add_filter!(chooser::FileChooser, filter::FileFilter) ::Cvoid = detail.add_filter!(chooser._internal, filter._internal)
+    export add_filter!
+
+    clear_filters!(chooser::FileChooser) ::Cvoid = detail.clear_filters!(chooser._internal)
+    export clear_filters!
+
+    set_initial_filter!(chooser::FileChooser, filter::FileFilter) ::Cvoid = detail.set_initial_filter!(chooser._internal, filter._internal)
+    export set_initial_filter!
+
+    set_initial_file!(chooser::FileChooser, file::FileDescriptor) ::Cvoid = detail.set_initial_file!(chooser._internal, file._internal)
+    export set_initial_file!
+
+    set_initial_folder!(chooser::FileChooser, folder::FileDescriptor) ::Cvoid = detail.set_initial_file!(chooser._internal, folder._internal)
+    export set_initial_folder!
+
+    set_initial_name!(chooser::FileChooser, name::String) ::Cvoid = detail.set_initial_name!(chooser._internal, name)
+    export set_initial_name!
 
     Base.show(io::IO, x::FileChooser) = show_aux(io, x)
 
@@ -2469,6 +2491,11 @@ module mousetrap
         detail.set_child!(toggle_button._internal, child._internal.cpp_object)
     end
     export set_child!
+
+    function set_icon!(toggle_button::ToggleButton, icon::Icon)
+        detail.set_icon!(toggle_button._internal, icon._internal)
+    end
+    export set_icon!
 
     @export_function ToggleButton remove_child! Cvoid
 

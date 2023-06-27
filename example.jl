@@ -22,15 +22,20 @@ main() do app::Application
 
     set_child!(window, entry)
 
-    color_chooser = ColorChooser("Choose Color")
-    on_accept!(color_chooser) do self::ColorChooser, color::RGBA
-        println("Selected $color")
-    end
-    on_cancel!(color_chooser) do self::ColorChooser
-        println("color selection canceleld")
-    end
-    present!(color_chooser)
+    file_chooser = FileChooser(FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FILES)
 
+    on_accept!(file_chooser) do self::FileChooser, files::Vector{FileDescriptor}
+        println("User chose files at $files")
+    end
+    on_cancel!(file_chooser) do self::FileChooser
+        println("User cancelled the dialog")
+    end
+
+    filter = FileFilter("*.jl")
+    add_allowed_suffix!(filter, "jl")
+    add_filter!(file_chooser, filter)
+
+    present!(file_chooser)
     present!(window)
 end
 

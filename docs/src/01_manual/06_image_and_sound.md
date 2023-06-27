@@ -1,4 +1,4 @@
-# Chapter 8: Image
+# Chapter 6: Images
 
 In this chapter we will learn:
 + How to use colors in mousetrap

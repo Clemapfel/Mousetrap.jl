@@ -193,6 +193,13 @@ add_controller!(::Widget, controller::EventController)
 Add an event controller to the widget. Once the widget is realized, it will start listening for events.
 """
 
+@document add_filter! """
+```
+add_filter!(::FileChooser, ::FileFilter)
+```
+Add a filter to the selection of available file filters.
+"""
+
 @document add_icon! """
 ```
 add_icon!(model::MenuModel, icon::Icon, action::Action) 
@@ -512,6 +519,13 @@ clear!(::ListView, iterator::ListViewIterator)
 clear!(::GridView) 
 ```
 Remove all children from the container widget.
+"""
+
+@document clear_filters! """
+```
+clear_filters!(::FileChooser)
+```
+Remove all registered file filters.
 """
 
 @document clear_render_tasks! """
@@ -2846,7 +2860,7 @@ lower than the number of columns, the leftover columns will contain an empty cel
 ```
 query_info(::FileDescriptor, attribute_id::String) -> String
 ```
-Access metadata info about a file. A list of attribute IDs can be found [here](https://docs.gtk.org/gio/index.html#constants).
+Access metadata info about a file. A list of attribute IDs can be found [here](https://gitlab.gnome.org/GNOME/glib/-/blob/main/gio/gfileinfo.h#L46).
 Note that there is no guaruantee that a file will contain a value for any of these attributes.
 """
 
@@ -3655,7 +3669,8 @@ Set the policy that determines when / if the horizontal scrollbar of the viewpor
 
 @document set_icon! """
 ```
-set_icon!(::Button, icon::Icon) 
+set_icon!(::Button, ::Icon) 
+set_icon!(::ToggleButton, ::Icon)
 ```
 Replace the buttons label with an icon.
 """
@@ -3665,6 +3680,35 @@ Replace the buttons label with an icon.
 set_image!(::Clipboard, image::Image) 
 ```
 Override the clipboards content with an image. Use `get_image` to retrieve it.
+"""
+
+@document set_initial_file! """
+```
+set_initial_file!(::FileChooser, ::FileDescriptor)
+```
+For `FILE_CHOOSER_ACTION_OPEN_FILE` or `FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FILES`, choose the file that is selected when the dialog is first shown.
+"""
+
+@document set_initial_filter! """
+```
+set_initial_filter!(::FileChooser, ::FileFilter)
+```
+Set currently selected filter. If the filter was not yet added with [`add_filter!`](@ref), it will 
+still make it such that the filter is active, but the user will be unable to change the filter selection.
+"""
+
+@document set_initial_folder! """
+```
+set_initial_folder(::FileChooser, ::FileDescriptor)
+```
+For `FILE_CHOOSER_ACTION_SELECT_FOLDER` or `FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FOLDERS`, choose the folder that is selected when the dialog is first shown.
+"""
+
+@document set_initial_name! """
+```
+set_initial_name!(::FileChooser, ::String)
+```
+For `FILE_CHOOSER_ACTION_SAVE`, set the name-field that will be used to determine the saved files name.
 """
 
 @document set_inverted! """

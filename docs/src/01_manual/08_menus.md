@@ -1,4 +1,4 @@
-# Chapter 7: Menus
+# Chapter 8: Menus
 
 In this chapter, we will learn:
 + How to create complex, nested menus

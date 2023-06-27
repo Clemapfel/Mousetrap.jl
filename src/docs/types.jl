@@ -947,7 +947,7 @@ $(@type_fields()))
 """
 
 @document IconTheme """
-# IconTheme
+# IconTheme <: Any
 
 Allows loading of items from a folder if that folder strictly adheres to 
 the [freedesktop icon theme specifications](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
@@ -956,10 +956,19 @@ $(@type_constructors(
 ))
 
 $(@type_fields())
+
+## Example
+```julia
+theme = IconTheme()
+add_resource_path!(theme, "/path/to/freedesktop_icon_theme_directory")
+
+icon = Icon()
+create_from_theme!(icon, theme, "custom-icon-id", 64)
+```
 """
 
 @document Image """
-# Image
+# Image <: Any
 
 2D image data. Pixel-indeces are 1-based.
 
