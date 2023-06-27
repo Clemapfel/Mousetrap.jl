@@ -7,9 +7,9 @@ In this chapter, we will learn:
 + How to access a files metadata
 + How to monitor a file changing
 + How to open a dialog that lets users select files
-+ How to store arbitrary objects in a .ini file
-+ How to use icons 
-+ How to customize menu section layouts using icons
++ How to open an alert dialog that the user has to dismiss
++ How to store arbitrary objects in an .ini file
++ How to load and use icons 
 
 ---
 
@@ -273,7 +273,7 @@ If we no longer want to monitor a file, we can call [`cancel!`](@ref), at which 
 
 ---
 
-## FileChooser
+## File Chooser Dialog
 
 Opening a dialog to allow a user to select a file or folder is a task so common, most operating systems provide a native widget just for this purpose. Mousetrap, conversely, also has an object tailor-made for this: [`FileChooser`](@ref)
 
@@ -361,6 +361,58 @@ add_filter!(file_chooser, filter)
 ![](../resources/file_chooser_filter.png)
 
 By default, no `FileFilter`s will be registered, which means the `FileChooser` will display all possible file types. We can control which filter is active when the dialog opens using [`set_initial_filter!`](@ref)
+
+---
+
+## Alert Dialog
+
+A very common for an application that manipulates files is to make sure the user knows they are overriding a file, for example when the users selects a location using a `FileChooser` whos action is `FILE_CHOOSER_ACTION_SAVE_FILE`.
+
+While we could construct a custom widget for this purpose, put that widget in a `Window`, then present that window to the user, a task as common as this should be possible in only a few lines. For this purpose, mousetrap offers [`AlertDialog`](@ref), which is a dialog that shows a message to the user, along with one or more buttons they can click.
+
+Each `AlertDialog` has a **message**, a **detailed description**, as well as one or more **button labels**. We can choose all of these in the `AlertDialog`s constructor. For example, if we want to show a dialog that informs the user that a file is being overwritten, we could do:
+
+```julia
+overwrite_file_warning_dialog = AlertDialog(
+    ["Continue", "Cancel"],  # buttons
+    "A file with this name already exists, continue?", # message
+    "The original file will be overridden, this cannot be undone." # detail description
+)
+```
+
+While we could `present!` this dialog to the user now
+
+![](../resources/alert_dialog.png)
+
+We haven't yet connected any behavior to the user pressing a button. To do this, we use `on_selection!`, which takes a callback with the following signature:
+
+```
+(::AlertDialog, button_index::Int32, [::Data_t]) -> Cvoid
+```
+
+Where `button_index` is the index of the button, from left to right (1-based), or `0` if the dialog was dismissed without pressing a button.
+
+Continuing our example of warning the user when they're about to overwrite a file, we could do the following:
+
+```julia
+overwrite_file_warning_dialog = AlertDialog(
+    ["Continue", "Cancel"],  # buttons
+    "A file with this name already exists, continue?", # message
+    "The original file will be overridden, this cannot be undone." # detail description
+)
+
+on_selection!(overwrite_file_warning_dialog) do self::AlertDialog, button_index::Int32
+    if (button_index == 1) # "Continue" pressed
+        # write file
+    else  # "Cancel" pressed or otherwise dismissed
+        # do not write file
+    end
+end
+
+present!(overwrite_file_warning_dialog)
+```
+
+With this, we have a vastly simplified mechanism of how to show short, message-style dialogs to the user.
 
 ---
 

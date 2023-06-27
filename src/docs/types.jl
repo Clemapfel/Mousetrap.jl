@@ -970,7 +970,7 @@ create_from_theme!(icon, theme, "custom-icon-id", 64)
 @document Image """
 # Image <: Any
 
-2D image data. Pixel-indeces are 1-based.
+2D image data. Pixel-indices are 1-based.
 
 $(@type_constructors(
     Image(),
