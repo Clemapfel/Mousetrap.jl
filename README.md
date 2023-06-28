@@ -1,4 +1,4 @@
-> **NOTE**: THis repo is under active development and should not be interacted with by the public, I'll make announcement in all the major places once it is ready to be tested by 3rd parties
+> **NOTE**: THis repo is under active development and should not be interacted with by the public, I'll make an announcement in all the major places once it is ready to be tested by 3rd parties
 
 # Mousetrap
 
