@@ -774,7 +774,7 @@ get_adjustment(::Scale) -> Adjustment
 get_adjustment(::SpinButton) -> Adjustment
 get_adjustment(::Scrollbar) -> Adjustment
 ```
-Retrieve the adjustment of the widget.
+Retrieve the adjustment of the widget. Modifying the adjustment will modify the widget, and vice-versa.
 """
 
 @document get_allocated_size """

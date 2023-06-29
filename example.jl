@@ -10,24 +10,12 @@ main() do app::Application
     window = Window(app)
 
     entry = Entry()
-    connect_signal_activate!(entry) do self::Entry
-        text = get_text(self)
-        println(text)
-        if is_valid_html_code(text)
-            println("User entered: $(html_code_to_rgba(text))")
-        else
-            println("error")
-        end
+    set_text!(entry, "Write here")
+    connect_signal_text_changed!(entry) do self::Entry
+        println("text is now: $(get_text(entry))")
     end
 
     set_child!(window, entry)
-
-    overwrite_file_warning_dialog = AlertDialog(
-    ["Continue", "Cancel"],  # buttons
-    "A file with this name already exists, continue?", # message
-    "The original file will be overridden, this cannot be undone." # detail description
-)
-    present!(overwrite_file_warning_dialog)
     present!(window)
 end
 

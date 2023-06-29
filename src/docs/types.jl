@@ -2,23 +2,26 @@
 @document Action """
 # Action <: SignalEmitter
 
-Memory-managed object that wraps a function, id, a optional state, and an optional shortcut trigger.
+Memory-managed object that wraps a function. Each action has a unique ID and is registered with 
+the [`Application`](@ref). It can furthermore have any number of shortcut triggers.
 
-Depending on whether [`set_function!`](@ref) or [`set_stateful_function!`](@ref)
-was used to register a callback, an action may have an internal
-boolean state.
+Depending on whether [`set_function!`](@ref) or [`set_stateful_function`](@ref) was called to register 
+a callback with the function, the action may have an additional boolean state.
 
-Actions can be enabled and disabled using [`set_enabled!`](@ref). Disabling 
-an action also disables all connected buttons and menu items.
+For **stateless** actions, the function is required to have the signature
+```
+(::Action, [::Data_t]) -> Cvoid
+```
+while for **stateful** actions, the functions signature has to be
+```
+(::Action, current_state::Bool, [::Data_t]) -> next_state::Bool
+```
 
-Once `set_function!` or `set_stateful_functino!` is called, the action
-is registered with the `Appliaction` supplied during the constructor.
-
-It can then be retrieved at any time using [`get_action`](@ref)
+See the manual chapter on actions for more information.
 
 $(@type_constructors(
-Action(::ActionID, ::Application),
-Action(stateless_function, ::ActionID, ::Application)
+    Action(::ActionID, ::Application),
+    Action(stateless_f, ::ActionID, ::Application)
 ))
 
 $(@type_signals(Action, 
@@ -31,7 +34,7 @@ $(@type_fields())
 ```julia
 action = Action("example.action", app)
 set_function!(action) do self::Action
-println(get_id(self) * " activated.")
+    println(get_id(self) * " activated.")
 end
 activate(action)
 ```
@@ -40,10 +43,10 @@ activate(action)
 @document Adjustment """
 # Adjustment <: SignalEmitter
 
-Object that represents a range of discrete values. If 
-this adjustment is the underlying range of a widget, modifying 
-that widget will modify this adjustment, and modifying this adjustment 
-will modify that widget.
+Object that represents a range of discrete values. Modifying the underlying adjustment 
+of a widget, will modify the widget, and vice-versa. 
+
+cf. [`get_adjustment`](@ref) to see which widgets are available to be controlled this way.
 
 $(@type_constructors(
     Adjustment(value::Number, lower::Number, upper::Number, increment::Number)
@@ -60,7 +63,13 @@ $(@type_fields())
 @document AlertDialog """
 # AlertDialog <: SignalEmitter
 
-Simple dialog that presents the user with a selection of labeled buttons. 
+Simple dialog with a message, detailed description, and one or more labeled buttons. 
+
+Using `on_selection!`, you can register a function with the signature
+```
+(::AlertDialog, button_index::Integer, [::Data_t]) -> Cvoid
+````
+which is called when the user makes a selection or closes the dialog.
 
 $(@type_constructors(
     AlertDialog(button_labels::Vector{String}, message::String, [detailed_message::String])
@@ -109,9 +118,8 @@ $(@type_fields())
 Used to register an application with the users OS. When all 
 windows of an application are closed, the application usually exits.
 
-Note that side effects can occur when two applications with the
-same ID are registered on the machine at the same time, as both
-instances may share resources.
+The applications ID is required to contain at least one `.`, and it should be unique, meaning no
+other application on the users operating system shares this ID.
 
 $(@type_constructors(
     Appication(::ApplicationID)
@@ -138,9 +146,8 @@ run!(app)
 @document AspectFrame """
 # AspectFrame <: Widget
 
-Container widget with a single child, regulates 
-its childs size such that it always adheres to the given 
-aspect ratio.
+Container widget with a single child, makes sure that 
+the size of its child will always be at the specified width-to-height ratio.
 
 $(@type_constructors(
     AspectFrame(width_to_height::AbstractFloat)
@@ -155,7 +162,7 @@ $(@type_fields())
 @document AxisAlignedRectangle """
 # AxisAlignedRectangle
 
-Axis aligned bounding box. Defined by its top-left 
+Axis-aligned bounding box. Defined by its top-left 
 corner and size.
 
 $(@type_constructors(
@@ -182,15 +189,24 @@ $(@type_signals(Box,
 ))
 
 $(@type_fields())
+
+## Example
+```julia
+box = Box(ORIENTATION_HORIZONTAL)
+push_back!(box, Label("01"))
+push_back!(box, Button())
+push_back!(box, Label("03"))
+
+# equivalent to
+box = hbox(Label("01"), Button(), Label("02"))
+```
 """
 
 @document Button """
 # Button <: Widget
 
-When clicked, this widget invokes any [`Action`](@ref) connected
-via [`set_action!`](@ref) and any signal handler connected to signal `clicked`.
-
-It has exaclty one child, which is the buttons label.
+Button with a label. Connect to signal `clicked` or specify an action via [`set_action!`](@ref)
+in order to react to the user clicking the button.
 
 $(@type_constructors(
     Button()
@@ -229,16 +245,20 @@ $(@type_signals(CenterBox,
 ))
 
 $(@type_fields())
+
+## Example
+```julia
+center_box = CenterBox(ORIENTATION_HORIZONTAL)
+set_start_child!(center_box, Label("Left"))
+set_center_child!(center_box, Button())
+set_end_child!(center_box, Label("Right"))
+```
 """
 
 @document CheckButton """
 # CheckButton <: Widget
 
-"Tickbox" that the user can check or uncheck by clicking it.
-For GTK4.8 or later, this widget also has a single child.
-
-`CheckButton`s state is not binary, rather it can be in one 
-of three states, which are respresented by the enum [`CheckButtonState`](@ref).
+Rectangle that displays a checkmark and an optional label. Connect to signal `toggled` to react to the user changing the `CheckButton`s state by clicking it.
 
 $(@type_constructors(
     CheckButton()
@@ -254,6 +274,7 @@ $(@type_fields())
 ## Example
 ```julia
 check_button = CheckButton()
+set_child!(check_button, Label("Click Me"))
 connect_signal_toggled!(check_button) do self::CheckButton
     state = get_state(self)
     print("CheckButton is now: ") 
@@ -272,7 +293,7 @@ set_child!(window, check_button)
 @document ClickEventController """
 # ClickEventController <: SingleClickGesture <: EventController
 
-Handles a series of on or more mouse-button-presses and/or touchscreen taps.
+Event controller that reacts to a series of one or more mouse-button or touchscreen presses.
 
 $(@type_constructors(
     ClickEventController()
@@ -306,8 +327,7 @@ Construct an instance of this type by calling [`get_clipboard`](@ref) on the
 toplevel window.
 
 If the clipboard contains an image, use [`get_image`](@ref) to access it,
-any other kind of data needs to be accesses with [`get_string`](@ref), which 
-returns the serialized form of that data.
+any other kind of data needs to be accesses with [`get_string`](@ref).
 
 $(@type_constructors(
 ))
@@ -355,9 +375,6 @@ println("time delta: \$(as_seconds(now - current))")
 
 Dialog that allows a user to choose a color.
 
-!!! Note
-    This widget is only available if GTK4.10 or later is installed
-
 $(@type_constructors(
     ColorChooser([title::String, modal::Bool])
 ))
@@ -383,11 +400,7 @@ present!(color_chooser)
 @document ColumnView """
 # ColumnView <: Widget
 
-Selectable widget that arranges its children as two dimensional table with a variable number of columns 
-and rows.
-
-Each column, represented by [`ColumnViewColumn`](@ref), has a unique title. Rows and columns can be inserted anywhere at any time,
-and the type of widget can be different for each cell.
+Selectable widget that arranges its children as a table with rows and columns.
 
 $(@type_constructors(
     ColumnView([::SelectionMode])
@@ -405,15 +418,12 @@ column_view = ColumnView(SELECTION_MODE_NONE)
 
 for column_i in 1:4
     column = push_back_column!(column_view, "Column #\$column_i")
-
-    # fill each column with labels
     for row_i in 1:3
         set_widget!(column_view, column, row_i, Label("\$row_i | \$column_i"))
     end
 end
 
 # or push an entire row at once
-# any widget can be put into any cell
 push_back_row!(column_view, Button(), CheckButton(), Entry(), Separator())        
 set_child!(window, column_view)
 ```
@@ -423,8 +433,7 @@ set_child!(window, column_view)
 # ColumnViewColumn <: SignalEmitter
 
 Class representing a column of [`ColumnView`](@ref). Has a label, any number of children 
-which represent all rows in this column (1-indexed), and an optional header menu, 
-which can be accessed by clicking the columns title.
+which represented that columns rows, and an optional header menu.
 
 $(@type_constructors(
 ))
@@ -447,11 +456,7 @@ set_widget!(column, 4, Label("4"))
 @document DragEventController """
 # DragEventController <: SingleClickGesture <: EventController
 
-Recognizes drag-gestures, in which the user clicks the area of a widget
-that has this controller added to it, keeps the click depressed while 
-moving the cursor.
-
-This works for both mouse-based and touch-based events.
+Event controller that recogizes drag-gestures by both a mouse or touch-device.
 
 $(@type_constructors(
     DragEventController()
@@ -466,12 +471,10 @@ $(@type_fields())
 ```julia
 drag_controller = DragEventController()
 connect_signal_drag!(drag_controller) do self::DragEventController, x_offset, y_offset
-    
     start::Vector2f = get_start_position(self)
     current = start + Vector2f(x_offset, y_offset)
     println("Current cursor position: \$current")
 end
-
 add_controller!(window, drag_controller)
 ```
 """
@@ -479,15 +482,7 @@ add_controller!(window, drag_controller)
 @document DropDown """
 # DropDown <: Widget
 
-Widget that, when click, presents a vertical list of items. If a button 
-is clicked, its corresponding callback function will be invoked, and the
-dropdown will selected on that button.
-
-Each button has two associated widgets, the **list widget** is displayed while the
-list of buttons is open, the **label widget** is displayed while the 
-button is currently selected.
-
-Use [`push_back!`](@ref) to add an item with its associated callback to the drop down.
+Presents the user with a collapsible list of items. If one of its items is clicked, that items callback will be invoked.
 
 $(@type_constructors(
     DropDown()
@@ -501,15 +496,12 @@ $(@type_fields())
 ## Example
 ```julia
 drop_down = DropDown()
-
-item_01_id = push_back!(drop_down, "Item 01") do x::DropDown
+push_back!(drop_down, "Item 01") do x::DropDown
     println("Item 01 selected") 
 end
-
-item_02_id = push_back!(drop_down, "Item 02") do x::DropDown
+push_back!(drop_down, "Item 02") do x::DropDown
     println("Item 02 selected") 
 end
-
 set_child!(window, drop_down)
 ```
 """
@@ -518,7 +510,7 @@ set_child!(window, drop_down)
 # DropDownItemID
 
 ID of a dropdown item, returned when adding a new item to the drop down.
-Keep track of this in order to identify items in an position-independent manner.
+Keep track of this in order to identify items in a position-independent manner.
 
 $(@type_constructors(
 ))
@@ -530,9 +522,7 @@ $(@type_fields(
 @document Entry """
 # Entry <: Widget
 
-Single-line text entry. Activated when the user 
-presses the enter key while the cursor is inside 
-text input area.
+Single-line text entry, supports "password mode", as well as inserted an icon to the left and/or right of the text area.
 
 $(@type_constructors(
     Entry()
@@ -544,24 +534,33 @@ $(@type_signals(Entry,
 ))
 
 $(@type_fields())
+
+```julia
+entry = Entry()
+set_text!(entry, "Write here")
+connect_signal_text_changed!(entry) do self::Entry
+    println("text is now: \$(get_text(entry))")
+end
+```
 """
 
 @document EventController abstract_type_docs(EventController, Any, """
 # EventController <: SignalEmitter
 
-Superclass of all event controllers. Use `add_controller!(::Widget, ::EventController)`
+Superclass of all event controllers. Use [`add_controller!`](@ref)
 to connect an event controller to any widget, after which it starts receiving input events.
-Connect to the unique signals of each event controller type in order to react to these events.
+Connect to the unique signals of each event controller in order to react to these events.
 """)
 
 @document Expander """
 # Expander <: Widget
 
 Collapsible item which has a label and child. If the label is clicked, 
-the child is shown or hidden.
+the child is shown (or hidden, if it is already shown).
 
-Note that this widget should not be used to create collapsible lists, 
-as [`ListView`](@ref) was made for this purpose. 
+!!! Note 
+    This widget should not be used to create collapsible lists, 
+    use [`ListView`](@ref) for this purpose instead.
 
 $(@type_constructors(
     Expander()
@@ -587,8 +586,7 @@ Connect a function with the signature
 using [`on_accept!`](@ref). When the user makes a selection, this function 
 will be invoked and `files` will contain one or more selected files.
 
-The file choosers layout and which items the user can select
-depends on the [`FileChooserAction`](@ref) specified on construction.
+The file choosers layout depends on the [`FileChooserAction`](@ref) specified on construction.
 
 $(@type_constructors(
     FileChooser(::FileChooserAction, [title::String])
@@ -620,9 +618,8 @@ present!(file_chooser)
 @document FileDescriptor """
 # FileDescriptor <: SignalEmitter
 
-Read-only object that points to a file or folder 
-at a specific location on disk. Note that there is no 
-guarantee that file or folder exists.
+Read-only object that points a specific location on disk. There is no
+guaruantee that this location contains a valid file or folder.
 
 $(@type_constructors(
     FileDescriptor(path::String)
@@ -635,7 +632,6 @@ $(@type_fields())
 
 ## Example
 ```julia
-# list file types of all files in current directory
 current_dir = FileDescriptor(".")
 for file in get_children(current_dir)
     println(get_name(file) * ":\t" * get_content_type(file))
@@ -646,7 +642,7 @@ end
 @document FileFilter """
 # FileFilter <: SignalEmitter
 
-File filter used by [`FileChooser`](@ref). Only files that 
+Filter used by [`FileChooser`](@ref). Only files that 
 pass the filter will be available to be selected when the file chooser is active.
 
 If multiple filters are supplied, the user can 
@@ -672,21 +668,14 @@ add_allowed_suffix!(filter, "jl") # without the `.`
 @document FileMonitor """
 # FileMonitor <: SignalEmitter
 
-Object that monitors a file location on disk. If 
-anything about the object at that location changes, for example if
-the content of the file is modified, `FileMonitor` 
-will invoke the registered callback. We can differentiate
-between event types using the [`FileMonitorEvent`](@ref) supplied
-to the callback.
-
-The callback is registered using [`on_file_changed!`](@ref) and is
-required to have the following signature:
-
+Object that monitors a location on disk. If 
+anything about the object at that location changes, it will call the function registered using [`on_file_changed!`](@ref),
+which requires a function with signature
 ```
-(::FileMonitor, ::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor, [::Data_t]) -> Cvoid
+(::FileMonitor, event::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor, [::Data_t]) -> Cvoid
 ```
 
-See the chapter on files for more information.
+Where `event` classifies the type of change, `self` is the file being monitored.
 
 $(@type_constructors(
 ))
@@ -712,9 +701,9 @@ end
 @document Fixed """
 # Fixed <: Widget
 
-Container widget that places its children at a specified position. 
-Use of this widget is usually discouraged because it does not allow
-for automatic resizing or alignment.
+Container widget that places its children at a specified pixel position relative to the `Fixed`s top-left corner.
+
+Use of this widget is usually discouraged, it does not allow for automatic expansion or alignment.
 
 $(@type_constructors(
     Fixed()
@@ -729,8 +718,7 @@ $(@type_fields())
 @document FocusEventController """
 # FocusEventController <: EventController
 
-After being connected to a widget, will emit 
-its signals when the widget gains or looses input focus.
+Reacts to a widget gaining or loosing input focus.
 
 $(@type_constructors(
     FocusEventController()
@@ -746,18 +734,18 @@ $(@type_fields())
 ## Example
 ```julia
 focus_controller = FocusEventController()
-connect_signal_focus_gained(focus_controller) do self::FocusController
+connect_signal_focus_gained!(focus_controller) do self::FocusController
     println("Gained Focus")
 end
-add_controller(widget, focus_controller)
+add_controller!(widget, focus_controller)
 ```
 """
 
 @document Frame """
 # Frame <: Widget
 
-Purely cosmetic widget that draws a black outline with rounded corners around
-its singular child. 
+Widget that draws a black outline with rounded corners around
+its singular child.
 
 $(@type_constructors(
     Frame()
@@ -772,9 +760,7 @@ $(@type_fields())
 @document FrameClock """
 # FrameClock <: SignalEmitter
 
-Allows to connect to its signals which 
-are synched to the render cycle of the associated
-widget. 
+Clock that is synched with a widgets render cycle. Connect to its signals to trigger behavior once per frame.
 
 $(@type_constructors(
 ))
@@ -787,7 +773,7 @@ $(@type_fields())
 ## Example
 ```julia
 frame_clock = get_frame_clock(widget)
-connect_signal_paint(frame_clock) do x::FrameClock
+connect_signal_paint!(frame_clock) do x::FrameClock
     println("Widget was drawn.")
 end
 ```
@@ -797,7 +783,7 @@ end
 # GLTransform <: SignalEmitter
 
 Transform in 3D spaces. Uses OpenGL coordinates, it should 
-therefore only be used to modify vertices of [`Shape`](@ref).
+therefore only be used to modify vertices of a [`Shape`](@ref).
 
 Can be indexed and modified as a 4x4 matrix of `Float32`.
 
@@ -816,8 +802,7 @@ $(@type_fields(
 # Grid <: Widget
 
 Selectable container that arranges its children in a non-uniform grid. 
-Each child widget has a row- & column-index (1-indexed), and a width 
-and height, measured in number of cells.
+Each child has a row- and column-index, as well as a width and height, measured in number of cells.
 
 $(@type_constructors(
     Grid()  
@@ -840,9 +825,8 @@ insert!(grid, Separator, 2, 1, 2, 1)
 @document GridView """
 # GridView <: Widget
 
-Selectable container that arranges its children in an uniform 
-grid. User [`set_max_n_columns`](@ref) and [`set_min_n_columns`](@ref)
-to control the grid layout.
+Selectable widget container that arranges its children in a uniform 
+grid.
 
 $(@type_constructors(
     GridView(::Orientation, [::SelectionMode])
@@ -853,6 +837,11 @@ $(@type_signals(GridView,
 ))
 
 $(@type_fields())
+
+## Example
+```julia
+grid_view = GridView()
+
 """
 
 @document GroupID """
@@ -891,9 +880,10 @@ $(@type_fields(
 @document HeaderBar """
 # HeaderBar <: Widget
 
-Widget usually used as the titlebar widget of a [`Window`](@ref).
-Has a centered title, the window control buttons, along with 
-any number of widgets at the start and at the end of the bar.
+Widget that is ideal to be used as the title bar of a window. Has a title, 
+close, maximize, minimize buttons, as well as an area for widgets left of and right 
+of the title.
+
 
 $(@type_constructors(
     HeaderBar(),
@@ -907,10 +897,6 @@ $(@type_fields())
 
 ## Example
 ```julia
-# Layout syntax
-# any element left of `:` is displayed left of the the title
-# only `close`, `minimize`, `maximize` are valid layout elements
-
 header_bar = HeaderBar("close:title,minimize,maximize")
 push_front!(header_bar, Button())
 set_titlebar_widget!(window, header_bar)
@@ -920,9 +906,7 @@ set_titlebar_widget!(window, header_bar)
 @document Icon """
 # Icon
 
-Object managing an image file on disk that can be used 
-as an icon. Usually, these should be a vector graphics 
-or .ico file, though any image file can be loaded.
+Allows loading of icons from a image file or icon theme.
 
 $(@type_constructors(
     Icon(),
@@ -970,7 +954,7 @@ create_from_theme!(icon, theme, "custom-icon-id", 64)
 @document Image """
 # Image <: Any
 
-2D image data. Pixel-indices are 1-based.
+2D image data, in RGBA.
 
 $(@type_constructors(
     Image(),
@@ -984,8 +968,7 @@ $(@type_fields())
 @document ImageDisplay """
 # ImageDisplay <: Widget
 
-Widget that displays an [`Image`](@ref), [`Icon`](@ref), or image file. Once
-constructed, the image data is deep-copied.
+Widget that displays an [`Image`](@ref), [`Icon`](@ref), or image file.
 
 $(@type_constructors(
     ImageDisplay(path::String),
@@ -1002,8 +985,7 @@ $(@type_fields())
 @document KeyCode """
 # KeyCode
 
-Identifier of a key. Used for [`ShortcutTrigger`](@ref) syntax 
-and when recognizing keys using [`KeyEventController`](@ref).
+Identifier of a key. Used for [`ShortcutTrigger`](@ref) syntax.
 
 $(@type_constructors(
 ))
@@ -1015,7 +997,7 @@ $(@type_fields(
 @document KeyEventController """
 # KeyEventController <: EventController
 
-Recognizes keyboard key strokes.
+Event controller that recognizes keyboard key strokes.
 
 $(@type_constructors(
     KeyEventController()
@@ -1044,10 +1026,9 @@ add_controller!(window, key_controller)
 @document KeyFile """
 # KeyFile <: SignalEmitter
 
-GLib keyfile, allows storing various types
-by serializing them.
+GLib keyfile, ordered into groups with key-value pairs. 
 
-The following types can be (de)serialized in this way:
+Allows (de-)serializing of the following types:
 + `Bool`, `Vector{Bool}`
 + `AbstractFloat`, `Vector{AbstractFloat}`
 + `Signed`, `Vector{Signed}`
@@ -1086,8 +1067,7 @@ key_id=123;456;789;
 @document KeyID """
 # KeyID
 
-ID of [`KeyFile`](@ref) key-value-pair. May not start with a number, and only 
-roman letters, 0-9, and '_' may be used.
+ID of [`KeyFile`](@ref) key-value-pair. Contains only roman letters, 0-9, and '_'.
 
 $(@type_constructors(
 ))
@@ -1120,8 +1100,7 @@ $(@type_fields())
 @document LevelBar """
 # LevelBar <: Widget
 
-Bar displaying fraction of a range. If the fraction reaches 75%,
-the color of the bar changes. 
+Non-interactive widget that displays the value of a range as a fraction.
 
 $(@type_constructors(
     LevelBar(min::AbstractFloat, max::AbstractFloat)
@@ -1136,7 +1115,7 @@ $(@type_fields())
 @document ListView """
 # ListView <: Widget
 
-Selectable widget that arranges its children in a (optionally nested) list.
+Selectable widget container that arranges its children in a (nested) list.
 
 $(@type_constructors(
     ListView(::Orientation, [::SelectionMode])
@@ -1166,9 +1145,9 @@ set_child!(window, list_view)
 @document ListViewIterator """
 # ListViewIterator
 
-Iterator returned when inserting an item into a `ListView`. Use this
-iterator as an additional argument to insert any item as the child of 
-a `ListView` child, which creates a nested list.
+Iterator returned when inserting an item into a [`ListView`](@ref). Use this
+iterator as an additional argument to `push_back!`, `push_front!`, or `insert`, in order 
+to create a nested list at that item position.
 
 $(@type_constructors(
 ))
@@ -1181,7 +1160,7 @@ $(@type_fields(
 # LogDomain
 
 Domain of log messages, this will be used to associate log 
-message with a specific application or library.
+message with a specific application or library. May only contain roman letters, `_`, `.` and `-`.
 
 $(@type_constructors(
     LogDomain(::String)
@@ -1194,9 +1173,7 @@ $(@type_fields(
 @document LongPressEventController """
 # LongPressEventController <: SingleClickGesture <: EventController
 
-Recognizes long-press gestures, in which the users 
-presses a mouse button or touchscreen, then holds that 
-press without moving the cursor for a specific amount of time.
+Event controller that recognizes long-press-gestures from a mouse or touch-device.
 
 $(@type_constructors(
     LongPressEventController()
@@ -1223,8 +1200,10 @@ add_controller!(window, long_press_controller)
 # MenuBar <: Widget
 
 View that displays a [`MenuModel`](@ref) as a horizontal bar. 
+
 The `MenuModel` has to have the following structure:
-+ all top-level items have to be of type "submenu"
++ all top-level items have to be "submenu"-type items
++ no submenu or section of another submenu may have a "widget"-type item
 
 $(@type_constructors(
     HeaderBar(::MenuModel)
@@ -1261,9 +1240,17 @@ construct a menu.
 Use [`MenuBar`](@ref) or [`PopoverMenu`](@ref) to display the
 menu to the user.
 
-The type of menu item is determined by which function
-is called to add the item. See the manual chapter on menus
-for more information.
+The following types of menu items are available
+
+| Type      | Function |
+|-----------|-------------|
+| "action"  | [`add_action!(::MenuModel, label::String, ::Action)`](@ref) |
+| "icon"    | [`add_icon!(::MenuModel, ::Icon, ::Action)`](@ref) |
+| "submenu" | [`add_submenu!(::MenuModel::, label::String, other::MenuModel)`](@ref) |
+| "section" | [`add_section(::MenuModel::, label::String, other::MenuModel)`](@ref) |
+| "widget"  | [`add_widget!(::MenuModel, ::Widget)`](@ref) |
+
+See the manual section on menus for more information.
 
 $(@type_constructors(
     MenuModel()
@@ -1279,8 +1266,14 @@ $(@type_fields())
 @document ModifierState """
 # ModifierState
 
-Holds information about which modifier keys (Control, Alt, Shift)
-are currently pressed.
+Holds information about which modifier are currently pressed
+
+See also:
++ [`control_pressed`](@ref)
++ [`alt_pressed`](@ref)
++ [`shift_pressed`](@ref)
++ [`mouse_button_01_pressed`](@ref)
++ [`mouse_button_02_pressed`](@ref)
 
 $(@type_constructors(
 ))
@@ -1303,8 +1296,7 @@ add_controller!(window, key_controller)
 @document MotionEventController """
 # MotionEventController <: EventController
 
-Captures cursor motion events while the cursor is inside the allocated area of the widget that
-this controller was added to.
+Captures cursor motion events while the cursor is inside the allocated area of the associated widget.
 
 $(@type_constructors(
     MotionEventController()
@@ -1333,8 +1325,8 @@ add_controller!(window, motion_controller)
 
 Widget that arranges its children as a list of pages. Each page
 has exactly one child widget, as well as an optional label widget. Pages
-can be freely reordered by the user, and one page can be drag-&-dropped
-from one `Notebook` instace to another.
+can be freely reordered by the user, and they can be drag-and-dropped from
+one `Notebook` to another.
 
 $(@type_constructors(
     Notebook()
@@ -1366,16 +1358,8 @@ set_child!(window, notebook)
 @document Overlay """
 # Overlay <: Widget
 
-Widget that has exaclty one "base" child, set via [`set_child!`](@ref), 
-and any number of "overlay" children, added via [`add_overlay!`](@ref).
-
-The base child will be rendered at the bottom, while all overlay children
-will be render one on top of another, in the order they were added.
-
-If two interactable widgets overlap, only the top-most widget can
-receive input events. Use [`set_can_respond_to_input!`](@ref) to disable 
-the upper widget, at which point the lower widget underneath can
-be interacted with.
+Widget that has exaclty one "base" child, and any number of "overlay" children. If 
+two interactable widgets overlap, only the top-most widget will be interactable. 
 
 $(@type_constructors(
     Overlay()
@@ -1398,13 +1382,10 @@ set_child!(window, overlay)
 @document PanEventController """
 # PanEventController <: SingleClickGesture <: EventController
 
-Recognizes pan gestures, in which the user drags 
-the cursor of a mouse or touchscreen alonge either the horizontal
-or vertical axis, depending on which [`Orientation`](@ref) was 
-supplied when this controller was constructed.
+Recognizes pan gestures along exactly one axis.
 
 $(@type_constructors(
-    PanEventController(::Orientation)
+    PanEventController(axis::Orientation)
 ))
 
 $(@type_signals(PanEventController, 
@@ -1430,8 +1411,7 @@ add_controller!(window, pan_controller)
 @document Paned """
 # Paned <: Widget
 
-Widget with exactly two children, set with [`set_start_child!`](@ref) and [`set_end_child!`](@ref). 
-Draws a solid border between the two, which the user can drag to 
+Widget with exactly two children. Draws a solid border between the two, which the user can drag to 
 one side or the other to control the size of both widgets at the same time.
 
 $(@type_constructors(
@@ -1442,12 +1422,18 @@ $(@type_signals(Paned,
 ))
 
 $(@type_fields())
+
+## Example
+```julia
+paned = Paned(ORIENTATION_HORIZONTAL)
+set_start_child!(paned, Label("Left"))
+set_end_child!(paned, Label("Right"))
 """
 
 @document PinchZoomEventController """
 # PinchZoomEventController <: EventController
 
-Controller recognizing touch-screen only 2-finger pinch-zoom gestures.
+Controller recognizing 2-finger pinch-zoom gestures (touch-only).
 
 $(@type_constructors(
     PinchZoomEventController()
@@ -1472,11 +1458,8 @@ add_controller!(window, pinch_zoom_controller)
 @document Popover """
 # Popover <: Widget
 
-Specialized type of window with exactly on child. It needs to be 
-attach to a different widget, at which point [`popup!`](@ref) and [`popdown!`](@ref)
-can be called to present or hide the popover from the user.
-
-[`PopoverButton`](@ref) provides an automated way of showing / hiding the popover.
+Window-type widget with exactly one child, has to be attached to another widget to be visible.
+Use [`PopoverButton`](@ref) to automatically show / hide the popover.
 
 $(@type_constructors(
     Popover()
@@ -1506,9 +1489,6 @@ set_child!(window, popover_button)
 Button that has automatically shows or hides its associated [`Popover`](@ref) or [`PopoverMenu`](@ref)
 when clicked.
 
-Like [`Button`](@ref). it has exactly one label, next to which a down arrow will be drawn to indicate that
-this button opens a popup.
-
 $(@type_constructors(
     PopoverButton()
 ))
@@ -1533,8 +1513,8 @@ set_child!(window, popover_button)
 @document PopoverMenu """
 # PopoverMenu <: Widget
 
-Menu view that display a [`MenuModel`](@ref) in a popover window. Use [`PopoverButton`](@ref)
-for an automated way of revealing the popover.
+Menu view that display a [`MenuModel`](@ref) in a popover window. 
+Use [`PopoverButton`](@ref) to automatically show / hide the popover.
 
 $(@type_constructors(
     PopoverMenu(::MenuModel)
@@ -1567,7 +1547,7 @@ set_child!(window, popover_button)
 @document ProgressBar """
 # ProgressBar <: Widget
 
-Loading bar, use [`set_fraction!`](@ref) to specify the current percentage, in `[0, 1]`
+Bar that displays a fraction in `[0, 1]`. Use `set_fraction!` to change the current value.
 
 $(@type_constructors(
     ProgressBar()
@@ -1600,7 +1580,9 @@ $(@type_fields(
 @document RenderArea """
 # RenderArea <: Widget
 
-OpenGL canvas. See the manual chapter on native rendering for more
+OpenGL canvas. 
+
+See the manual chapter on native rendering for more
 information.
 
 $(@type_constructors(
@@ -1634,9 +1616,8 @@ If no shader, transform, and/or blend mode is specified,
 the default shader, identity transform, and [`BLEND_MODE_NORMAL`](@ref) will 
 be used, respectively.
 
-Use [`add_render_task!`](@ref) to add the task to a [`RenderArea`](@ref), 
-after which it will be automatically be rendered every frame 
-the `RenderArea` draws to the screen.
+See the manual chapter on native rendering for more
+information.
 
 $(@type_constructors(
     RenderTask(::Shape ; [shader::Union{Shader, Nothing}, transform::Union{GLTransform, Nothing}, blend_mode::BlendMode])
@@ -1663,10 +1644,12 @@ task = RenderTask(shape;
 """
 
 @document RenderTexture """
-# RenderTexture <: SignalEmitter
+# RenderTexture <: TextureObject <: SignalEmitter
 
-Texture that can be bound as a render target. See the 
-manual chapter on native rendering for more information.
+Texture that can be bound as a render target. 
+
+See the manual chapter on native rendering for more
+information.
 
 $(@type_constructors(
     RenderTexture()
@@ -1735,7 +1718,6 @@ end
 # Revealer <: Widget
 
 Container that plays an animation to reveal or hide its singular child.
-Choose the type of animation from one of the values of the enum [`RevealerTransitionType`](@ref).
 
 $(@type_constructors(
     Revealer(::RevealerTransitionType)
@@ -1751,7 +1733,7 @@ $(@type_fields())
 @document RotateEventController """
 # RotateEventController <: EventController
 
-Controller recognizing touch-only 2-finger rotate gestures.
+Recognizes 2-finger rotate gestures (touch-only).
 
 $(@type_constructors(
     RotateEventController()
@@ -1776,8 +1758,7 @@ add_controller!(window, rotate_controller)
 @document Scale """
 # Scale <: Widget
 
-Widget that allows users to select a value from a range by 
-sliding a scale.
+Allows users to select a value from a range.
 
 $(@type_constructors(
     Scale(lower::AbstractFloat, upper::AbstractFloat, step_increment::AbstractFloat, [::Orientation])
@@ -1788,12 +1769,20 @@ $(@type_signals(Scale,
 ))
 
 $(@type_fields())
+
+## Example
+```julia
+scale = Scale(0, 1, 0.01)
+connect_signal_value_changed!(scale) self::Scale
+    println("Current value: \$(get_value(scale))")
+end
+```
 """
 
 @document ScrollEventController """
 # ScrollEventController <: EventController
 
-Controller recognizing mouse-based scroll-wheel and 2-finger touchscreen scrolling events.
+Controller recognizing scrolling gestures, such as a mouse scrollwheel or 2-finger touch-screen scrolling.
 
 $(@type_constructors(
     ScrollEventController(; [emit_vertical::Bool = true, emit_horizontal::Bool = true])
@@ -1845,6 +1834,8 @@ such as [`GridView`](@ref), [`ListView`](@ref), or [`Stack`](@ref).
 Only if the selection mode is set to anything other than [`SELECTION_MODE_NONE`](@ref)
 will the selection model emit its signals.
 
+Use [`get_selection_model!`](@ref) to retrieve the model from a selectable widget.
+
 $(@type_constructors(
 ))
 
@@ -1887,15 +1878,10 @@ $(@type_fields())
 @document Shader """
 # Shader <: SignalEmitter
 
-Represents an OpenGL shader program, which has a bound
-vertex- and fragment-shader. If a shader is not specified 
-for one or more of these, the default shader will be used.
+OpenGL shader program, contains a fragment and vertex shader.
 
-To use a shader, it needs to be bound to a [`RenderTask`](@ref) along with 
-a [`Shape`](@ref). Then, when the task is rendered, the shader will be applied
-to all vertices / fragments of the shape.
-
-See the manual section on native rendering for more information.
+See the manual chapter on native rendering for more
+information.
 
 $(@type_constructors(
     Shader()
@@ -1910,13 +1896,10 @@ $(@type_fields())
 @document Shape """
 # Shape <: SignalEmitter
 
-Represents an OpenGL vertex buffer. A wide variety of 
-pre-made shapes are available.
+OpenGL vertex buffer, pre-initialized as one of various shape types.
 
-Shapes use the GL coordinate system and need to be bound
-to a [`RenderTask`](@ref) in order to be displayed. 
-
-See the manual section on native rendering for more information.
+See the manual chapter on native rendering for more
+information.
 
 $(@type_constructors(
     Shape(),
@@ -1946,13 +1929,8 @@ $(@type_fields())
 @document ShortcutEventController """
 # ShortcutEventController <: EventController
 
-Eventcontroller that listens for shortcut key combinations. If one 
-is recognized, the corresponding action will be invoked.
-
-It emits no signals, instead, [`add_action!`](@ref) will register and
-[`Action`](@ref) with the controller, at which point the controller 
-will listen to any shortcuts of the action added via
-[`add_shortcut!`](@ref).
+Triggers actions if their associate shortcuts are recognized. 
+Call [`add_action!`](@ref) to specify which actions the controller should manage.
 
 $(@type_constructors(
     ShortcutEventController()
@@ -2001,15 +1979,12 @@ $(@type_fields(
 @document SignalEmitter abstract_type_docs(SignalEmitter, Any, """
 # SignalEmitter <: Any
 
-Object that can emit signals, though it may not necessarily do so.
+Object that can emit signals.
 
-Additionally, any `SignalEmitter` sub-class is memory-managed completely independently 
-of Julia. The Julia-side class is only a thin wrapper that allows us to 
-interact with the underlying internal object. This underlying object 
-is only finalized when its internal reference count reaches zero.
-
-Because of this, users don't have to worry about keeping track of widgets
-or other signal emitters, their life-time is managed automatically for them.
+Any signal emitter is memory-managed independently of Julia, once its
+internal reference counter reaches zero, it is safely deallocated. Julia
+users do not have to worry about keeping any signal emitters in scope, it
+is done automatically.
 """)
 
 @document SingleClickGesture abstract_type_docs(SingleClickGesture, Any, """
@@ -2026,9 +2001,7 @@ Specialized type of `EventController` that provides the following functions:
 @document SpinButton """
 # SpinButton <: Widget
 
-Widget that contains an entry where the user can enter 
-an exact numerical value. It furthermore has two buttons
-to increase or decrease the value by the specific step increment.
+Widget with a value-entry and two buttons.
 
 $(@type_constructors(
     SpinButton(lower::Number, upper::Number, step_increment::Number, [orientation::Orientation])
@@ -2044,8 +2017,8 @@ $(@type_fields())
 @document Spinner """
 # Spinner <: Widget
 
-Graphical widget that signifies that a process is busy. Once 
-[`set_is_spinning!`](@ref) is set to `true`, the spinning animation will start.
+Graphical widget that signifies that a process is busy. Set 
+[`set_is_spinning!`](@ref)  to `true` to start the spinning animation.
 
 $(@type_constructors(
     Spinner()
@@ -2066,10 +2039,6 @@ way for users to choose the page of the stack.
 
 Connect to the signals of the [`SelectionModel`](@ref) provided by [`get_selection_model!`](@ref)
 to track which stack page is currently selected.
-
-Whenever the stack switches from one page to another, an animation is 
-plays. A huge number of animations are available, which are chosen 
-as values of the enum [`StackTransitionType`](@ref).
 
 $(@type_constructors(
     Stack()
@@ -2101,7 +2070,6 @@ set_child!(window, box)
 # StackID
 
 ID that uniquely identifies a page of a [`Stack`](@ref). Will be used as the page title for [`StackSwitcher`](@ref) and [`StackSidebar`](@ref).
-
 
 $(@type_constructors(
 ))
@@ -2146,7 +2114,7 @@ $(@type_fields())
 Controller handling events from a stylus devices, such as drawing tablets.
 
 Has access to many manufacturer specific sensors, see the section on `StylusEventController`
-in the manual chapter on event handling.
+in the manual chapter on event handling for more information.
 
 $(@type_constructors(
     StylusEventController()
@@ -2174,7 +2142,7 @@ add_controller!(window, stylus_controller)
 @document SwipeEventController """
 # SwipeEventController <: SingleClickGesture <: EventController
 
-Recognizes touchscreen swipe gestures.
+Recognizes swipe gestures (touch-only).
 
 $(@type_constructors(
     SwipeEventController())
@@ -2211,8 +2179,7 @@ add_controller!(window, swipe_controller)
 @document Switch """
 # Switch <: Widget
 
-Ligthswitch-like widget that can be either on or off. When the switch 
-is clicked, the state changes and signal `activate` is emitted.
+Widget with a binary state, emits signal `active` when triggered.
 
 $(@type_constructors(
     Switch()
@@ -2228,12 +2195,7 @@ $(@type_fields())
 @document TextView """
 # TextView <: Widget
 
-Multi-line text entry. Unlike [`Entry`](@ref), this 
-widget cannot emit signal `activate`. Pressing enter
-will create a newline.
-
-`TextView` supports basic text-editor features such as text justification 
-and undo/redo.
+Multi-line text entry. 
 
 $(@type_constructors(
     TextVew()
@@ -2244,16 +2206,24 @@ $(@type_signals(TextView,
 ))
 
 $(@type_fields())
+
+## Example
+```julia
+entry = TextView()
+set_text!(entry, "Write here\nOr here")
+connect_signal_text_changed!(entry) do self::TextEntry
+    println("text is now: \$(get_text(entry))")
+end
+```
 """
 
 @document Texture """
-# Texture <: SignalEmitter
+# Texture <: TextureObject <: SignalEmitter
 
-OpenGL Texture. Needs to be bound to a [`Shape`](@ref) 
-in order to be rendered.
+OpenGL Texture. 
 
-Textures support custom wrap- and scale-modes, see the 
-manual section on native rendering for more information.
+See the manual chapter on native rendering for more
+information.
 
 $(@type_constructors(
     Texture()
@@ -2271,13 +2241,14 @@ $(@type_fields())
 Object that can be bound as a texture. Use [`set_texture!`](@ref) to associate 
 it with a [`Shape`](@ref).
 
-See the chapter on native rendering for more information.
+See the manual chapter on native rendering for more
+information.
 """
 
 @document Time """
 # Time
 
-Object representing duration in time, nanoseconds precision, may be negative.
+Object representing a duration, nanoseconds precision, may be negative.
 
 $(@type_constructors(
     nanoseconds(::Int64),
@@ -2300,11 +2271,7 @@ println(as_microseconds(seconds(3.14159)))
 @document ToggleButton """
 # ToggleButton <: Widget
 
-Button that will stay toggled when clicked, emitting the 
-`toggled` signal.
-
-Like [`Button`](@ref), it has exactly one label and can optionally
-be made circular.
+Button with a boolean state. Emits signal `toggled` when its state changes.
 
 $(@type_constructors(
     ToggleButton()
@@ -2329,7 +2296,7 @@ set_child!(window, toggle_button)
 # TypedFunction
 
 Object used to invoke an arbitrary function using the given signature. This wrapper
-will automatically convert any arguments and return values to the given types
+will automatically convert any arguments and return values to the types specified as the signature,
 unless impossible, at which point an assertion error will be thrown on instantiation.
 
 In this way, it can be used to assert a functions signature at compile time.
@@ -2446,7 +2413,7 @@ for more information.
 
 All widgets share the following signals, where `T` is the subclass 
 of `Widget`. For example, signal `realize` of class `Label` has the 
-signature `(::Label, [::Data_t]) -> Cvoid`.
+signature `(::Label, [::Data_t]) -> Cvoid`:
 
 $(@type_signals(T,
     realize,
@@ -2462,17 +2429,12 @@ $(@type_signals(T,
 @document Window """
 # Window <: Widget
 
-Top-level window, associated with an [`Application`](@ref). If all windows
-of an application are closed, it will request to exit.
+Top-level window, associated with an [`Application`](@ref).
 
-`Window` is the only widget that does not have a parent.
+When the users window manager requests for a window to close,
+signal `close_request` will be emitted whose return value can 
+prevent the window from closing.
 
-Windows have a singular child, and an optional titlebar widget, 
-which will be inserted into the area in the header bar. This will 
-usually be a [`HeaderBar`], though any widget can used.
-
-When the users window manager requests for a `Window` to close,
-signal `close_request` will be emitted, see below for more information.
 
 $(@type_constructors(
     Window(app::Application)
