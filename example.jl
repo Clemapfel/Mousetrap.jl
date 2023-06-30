@@ -5,6 +5,19 @@ Pkg.activate(".")
 using mousetrap 
 @info "Done."
 
+
+struct A{T} <: Widget
+    b::Union{T, Nothing}
+    A(x::T) where T = new{T}(x)
+end
+mousetrap.as_widget(x::A) = return x.b
+
+struct B{T} <: Widget
+    a::Union{T, Nothing}
+    B() where T = new{T}(nothing)
+end
+mousetrap.as_widget(x::B) = return x.a
+
 main() do app::Application
 
     window = Window(app)
@@ -25,7 +38,12 @@ main() do app::Application
         set_horizontal_alignment!(button, ALIGNMENT_CENTER)
     end
 
-    box = CenterBox(ORIENTATION_HORIZONTAL, active_box, inconsistent_box, inactive_box)
+    a = A{B}()
+    b = B{A}()
+    a.b = b
+    b.a = a
+
+    box = CenterBox(ORIENTATION_HORIZONTAL, active_box, a, inactive_box)
     set_margin!(box, 75)
 
     set_child!(window, box)
