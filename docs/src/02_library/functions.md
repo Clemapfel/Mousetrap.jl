@@ -95,6 +95,10 @@ mousetrap.add_allowed_pattern!
 ```@docs
 mousetrap.add_allowed_suffix!
 ```
+## `add_button!`
+```@docs
+mousetrap.add_button!
+```
 ## `add_child!`
 ```@docs
 mousetrap.add_child!
@@ -102,6 +106,10 @@ mousetrap.add_child!
 ## `add_controller!`
 ```@docs
 mousetrap.add_controller!
+```
+## `add_filter!`
+```@docs
+mousetrap.add_filter!
 ```
 ## `add_icon!`
 ```@docs
@@ -270,6 +278,10 @@ mousetrap.clear
 ## `clear!`
 ```@docs
 mousetrap.clear!
+```
+## `clear_filters!`
+```@docs
+mousetrap.clear_filters!
 ```
 ## `clear_render_tasks!`
 ```@docs
@@ -1131,6 +1143,10 @@ mousetrap.get_angle_delta
 ```@docs
 mousetrap.get_autohide
 ```
+## `get_axis_value`
+```@docs
+mousetrap.get_axis_value
+```
 ## `get_bottom_margin`
 ```@docs
 mousetrap.get_bottom_margin
@@ -1138,6 +1154,10 @@ mousetrap.get_bottom_margin
 ## `get_bounding_box`
 ```@docs
 mousetrap.get_bounding_box
+```
+## `get_button_label!`
+```@docs
+mousetrap.get_button_label!
 ```
 ## `get_can_respond_to_input`
 ```@docs
@@ -1166,6 +1186,10 @@ mousetrap.get_children
 ## `get_clipboard`
 ```@docs
 mousetrap.get_clipboard
+```
+## `get_color`
+```@docs
+mousetrap.get_color
 ```
 ## `get_column_at`
 ```@docs
@@ -1215,6 +1239,10 @@ mousetrap.get_delay_factor
 ```@docs
 mousetrap.get_destroy_with_parent
 ```
+## `get_detailed_description`
+```@docs
+mousetrap.get_detailed_description
+```
 ## `get_display_mode`
 ```@docs
 mousetrap.get_display_mode
@@ -1254,6 +1282,10 @@ mousetrap.get_expand_vertically
 ## `get_expanded`
 ```@docs
 mousetrap.get_expanded
+```
+## `get_file_chooser_action`
+```@docs
+mousetrap.get_file_chooser_action
 ```
 ## `get_file_extension`
 ```@docs
@@ -1471,6 +1503,10 @@ mousetrap.get_max_n_columns
 ```@docs
 mousetrap.get_max_width_chars
 ```
+## `get_message`
+```@docs
+mousetrap.get_message
+```
 ## `get_min_n_columns`
 ```@docs
 mousetrap.get_min_n_columns
@@ -1486,6 +1522,10 @@ mousetrap.get_minimum_size
 ## `get_mode`
 ```@docs
 mousetrap.get_mode
+```
+## `get_n_buttons`
+```@docs
+mousetrap.get_n_buttons
 ```
 ## `get_n_columns`
 ```@docs
@@ -2191,6 +2231,10 @@ mousetrap.insert_row_at!
 ```@docs
 mousetrap.is_cancelled
 ```
+## `is_executable`
+```@docs
+mousetrap.is_executable
+```
 ## `is_file`
 ```@docs
 mousetrap.is_file
@@ -2247,6 +2291,10 @@ mousetrap.mouse_button_02_pressed
 ```@docs
 mousetrap.move!
 ```
+## `move_to_trash!`
+```@docs
+mousetrap.move_to_trash!
+```
 ## `nanoseconds`
 ```@docs
 mousetrap.nanoseconds
@@ -2266,6 +2314,18 @@ mousetrap.on_cancel!
 ## `on_file_changed!`
 ```@docs
 mousetrap.on_file_changed!
+```
+## `on_selection!`
+```@docs
+mousetrap.on_selection!
+```
+## `open_file`
+```@docs
+mousetrap.open_file
+```
+## `open_url`
+```@docs
+mousetrap.open_url
 ```
 ## `popdown!`
 ```@docs
@@ -2346,6 +2406,10 @@ mousetrap.remove!
 ## `remove_action!`
 ```@docs
 mousetrap.remove_action!
+```
+## `remove_button!`
+```@docs
+mousetrap.remove_button!
 ```
 ## `remove_center_child!`
 ```@docs
@@ -2519,6 +2583,10 @@ mousetrap.set_autohide!
 ```@docs
 mousetrap.set_bottom_margin!
 ```
+## `set_button_label!`
+```@docs
+mousetrap.set_button_label!
+```
 ## `set_can_respond_to_input!`
 ```@docs
 mousetrap.set_can_respond_to_input!
@@ -2579,13 +2647,17 @@ mousetrap.set_cursor_visible!
 ```@docs
 mousetrap.set_default_widget!
 ```
-## `set_delay_factor`
+## `set_delay_factor!`
 ```@docs
-mousetrap.set_delay_factor
+mousetrap.set_delay_factor!
 ```
 ## `set_destroy_with_parent!`
 ```@docs
 mousetrap.set_destroy_with_parent!
+```
+## `set_detailed_description!`
+```@docs
+mousetrap.set_detailed_description!
 ```
 ## `set_display_mode!`
 ```@docs
@@ -2638,6 +2710,10 @@ mousetrap.set_expanded!
 ## `set_file!`
 ```@docs
 mousetrap.set_file!
+```
+## `set_file_chooser_action!`
+```@docs
+mousetrap.set_file_chooser_action!
 ```
 ## `set_fixed_width`
 ```@docs
@@ -2714,6 +2790,22 @@ mousetrap.set_icon!
 ## `set_image!`
 ```@docs
 mousetrap.set_image!
+```
+## `set_initial_file!`
+```@docs
+mousetrap.set_initial_file!
+```
+## `set_initial_filter!`
+```@docs
+mousetrap.set_initial_filter!
+```
+## `set_initial_folder!`
+```@docs
+mousetrap.set_initial_folder!
+```
+## `set_initial_name!`
+```@docs
+mousetrap.set_initial_name!
 ```
 ## `set_inverted!`
 ```@docs
@@ -2846,6 +2938,10 @@ mousetrap.set_max_width_chars!
 ## `set_maximized!`
 ```@docs
 mousetrap.set_maximized!
+```
+## `set_message!`
+```@docs
+mousetrap.set_message!
 ```
 ## `set_min_n_columns!`
 ```@docs
@@ -3470,6 +3566,10 @@ mousetrap.should_shortcut_trigger_trigger
 ## `show!`
 ```@docs
 mousetrap.show!
+```
+## `show_in_file_explorer`
+```@docs
+mousetrap.show_in_file_explorer
 ```
 ## `start!`
 ```@docs

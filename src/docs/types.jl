@@ -238,7 +238,8 @@ prioritizing keeping the middle widget centered at all
 times.
 
 $(@type_constructors(
-    CenterBox()
+    CenterBox(::Orientation),
+    CenterBox(::Orientation, left::Widget, center::Widget, right::Widget)
 ))
 
 $(@type_signals(CenterBox, 
@@ -2278,6 +2279,9 @@ $(@type_constructors(
 ))
 
 $(@type_signals(ToggleButton, 
+    toggled,
+    clicked,
+    activate
 ))
 
 $(@type_fields())
@@ -2286,7 +2290,7 @@ $(@type_fields())
 ```julia
 toggle_button = ToggleButton()
 connect_signal_toggled!(toggle_button) do self::ToggleButton
-    println("state is now: " get_is_activate(self))
+    println("state is now: " get_is_active(self))
 end
 set_child!(window, toggle_button)
 ```

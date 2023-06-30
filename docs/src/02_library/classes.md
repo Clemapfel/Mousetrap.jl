@@ -50,6 +50,25 @@ Adjustment
 + [`mousetrap.set_signal_properties_changed_blocked!`](@ref)
 + [`mousetrap.set_signal_value_changed_blocked!`](@ref)
 ---
+## AlertDialog
+```@docs
+AlertDialog
+```
+#### Functions that interact with this type:
++ [`mousetrap.add_button!`](@ref)
++ [`mousetrap.get_button_label!`](@ref)
++ [`mousetrap.get_detailed_description`](@ref)
++ [`mousetrap.get_is_modal`](@ref)
++ [`mousetrap.get_message`](@ref)
++ [`mousetrap.get_n_buttons`](@ref)
++ [`mousetrap.on_selection!`](@ref)
++ [`mousetrap.present!`](@ref)
++ [`mousetrap.remove_button!`](@ref)
++ [`mousetrap.set_button_label!`](@ref)
++ [`mousetrap.set_detailed_description!`](@ref)
++ [`mousetrap.set_is_modal!`](@ref)
++ [`mousetrap.set_message!`](@ref)
+---
 ## Angle
 ```@docs
 Angle
@@ -376,6 +395,18 @@ Clock
 + [`mousetrap.elapsed`](@ref)
 + [`mousetrap.restart!`](@ref)
 ---
+## ColorChooser
+```@docs
+ColorChooser
+```
+#### Functions that interact with this type:
++ [`mousetrap.get_color`](@ref)
++ [`mousetrap.get_is_modal`](@ref)
++ [`mousetrap.on_accept!`](@ref)
++ [`mousetrap.on_cancel!`](@ref)
++ [`mousetrap.present!`](@ref)
++ [`mousetrap.set_is_modal!`](@ref)
+---
 ## ColumnView
 ```@docs
 ColumnView
@@ -669,13 +700,21 @@ Expander
 FileChooser
 ```
 #### Functions that interact with this type:
++ [`mousetrap.add_filter!`](@ref)
 + [`mousetrap.cancel!`](@ref)
++ [`mousetrap.clear_filters!`](@ref)
 + [`mousetrap.get_accept_label`](@ref)
++ [`mousetrap.get_file_chooser_action`](@ref)
 + [`mousetrap.get_is_modal`](@ref)
 + [`mousetrap.on_accept!`](@ref)
 + [`mousetrap.on_cancel!`](@ref)
 + [`mousetrap.present!`](@ref)
 + [`mousetrap.set_accept_label!`](@ref)
++ [`mousetrap.set_file_chooser_action!`](@ref)
++ [`mousetrap.set_initial_file!`](@ref)
++ [`mousetrap.set_initial_filter!`](@ref)
++ [`mousetrap.set_initial_folder!`](@ref)
++ [`mousetrap.set_initial_name!`](@ref)
 + [`mousetrap.set_is_modal!`](@ref)
 ---
 ## FileDescriptor
@@ -700,13 +739,20 @@ FileDescriptor
 + [`mousetrap.get_path`](@ref)
 + [`mousetrap.get_path_relative_to`](@ref)
 + [`mousetrap.get_uri`](@ref)
++ [`mousetrap.is_executable`](@ref)
 + [`mousetrap.is_file`](@ref)
 + [`mousetrap.is_folder`](@ref)
 + [`mousetrap.is_symlink`](@ref)
 + [`mousetrap.move!`](@ref)
++ [`mousetrap.move_to_trash!`](@ref)
++ [`mousetrap.open_file`](@ref)
++ [`mousetrap.open_url`](@ref)
 + [`mousetrap.query_info`](@ref)
 + [`mousetrap.read_symlink`](@ref)
 + [`mousetrap.set_file!`](@ref)
++ [`mousetrap.set_initial_file!`](@ref)
++ [`mousetrap.set_initial_folder!`](@ref)
++ [`mousetrap.show_in_file_explorer`](@ref)
 ---
 ## FileFilter
 ```@docs
@@ -717,7 +763,9 @@ FileFilter
 + [`mousetrap.add_allowed_mime_type!`](@ref)
 + [`mousetrap.add_allowed_pattern!`](@ref)
 + [`mousetrap.add_allowed_suffix!`](@ref)
++ [`mousetrap.add_filter!`](@ref)
 + [`mousetrap.get_name`](@ref)
++ [`mousetrap.set_initial_filter!`](@ref)
 ---
 ## FileMonitor
 ```@docs
@@ -1408,7 +1456,7 @@ LongPressEventController
 ```
 #### Functions that interact with this type:
 + [`mousetrap.get_delay_factor`](@ref)
-+ [`mousetrap.set_delay_factor`](@ref)
++ [`mousetrap.set_delay_factor!`](@ref)
 + [`mousetrap.connect_signal_press_cancelled!`](@ref)
 + [`mousetrap.connect_signal_pressed!`](@ref)
 + [`mousetrap.disconnect_signal_press_cancelled!`](@ref)
@@ -2520,6 +2568,7 @@ StackSwitcher
 StylusEventController
 ```
 #### Functions that interact with this type:
++ [`mousetrap.get_axis_value`](@ref)
 + [`mousetrap.get_hardware_id`](@ref)
 + [`mousetrap.get_tool_type`](@ref)
 + [`mousetrap.has_axis`](@ref)
@@ -2714,6 +2763,7 @@ ToggleButton
 + [`mousetrap.get_is_circular`](@ref)
 + [`mousetrap.remove_child!`](@ref)
 + [`mousetrap.set_child!`](@ref)
++ [`mousetrap.set_icon!`](@ref)
 + [`mousetrap.set_is_active!`](@ref)
 + [`mousetrap.set_is_circular!`](@ref)
 + [`mousetrap.connect_signal_activate!`](@ref)

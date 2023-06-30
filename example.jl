@@ -9,13 +9,26 @@ main() do app::Application
 
     window = Window(app)
 
-    entry = Entry()
-    set_text!(entry, "Write here")
-    connect_signal_text_changed!(entry) do self::Entry
-        println("text is now: $(get_text(entry))")
+    active = CheckButton()
+    set_state!(active, CHECK_BUTTON_STATE_ACTIVE)
+    active_box = vbox(active, Label("active"))
+
+    inconsistent = CheckButton()
+    set_state!(inconsistent, CHECK_BUTTON_STATE_INCONSISTENT)
+    inconsistent_box = vbox(inconsistent, Label("inconsistent"))
+
+    inactive = CheckButton()
+    set_state!(inactive, CHECK_BUTTON_STATE_INACTIVE)
+    inactive_box = vbox(inactive, Label("inactive"))
+
+    for button in [active, inconsistent, inactive]
+        set_horizontal_alignment!(button, ALIGNMENT_CENTER)
     end
 
-    set_child!(window, entry)
+    box = CenterBox(ORIENTATION_HORIZONTAL, active_box, inconsistent_box, inactive_box)
+    set_margin!(box, 75)
+
+    set_child!(window, box)
     present!(window)
 end
 

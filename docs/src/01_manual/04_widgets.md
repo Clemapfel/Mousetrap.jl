@@ -212,34 +212,34 @@ Each widget has a property governing what the user's cursor will look like while
 Some widgets already set the cursor to an appropriate shape automatically, but we can control the cursor shape for each individual widget manually using `set_cursor!`, which takes 
 a value of the enum [`CursorType`](@ref):
 
-| `CursorType` value            | Appearance                                                                                          |
-|-------------------------------|-----------------------------------------------------------------------------------------------------|
-| CURSOR_TYPE_NONE              | Invisible cursor                                                                                    |
-| CURSOR_TYPE_DEFAULT           | Default arrow pointer                                                                               |
-| CURSOR_TYPE_POINTER           | Hand pointing                                                                                       |
-| CURSOR_TYPE_TEXT              | Caret                                                                                               |
-| CURSOR_TYPE_GRAB              | Hand, not yet grabbing                                                                              |
-| CURSOR_TYPE_GRABBING          | Hand, currently grabbing                                                                            |
-| CURSOR_TYPE_CELL              | Cross, used for selecting cells from a table                                                        |
-| CURSOR_TYPE_CROSSHAIR         | Crosshair, used for making pixel-perfect selections                                                 |
-| CURSOR_TYPE_HELP              | Questionmark, instructs the user that clicking or hovering above this element will open a help menu |
-| CURSOR_TYPE_CONTEXT_MENU      | Questionmark, instructs the user that clicking will open a context menu                             |
-| CURSOR_TYPE_NOT_ALLOWED       | Instructs the user that this action is currently disabled                                           |
-| CURSOR_TYPE_PROGRESS          | Spinning animation, signifies that the object is currently busy                                     |
-| CURSOR_TYPE_WAIT              | Loading animation, Instructs the user that an action will become available soon                     |
-| CURSOR_TYPE_ZOOM_IN           | Lens, usually with a plus icon                                                                      |
-| CURSOR_TYPE_ALL_SCROLL        | Omni-directional scrolling                                                                          |
-| CURSOR_TYPE_MOVE              | 4-directional arrow                                                                                 |
-| CURSOR_TYPE_NORTH_RESIZE      | Up-arrow                                                                                            |
-| CURSOR_TYPE_NORTH_EAST_RESIZE | Up-left arrow                                                                                       |
-| CURSOR_TYPE_EAST_RESIZE       | Left arrow                                                                                          |
-| CURSOR_TYPE_SOUTH_EAST_RESIZE | Down-left arrow                                                                                     |
-| CURSOR_TYPE_SOUTH_RESIZE      | Down arrow                                                                                          |
-| CURSOR_TYPE_SOUTH_WEST_RESIZE | Down-right arrow                                                                                    |
-| CURSOR_TYPE_WEST_RESIZE       | Right arrow                                                                                         |
-| CURSOR_TYPE_NORTH_WEST_RESIZE | Up-right arrow                                                                                      |
-| CURSOR_TYPE_ROW_RESIZE        | Up-down arrow                                                                                       |
-| CURSOR_TYPE_COLUMN_RESIZE     | Left-right arrow                                                                                    |
+| `CursorType` value             | Appearance                                                                                          |
+|--------------------------------|-----------------------------------------------------------------------------------------------------|
+| `CURSOR_TYPE_NONE`             | Invisible cursor                                                                                    |
+| `CURSOR_TYPE_DEFAULT`          | Default arrow pointer                                                                               |
+| `CURSOR_TYPE_POINTER`          | Hand pointing                                                                                       |
+| `CURSOR_TYPE_TEXT`             | Caret                                                                                               |
+| `CURSOR_TYPE_GRAB`             | Hand, not yet grabbing                                                                              |
+| `CURSOR_TYPE_GRABBING`         | Hand, currently grabbing                                                                            |
+| `CURSOR_TYPE_CELL`             | Cross, used for selecting cells from a table                                                        |
+| `CURSOR_TYPE_CROSSHAIR`        | Crosshair, used for making pixel-perfect selections                                                 |
+| `CURSOR_TYPE_HELP`             | Questionmark, instructs the user that clicking or hovering above this element will open a help menu |
+| `CURSOR_TYPE_CONTEXT_MENU`     | Questionmark, instructs the user that clicking will open a context menu                             |
+| `CURSOR_TYPE_NOT_ALLOWED`      | Instructs the user that this action is currently disabled                                           |
+| `CURSOR_TYPE_PROGRESS`         | Spinning animation, signifies that the object is currently busy                                     |
+| `CURSOR_TYPE_WAIT`             | Loading animation, Instructs the user that an action will become available soon                     |
+| `CURSOR_TYPE_ZOOM_IN`          | Lens, usually with a plus icon                                                                      |
+| `CURSOR_TYPE_ALL_SCROLL`       | Omni-directional scrolling                                                                          |
+| `CURSOR_TYPE_MOVE`             | 4-directional arrow                                                                                 |
+| `CURSOR_TYPE_NORTH_RESIZE`     | Up-arrow                                                                                            |
+| `CURSOR_TYPE_NORTH_EAST_RESIZE` | Up-left arrow                                                                                       |
+| `CURSOR_TYPE_EAST_RESIZE`      | Left arrow                                                                                          |
+| `CURSOR_TYPE_SOUTH_EAST_RESIZE` | Down-left arrow                                                                                     |
+| `CURSOR_TYPE_SOUTH_RESIZE`     | Down arrow                                                                                          |
+| `CURSOR_TYPE_SOUTH_WEST_RESIZE` | Down-right arrow                                                                                    |
+| `CURSOR_TYPE_WEST_RESIZE`      | Right arrow                                                                                         |
+| `CURSOR_TYPE_NORTH_WEST_RESIZE` | Up-right arrow                                                                                      |
+| `CURSOR_TYPE_ROW_RESIZE`        | Up-down arrow                                                                                       |
+| `CURSOR_TYPE_COLUMN_RESIZE`     | Left-right arrow                                                                                    |
 
 
 `Button`s default cursor is `CURSOR_TYPE_DEFAULT`. If we want to indicate to the user that the button should be clicked, we can instead set it to be a pointer:
@@ -264,7 +264,7 @@ Each widget can optionally have a **tooltip**. This is a little window that open
 
 Tooltips are usually a simple text message. For a case like this, we can set the text directly using `set_tooltip_text!`:
 
-```cpp
+```julia
 button = Button()
 set_tooltip_text!(button, "Click to Open");
 ```
@@ -274,170 +274,128 @@ If we want to use something more complex than just simple text, we can register 
 
 ---
 
+Now that we know properties shared by all widgets, we can continue onto learning about all the specific widget types. From this point onwards, we can be sure that any of these objects supports all properties and signals discussed so far.
+
 ## Window
 
-For our first widget, we have \a{Window}. Windows are central to any application, as such, `Window` and `Application` are inherently connected. We cannot create a `Window` without an application. If all windows are closed, the underlying application usually exists, though we can prevent this using \a{Application::hold}.
+For our first widget, we have [`Window`](@ref). Windows are central to any application, as such, `Window` and `Application` are inherently connected. We cannot create a `Window` without an application. If all windows are closed, the underlying application usually exists.
 
-While windows are widget, they occupy somewhat of a special place. A `Window` cannot be the child of any other widget, it is **top-level**.
+While windows are widget, they occupy a somewhat of a special place. `Window` is the only widget that does not have a parent, this is called being **top-level**, nothing is "above" the window in the parent-child hierarchy.
 
-This means that any and all widgets are direct or indirect children of a `Window`. `Window` can only have one direct child, which we set using `Window::set_child`.
-
-`Window` has three signals (on top of those inherited from `Widget`):
-
-\signals
-\signal_close_request{Window}
-\signal_activate_default_widget{Window}
-\signal_activate_focused_widget{Window}
-
-`activate_default_widget` is emitted when the default widge,  designated as such via `Window::set_default_widget`, emits its `activate` signal. Users can trigger the default widget by pressing enter while the widget is shown. This is useful for small message dialogs that have, for example, an "ok" and "cancel" button. By making the "ok" button the default widget, the user can simply press enter to confirm, making it so they do not have to operate the mouse.
-
-Another of `Window`s signals,  `activate_focused_widget` is emitted when the widget that currently *holds input focus* is activated. We will about input focus [chapter on event handling](05_events.md), for now, we simply note that this signal exists.
-
-Lastly, we have signal `close_request`:
-
-### Close Request
-
-When the window manager, which is the part of the user's operating system that deals with window layout and lifetime, request a window to close, the window does not immediately close. Instead, `Window` emits `close_request`, which we can connect to. This signal can be conceptualized as the window asking "should I really close right now?". If no signal handler is connected, the window closes immediately. This is the default behavior. If we do connect a signal handler, we can trigger custom behavior and prevent the window from closing.
-
-We recall that the signature of `close_request` is `(Window&, (Data_t)) -> WindowCloseRequestResult`. This return type, \a{WindowCloseRequestResult} is an enum with two values `ALLOW_CLOSE` and `PREVENT_CLOSE`. Depending on which of the two is returned, the window does or does close when requested.
-
-For example, to prevent a `Window` instance from closing until a global flag is set, we can do the following:
-
-```cpp
-auto window = Window(// ...
-
-static bool should_close = false;
-window.connect_signal_close_request([](Window&){
-
-    std::cout << "Window is attempting to close" << std::endl;
-    
-    if (should_close)
-        return WindowCloseRequestResult::ALLOW_CLOSE;
-    else
-        return WindowCloseRequestResult::PREVENT_CLOSE;
-});
-```
+`Window` has exactly on child, which we set with `set_child!`, as we have many times so far already.
 
 ### Opening / Closing a Window
 
-When we create a `Window` instance, it will be initially hidden. None of its widgets will be realized or shown, and the user has no way to know that the window exists. A `Window`s lifetime only begins once we call `Window::present`. This opens the window and shows it to the user. We've seen this in our previous `main.cpp`:
+When we create a `Window` instance, it will be initially hidden. None of its children will be realized or shown, and the user has no way to know that the window exists. A `Window`s lifetime only begins once we call `present!`. This opens the window and shows it to the user. We've seen this in our `main` functions before:
 
-```cpp
-app.connect_signal_activate([](Application& app)
-{
-    // main window
-    auto window = Window(*app);
+```julia
+main() do app::Application
 
-    // initialization here
-
-    // make main window actually visible
-    window.present();
-});
+    # create the window
+    window = Window(app)
+    
+    # show the window, this realizes all widgets inside
+    present!(window)
+end
 ```
 
-Conversely, if we want a window to go back to its initial state, where it is hidden from the user, we call `Window::hide`. If we want to close the window permanently, unrealizing all widgets inside it, we use `Window::close`.
+At any point we can call `close!`, which hides the window. This does not destroy the window permanently, unless `set_hide_on_close!` was set to `false` previously. For an application 
+to exit, all its windows only need to be hidden, not permanently destroyed. Therefore, calling `close!` on all windows will also cause the application to attempt to exit.
+
+### Close Request
+
+`Window` has three signals, `activate_default_widget`, `activate_focused_widget`, and `close_request`, only the latter of which is relevant to us for now.
+
+It requires a signal handler with the signature
+
+```
+(::Window, [::Data_t]) -> WindowCloseRequestResult
+```
+
+When the window handler of the users OS asks the window to close, for example by the user pressing the "x" button, this signal will be emitted. It's result, of type [`WindowCloseRequestResult`](@ref) determines whether the window actualls does close. By returning `WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE`, the window will stay open:
+
+```julia
+# create a window that cannot be closed
+window = Window(app)
+connect_signal_close_request!(window) self::Window
+    return WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE
+end
+present!(window)
+```
+
+If the signal handler instead returns `WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE`, the window will simply close, which is the default behavior. This is also what happens when no handler
+is connected to signal `close_request`.
 
 ### Window Properties
 
-Other than the signals, we can change s properties of any `Window`:
+Other than its singular child, `Window` has a number of other properties:
 
 #### Title
 
-`Window::set_title` sets the name displayed in the window's header bar. By default, this name will be the name of the application. We can choose to hide the title by simply calling `window.set_title("")`.
+`set_title!` sets the name displayed in the window's header bar. By default, this name will be the name of the application. We can choose to hide the title by simply calling `set_title!(window, "")`.
 
 #### Modality & Transience
 
 When dealing with multiple windows, we can influence the way two windows interact with each other. Two of these interactions are determined by whether a window is **modal** and whether it is **transient** for another window.
 
-By setting `Window::set_modal` to true, if the window is revealed, **all other windows of the application will be deactivated**, preventing user interaction with them. This also freezes animations, it essentially pauses all other windows. The most common use-case for this is for dialogs, for example if the user requests to close the application, it is common to open a small dialog requesting the user to confirm exiting the application. While this dialog is shown, the main window should be paused until the user chooses an action.
+By setting `set_modal!` to true, if the window is revealed, **all other windows of the application will be deactivated**, preventing user interaction with them. This also freezes animations, it essentially pauses all other windows. The most common use-case for this is for dialogs, for example if the user requests to close the application, it is common to open a small dialog requesting the user to confirm exiting the application. While this dialog is shown, the main window should be disabled and all other processes should halt until a selection is made. This is possible by making the dialog *modal*.
 
-Using `Window::set_transient_for`, we can make sure a window will always be shown in front of another. `A.set_transient_for(B)` will make it so, while `A` overlaps `B` on the user's desktop, `A` will be shown in front of `B`. 
+Using `set_transient_for!`, we can make sure a window will always be shown in front of another. `set_transient_for!(A, B)` will make it so, while `A` overlaps `B` on the users desktop, `A` will be shown in front of `B`. 
 
-#### HeaderBar
+#### Titlebar
 
-The part on top of a window is called the **header bar**. By default, it will show the window title and a minimize-, maximize- and close-button. We can completely hide the header bar using `Window::set_is_decorated`.
+The part on top of a window is called the **title bar**. By default, it will show the window title and a minimize-, maximize- and close-button. We can completely hide the header bar using `set_is_decorated!(window, false)`, which also means the user has now way to move or close the window, as the header bar is not accessible to them.
 
-All `Window`s have space for one more widget (other than its child), which we insert using `Window::set_titlebar_widget`. This will usually be a \a{HeaderBar}, though any widget can be inserted this way.
-
-`HeaderBar` is a widget that has three areas where other widgets can be inserted, at the front (left of the title), at the end (right of the title), or as the title. 
-
-An alternative way of formatting the `HeaderBar` is with **header bar layouts**, which is a string supplied to `HeaderBar::set_layout`.
-
-This is a list of button IDs. Valid IDs are restricted to:
-
-+ `maximize`: Maximize Button
-+ `minimize`: Minimize Button
-+ `close`: Close Button
-
-We choose which buttons are allocated on which side of the title by using `:`. Buttons before `:` are shown left of the title, buttons after `:` are shown right of the title. A list of buttons is delineated with `,`.
-
-Some examples, where we used the alternative constructor for `HeaderBar` which takes the layout string directly:
-
-```cpp
-window.set_title("mousetrap");
-window.set_titlebar_widget(HeaderBar("close:minimize,maximize"));
-```
-
-\image html headerbar_close_minimize_maximize.png
-
-```cpp
-window.set_title("");
-window.set_titlebar_widget(HeaderBar("close:"));
-```
-
-\image html headerbar_close_no_title.png
-
-
-```cpp
-window.set_title("mousetrap");
-window.set_titlebar_widget(HeaderBar(":close"));
-```
-
-\image html headerbar_title_close.png
-
----
+In addition to the child in the content area of the window, `Window` supports inserting a widget into the titlebar using [`set_titlebar_widget!`](@ref), this will usually be a `HeaderBar`, which we will learn about later in this chapter, though any arbitrary widget can be inserted.
 
 ---
 
 ## Label
 
-In contention for being *the* most used widget, `Label`s are important to understand. A `Label` displays static text, which is not interactable. It is initialized as one would expect:
+In contention for being *the* most used widget, `Label`s are important to understand. A `Label` displays static text, meaning it is not interactable. It is initialized as one would expect:
 
-```cpp
-auto label = Label("text");
+```julia
+label = Label("text")
 ```
 
-To change a `Label`s text after initialization, we use `Label::set_text`. Most of the time, this will be a signle line of text or a word. If we supply multiple lines of text for `Label`, we can choose from some additional formatting options:
+To change a `Label`s text after initialization, we use `set_text!`. This can be any number of lines, `Label` is not just for single-line text. If our text has more than one line, a number of additional formatting options are available:
 
 ### Justify Mode
 
-[Justification](https://en.wikipedia.org/wiki/Typographic_alignment) determines how words are distributed along the horizontal axis. There are 5 modes in total, all of which are part of the enum \a{JustifyMode}:
+[Justification](https://en.wikipedia.org/wiki/Typographic_alignment) determines how words are distributed along the horizontal axis. There are 5 modes in total, all of which are part of the enum [`JustifyMode`](@ref), set using `set_justify_mode!`:
 
-\image html text_justify_left.png "JustifyMode::LEFT"<br>
-\image html text_justify_center.png "JustifyMode::CENTER"<br>
-\image html text_justify_right.png "JustifyMode::RIGHT"<br>
-\image html text_justify_fill.png "JustifyMode::FILL"<br>
+![](../resources/text_justify_left.png)
+`JUSTIFY_MODE_LEFT`
 
-Where the fifth mode is `JustifyMode::NONE` which arranges all text in exactly one line.
+![](../resources/text_justify_center.png)
+`JUSTIFY_MODE_CENTER`
+
+![](../resources/text_justify_right.png)
+`JUSTIFY_MODE_RIGHT`
+
+![](../resources/text_justify_fill.png)
+`JUSTIFY_MODE_FILL`
+
+Where the fifth mode is `JUSTIFY_MODE_NONE` which arranges all text in exactly one line.
 
 ### Wrapping
 
-Wrapping determines where a line break is inserted if the text's width exceeds that of the `Label`s parent widget. For wrapping to happen at all, the `JustifyMode` has to be set to anything **other** than `JustifyMode::NONE`.
+Wrapping determines where a line break is inserted if the text's width exceeds that of `Label` allocated area. For wrapping to happen at all, the `JustifyMode` has to be set to anything **other** than `LABEL_WRAP_MODE_NONE`, which is the default.
 
-Wrapping mode are values of the enum \a{LabelWrapMode}:
+Wrapping modes are values of the enum [`LabelWrapMode`](@ref):
 
 | `LabelWrapMode` value  | Meaning                                                 | Example                 |
 |------------------------|---------------------------------------------------------|-------------------------|
 | `NONE`                 | no wrapping                                             | `"humane mousetrap"`    |
 | `ONLY_ON_WORD`         | line will only be split between two words               | `"humane\nmousetrap"`   |
-| `ONLY_ON_CHAR`         | line will only be split between syllables, adding a `-` | `"hu-\nmane mousetrap"` |
-| `WORD_OR_CHAR`         | line will be split between words and/or syllables       | see above               |
+| `ONLY_ON_CHAR`         | line will only be split between syllables, adding a `-` | `"hu-\nmane mouse-trap"` |
+| `WORD_OR_CHAR`         | line will be split between words and/or syllables       | `"humane\nmouse-trap"`   |
 
 Where `\n` is the newline character.
 
 ### Ellipsize Mode
 
-If a line is too long for the available space and wrapping is disabled, **ellipsizing** will take place. The corresponding enum `EllipsizeMode` has four possible value:
+If a line is too long for the available space and wrapping is disabled, **ellipsizing** will take place. The corresponding enum [`EllipsizeMode`](@ref) has four possible value:
 
 | `EllipsizeMode` value | Meaning                                                  | Example                     |
 |-----------------------|----------------------------------------------------------|-----------------------------|
@@ -448,7 +406,7 @@ If a line is too long for the available space and wrapping is disabled, **ellips
 
 ### Markup
 
-Labels support **markup**, which allows users to change properties about individual words or characters in a way very similar to text formatting html. Markup in mousetrap uses [Pango attributes](https://docs.gtk.org/Pango/pango_markup.html), which allows for styles including the following:
+Labels support **markup**, which allows users to change properties about individual words or characters in a way similar to text formatting in html. Markup in mousetrap uses [Pango attributes](https://docs.gtk.org/Pango/pango_markup.html), which allows for styles including the following:
 
 | Tag          | Example                  | Result                  |
 |--------------|--------------------------|-------------------------|
@@ -465,11 +423,21 @@ Labels support **markup**, which allows users to change properties about individ
 
 Where in the last row, we used the [decimal html code](https://www.compart.com/en/unicode/U+1FAA4) for the mousetrap emoji provided by unicode.
 
-\note Pango only accepts the **decimal** code, not hexadecimal. For example, the mousetrap emoji has the decimal code `129700`, while its hexadecimal code is `x1FAA4`. To use this emote in text, we thus use `&#129700;`, **not** `&#x1FAA4;`. The latter will not work.
+!!! note
+    Pango only accepts the **decimal** code, not hexadecimal. For example, the mousetrap emoji has the decimal code `129700`, while its hexadecimal code is `x1FAA4`. 
+    To use this emote in text, we thus use `&#129700;`, **not** `&#x1FAA4;`. The latter will not work.
 
-\note All `<`, `>` will be parsed as style tags, regardless of whether they are escaped. To display them as characters, we us `&lt;` (less-than) and `&gt;` (greater-than) instead of `<` and `>`. For example, we would `x < y` as `"x &lt; y"`.
+!!! note 
+    All `<`, `>` will be parsed as style tags, regardless of whether they are escaped. To display them as characters, we us `&lt;` 
+    (less-than) and `&gt;` (greater-than) instead of `<` and `>`. For example, we would `x < y` as `"x &lt; y"`.
 
 Pango also supports colors, different fonts, text direction, and more. For these, we can [consult the Pango documentation](https://docs.gtk.org/Pango/pango_markup.html) directly.
+
+```julia
+label = Label("&lt;tt&gt;01234&lt;/tt&gt; is rendered as <tt>01234</tt>")
+set_child!(window, label)
+```
+![](../resources/label_example.png)
 
 ---
 
@@ -477,253 +445,269 @@ Pango also supports colors, different fonts, text direction, and more. For these
 
 ## Box
 
-\a{Box} is a multi-widget container, which aligns its children horizontally or vertically, depending on whether we pass \a{Orientation::HORIZONTAL} or \a{Orientation::VERTICAL} to its constructor. We can change the orientation of a box after construction using `set_orientation`.
+[`Box`](@ref) is a multi-widget container that aligns its children horizontally or vertically, depending on **orientation**. A number of widgets are orientable like this, which means they supports the functions `set_orientation!` and `get_orientation`, which take / return an enum value of enum [`Orientation`](@ref)
 
-TO add widgets to the start or end of the box, we use `Box::push_front`, `Box::push_back`, respectively, which take a `Widget&`. 
+| `Orientation` Value       | Meaning                                  |
+|---------------------------|------------------------------------------|
+| `ORIENTATION_HORIZONTAL`  | Oriented left-to-right, along the x-axis |
+| `ORIENTATION_VERTICAL`    | Oriented top-to-bottom, along the y-axis |
 
-```cpp
-auto box = Box(Orientation::HORIZONTAL);
+To add widgets to the box, we use `push_front!`, `push_back!` and `insert_after!`:
 
-auto start = Label("|start");
-auto end = Label("end|");
-auto center = Label("|middle|");
+```julia
+left = Label("LEFT")
+set_margin_start!(left, 10)
 
-// add to start of box
-box.push_front(start);
+center = Label("CENTER")
+set_margin_horizontal!(center, 10)
 
-// add to end of box
-box.push_back(end);
+right = Label("RIGHT")
+set_margin_end!(right, 10)
 
-// add right after start
-box.insert_after(center, start);
+box = Box(ORIENTATION_HORIZONTAL)
+
+# add `left` to the start
+push_front!(box, left)
+
+# add `right to the end
+push_back!(box, right)
+
+# insert `center` after `left`
+insert_after!(box, center, left)
 ```
 
-\image html box_start_center_end.png
+![](../resources/box_example.png)
 
-Between any two children, an optional space will be inserted once we set `Box::set_spacing`. By default, this spacing is `0`.
+In this example, we use margins to add a 10px gap in between each child. This can be done more succinctly using the boxes own **spacing** propety. By setting `set_spacing!` to `10`, we insert 10 pixels in between any two children.
 
+Lastly, `hbox` and `vbox` are two convenience functinos that take a number of widgets and return a horizontal or vertical box with those widgets already inserted. Using this and spacing, we can write the above as two lines:
+
+```julia
+box = hbox(Label("LEFT"), Label("CENTER"), Label("RIGHT"))
+set_spacing!(box, 10)
+set_child!(window, box)
+```
 ---
 
 ## CenterBox
 
-\a{CenterBox} is a container that has exactly three children. `CenterBox` prioritizes keeping the designated center child centered at all costs, making it a good choice when symmetry is desired.
+[`CenterBox`](@ref) is an orientable container that has exactly three children. `CenterBox` prioritizes keeping the designated center child centered at all costs, making it a good choice when symmetry is desired.
 
-We use `CenterBox::set_start_child`, `CenterBox::set_center_child`, and `CenterBox::set_end_child` to specify the corresponding child widget.
+We use `set_start_child!`, `set_center_child!`, and `set_end_child!` to specify the corresponding child widget:
 
-```cpp
-auto center_box = CenterBox(Orientation::HORIZONTAL);
-center_box.set_center_child(Button());
-center_box.set_start_child(Label("start"));
-center_box.set_end_child(Label("end"));
+```julia
+center_box = CenterBox(ORIENTATION_HORIZONTAL)
+set_start_child!(center_box, Label("start"))
+set_center_child!(center_box, Button())
+set_end_child!(center_box, Label("end"))
 ```
 
-\image html center_box.png
-
-`CenterBox` is orientable, meaning it also supplies `set_orientation` , just like `Box`.
+![](../resources/center_box.png)
 
 ---
 
 ## Separator
 
-Perhaps the simplest widget is `Separator`. It simply fills its allocated area with a solid color:
+Perhaps the simplest widget is [`Separator`](@ref). It simply fills its allocated area with a solid color:
 
-```cpp
-auto separator = Separator();
-separator.set_margin(20);
-separator.set_expand(true);
-window.set_child(separator);
+```julia
+separator = Separator()
+set_margin!(separator, 20)
+set_expand!(separator, true)
+set_child!(window, separator)
 ```
 
-\image html separator_example.png
+![](../resources/separator_example.png)
 
-This widget is often used as a background to another widget, to fill empty space, or as en element visually separating two sections. Often, we want to have the separator be a specific thickness. This can be accomplished using size-hinting. For example, to draw a horizontal line similar to the `<hr>` tag in HTML, we would do the following:
+This widget is often used as a background to another widget, to fill empty space, or as en element visually separating two sections. Often, we want to have the separator be a specific thickness. This can be accomplished using size-hinting. For example, to draw a horizontal line similar to the `<hr>` element in HTML, we would do the following:
 
-```cpp
-auto hr = Separator();
-separator.set_expand_horizontally(true);
-separator.set_expand_vertically(false);
-separator.set_size_request({
+```julia
+hr = Separator()
+set_expand_horizontally!(hr, true)
+set_expand_vertically!(hr, false)
+set_size_request!(hr, Vector2f(
     0,  // width: any 
     3   // height: exactly 3 px
-});
+));
 ```
 
-This will render as a line that has a height of `3` px at all times, but will expand horizontally.
+This will render as a line that has a height of `3` px at all times, but will assume the entire width of its parent.
 
 ---
 
 ## ImageDisplay
 
-\a{ImageDisplay} is used to display static images.
+[`ImageDisplay`](@ref) is used to display static images.
 
 Assuming we have an image at the absolute path `/resources/image.png`, we can create an `ImageDisplay` like so:
 
-```cpp
-auto display = ImageDisplay();
-display.create_from_file("/resources/image.png");
+```julia
+image_display = ImageDisplay()
+create_from_file!(image_display, "/resources/image.png")
+
+# equivalent to
+image_display = ImageDisplay("/resources/image.png")
 ```
 
 The following image formats are supported by `ImageDisplay`:
 
-| Format Name             | File Extensions |
-|-------------------------|-----------------|
-| PNG                     | `.png`  |
-| JPEG                    | `.jpeg` `.jpe` `.jpg`  |
-| JPEG XL image           | `.jxl`  |
-| Windows Metafile        | `.wmf` `.apm`  |
-| Windows animated cursor | `.ani`  |
-| BMP                     | `.bmp`  |
-| GIF                     | `.gif`  |
-| MacOS X icon            | `.icns`  |
-| Windows icon            | `.ico` `.cur`  |
-| PNM/PBM/PGM/PPM         | `.pnm` `.pbm` `.pgm` `.ppm`  |
-| QuickTime               | `.qtif` `.qif`  |
-| Scalable Vector Graphics | `.svg` `.svgz` `.svg.gz`  |
-| Targa                   | `.tga` `.targa`  |
-| TIFF                    | `.tiff` `.tif`  |
-| WebP                    | `.webp`  |
-| XBM                     | `.xbm`  |
-| XPM                     | `.xpm`  |
+| Format Name             | File Extensions            |
+|-------------------------|----------------------------|
+| PNG                     | `.png`                     |
+| JPEG                    | `.jpeg` `.jpe` `.jpg`      |
+| JPEG XL image           | `.jxl`                     |
+| Windows Metafile        | `.wmf` `.apm`              |
+| Windows animated cursor | `.ani`                     |
+| BMP                     | `.bmp`                     |
+| GIF                     | `.gif`                     |
+| MacOS X icon            | `.icns`                    |
+| Windows icon            | `.ico` `.cur`              |
+| PNM/PBM/PGM/PPM         | `.pnm` `.pbm` `.pgm` `.ppm` |
+| QuickTime               | `.qtif` `.qif`             |
+| Scalable Vector Graphics | `.svg` `.svgz` `.svg.gz`   |
+| Targa                   | `.tga` `.targa`            |
+| TIFF                    | `.tiff` `.tif`             |
+| WebP                    | `.webp`                    |
+| XBM                     | `.xbm`                     |
+| XPM                     | `.xpm`                     |
 
-After realization, we cannot change the contents of `ImageDisplay` directly. If the file on disk changes, `ImageDisplay` remains unchanged. If we want to update `ImageDisplay`, we need to call `create_from_file` manually again.
-
-By default, `ImageDisplay` behaves just like any other widget, in that it scales freely. If the underlying image was [raster-based](https://en.wikipedia.org/wiki/Raster_graphics), it may be blurred or distorted. To prevent this, we can call `display.set_expand(false)` which prevents expansion of the widget, then size-hint it:
-
-```cpp
-display.set_expand(false);
-display.set_size_request(display.get_size());
-```
-
-Where `ImageDisplay::get_size` returns the original resolution of the image it was created from. For example, for a `.png` file of size 75x35 px, `display` would always be exactly 75x35 pixels on screen, meaning the image is displayed at 1:1 resolution.
+After realization, we cannot change the contents of `ImageDisplay` directly. If the file on disk changes, `ImageDisplay` remains unchanged. If we want to update `ImageDisplay`, we need to call `create_from_file!` manually again.
 
 ---
 
 ## Button
 
-Familiar from previous chapters, \a{Button} is commonly used to trigger behavior.
+Familiar from previous chapters, [`Button`](@ref) is commonly used to trigger behavior.
 
-It has the following signals:
+It has the two signals:
 
-\signals
-\signal_activate{Button}
-\signal_clicked{Button}
-
-Where physically clicking the button both emits `activate` and `clicked`, while calling `Widget::activate` only emits `activate`, not `clicked`.
-
-To change the label of a button, we use `Button::set_child`. This will usually be a `Label` or `ImageDisplay`, though any arbitrary widget can be used as a child.
-
-Other than the child widget, we can customize the look of a button further. `Button::set_has_frame` will change whether the button has a texture and outline to it, while `Button::set_is_circular` changes the button to a fully rounded appearance:
-
-\image html button_types.png
-
-\how_to_generate_this_image_begin
-```cpp
-auto normal = Button();
-normal.set_child(Label("01"));
-
-auto no_frame = Button();
-no_frame.set_has_frame(false);
-no_frame.set_child(Label("02"));
-
-auto circular = Button();
-circular.set_is_circular(true);
-circular.set_child(Label("03"));
-
-auto box = CenterBox(Orientation::HORIZONTAL);;
-box.set_start_child(normal);
-box.set_center_child(no_frame);
-box.set_end_child(circular);
-
-box.set_margin(75);
-window.set_child(box);
+```@eval
+Base.include(Main, "signals.jl")
+@signal_table(Button,
+    clicked,
+    activate
+)
 ```
-\how_to_generate_this_image_end
+
+If the user clicks the button using a mouse `clicked` is emitted, while triggering the button by pressing enter emits `activate`. This latter mechanism of 
+emitting signal `activate` is shared by a number of other widgets, while `clicked` is unique to `Button`.
+
+`Button` has a single child that is used as its label. We set it using `set_child!`.
+
+Other than the child widget, we can customize the look of a button further. `set_has_frame!` will make all graphical elements of the button other than its label invisible, while `set_is_circular!` changes the button from rectangular to fully rounded:
+
+![](../resources/button_types.png)
+
+!!! details "How to generate this image"
+    ```julia
+    using mousetrap
+    main() do app::Application
+        window = Window(app)
+    
+        normal = Button()
+        set_child!(normal, Label("01"))
+    
+        no_frame = Button()
+        set_has_frame!(no_frame, false)
+        set_child!(no_frame, Label("02"))
+    
+        circular = Button()
+        set_is_circular!(circular, true)
+        set_child!(circular, Label("03"))
+    
+        box = CenterBox(ORIENTATION_HORIZONTAL, normal, no_frame, circular)
+        set_margin!(box, 75)
+    
+        set_child!(window, box)
+        pesent!(window)
+    end
+    ```
 
 Where the above shown buttons have the following properties:
 
-| Button | set_has_frame | set_is_circular |
-|--------|---------------|-----------------|
-| 01  | true | false |
-| 02 | false | false |
-| 03 | true | true |
+| Button | `set_has_frame!` | `set_is_circular!` |
+|--------|------------------|-------------------|
+| 01     | true             | false             |
+| 02     | false            | false             |
+| 03     | true             | true              |
 
 ---
 
 ## ToggleButton
 
-`ToggleButton` is a specialized form of `Button`. It supports most of `Button`s methods / signals, including `set_child`, `set_has_frame`, `set_is_circular` and signal `clicked`.
+[`ToggleButton`](@ref) is a specialized form of `Button`. It supports most of `Button`s methods / signals, including `set_child!`, `set_has_frame!`, `set_is_circular!` and signals `activate` and `clicked`.
 
-Unique to `ToggleButton` is that, if clicked, the button will **remain pressed**. When clicked again, it returns to being unpressed. Anytime the state of the `ToggleButton` changes, `toggled` will be emitted. In this way, `ToggleButton` can be used to track a boolean state.
+Unique to `ToggleButton` is that, if clicked, the button will **remain pressed**. When clicked again, it returns to being unpressed. Anytime the state of the `ToggleButton` changes, signal `toggled` will be emitted. In this way, `ToggleButton` can be used to track a boolean state.
 
-\signals
-\signal_toggled{ToggleButton}
-\signal_activate{ToggleButton}
-\signal_clicked{ToggleButton}
+```@eval
+Base.include(Main, "signals.jl")
+@signal_table(ToggleButton,
+    toggled,
+    clicked,
+    activate
+)
+```
 
-To check whether the button is currently toggled, we use `ToggleButton::get_is_active`, which returns `true` if the button is currently pressed, `false` otherwise.
+To check whether the button is currently toggled, we use `get_is_active`, which returns `true` if the button is currently depressed, `false` otherwise.
 
-```cpp
-auto toggle_button = ToggleButton();
-toggle_button.connect_signal_clicked([](ToggleButton& instance) -> void {
-    if (instance.get_is_active())
-        std::cout << "pressed" << std::endl;
-    else
-        std::cout << "released" << std::endl;
-});
+```julia
+toggle_button = ToggleButton()
+connect_signal_toggled!(toggle_button) do self::ToggleButton
+  println("state is now: " get_is_active(self))
+end
+set_child!(window, toggle_button)
 ```
 
 ---
 
 ## CheckButton
 
-\{CheckButton} is almost identical to `ToggleButton` in function -  but not appearance. `CheckButton` is an empty box in which a checkmark appears when it is toggled. Just like before, we query whether it is pressed by calling `CheckButton::get_is_active`.
+[`CheckButton`](@ref) is very similar to `ToggleButton` in function - but not appearance. `CheckButton` is an empty box in which a checkmark appears when it is toggled. Just like before, we query whether it is pressed by calling `get_is_active`. 
 
-\signals
-\signal_activate{CheckButton}
-\signal_toggled{CheckButton}
-
-`CheckButton` can be in one of **three** states, which are represented by the enum \a{CheckButtonState}. The button can either be `ACTIVE`, `INACTIVE`, or `INCONSISTENT`. This changes the appearance of the button:
-
-\image html check_button_states.png
-
-\how_to_generate_this_image_begin
-```cpp
-auto active = CheckButton();
-active.set_state(CheckButtonState::ACTIVE);
-auto active_box = Box(Orientation::VERTICAL);
-active_box.push_back(active);
-active_box.push_back(Label("active"));
-
-auto inconsistent = CheckButton();
-inconsistent.set_state(CheckButtonState::INCONSISTENT);
-auto inconsistent_box = Box(Orientation::VERTICAL);
-inconsistent_box.push_back(inconsistent);
-inconsistent_box.push_back(Label("inconsistent"));
-
-auto inactive = CheckButton();
-inactive.set_state(CheckButtonState::INACTIVE);
-auto inactive_box = Box(Orientation::VERTICAL);
-inactive_box.push_back(inactive);
-inactive_box.push_back(Label("inactive"));
-
-for (auto* button : {
-   &active,
-   &inconsistent,
-   &inactive
-})
-   button->set_horizontal_alignment(Alignment::CENTER);
-
-auto box = CenterBox(Orientation::HORIZONTAL);;
-box.set_start_child(active_box);
-box.set_center_child(inconsistent_box);
-box.set_end_child(inactive_box);
-
-box.set_margin(75);
-window.set_child(box);
+```@eval
+Base.include(Main, "signals.jl")
+@signal_table(ToggleButton,
+    toggled,
+    clicked
+)
 ```
-\how_to_generate_this_image_end
 
-Note that `CheckButton::get_is_active` will only return `true` if the current state is specifically `CheckButtonState::ACTIVE`. `toggled` is emitted whenever the state changes, regardless of which state the `CheckButton` was in.
+`CheckButton` can be in one of **three** states, which are represented by the enum [`CheckButtonState`](@ref). The button can either be `CHECK_BUTTON_STATE_ACTIVE`, `CHECK_BUTTON_STATE_INACTIVE`, or `CHECK_BUTTON_STATE_INCONSISTENT`. This changes the appearance of the button:
+
+![](../resources/check_button_states.png)
+
+!!! details "How to generate this image"
+    ```julia
+    using mousetrap
+    main() do app::Application
+    
+        window = Window(app)
+    
+        active = CheckButton()
+        set_state!(active, CHECK_BUTTON_STATE_ACTIVE)
+        active_box = vbox(active, Label("active"))
+    
+        inconsistent = CheckButton()
+        set_state!(inconsistent, CHECK_BUTTON_STATE_INCONSISTENT)
+        inconsistent_box = vbox(inconsistent, Label("inconsistent"))
+    
+        inactive = CheckButton()
+        set_state!(inactive, CHECK_BUTTON_STATE_INACTIVE)
+        inactive_box = vbox(inactive, Label("inactive"))
+    
+        for button in [active, inconsistent, inactive]
+            set_horizontal_alignment!(button, ALIGNMENT_CENTER)
+        end
+    
+        box = CenterBox(ORIENTATION_HORIZONTAL, active_box, inconsistent_box, inactive_box)
+        set_margin!(box, 75)
+    
+        set_child!(window, box)
+        present!(window)
+    end
+    ```
+
+Note that `get_is_active` will only return `true` if the current state is specifically `CHECK_BUTTON_STATE_ACTIVE`. `toggled` is emitted whenever the state changes, regardless of which state the `CheckButton` was in.
 
 ---
 
@@ -737,7 +721,7 @@ As the last widget intended to convey a boolean state to the user, we have \a{Sw
 \image html switch_states.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto active = Switch();
 active.set_active(true);
 auto active_box = Box(Orientation::VERTICAL);
@@ -784,7 +768,7 @@ Turning to the actual `Adjustment` class, it has four properties
 
 For example, expressing the previous range like so:
 
-```cpp
+```julia
 auto adjustment = Adjustment(
     1,      // value
     0,      // lower
@@ -812,7 +796,7 @@ We can connect to `value_changed` to monitor the value property of an `Adjustmen
 \image html spin_button.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto horizontal = SpinButton(0, 2, 0.5);
 horizontal.set_orientation(Orientation::HORIZONTAL);
 horizontal.set_value(1);
@@ -841,7 +825,7 @@ window.set_child(box);
 
 We supply the properties of the range underlying the `SpinButton` to its constructor:
 
-```cpp
+```julia
 // create SpinButton with range [0, 2] and increment 0.5
 auto spin_button = SpinButton(0, 2, 0.5)
 ```
@@ -864,7 +848,7 @@ When the user reaches one end of the `SpinButton`s range, which, for a range of 
 
 \image html scale_no_value.png
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto horizontal = Scale(0, 2, 0.5);
 horizontal.set_orientation(Orientation::HORIZONTAL);
 horizontal.set_value(1);
@@ -889,7 +873,7 @@ state->main_window.set_child(box);
 
 \image html scale_with_value.png
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto horizontal = Scale(0, 2, 0.5);
 horizontal.set_orientation(Orientation::HORIZONTAL);
 horizontal.set_value(1);
@@ -929,7 +913,7 @@ Similar to `Scale`, \a{ScrollBar} is used to pick a value from an adjustment. It
 
 To create a `LevelBar`, we need to specify the minimum and maximum value of the range we wish to display. We can then set the current value using `LevelBar::set_value`. The resulting fraction is computed automatically, based on the upper and lower limit we supplied to the constructor:
 
-```cpp
+```julia
 // create level for range [0, 2]
 auto level_bar = LevelBar(0, 2);
 level_bar.set_value(1.0); // set to 50%
@@ -942,7 +926,7 @@ Once the bar reaches 75%, it changes color:
 \image html level_bar.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto box = Box(Orientation::VERTICAL);
 box.set_spacing(10);
 box.set_margin(10);
@@ -984,7 +968,7 @@ A specialized case of indicating a continuous value is that of a **progress bar*
 \image html progress_bar.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto progress_bar = ProgressBar();
 progress_bar.set_fraction(0.47);
 progress_bar.set_vertical_alignment(Alignment::CENTER);
@@ -1012,7 +996,7 @@ To signal progress while we do not have an exact fraction, we can use the \a{Spi
 \image html spinner.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto spinner = Spinner();
 spinner.set_is_spinning(true);
 window.set_child(spinner);
@@ -1036,7 +1020,7 @@ While we could control the size of an `Entry` using size-hinting, a better way i
 \image html entry_password_mode.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto clear = Entry();
 clear.set_text("text");
 
@@ -1096,7 +1080,7 @@ When the `DropDown` is clicked, a window presents the user with a list of items.
 
 We usually want both labels to be an actual `Label`, though any widget can be used as the list or selected label.
 
-```cpp
+```julia
 auto dropdown = DropDown();
 dropdown.push_back(
     Label("List Label"), // list label
@@ -1111,7 +1095,7 @@ Here, we created a dropdown and added a single item. The item has the list label
 
 In praxis, we would want the callback to mutate some global property to keep track of which item is selected. Alternatively, we can query which item is currently selected by calling `DropDown::get_selected`. This function returns an **item ID**, which is obtained when we call `DropDown::push_back`:
 
-```cpp
+```julia
 auto dropdown = DropDown();
 auto id_01 = dropdown.push_back(Label("01"), Label("Option 01"), [](DropDown&){});
 auto id_02 = dropdown.push_back(Label("02"), Label("Option 02"), [](DropDown&){});
@@ -1133,7 +1117,7 @@ Where `[](DropDown&){}` is a lambda that simply does nothing (but still conforms
 \image html frame_no_frame.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto left = Separator();
 auto right = Separator();
 
@@ -1168,7 +1152,7 @@ Not to be confused with `Frame`, \a{AspectFrame} adds no graphical element to it
 
 We choose the aspect ratio in `AspectFrame`s constructor, though we can later adjust it using `AspectFrame::set_ratio`. Both of these functions accept a floating point ratio calculated as `width / height`. For example, if we want to force a widget to keep an aspect ratio of 4:3, we would do:
 
-```cpp
+```julia
 auto child_widget = // ...
 auto aspect_frame = AspectFrame(4.f / 3) // 4:3 aspect ratio
 aspect_frame.set_child(child_widget);
@@ -1200,7 +1184,7 @@ Using this, we can trigger our own behavior, for example to update a widgets dis
 
 We have control over the kind and speed of the transition animation. By calling `Revealer::set_transition_duration`, we can set the exact amount of time an animation should take. For example, to set the animation duration to 1 second:
 
-```cpp
+```julia
 auto revealer = Revealer();
 revealer.set_child(// ...
 revealer.set_transition_duration(seconds(1));
@@ -1219,7 +1203,7 @@ Apart from the speed, we also have a choice of animation **type**, represented b
 \image html expander.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto child = Label("[expanded child]");
 child.set_horizontal_alignment(Alignment::START);
 child.set_margin(5);
@@ -1251,7 +1235,7 @@ So far, all widget containers have aligned their children such that they do not 
 \image html overlay_two_buttons.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
  auto lower = Button();
 lower.set_horizontal_alignment(Alignment::START);
 lower.set_vertical_alignment(Alignment::START);
@@ -1280,7 +1264,7 @@ Where the position and size of overlayed widgets depend on their expansion and a
 
 By default, `Overlay` will allocate exactly as much space as the base widget (set with `Overlay::set_child`) does. If one of the overlaid widgets takes up more space than the base widget, it will be truncated. We can avoid this by supplying a second argument to `Overlay::add_overlay`, which is a boolean indicated whether the overlay widget should be included in the entire container's size allocation. That is, if the overlaid widget is larger than the base widget, the `Overlay` will resize itself such that the entire overlaid widget is visible.
 
-```cpp
+```julia
 overlay.add_overlay(overlay_widget, true); 
 // resize if overlay_widget allocates more space than child
 ``` 
@@ -1296,7 +1280,7 @@ When one interactable widget is shown partially overlapping another, only the to
 \image html paned_centered.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto left = Overlay();
 left.set_child(Separator());
 left.add_overlay(Label("left"));
@@ -1327,7 +1311,7 @@ Shrinkable sets whether the side of the `Paned` can be made smaller than the all
 \image html paned_shrinkable.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto left = Overlay();
 left.set_child(Separator());
 left.add_overlay(Label("left"));
@@ -1358,7 +1342,7 @@ state->main_window.set_child(paned);
 
 By default, most containers will allocate a size that is equal to or exceeds the largest natural size of its children. For example, if we create a widget that has a natural size of 5000x1000 px and use it as the child of a `Window`, the `Window` will attempt to allocate 5000x1000 pixels on screen, making the window far larger than most screens can display. In situations like these, we should instead use a \a{Viewport}, which allows users to only view part of a larger widget:
 
-```cpp
+```julia
 auto child = Separator();
 child.set_size_request({5000, 5000});
 
@@ -1413,7 +1397,7 @@ Showing the popover is called **popup**, closing the popover is called **popdown
 \image html popover.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto popover = Popover();
 auto child = Separator();
 child.set_size_request({150, 200});
@@ -1440,7 +1424,7 @@ Like `Button`, `PopoverButton` has a single child, can be circular, and has the 
 
 We first create the `Popover`, then connect it to the button using `PopoverButton::set_popover`.
 
-```cpp
+```julia
 auto popover = Popover();
 popover.set_child(// ...
 auto popover_button = PopoverButton();
@@ -1450,7 +1434,7 @@ popover_button.set_popover(popover);
 \image html popover.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto popover = Popover();
 auto child = Separator();
 child.set_size_request({150, 200});
@@ -1507,7 +1491,7 @@ To show how `SelectionModel` is used, we first need to create our first selectab
 \image html list_view_single_selection.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto list_view = ListView(Orientation::HORIZONTAL, SelectionMode::SINGLE);
 
 auto child = [](size_t id)
@@ -1551,7 +1535,7 @@ By default, `ListView` displays its children in a linear list, either horizontal
 \image html list_view_nested.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto list_view = ListView(Orientation::VERTICAL);
 auto child = [](const std::string& string)
 {
@@ -1587,7 +1571,7 @@ Here, we have a triple nested list. The outer list has the items `outer item #01
 
 When `ListView::push_back` is called, it returns an **iterator**. When we supply this iterator as the second argument to any of the widget-inserting functions, such as `ListView::push_back`, the new child will be inserted as a child to the item the iterator points to. If no iterator is specified, the item will be inserted in the top-level list.
 
-```cpp
+```julia
 auto it_01 = list_view.push_back(/* outer item #01 */);
 auto it_02 = list_view.push_back(/* outer item #02 */);
 
@@ -1605,7 +1589,7 @@ This means, if we only want to show items in a simple, non-nested list, we can i
 
 In order to react to the user selecting a new item in our `ListView` (if its selection mode is anything other than `NONE`), we should connect to the lists `SelectionModel` like so:
 
-```cpp
+```julia
 auto list_view = ListView(Orientation::HORIZONTAL, SelectionMode::SINGLE);
 
 list_view.get_selection_model()->connect_signal_selection_changed(
@@ -1626,7 +1610,7 @@ This way of accessing the `SelectionModel`, then connecting to one of its signal
 \image html grid_view.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto grid_view = GridView(Orientation::HORIZONTAL, SelectionMode::SINGLE);
 grid_view.set_max_n_columns(4);
 
@@ -1670,7 +1654,7 @@ Other than this, `GridView` supports the same functions as `ListView`, including
 
 To fill our `ColumnView`, we first instance it, then allocate a number of columns:
 
-```cpp
+```julia
 auto column_view = ColumnView(SelectionMode::SINGLE);
 column_view.push_back_column("Column 01");
 column_view.push_back_column("Column 02");
@@ -1681,7 +1665,7 @@ To add a column at a later point, either to the start, end, or at a specific pos
 
 Once we have all our columns set up, we can add child widgets either by using \a{ColumnView::set_widget} or the convenience function `push_back_row`, which adds a row of widgets to the end of the table:
 
-```cpp
+```julia
 column_view.push_back_row(Label("1 | 1"), Label("1 | 2"), Label("1 | 3"));
 column_view.push_back_row(Label("2 | 1"), Label("2 | 2"), Label("2 | 3"));
 column_view.push_back_row(Label("3 | 1"), Label("3 | 2"), Label("3 | 3"));
@@ -1690,7 +1674,7 @@ column_view.push_back_row(Label("3 | 1"), Label("3 | 2"), Label("3 | 3"));
 \image html column_view_hello_world.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto column_view = ColumnView(SelectionMode::SINGLE);
 auto col1 = column_view.push_back_column("Column 01");
 auto col2 = column_view.push_back_column("Column 02");
@@ -1722,7 +1706,7 @@ Not to be confused with `GridView`, \a{Grid} arranges its children in a **non-un
 \image html grid.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto grid = Grid();
 
 auto add_child = [&](size_t x, size_t y, size_t width, size_t height)
@@ -1769,7 +1753,7 @@ For example, in the above figure, the widget labeled `00` has x- and y-index `0`
 
 To add a widget to a grid, we need to provide the widget along with its desired position and size in the grid:
 
-```cpp
+```julia
 grid.insert(
     /* child widget */
     {1, 0},  // x, y
@@ -1796,7 +1780,7 @@ Lastly, we can choose the spacing between each cell using `Grid::set_row_spacing
 
 \a{Stack} is a selectable widget that can only ever display exactly one child at a time, though we register any number of widgets first. All widget except the selected on will be hidden, while the selected widget will occupy the entire allocated space of the `Stack`:
 
-```cpp
+```julia
 auto stack = Stack();
 auto page_01 = // widget
 auto page_02 = // widget
@@ -1816,7 +1800,7 @@ We see above that `Stack::add_child` takes a second argument, which is the **pag
 
 \a{StackSwitcher} presents the user with a row of buttons, each of which use the corresponding stack pages title:
 
-```cpp
+```julia
 auto stack = Stack();
 stack.add_child(/* child #01 */, "Page 01");
 stack.add_child(/* child #02 */, "Page 02");
@@ -1832,7 +1816,7 @@ box.push_back(stack_switcher);
 \image html stack_switcher.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto stack = Stack();
 auto child = [](size_t id)
 {
@@ -1876,7 +1860,7 @@ window.set_child(box);
 
 \a{StackSidebar} has the same purpose as `StackSwitcher`, though it displays the list of stack pages as a vertical list:
 
-```cpp
+```julia
 auto stack = Stack();
 stack.add_child(/* child #01 */, "Page 01");
 stack.add_child(/* child #02 */, "Page 02");
@@ -1892,7 +1876,7 @@ box.push_back(stack_sidebar);
 \image html stack_sidebar.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto stack = Stack();
 auto child = [](size_t id)
 {
@@ -1950,7 +1934,7 @@ Mousetrap provides a large number of different animation, which are represented 
 \image html notebook.png
 
 \how_to_generate_this_image_begin
-```cpp
+```julia
 auto notebook = Notebook();
 auto child = [](size_t id)
 {
@@ -1995,7 +1979,7 @@ When `Notebook::set_tabs_reorderable` is set to `true`, the user can drag and dr
 
 Where `_` is an unused argument. For example, we would connect to `page_selection_changed` like so:
 
-```cpp
+```julia
 notebook.connect_signal_page_selection_changed([](Notebook&, void*, int32_t page_index){
     std::cout << "Selected Page is now: " << page_index << std::endl;
 });
@@ -2031,7 +2015,7 @@ While we could create 5 individual widgets for every element of `GridView`, this
 
 We first create a class like so:
 
-```cpp
+```julia
 class LabeledChild
 {
     public:
@@ -2050,7 +2034,7 @@ All the widgets are private fields of the compound widget. This means, as long a
 
 We usually define how a compound widget is assembled in its constructor:
 
-```cpp
+```julia
 // define constructor
 LabeledChild(size_t id)
     : _label(std::to_string(id))
@@ -2071,7 +2055,7 @@ The entire `Overlay` is first inserted into a `Frame`, then that frame is set as
 
 We can now initialize our compound widget and add it to a window, right?
 
-```cpp
+```julia
 auto instance = LabeledChild(0);
 window.set_child(compound_widget);
 ```
@@ -2086,7 +2070,7 @@ As the error states, `LabeledChild` cannot bind to a reference of type `mousetra
 
 This is accomplished by inheriting from \a{CompoundWidget}:
 
-```cpp
+```julia
 class LabeledChild : public CompoundWidget
 {
     public:
@@ -2107,7 +2091,7 @@ class LabeledChild : public CompoundWidget
 
 Inherting from this class requires us to implement the pure virtual function `Widget& as_widget()`. This is only thing we need to do in order for our class to be able to be treated as a `Widget`
 
-```cpp
+```julia
 Widget& as_widget()
 {
     return _aspect_frame;
@@ -2118,7 +2102,7 @@ The returned value should be the **top-level** widget of our compound widget. Al
 
 Writing out example `LabeledChild` like this may make the widget order clearer:
 
-```cpp
+```julia
 AspectFrame \
     Frame \
         Overlay \
@@ -2132,7 +2116,7 @@ We see that `AspectFrame` is the only widget that is not also a child of another
 
 Putting it all together:
 
-```cpp
+```julia
 /// labeled_child.hpp
 struct LabeledChild : public CompoundWidget
 {

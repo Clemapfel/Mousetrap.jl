@@ -2314,7 +2314,7 @@ module mousetrap
     export push_front!
 
     function insert_after!(box::Box, to_append::Widget, after::Widget)
-        detail.push_front!(box._internal, to_append._internal.cpp_object, after._internal.cpp_object)
+        detail.insert_after!(box._internal, to_append._internal.cpp_object, after._internal.cpp_object)
     end
     export insert_after!
 
@@ -2378,7 +2378,15 @@ module mousetrap
 
     @export_type CenterBox Widget
     CenterBox(orientation::Orientation) = CenterBox(detail._CenterBox(orientation))
-
+    
+    function CenterBox(orientation::Orientation, left::Widget, center::Widget, right::Widget) ::CenterBox
+        out = CenterBox(orientation)
+        set_start_child!(out, left)
+        set_center_child!(out, center)
+        set_end_child!(out, right)
+        return out
+    end
+    
     function set_start_child!(center_box::CenterBox, child::Widget)
         detail.set_start_child!(center_box._internal, child._internal.cpp_object)
     end
