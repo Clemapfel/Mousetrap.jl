@@ -20,6 +20,7 @@ In this chapter, we will learn:
         present!(window)
     end
     ```
+
 ---
 
 ## What is a widget?
@@ -1995,167 +1996,172 @@ Note that `Notebook` does not provide `get_selection_model`. We use the `page_se
 
 ## Compound Widgets
 
-This concludes our tour of most of mousetraps widgets. Even though the selection is wide and powerful, we have yet to learn one of the more important things: **how do we make our own widgets?**
+Now that we have many new widgets in our arsenal, a natural question is "how do we make our own?". If we want to construct a completely new widget, pixel-by-pixel, line-by-line, we will have to wait until the chapter on [native rendering](./09_native_rendering.md). Until then, we are already perfeclty capable of creating what is called a **compound widget**.
 
-If we want to start from scratch and manually choose every pixel and mode of interaction, we will have to wait until the chapter on [native rendering](09_opengl.md). Not all custom widgets need to be that low-level, however. Often, we simply want a collection of already existing widgets to act as one. To illustrate this, we'll work through a simple example.
+A compound widget is a widget that groups many other, pre-made widgets together. Compound widgets give an esy mechanism to 
+logically group a collection of widgets, and treat them as a whole, instead of having to operate on each of its parts individually.
 
-In previous sections, whenever a figure was shown, the C++ code used to generate that figure was supplied along with it. Take, for example, the figure from the section on `GridView`:
+In order for a Julia object to be considered a `Widget`, that is, all functions that take a `mousetrap.Widget` also work 
+on this new object, it has to implement the **widget interface**. An object is considered a `Widget` if...
 
-\image html grid_view.png
++ it is direct or indirect subtype of `Widget`
++ `get_top_level_widget`, which maps it to its top-level widget, is defined for this type
 
-Here, `GridView` has 7 children. Each child is clearly a widget, as `GridView::push_back` requires a widget to be used as the argument. Looking closely, the children are actually a collection of at least 3 widgets:
+In this section we will work through an example, which will help explain what both of these conditions mean, and how to fullfill them.
 
-+ a `Label` with the number
-+ a `Separator` as the background
-+ a `Frame` for the rounded outline
+### Example: Placeholder
 
-On top of these, we have an `Overlay` in order to layer all three graphical elements on top of each other. Lastly, an `AspectFrame` keeps the element square.
+In the previous section on selectable containers such as a `ListView` and `GridView`, we used this "placeholder" widget:
 
-While we could create 5 individual widgets for every element of `GridView`, this would be highly tedious and not very idiomatic, as C++ is an object-oriented language. Instead, we should create a new, **compound widget**, a widget that is made up of multiple other widgets, but acts as one.
+![](../resources/compound_widget_list_view.png)
 
-We first create a class like so:
+This is a list view with four elements, each of the elements is an object of type `Placeholder`. 
 
-```julia
-class LabeledChild
-{
-    public:
-        LabeledChild(size_t id);
-        
-    private:
-        Separator _separator;
-        Label _label;
-        Frame _frame;
-        Overlay _overlay;
-        AspectFrame _aspect_frame = AspectFrame(1);
-};
-```
+Looking closely, we see that each placeholder has a `Label` with the title, a `Separator` behind the label. Because they are rendered on top of each other, an `Overlay` has to be involved. A `Frame` is used to give the element rounded corners, lastly, each element is square, which means its size is managed by an `AspectFrame`.
 
-All the widgets are private fields of the compound widget. This means, as long as an instance of `LabeledChild` exists, the 5 widgets it contains will be kept in memory, but other objects cannot directly access the components individually.
-
-We usually define how a compound widget is assembled in its constructor:
+Creating a new Julia struct with these elements, we get:
 
 ```julia
-// define constructor
-LabeledChild(size_t id)
-    : _label(std::to_string(id))
-{
-    _overlay.set_child(_separator);
-    _overlay.add_overlay(_label);
-
-    _frame.set_child(_overlay);
-    _aspect_frame.set_child(_frame);
-}
+struct Placeholder
+    label::Label
+    separator::Separator
+    overlay::Overlay
+    frame::Frame
+    aspect_frame::AspectFrame
+end
 ```
 
-This constructor sets up the structure we discussed before.
-
-The lowermost layer of the `Overlay` is the `Separator`, which will act as the background for the compound widget. On top of it, a `` is added. We set the string of the label based on the ID given to the constructor.
-
-The entire `Overlay` is first inserted into a `Frame`, then that frame is set as the child of our `AspectFrame`, which has a ratio of `1`, keeping it square at all times.
-
-We can now initialize our compound widget and add it to a window, right?
+We add a constructo that assembles these widgets in the way we see them:
 
 ```julia
-auto instance = LabeledChild(0);
-window.set_child(compound_widget);
+function Placeholder(text::String)
+    out = Placeholder(
+        Label("<tt>" * text * "</tt>")  # label with monospaced text 
+        Separator()                     # background
+        Overlay()                       # overlay to layer label on top of background
+        Frame()                         # frame for outline and rounded corners
+        AspectFrame(1.0)                # square aspect frame
+   )     
+   
+   # make the background the lower most layer
+   set_child!(out.overlay, out.separator)
+   
+   # add the label on top
+   add_overlay(out.ovleray, out.label; include_in_measurement = true)
+   
+   # add everything into the `Frame`
+   set_child!(frame, overlay)
+   
+   # force frame to be square
+   set_child!(aspect_frame, frame)
+   
+   return out
+end
 ```
-```
-/home/mousetrap/test/main.cpp:201:26: error: non-const lvalue reference to type 'mousetrap::Widget' cannot bind to a value of unrelated type 'LabeledChild'
-        window.set_child(instance);
-                         ^~~~~~~~
-```
-No, we cannot. 
 
-As the error states, `LabeledChild` cannot bind to a reference of type `mousetrap::Widget`.  For this to work, we need to **declare it to be a widget**.
-
-This is accomplished by inheriting from \a{CompoundWidget}:
+With our compound widget assembled, we will want to make it the child of the window:
 
 ```julia
-class LabeledChild : public CompoundWidget
-{
-    public:
-        // ctor
-        LabeledChild(size_t id);
-        
-        // function required by `Widget`
-        operator NativeWidget() const override;
-        
-    private:
-        Separator _separator;
-        Label _label;
-        Frame _frame;
-        Overlay _overlay;
-        AspectFrame _aspect_frame = AspectFrame(1);
-};
+main() do app::Application
+    window = Window(app)
+    set_child!(window, Placeholder("Test")
+    present!(window)
+end 
+```
+```
+[ERROR] In mousetrap.main: MethodError: no method matching set_child!(::Window, ::Placeholder)
+
+Closest candidates are:
+  set_child!(::Window, ::Widget)
+   @ mousetrap ~/Workspace/mousetrap.jl/src/mousetrap.jl:1457
 ```
 
-Inherting from this class requires us to implement the pure virtual function `Widget& as_widget()`. This is only thing we need to do in order for our class to be able to be treated as a `Widget`
+We can't add it as a child because `Placeholder`, the new Julia struct, is not yet considered a widget. 
+
+### Widget Interface
+
+To solve this we come back to our two properties that make something a widget:
+1) it is direct or indirect subtype of `Widget`
+2) `get_top_level_widget`, which maps it to its top-level widget, is defined for this type
+
+Solving 1), we make `Placeholder` a subtype of `mousetra.Widget`:
 
 ```julia
-Widget& as_widget()
-{
-    return _aspect_frame;
-}
+struct Placeholder <: Widget
+    label::Label
+    separator::Separator
+    overlay::Overlay
+    frame::Frame
+    aspect_frame::AspectFrame
+end
 ```
 
-The returned value should be the **top-level** widget of our compound widget. All other parts of a compound widget are contained in the top-level widget, and the top-level widget is not contained in any other widget.
+To implement `get_top_level_widget`, we need to look at how we assembled `Placeholder` during its constructor, then figure out which widget is indeed the top-most.
 
-Writing out example `LabeledChild` like this may make the widget order clearer:
+We can write the `Placeholder` architecture out like so:
 
-```julia
+```cpp
 AspectFrame \
     Frame \
         Overlay \
-            Label 
+            Label
             Separator
-``` 
-
-Where each line ending in `\` is a widget container. A widget being indented means it is a child of the widget above.
-
-We see that `AspectFrame` is the only widget that is not also a child of another widget. Therefore, `AspectFrame` is the top-level widget, hence the definition of `as_widget` above.
-
-Putting it all together:
-
-```julia
-/// labeled_child.hpp
-struct LabeledChild : public CompoundWidget
-{
-    public:
-        LabeledChild(size_t id)
-            : _label(std::to_string(id))
-        {
-            _overlay.set_child(_separator);
-            _overlay.add_overlay(_label);
-
-            _frame.set_child(_overlay);
-            _aspect_frame.set_child(_frame);
-            _aspect_frame.set_margin(10);
-        }
-
-    protected:
-        Widget& as_widget()
-        {
-            return _aspect_frame;
-        }
-        
-    private:
-        Separator _separator;
-        Label _label;
-        Frame _frame;
-        Overlay _overlay;
-        AspectFrame _aspect_frame = AspectFrame(1);
-};
-
-/// main.cpp
-auto instance = LabeledChild(0);
-window.set_child(instance);
 ```
 
-\image html compound_widget.png
+Where a widget with `\` is a widget container. The only widget without a direct parent is the `AspectFrame`, therefore `aspect_frame` is the top-level widget.
 
-In this example, `LabeledChild` is fairly simple. In practice, applications can have dozens if not hundreds of different compound widget, all made up of an even larger number of native widgets, which mousetrap will handle just fine.
+Given this, we implement `get_top_level_widget`:
 
-Indeed, an entire application will usually be one, giant compound widget, with a `Window` as the top-level widget.
+```julia
+mousetrap.get_top_level_widget(x::Placeholder) = x.aspect_frame
+```
 
-In any case, inherting from `CompuondWidget` and implementing `Widget& as_widget()` is the glue that binds our custom objects to the pre-built way mousetrap allows widgets to be used. Once it is implemented (by simply returning the top-level widget), everything works as expected.
+Where the `mousetrap.` prefix is necessary to tell the compiler that we are overloading that method, not creating a new method in our current module.
+
+With `Widget` subtyped and `get_top_level_widget` implemented, our `main` now looks like this:
+
+```julia
+struct Placeholder
+    label::Label
+    separator::Separator
+    overlay::Overlay
+    frame::Frame
+    aspect_frame::AspectFrame
+end
+
+function Placeholder(text::String)
+    out = Placeholder(
+        Label("<tt>" * text * "</tt>")
+        Separator()
+        Overlay() 
+        Frame() 
+        AspectFrame(1.0)
+    )     
+    
+    set_child!(out.overlay, out.separator)
+    add_overlay(out.ovleray, out.label; include_in_measurement = true)
+    set_child!(frame, overlay)
+    set_child!(aspect_frame, frame)
+    return out
+end
+
+main() do app::Application
+    window = Window(app)
+    set_child!(window, Placeholder("TEST")
+    present!(window)
+end
+```
+
+![](../resources/compound_widget_complete.png)
+
+Now that `Placeholder` is a proper widget, all of mousetraps functions, including all widget signals, have become avaialable to use.
+
+Using this technique, we can build an application piece by piece. A compound widget itself can be made up of multiple other compound widgets, an in some way the entire application itself is just one giant compound widget, with the `Window` as the top-level widget.
+
+Of course, we are only able to interact with the compound widget by interacting with each of its components, which is fairly limiting. In the next chapter, we will change this. By learning about **event handling**, we will be able to react to any kind of user-interaction, giving us the last tool needed to create an application that isn't just a collection of pre-made widgets, but something we have built ourself.
+
+
+
+
+
 

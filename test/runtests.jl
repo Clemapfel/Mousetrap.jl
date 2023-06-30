@@ -1,14 +1,22 @@
+import Pkg; Pkg.activate(.)
+using mousetrap
 
-mt = mousetrap
-mt.main() do app::mt.Application
+function test_aspect_frame()
 
-    window = mt.Window(app)
+    instance = AspectFrame(2, 0.25, 0.75)
+    @testset "AspectFrame" begin
+        @test get_ratio(instance) == 2
+        @test get_child_x_alignment == 0.25
+        @test get_child_y_alignment == 0.75
 
-    spin_button = mt.SpinButton(0.0, 1.0, 0.01)
-    mt.connect_signal_value_changed!(spin_button) do x::mt.SpinButton
-        println(mt.get_value(x))
+        set_ratio!(instance, 3)
+        set_child_x_alignment(instance, 0.5)
+        set_child_y_alignment(instance, 0.5)
+
+        @test get_ratio(instance) == 3
+        @test get_child_x_alignment == 0.5
+        @test get_child_y_alignment == 0.5
     end
-
-    mt.set_child!(window, spin_button)
-    mt.present!(window)
 end
+
+

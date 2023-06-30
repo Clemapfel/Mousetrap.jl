@@ -319,12 +319,12 @@ module mousetrap
             )))
     end
     
-    @generated function as_widget(x) ::Widget
+    @generated function get_top_level_widget(x) ::Widget
         return :(
             throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `mousetrap.as_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
         )
     end
-    export as_widget
+    export get_top_level_widget
 
     @generated function is_native_widget(x)
         :(return false)
@@ -2278,8 +2278,8 @@ module mousetrap
 ####### aspect_frame.jl
 
     @export_type AspectFrame Widget
-    function AspectFrame(ratio::AbstractFloat; child_x_alignment::AbstractFloat = 0.5, child_y_alignment::AbstractFloat = 0.5)
-        return AspectFrame(detail._AspectFrame(ratio, child_x_alignment, child_y_alignment))
+    function AspectFrame(ratio::Number; child_x_alignment::AbstractFloat = 0.5, child_y_alignment::AbstractFloat = 0.5)
+        return AspectFrame(detail._AspectFrame(convert(Cfloat, ratio), convert(Cfloat, child_x_alignment), convert(Cfloat, child_y_alignment)))
     end
 
     @export_function AspectFrame set_ratio! Cvoid AbstractFloat => Cfloat ratio
@@ -4061,12 +4061,12 @@ module mousetrap
         seen = Set{Type}()
         while !is_native_widget(as_native)
             if typeof(as_native) in seen
-                detail.log_critical("In as_widget_pointer: Type `$(typeof(as_native))`` has a malformed `as_widget` definition, this usually means `as_widget(x)` returns x itself, as opposed to the top-level widget component of x.", MOUSETRAP_DOMAIN)
+                detail.log_critical("In as_widget_pointer: Type `$(typeof(as_native))`` has a malformed `as_widget` definition, this usually means `get_top_level_widget(x)` returns x itself, as opposed to the top-level widget component of x.", MOUSETRAP_DOMAIN)
                 return Separator(opacity = 0.0)._internal.cpp_object # return placeholder to prevent segfault
             else
                 push!(seen, typeof(as_native))
             end
-            as_native = as_widget(as_native)
+            as_native = get_top_level_widget(as_native)
         end
         return as_native._internal.cpp_object
     end

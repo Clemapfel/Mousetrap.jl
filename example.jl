@@ -5,35 +5,49 @@ Pkg.activate(".")
 using mousetrap 
 @info "Done."
 
-struct Compound <: Widget
-    x::Label
+struct Placeholder <: Widget
+
+    overlay::Overlay
+    label::Label
+    separator::Separator
+    frame::Frame
+    aspect_frame::AspectFrame
+
+    function Placeholder(label::String)
+        out = new(
+            Overlay(),
+            Label("<tt>" * label * "</tt>"),
+            Separator(),
+            Frame(),
+            AspectFrame(1)
+        )
+
+        set_child!(out.overlay, out.separator)
+        add_overlay!(out.overlay, out.label; include_in_measurement = true)
+        set_child!(out.frame, out.overlay)
+        set_child!(out.aspect_frame, out.frame)
+
+        set_size_request!(out.aspect_frame, Vector2f(50, 50))
+        set_margin!(out.aspect_frame, 10);
+        return out
+    end
 end
-mousetrap.as_widget(x::Compound) = x
+mousetrap.get_top_level_widget(x::Placeholder) = x.aspect_frame
 
 main() do app::Application
 
     window = Window(app)
+    set_title!(window, "mousetrap.jl")
 
-    active = CheckButton()
-    set_state!(active, CHECK_BUTTON_STATE_ACTIVE)
-    active_box = vbox(active, Label("active"))
+    #=
+    list_view = ListView(ORIENTATION_HORIZONTAL)
+    push_back!(list_view, Placeholder("01"))
+    push_back!(list_view, Placeholder("02"))
+    push_back!(list_view, Placeholder("03"))
+    push_back!(list_view, Placeholder("04"))
+    =#
 
-    inconsistent = CheckButton()
-    set_state!(inconsistent, CHECK_BUTTON_STATE_INCONSISTENT)
-    inconsistent_box = vbox(inconsistent, Label("inconsistent"))
-
-    inactive = CheckButton()
-    set_state!(inactive, CHECK_BUTTON_STATE_INACTIVE)
-    inactive_box = vbox(inactive, Label("inactive"))
-
-    for button in [active, inconsistent, inactive]
-        set_horizontal_alignment!(button, ALIGNMENT_CENTER)
-    end
-
-    box = CenterBox(ORIENTATION_HORIZONTAL, active_box, Compound(Label("test")), inactive_box)
-    set_margin!(box, 75)
-
-    set_child!(window, box)
+    set_child!(window, Placeholder("TEST"))
     present!(window)
 end
 

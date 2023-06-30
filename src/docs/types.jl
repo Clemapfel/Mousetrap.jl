@@ -2416,7 +2416,7 @@ size and position on screen. See the manual chapter on widgets
 for more information.
 
 In order for an object to be treated as a widget, it needs to subtype 
-this abstract type and define [`mousetrap.as_widget`](@ref). See the 
+this abstract type and define [`mousetrap.get_top_level_widget`](@ref). See the 
 manual section on compound widgets in the chapter on widgets for more information.
 
 All widgets share the following signals, where `T` is the subclass 
