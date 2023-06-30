@@ -318,6 +318,29 @@ module mousetrap
                 convert($arg4_destination_type, $arg4_name)
             )))
     end
+    
+    @generated function as_widget(x) ::Widget
+        return :(
+            throw(AssertionError("""
+            Object of type $(typeof(x)) does not fullfill the widget interface. In order 
+            for it to be able to be treated as a widget, it needs to subtype `mousetrap.Widget` 
+            and define the function `mousetrap.as_widget(::$(typeof(x))) ::Widget`, which 
+            maps an instance of $(typeof(x)) to its top-level widget component.
+
+            See the manual section on compound widgets in the chapter on widgets for more information.
+            """))
+        )
+    end
+    export as_widget
+
+    @generated function is_native_widget(x)
+        :(return false)
+    end
+    # no export
+
+    macro declare_native_widget(Type)
+        :(is_native_widget(::$Type) = return true)
+    end
 
     macro export_type(name, super)
 
@@ -328,13 +351,13 @@ module mousetrap
             throw(AssertionError("In mousetrap.@export_type: detail.$internal_name undefined"))
         end
 
-        out = Expr(:block)
+        out = Expr(:toplevel)
         mousetrap.eval(:(export $name))
-        push!(out.args, quote
+        push!(out.args, :(
             mutable struct $name <: $super
                 _internal::detail.$internal_name
             end
-        end)
+        ))
         return out
     end
 
@@ -346,13 +369,13 @@ module mousetrap
             throw(AssertionError("In mousetrap.@export_type: detail.$internal_name undefined"))
         end
 
-        out = Expr(:block)
+        out = Expr(:toplevel)
         mousetrap.eval(:(export $name))
-        push!(out.args, quote
+        push!(out.args, :(
             struct $name
                 _internal::detail.$internal_name
             end
-        end)
+        ))
         return out
     end
 
@@ -1439,7 +1462,7 @@ module mousetrap
     @export_function Window close! Cvoid
 
     function set_child!(window::Window, child::Widget)
-        detail.set_child!(window._internal, child._internal.cpp_object)
+        detail.set_child!(window._internal, as_widget_pointer(child))
     end
     export set_child!
 
@@ -1450,7 +1473,7 @@ module mousetrap
     @export_function Window get_title String
 
     function set_titlebar_widget!(window::Window, titlebar::Widget)
-        detail.set_titlebar_widget!(window._internal, titlebar._internal.cpp_object)
+        detail.set_titlebar_widget!(window._internal, as_widget_pointer(titlebar))
     end
     export set_titlebar_widget!
 
@@ -1472,7 +1495,7 @@ module mousetrap
     @export_function Window get_focus_visible Bool
 
     function set_default_widget!(window::Window, widget::Widget)
-        detail.set_default_widget!(window._internal, widget._internal.cpp_object)
+        detail.set_default_widget!(window._internal, as_widget_pointer(widget))
     end
     export set_default_widget!
 
@@ -2275,7 +2298,7 @@ module mousetrap
 
     @export_function AspectFrame remove_child! Cvoid
 
-    set_child!(aspect_frame::AspectFrame, child::Widget) = detail.set_child!(aspect_frame._internal, child._internal.cpp_object)
+    set_child!(aspect_frame::AspectFrame, child::Widget) = detail.set_child!(aspect_frame._internal, as_widget_pointer(child))
     export set_child!
 
     Base.show(io::IO, x::AspectFrame) = show_aux(io, x, :ratio)
@@ -2304,22 +2327,22 @@ module mousetrap
     export vbox
 
     function push_back!(box::Box, widget::Widget)
-        detail.push_back!(box._internal, widget._internal.cpp_object)
+        detail.push_back!(box._internal, as_widget_pointer(widget))
     end
     export push_back!
 
     function push_front!(box::Box, widget::Widget)
-        detail.push_front!(box._internal, widget._internal.cpp_object)
+        detail.push_front!(box._internal, as_widget_pointer(widget))
     end
     export push_front!
 
     function insert_after!(box::Box, to_append::Widget, after::Widget)
-        detail.insert_after!(box._internal, to_append._internal.cpp_object, after._internal.cpp_object)
+        detail.insert_after!(box._internal, as_widget_pointer(to_append), as_widget_pointer(after))
     end
     export insert_after!
 
     function remove!(box::Box, widget::Widget)
-        detail.remove!(box._internal, widget._internal.cpp_object)
+        detail.remove!(box._internal, as_widget_pointer(widget))
     end
     export remove!
 
@@ -2352,7 +2375,7 @@ module mousetrap
     @export_function Button get_is_circular Bool
 
     function set_child!(button::Button, child::Widget)
-        detail.set_child!(button._internal, child._internal.cpp_object)
+        detail.set_child!(button._internal, as_widget_pointer(child))
     end
     export set_child!
 
@@ -2388,17 +2411,17 @@ module mousetrap
     end
     
     function set_start_child!(center_box::CenterBox, child::Widget)
-        detail.set_start_child!(center_box._internal, child._internal.cpp_object)
+        detail.set_start_child!(center_box._internal, as_widget_pointer(child))
     end
     export set_start_child!
 
     function set_center_child!(center_box::CenterBox, child::Widget)
-        detail.set_center_child!(center_box._internal, child._internal.cpp_object)
+        detail.set_center_child!(center_box._internal, as_widget_pointer(child))
     end
     export set_center_child!
 
     function set_end_child!(center_box::CenterBox, child::Widget)
-        detail.set_end_child!(center_box._internal, child._internal.cpp_object)
+        detail.set_end_child!(center_box._internal, as_widget_pointer(child))
     end
     export set_end_child!
 
@@ -2432,7 +2455,7 @@ module mousetrap
 
     if detail.GTK_MINOR_VERSION >= 8
         function set_child!(check_button::CheckButton, child::Widget)
-            detail.set_child!(check_button._internal, child._internal.cpp_object)
+            detail.set_child!(check_button._internal, as_widget_pointer(child))
         end
         export set_child!
 
@@ -2469,7 +2492,7 @@ module mousetrap
     @export_function ToggleButton get_is_circular Bool
 
     function set_child!(toggle_button::ToggleButton, child::Widget)
-        detail.set_child!(toggle_button._internal, child._internal.cpp_object)
+        detail.set_child!(toggle_button._internal, as_widget_pointer(child))
     end
     export set_child!
 
@@ -2526,7 +2549,7 @@ module mousetrap
     get_vertical_adjustment(viewport::Viewport) ::Adjustment = Adjustment(detail.get_vertical_adjustment(viewport._internal))
     export get_vertical_adjustment
 
-    set_child!(viewport::Viewport, child::Widget) = detail.set_child(viewport._internal, child._internal.cpp_object)
+    set_child!(viewport::Viewport, child::Widget) = detail.set_child(viewport._internal, as_widget_pointer(child))
     export set_child!
 
     @export_function Viewport remove_child! Cvoid
@@ -2598,14 +2621,14 @@ module mousetrap
     Expander() = Expander(detail._Expander())
 
     function set_child!(expander::Expander, child::Widget)
-        detail.set_child!(expander._internal, child._internal.cpp_object)
+        detail.set_child!(expander._internal, as_widget_pointer(child))
     end
     export set_child!
 
     @export_function Expander remove_child! Cvoid
 
     function set_label_widget!(expander::Expander, child::Widget)
-        detail.set_label_widget!(expander._internal, child._internal.cpp_object)
+        detail.set_label_widget!(expander._internal, as_widget_pointer(child))
     end
     export set_label_widget!
 
@@ -2623,16 +2646,16 @@ module mousetrap
     @export_type Fixed Widget
     Fixed() = Fixed(detail._Fixed())
 
-    add_child!(fixed::Fixed, child::Widget, position::Vector2f) = detail.add_child!(fixed._internal, child._internal.cpp_object, position)
+    add_child!(fixed::Fixed, child::Widget, position::Vector2f) = detail.add_child!(fixed._internal, as_widget_pointer(child), position)
     export add_child!
 
-    remove_child!(fixed::Fixed, child::Widget) = detail.remove_child!(fixed._internal, child._internal.cpp_object)
+    remove_child!(fixed::Fixed, child::Widget) = detail.remove_child!(fixed._internal, as_widget_pointer(child))
     export remove_child!
 
-    set_child_position!(fixed::Fixed, child::Widget, position::Vector2f) = detail.set_child_position!(fixed._internal, child._internal.cpp_object, position)
+    set_child_position!(fixed::Fixed, child::Widget, position::Vector2f) = detail.set_child_position!(fixed._internal, as_widget_pointer(child), position)
     export set_child_position!
 
-    get_child_position(fixed::Fixed, child::Widget) ::Vector2f = detail.get_child_position(fixed._internal, child._internal.cpp_object)
+    get_child_position(fixed::Fixed, child::Widget) ::Vector2f = detail.get_child_position(fixed._internal, as_widget_pointer(child))
     export get_child_position
 
     @add_widget_signals Fixed
@@ -2763,10 +2786,10 @@ module mousetrap
     @export_type Frame Widget
     Frame() = Frame(detail._Frame())
 
-    set_child!(frame::Frame, child::Widget) = detail.set_child!(frame._internal, child._internal.cpp_object)
+    set_child!(frame::Frame, child::Widget) = detail.set_child!(frame._internal, as_widget_pointer(child))
     export set_child!
 
-    set_label_widget!(frame::Frame, label::Widget) = detail.set_label_widget!(frame._internal, label._internal.cpp_object)
+    set_label_widget!(frame::Frame, label::Widget) = detail.set_label_widget!(frame._internal, as_widget_pointer(label))
     export set_label_widget!
 
     @export_function Frame remove_child! Cvoid
@@ -2783,18 +2806,18 @@ module mousetrap
     @export_type Overlay Widget
     Overlay() = Overlay(detail._Overlay())
 
-    set_child!(overlay::Overlay, child::Widget) = detail.set_child!(overlay._internal, child._internal.cpp_object)
+    set_child!(overlay::Overlay, child::Widget) = detail.set_child!(overlay._internal, as_widget_pointer(child))
     export set_child!
 
-    remove_child!(overlay::Overlay) = detail.remove_child!(overlay._internal, child._internal.cpp_object)
+    remove_child!(overlay::Overlay) = detail.remove_child!(overlay._internal)
     export remove_child!
 
     function add_overlay!(overlay::Overlay, child::Widget; include_in_measurement::Bool = true, clip::Bool = false)
-        detail.add_overlay!(overlay._internal, child._internal.cpp_object, include_in_measurement, clip)
+        detail.add_overlay!(overlay._internal, as_widget_pointer(child), include_in_measurement, clip)
     end
     export add_overlay!
 
-    remove_overlay!(overlay::Overlay, child::Widget) = detail.remove_overlay(overlay._internal, child._internal.cpp_object)
+    remove_overlay!(overlay::Overlay, child::Widget) = detail.remove_overlay(overlay._internal, as_widget_pointer(child))
     export remove_overlay!
 
     @add_widget_signals Overlay
@@ -2818,7 +2841,7 @@ module mousetrap
     add_action!(model::MenuModel, label::String, action::Action) = detail.add_action!(model._internal, label, action._internal)
     export add_action!
 
-    add_widget!(model::MenuModel, widget::Widget) = detail.add_widget!(model._internal, widget._internal.cpp_object)
+    add_widget!(model::MenuModel, widget::Widget) = detail.add_widget!(model._internal, as_widget_pointer(widget))
     export add_widget!
 
     @export_enum SectionFormat begin
@@ -2874,14 +2897,14 @@ module mousetrap
     @export_function Popover present! Cvoid
 
     function set_child!(popover::Popover, child::Widget)
-        detail.set_child!(popover._internal, child._internal.cpp_object)
+        detail.set_child!(popover._internal, as_widget_pointer(child))
     end
     export set_child!
 
     @export_function Popover remove_child! Cvoid
 
     function attach_to!(popover::Popover, attachment::Widget)
-        detail.atach_to!(popover._internal, attachment._internal.cpp_object)
+        detail.attach_to!(popover._internal, as_widget_pointer(attachment))
     end
     export attach_to!
 
@@ -2914,7 +2937,7 @@ module mousetrap
         return out
     end
 
-    set_child!(popover_button::PopoverButton, child::Widget) = detail.set_child!(popover_button._internal, child._internal.cpp_object)
+    set_child!(popover_button::PopoverButton, child::Widget) = detail.set_child!(popover_button._internal, as_widget_pointer(child))
     export set_child!
 
     @export_function PopoverButton remove_child! Cvoid
@@ -2965,13 +2988,13 @@ module mousetrap
 
     function push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
-        return detail.push_back!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.push_back!(drop_down._internal, list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
-        return detail.push_back!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.push_back!(drop_down._internal, list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -2993,13 +3016,13 @@ module mousetrap
     export push_back!
 
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
-        return detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.push_front!(drop_down._internal, list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
-        return detail.push_front!(drop_down._internal, list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.push_front!(drop_down._internal, list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -3018,13 +3041,13 @@ module mousetrap
 
     function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
-        return detail.insert!(drop_down._internal, from_julia_index(index), list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.insert!(drop_down._internal, from_julia_index(index), list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
-        return detail.insert!(drop_down._internal, from_julia_index(index), list_widget._internal.cpp_object, label_widget._internal.cpp_object, function (drop_down_internal_ref)
+        return detail.insert!(drop_down._internal, from_julia_index(index), list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -3371,16 +3394,16 @@ module mousetrap
     end
     export ListViewIterator
 
-    push_back!(list_view::ListView, widget::Widget) = ListViewIterator(detail.push_back!(list_view._internal, widget._internal.cpp_object, Ptr{Cvoid}()))
-    push_back!(list_view::ListView, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.push_back!(list_view._internal, widget._internal.cpp_object, iterator._internal))
+    push_back!(list_view::ListView, widget::Widget) = ListViewIterator(detail.push_back!(list_view._internal, as_widget_pointer(widget), Ptr{Cvoid}()))
+    push_back!(list_view::ListView, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.push_back!(list_view._internal, as_widget_pointer(widget), iterator._internal))
     export push_back!
 
-    push_front!(list_view::ListView, widget::Widget) = ListViewIterator(detail.push_front!(list_view._internal, widget._internal.cpp_object, Ptr{Cvoid}()))
-    push_front!(list_view::ListView, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.push_front!(list_view._internal, widget._internal.cpp_object, iterator._internal))
+    push_front!(list_view::ListView, widget::Widget) = ListViewIterator(detail.push_front!(list_view._internal, as_widget_pointer(widget), Ptr{Cvoid}()))
+    push_front!(list_view::ListView, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.push_front!(list_view._internal, as_widget_pointer(widget), iterator._internal))
     export push_front!
 
-    insert!(list_view::ListView, widget::Widget, index::Integer) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), widget._internal.cpp_object, Ptr{Cvoid}()))
-    insert!(list_view::ListView, widget::Widget, index::Integer, iterator::ListViewIterator) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), widget._internal.cpp_object, iterator._internal))
+    insert!(list_view::ListView, widget::Widget, index::Integer) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), Ptr{Cvoid}()))
+    insert!(list_view::ListView, widget::Widget, index::Integer, iterator::ListViewIterator) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), iterator._internal))
     export insert!
 
     remove!(list_view::ListView, index::Integer) = detail.remove!(list_view._internal, from_julia_index(index), Ptr{Cvoid}())
@@ -3391,8 +3414,8 @@ module mousetrap
     clear!(list_view::ListView, iterator::ListViewIterator) = detail.clear!(list_view._internal, iterator._internal)
     export clear!
 
-    set_widget_at!(list_view::ListView, index::Integer, widget::Widget) = detail.set_widget_at!(list_view._internal, from_julia_index(index), widget._internal.cpp_object, Ptr{Cvoid}())
-    set_widget_at!(list_view::ListView, index::Integer, widget::Widget, iterator::ListViewIterator) = detail.set_widget_at!(list_view._internal, from_julia_index(index), widget._internal.cpp_object, iterator._internal)
+    set_widget_at!(list_view::ListView, index::Integer, widget::Widget) = detail.set_widget_at!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), Ptr{Cvoid}())
+    set_widget_at!(list_view::ListView, index::Integer, widget::Widget, iterator::ListViewIterator) = detail.set_widget_at!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), iterator._internal)
     export set_widget_at!
 
     get_selection_model(list_view::ListView) ::SelectionModel = SelectionModel(detail.get_selection_model(list_view._internal))
@@ -3419,16 +3442,16 @@ module mousetrap
     GridView(orientation::Orientation = ORIENTATION_VERTICAL, selection_mode::SelectionMode = SELECTION_MODE_NONE) = GridView(detail._GridView(orientation, selection_mode))
     GridView(selection_mode::SelectionMode) = GridView(ORIENTATION_VERTICAL, selection_mode)
 
-    push_back!(grid_view::GridView, widget::Widget) = detail.push_back!(grid_view._internal, widget._internal.cpp_object)
+    push_back!(grid_view::GridView, widget::Widget) = detail.push_back!(grid_view._internal, as_widget_pointer(widget))
     export push_back!
 
-    push_front!(grid_view::GridView, widget::Widget) = detail.push_ront!(grid_view._internal, widget._internal.cpp_object)
+    push_front!(grid_view::GridView, widget::Widget) = detail.push_ront!(grid_view._internal, as_widget_pointer(widget))
     export push_front!
 
-    insert!(grid_view::GridView, index::Integer, widget::Widget) = detail.insert!(grid_view._internal, from_julia_index(index), widget._internal.cpp_object)
+    insert!(grid_view::GridView, index::Integer, widget::Widget) = detail.insert!(grid_view._internal, from_julia_index(index), as_widget_pointer(widget))
     export insert!
 
-    remove!(grid_view::GridView, widget::Widget) = detail.remove!(grid_view._internal, widget._internal.cpp_object)
+    remove!(grid_view::GridView, widget::Widget) = detail.remove!(grid_view._internal, as_widget_pointer(widget))
     export remove!
 
     clear!(grid_view::GridView) = detail.clear!(grid_view._internal)
@@ -3469,20 +3492,20 @@ module mousetrap
     Grid() = Grid(detail._Grid())
 
     function insert!(grid::Grid, widget::Widget, row_i::Signed, column_i::Signed; n_horizontal_cells::Unsigned = Unsigned(1), n_vertical_cells::Unsigned = Unsigned(1))
-        detail.insert!(grid._internal, widget._internal.cpp_object, row_i - 1, column_i - 1, n_horizontal_cells, n_vertical_cells)
+        detail.insert!(grid._internal, as_widget_pointer(widget), row_i - 1, column_i - 1, n_horizontal_cells, n_vertical_cells)
     end
     export insert!
 
-    remove!(grid::Grid, widget::Widget) = detail.remove!(grid._internal, widget._internal.cpp_object)
+    remove!(grid::Grid, widget::Widget) = detail.remove!(grid._internal, as_widget_pointer(widget))
     export remove!
 
     function get_position(grid::Grid, widget::Widget) ::Vector2i
-        native_pos::Vector2i = detail.get_position(grid._internal, widget._internal.cpp_object)
+        native_pos::Vector2i = detail.get_position(grid._internal, as_widget_pointer(widget))
         return Vector2i(native_pos.x + 1, native_pos.y + 1)
     end
     export get_position
 
-    get_size(grid::Grid, widget::Widget) ::Vector2i = detail.get_size(grid._internal, widget._internal.cpp_object)
+    get_size(grid::Grid, widget::Widget) ::Vector2i = detail.get_size(grid._internal, as_widget_pointer(widget))
     export get_size
 
     insert_row_at!(grid::Grid, row_i::Signed) = detail.insert_row_at!(grid._internal, row_i -1)
@@ -3553,7 +3576,7 @@ module mousetrap
     const StackID = String
     export StackID
 
-    add_child!(stack::Stack, child::Widget, title::String) ::StackID = detail.add_child!(stack._internal, child._internal.cpp_object, title)
+    add_child!(stack::Stack, child::Widget, title::String) ::StackID = detail.add_child!(stack._internal, as_widget_pointer(child), title)
     export add_child!
 
     remove_child!(stack::Stack, id::StackID) = detail.remove_child!(stack._internal, id)
@@ -3593,17 +3616,17 @@ module mousetrap
     Notebook() = Notebook(detail._Notebook())
 
     function push_front!(notebook::Notebook, child_widget::Widget, label_widget::Widget) ::Int64
-        return detail.push_front!(notebook._internal, child_widget._internal.cpp_object, label_widget._internal.cpp_object)
+        return detail.push_front!(notebook._internal, child_as_widget_pointer(widget), label_as_widget_pointer(widget))
     end
     export push_front!
 
     function push_back!(notebook::Notebook, child_widget::Widget, label_widget::Widget) ::Int64
-        return detail.push_back!(notebook._internal, child_widget._internal.cpp_object, label_widget._internal.cpp_object)
+        return detail.push_back!(notebook._internal, child_as_widget_pointer(widget), label_as_widget_pointer(widget))
     end
     export push_back!
 
     function insert!(notebook::Notebook, index::Integer, child_widget::Widget, label_widget::Widget) ::Int64
-        return detail.insert!(notebook._internal, from_julia_index(index), child_widget._internal.cpp_object, label_widget._internal.cpp_object)
+        return detail.insert!(notebook._internal, from_julia_index(index), child_as_widget_pointer(widget), label_as_widget_pointer(widget))
     end
     export insert!
 
@@ -3688,7 +3711,7 @@ module mousetrap
     export has_column_with_title
 
     function set_widget!(column_view::ColumnView, column::ColumnViewColumn, row_i::Integer, widget::Widget)
-        detail.set_widget!(column_view._internal, column._internal, from_julia_index(row_i), widget._internal.cpp_object)
+        detail.set_widget!(column_view._internal, column._internal, from_julia_index(row_i), as_widget_pointer(widget))
     end
     export set_widget!
 
@@ -3764,16 +3787,16 @@ module mousetrap
     @export_function HeaderBar set_show_title_buttons! Cvoid Bool b
     @export_function HeaderBar get_show_title_buttons Bool
 
-    set_title_widget!(header_bar::HeaderBar, widget::Widget) = detail.set_title_widget!(header_bar._internal, widget._internal.cpp_object)
+    set_title_widget!(header_bar::HeaderBar, widget::Widget) = detail.set_title_widget!(header_bar._internal, as_widget_pointer(widget))
     export set_title_widget!
 
-    push_front!(header_bar::HeaderBar, widget::Widget) = detail.push_front!(header_bar._internal, widget._internal.cpp_object)
+    push_front!(header_bar::HeaderBar, widget::Widget) = detail.push_front!(header_bar._internal, as_widget_pointer(widget))
     export push_front!
 
-    push_back!(header_bar::HeaderBar, widget::Widget) = detail.push_back!(header_bar._internal, widget._internal.cpp_object)
+    push_back!(header_bar::HeaderBar, widget::Widget) = detail.push_back!(header_bar._internal, as_widget_pointer(widget))
     export push_back!
 
-    remove!(header_bar::HeaderBar, widget::Widget) = detail.remove!(header_bar._internal, widget._internal.cpp_object)
+    remove!(header_bar::HeaderBar, widget::Widget) = detail.remove!(header_bar._internal, as_widget_pointer(widget))
     export remove!
 
     @add_widget_signals HeaderBar
@@ -3798,7 +3821,7 @@ module mousetrap
     @export_function Paned set_start_child_shrinkable Cvoid Bool b
     @export_function Paned get_start_child_shrinkable Bool
 
-    set_start_child!(paned::Paned, child::Widget) = detail.set_start_child!(paned._internal, child._internal.cpp_object)
+    set_start_child!(paned::Paned, child::Widget) = detail.set_start_child!(paned._internal, as_widget_pointer(child))
     export set_start_child!
 
     @export_function Paned remove_start_child! Cvoid
@@ -3808,7 +3831,7 @@ module mousetrap
     @export_function Paned set_end_child_shrinkable Cvoid Bool b
     @export_function Paned get_end_child_shrinkable Bool
 
-    set_end_child!(paned::Paned, child::Widget) = detail.set_end_child!(paned._internal, child._internal.cpp_object)
+    set_end_child!(paned::Paned, child::Widget) = detail.set_end_child!(paned._internal, as_widget_pointer(child))
     export set_end_child!
 
     @export_function Paned remove_end_child! Cvoid
@@ -3869,7 +3892,7 @@ module mousetrap
     @export_type Revealer Widget
     Revealer(transition_type::RevealerTransitionType = REVEALER_TRANSITION_TYPE_CROSSFADE) = Revealer(detail._Revealer(transition_type))
 
-    set_child!(revealer::Revealer, child::Widget) = detail.set_child!(revealer._internal, child._internal.cpp_object)
+    set_child!(revealer::Revealer, child::Widget) = detail.set_child!(revealer._internal, as_widget_pointer(child))
     export set_child!
 
     @export_function Revealer remove_child! Cvoid
@@ -4040,14 +4063,23 @@ module mousetrap
 
 ####### widget.jl
 
-    abstract type CompoundWidget <: Widget end
+    function as_widget_pointer(widget::Widget)
+        as_native::Widget = widget
+        while !is_native_widget(as_native)  # TODO: Can this loop infinitely for recursive types?
+            as_native = as_widget(as_native)
+        end
+        return as_native._internal.cpp_object
+    end
 
     macro export_widget_function(name, return_t)
 
         return_t = esc(return_t)
 
         mousetrap.eval(:(export $name))
-        return :($name(widget::Widget) = Base.convert($return_t, detail.$name(widget._internal.cpp_object)))
+        return :(function $name(widget::Widget)            
+            return Base.convert($return_t, detail.$name(as_widget_pointer(widget)))
+        end)
+        return out
     end
 
     macro export_widget_function(name, return_t, arg1_type, arg1_name)
@@ -4064,7 +4096,10 @@ module mousetrap
         arg1_name = esc(arg1_name)
 
         mousetrap.eval(:(export $name))
-        out = :($name(widget::Widget, $arg1_name::$arg1_origin_type) = Base.convert($return_t, detail.$name(widget._internal.cpp_object, convert($arg1_destination_type, $arg1_name))))
+        out = Expr(:toplevel)
+        return :(function $name(widget::Widget, $arg1_name::$arg1_origin_type) 
+            return Base.convert($return_t, detail.$name(as_widget_pointer(widget), convert($arg1_destination_type, $arg1_name)))
+        end)
         return out
     end
 
@@ -4108,7 +4143,7 @@ module mousetrap
 
     @export_widget_function set_tooltip_text! Cvoid String text
 
-    set_tooltip_widget!(widget::Widget, tooltip::Widget) = detail.set_tooltip_widget!(widget._internal.cpp_object, tooltip._internal.cpp_object)
+    set_tooltip_widget!(widget::Widget, tooltip::Widget) = detail.set_tooltip_widget!(as_widget_pointer(widget), as_widget_pointer(tooltip))
     export set_tooltip_widget!
 
     @export_widget_function remove_tooltip_widget! Cvoid
@@ -4116,7 +4151,7 @@ module mousetrap
     @export_widget_function set_cursor! Cvoid CursorType cursor
 
     function set_cursor_from_image!(widget::Widget, image::Image, offset::Vector2i = Vector2i(0, 0))
-        detail.set_cursor_from_image(widget._internal.cpp_object, image._internal, offset.x, offset.y)
+        detail.set_cursor_from_image(as_widget_pointer(widget), image._internal, offset.x, offset.y)
     end
     export set_cursor_from_image!
 
@@ -4124,12 +4159,12 @@ module mousetrap
     @export_widget_function show! Cvoid
 
     function add_controller!(widget::Widget, controller::EventController)
-        detail.add_controller!(widget._internal.cpp_object, controller._internal.cpp_object)
+        detail.add_controller!(as_widget_pointer(widget), controller._internal.cpp_object)
     end
     export add_controller!
 
     function remove_controller!(widget::Widget, controller::EventController)
-        detail.remove_controller!(widget._internal.cpp_object, controller._internal.cpp_object)
+        detail.remove_controller!(as_widget_pointer(widget), controller._internal.cpp_object)
     end
     export remove_controller!
 
@@ -4153,27 +4188,27 @@ module mousetrap
     @export_widget_function set_hide_on_overflow! Cvoid Bool b
     @export_widget_function get_hide_on_overflow Bool
 
-    get_frame_clock(widget::Widget) = FrameClock(detail.get_frame_clock(widget._internal.cpp_object))
+    get_frame_clock(widget::Widget) = FrameClock(detail.get_frame_clock(as_widget_pointer(widget)))
     export get_frame_clock
 
     @export_widget_function remove_tick_callback! Cvoid
 
     function set_tick_callback!(f, widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, TickCallbackResult, (FrameClock, Data_t))
-        detail.set_tick_callback!(widget._internal.cpp_object, function(frame_clock_ref)
+        detail.set_tick_callback!(as_widget_pointer(widget), function(frame_clock_ref)
             typed_f(FrameClock(frame_clock_ref[]), data)
         end)
     end
     function set_tick_callback!(f, widget::Widget)
         typed_f = TypedFunction(f, TickCallbackResult, (FrameClock,))
-        detail.set_tick_callback!(widget._internal.cpp_object, function(frame_clock_ref)
+        detail.set_tick_callback!(as_widget_pointer(widget), function(frame_clock_ref)
             typed_f(FrameClock(frame_clock_ref[]))
         end)
     end
     export set_tick_callback!
 
     function set_listens_for_shortcut_action!(widget::Widget, action::Action) ::Cvoid
-        detail.set_listens_for_shortcut_action!(widget._internal.cpp_object, action._internal)
+        detail.set_listens_for_shortcut_action!(as_widget_pointer(widget), action._internal)
     end
     export set_listens_for_shortcut_action!
 
@@ -4229,7 +4264,7 @@ module mousetrap
     set_file!(clipboard::Clipboard, file::FileDescriptor) = detail.set_file!(clipboard._internal, file._internal)
     export set_file!
 
-    get_clipboard(widget::Widget) ::Clipboard = Clipboard(detail.get_clipboard(widget._internal.cpp_object))
+    get_clipboard(widget::Widget) ::Clipboard = Clipboard(detail.get_clipboard(as_widget_pointer(widget)))
     export get_clipboard
 
     Base.show(io::IO, x::Clipboard) = show_aux(io, x, :contains_image, :contains_string, :contains_file)
@@ -4728,5 +4763,48 @@ module mousetrap
 ###### documentation
         
     include("./docs.jl")
+
+    @declare_native_widget AspectFrame
+@declare_native_widget Box
+@declare_native_widget Button
+@declare_native_widget CenterBox
+@declare_native_widget CheckButton
+@declare_native_widget ColumnView
+@declare_native_widget DropDown
+@declare_native_widget Entry
+@declare_native_widget Expander
+@declare_native_widget Fixed
+@declare_native_widget Frame
+@declare_native_widget Grid
+@declare_native_widget GridView
+@declare_native_widget HeaderBar
+@declare_native_widget ImageDisplay
+@declare_native_widget Label
+@declare_native_widget LevelBar
+@declare_native_widget ListView
+@declare_native_widget MenuBar
+@declare_native_widget Notebook
+@declare_native_widget Overlay
+@declare_native_widget Paned
+@declare_native_widget Popover
+@declare_native_widget PopoverButton
+@declare_native_widget PopoverMenu
+@declare_native_widget ProgressBar
+@declare_native_widget RenderArea
+@declare_native_widget Revealer
+@declare_native_widget Scale
+@declare_native_widget Scrollbar
+@declare_native_widget Separator
+@declare_native_widget SpinButton
+@declare_native_widget Spinner
+@declare_native_widget Stack
+@declare_native_widget StackSidebar
+@declare_native_widget StackSwitcher
+@declare_native_widget Switch
+@declare_native_widget TextView
+@declare_native_widget ToggleButton
+@declare_native_widget Viewport
+@declare_native_widget Window
+
 
 end # module mousetrap

@@ -459,6 +459,26 @@ as_triangle!(::Shape, a::Vector2f, b::Vector2f, c::Vector2f)
 Initialize the shape as a triangle.
 """
 
+@document as_widget """
+```
+as_widget(::Widget) -> Widget
+```
+Function that maps a non-native compount widget (subtyping `Widget`) to its top-level widget component. 
+
+See the manual section on compound widgets in the chapter on widgets for more information.
+
+## Example
+```julia
+struct CompoundWidget <: Widget
+    box::Box
+   
+    NewWidget() = new(hbox(Label("this is a compound widget")))
+end
+
+mousetrap.as_widget(x::CompoundWidget) = x.box
+# after this definition, `CompoundWidget` can be used like any native mousetrap widget
+"""
+
 @document as_wireframe! """
 ```
 as_wireframe!(::Shape, points::Vector{Vector2f}) 
