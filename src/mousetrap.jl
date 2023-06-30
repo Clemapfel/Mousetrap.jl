@@ -2443,8 +2443,8 @@ module mousetrap
     @export_function CheckButton get_state CheckButtonState
     @export_function CheckButton get_is_active Bool
 
-    set_active!(button::CheckButton, b::Bool) = set_state!(button, b ? CHECK_BUTTON_STATE_ACTIVE : CHECK_BUTTON_STATE_INACTIVE)
-    export set_active!
+    set_is_active!(button::CheckButton, b::Bool) = set_state!(button, b ? CHECK_BUTTON_STATE_ACTIVE : CHECK_BUTTON_STATE_INACTIVE)
+    export set_is_active!
 
     if detail.GTK_MINOR_VERSION >= 8
         function set_child!(check_button::CheckButton, child::Widget)
@@ -3970,6 +3970,8 @@ module mousetrap
     @export_function SpinButton get_should_snap_to_ticks Bool
     @export_function SpinButton set_allow_only_numeric! Cvoid Bool b
     @export_function SpinButton get_allow_only_numeric Bool
+    @export_function SpinButton set_orientation! Cvoid Orientation orientation
+    @export_function SpinButton get_orientation Orientation
 
     function set_text_to_value_function!(f, spin_button::SpinButton, data::Data_t) where Data_t
         set_allow_only_numeric!(spin_button, false)

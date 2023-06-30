@@ -39,15 +39,25 @@ main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    #=
-    list_view = ListView(ORIENTATION_HORIZONTAL)
-    push_back!(list_view, Placeholder("01"))
-    push_back!(list_view, Placeholder("02"))
-    push_back!(list_view, Placeholder("03"))
-    push_back!(list_view, Placeholder("04"))
-    =#
+    horizontal = SpinButton(0, 2, 0.5)
+    set_value!(horizontal, 1)
 
-    set_child!(window, Placeholder("TEST"))
+    horizontal_buffer = CenterBox(
+        ORIENTATION_VERTICAL, 
+        Separator(; opacity = 0.0),
+        horizontal,
+        Separator(; opacity = 0.0)
+    )
+
+    vertical = SpinButton(0, 2, 0.5)
+    set_value!(vertical, 1)
+    set_orientation!(vertical, ORIENTATION_VERTICAL)
+
+    box = CenterBox(ORIENTATION_HORIZONTAL)
+    set_start_child!(box, horizontal_buffer)
+    set_end_child!(box, vertical)
+
+    set_child!(window, box)
     present!(window)
 end
 

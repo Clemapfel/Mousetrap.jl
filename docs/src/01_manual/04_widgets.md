@@ -714,41 +714,46 @@ Note that `get_is_active` will only return `true` if the current state is specif
 
 ## Switch
 
-As the last widget intended to convey a boolean state to the user, we have \a{Switch}, which has the appearance similar to a light switch. `Switch` does not emit `toggled`, instead, we connect to the `activate` signal, which is emitted anytime the switch is operated.
+As the last widget intended to convey a boolean state to the user, we have [`Switch`](@ref), which has an appearance similar to a light switch. `Switch` does not emit `toggled`, instead, we connect to the `activate` signal, which is emitted anytime the switch is operated.
 
-\signals
-\signals_activate{Switch}
-
-\image html switch_states.png
-
-\how_to_generate_this_image_begin
-```julia
-auto active = Switch();
-active.set_active(true);
-auto active_box = Box(Orientation::VERTICAL);
-active_box.push_back(active);
-active_box.push_back(Label("active"));
-
-auto inactive = Switch();
-inactive.set_active(false);
-auto inactive_box = Box(Orientation::VERTICAL);
-inactive_box.push_back(inactive);
-inactive_box.push_back(Label("inactive"));
-
-for (auto* s : {&active, &inactive})
-{
-    s->set_horizontal_alignment(Alignment::CENTER);
-    s->set_margin(10);
-}
-
-auto box = CenterBox(Orientation::HORIZONTAL);;
-box.set_start_child(active_box);
-box.set_end_child(inactive_box);
-
-box.set_margin(75);
-state->main_window.set_child(box);
+```@eval
+include("signals.jl")
+@signal_table(Switch,
+    activate
+)
 ```
-\how_to_generate_this_image_end
+
+![](../resources/switch_states.png)
+
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+    
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+    
+        active = Switch()
+        set_is_active!(active, true)
+        active_box = vbox(active, Label("active"))
+    
+        inactive = Switch()
+        set_is_active!(inactive, false)
+        inactive_box = vbox(inactive, Label("inactive"))
+    
+        for switch in [active, inactive]
+            set_horizontal_alignment!(switch, ALIGNMENT_CENTER)
+            set_margin!(switch, 10)
+        end
+    
+        box = CenterBox(ORIENTATION_HORIZONTAL)
+        set_start_child!(box, active_box)
+        set_end_child!(box, inactive_box)
+        set_margin!(box, 75)
+    
+        set_child!(window, box)
+        present!(window)
+    end
+    ```
 
 ---
 
@@ -756,11 +761,9 @@ state->main_window.set_child(box);
 
 ## Adjustment
 
-From widgets conveying a boolean state, we will now move on to widgets conveying a discrete number. These let the user choose a value from a **range**, which, in mousetrap, is represented by a signal emitter called \a{Adjustment}.
+From widgets conveying a boolean state, we'll now move on to widgets conveying a discrete number. These let the user choose a value from a **range**, which, in mousetrap, is represented by a signal emitter called [`Adjustment`](@ref).
 
-In general, a range has a lower and upper value. For example, the range `[0, 2]` has the `lower` of `0` and `upper` of `2`. A second property is the **step increment**, which is the minimum difference between two adjacent values in the range. For example, if the range is `[0, 2]` and the step increment is `0.5`, then the user can choose from the numbers `{0, 0.5, 1, 1.5, 2}`. If the step increment is `0.01`, `[0,2]` includes the numbers  `{0, 0.01, 0.02, ..., 1.98, 2.00}`.
-
-Turning to the actual `Adjustment` class, it has four properties
+`Adjustment` has four properties:
 
 + `lower`: lower bound of the range
 + `upper`: upper bound of the range
@@ -778,15 +781,19 @@ auto adjustment = Adjustment(
 );
 ```
 
-Which will have the value of `1` on initialization.
+Will make the use able to select from the values `{0, 0.5, 1, 1.5, 2}`, with `1` being selected on initialization.
 
-We usually do not need to create our own `Adjustment`, rather, it is provided by a number of widgets. Notable about this is that the widget and its adjustment linked internally. If we change any property of the `Adjustment`, the widget will change its appearance accordingly.
+We usually do not need to create our own `Adjustment`, rather, it is provided by a number of widgets which use it to select their value. Notably, if the `Adjustment` is modified, that widgets value is modified, and if the widget is modified, the  adjustment is too. 
 
 Adjustment has two signals:
 
-\signals
-\signal_value_changed{Adjustment}
-\signal_properties_changed{Adjustment}
+```@eval
+include("signals.jl")
+@signal_table(Adjustment,
+    value_changed,
+    properties_changed
+)
+```
 
 We can connect to `value_changed` to monitor the value property of an `Adjustment` (and thus whatever widget is controlled by it), while `properties_changed` is emitted when one of `upper`, `lower` or `step increment` changes.
 
@@ -794,7 +801,19 @@ We can connect to `value_changed` to monitor the value property of an `Adjustmen
 
 ## SpinButton
 
-\image html spin_button.png
+`SpinButton` is used to pick an exact value from a range. The user can click the rectangular area and manually enter a value using the keyboard, or they can increase or decrease the current value by the step increment of the the widgets `Adjustment` by pressing the plus or minus button.
+
+We supply the properties of the range underlying the `SpinButton` to its constructor:
+
+```julia
+# create SpinButton with range [0, 2] and increment 0.5
+spin_button = SpinButton(0, 2, 0.5)
+```
+
+![](../resources/spin_button.png)
+
+
+![](../resources/spin_button.png)
 
 \how_to_generate_this_image_begin
 ```julia
@@ -821,15 +840,6 @@ box.set_margin_vertical(40);
 window.set_child(box);
 ```
 \how_to_generate_this_image_end
-
-`SpinButton` is used to pick an exact value from a range. The user can click the rectangular area and manually enter a value using the keyboard, or they can increase or decrease the current value by the step increment of the `SpinButton`s adjustment by pressing the plus or minus button.
-
-We supply the properties of the range underlying the `SpinButton` to its constructor:
-
-```julia
-// create SpinButton with range [0, 2] and increment 0.5
-auto spin_button = SpinButton(0, 2, 0.5)
-```
 
 If we want to check any of the properties of the  `SpinButton`s range, we can either query the `Adjustment*` returned by `SpinButton::get_adjustment`, or we can get the values directly using `SpinButton::get_value`, `SpinButton::get_lower`, etc. This is just for the sake of convenience, both ways have identical behavior.
 
