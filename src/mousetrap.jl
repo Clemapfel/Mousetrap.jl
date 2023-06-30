@@ -65,7 +65,7 @@ module mousetrap
     const LogDomain = String;
     export LogDomain
 
-    const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN
+    const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN * ".jl"
 
     """
     ```
@@ -321,14 +321,7 @@ module mousetrap
     
     @generated function as_widget(x) ::Widget
         return :(
-            throw(AssertionError("""
-            Object of type $(typeof(x)) does not fullfill the widget interface. In order 
-            for it to be able to be treated as a widget, it needs to subtype `mousetrap.Widget` 
-            and define the function `mousetrap.as_widget(::$(typeof(x))) ::Widget`, which 
-            maps an instance of $(typeof(x)) to its top-level widget component.
-
-            See the manual section on compound widgets in the chapter on widgets for more information.
-            """))
+            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `mousetrap.as_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
         )
     end
     export as_widget
@@ -4065,11 +4058,19 @@ module mousetrap
 
     function as_widget_pointer(widget::Widget)
         as_native::Widget = widget
-        while !is_native_widget(as_native)  # TODO: Can this loop infinitely for recursive types?
+        seen = Set{Type}()
+        while !is_native_widget(as_native)
+            if typeof(as_native) in seen
+                detail.log_critical("In as_widget_pointer: Type `$(typeof(as_native))`` has a malformed `as_widget` definition, this usually means `as_widget(x)` returns x itself, as opposed to the top-level widget component of x.", MOUSETRAP_DOMAIN)
+                return Separator(opacity = 0.0)._internal.cpp_object # return placeholder to prevent segfault
+            else
+                push!(seen, typeof(as_native))
+            end
             as_native = as_widget(as_native)
         end
         return as_native._internal.cpp_object
     end
+    # no export
 
     macro export_widget_function(name, return_t)
 
