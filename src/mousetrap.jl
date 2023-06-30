@@ -11,32 +11,6 @@ module mousetrap
         function __init__() @initcxx end
         #@wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
         @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
-
-        set_gtk_uninitialized_message("""
-        Attempting to construct a widget, but the GTK4 backend has not yet been initialized. Make sure that, for all widgets, the widgets constructor is called **after** `Application` has emitted its `activate` signal.
-
-        A typical `.jl` file using mousetrap should look like this:
-        ```julia
-        using mousetrap
-        main() do app::Application
-            # all construction of widgets should happen here
-        end
-        ```
-        You have most likely attempted to construct a widget outside of the `activate` signal handler.
-        """)
-
-        set_gl_uninitialized_message("""
-        Attempting to interact with the global OpenGL context, but it has not yet been initialized. Make sure that any OpenGL-related objects are constructed **after** `Application` has emitted its `activate` signal.
-        
-        A typical `.jl` file using mousetrap should look like this:
-        ```julia
-        using mousetrap
-        main() do app::Application
-            # all OpenGL-related activity should happen here
-        end
-        ```
-        You have most likely attempted to construct an OpenGL-relatved object outside the `activate` signal handler.
-        """)
     end
 
 ####### typed_function.jl
@@ -406,7 +380,6 @@ module mousetrap
         to_int_name = Symbol(enum) * :_to_int
         push!(out.args, :(Base.string(x::$enum) = string(mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(mousetrap.detail.to_int_name(x))))
-
         return out
     end
 
@@ -4059,6 +4032,8 @@ module mousetrap
 
 ####### widget.jl
 
+    abstract type CompoundWidget <: Widget end
+
     macro export_widget_function(name, return_t)
 
         return_t = esc(return_t)
@@ -4132,7 +4107,7 @@ module mousetrap
 
     @export_widget_function set_cursor! Cvoid CursorType cursor
 
-    function set_cursor_from_image!(widget::Widget, image::Image, offset::Vector2i)
+    function set_cursor_from_image!(widget::Widget, image::Image, offset::Vector2i = Vector2i(0, 0))
         detail.set_cursor_from_image(widget._internal.cpp_object, image._internal, offset.x, offset.y)
     end
     export set_cursor_from_image!

@@ -105,7 +105,7 @@
     :CURSOR_TYPE_ZOOM_IN,
     :CURSOR_TYPE_ZOOM_OUT
 ])
-@document CURSOR_TYPE_ALL_SCROLL "No visible cursor"
+@document CURSOR_TYPE_ALL_SCROLL "Omni-directional scrolling"
 @document CURSOR_TYPE_CELL "Cross, used for selecting cells from a table"
 @document CURSOR_TYPE_COLUMN_RESIZE "Left-right arrow"
 @document CURSOR_TYPE_CONTEXT_MENU "Questionmark, instructs the user that clicking will open a context menu"

@@ -2429,12 +2429,12 @@ $(@type_signals(T,
 @document Window """
 # Window <: Widget
 
-Top-level window, associated with an [`Application`](@ref).
+Top-level window, associated with an [`Application`](@ref). Has exactly one child, 
+as well as a titlebar widget, which will usually be a [`HeaderBar`](@ref).
 
 When the users window manager requests for a window to close,
-signal `close_request` will be emitted whose return value can 
+signal `close_request` will be emitted, whose return value can 
 prevent the window from closing.
-
 
 $(@type_constructors(
     Window(app::Application)

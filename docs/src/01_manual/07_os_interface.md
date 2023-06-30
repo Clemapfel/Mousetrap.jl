@@ -486,7 +486,6 @@ height = get_value(file, "image_view.window", "height", Int32)
 default_color = get_value(file, "image_view.window", "default_color_rgba", RGBA)
 ```
 
-
 We see that the general syntax to access a keyfile value is `get_value(<file>, <group_name>, <key_name>, <type>)`, where `type` is one of the following:
 
 | Type                      | Example Value                                | Format                            |

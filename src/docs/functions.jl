@@ -1,5 +1,5 @@
 
-# Note: @doc can't document macros, apparently, done inline in `mousetrap.jl`
+# Note: @doc can't document macros apparently, done inline in `mousetrap.jl`
 # @document @log_info 
 # @document @log_warning 
 # @document @log_critical 
@@ -3396,7 +3396,7 @@ Set which cursor shape should be used when the cursor is over the allocated area
 
 @document set_cursor_from_image! """
 ```
-set_cursor_from_image!(::Widget, image::Image, offset::Vector2i) 
+set_cursor_from_image!(::Widget, image::Image, [offset::Vector2i]) 
 ```
 Set which image should be displayed when the cursor is over the allocated area of the widget. `offset` 
 determines the vertical and horizontal offset of the center of the image, relative to the cursor position, in pixels.

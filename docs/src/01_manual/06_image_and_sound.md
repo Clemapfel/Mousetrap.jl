@@ -34,7 +34,7 @@ For both representations, all components are 32-bit floats in `[0, 1]`. The **al
 We can freely convert between `RGBA` and `HSVA`. To do this, we use [`rgba_to_hsva`](@ref) and [`hsva_to_rgba`](@ref):
 
 ```julia
-rgba = RGBA(0.1, 0.2, 0.3, 0.4))
+rgba = RGBA(0.1, 0.2, 0.3, 0.4)
 as_hsva = rgba_to_hsva(rgba)
 as_rgba = hsva_to_rgba(as_hsva)
 @assert rgba == as_rgba # true
