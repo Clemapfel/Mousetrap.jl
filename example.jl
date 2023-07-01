@@ -39,24 +39,17 @@ main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    horizontal = Scale(0, 2, 0.5)
-    set_orientation!(horizontal, ORIENTATION_HORIZONTAL)
-    set_value!(horizontal, 1)
-    set_size_request!(horizontal, Vector2f(200, 0))
+    overwrite_file_warning_dialog = AlertDialog(
+    ["Continue", "Cancel"],  # buttons
+    "A file with this name already exists, continue?", # message
+    "The original file will be overwritten, this cannot be undone." # detail description
+    )
 
-    vertical = Scale(0, 2, 0.5)
-    set_orientation!(vertical, ORIENTATION_VERTICAL)
-    set_value!(vertical, 1)
-    set_size_request!(vertical, Vector2f(0, 200))
-
-    box = CenterBox(ORIENTATION_HORIZONTAL)
-    set_start_child!(box, horizontal)
-    set_end_child!(box, vertical)
-
-    set_margin_horizontal!(box, 75)
-    set_margin_vertical!(box, 40)
-
-    set_child!(window, box)
+    button = Button()
+    connect_signal_clicked!(button, overwrite_file_warning_dialog) do x::Button, dialog
+        present!(dialog)
+    end
+    set_child!(window, button)
     present!(window)
 end
 

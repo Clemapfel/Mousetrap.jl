@@ -106,5 +106,4 @@ let file = open("docs/src/02_library/classes.md", "w+")
     @info "Done."
 end 
 
-Base.Filesystem.cp("src/docs/signals.jl", "docs/signals.jl"; force=true)
 makedocs(sitename="mousetrap")

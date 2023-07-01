@@ -24,7 +24,7 @@ Action
 + [`mousetrap.disconnect_signal_activated!`](@ref)
 + [`mousetrap.emit_signal_activated`](@ref)
 + [`mousetrap.get_signal_activated_blocked`](@ref)
-+ [`mousetrap.set_signal_activated_blocked!`](@ref)
++ [`mousetrap.set_signal_activated_blocked!`()](@ref)
 ---
 ## Adjustment
 ```@docs

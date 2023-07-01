@@ -17,7 +17,7 @@ In mousetrap, menus follows the [model-view architectural pattern](https://en.wi
 the menus model, which holds information about how the menu is structured, along with a view, which takes the models and transforms it into an interactable
 widget users can manipulate.
 
-!!! Note "Running Snippets from this Section"
+!!! note "Running Snippets from this Section"
 
     To follow along with code snippets from this section, we can use the following `.jl` file:
     ```julia

@@ -559,7 +559,7 @@ Connect to the unique signals of each event controller in order to react to thes
 Collapsible item which has a label and child. If the label is clicked, 
 the child is shown (or hidden, if it is already shown).
 
-!!! Note 
+!!! note
     This widget should not be used to create collapsible lists, 
     use [`ListView`](@ref) for this purpose instead.
 

@@ -98,7 +98,7 @@ Shipped applications, that is, applications intended for end users that are no l
 
 If the operating system is Linux, many log message will be written to the default location, usually `/var/log`. On other operating systems, message may not be stored at all.
 
-Regardless of OS, we can forward all logging, including that of mousetrap itself, to a file using `set_log_file`, which takes the file path as a string. If the file already exist, it will be appended to (as opposed to being overriden). If the file does not yet exist, it will be created. If this operation was unsuccesful, `false` will be returned.
+Regardless of OS, we can forward all logging, including that of mousetrap itself, to a file using `set_log_file`, which takes the file path as a string. If the file already exist, it will be appended to (as opposed to being overwritten). If the file does not yet exist, it will be created. If this operation was unsuccesful, `false` will be returned.
 
 When stored to a file, logging message will have a different format that may or may not list additional information when compared to logging to a console. The philosophy behind this is that it is better to log as much information as possible, then use second party software to filter it, as opposed to missing crucial information for the sake of brevity:
 
@@ -333,7 +333,7 @@ Looking again at the previous screenshot in this section, we see that in the bot
 
 By adding a filter, we make it so only files that pass that filter will be shown and thus be selectable. This is useful when we want to limit file selection to only a certain type of files, for example, an image manipulation application would only allow loadable image files as the file type for an `Open...` dialog.
 
-We construct a `FileFilter` by first choosing a name. This string will be used as the title of the filter, which is shown in the `FileChooser`s drop-down:
+We construct a `FileFoilter` by first choosing a name. This string will be used as the title of the filter, which is shown in the `FileChooser`s drop-down:
 
 ```julia
 file_filter = FileFilter("*.jl")
@@ -366,7 +366,7 @@ By default, no `FileFilter`s will be registered, which means the `FileChooser` w
 
 ## Alert Dialog
 
-A very common for an application that manipulates files is to make sure the user knows they are overriding a file, for example when the users selects a location using a `FileChooser` whos action is `FILE_CHOOSER_ACTION_SAVE_FILE`.
+A very common for an application that manipulates files is to make sure the user knows they are overwriting a file, for example when the users selects a location using a `FileChooser` whos action is `FILE_CHOOSER_ACTION_SAVE_FILE`.
 
 While we could construct a custom widget for this purpose, put that widget in a `Window`, then present that window to the user, a task as common as this should be possible in only a few lines. For this purpose, mousetrap offers [`AlertDialog`](@ref), which is a dialog that shows a message to the user, along with one or more buttons they can click.
 
@@ -376,7 +376,7 @@ Each `AlertDialog` has a **message**, a **detailed description**, as well as one
 overwrite_file_warning_dialog = AlertDialog(
     ["Continue", "Cancel"],  # buttons
     "A file with this name already exists, continue?", # message
-    "The original file will be overridden, this cannot be undone." # detail description
+    "The original file will be overwritten, this cannot be undone." # detail description
 )
 ```
 
@@ -548,5 +548,5 @@ Other than with `ImageDisplay`, we have other ways to use icons in graphical wid
 
 ## Icon Themes
 
-!!! Note 
+!!! note 
     This chapter is not yet complete, consider viewing the document of [`IconTheme`](@ref) and its related functions.
