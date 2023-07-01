@@ -106,6 +106,5 @@ let file = open("docs/src/02_library/classes.md", "w+")
     @info "Done."
 end 
 
-println(pwd())
-Base.Filesystem.cp("src/docs/signals.jl", "./signals.jl"; force=true)
-makedocs(sitename="mousetrap", expandfirst=["01_installation.md"])
+Base.Filesystem.cp("src/docs/signals.jl", "docs/signals.jl"; force=true)
+makedocs(sitename="mousetrap")

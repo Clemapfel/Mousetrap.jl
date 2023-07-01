@@ -56,7 +56,7 @@ AlertDialog
 ```
 #### Functions that interact with this type:
 + [`mousetrap.add_button!`](@ref)
-+ [`mousetrap.get_button_label!`](@ref)
++ [`mousetrap.get_button_label`](@ref)
 + [`mousetrap.get_detailed_description`](@ref)
 + [`mousetrap.get_is_modal`](@ref)
 + [`mousetrap.get_message`](@ref)
@@ -1141,6 +1141,7 @@ Image
 ```
 #### Functions that interact with this type:
 + [`mousetrap.as_cropped`](@ref)
++ [`mousetrap.as_flipped`](@ref)
 + [`mousetrap.as_scaled`](@ref)
 + [`mousetrap.create!`](@ref)
 + [`mousetrap.create_from_file!`](@ref)
@@ -2102,7 +2103,7 @@ Scale
 + [`mousetrap.add_mark!`](@ref)
 + [`mousetrap.clear_marks!`](@ref)
 + [`mousetrap.get_adjustment`](@ref)
-+ [`mousetrap.get_has_origin!`](@ref)
++ [`mousetrap.get_has_origin`](@ref)
 + [`mousetrap.get_lower`](@ref)
 + [`mousetrap.get_orientation`](@ref)
 + [`mousetrap.get_should_draw_value`](@ref)

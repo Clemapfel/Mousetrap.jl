@@ -183,6 +183,10 @@ mousetrap.as_ellipse!
 ```@docs
 mousetrap.as_elliptical_ring!
 ```
+## `as_flipped`
+```@docs
+mousetrap.as_flipped
+```
 ## `as_line!`
 ```@docs
 mousetrap.as_line!
@@ -1163,9 +1167,9 @@ mousetrap.get_bottom_margin
 ```@docs
 mousetrap.get_bounding_box
 ```
-## `get_button_label!`
+## `get_button_label`
 ```@docs
-mousetrap.get_button_label!
+mousetrap.get_button_label
 ```
 ## `get_can_respond_to_input`
 ```@docs
@@ -1351,9 +1355,9 @@ mousetrap.get_has_focus
 ```@docs
 mousetrap.get_has_frame
 ```
-## `get_has_origin!`
+## `get_has_origin`
 ```@docs
-mousetrap.get_has_origin!
+mousetrap.get_has_origin
 ```
 ## `get_has_wide_handle`
 ```@docs

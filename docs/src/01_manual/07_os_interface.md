@@ -196,7 +196,7 @@ end
 
 ### Moving / Copying File
 
-To move a file from one location to another, we use [`move!`](@ref). If we want to copy a file or directory instead of moving it, we use [`copy!`](@ref):
+To move a fil e from one location to another, we use [`move!`](@ref). If we want to copy a file or directory instead of moving it, we use [`copy!`](@ref mousetrap.copy!):
 
 ```julia
 from = FileDescriptor("/path/from/file.txt")
@@ -344,11 +344,11 @@ We now have to specify which files should pass the filter. `FileFilter` offers m
 | `FileFilter` Method                             | Argument       | Resulting Allowed Files                                   |
 |-------------------------------------------------|----------------|-----------------------------------------------------------|
 | [`add_allowed_suffix!`](@ref)                   | `jl`           | files ending in `.jl`                                     |
-| [`add_allow_all_supported_image_formats`](@ref) | (no argument)  | file types that can be loaded by [`ImageDisplay`](@ref)s  |
-| [`add_allowed_mime_type`](@ref)                 | `text/plain`   | files classified as plain text, for example `.txt`        |
-| [`add_alowed_pattern`](@ref)                    | `*.jl`         | files whose name conform to the given regular expression  |
+| [`add_allow_all_supported_image_formats!`](@ref) | (no argument)  | file types that can be loaded by [`ImageDisplay`](@ref)s  |
+| [`add_allowed_mime_type!`](@ref)                 | `text/plain`   | files classified as plain text, for example `.txt`        |
+| [`add_allowed_pattern!`](@ref)                    | `*.jl`         | files whose name conform to the given regular expression  |
 
-Where a table with the allowed image formats is available in [the chapter on images](08_image_and_sound.md#supported-image-formats).
+Where a table with the allowed image formats is available in [the chapter on images](06_image_and_sound.md#supported-image-formats).
 
 After having set up our filter, we simply add it to the `FileChooser` instance using [`add_filter!`](@ref):
 
@@ -421,7 +421,7 @@ With this, we have a vastly simplified mechanism of how to show short, message-s
 
 ## Glib Keyfiles
 
-For many objects like images, mousetrap [offers ways to store them on the disk](@ref save_to_file!) For custom objects, such as the state of our application, we have no such option. While it may sometimes be necessary, for most purposes we do not need to create a custom file type, instead, we can use the [**GLib KeyFile**](https://docs.gtk.org/glib/struct.KeyFile.html), whose syntax is heavily inspired by Windows `.ini` settings files.
+For many objects like images, mousetrap [offers ways to store them on the disk](@ref save_to_file) For custom objects, such as the state of our application, we have no such option. While it may sometimes be necessary, for most purposes we do not need to create a custom file type, instead, we can use the [**GLib KeyFile**](https://docs.gtk.org/glib/struct.KeyFile.html), whose syntax is heavily inspired by Windows `.ini` settings files.
 
 Keyfiles are human-readable and easy to edit, which makes them better suited for certain purposes when compared to [json](https://docs.fileformat.com/web/json/) or [xml](https://docs.fileformat.com/web/xml/) files.
 

@@ -5,7 +5,7 @@
 Memory-managed object that wraps a function. Each action has a unique ID and is registered with 
 the [`Application`](@ref). It can furthermore have any number of shortcut triggers.
 
-Depending on whether [`set_function!`](@ref) or [`set_stateful_function`](@ref) was called to register 
+Depending on whether [`set_function!`](@ref) or [`set_stateful_function!`](@ref) was called to register
 a callback with the function, the action may have an additional boolean state.
 
 For **stateless** actions, the function is required to have the signature
@@ -52,7 +52,7 @@ $(@type_constructors(
     Adjustment(value::Number, lower::Number, upper::Number, increment::Number)
 ))
 
-$(@type_signals(Adjusment, 
+$(@type_signals(Adjustment,
     value_changed,
     properties_changed
 ))
@@ -122,7 +122,7 @@ The applications ID is required to contain at least one `.`, and it should be un
 other application on the users operating system shares this ID.
 
 $(@type_constructors(
-    Appication(::ApplicationID)
+    Application(::ApplicationID)
 ))
 
 $(@type_signals(Application, 
@@ -1247,8 +1247,8 @@ The following types of menu items are available
 |-----------|-------------|
 | "action"  | [`add_action!(::MenuModel, label::String, ::Action)`](@ref) |
 | "icon"    | [`add_icon!(::MenuModel, ::Icon, ::Action)`](@ref) |
-| "submenu" | [`add_submenu!(::MenuModel::, label::String, other::MenuModel)`](@ref) |
-| "section" | [`add_section(::MenuModel::, label::String, other::MenuModel)`](@ref) |
+| "submenu" | [`add_submenu!(::MenuModel, label::String, other::MenuModel)`](@ref) |
+| "section" | [`add_section!(::MenuModel, label::String, other::MenuModel)`](@ref) |
 | "widget"  | [`add_widget!(::MenuModel, ::Widget)`](@ref) |
 
 See the manual section on menus for more information.
@@ -1813,7 +1813,7 @@ add_controller!(window, scroll_controller)
 # Scrollbar <: Widget
 
 Widget usually used to scroll a window or view. Connect to 
-the signals of the [`Adjusment`](@ref) obtained using [`get_adjustment`](@ref)
+the signals of the [`Adjustment`](@ref) obtained using [`get_adjustment`](@ref)
 to react to the user changing the position of the scrollbar.
 
 $(@type_constructors(
@@ -1835,7 +1835,7 @@ such as [`GridView`](@ref), [`ListView`](@ref), or [`Stack`](@ref).
 Only if the selection mode is set to anything other than [`SELECTION_MODE_NONE`](@ref)
 will the selection model emit its signals.
 
-Use [`get_selection_model!`](@ref) to retrieve the model from a selectable widget.
+Use [`get_selection_model`](@ref) to retrieve the model from a selectable widget.
 
 $(@type_constructors(
 ))
@@ -2038,7 +2038,7 @@ Selectable widget that always shows exactly one of its children.
 Use [`StackSwitcher`](@ref) or [`StackSidebar`](@ref) to provide a
 way for users to choose the page of the stack.
 
-Connect to the signals of the [`SelectionModel`](@ref) provided by [`get_selection_model!`](@ref)
+Connect to the signals of the [`SelectionModel`](@ref) provided by [`get_selection_model`](@ref)
 to track which stack page is currently selected.
 
 $(@type_constructors(
@@ -2383,7 +2383,7 @@ The user can control which part is shown
 by operating two scrollbars. These  will automatically hide 
 or show themself when the users cursor enters the viewport.
 This behavior can be influenced by setting the 
-[`ScrollbarPolicy`](@ref) for one or both of the scrollbars.
+[`ScrollbarVisibilityPolicy`](@ref) for one or both of the scrollbars.
 
 `Viewport` can be forced to obey the width and/or height 
 of its child by setting [`set_propagate_natural_width!`](@ref) and / or

@@ -70,7 +70,7 @@ we have to create two button instances.
 
 ### Size Request
 
-Moving onto the properties that determines the widgets size, we have its **size request**. This is a [`Vector2f`](@ref) which governs the minimum width and height of the widget, in pixels. Once set with [`set_size_request!`](@ref), no matter what, that widget will always allocate at least that amount of space. 
+Moving onto the properties that determines the widgets size, we have its **size request**. This is a [`Vector2f`](@ref Vector2) which governs the minimum width and height of the widget, in pixels. Once set with [`set_size_request!`](@ref), no matter what, that widget will always allocate at least that amount of space. 
 
 By default, all widgets size request is `Vector2f(0, 0)`. Setting the width and/or height of a widgets size request to `0` will tell the size manager, the algorithm determining the widgets final size on screen, that the widget has not made a request for a minimum size.
 
@@ -582,7 +582,7 @@ Familiar from previous chapters, [`Button`](@ref) is commonly used to trigger be
 
 It has the two signals:
 
-```@eval
+```
 Base.include(Main, "signals.jl")
 @signal_table(Button,
     clicked,
@@ -624,7 +624,6 @@ Other than the child widget, we can customize the look of a button further. `set
     end
     ```
 
-
 Where the above shown buttons have the following properties:
 
 | Button | `set_has_frame!` | `set_is_circular!` |
@@ -641,7 +640,7 @@ Where the above shown buttons have the following properties:
 
 Unique to `ToggleButton` is that, if clicked, the button will **remain pressed**. When clicked again, it returns to being unpressed. Anytime the state of the `ToggleButton` changes, signal `toggled` will be emitted. In this way, `ToggleButton` can be used to track a boolean state.
 
-```@eval
+```
 Base.include(Main, "signals.jl")
 @signal_table(ToggleButton,
     toggled,
@@ -666,7 +665,7 @@ set_child!(window, toggle_button)
 
 [`CheckButton`](@ref) is very similar to `ToggleButton` in function - but not appearance. `CheckButton` is an empty box in which a checkmark appears when it is toggled. Just like before, we query whether it is pressed by calling `get_is_active`. 
 
-```@eval
+```
 Base.include(Main, "signals.jl")
 @signal_table(ToggleButton,
     toggled,
@@ -717,8 +716,8 @@ Note that `get_is_active` will only return `true` if the current state is specif
 
 As the last widget intended to convey a boolean state to the user, we have [`Switch`](@ref), which has an appearance similar to a light switch. `Switch` does not emit `toggled`, instead, we connect to the `activate` signal, which is emitted anytime the switch is operated.
 
-```@eval
-include("signals.jl")
+```
+Base.include(Main, "signals.jl")
 @signal_table(Switch,
     activate
 )
@@ -787,8 +786,8 @@ We usually do not need to create our own `Adjustment`, rather, it is provided by
 
 Adjustment has two signals:
 
-```@eval
-include("signals.jl")
+```
+Base.include(Main, "signals.jl")
 @signal_table(Adjustment,
     value_changed,
     properties_changed
@@ -1475,7 +1474,7 @@ For 90% of cases, this is the way to go when we want to use a `Popover`. It is e
 
 The arrow character next to the `PopoverButton`s child indicates to the user that clicking it will reveal a popover. We can hide this arrow by setting `PopoverButton::set_always_show_arrow` to `false`.
 
-We will see one more use of `PopoverButton` in the [chapter on menus](06_menus.md), where we use it to control `PopoverMenu`, a specialized form of `Popover` that shows a menu instead of an arbitrary widget.
+We will see one more use of `PopoverButton` in the [chapter on menus](08_menus.md), where we use it to control `PopoverMenu`, a specialized form of `Popover` that shows a menu instead of an arbitrary widget.
 
 ---
 

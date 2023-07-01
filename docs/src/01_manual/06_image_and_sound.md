@@ -154,7 +154,7 @@ The following image formats are supported:
 | XBM                     | `.xbm`  |
 | XPM                     | `.xpm`  |
 
-It is recommended to use `Image` only for raster-based file types. While possible, for vector-graphics based types like `.ico` and `.svg`, mousetrap offers another more specialized class, [`Icon`](@ref), which we learned about in the [chapter on operating system interfacing](@ref). 
+It is recommended to use `Image` only for raster-based file types. While possible, for vector-graphics based types like `.ico` and `.svg`, mousetrap offers another more specialized class, [`Icon`](@ref), which we learned about in the [chapter on operating system interfacing](./07_os_interface.md). 
 
 #### Creating an Image from Scratch
 

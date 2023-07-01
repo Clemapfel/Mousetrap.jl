@@ -6,16 +6,17 @@ TODO
 
 ```@contents
 Pages = [
-    "manual/01_installation.md",
-    "manual/02_signals.md",
-    "manual/03_actions.md",
-    "manual/04_widgets.md",
-    "manual/05_event_handling.md",
-    "manual/06_menus.md",
-    "manual/07_image_and_sound.md",
-    "manual/08_os_interface.md",
-    "manual/09_native_rendering.md",
-    "manual/10_closing_statements.md",
+    "01_manual/01_installation.md"
+    "01_manual/02_signals.md"
+    "01_manual/03_actions.md"
+    "01_manual/04_widgets.md"
+    "01_manual/05_event_handling.md"
+    "01_manual/06_image_and_sound.md"
+    "01_manual/07_os_interface.md"
+    "01_manual/08_menus.md"
+    "01_manual/09_native_rendering.md"
+    "01_manual/10_closing_statements.md"
+
 ]
 
 Depth = 4

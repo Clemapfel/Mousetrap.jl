@@ -7,7 +7,7 @@ In this chapter, we will learn:
 
 ---
 
-In the [chapter on actions](./03_actions) we learned that we can trigger an action using [`Button`](@ref), by assigning an action to it using [`set_action!`](@ref).
+In the [chapter on actions](./03_actions.md) we learned that we can trigger an action using [`Button`](@ref), by assigning an action to it using [`set_action!`](@ref).
 this works if we want to have a GUI element that has a few actions, in reality, an application can have hundreds of different actions. Asking users to trigger these using
 an equal number of buttons would be unsustainable. For situations like these, we should instead turn to **menus**.
 
@@ -52,7 +52,7 @@ widget users can manipulate.
 
 The first and most simple item type is called "action". Added via [`add_action!`](@ref), which takes both a label and an [`Action`](@ref) instance, this item is a simple button with text. If the user clicks the button, the action is executed.
 
-Similar to `Button`, if the action is disabled (via [`set_enabled`](@ref)), the menu item will appear "greyed out" and cannot be activated.
+Similar to `Button`, if the action is disabled (via [`set_enabled!`](@ref)), the menu item will appear "greyed out" and cannot be activated.
 
 ```cpp
 add_action!(model, "Action Item #1", action)
@@ -64,7 +64,7 @@ add_action!(model, "Action item #3", action)
 
 ### Item Type #2: Widgets
 
-Secondly, we have perhaps the most powerful type of item: A custom widget. We add an item of this type using [`add_widget`](@ref), which only takes a single argument, the widget itself. This widget can be arbitrarily complex, though it is usually not adviced to insert an entire `ColumnView` into a tiny menu. Good-practic examples include `Button`, `Entry`, `CheckButton`, `ToggleButton`, `Switch` and `SpinButton`, all of which are interactable.
+Secondly, we have perhaps the most powerful type of item: A custom widget. We add an item of this type using [`add_widget!`](@ref), which only takes a single argument, the widget itself. This widget can be arbitrarily complex, though it is usually not adviced to insert an entire `ColumnView` into a tiny menu. Good-practic examples include `Button`, `Entry`, `CheckButton`, `ToggleButton`, `Switch` and `SpinButton`, all of which are interactable.
 
 We do not supply an `Action` instance with this item, if we want the user interacting with the menu item to trigger behavior, we will have to connect that behavior to the signals of the widget thats inserted into the menu.
 

@@ -1792,6 +1792,11 @@ module mousetrap
     end
     export as_cropped
 
+    function as_flipped(image::Image, flip_horizontally::Bool, flip_vertically::Bool)
+        return Image(detail.as_flipped(image._internal, flip_horizontally, flip_vertically))
+    end
+    export as_flipped
+
     function set_pixel!(image::Image, x::Integer, y::Integer, color::RGBA)
         detail.set_pixel_rgba!(image._internal, from_julia_index(x), from_julia_index(y), color)
     end
@@ -2173,10 +2178,10 @@ module mousetrap
     end
     export set_button_label!
 
-    function get_button_label!(dialog::AlertDialog, index::Integer) ::String
-        detail.get_button_label!(dialog._internal, from_julia_index(index))
+    function get_button_label(dialog::AlertDialog, index::Integer) ::String
+        detail.get_button_label(dialog._internal, from_julia_index(index))
     end
-    export get_button_label!
+    export get_button_label
 
     @export_function AlertDialog get_n_buttons Integer
     @export_function AlertDialog get_message String
@@ -3933,7 +3938,7 @@ module mousetrap
     @export_function Scale set_should_draw_value! Cvoid Bool b
     @export_function Scale get_should_draw_value Bool
     @export_function Scale set_has_origin! Cvoid Bool b
-    @export_function Scale get_has_origin! Bool
+    @export_function Scale get_has_origin Bool
     @export_function Scale set_orientation! Cvoid Orientation orientation
     @export_function Scale get_orientation Orientation
 

@@ -153,7 +153,7 @@ end
 
 We can also modify the state from the outside: [`set_state!`](@ref) and [`get_state`](@ref) access the internal state of a stateful action. If we are unsure about whether an action is stateful or stateless, we can call [`get_is_stateful`](@ref), which returns `true` if the actions callback was registered using `set_stateful_function!`.
 
-Stateful actions will become useful in the [chapter on menus](./06_menus.md), where we will use them to trigger a global boolean flag using an automatically constructed menu. 
+Stateful actions will become useful in the [chapter on menus](./08_menus.md), where we will use them to trigger a global boolean flag using an automatically constructed menu. 
 
 ---
 

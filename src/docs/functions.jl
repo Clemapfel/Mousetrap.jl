@@ -338,6 +338,13 @@ as_elliptical_ring!(::Shape, center::Vector2f, outer_x_radius::AbstractFloat, ou
 Initialize the shape as an elliptical ring.
 """
 
+@document as_flipped """
+```
+as_flipped(::Image, flip_horizontally::Bool, flip_vertically::Bool) -> Image
+```
+Create a new image that is horizontally and/or vertically mirrored. This does not modify the original image.
+"""
+
 @document as_line! """
 ```
 as_line!(::Shape, a::Vector2f, b::Vector2f) 
@@ -829,7 +836,7 @@ Get value for the devices axis, or 0 if no such axis is present.
 
 @document get_button_label """
 ```
-get_button_label(::AlertDialog, index::Integer) -> String
+get_button_label!(::AlertDialog, index::Integer) -> String
 ```
 Get label of button at given index (1-based).
 """
@@ -1069,6 +1076,13 @@ get_expanded(::Expander) -> Bool
 Get whether the expanders child is currently visible.
 """
 
+@document get_file_chooser_action """
+```
+get_file_chooser_action(::FileChooser) -> FileChooserAction
+```
+Get current file chooser action type.
+"""
+
 @document get_file_extension """
 ```
 get_file_extension(::FileDescriptor) -> String
@@ -1214,7 +1228,7 @@ Get alignment along the x-axis.
 
 @document get_horizontal_scrollbar_policy """
 ```
-get_horizontal_scrollbar_policy(::Viewport) -> ScrollbarPolicy
+get_horizontal_scrollbar_policy(::Viewport) -> ScrollbarVisibilityPolicy
 ```
 Get the policy governing how and if the horizontal scrollbar is revealed / hidden.
 """
@@ -1288,6 +1302,13 @@ get_is_decorated(::Window) -> Bool
 Get whether the header bar of the window is visible.
 """
 
+@document is_executable """
+```
+is_executable(::FileDescriptor) -> Bool
+```
+Get whether file object can be executed.
+"""
+
 @document get_is_focusable """
 ```
 get_is_focusable(::Widget) -> Bool
@@ -1299,7 +1320,7 @@ Get whether the widget can hold input focus.
 ```
 get_is_holding(::Application) -> Bool
 ```
-Get whether [`hold`](@ref) was called and the application currently blocks attempts at exiting.
+Get whether [`hold!`](@ref) was called and the application currently blocks attempts at exiting.
 """
 
 @document get_is_horizontally_homogeneous """
@@ -1987,7 +2008,7 @@ Get current state of the check button.
 
 @document get_step_increment """
 ```
-get_step_increment(::Adjusment) -> Float32
+get_step_increment(::Adjustment) -> Float32
 get_step_increment(::Scale) -> Float32
 get_step_increment(::SpinButton) -> Float32
 ```
@@ -2337,7 +2358,7 @@ Get alignment along the y-axis.
 
 @document get_vertical_scrollbar_policy """
 ```
-get_vertical_scrollbar_policy(::Viewport) -> ScrollbarPolicy
+get_vertical_scrollbar_policy(::Viewport) -> ScrollbarVisibilityPolicy
 ```
 Get policy of vertical scrollbar.
 """
@@ -3467,9 +3488,9 @@ Designate a widget as the default widget. When the widget is activated, for exam
 pressing the enter key, the default widget is activated.
 """
 
-@document set_delay_factor """
+@document set_delay_factor! """
 ```
-set_delay_factor(::LongPressEventController, factor::AbstractFloat) 
+set_delay_factor!(::LongPressEventController, factor::AbstractFloat) 
 ```
 Set a factor that multiplies the default delay after which a longpress gesture is recognized.
 """
@@ -3583,6 +3604,13 @@ Set whether the widget should expand along the y-axis.
 set_file!(::Clipboard, file::FileDescriptor) 
 ```
 Override the content of the clipboard with a path to a file. Use `get_string(f, ::Clipboard)` to retrieve it.
+"""
+
+@document set_file_chooser_action! """
+```
+set_file_chooser_action!(::FileChooser, ::FileChooserAction)
+```
+Override the current file chooser action type, this may not change the layout until the dialog is hidden, then shown again.
 """
 
 @document set_fixed_width """

@@ -113,6 +113,99 @@ include("docs/functions.jl")
 include("docs/types.jl")
 include("docs/enums.jl")
 
+
+macro generate_signal_function_docs(snake_case)
+
+    out = Expr(:toplevel)
+
+    id = snake_case
+
+    signature = signal_descriptors[snake_case][1]
+    connect_signal_name = :connect_signal_ * snake_case * :!
+    
+    connect_signal_string = """
+        ```
+        $connect_signal_name(f, ::T, [::Data_t]) -> Cvoid
+        ```
+        Connect to signal `$id`, where `T` is a signal emitter instance that supports this signal
+
+        `Data_t` is an optional argument, which, if specified, will be forwarded to the signal handler.
+        
+        `f` is required to be invocable as a function with signature:
+        ```
+        $signature
+        ```
+        Where `T` is the type of the signal emitter instance.
+        """
+
+    push!(out.args, :(@document $connect_signal_name $connect_signal_string))
+
+    ###
+
+    emit_signal_name = :emit_signal_ * snake_case
+
+    return_t = match(r" -> .*", signature).match
+    arg_ts = signature[(match(r"::T, ", signature).offset + 5):(match(r", \[::Data_t\]", signature).offset - 1)]
+
+    emit_signal_string = """
+        ```
+        $emit_signal_name(::T, $arg_ts)$return_t
+        ```
+        Manually emit signal `$id`, where `T` is a signal emitter that supports this signal.
+        The arguments will forwarded to the signal handler.
+        """
+   
+    emit_signal_name = :emit_signal_ * snake_case
+
+    push!(out.args, :(@document $emit_signal_name $emit_signal_string))
+
+    ### 
+    
+    disconnect_signal_name = :disconnect_signal_ * snake_case * :!
+
+    disconnect_signal_string = """
+        ```
+        $disconnect_signal_name(::T)
+        ```
+        Permanently disconnect a signal, where `T` is a signal emitter that supports signal `$id`. 
+        """
+
+    push!(out.args, :(@document $disconnect_signal_name $disconnect_signal_string))
+
+    ###
+
+    set_signal_blocked_name = :set_signal_ * snake_case * :_blocked * :!
+
+    set_signal_blocked_string = """
+        ```
+        $set_signal_blocked_name(::T, ::Bool)
+        ```
+        If set to `true`, blocks emission of this signal until turned back on, where `T` is a signal emitter that supports signal `$id`.
+        """
+
+    push!(out.args, :(@document $set_signal_blocked_name $set_signal_blocked_string))
+
+    ###
+
+    get_signal_blocked_name = :get_signal_ * snake_case * :_blocked
+
+    get_signal_blocked_string = """
+        ```
+        $get_signal_blocked_name(::T) -> Bool
+        ```
+        Get whether the signal is currently blocked, where `T` is a signal emitter that supports signal `$id`.
+        """
+
+    push!(out.args, :(@document $get_signal_blocked_name $get_signal_blocked_string))
+
+    return out
+end
+
+for pair in signal_descriptors
+    id = pair[1]
+    eval(:(@generate_signal_function_docs $id))
+end
+
 @do_not_compile const _generate_function_docs = quote
 
     for name in mousetrap.functions

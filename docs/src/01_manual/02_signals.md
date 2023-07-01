@@ -161,7 +161,7 @@ Each signal requires its handler to conform to a specific signature. This signat
 ## Checking Signal Signature
 
 Working with our example, signal `clicked` of class `Button`, let's say we do not know what function is able to connect to this signal.
-To find out, we check the mousetrap documentation, either [online](@ref mousetrap.Button) or from within the REPL by pressing `?` and entering the name of the class we want to look up:
+To find out, we check the mousetrap documentation, either by visting [`Button`](@ref)s documentation online, or from within the REPL by pressing `?` and entering the name of the class we want to look up:
 
 ```
 help?> mousetrap.Button
