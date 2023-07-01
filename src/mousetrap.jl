@@ -3929,6 +3929,20 @@ module mousetrap
     @export_function Scale set_upper! Cvoid Number => Cfloat value
     @export_function Scale set_step_increment! Cvoid Number => Cfloat value
     @export_function Scale set_value! Cvoid Number => Cfloat value
+    
+    @export_function Scale set_should_draw_value! Cvoid Bool b
+    @export_function Scale get_should_draw_value Bool
+    @export_function Scale set_has_origin! Cvoid Bool b
+    @export_function Scale get_has_origin! Bool
+    @export_function Scale set_orientation! Cvoid Orientation orientation
+    @export_function Scale get_orientation Orientation
+
+    function add_mark!(scale::Scale, value::Number, position::RelativePosition, label::String = "")
+        detail.add_mark!(scale._internal, convert(Cfloat, value), position, label)
+    end
+    export add_mark!
+
+    @export_function Scale clear_marks! Cvoid
 
     @add_widget_signals Scale
     @add_signal_value_changed Scale

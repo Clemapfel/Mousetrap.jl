@@ -624,6 +624,7 @@ Other than the child widget, we can customize the look of a button further. `set
     end
     ```
 
+
 Where the above shown buttons have the following properties:
 
 | Button | `set_has_frame!` | `set_is_circular!` |
@@ -754,7 +755,6 @@ include("signals.jl")
         present!(window)
     end
     ```
-
 ---
 
 ---
@@ -812,75 +812,84 @@ spin_button = SpinButton(0, 2, 0.5)
 
 ![](../resources/spin_button.png)
 
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+    
+        horizontal = SpinButton(0, 2, 0.5)
+        set_value!(horizontal, 1)
+    
+        # Add invisible separator buffers above and below spin button for better symmetry
+        horizontal_buffer = CenterBox(
+            ORIENTATION_VERTICAL, 
+            Separator(; opacity = 0.0),
+            horizontal,
+            Separator(; opacity = 0.0)
+        )
+    
+        vertical = SpinButton(0, 2, 0.5)
+        set_value!(vertical, 1)
+        set_orientation!(vertical, ORIENTATION_VERTICAL)
+    
+        box = CenterBox(ORIENTATION_HORIZONTAL)
+        set_start_child!(box, horizontal_buffer)
+        set_end_child!(box, vertical)
+    
+        set_child!(window, box)
+        present!(window)
+    end             
+    ```
 
-![](../resources/spin_button.png)
+We set and access any property of spin button using `get_value`, `set_value!`, `get_lower`, `set_lower!`, etc. These work exactly as if we were modifying the underlying `Adjustment`, which we can also obtain using `get_adjustment`.
 
-\how_to_generate_this_image_begin
+`SpinButton` has two signals, one of which, `value_changed`, we recognized from `Adjustment`. To react to the user changing the value of a `SpinButton`, we would do the following:
+
 ```julia
-auto horizontal = SpinButton(0, 2, 0.5);
-horizontal.set_orientation(Orientation::HORIZONTAL);
-horizontal.set_value(1);
-
-// pad horizontal spin button with invisible separators above and below
-auto horizontal_buffer = CenterBox(Orientation::VERTICAL);
-horizontal_buffer.set_start_child(Separator(0));
-horizontal_buffer.set_center_child(horizontal);
-horizontal_buffer.set_end_child(Separator(0));
-
-auto vertical = SpinButton(0, 2, 0.5);
-vertical.set_orientation(Orientation::VERTICAL);
-vertical.set_value(1);
-
-auto box = CenterBox(Orientation::HORIZONTAL);;
-box.set_start_child(horizontal_buffer);
-box.set_end_child(vertical);
-
-box.set_margin_horizontal(75);
-box.set_margin_vertical(40);
-window.set_child(box);
+spin_button = SpinButton(0, 2, 0.5)
+connect_signal_value_changed!(spin_button) do self::SpinButton
+    println("Value is now: $(get_value(self))")
+end
 ```
-\how_to_generate_this_image_end
 
-If we want to check any of the properties of the  `SpinButton`s range, we can either query the `Adjustment*` returned by `SpinButton::get_adjustment`, or we can get the values directly using `SpinButton::get_value`, `SpinButton::get_lower`, etc. This is just for the sake of convenience, both ways have identical behavior.
-
-`SpinButton` has two signals:
-
-\signals
-\signal_value_changed{SpinButton}
-\signal_wrapped{SpinButton}
-
-Only the latter of which needs explanation, as we recognize `value_changed` from `Adjustment`.
-
-When the user reaches one end of the `SpinButton`s range, which, for a range of `[0, 2]` would be either the value `0` or `2`, if the user attempts to increase or decrease the value further, nothing will happen. However, if we set `SpinButton::set_can_wrap` to `true`, the value will wrap around to the opposite side of the range. For example, trying to increase the value while it is `2`, it would jump to `0`, and vice-versa.
+The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) was set to `true` and the spin buttons value under- or overflows.
 
 ---
 
 ## Scale
 
-\image html scale_no_value.png
-\how_to_generate_this_image_begin
-```julia
-auto horizontal = Scale(0, 2, 0.5);
-horizontal.set_orientation(Orientation::HORIZONTAL);
-horizontal.set_value(1);
-horizontal.set_size_request({200, 0});
+![](../resources/scale_no_value.png)
 
-auto vertical = Scale(0, 2, 0.5);
-vertical.set_orientation(Orientation::VERTICAL);
-vertical.set_value(1);
-vertical.set_size_request({0, 200});
+!!! detail "How to generate this image"
+    ```julia
+    main() do app::Application
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
 
-auto box = CenterBox(Orientation::HORIZONTAL);;
-box.set_start_child(horizontal);
-box.set_end_child(vertical);
+        horizontal = Scale(0, 2, 0.5)
+        set_orientation!(horizontal, ORIENTATION_HORIZONTAL)
+        set_value!(horizontal, 1)
+        set_size_request!(horizontal, Vector2f(200, 0))
 
-box.set_margin_horizontal(75);
-box.set_margin_vertical(40);
-state->main_window.set_child(box);
-```
-\how_to_generate_this_image_end
+        vertical = Scale(0, 2, 0.5)
+        set_orientation!(vertical, ORIENTATION_VERTICAL)
+        set_value!(vertical, 1)
+        set_size_request!(vertical, Vector2f(0, 200))
 
-\a{Scale}, just like `SpinButton`, is a widget that allows a user to choose a value from the underlying `Adjustment`. This is done by click-dragging the knob of the scale, or clicking anywhere on its rail. In this way, it is usually harder to pick an exact decimal value on a `Scale` as opposed to a `SpinButton`. We can aid in this task by displaying the exact value next to the scale, which is enabled with `Scale::set_should_draw_value`:
+        box = CenterBox(ORIENTATION_HORIZONTAL)
+        set_start_child!(box, horizontal)
+        set_end_child!(box, vertical)
+
+        set_margin_horizontal!(box, 75)
+        set_margin_vertical!(box, 40)
+
+        set_child!(window, box)
+        present!(window)
+    end
+    ```
+
+[`Scale`](@ref), just like `SpinButton`, is a widget that allows a user to choose a value from the underlying `Adjustment`. This is done by click-dragging the knob of the scale, or clicking anywhere on its rail. In this way, it is usually harder to pick an exact decimal value on a `Scale` as opposed to a `SpinButton`. We can aid in this task by displaying the exact value next to the scale, which is enabled with [`set_should_draw_value!`](@ref):
 
 \image html scale_with_value.png
 \how_to_generate_this_image_begin

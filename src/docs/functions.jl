@@ -207,6 +207,14 @@ add_icon!(model::MenuModel, icon::Icon, action::Action)
 Add an "icon"-type item to the menu model. 
 """
 
+@document add_mark! """
+```
+add_mark!(::Scale, value::Number, position::RelativePosition, [label::String])
+```
+Add a mark at the specified value, with an optional label. `position` determines 
+on which side of the scale the mark is drawn.
+"""
+
 @document add_marker! """
 ```
 add_marker!(::LevelBar, name::String, value::AbstractFloat) 
@@ -526,6 +534,13 @@ Remove all children from the container widget.
 clear_filters!(::FileChooser)
 ```
 Remove all registered file filters.
+"""
+
+@document clear_marks! """
+```
+clear_marks!(::Scale)
+```
+Remove all marks added via [`add_mark!`](@ref).
 """
 
 @document clear_render_tasks! """
@@ -1155,6 +1170,13 @@ get_has_frame(::PopoverButton) -> Bool
 Get whether the widgets outline should be displayed. This does not impact the widgets interactability.
 """
 
+@document get_has_origin """
+```
+get_has_origin(::Scale) -> Bool
+```
+Get whether the area between the origin of the scale and the current value should be fille with a solid color
+"""
+
 @document get_has_wide_handle """
 ```
 get_has_wide_handle(::Paned) -> Bool
@@ -1613,6 +1635,8 @@ get_orientation(::Paned) -> Orientation
 get_orientation(::ProgressBar) -> Orientation 
 get_orientation(::Scrollbar) -> Orientation 
 get_orientation(::Separator) -> Orientation 
+get_orientation(::SpinButton) -> Orientation
+get_orientation(::SpinButton) -> Orientation
 ```
 Get whether the widget is oriented horizontally or vertically.
 
@@ -1816,6 +1840,13 @@ Get the underlying selection model of the selectable widget.
 get_shortcuts(action::Action) -> Vector{ShortcutTrigger}
 ```
 Get all registered shortcuts.
+"""
+
+@document get_should_draw_value """
+```
+get_should_draw_value(::Scale) -> Bool
+```
+Get whether the value of the scales adjustment is drawn next to the knob
 """
 
 @document get_should_interpolate_size """
@@ -3635,6 +3666,13 @@ set_has_frame!(::PopoverButton, ::Bool)
 Set whether the widgets outline should be displayed. This does not impact the widgets interactability.
 """
 
+@document set_has_origin! """
+```
+set_has_origin!(::Scale, ::Bool)
+```
+Set whether the area of the slider between the start of the range and the current value should be filled with a color
+"""
+
 @document set_has_wide_handle! """
 ```
 set_has_wide_handle!(::Paned, ::Bool) 
@@ -4068,6 +4106,8 @@ set_orientation!(::Separator, orientation::Orientation)
 set_orientation!(::ListView, orientation::Orientation) 
 set_orientation!(::GridView, orientation::Orientation) 
 set_orientation!(::Paned, orientation::Orientation) 
+set_orientation!(::SpinButton, orientation::Orientation)
+set_orientation!(::Scale, orientation::Orientation)
 ```
 Set orientation of the widget, this governs along which axis it aligns itself and its children.
 
@@ -4240,6 +4280,13 @@ Set whether the user can select part of the label, as would be needed to copy it
 set_selected(::DropDown, id::DropDownItemID) 
 ```
 Make the item identified by the given ID the currently selected item. This will invoke its associated callback.
+"""
+
+@document set_should_draw_value! """
+```
+set_should_draw_value!(::Scale, ::Bool)
+```
+Set whether the current value of the scales internal adjustment should be drawn next to the knob
 """
 
 @document set_should_interpolate_size """

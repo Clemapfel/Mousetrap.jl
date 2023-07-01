@@ -39,23 +39,22 @@ main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    horizontal = SpinButton(0, 2, 0.5)
+    horizontal = Scale(0, 2, 0.5)
+    set_orientation!(horizontal, ORIENTATION_HORIZONTAL)
     set_value!(horizontal, 1)
+    set_size_request!(horizontal, Vector2f(200, 0))
 
-    horizontal_buffer = CenterBox(
-        ORIENTATION_VERTICAL, 
-        Separator(; opacity = 0.0),
-        horizontal,
-        Separator(; opacity = 0.0)
-    )
-
-    vertical = SpinButton(0, 2, 0.5)
-    set_value!(vertical, 1)
+    vertical = Scale(0, 2, 0.5)
     set_orientation!(vertical, ORIENTATION_VERTICAL)
+    set_value!(vertical, 1)
+    set_size_request!(vertical, Vector2f(0, 200))
 
     box = CenterBox(ORIENTATION_HORIZONTAL)
-    set_start_child!(box, horizontal_buffer)
+    set_start_child!(box, horizontal)
     set_end_child!(box, vertical)
+
+    set_margin_horizontal!(box, 75)
+    set_margin_vertical!(box, 40)
 
     set_child!(window, box)
     present!(window)

@@ -115,6 +115,10 @@ mousetrap.add_filter!
 ```@docs
 mousetrap.add_icon!
 ```
+## `add_mark!`
+```@docs
+mousetrap.add_mark!
+```
 ## `add_marker!`
 ```@docs
 mousetrap.add_marker!
@@ -282,6 +286,10 @@ mousetrap.clear!
 ## `clear_filters!`
 ```@docs
 mousetrap.clear_filters!
+```
+## `clear_marks!`
+```@docs
+mousetrap.clear_marks!
 ```
 ## `clear_render_tasks!`
 ```@docs
@@ -1343,6 +1351,10 @@ mousetrap.get_has_focus
 ```@docs
 mousetrap.get_has_frame
 ```
+## `get_has_origin!`
+```@docs
+mousetrap.get_has_origin!
+```
 ## `get_has_wide_handle`
 ```@docs
 mousetrap.get_has_wide_handle
@@ -1678,6 +1690,10 @@ mousetrap.get_selection_model
 ## `get_shortcuts`
 ```@docs
 mousetrap.get_shortcuts
+```
+## `get_should_draw_value`
+```@docs
+mousetrap.get_should_draw_value
 ```
 ## `get_should_interpolate_size`
 ```@docs
@@ -2022,6 +2038,10 @@ mousetrap.get_tool_type
 ## `get_top_left`
 ```@docs
 mousetrap.get_top_left
+```
+## `get_top_level_widget`
+```@docs
+mousetrap.get_top_level_widget
 ```
 ## `get_top_margin`
 ```@docs
@@ -2555,10 +2575,6 @@ mousetrap.set_accept_label!
 ```@docs
 mousetrap.set_action!
 ```
-## `set_active!`
-```@docs
-mousetrap.set_active!
-```
 ## `set_alignment!`
 ```@docs
 mousetrap.set_alignment!
@@ -2754,6 +2770,10 @@ mousetrap.set_has_close_button!
 ## `set_has_frame!`
 ```@docs
 mousetrap.set_has_frame!
+```
+## `set_has_origin!`
+```@docs
+mousetrap.set_has_origin!
 ```
 ## `set_has_wide_handle!`
 ```@docs
@@ -3062,6 +3082,10 @@ mousetrap.set_selectable!
 ## `set_selected`
 ```@docs
 mousetrap.set_selected
+```
+## `set_should_draw_value!`
+```@docs
+mousetrap.set_should_draw_value!
 ```
 ## `set_should_interpolate_size`
 ```@docs
