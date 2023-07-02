@@ -1,7 +1,6 @@
 module mousetrap
 
     const VERSION = v"0.1.0"
-
     macro do_not_compile(args...) return :() end
     
 ####### detail.jl
@@ -26,7 +25,7 @@ module mousetrap
             actual_return_ts = Base.return_types(f, arg_ts)
             match_found = false
             for type in actual_return_ts
-                if type <: return_t || !isempty(Base.return_types(Base.convert, (Type{return_t}, type)))
+                if type <: return_t
                     match_found = true
                     break;
                 end
@@ -1426,6 +1425,8 @@ module mousetrap
                 print(stderr, "\n")
                 quit!(app)
             end
+
+            return nothing
         end
         return run!(app)
     end

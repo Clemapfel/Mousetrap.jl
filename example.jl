@@ -11,7 +11,9 @@ main() do app::Application
     set_title!(window, "mousetrap.jl")
 
     dropdown = DropDown()
-    push_back!(dropdown,
+    push_back!(
+        (::DropDown) -> nothing,
+        dropdown,
         Label("Item #01"),
         Label("01")
     )
@@ -24,4 +26,6 @@ main() do app::Application
 
     set_child!(window, frame)
     present!(window)
+
+    return nothing
 end

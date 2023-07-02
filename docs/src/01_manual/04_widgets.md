@@ -1166,8 +1166,8 @@ Lastly, sometimes we want a different label for when an item is selected, and fo
 ```julia
 dropdown = DropDown()
 push_back!(dropdown,
-    Label("Item #01"),  # Label displayed in dropdown menu
-    Label("01")         # Label displayed when item is selected
+    Label("Item #01"),  # Widget displayed in dropdown menu
+    Label("01")         # Widget displayed when item is selected
 )
 
 push_back!(dropdown, Label("Item #02"), Label("02"))
@@ -1176,7 +1176,7 @@ push_back!(dropdown, Label("Item #03"), Label("03"))
 
 ![](../resources/dropdown_separate.png)
 
-Where we had to first create a `Label` instance, then use it as the label widget, as this method of `push_back!` takes any two widgets, which gives us incredible flexibility with how we want the dropdown to be displayed. This method also supports adding a callback as the first argument, which behaves exactly as before.
+Where we had to first create a `Label` instance, then use it as the label widget, as this method of `push_back!` takes any two widgets, which gives us incredible flexibility with how we want the dropdown to be displayed. This method, along with all methods of `push_front!` and `insert!`, also supports adding a callback as the first argument, which behaves exactly as before.
 
 ---
 
