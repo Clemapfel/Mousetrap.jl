@@ -1442,6 +1442,8 @@ module mousetrap
     end
 
     @export_type Window Widget
+    @declare_native_widget Window
+
     Window(app::Application) = Window(detail._Window(app._internal))
 
     function set_application!(window::Window, app::Application)
@@ -2258,6 +2260,8 @@ module mousetrap
 ####### image_display.jl
 
     @export_type ImageDisplay Widget
+    @declare_native_widget ImageDisplay
+
     ImageDisplay(path::String) = ImageDisplay(detail._ImageDisplay(path))
     ImageDisplay(image::Image) = ImageDisplay(detail._ImageDisplay(image._internal))
     ImageDisplay(icon::Icon) = ImageDisplay(detail._ImageDisplay(icon._internal))
@@ -2284,6 +2288,8 @@ module mousetrap
 ####### aspect_frame.jl
 
     @export_type AspectFrame Widget
+    @declare_native_widget AspectFrame
+
     function AspectFrame(ratio::Number; child_x_alignment::AbstractFloat = 0.5, child_y_alignment::AbstractFloat = 0.5)
         return AspectFrame(detail._AspectFrame(convert(Cfloat, ratio), convert(Cfloat, child_x_alignment), convert(Cfloat, child_y_alignment)))
     end
@@ -2305,6 +2311,8 @@ module mousetrap
 ####### box.jl
 
     @export_type Box Widget
+    @declare_native_widget Box
+
     Box(orientation::Orientation) = Box(detail._Box(orientation))
 
     function hbox(widgets::Widget...) 
@@ -2366,7 +2374,21 @@ module mousetrap
 ####### button.jl
 
     @export_type Button Widget
+    @declare_native_widget Button
+
     Button() = Button(detail._Button())
+
+    function Button(label::Widget) 
+        out = Button()
+        set_child!(out, label)
+        return out
+    end
+
+    function Button(icon::Icon)
+        out = Button()
+        set_icon!(out, icon)
+        return out
+    end
 
     @export_function Button set_has_frame! Cvoid Bool b
     @export_function Button get_has_frame Bool
@@ -2399,6 +2421,8 @@ module mousetrap
 ####### center_box.jl
 
     @export_type CenterBox Widget
+    @declare_native_widget CenterBox
+
     CenterBox(orientation::Orientation) = CenterBox(detail._CenterBox(orientation))
     
     function CenterBox(orientation::Orientation, left::Widget, center::Widget, right::Widget) ::CenterBox
@@ -2443,6 +2467,8 @@ module mousetrap
     end
 
     @export_type CheckButton Widget
+    @declare_native_widget CheckButton
+
     CheckButton() = CheckButton(detail._CheckButton())
 
     @export_function CheckButton set_state! Cvoid CheckButtonState state
@@ -2470,6 +2496,8 @@ module mousetrap
 ####### switch.jl
 
     @export_type Switch Widget
+    @declare_native_widget Switch
+
     Switch() = Switch(detail._Switch())
 
     @export_function Switch get_is_active Bool
@@ -2483,7 +2511,20 @@ module mousetrap
 ####### toggle_button.jl
 
     @export_type ToggleButton Widget
+    @declare_native_widget ToggleButton
+
     ToggleButton() = ToggleButton(detail._ToggleButton())
+    function ToggleButton(label::Widget)
+        out = ToggleButton()
+        set_child!(out, label)
+        return out
+    end
+
+    function ToggleButton(icon::Icon)
+        out = ToggleButton()
+        set_icon!(out, icon)
+        return out
+    end
 
     @export_function ToggleButton set_is_active! Cvoid Bool b
     @export_function ToggleButton get_is_active Bool
@@ -2525,7 +2566,15 @@ module mousetrap
     end
 
     @export_type Viewport Widget
+    @declare_native_widget Viewport
+
     Viewport() = Viewport(detail._Viewport())
+
+    function Viewport(child::Widget) ::Viewport
+        out = Viewport()
+        set_child!(out, child)
+        return out
+    end
 
     @export_function Viewport set_propagate_natural_height! Cvoid Bool b
     @export_function Viewport get_propagate_natural_height Bool
@@ -2583,6 +2632,8 @@ module mousetrap
 ####### entry.jl
 
     @export_type Entry Widget
+    @declare_native_widget Entry
+
     Entry() = Entry(detail._Entry())
 
     @export_function Entry get_text String
@@ -2617,8 +2668,10 @@ module mousetrap
 ####### expander.jl
 
     @export_type Expander Widget
+    @declare_native_widget Expander
+
     Expander() = Expander(detail._Expander())
-    function Expander(child::Widget, label::Widget) 
+    function Expander(child::Widget, label::Widget) ::Expander
         out = Expander()
         set_child!(out, child)
         set_label_widget!(out, label)
@@ -2649,6 +2702,8 @@ module mousetrap
 ####### fixed.jl
 
     @export_type Fixed Widget
+    @declare_native_widget Fixed
+
     Fixed() = Fixed(detail._Fixed())
 
     add_child!(fixed::Fixed, child::Widget, position::Vector2f) = detail.add_child!(fixed._internal, as_widget_pointer(child), position)
@@ -2675,6 +2730,8 @@ module mousetrap
     end
 
     @export_type LevelBar Widget
+    @declare_native_widget LevelBar
+
     LevelBar(min::Number, max::Number) = LevelBar(detail._LevelBar(convert(Cfloat, min), convert(Cfloat, max)))
 
     @export_function LevelBar add_marker! Cvoid String name AbstractFloat => Cfloat value
@@ -2720,6 +2777,8 @@ module mousetrap
     end
 
     @export_type Label Widget
+    @declare_native_widget Label
+
     Label() = Label(detail._Label())
     Label(formatted_string::String) = Label(detail._Label(formatted_string))
 
@@ -2754,6 +2813,8 @@ module mousetrap
 ####### text_view.jl
 
     @export_type TextView Widget
+    @declare_native_widget TextView
+
     TextView() = TextView(detail._TextView())
 
     @export_function TextView get_text String
@@ -2790,6 +2851,8 @@ module mousetrap
 ####### frame.jl
 
     @export_type Frame Widget
+    @declare_native_widget Frame
+
     Frame() = Frame(detail._Frame())
 
     function Frame(child::Widget) ::Frame
@@ -2816,8 +2879,10 @@ module mousetrap
 ####### overlay.jl
 
     @export_type Overlay Widget
+    @declare_native_widget Overlay
+
     Overlay() = Overlay(detail._Overlay())
-    function Overlay(base::Widget, overlays::Widget...)
+    function Overlay(base::Widget, overlays::Widget...) ::Overlay
         out = Overlay()
         set_child!(out, base)
         for overlay in overlays
@@ -2891,6 +2956,8 @@ module mousetrap
 ###### menubar.jl
 
     @export_type MenuBar Widget
+    @declare_native_widget MenuBar
+
     MenuBar(model::MenuModel) = MenuBar(detail._MenuBar(model._internal))
 
     @add_widget_signals MenuBar
@@ -2900,6 +2967,8 @@ module mousetrap
 ####### popover_menu.jl
 
     @export_type PopoverMenu Widget
+    @declare_native_widget PopoverMenu
+
     PopoverMenu(model::MenuModel) = PopoverMenu(detail._PopoverMenu(model._internal))
 
     @add_widget_signals PopoverMenu
@@ -2910,6 +2979,8 @@ module mousetrap
 ###### popover.jl
 
     @export_type Popover Widget
+    @declare_native_widget Popover
+
     Popover() = Popover(detail._Popover())
 
     @export_function Popover popup! Cvoid
@@ -2943,15 +3014,16 @@ module mousetrap
 ###### popover_button.jl
 
     @export_type PopoverButton Widget
-    PopoverButton() = PopoverButton(detail._PopoverButton())
+    @declare_native_widget PopoverButton
 
-    function PopoverButton(popover_menu::PopoverMenu)
+    PopoverButton() = PopoverButton(detail._PopoverButton())
+    function PopoverButton(popover_menu::PopoverMenu) ::PopoverButton
         out = PopoverButton()
         set_popover_menu!(out, popover_menu)
         return out
     end
 
-    function PopoverButton(popover::Popover)
+    function PopoverButton(popover::Popover) ::PopoverButton
         out = PopoverButton()
         set_popover!(out, popover)
         return out
@@ -2992,6 +3064,8 @@ module mousetrap
 ###### drop_down.jl
 
     @export_type DropDown Widget
+    @declare_native_widget DropDown
+
     DropDown() = DropDown(detail._DropDown())
 
     const DropDownItemID = String
@@ -3412,6 +3486,8 @@ module mousetrap
 ###### list_view.jl
 
     @export_type ListView Widget
+    @declare_native_widget ListView
+
     ListView(orientation::Orientation, selection_mode::SelectionMode = SELECTION_MODE_NONE) = ListView(detail._ListView(orientation, selection_mode))
 
     struct ListViewIterator
@@ -3464,6 +3540,8 @@ module mousetrap
 ###### grid_view.jl
 
     @export_type GridView Widget
+    @declare_native_widget GridView
+
     GridView(orientation::Orientation = ORIENTATION_VERTICAL, selection_mode::SelectionMode = SELECTION_MODE_NONE) = GridView(detail._GridView(orientation, selection_mode))
     GridView(selection_mode::SelectionMode) = GridView(ORIENTATION_VERTICAL, selection_mode)
 
@@ -3514,6 +3592,8 @@ module mousetrap
 ###### grid.jl
 
     @export_type Grid Widget
+    @declare_native_widget Grid
+
     Grid() = Grid(detail._Grid())
 
     function insert!(grid::Grid, widget::Widget, row_i::Signed, column_i::Signed; n_horizontal_cells::Unsigned = Unsigned(1), n_vertical_cells::Unsigned = Unsigned(1))
@@ -3563,12 +3643,15 @@ module mousetrap
 ###### stack.jl
 
     @export_type Stack Widget
+    @declare_native_widget Stack
     Stack() = Stack(detail._Stack())
 
     @export_type StackSidebar Widget
+    @declare_native_widget StackSidebar
     StackSidebar(stack::Stack) = StackSidebar(detail._StackSidebar(stack._internal))
 
     @export_type StackSwitcher Widget
+    @declare_native_widget StackSwitcher
     StackSwitcher(stack::Stack) = StackSwitcher(detail._StackSwitcher(stack._internal))
 
     @export_enum StackTransitionType begin
@@ -3638,6 +3721,8 @@ module mousetrap
 ###### notebook.jl
 
     @export_type Notebook Widget
+    @declare_native_widget Notebook
+
     Notebook() = Notebook(detail._Notebook())
 
     function push_front!(notebook::Notebook, child_widget::Widget, label_widget::Widget) ::Int64
@@ -3686,6 +3771,8 @@ module mousetrap
 ###### column_view.jl
 
     @export_type ColumnViewColumn SignalEmitter
+    @declare_native_widget ColumnView
+
     ColumnViewColumn(internal::Ptr{Cvoid}) = ColumnViewColumn(detail._ColumnViewColumn(internal))
 
     @export_function ColumnViewColumn set_title! Cvoid String title
@@ -3804,6 +3891,8 @@ module mousetrap
 ###### header_bar.jl
 
     @export_type HeaderBar Widget
+    @declare_native_widget HeaderBar
+
     HeaderBar() = HeaderBar(detail._HeaderBar())
     HeaderBar(layout::String) = HeaderBar(detail._HeaderBar(layout))
 
@@ -3831,8 +3920,17 @@ module mousetrap
 ###### paned.jl
 
     @export_type Paned Widget
+    @declare_native_widget Paned
+
     Paned(orientation::Orientation) = Paned(detail._paned(orientation))
 
+    function Paned(start_child::Widget, end_child::Widget, orientation::Orientation) ::Paned
+        out = Paned()
+        set_start_child!(out, start_child)
+        set_end_child!(out, end_child)
+        return out
+    end
+    
     @export_function Paned get_position Cint
     @export_function Paned set_position! Cvoid Integer position
 
@@ -3866,6 +3964,8 @@ module mousetrap
 ###### progress_bar.jl
 
     @export_type ProgressBar Widget
+    @declare_native_widget ProgressBar
+
     ProgressBar() = ProgressBar(detail._ProgressBar())
 
     @export_function ProgressBar pulse Cvoid
@@ -3885,6 +3985,8 @@ module mousetrap
 ###### spinner.jl
 
     @export_type Spinner Widget
+    @declare_native_widget Spinner
+
     Spinner() = Spinner(detail._Spinner())
 
     @export_function Spinner set_is_spinning! Cvoid Bool b
@@ -3910,6 +4012,8 @@ module mousetrap
     end
 
     @export_type Revealer Widget
+    @declare_native_widget Revealer
+
     Revealer(transition_type::RevealerTransitionType = REVEALER_TRANSITION_TYPE_CROSSFADE) = Revealer(detail._Revealer(transition_type))
 
     set_child!(revealer::Revealer, child::Widget) = detail.set_child!(revealer._internal, as_widget_pointer(child))
@@ -3935,6 +4039,8 @@ module mousetrap
 ###### scale.jl
 
     @export_type Scale Widget
+    @declare_native_widget Scale
+
     function Scale(lower::Number, upper::Number, step_increment::Number, orientation::Orientation = ORIENTATION_HORIZONTAL)
         return Scale(detail._Scale(
             convert(Cfloat, lower),
@@ -3979,6 +4085,8 @@ module mousetrap
 ###### spin_button.jl
 
     @export_type SpinButton Widget
+    @declare_native_widget SpinButton
+
     function SpinButton(lower::Number, upper::Number, step_increment::Number, orientation::Orientation = ORIENTATION_HORIZONTAL)
         return SpinButton(detail._SpinButton(
             convert(Cfloat, lower), 
@@ -4059,6 +4167,8 @@ module mousetrap
 ###### scrollbar.jl
 
     @export_type Scrollbar Widget
+    @declare_native_widget Scrollbar
+
     Scrollbar() = Scrollbar(detail._ScrollBar)
 
     get_adjustment(scrollbar::Scrollbar) ::Adjustment = Adjustment(detail.get_adjustment(scrollbar._internal))
@@ -4074,6 +4184,8 @@ module mousetrap
 ###### separator.jl
 
     @export_type Separator Widget
+    @declare_native_widget Separator
+
     Separator(orientation::Orientation = ORIENTATION_HORIZONTAL; opacity::AbstractFloat = 1.0) = Separator(detail._Separator(convert(Cfloat, opacity), orientation))
 
     @export_function Separator set_orientation! Cvoid Orientation orientation
@@ -4771,6 +4883,8 @@ module mousetrap
 ###### render_area.jl
 
     @export_type RenderArea Widget
+    @declare_native_widget RenderArea
+
     RenderArea() = RenderArea(detail._RenderArea())
 
     add_render_task!(area::RenderArea, task::RenderTask) = detail.add_render_task!(area._internal, task._internal)
@@ -4807,48 +4921,5 @@ module mousetrap
 ###### documentation
         
     include("./docs.jl")
-
-    @declare_native_widget AspectFrame
-@declare_native_widget Box
-@declare_native_widget Button
-@declare_native_widget CenterBox
-@declare_native_widget CheckButton
-@declare_native_widget ColumnView
-@declare_native_widget DropDown
-@declare_native_widget Entry
-@declare_native_widget Expander
-@declare_native_widget Fixed
-@declare_native_widget Frame
-@declare_native_widget Grid
-@declare_native_widget GridView
-@declare_native_widget HeaderBar
-@declare_native_widget ImageDisplay
-@declare_native_widget Label
-@declare_native_widget LevelBar
-@declare_native_widget ListView
-@declare_native_widget MenuBar
-@declare_native_widget Notebook
-@declare_native_widget Overlay
-@declare_native_widget Paned
-@declare_native_widget Popover
-@declare_native_widget PopoverButton
-@declare_native_widget PopoverMenu
-@declare_native_widget ProgressBar
-@declare_native_widget RenderArea
-@declare_native_widget Revealer
-@declare_native_widget Scale
-@declare_native_widget Scrollbar
-@declare_native_widget Separator
-@declare_native_widget SpinButton
-@declare_native_widget Spinner
-@declare_native_widget Stack
-@declare_native_widget StackSidebar
-@declare_native_widget StackSwitcher
-@declare_native_widget Switch
-@declare_native_widget TextView
-@declare_native_widget ToggleButton
-@declare_native_widget Viewport
-@declare_native_widget Window
-
 
 end # module mousetrap

@@ -209,7 +209,9 @@ Button with a label. Connect to signal `clicked` or specify an action via [`set_
 in order to react to the user clicking the button.
 
 $(@type_constructors(
-    Button()
+    Button(),
+    Button(label::Widget),
+    Button(::Icon)
 ))
 
 $(@type_signals(Button, 
@@ -1421,7 +1423,8 @@ Widget with exactly two children. Draws a solid border between the two, which th
 one side or the other to control the size of both widgets at the same time.
 
 $(@type_constructors(
-    Paned()
+    Paned(orientation::Orientation),
+    Paned(start_child::Widget, end_child::Widget, orientation::Orientation)
 ))
 
 $(@type_signals(Paned, 
@@ -1496,7 +1499,9 @@ Button that has automatically shows or hides its associated [`Popover`](@ref) or
 when clicked.
 
 $(@type_constructors(
-    PopoverButton()
+    PopoverButton(),
+    PopoverButton(::Popover),
+    PopoverButton(::PopoverMenu)
 ))
 
 $(@type_signals(PopoverButton, 
@@ -2280,7 +2285,9 @@ println(as_microseconds(seconds(3.14159)))
 Button with a boolean state. Emits signal `toggled` when its state changes.
 
 $(@type_constructors(
-    ToggleButton()
+    ToggleButton(),
+    ToggleButton(label::Widget),
+    ToggleButton(::Icon)
 ))
 
 $(@type_signals(ToggleButton, 
