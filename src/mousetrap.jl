@@ -534,16 +534,16 @@ module mousetrap
     as_nanoseconds(time::Time) ::Int64 = time._ns
     export as_nanoseconds
 
-    minutes(n::AbstractFloat) = Time(detail.minutes_to_ns(n))
+    minutes(n::Number) = Time(detail.minutes_to_ns(convert(Cdouble, n)))
     export minutes
 
-    seconds(n::AbstractFloat) = Time(detail.seconds_to_ns(n))
+    seconds(n::Number) = Time(detail.seconds_to_ns(convert(Cdouble, n)))
     export seconds
 
-    milliseconds(n::AbstractFloat) = Time(detail.milliseconds_to_ns(n))
+    milliseconds(n::Number) = Time(detail.milliseconds_to_ns(convert(Cdouble, n)))
     export milliseconds
 
-    microseconds(n::AbstractFloat) = Time(detail.microseconds_to_ns(n))
+    microseconds(n::Number) = Time(detail.microseconds_to_ns(convert(Cdouble, n)))
     export microseconds
 
     nanoseconds(n::Integer) = Time(n)
@@ -2618,6 +2618,12 @@ module mousetrap
 
     @export_type Expander Widget
     Expander() = Expander(detail._Expander())
+    function Expander(child::Widget, label::Widget) 
+        out = Expander()
+        set_child!(out, child)
+        set_label_widget!(out, label)
+        return out
+    end
 
     function set_child!(expander::Expander, child::Widget)
         detail.set_child!(expander._internal, as_widget_pointer(child))
@@ -2811,6 +2817,14 @@ module mousetrap
 
     @export_type Overlay Widget
     Overlay() = Overlay(detail._Overlay())
+    function Overlay(base::Widget, overlays::Widget...)
+        out = Overlay()
+        set_child!(out, base)
+        for overlay in overlays
+            add_overlay!(out, overlay)
+        end
+        return out
+    end
 
     set_child!(overlay::Overlay, child::Widget) = detail.set_child!(overlay._internal, as_widget_pointer(child))
     export set_child!

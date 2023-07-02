@@ -566,7 +566,8 @@ the child is shown (or hidden, if it is already shown).
     use [`ListView`](@ref) for this purpose instead.
 
 $(@type_constructors(
-    Expander()
+    Expander(),
+    Expander(child::Widget, label::Widget)
 ))
 
 $(@type_signals(Expander, 
@@ -1366,7 +1367,8 @@ Widget that has exaclty one "base" child, and any number of "overlay" children. 
 two interactable widgets overlap, only the top-most widget will be interactable. 
 
 $(@type_constructors(
-    Overlay()
+    Overlay(),
+    Overlay(base::Widget, overlays::Widget...)
 ))
 
 $(@type_signals(Overlay, 

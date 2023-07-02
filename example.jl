@@ -10,22 +10,16 @@ main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    dropdown = DropDown()
-    push_back!(
-        (::DropDown) -> nothing,
-        dropdown,
-        Label("Item #01"),
-        Label("01")
-    )
+    child = Frame(Overlay(Separator(), Label("Child")))
+    set_margin!(child, 10)
+    set_size_request!(child, Vector2f(0, 100))
 
-    push_back!(dropdown, Label("Item #02"), Label("02"))
-    push_back!(dropdown, Label("Item #03"), Label("03"))
+    label = Label("Label")
+    set_margin!(label, 10)
+   
+    expander_and_frame = Frame(Expander(child, label))
+    set_margin!(expander_and_frame, 10)
 
-    frame = Frame(dropdown)
-    set_margin!(frame, 10)
-
-    set_child!(window, frame)
+    set_child!(window, expander_and_frame)
     present!(window)
-
-    return nothing
 end

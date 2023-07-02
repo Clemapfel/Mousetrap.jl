@@ -1123,9 +1123,9 @@ end
 
 ## Dropdown
 
-We sometimes want users to be able to pick a value from a **set list of values**, which may or may not be numeric. [`DropDown`](@ref) allows for this. If clicked, a window presents the user with a list of items. The user can click on any of these, that item will be made the currently selected item.
+We sometimes want users to be able to pick a value from a **set list of values**, which may or may not be numeric. [`DropDown`](@ref) allows for this. If clicked, a window presents the user with a list of items. The user can click on any of these, then that item will be made the currently selected item.
 
-We add an item using `push_back!`, which takes a string as the items label:
+We add an item using `push_back!`, which takes a string, which will be used as the items label:
 
 ```julia
 dropdown = DropDown()
@@ -1136,11 +1136,11 @@ item_03_id = push_back!(dropdown, "Item #03")
 
 ![](../resources/dropdown_simple.png)
 
-`push_back!` returns the internal id of the item. We should keep track of this ID, as it will be used to identify the currently selected item. By calling `get_selected`, we can get the ID of the currently selected item.
+`push_back!` returns the internal id of the item. We should keep track of this ID, as it will be used to identify the currently selected item, which we can compare against the result of `get_selected`.
 
 If we do loose track of the ID, we can always retrieve it using `get_item_at`, which returns the ID of the item at a given position.
 
-`push_back!`, and it's equivalents `push_front!` and `insert!`, provide a method that also takes a callback. This callback will be invoked when the item is selected, it has the signature:
+`push_back!`, and its equivalents `push_front!` and `insert!`, provide a method that also takes a callback. This callback will be invoked when the item is selected, it has the signature:
 
 ```
 (::DropDown, [::Data_t]) -> Cvoid
@@ -1176,7 +1176,7 @@ push_back!(dropdown, Label("Item #03"), Label("03"))
 
 ![](../resources/dropdown_separate.png)
 
-Where we had to first create a `Label` instance, then use it as the label widget, as this method of `push_back!` takes any two widgets, which gives us incredible flexibility with how we want the dropdown to be displayed. This method, along with all methods of `push_front!` and `insert!`, also supports adding a callback as the first argument, which behaves exactly as before.
+Where we had to first create a `Label` instance, then use it as the label widget, as this method of `push_back!` takes any two *widgets*, as opposed to just strings. This gives us incredible flexibility with how we want the dropdown to be displayed. This method, along with all methods of `push_front!` and `insert!`, also supports adding a callback as the first argument, which behaves exactly as before.
 
 ---
 
@@ -1184,119 +1184,57 @@ Where we had to first create a `Label` instance, then use it as the label widget
 
 ## Frame
 
-\a{Frame} is a purely cosmetic widget that displays whatever child we choose using `Frame::set_child` in a frame with a small border and rounded corners:
+[`Frame`](@ref) is a purely cosmetic widget that displays its singular child in a frame with a small border and rounded corners:
 
-\image html frame_no_frame.png
+![](../resources/frame.png)
 
-\how_to_generate_this_image_begin
-```julia
-auto left = Separator();
-auto right = Separator();
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
 
-auto frame = Frame();
-frame.set_child(right);
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
 
-for (auto* separator : {&left, &right})
-{
-    separator->set_size_request({50, 50});
-    separator->set_expand(false);
-}
+        left = Separator()
+        right = Separator()
 
-auto box = CenterBox(Orientation::HORIZONTAL);
-box.set_start_child(left);
-box.set_end_child(frame);
+        for separator in [left, right]
+            set_size_request!(separator, Vector2f(50, 50))
+            set_expand!(separator, false)
+        end
 
-box.set_margin_horizontal(75);
-box.set_margin_vertical(40);
-window.set_child(box);
-```
-\how_to_generate_this_image_end
+        box = CenterBox(ORIENTATION_HORIZONTAL)
+        set_start_child!(box, left)
+        set_end_child!(box, Frame(right))
 
-Using `Frame::set_label_widget`, we can furthermore choose a widget to be displayed above the child widget of the frame. This will usually be a `Label`, though `set_label_widget` accepts any kind of widget.
+        set_margin_horizontal!(box, 75)
+        set_margin_vertical!(box, 40)
+    
+        set_child!(window, box)
+        present!(window)
+    end
+    ```
 
-`Frame` is rarely necessary, but will make GUIs seem more aesthetically pleasing and polished.
+Using [`set_label_widget!`](@ref), we can furthermore choose a widget to be displayed above the child widget of the frame. This will usually be a `Label`, though `set_label_widget!` accepts any kind of widget.
+
+`Frame` is rarely necessary, but will make GUIs seem more aesthetically pleasing and polished. 
 
 ---
 
 ## AspectFrame
 
-Not to be confused with `Frame`, \a{AspectFrame} adds no graphical element to its singular child. Instead, the widget added with `AspectFrame::set_child` will be forced to allocate a size that conforms to a specific **aspect ratio**. That is, its width-to-height ratio will stay constant.
+Not to be confused with `Frame`, [`AspectFrame`](@ref) adds no graphical element to its singular child. Instead, the widget added with `set_child!` will be forced to allocate a size that conforms to a specific **aspect ratio**. That is, its width-to-height ratio will stay constant, regardless of the aspect ratio of its parent.
 
-We choose the aspect ratio in `AspectFrame`s constructor, though we can later adjust it using `AspectFrame::set_ratio`. Both of these functions accept a floating point ratio calculated as `width / height`. For example, if we want to force a widget to keep an aspect ratio of 4:3, we would do:
+We choose the aspect ratio in `AspectFrame`s constructor, though we can later adjust it using `set_ratio!`. Both of these functions accept a floating point ratio calculated as `width / height`. For example, if we want to force a widget to keep an aspect ratio of 4:3, we would do:
 
 ```julia
-auto child_widget = // ...
-auto aspect_frame = AspectFrame(4.f / 3) // 4:3 aspect ratio
-aspect_frame.set_child(child_widget);
+child_widget = # ...
+aspect_frame = AspectFrame(4.0 / 3.0)
+set_child!(aspect_frame, child_widget);
 ```
 
-Where we wrote `4.f / 3` instead of `4 / 3` because in C++, the latter would trigger [integer division](https://en.wikipedia.org/wiki/Division_(mathematics)#Of_integers) resulting in a ratio of `1` (instead of the intended `1.333...`).
-
 ---
 
-## Revealer
-
-While not technically necessary, animations can improve user experience drastically. Not only do they add visual style, they can hide abrupt transitions or small loading times. As such, they should be in any advanced GUI designer's repertoire.
-
-One of the most common applications for animations is that of hiding or showing a widget. So far, when we called `Widget::hide` or `Widget::show`, the widget appears instantly, one frame after the function was called. This works, but when showing a large widget, other widgets around it will want to change their size allocation, which may drastically change the entire window's layout instantly.
-
-To address this, mousetrap offers \a{Revealer}, which plays an animation to reveal or hide a widget.
-`Revealer` always has exactly one child, set with `Revealer::set_child`. `Revealer` itself has no graphical element, it acts just like a `Box` with a single child.
-
-To trigger the `Revealer`s animation and change whether the child widget is currently visible, we call `Revealer::set_revealed` which takes a boolean as its argument. If the widget goes from hidden to shown or shown to hidden, the animation will play.
-
-Once the animation is done, signal `revealed` will be emitted:
-
-\signals
-\signal_revealed{Revealer}
-
-Using this, we can trigger our own behavior, for example to update a widgets display or trigger additional animations.
-
-### Transition Animation
-
-We have control over the kind and speed of the transition animation. By calling `Revealer::set_transition_duration`, we can set the exact amount of time an animation should take. For example, to set the animation duration to 1 second:
-
-```julia
-auto revealer = Revealer();
-revealer.set_child(// ...
-revealer.set_transition_duration(seconds(1));
-```
-
-Where `seconds` returns a \a{Time}.
-
-Apart from the speed, we also have a choice of animation **type**, represented by the enum \a{RevealerTransitionType}. Animations include a simple cross-fade, sliding, swinging, or `NONE`, which instantly shows or hides the widget. For more information on the look of the animation, see the \link mousetrap::RevealerTransitionType related documentation page\endlink.
-
----
-
-## Expander
-
-\a{Expander} is similar to `Revealer`, in that it also has exactly one child widget, and it shows / hides the widget. Unlike `Revealer`, there is no animation attached to `Expander`. Instead, it hides the widget behind a collapsible label:
-
-\image html expander.png
-
-\how_to_generate_this_image_begin
-```julia
-auto child = Label("[expanded child]");
-child.set_horizontal_alignment(Alignment::START);
-child.set_margin(5);
-child.set_margin_start(15);
-
-auto expander = Expander();
-expander.set_child(child);
-expander.set_label_widget(Label("Expander"));
-
-auto frame = Frame();
-frame.set_child(expander);
-frame.set_margin(50);
-window.set_child(frame);
-``` 
-\how_to_generate_this_image_end
-
-We set the `Expander`s child widget with `Expander::set_child`. We will furthermore want to specify a label widget, which is the widget shown next to the small arrow.  Set with`Expander::set_label_widget`, this widget will usually be a `Label`, though, again, any arbitrarily complex widget can be used.
-
-Note that `Expander` should not be used for the purpose of large nested list, for example those displaying a file system tree. A purpose-built widget for this already exists, it is called `ListView` and we will learn how to use it later in this chapter.
-
----
 
 ## Overlay
 
@@ -1407,6 +1345,97 @@ state->main_window.set_child(paned);
 \how_to_generate_this_image_end
 
 `Paned::set_end_child_shrinkable(true)` made it possible to move the barrier such that the left child is partially covered.
+
+---
+
+## Revealer
+
+While not technically necessary, animations can improve user experience drastically. Not only do they add visual style, they can hide abrupt transitions or small loading times. As such, they should be in any advanced GUI designer's repertoire.
+
+One of the most common applications for animations is the act of hiding or showing a widget.
+[`Revealer`](@ref) was made for this purpose.,
+
+
+To trigger the `Revealer`s animation and change whether the child widget is currently visible, we call `set_revealed!` which takes a boolean as its argument. If the widget goes from hidden to shown or shown to hidden, the animation will play. Once the animation is done, signal `revealed` will be emittedd.
+
+### Transition Animation
+
+We have control over the kind and speed of the transition animation. By calling `set_transition_duration!`, we can set the exact amount of time an animation should take. For example, to set the animation duration to 1 second:
+
+```julia
+revealer = Revealer()
+set_child!(revealer, #= widget =#)
+set_transition_duration!(revealer, seconds(1));
+```
+
+Where `seconds` returns a [`mousetrap.Time`](@ref).
+
+Apart from the speed, we also have a choice of animation **type**, represented by the enum [`RevealerTransitionType`](@ref). Animations include a simple cross-fade, sliding, swinging, or no animation at all, which instantly shows or hides the widget.
+
+![](../resources/revealer.png)
+
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+
+        # create child
+        child = Frame(Overlay(Separator(), Label("<span size='200%'>[Item]</span>")))
+        set_margin!(child, 10)
+        set_size_request!(child, Vector2f(0, 100))
+
+        # setup revealer
+        revealer = Revealer()
+        set_child!(revealer, child)
+        set_transition_duration!(revealer, seconds(1))
+        set_transition_type!(revealer, REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
+
+        # create a button that, when clicked, triggers the revealer animation
+        button = Button()
+        connect_signal_clicked!(button, revealer) do self::Button, revealer::Revealer
+            set_revealed!(revealer, !get_revealed(revealer))
+        end
+    
+        set_child!(window, vbox(button, revealer))
+        present!(window)
+    end
+    ```
+
+
+---
+
+## Expander
+
+[`Expander`](@ref) is similar to `Revealer`, in that it also has exactly one child widget, and it shows / hides the widget. Unlike `Revealer`, there is no animation attached to `Expander`. Instead, it hides the widget behind a collapsible label.
+
+Expander has two children, the label, set with `set_label_widget!`, and its child, set with `set_child!`, which is the widget that will be shown / hidden.
+
+![](../resources/expander.png)
+
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+
+        child = Frame(Overlay(Separator(), Label("Child")))
+        set_margin!(child, 10)
+        set_size_request!(child, Vector2f(0, 100))
+
+        label = Label("Label")
+        set_margin!(label, 10)
+    
+        expander_and_frame = Frame(Expander(child, label))
+        set_margin!(expander_and_frame, 10)
+
+        set_child!(window, expander_and_frame)
+        present!(window)
+    end
+    ```
+
+Note that `Expander` should not be used for the purpose of creating nested lists, as `ListView`, a widget we will learn about later in this chapter, is better suited for this purpose.
+
 
 ---
 
