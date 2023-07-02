@@ -269,14 +269,6 @@
 @document PAN_DIRECTION_RIGHT "Pan right-left"
 @document PAN_DIRECTION_UP "Pen down-up"
 
-@document ProgressBarDisplayMode enum_docs(:ProgressBarDisplayMode,
-    "Determines whether a [`ProgressBar`](@ref) should displays text or a percentage, showing the current fraction", [
-    :PROGRESS_BAR_DISPLAY_MODE_SHOW_PERCENTAGE,
-    :PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT
-])
-@document PROGRESS_BAR_DISPLAY_MODE_SHOW_PERCENTAGE "Show a percentage"
-@document PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT "Show custom text set via [`set_text!`](@ref)"
-
 @document PropagationPhase enum_docs(:PropagationPhase,
     "Determines at which part during the main loop event propgataion an event controller will consume the event, cf. https://developer-old.gnome.org/gtk4/stable/event-propagation.html", [
     :PROPAGATION_PHASE_BUBBLE,

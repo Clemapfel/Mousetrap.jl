@@ -1003,13 +1003,6 @@ get_detailed_description(::AlertDIalog) -> String
 Get detailed message, this is the text shown below the dialogs title.
 """
 
-@document get_display_mode """
-```
-get_display_mode(::ProgressBar) -> ProgressBarDisplayMode
-```
-Get whether the progress bar displays a percentage or custom text.
-"""
-
 @document get_editable """
 ```
 get_editable(::TextView) -> Bool
@@ -1918,6 +1911,13 @@ Get whether a separator should be drawn between two rows.
 get_show_separators(::ListView) -> Bool
 ```
 Get whether a separator should be drawn between two items.
+"""
+
+@document get_show_text """
+```
+get_show_text(::ProgressBar) - Bool
+```
+Get whether a percentage or custom label should be displayed above the progress bar.
 """
 
 @document get_show_title_buttons """
@@ -3509,13 +3509,6 @@ set_detailed_description(::AlertDialog, message::String)
 Set the detail message, this is the text shown below the dialogs title.
 """
 
-@document set_display_mode! """
-```
-set_display_mode!(::ProgressBar, mode::ProgressBarDisplayMode) 
-```
-Set whether the progress bar should display a percentage or custom text.
-"""
-
 @document set_editable! """
 ```
 set_editable!(::TextView, ::Bool) 
@@ -4357,6 +4350,13 @@ Set whether separators should be drawn between each row.
 set_show_separators(::ListView, ::Bool) 
 ```
 Set whether separators should be drawn between two items.
+"""
+
+@document set_show_text! """
+```
+set_show_text!(::ProgressBar, ::Bool)
+```
+Set whether a percentage or custom text should be displayed above the progress bar.
 """
 
 @document set_show_title_buttons! """

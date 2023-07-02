@@ -2679,6 +2679,7 @@ module mousetrap
     @export_function LevelBar set_min_value! Cvoid Number => Cfloat value
     @export_function LevelBar get_min_value Cfloat
     @export_function LevelBar set_max_value! Cvoid Number => Cfloat value
+    @export_function LevelBar get_max_value Cfloat
     @export_function LevelBar set_value! Cvoid Number => Cfloat value
     @export_function LevelBar get_value Cfloat
     @export_function LevelBar set_orientation! Cvoid Orientation orientation
@@ -2783,6 +2784,12 @@ module mousetrap
 
     @export_type Frame Widget
     Frame() = Frame(detail._Frame())
+
+    function Frame(child::Widget) ::Frame
+        out = Frame()
+        set_child!(out, child)
+        return out
+    end
 
     set_child!(frame::Frame, child::Widget) = detail.set_child!(frame._internal, as_widget_pointer(child))
     export set_child!
@@ -2978,7 +2985,7 @@ module mousetrap
     @export_function DropDown remove! Cvoid DropDownItemID id
     @export_function DropDown set_always_show_arrow! Cvoid Bool b
     @export_function DropDown get_always_show_arrow Bool
-    @export_function DropDown set_selected Cvoid DropDownItemID id
+    @export_function DropDown set_selected! Cvoid DropDownItemID id
     @export_function DropDown get_selected DropDownItemID
 
     get_item_at(drop_down::DropDown, i::Integer) = detail.get_item_at(drop_down._internal, from_julia_index(i))
@@ -2986,13 +2993,13 @@ module mousetrap
 
     function push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
-        return detail.push_back!(drop_down._internal, list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
+        return detail.push_back!(drop_down._internal, as_widget_pointer(list_widget), as_widget_pointer(label_widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
-        return detail.push_back!(drop_down._internal, list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
+        return detail.push_back!(drop_down._internal, as_widget_pointer(list_widget), as_widget_pointer(label_widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -3008,19 +3015,18 @@ module mousetrap
         end)
     end
     
-    push_back!(drop_down::DropDown, list_widget::Widget, label_widget::Widget) = push_back!((_::DropDown) -> (), list_widget, label_widget)
-    push_back!(drop_down::DropDown, label::String) = push_back!((_::DropDown) -> (), drop_down, label)
-
+    push_back!(drop_down::DropDown, list_widget::Widget, label_widget::Widget) = push_back!((_::DropDown) -> nothing, drop_down, list_widget, label_widget)
+    push_back!(drop_down::DropDown, label::String) = push_back!((_::DropDown) -> nothing, drop_down, label)
     export push_back!
 
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
-        return detail.push_front!(drop_down._internal, list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
+        return detail.push_front!(drop_down._internal, as_widget_pointer(list_widget), as_widget_pointer(label_widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
-        return detail.push_front!(drop_down._internal, list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
+        return detail.push_front!(drop_down._internal, as_widget_pointer(list_widget), as_widget_pointer(label_widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -3035,17 +3041,20 @@ module mousetrap
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
+
+    push_front!(drop_down::DropDown, list_widget::Widget, label_widget::Widget) = push_front!((_::DropDown) -> nothing, drop_down, list_widget, label_widget)
+    push_front!(drop_down::DropDown, label::String) = push_front!((_::DropDown) -> nothing, drop_down, label)
     export push_front!
 
     function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
-        return detail.insert!(drop_down._internal, from_julia_index(index), list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
+        return detail.insert!(drop_down._internal, from_julia_index(index), as_widget_pointer(list_widget), as_widget_pointer(label_widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
     function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
-        return detail.insert!(drop_down._internal, from_julia_index(index), list_as_widget_pointer(widget), label_as_widget_pointer(widget), function (drop_down_internal_ref)
+        return detail.insert!(drop_down._internal, from_julia_index(index), as_widget_pointer(list_widget), as_widget_pointer(label_widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
@@ -3061,6 +3070,9 @@ module mousetrap
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
+
+    insert!(drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget) = insert!((_::DropDown) -> nothing, drop_down, index, list_widget, label_widget)
+    insert!(drop_down::DropDown, index::Integer, label::String) = insert!((_::DropDown) -> nothing, drop_down, index, label)
     export insert!
 
     @add_widget_signals DropDown
@@ -3614,17 +3626,17 @@ module mousetrap
     Notebook() = Notebook(detail._Notebook())
 
     function push_front!(notebook::Notebook, child_widget::Widget, label_widget::Widget) ::Int64
-        return detail.push_front!(notebook._internal, child_as_widget_pointer(widget), label_as_widget_pointer(widget))
+        return detail.push_front!(notebook._internal, child_as_widget_pointer(widget), as_widget_pointer(label_widget))
     end
     export push_front!
 
     function push_back!(notebook::Notebook, child_widget::Widget, label_widget::Widget) ::Int64
-        return detail.push_back!(notebook._internal, child_as_widget_pointer(widget), label_as_widget_pointer(widget))
+        return detail.push_back!(notebook._internal, child_as_widget_pointer(widget), as_widget_pointer(label_widget))
     end
     export push_back!
 
     function insert!(notebook::Notebook, index::Integer, child_widget::Widget, label_widget::Widget) ::Int64
-        return detail.insert!(notebook._internal, from_julia_index(index), child_as_widget_pointer(widget), label_as_widget_pointer(widget))
+        return detail.insert!(notebook._internal, from_julia_index(index), child_as_widget_pointer(widget), as_widget_pointer(label_widget))
     end
     export insert!
 
@@ -3841,11 +3853,6 @@ module mousetrap
     @export_type ProgressBar Widget
     ProgressBar() = ProgressBar(detail._ProgressBar())
 
-    @export_enum ProgressBarDisplayMode begin
-        PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT
-        PROGRESS_BAR_DISPLAY_MODE_SHOW_PERCENTAGE
-    end
-
     @export_function ProgressBar pulse Cvoid
     @export_function ProgressBar set_fraction! Cvoid AbstractFloat => Cfloat zero_to_one
     @export_function ProgressBar get_fraction Cfloat
@@ -3853,8 +3860,8 @@ module mousetrap
     @export_function ProgressBar get_is_inverted Bool
     @export_function ProgressBar set_text! Cvoid String text
     @export_function ProgressBar get_text String
-    @export_function ProgressBar set_display_mode! Cvoid ProgressBarDisplayMode mode
-    @export_function ProgressBar get_display_mode ProgressBarDisplayMode
+    @export_function ProgressBar set_show_text! Cvoid Bool b
+    @export_function ProgressBar get_show_text Bool
     @export_function ProgressBar set_orientation! Cvoid Orientation orientation
     @export_function ProgressBar get_orientation Orientation
 

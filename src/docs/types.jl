@@ -536,11 +536,13 @@ $(@type_signals(Entry,
 
 $(@type_fields())
 
+
+## Example
 ```julia
 entry = Entry()
 set_text!(entry, "Write here")
 connect_signal_text_changed!(entry) do self::Entry
-    println("text is now: \$(get_text(entry))")
+    println("text is now: \$(get_text(self))")
 end
 ```
 """
@@ -749,7 +751,8 @@ Widget that draws a black outline with rounded corners around
 its singular child.
 
 $(@type_constructors(
-    Frame()
+    Frame(),
+    Frame(child::Widget)
 ))
 
 $(@type_signals(Frame, 
@@ -2210,10 +2213,10 @@ $(@type_fields())
 
 ## Example
 ```julia
-entry = TextView()
-set_text!(entry, "Write here\nOr here")
-connect_signal_text_changed!(entry) do self::TextEntry
-    println("text is now: \$(get_text(entry))")
+text_view = TextView()
+set_text!(text_view, "Write here")
+connect_signal_text_changed!(text_view) do self::TextView
+    println("text is now: \$(get_text(self))")
 end
 ```
 """

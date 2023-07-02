@@ -69,7 +69,7 @@ Because a widget can only have exactly one parent, we cannot put the same widget
 we have to create two button instances.
 
 ### Size Request
-
+ 
 Moving onto the properties that determines the widgets size, we have its **size request**. This is a [`Vector2f`](@ref Vector2) which governs the minimum width and height of the widget, in pixels. Once set with [`set_size_request!`](@ref), no matter what, that widget will always allocate at least that amount of space. 
 
 By default, all widgets size request is `Vector2f(0, 0)`. Setting the width and/or height of a widgets size request to `0` will tell the size manager, the algorithm determining the widgets final size on screen, that the widget has not made a request for a minimum size.
@@ -890,198 +890,232 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
 
 [`Scale`](@ref), just like `SpinButton`, is a widget that allows a user to choose a value from the underlying `Adjustment`. This is done by click-dragging the knob of the scale, or clicking anywhere on its rail. In this way, it is usually harder to pick an exact decimal value on a `Scale` as opposed to a `SpinButton`. We can aid in this task by displaying the exact value next to the scale, which is enabled with [`set_should_draw_value!`](@ref):
 
-\image html scale_with_value.png
-\how_to_generate_this_image_begin
+!!! detail "How to generate this image"
+    ```julia
+    main() do app::Application
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+
+        horizontal = Scale(0, 2, 0.5)
+        set_orientation!(horizontal, ORIENTATION_HORIZONTAL)
+        set_value!(horizontal, 1)
+        set_size_request!(horizontal, Vector2f(200, 0))
+        set_should_draw_value!(horizontal, true)
+
+        vertical = Scale(0, 2, 0.5)
+        set_orientation!(vertical, ORIENTATION_VERTICAL)
+        set_value!(vertical, 1)
+        set_size_request!(vertical, Vector2f(0, 200))
+        set_should_draw_value!(vertical, true)
+
+        box = CenterBox(ORIENTATION_HORIZONTAL)
+        set_start_child!(box, horizontal)
+        set_end_child!(box, vertical)
+
+        set_margin_horizontal!(box, 75)
+        set_margin_vertical!(box, 40)
+
+        set_child!(window, box)
+        present!(window)
+    end
+    ```
+
+`Scale`supports most of `SpinButton`s functions, including querying information about its underlying range and settings the orientation, and signal `value_changed`:
+
 ```julia
-auto horizontal = Scale(0, 2, 0.5);
-horizontal.set_orientation(Orientation::HORIZONTAL);
-horizontal.set_value(1);
-horizontal.set_size_request({200, 0});
-horizontal.set_should_draw_value(true);
-
-auto vertical = Scale(0, 2, 0.5);
-vertical.set_orientation(Orientation::VERTICAL);
-vertical.set_value(1);
-vertical.set_size_request({0, 200});
-vertical.set_should_draw_value(true);
-
-auto box = CenterBox(Orientation::HORIZONTAL);;
-box.set_start_child(horizontal);
-box.set_end_child(vertical);
-
-box.set_margin_horizontal(75);
-box.set_margin_vertical(40);
-state->main_window.set_child(box);
+scale = Scale(0, 2, 0.5)
+connect_signal_value_changed!(scale) do self::Scale
+    println("Value is now: $(get_value(self))")
+end
 ```
-\how_to_generate_this_image_end
-
-
-`Scale`supports most of `SpinButton`s functions, including querying information about its underlying range and settings the orientation.
 
 ---           
 
 ## ScrollBar
 
-Similar to `Scale`, \a{ScrollBar} is used to pick a value from an adjustment. It is often used as a way to choose which part of a widget should be shown on screen. For an already automated way of doing this, see `Viewport`.
+Similar to `Scale`, [`ScrollBar`](@ref) is used to pick a value from an adjustment. It is often used as a way to choose which part of a widget should be shown on screen. For an already automated way of doing this, see `Viewport`.
 
 ---
 
 ## LevelBar
 
-\a{LevelBar} is used to display a fraction to indicate the level of something, for example the volume of a playback device.
+[`LevelBar](@ref) is used to display a fraction to indicate the level of something, for example the volume of a playback device.
 
-To create a `LevelBar`, we need to specify the minimum and maximum value of the range we wish to display. We can then set the current value using `LevelBar::set_value`. The resulting fraction is computed automatically, based on the upper and lower limit we supplied to the constructor:
+To create a `LevelBar`, we need to specify the minimum and maximum value of the range we wish to display. We can then set the current value using `set_value!`. The resulting fraction is computed automatically, based on the upper and lower limit we supplied to the constructor:
 
 ```julia
-// create level for range [0, 2]
-auto level_bar = LevelBar(0, 2);
-level_bar.set_value(1.0); // set to 50%
+# create a LevelBar for range [0, 2]
+level_bar = LevelBar(0, 2)
+set_value!(level_bar, 1.0); // set to 50%
 ```
 
-The bar will be oriented horizontally by default, but we can call `set_orientation` to change this.
+Unlike the previous widgets, `LevelBar` does not have a step increment.
 
 Once the bar reaches 75%, it changes color:
 
-\image html level_bar.png
+![](../resources/level_bar.png)
 
-\how_to_generate_this_image_begin
-```julia
-auto box = Box(Orientation::VERTICAL);
-box.set_spacing(10);
-box.set_margin(10);
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
 
-size_t n_bars = 5;
-for (size_t i = 0; i < n_bars+1; ++i)
-{
-    float fraction = 1.f / n_bars;
+        box = Box(ORIENTATION_VERTICAL)
+        set_spacing!(box, 10)
+        set_margin!(box, 10)
 
-    auto label = Label(std::to_string(int(fraction * 100)) + "%");
-    label.set_size_request({50, 0});
+        n_bars = 5
+        for i in 1:n_bars
+            fraction = Float32(i) / n_bars
+            label = Label(string(Int64(round(fraction * 100))) * "%")
+            set_size_request!(label, Vector2f(50, 0))
 
-    auto bar = LevelBar(0, 1);
-    bar.set_value(fraction);
-    bar.set_expand_horizontally(true);
+            bar = LevelBar(0, 1)
+            set_value!(bar, fraction)
+            set_expand_horizontally!(bar, true)
 
-    auto local_box = Box(Orientation::HORIZONTAL);
-    local_box.push_back(label);
-    local_box.push_back(bar);
-    box.push_back(local_box);
-}
+            row_box = Box(ORIENTATION_HORIZONTAL)
+            set_spacing!(box, 10)
+            push_back!(row_box, label)
+            push_back!(row_box, bar)
 
-window.set_child(box);
-```
-\how_to_generate_this_image_end
+            push_back!(box, row_box)
+        end
 
-The bar can also be used to display a value from a range only consisting of integers, in which case the bar will be shown segmented. We can set the `LevelBar`s mode using `LevelBar::set_mode`, which takes either `LevelBarMode::CONTINUOUS` or `LevelBarMode::DISCRETE` as its argument.
+        set_child!(window, box)
+        present!(window)
+    end
+    ```
+
+`LevelBar` also supports displaying a discrete value, in which case it will be drawn segmented. To enable this, we set `set_mode!` to `LEVEL_BAR_DISPLAY_MODE_DISCRETE`, as opposed to `LEVEL_BAR_MODE_CONTINUOUS`, which is the default.
 
 ---
 
 ## ProgressBar
 
-A specialized case of indicating a continuous value is that of a **progress bar**. A progress bar is used to show how much of a task is currently complete. This is most commonly used during a multi-second loading animation, for example during the startup phase of an application. As more and more resources are loaded, the progress bar fills, which communicates to the user how long they will have to wait, and that progress is being made.
+Similarly to `LevelBar`, [`ProgressBar`](@ref) communicates a fraction to the user, which is frequently use to show the user how much of a task is currently completed.
 
-\a{ProgressBar} is built for this exact purpose. It does not have an upper or lower bound, as its range is fixed to `[0, 1]`. We can set the current fraction using `ProgressBar::set_fraction`. 
+`ProgressBar` only expresses values in `[0, 1]`, and [`set_fraction!`](@ref) will only accept values in this range.
 
-`ProgressBar` has a special animation trigger, which makes the bar "pulse", which is usually done everytime the fraction changes. We have to manually trigger this pulse animation using `ProgressBar::pulse`. Note that this does not change the currently displayed fraction of the progress bar, it only plays an animation.
+Using `set_show_text!`, we can make it so the current percentage is drawn along with the progress bar, or we can draw a custom label using `set_text!`
 
-\image html progress_bar.png
+![](../resources/progress_bar.png)
 
-\how_to_generate_this_image_begin
-```julia
-auto progress_bar = ProgressBar();
-progress_bar.set_fraction(0.47);
-progress_bar.set_vertical_alignment(Alignment::CENTER);
-progress_bar.set_expand(true);
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
 
-auto label = Label("47%");
-label.set_margin_end(10);
-
-auto box = Box(Orientation::HORIZONTAL);
-box.set_homogeneous(false);
-box.push_back(label);
-box.push_back(progress_bar);
-box.set_margin(10);
-
-window.set_child(box);
-```
-\how_to_generate_this_image_end
-
+        box = Box(ORIENTATION_VERTICAL)
+    
+        progress_bar = ProgressBar()
+        set_fraction!(progress_bar, 0.47)
+        set_vertical_alignment!(progress_bar, ALIGNMENT_CENTER)
+        set_expand!(progress_bar, true)
+        set_show_text!(progress_bar, true)
+        set_margin!(progress_bar, 10)
+        
+        set_child!(window, progress_bar)
+        present!(window)
+    end
+    ```
 ---
 
 ## Spinner
 
-To signal progress while we do not have an exact fraction, we can use the \a{Spinner} widget. It simply displays an animated spinning icon. Using `Spinner::set_is_spinning`, we can control whether the animation is currently playing.
+To signal progress when we do not have an exact fraction, we use [`Spinner`](@ref) which is a small spinning icon. Once we set [`set_is_spinning!`](@ref) to `true`, a spinning animatino will play, indicating to the user that work is being done.
 
-\image html spinner.png
+![](../resources/spinner.png)
 
-\how_to_generate_this_image_begin
-```julia
-auto spinner = Spinner();
-spinner.set_is_spinning(true);
-window.set_child(spinner);
-```
-\how_to_generate_this_image_end
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
 
----
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+
+        spinner = Spinner()
+        set_is_spinning!(spinner, true)
+
+        set_child!(window, spinner)
+        present!(window)
+    end
+    ```
 
 ---
 
 ## Entry
 
-Text entry is central to many application. Mousetrap offers two widgets that allow the user to type freely. \a{Entry} is the widget of choice for **single-line text entry**.
+Text entry is central to many application. Mousetrap offers two widgets that allow the user to type freely. [`Entry`](@ref) is the widget of choice for single-line text entry.
 
-`Entry` is an area that, when clicked, allows the user to type freely. The currently displayed text is stored in an internal text buffer. We can access or modify the buffers content with `Entry::get_text` and `Entry::set_text`, respectively.
+The entries currently displayed text is stored in an internal text buffer. We can freely access or modify the buffers content with `Entry::get_text` and `Entry::set_text`.
 
-While we could control the size of an `Entry` using size-hinting, a better way is `Entry::set_max_length`, which takes an integer representing the number of characters that the prompts should make space for. For example, `entry.set_max_length(15)` will resize the entry such that it is wide enough to show 15 characters at the current font size.
+While we could control the size of an `Entry` using size-hinting, a better way is `get_max_width_chars!`, which resizes the entry such that is length is enough to fit a certain number of characters into its area.
 
-`Entry` supports "password mode", which is when each character typed is replaced with a dot. This is to prevent a third party looking at a user screen and seeing what they typed. To enter password mode, we set `Entry::set_text_visible` to `false`.
+`Entry` supports "password mode", which is when each character typed is replaced with a dot. This is to prevent a third party looking at a user screen and seeing what they typed. To enter password mode, we set `set_text_visible!` to `false`. Note that this does not actually encrypt the text buffer in memory, it is a purely visual change.
 
-\image html entry_password_mode.png
+![](../resources/entry.png)
 
-\how_to_generate_this_image_begin
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+
+        clear = Entry()
+        set_text!(clear, "text")
+
+        password = Entry()
+        set_text!(password, "text")
+        set_text_visible!(password, false)
+
+        box = vbox(clear, password)
+        set_spacing!(box, 10)
+        set_margin_horizontal!(box, 75)
+        set_margin_vertical!(box, 40)
+
+        set_child!(window, box)
+        present!(window)
+    end
+    ```
+
+Lastly, `Entry` is **activatable**, when the user presses the enter key while the cursor is inside the entires text area, it will emite signal `activate`. Its other signal, `text_changed`, is emitted whenever the internal text buffer changes in anyway. We would 
+
+Other than `activate`, `Entry` has one more signal, `text_changed`, which is emitted whenever the internal buffer changes. Checking this signals signature, we see that we can connect to it like so:
+
 ```julia
-auto clear = Entry();
-clear.set_text("text");
-
-auto password = Entry();
-password.set_text("text");
-password.set_text_visible(false);
-
-auto box = Box(Orientation::VERTICAL);
-box.set_spacing(10);
-box.push_back(clear);
-box.push_back(password);
-
-box.set_margin_horizontal(75);
-box.set_margin_vertical(40);
-window.set_child(box);
+entry = Entry()
+set_text!(entry, "Write here")
+connect_signal_text_changed!(entry) do self::Entry
+    println("text is now: $(get_text(self))")
+end
 ```
-\how_to_generate_this_image_end
 
-Lastly, `Entry` is **activatable**. Users usually do this by pressing the enter key while the cursor is inside the `Entry`. This does not cause any behavior initially, but we can connect to the `activate` signal of `Entry` to choose a custom function to be called.
-
-Other than `activate`, `Entry` has one more signal, `text_changed`, which is emitted whenever the internal buffer changes.
-
-\signals
-\signal_activate{Entry}
-\signal_text_changed{Entry}
-
-Note that the user cannot insert a newline character using the enter key. `Entry` should exclusively be used for text prompts which have no line breaks. For multi-line text entry, we should use the next widget instead.
+Note that the user cannot insert a newline character using the enter key. `Entry` should exclusively be used for text prompts which have **no line breaks**. For multi-line text entry, we should use the next widget instead.
 
 ---
 
 ## TextView
 
-While we can technically input a newline character into `Entry` by copy pasting the corresponding control character, it is not possible to display two lines at the same time. For this purpose, we use \a{TextView}. It supports a number of basic text-editor features, including **undo / redo**, which are triggered by the user pressing Control + Z or Control + Y respectively. We as developers can also trigger this behavior manually with `TextView::undo` / `TextView::redo`.
+[`TextView`](@ref) is the multi-line equivalent of `Entry`. It supports a number of basic text-editor features, including **undo / redo**, which are triggered by the user pressing Control + Z or Control + Y respectively. We as developers can also trigger this behavior manually with `undo!` / `redo!`.
 
-Much like `Label`, we can set how the text aligns horizontally using `TextView::set_justify_mode`. To further customize how text is displayed, we can choose the **internal margin**, which is the distance between the frame of the `TextView` and the text inside of it. `TextView::set_left_margin`, `TextView::set_right_margin`, `TextView::set_top_margin` and `TextView::set_bottom_margin` allow us to choose these values freely.
+Much like `Label`, we can set how the text aligns horizontally using `set_justify_mode!`. To further customize how text is displayed, we can choose the **internal margin**, which is the distance between the frame of the `TextView` and the text inside of it. `set_left_margin!`, `set_right_margin!`, `set_top_margin!` and `set_bottom_margin!` allow us to choose these values freely.
 
-`TextView` does **not** have the `activate` signal, pressing enter while the cursor is inside the widget will simply create a new line. Instead, it has the following signals, where `text_changed` behaves exactly like it does with `Entry`:
+`TextView` does **not** have the `activate` signal, pressing enter while the cursor is inside the widget will simply create a new line. Instead, it only has signal `text_changed`, which behaves identical to that of `Entry`:
 
-\signals
-\signal_text_changed{TextView}
-\signal_undo{TextView}
-\signal_redo{TextView}
+```julia
+text_view = TextView()
+set_text!(text_view, "Write here")
+connect_signal_text_changed!(text_view) do self::TextView
+    println("text is now: $(get_text(self))")
+end
+```
 
 ---
 
@@ -1089,41 +1123,60 @@ Much like `Label`, we can set how the text aligns horizontally using `TextView::
 
 ## Dropdown
 
-We sometimes want users to be able to pick a value from a **set list of values**, which may or may not be numeric. \a{DropDown} allows for this.
+We sometimes want users to be able to pick a value from a **set list of values**, which may or may not be numeric. [`DropDown`](@ref) allows for this. If clicked, a window presents the user with a list of items. The user can click on any of these, that item will be made the currently selected item.
 
-When the `DropDown` is clicked, a window presents the user with a list of items. The user can click on any of these, at which point the dropdown will invoke the corresponding function for that item, which is set during \a{DropDown::push_back}. This function takes three arguments:
-
-+ **list label**: widget displayed inside the dropdown window
-+ **selected label**: widget displayed once one of the items is selected
-+ **callback**: function with signature `(DropDown&, (Data_t)) -> void`, which is invoked when a selection is made
-
-We usually want both labels to be an actual `Label`, though any widget can be used as the list or selected label.
+We add an item using `push_back!`, which takes a string as the items label:
 
 ```julia
-auto dropdown = DropDown();
-dropdown.push_back(
-    Label("List Label"), // list label
-    Label("Selected Label"), // selected label
-    [](DropDown&) { std::cout << "selected" << std::endl; } // callback
-);
+dropdown = DropDown()
+item_01_id = push_back!(dropdown, "Item #01")
+item_02_id = push_back!(dropdown, "Item #02")
+item_03_id = push_back!(dropdown, "Item #03")
 ```
 
-\image dropdown_hello_world.png
+![](../resources/dropdown_simple.png)
 
-Here, we created a dropdown and added a single item. The item has the list label `"List Label"`, and the selected label `"Selected Label"`. When this item is selected, the lambda will be invoked, which here simply prints `selected` to the console.
+`push_back!` returns the internal id of the item. We should keep track of this ID, as it will be used to identify the currently selected item. By calling `get_selected`, we can get the ID of the currently selected item.
 
-In praxis, we would want the callback to mutate some global property to keep track of which item is selected. Alternatively, we can query which item is currently selected by calling `DropDown::get_selected`. This function returns an **item ID**, which is obtained when we call `DropDown::push_back`:
+If we do loose track of the ID, we can always retrieve it using `get_item_at`, which returns the ID of the item at a given position.
+
+`push_back!`, and it's equivalents `push_front!` and `insert!`, provide a method that also takes a callback. This callback will be invoked when the item is selected, it has the signature:
+
+```
+(::DropDown, [::Data_t]) -> Cvoid
+```
 
 ```julia
-auto dropdown = DropDown();
-auto id_01 = dropdown.push_back(Label("01"), Label("Option 01"), [](DropDown&){});
-auto id_02 = dropdown.push_back(Label("02"), Label("Option 02"), [](DropDown&){});
-
-// check if selected item is 01
-bool item_01_selected = dropdown.get_selected() == id_01;
+dropdown = DropDown()
+push_back!(dropdown, "Item #01") do self::DropDown
+    println("Item #01 selected")
+end
+push_back!(dropdown, "Item #02") do self::DropDown
+    println("Item #03 selected")
+end
+push_back!(dropdown, "Item #03") do self::DropDown
+    println("Item #03 selected")
+end
 ```
 
-Where `[](DropDown&){}` is a lambda that simply does nothing (but still conforms to the `(DropDown&, (Data_t)) -> void` signature).
+This gives us a better mechanism of keeping track of which item is currently selected. Instead of querying the `DropDown` using `get_selected` and react to its result, we should instead register a callback using this method.
+
+Lastly, sometimes we want a different label for when an item is selected, and for when the user opens the menu to select an item. For this situation, `push_back!` offers a method that lets us specify the labels separately:
+
+```julia
+dropdown = DropDown()
+push_back!(dropdown,
+    Label("Item #01"),  # Label displayed in dropdown menu
+    Label("01")         # Label displayed when item is selected
+)
+
+push_back!(dropdown, Label("Item #02"), Label("02"))
+push_back!(dropdown, Label("Item #03"), Label("03"))
+```
+
+![](../resources/dropdown_separate.png)
+
+Where we had to first create a `Label` instance, then use it as the label widget, as this method of `push_back!` takes any two widgets, which gives us incredible flexibility with how we want the dropdown to be displayed. This method also supports adding a callback as the first argument, which behaves exactly as before.
 
 ---
 
