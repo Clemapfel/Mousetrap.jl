@@ -10,16 +10,11 @@ main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    child = Frame(Overlay(Separator(), Label("Child")))
-    set_margin!(child, 10)
-    set_size_request!(child, Vector2f(0, 100))
+    list_view = ListView()
+    push_back!(list_view, Label("Child #01"))
+    push_back!(list_view, Button("Child #02"))
+    push_Back!()
 
-    label = Label("Label")
-    set_margin!(label, 10)
-   
-    expander_and_frame = Frame(Expander(child, label))
-    set_margin!(expander_and_frame, 10)
-
-    set_child!(window, expander_and_frame)
+    set_child!(window, button)
     present!(window)
 end

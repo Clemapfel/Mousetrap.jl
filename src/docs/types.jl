@@ -150,7 +150,8 @@ Container widget with a single child, makes sure that
 the size of its child will always be at the specified width-to-height ratio.
 
 $(@type_constructors(
-    AspectFrame(width_to_height::AbstractFloat)
+    AspectFrame(width_to_height::AbstractFloat; [child_x_alignment::AbstractFloat, child_y_alignment::AbstractFloat]),
+    AspectFrame(Width_to_height::AbstractFloat, child::Widget)
 ))
 
 $(@type_signals(AspectFrame, 

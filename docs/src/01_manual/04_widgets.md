@@ -1238,113 +1238,91 @@ set_child!(aspect_frame, child_widget);
 
 ## Overlay
 
-So far, all widget containers have aligned their children such that they do not overlap. In cases where we do want overlapping to happen, we have to use \a{Overlay}.
+So far, all widget containers have aligned their children such that they do not overlap. In cases where we do want overlapping to happen, for example if we want to render one widget on ront of another, we have to use [`Overlay`](@ref)
 
-`Overlay` has one "base" widget, which is at the conceptual bottom of the overlay. We set this widget using `Overlay::set_child`. We can then add any number of widgets on top of the base widget using `Overlay::add_overlay`:
+`Overlay` has one "base" widget, which is at the conceptual bottom of the overlay. We set this widget using `set_child!`. We can then add any number of widgets on top of the base widget using `add_overlay!`:
 
-\image html overlay_two_buttons.png
+![](../resources/overlay_buttons.png)
 
-\how_to_generate_this_image_begin
-```julia
- auto lower = Button();
-lower.set_horizontal_alignment(Alignment::START);
-lower.set_vertical_alignment(Alignment::START);
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
 
-auto upper = Button();
-upper.set_horizontal_alignment(Alignment::END);
-upper.set_vertical_alignment(Alignment::END);
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
 
-for (auto* button : {&lower, &upper})
-    button->set_size_request({50, 50});
+        lower = Button()
+        set_horizontal_alignment!(lower, ALIGNMENT_START)
+        set_vertical_alignment!(lower, ALIGNMENT_START)
 
-auto overlay = Overlay();
-overlay.set_child(Separator());
-overlay.add_overlay(lower);
-overlay.add_overlay(upper);
+        upper = Button()
+        set_horizontal_alignment!(upper, ALIGNMENT_END)
+        set_vertical_alignment!(upper, ALIGNMENT_END)
 
-auto aspect_frame = AspectFrame(1);
-aspect_frame.set_child(overlay);
+        overlay = Overlay()
+        set_child!(overlay, lower)
+        add_overlay!(overlay, upper)
 
-aspect_frame.set_margin(10);
-window.set_child(aspect_frame);
-```
-\how_to_generate_this_image_end
+        set_child!(window, AspectFrame(1, overlay))
+        present!(window)
+    end
+    ```
 
 Where the position and size of overlayed widgets depend on their expansion and alignment properties.
 
-By default, `Overlay` will allocate exactly as much space as the base widget (set with `Overlay::set_child`) does. If one of the overlaid widgets takes up more space than the base widget, it will be truncated. We can avoid this by supplying a second argument to `Overlay::add_overlay`, which is a boolean indicated whether the overlay widget should be included in the entire container's size allocation. That is, if the overlaid widget is larger than the base widget, the `Overlay` will resize itself such that the entire overlaid widget is visible.
+By default, `Overlay` will allocate exactly as much space as the base widget (set with `set_child!`) does. If one of the overlaid widgets takes up more space than the base widget, it will be truncated. We can avoid this by supplying a second argument to `add_overlay!`, which is a boolean indicated whether the overlay widget should be included in the entire container's size allocation. That is, if the overlaid widget is larger than the base widget, the `Overlay` will resize itself such that the entire overlaid widget is visible:
 
 ```julia
-overlay.add_overlay(overlay_widget, true); 
-// resize if overlay_widget allocates more space than child
-``` 
-
-When one interactable widget is shown partially overlapping another, only the top-most widget can be interacted with by the user. If we want the user to be able to access a lower layer, we need to make any widget on top non-interactable, either by calling `Widget::hide` or `Widget::set_can_respond_to_input(false)`.
+add_overlay!(overlay, overlaid_widge; include_in_measurement = true); 
+```
 
 ---
 
 ## Paned
 
-\a{Paned} is a widget that always has exactly two children. Between the two children, a visual barrier is drawn. The user can click on this barrier and drag it horizontally or vertically, depending on the orientation of the `Paned`. This gives the user the option to resize how much of a shared space one of the two widgets allocates.
+[`Paned`](@ref) is a widget that always has exactly two children. Between the two children, a visual barrier is drawn. The user can click on this barrier and drag it horizontally or vertically, depending on the orientation of the `Paned`. This gives the user the option to resize how much of a shared space one of the two widgets allocates.
 
-\image html paned_centered.png
+`Paned` is orientable, depending on its orientation, `set_start_child!` and  `set_end_child!` add a widget to the corresponding side.
 
-\how_to_generate_this_image_begin
-```julia
-auto left = Overlay();
-left.set_child(Separator());
-left.add_overlay(Label("left"));
+![](../resources/paned.png)
 
-auto right = Overlay();
-right.set_child(Separator());
-right.add_overlay(Label("right"));
+!!! details "How to generate this image"
+    ```julia
+    function generate_child(label::String)
+        out = Frame(Overlay(Separator(), Label(label)))
+        set_margin!(out, 10)
+        return out
+    end
 
-for (auto* child : {&left, &right})
-    child->set_margin(10);
+    main() do app::Application
 
-auto paned = Paned(Orientation::HORIZONTAL);
-paned.set_start_child(left);
-paned.set_end_child(right);
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
 
-state->main_window.set_child(paned);
-```
-\how_to_generate_this_image_end
+        paned = Paned(ORIENTATION_HORIZONTAL)
+        set_start_child!(paned, generate_child("Left"))
+        set_end_child!(paned, generate_child("Right"))
 
-Assuming the `Paned`s orientation is `Orientation::HORIZONTAL`, we can set the child on the left using `Paned::set_start_child` and the child on the right with `Paned::set_end_child`. Both children have to be set to valid widgets in order for the user to have the option of interacting with the `Paned`. If we, for some reason, do not have two widgets but would still like to use a `Paned`, we should add a `Separator` as the other child.
+        set_start_child_shrinkable!(paned, true)
+        set_end_child_shrinkable!(paned, true)
+
+        set_child!(window, paned)
+        present!(window)
+    end
+    ```
 
 `Paned` has two per-child properties: whether a child is **resizable** and whether it is **shrinkable**.
 
 Resizable means that if the `Paned` changes size, the child should change size with it.
 
-Shrinkable sets whether the side of the `Paned` can be made smaller than the allocated size of that side's child widget. If set to `true`, the user can drag the `Paned`s barrier, such that one of the widgets is partially or completely hidden:
+Shrinkable sets whether the side of the `Paned` can be made smaller than the allocated size of that sides child widget. If set to `true`, the user can drag the `Paned`s barrier, such that one of the widgets is partially or completely hidden:
 
-\image html paned_shrinkable.png
-
-\how_to_generate_this_image_begin
 ```julia
-auto left = Overlay();
-left.set_child(Separator());
-left.add_overlay(Label("left"));
-
-auto right = Overlay();
-right.set_child(Separator());
-right.add_overlay(Label("right"));
-
-for (auto* child : {&left, &right})
-    child->set_margin(10);
-
-auto paned = Paned(Orientation::HORIZONTAL);
-paned.set_start_child(left);
-paned.set_end_child(right);
-
-paned.set_start_child_shrinkable(true);
-paned.set_end_child_shrinkable(true);
-
-state->main_window.set_child(paned);
+set_start_child_shrinkable!(paned, true)
+set_end_child_shrinkable!(paned, true)
 ```
-\how_to_generate_this_image_end
 
-`Paned::set_end_child_shrinkable(true)` made it possible to move the barrier such that the left child is partially covered.
+![](../resources/paned_shrinkable.png)
 
 ---
 
@@ -1401,8 +1379,6 @@ Apart from the speed, we also have a choice of animation **type**, represented b
         present!(window)
     end
     ```
-
-
 ---
 
 ## Expander
@@ -1441,124 +1417,129 @@ Note that `Expander` should not be used for the purpose of creating nested lists
 
 ## Viewport
 
-By default, most containers will allocate a size that is equal to or exceeds the largest natural size of its children. For example, if we create a widget that has a natural size of 5000x1000 px and use it as the child of a `Window`, the `Window` will attempt to allocate 5000x1000 pixels on screen, making the window far larger than most screens can display. In situations like these, we should instead use a \a{Viewport}, which allows users to only view part of a larger widget:
+By default, most containers will allocate a size equal to or exceeding that of its children. For example, if we create a widget that has a natural size of 5000x1000 px and use it as the child of a `Window`, the `Window` will attempt to allocate 5000x1000 pixels on screen, making the window far larger than most screens can display. 
 
-```julia
-auto child = Separator();
-child.set_size_request({5000, 5000});
+Someimtes, widgets that are this large are unavoidable, which is why there is a widget that offers viewing only parts of its child: [`Viewport`](@ref).
 
-auto viewport = Viewport();
-viewport.set_child(child);
+We set the viewports singular child using `set_child!`, after which the user can operate the two scrollbars to change which part of the child is currently visible:
 
-state->main_window.set_child(viewport
-```
-\image html viewport.png
+![](../resources/viewport.png)
 
-Without the `Viewport`, the `Separator` child widget would force the outer `Window` to allocate 5000x5000 pixels, as we size-hinted it to be that size. By using `Viewport`, the `Window` is free to allocate any size, retaining resizability. The end-user can influence which area of the larger widget is currently visible by operating the scrollbars inherent to `Viewport`.
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+
+        child = Frame(Overlay(Separator(), Label("<span size='800%'>CHILD</span>")))
+        set_margin!(child, 10);
+
+        viewport = Viewport()
+        set_child!(viewport, child)
+
+        set_child!(window, viewport)
+        present!(window)
+    end
+    ```
 
 ### Size Propagation
 
-By default, `Viewport` will disregard the size of its child and simply allocate an area based on the `Viewport`s properties only. We can override this behavior by forcing `Viewport` to **propagate** the width or height of its child.
+By default, `Viewport` will disregard the size of its child and simply allocate an area based only on the properties of the `Viewport` itself. This behavior can be overridden by setting the viewports **size propagation**
 
-By calling `Viewport::set_propagate_natural_width(true)`, `Viewport` will assume the width of its child. Conversely, calling `Viewport::set_propagate_natural_width(true)` forces the window to allocate space equal to the height of its child. A viewport that has both of these set to true will behave exaclty like a box with a single child.
+If `set_propagate_natural_height!` is set to true, the viewports height will be equal thte height of its child. Conversely, `set_propagate_natural_width!` does the same for the childs width.
+
+```julia
+set_propagate_natural_width!(viewport, true)
+set_propagate_natural_height!(viewport, false)
+```
+
+![](../resources/viewport_propagation.png)
+
+Here, the viewport will be the same width as the child, but the viewports height is independent of that of its child. 
 
 ### Scrollbar Policy
 
-`Viewport` has two scrollbars, controlling the horizontal and vertical position. If we want to trigger behavior in addition to changing which part of the child widget `Viewport` displays, we can access each scrollbars `Adjustment` using `Viewport::get_horizontal_adjustment` and `Viewport::get_vertical_adjustment` respectively, then connect to the `Adjustment`s signals.
+`Viewport` has two scrollbars, controlling the horizontal and vertical position. By default, these will automatically reveal themself when the users cursor enters the viewport, hiding themself once the cursor exists.
 
-By default, once the cursor enters `Viewport`, both scrollbars will reveal themselves. If the cursor moves outside the `Viewport`, the scrollbars will hide again.
+This behavior of if and when to reveal the scrollbars is determined by the viewports 
+*scrollbar policy**, set with `set_horizontal_scrollbar_policy!` and  `set_vertical_scrollbar_policy!`, both of which take a value of the enum [`ScrollbarVisibilityPolicy`](@ref), which has the following instances:
 
-This behavior is controlled by the viewports **scrollbar policy**, represented by the \a{ScrollbarVisibilityPolicy} enum:
++ `SCROLLBAR_VISIBILITY_POLICY_NEVER`: scrollbar always hidden
++ `SCROLLBAR_VISIBILITY_POLICY_ALWAYS`: scrollbar is always shown
++ `SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC`: scrollbar hides/shows automatically, see above
 
-+ `NEVER`: scrollbar is hidden permanently
-+ `ALWAYS`: scrollbar is always shown, does not hide itself
-+ `AUTOMATIC`: default behavior, see above
-
-We can set the policy for each scrollbar individually using `Viewport::set_horizontal_scrollbar_policy` and `Viewport::set_vertical_scrollbar_policy`.
+If `set_propagate_natural_height!` is set to `true`, the vertical scrollbar will always be hidden, regardless of policy. The same is true for `set_propagate_natural_width!` and the horizontal scrollbar.
 
 ### Scrollbar Position
 
-Lastly, we can customize the location of both scrollbars at the same time using `Viewport::set_scrollbar_placement`, which takes one of the following values:
+Lastly, we can customize the location of both scrollbars at the same time using `set_scrollbar_placement!`, which takes one of the following values of the enum [`CornerPlacement`](@ref).
 
-+ `CornerPlacement::TOP_LEFT`: horizontal scrollbar at the top, vertical scrollbar on the left
-+ `CornerPlacement::TOP_RIGHT`: horizontal at the top, vertical on the right
-+ `CornerPlacement::BOTTOM_LEFT`: horizontal at the bottom, vertical on the left
-+ `CornerPlacement::BOTTOM_RIGHT`: horizontal at the bottom, vertical on the right
++ `CORNER_PLACEMENT_TOP_LEFT`: horizontal scrollbar at the top, vertical scrollbar on the left
++ `CORNER_PLACEMENT_TOP_RIGHT`: horizontal at the top, vertical on the right
++ `CORNER_PLACEMENT_BOTTOM_LEFT`: horizontal at the bottom, vertical on the left
++ `CORNER_PLACEMENT_BOTTOM_RIGHT`: horizontal at the bottom, vertical on the right
 
-With this, scrollbar policy, size propagation, and being able to access the adjustment of each scrollbar individually, we have full control over every aspect of `Viewport`.
+### Signals
+
+If we want to react to the user scrolling the `Viewport`s child, we can either connect to its signal `scroll_child`, or we can access the `Adjustment` controlling each  scrollbar using `get_horizontal_adjustment` and `get_vertical_adjustment`, then connect to the signals of `Adjustment`s
+
+With this, scrollbar policy, size propagation we have full control over every aspect of `Viewport`.
 
 ---
 
-## Popovers
+## Popover
 
-A \a{Popover} is a special kind of window. It is always [modal](#modality--transience). Rather than having the normal window decoration with a close button and title, `Popover` closes dynamically (or when requested by the application). 
+A [`Popover`](@ref) is a special kind of window. It is always [modal](#modality--transience). Rather than having the normal window decoration with a close button and title, `Popover` closes dynamically (or when requested by the application). 
 
-Showing the popover is called **popup**, closing the popover is called **popdown**, `Popover` correspondingly has `Popover::popup` and `Popover::popdown` to trigger this behavior.
+Showing the popover is called **popup**, closing the popover is called **popdown**, `Popover` correspondingly has `popup!` and `popdown!` to trigger this behavior.
 
-\image html popover.png
+![](../resources/popover.png)
 
-\how_to_generate_this_image_begin
-```julia
-auto popover = Popover();
-auto child = Separator();
-child.set_size_request({150, 200});
-popover.set_child(child);
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
 
-auto popover_button = PopoverButton();
-popover_button.set_popover(popover);
-popover_button.set_expand(false);
-popover_button.set_margin(50);
+        child = Frame(Overlay(Separator(), Label("Child")))
+        set_size_request!(child, Vector2f(100, 75))
+        set_margin!(child, 10);
 
-auto aspect_frame = AspectFrame(1);
-aspect_frame.set_child(popover_button);
-window.set_child(aspect_frame);
-```
-\how_to_generate_this_image_end
+        popover = Popover()
+        set_child!(popover, child)
 
-Popovers can only be shown while they are **attached** to another widget. We use `Popover::attach_to` to specify this widget, while `Popover::set_child` chooses which widget to display inside the popover. Like `Window`, `Popover` always has exactly one child.
+        # create a button, attach the popover to it
+        button = Button()
+        attach_to!(popover, button)
 
-Manually calling `popup` or `popdown` to show / hide the `Popover` can be finnicky. To address this, mousetrap offers a widget that fully automates this process for us.
+        # when the button is clicked, the popover is shown. It hides automatically
+        connect_signal_clicked!(button, popover) do self::Button, popover::Popover
+            popup!(popover)
+        end
+
+        set_child!(window, button)
+        present!(window)
+    end
+    ```
+
+Popovers can only be shown while they are **attached** to another widget. We use `attach_to!` to specify this widget, while `set_child!` chooses which widget to display inside the popover. Like `Window`, `Popover` always has exactly one child.
+
+Manually calling `popup!` or `popdown!` to show / hide the `Popover` can be bothersome, to address this, mousetrap offers a widget that automatically attaches the popover and controls its visibility: [`PopoverButton`](@ref)
 
 ## PopoverButton
 
 Like `Button`, `PopoverButton` has a single child, can be circular, and has the `activate` signals. Instead of triggering behavior, `PopoverButton`s purpose is to reveal and hide a `Popover`.
 
-We first create the `Popover`, then connect it to the button using `PopoverButton::set_popover`.
+We first create the `Popover`, then connect it to the button using `set_popover!`. After this, if the user clicks the `PopoverButton`, the popover is shown.
 
 ```julia
-auto popover = Popover();
-popover.set_child(// ...
-auto popover_button = PopoverButton();
-popover_button.set_popover(popover);
+popover = Popover()
+set_child!(popover, child)
+popover_button = PopoverButton(popover)
 ```
 
-\image html popover.png
-
-\how_to_generate_this_image_begin
-```julia
-auto popover = Popover();
-auto child = Separator();
-child.set_size_request({150, 200});
-popover.set_child(child);
-
-auto popover_button = PopoverButton();
-popover_button.set_popover(popover);
-popover_button.set_expand(false);
-popover_button.set_margin(50);
-
-auto aspect_frame = AspectFrame(1);
-aspect_frame.set_child(popover_button);
-window.set_child(aspect_frame);
-```
-\how_to_generate_this_image_end
-
-For 90% of cases, this is the way to go when we want to use a `Popover`. It is easy to set up and we don't have to manually control the popover position or when to show / hide it. 
-
-The arrow character next to the `PopoverButton`s child indicates to the user that clicking it will reveal a popover. We can hide this arrow by setting `PopoverButton::set_always_show_arrow` to `false`.
-
-We will see one more use of `PopoverButton` in the [chapter on menus](08_menus.md), where we use it to control `PopoverMenu`, a specialized form of `Popover` that shows a menu instead of an arbitrary widget.
-
----
+Additionally, an arrow is shown next to the label of the `PopoverButton`, indicating to the user that, when it is clicked, a popover will open.
 
 ---
 
@@ -1566,28 +1547,18 @@ We will see one more use of `PopoverButton` in the [chapter on menus](08_menus.m
 
 We will now move on to **selectable widgets**, which tend to be the most complex and powerful widgets in mousetrap.
 
-All selectable widgets have some things in common: They a) are widget containers supporting multiple children and b) provide `get_selection_model`, which returns a \a{SelectioModel}. This model contains information about which of the widgets children is currently selected.
+All selectable widgets have on thing in common, their multiple children are managed by a **selection model**. This model is a list of widgets. For each widget, the model will keep track of whether that widget is currently selected.
+Modifying the model will modify the selectable widget, and modifying the selectable widget will modify the model. In this way, the two are linked.
 
-`SelectionModel` is not a widget, but it is a signal emitter. Similar to `Adjustment`, it is internally linked with its corresponding selectable widget. Changing the widget updates the `SelectionModel`, changing the `SelectionModel` updates the widget. We usually do not construct `SelectionModel` directly, instead, we access the underlying `SelectionModel` once we instanced a selectable widget.
-
-`SelectionModel` provides signal `selection_changed`, which is emitted whenever the internal state of the `SelectionModel` changes.
-
-\signals
-\signal_selection_changed{SelectionModel}
-
-The signal provides two arguments, `position`, which is the position newly selected item, and `n_items`, which is the new number of currently selected items.
-
-The latter is necessary because `SelectionModel`s can have one of three internal **selection modes**, represented by the enum \a{SelectionMode}:
-
-+ `NONE`: Exactly 0 items are selected at all times
-+ `SINGLE`: Exactly 1 item is selected at all times
-+ `MULTIPLE`: 0 or more items can be selected
-
-To show how `SelectionModel` is used, we first need to create our first selectable widget.
+TODO
 
 ## ListView
 
-\a{ListView} is a widget that arranges its children in a row (or column if its orientation is `VERTICAL`) in a way similar to `Box`. Unlike `Box`, `ListView` is *selectable*.
+[`ListView`](@ref) is a widget that arranges its children in a row or column, depending on orientation. When creating the `ListView`, we specify this orientation along with the selection mode. We can then add children using `push_back!`, `push_front!` and `insert!`:
+
+```julia
+list_view = ListView(ORIENTATION_VERTICAL, SELECTION_MODE_SINGLE)
+push_back!(list_view, 
 
 \image html list_view_single_selection.png
 

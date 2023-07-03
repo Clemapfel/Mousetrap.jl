@@ -2294,6 +2294,12 @@ module mousetrap
         return AspectFrame(detail._AspectFrame(convert(Cfloat, ratio), convert(Cfloat, child_x_alignment), convert(Cfloat, child_y_alignment)))
     end
 
+    function AspectFrame(ratio::Number, child::Widget)
+        out = AspectFrame(ratio)
+        set_child!(out, child)
+        return out
+    end
+
     @export_function AspectFrame set_ratio! Cvoid AbstractFloat => Cfloat ratio
     @export_function AspectFrame get_ratio Cfloat
     @export_function AspectFrame set_child_x_alignment! Cvoid AbstractFloat => Cfloat alignment
@@ -2597,7 +2603,7 @@ module mousetrap
     get_vertical_adjustment(viewport::Viewport) ::Adjustment = Adjustment(detail.get_vertical_adjustment(viewport._internal))
     export get_vertical_adjustment
 
-    set_child!(viewport::Viewport, child::Widget) = detail.set_child(viewport._internal, as_widget_pointer(child))
+    set_child!(viewport::Viewport, child::Widget) = detail.set_child!(viewport._internal, as_widget_pointer(child))
     export set_child!
 
     @export_function Viewport remove_child! Cvoid
@@ -3771,7 +3777,6 @@ module mousetrap
 ###### column_view.jl
 
     @export_type ColumnViewColumn SignalEmitter
-    @declare_native_widget ColumnView
 
     ColumnViewColumn(internal::Ptr{Cvoid}) = ColumnViewColumn(detail._ColumnViewColumn(internal))
 
@@ -3789,6 +3794,8 @@ module mousetrap
     @export_function ColumnViewColumn get_is_resizable Bool
 
     @export_type ColumnView Widget
+    @declare_native_widget ColumnView
+
     ColumnView(selection_mode::SelectionMode = SELECTION_MODE_NONE) = ColumnView(detail._ColumnView(selection_mode))
 
     function push_back_column!(column_view::ColumnView, title::String) ::ColumnViewColumn 
@@ -3922,7 +3929,7 @@ module mousetrap
     @export_type Paned Widget
     @declare_native_widget Paned
 
-    Paned(orientation::Orientation) = Paned(detail._paned(orientation))
+    Paned(orientation::Orientation) = Paned(detail._Paned(orientation))
 
     function Paned(start_child::Widget, end_child::Widget, orientation::Orientation) ::Paned
         out = Paned()
@@ -3941,7 +3948,7 @@ module mousetrap
 
     @export_function Paned set_start_child_resizable! Cvoid Bool b
     @export_function Paned get_start_child_resizable Bool
-    @export_function Paned set_start_child_shrinkable Cvoid Bool b
+    @export_function Paned set_start_child_shrinkable! Cvoid Bool b
     @export_function Paned get_start_child_shrinkable Bool
 
     set_start_child!(paned::Paned, child::Widget) = detail.set_start_child!(paned._internal, as_widget_pointer(child))
@@ -3951,7 +3958,7 @@ module mousetrap
 
     @export_function Paned set_end_child_resizable! Cvoid Bool b
     @export_function Paned get_end_child_resizable Bool
-    @export_function Paned set_end_child_shrinkable Cvoid Bool b
+    @export_function Paned set_end_child_shrinkable! Cvoid Bool b
     @export_function Paned get_end_child_shrinkable Bool
 
     set_end_child!(paned::Paned, child::Widget) = detail.set_end_child!(paned._internal, as_widget_pointer(child))

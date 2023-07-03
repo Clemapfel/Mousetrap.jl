@@ -12,31 +12,12 @@ with as little time and effort as possible.
 ---
 
 ## Features
-+ Create complex GUI application for Linux, Windows and MacOS
++ Create complex GUI application for Linux and Windows
 + Choose from over 40 different kinds of widgets for every occasion
 + Powerful image processing facilities, well-suited for image manipulation programs
 + Supports mice, keyboards, touchscreens, touchpad, and stylus devices
 + Fully abstracted OpenGL interface, allows for high-performance, hardware-accelerated rendering
 + Hand-written manual & extensive documentation: every exported symbol is documented
-
----
-
-## Design Goals
-
-#### A wholistic View is not necessary
-
-Mousetrap provides over 1000 exported symbols, which can be very daunting, especially to people without GUI experience (and/or multiple days to study).
-
-To address this, mousetrap was designed with a "plug & play" approach. **Users will
-only have to be aware of a tiny fraction of mouesetraps functionalities in order to
-start creating applications**. After acquiring this basic knowledge, they are free to learn
-about more widgets, advanced techniques, or entire other modules at their own pace - or not at all.
-
-#### Runtime Errors cannot crash the Application
-
-In many languages (including Julia and C++), if the *developer* causes an error by doing something wrong, that error will often cause the program to exit. Mousetrap aims to avoid this as much as possible. If a developer uses the library wrong, they should get a soft warning or be notified during compilation - as opposed to causing a fatal error during runtime.
-
-Over all else, stability is the top priority.
 
 ---
 
@@ -46,6 +27,7 @@ Over all else, stability is the top priority.
 + Simplify installation process to `] add mousetrap` for all operating systems
 + Add support for loading custom themes
 + Allow bundling of the Julia runtime and all necessary binary dependencies into a portable executable
++ Allow filtering and searching of selectable widgets
 + Implement CI for C++ and Julia components
 + Allow for audio playback & manipulating audio data
 + Add an event controller to capture video game controller / joystick events
