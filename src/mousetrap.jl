@@ -3702,6 +3702,9 @@ module mousetrap
     get_visible_child(stack::Stack) ::StackID = detail.get_visible_child(stack._internal)
     export get_visible_child
 
+    get_child_at(stack::Stack, index::Integer) ::StackID = detail.get_child_at(stack._internal, convert(Csize_t, index))
+    export get_child_at
+
     @export_function Stack set_transition_type! Cvoid StackTransitionType transition
     @export_function Stack get_transition_type StackTransitionType
 

@@ -41,14 +41,14 @@ All widgets **share a number of signals**. These signals are accessible for ever
 
 | Signal ID  | Signature                     |
 |------------|-------------------------------|
-| `realize`  | `(::T, [::Data_t]) -> Cvoid`  |
-| `destroy`  | `(::T, [::Data_t]) -> Cvoid`  | 
-| `show`     | `(::T, [::Data_t]) -> Cvoid`  | 
-| `hide`     | `(::T, [::Data_t]) -> Cvoid`  |
-| `map`      | `(::T, [::Data_t]) -> Cvoid`  | 
-| `unmap`    | `(::T, [::Data_t]) -> Cvoid`  | 
+| `realize`  | `(::T, [::Data_t]) -> Nothing`  |
+| `destroy`  | `(::T, [::Data_t]) -> Nothing`  | 
+| `show`     | `(::T, [::Data_t]) -> Nothing`  | 
+| `hide`     | `(::T, [::Data_t]) -> Nothing`  |
+| `map`      | `(::T, [::Data_t]) -> Nothing`  | 
+| `unmap`    | `(::T, [::Data_t]) -> Nothing`  | 
 
-Where `T` is the subtype. For example, since `Button` is a widget, the signature of `Button`s signal `realize` is `(::Button, [::Data_t]) -> Cvoid`.
+Where `T` is the subtype. For example, since `Button` is a widget, the signature of `Button`s signal `realize` is `(::Button, [::Data_t]) -> Nothing`.
 
 By the end of this chapter, we will have learned when exactly all these signals are emitted and what they mean. For now, we will just note that all widgets share these signals. For any widget in this chapter or in the docs, these signals are available. As such, they will not be listed for every `Widget` subtype.
 
@@ -1134,7 +1134,7 @@ If we do loose track of the ID, we can always retrieve it using `get_item_at`, w
 `push_back!`, and its equivalents `push_front!` and `insert!`, provide a method that also takes a callback. This callback will be invoked when the item is selected, it has the signature:
 
 ```
-(::DropDown, [::Data_t]) -> Cvoid
+(::DropDown, [::Data_t]) -> Nothing
 ```
 
 ```julia
@@ -1700,23 +1700,31 @@ Here, we use `Label`s as items in the `ColumnView`, but any arbitrarily complex 
 
 ## Stack
 
-\a{Stack} is a selectable widget that can only ever display exactly one child at a time, though we register any number of widgets first. All widget except the selected on will be hidden, while the selected widget will occupy the entire allocated space of the `Stack`:
+[`Stack'](@ref) is a selectable widget that can only ever display exactly one child at a time. Each child of the stack is called a **page**.
+
+We add a page using `add_child!`, which takes any widget, and the pages title. This title is mandatory and it has to uniquely identify the page. `add_child!` returns the pages ID, which, similarly to how adding elements to `DropDown` works, we need to keep track of in order to later refer to pages in a position-independent manner.
 
 ```julia
-auto stack = Stack();
-auto page_01 = // widget
-auto page_02 = // widget
+stack = Stack()
 
-auto page_01_id = stack.add_child(page_01, "Page 01");
-auto page_02_id = stack.add_child(page_02, "Page 02");
-
-// make page_01 currently displayed widget
-stack.set_visible_child(page_01_id);
+id_01 = add_child!(stack, generate_child("Child #01"), "Page #01")
+id_02 = add_child!(stack, generate_child("Child #02"), "Page #02")
+id_03 = add_child!(stack, generate_child("Child #03"), "Page #03")
 ```
 
-Adding a widget with `Stack::add_child` will return the **ID** of that page. To make a specific widget be the currently shown widget, we use `Stack::set_visible_child`, which takes this ID.
+To check which page is currently visible, we use `get_visible_child`, which returns that pages ID. If we loose track of a pages ID, we can retrieve the ID of a stack page at a given position using `get_child_at`.
 
-We see above that `Stack::add_child` takes a second argument, which is the **page title**. This title is not used in the stack itself, rather, it is used by two widgets made exclusively to interact with a `Stack`. These widgets facilitate the user being able to choose which stack page to display, as `Stack` itself has no way of user interaction.
+To keep track of which page is currently selected, we should connect to the stacks underlying `SelectionModel`, just like we would with `ListView` and `GridView`:
+
+```julia
+stack = Stack()
+stack_model = get_selection_model(stack)
+connect_signal_selection_changed!(selection_model, stack) do x::SelectionModel, position::Integer, n_items::Integer, stack::Stack
+    println("Current stack page is now: $(get_child_at(stack, position))")
+end
+```
+
+Where we provided the `Stack` instance to the selection models signal handler as the optional `Data_t` argument.
 
 ### StackSwitcher
 
@@ -1911,7 +1919,9 @@ mousetrap.insert!(
 )
 ```
 
-We have to take care ourselfs that no two widgets overlap. `set_column_spacing!` and `set_row_spacing!` automatically insert margins in between columns and rows, while `set_rows_homogeneous!` and `set_columns_homogeneous!` make it so all rows or columns will allocate the same height and widget, respectively.
+We have to take care ourselfs that no two widgets overlap. 
+
+`set_column_spacing!` and `set_row_spacing!` automatically insert margins in between columns and rows, while `set_rows_homogeneous!` and `set_columns_homogeneous!` make it so all rows or columns will allocate the same height and widget, respectively.
 
 `Grid` offers a more flexible, but also more manual way of arranging widgets in 2D space.
 
@@ -1964,7 +1974,7 @@ If we want to change the currently selected page, we use `next_page!`, `previous
 To react to the user changing the currently selected page, we have to connect to one of notebooks unique signals, `page_added`, `page_removed`, `page_reordered` and `page_selection_changed`, all of which require a signal handler with the signature 
 
 ```julia
-(::Notebook, page_index::Integer, [::Data_t]) -> Cvoid
+(::Notebook, page_index::Integer, [::Data_t]) -> Nothing
 ```
 
 For example, if we want to react to the user currently selected page changing, we would connect to signal `page_selection_changed` like so:
@@ -1982,7 +1992,7 @@ end
 
 Now that we have many new widgets in our arsenal, a natural question is "how do we make our own?". If we want to construct a completely new widget, pixel-by-pixel, line-by-line, we will have to wait until the chapter on [native rendering](./09_native_rendering.md). Until then, we are already perfectly capable of creating what is called a **compound widget**.
 
-A compound widget is a widget that groups many other, pre-made widgets together. Compound widgets give an esy mechanism to 
+A compound widget is a widget that groups many other, pre-made widgets together. Compound widgets give an easy mechanism to 
 logically group a collection of widgets, and treat them as a whole, instead of having to operate on each of its parts individually.
 
 In order for a Julia object to be considered a `Widget`, that is, all functions that take a `mousetrap.Widget` also work 

@@ -84,13 +84,13 @@ While this is nice, we will most likely want to react to the user selected a col
 
 `on_accept!` is invoked when the user selects a color, its callback is required to have the signature:
 ```
-(::ColorChooser, color::RGBA, [::Data_t]) -> Cvoid
+(::ColorChooser, color::RGBA, [::Data_t]) -> Nothing
 ```
 Where `color` will be the color the user selected.
 
 `on_cancel!` is invoked when the user closes the dialog in any way, without selecting a color. It's signature is 
 ```
-(::ColorChooser, [::Data_t]) -> Cvoid
+(::ColorChooser, [::Data_t]) -> Nothing
 ```
 
 To ask for a color selection and react to the user picking a color or dismissing the dialog, we can do the following:

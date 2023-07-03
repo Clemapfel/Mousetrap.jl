@@ -233,7 +233,7 @@ Often, when writing a GUI, we want the graphical interface to reflect the conten
 
 `FileMonitor` works similar to a signal emitter. To register a function that is called whenever the file changes, we use `on_file_changed!`, which expects a function with the signature 
 ```
-(::FileMonitor, event::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor, [::Data_t]) -> Cvoid
+(::FileMonitor, event::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor, [::Data_t]) -> Nothing
 ```
 
 where
@@ -302,14 +302,14 @@ In order to react to the user making a selection or canceling the operation, we 
 
 [`on_accept!`](@ref) takes a function that is invoked when the user makes a file selection. This function is required to have the signature
 ```julia
-(::FileChooser, files::Vector{FileDescriptor}, [::Data_t]) -> Cvoid
+(::FileChooser, files::Vector{FileDescriptor}, [::Data_t]) -> Nothing
 ```
 Where `files` may contain one or more files, depending on the `FileChooserAction` used when creating the dialog.
 
 The callback registered using `on_cancel!` is called if the user cancels or otherwise closes the dialog. This function requires a different signature:
 
 ```julia
-(::FileChooser, [::Data_t]) -> Cvoid
+(::FileChooser, [::Data_t]) -> Nothing
 ```
 
 Using these, we can trigger custom behavior if / when the user makes a selection:
@@ -387,7 +387,7 @@ While we could `present!` this dialog to the user now
 We haven't yet connected any behavior to the user pressing a button. To do this, we use `on_selection!`, which takes a callback with the following signature:
 
 ```
-(::AlertDialog, button_index::Integer, [::Data_t]) -> Cvoid
+(::AlertDialog, button_index::Integer, [::Data_t]) -> Nothing
 ```
 
 Where `button_index` is the index of the button, from left to right (1-based), or `0` if the dialog was dismissed without pressing a button.

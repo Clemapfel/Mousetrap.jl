@@ -13,17 +13,23 @@ function generate_child(label::String) ::Widget
     return child
 end
 
-main() do app::Application
+main(; application_id = "stack.example") do app::Application
 
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    notebook = Notebook()
+    stack = Stack()
 
-    push_back!(notebook, generate_child("Child #01"), Label("Label #01"))
-    push_back!(notebook, generate_child("Child #02"), Label("Label #02"))
-    push_back!(notebook, generate_child("Child #03"), Label("Label #03"))
+    add_child!(stack, generate_child("Child #01"), "Page #01")
+    add_child!(stack, generate_child("Child #02"), "Page #02")
+    add_child!(stack, generate_child("Child #03"), "Page #03")
 
-    set_child!(window, notebook)
+    stack = Stack()
+    stack_model = get_selection_model(stack)
+    connect_signal_selection_changed!(stack_model, stack) do x::SelectionModel, position::Integer, n_items::Integer, stack::Stack
+        println("Current stack page is now: $(get_child_at(stack, position))")
+    end
+
+    set_child!(window, hbox(stack, StackSidebar(stack)))
     present!(window)
 end

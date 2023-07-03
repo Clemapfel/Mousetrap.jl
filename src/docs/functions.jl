@@ -869,6 +869,13 @@ get_centroid(::Shape) -> Vector2f
 Get the centroid of the shape, this is the mathematical average of all its vertices positions.
 """
 
+@document get_child_at """
+```
+get_child_at(::Stack, index::Integer) -> StackID
+```
+Retrieve the ID of the stack page at given position, or `""` if the index is out of bounds
+"""
+
 @document get_child_position """
 ```
 get_child_position(fixed::Fixed, child::Widget) -> Vector2f
