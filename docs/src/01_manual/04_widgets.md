@@ -730,7 +730,6 @@ Base.include(Main, "signals.jl")
     main() do app::Application
     
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
     
         active = Switch()
         set_is_active!(active, true)
@@ -815,7 +814,6 @@ spin_button = SpinButton(0, 2, 0.5)
     ```julia
     main() do app::Application
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
     
         horizontal = SpinButton(0, 2, 0.5)
         set_value!(horizontal, 1)
@@ -864,7 +862,6 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
     ```julia
     main() do app::Application
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         horizontal = Scale(0, 2, 0.5)
         set_orientation!(horizontal, ORIENTATION_HORIZONTAL)
@@ -894,10 +891,8 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
     ```julia
     main() do app::Application
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         horizontal = Scale(0, 2, 0.5)
         set_orientation!(horizontal, ORIENTATION_HORIZONTAL)
@@ -962,7 +957,6 @@ Once the bar reaches 75%, it changes color:
     ```julia
     main() do app::Application
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         box = Box(ORIENTATION_VERTICAL)
         set_spacing!(box, 10)
@@ -1009,7 +1003,6 @@ Using `set_show_text!`, we can make it so the current percentage is drawn along 
     ```julia
     main() do app::Application
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         box = Box(ORIENTATION_VERTICAL)
     
@@ -1037,7 +1030,6 @@ To signal progress when we do not have an exact fraction, we use [`Spinner`](@re
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         spinner = Spinner()
         set_is_spinning!(spinner, true)
@@ -1066,7 +1058,6 @@ While we could control the size of an `Entry` using size-hinting, a better way i
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         clear = Entry()
         set_text!(clear, "text")
@@ -1193,7 +1184,6 @@ Where we had to first create a `Label` instance, then use it as the label widget
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         left = Separator()
         right = Separator()
@@ -1249,7 +1239,6 @@ So far, all widget containers have aligned their children such that they do not 
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         lower = Button()
         set_horizontal_alignment!(lower, ALIGNMENT_START)
@@ -1297,7 +1286,6 @@ add_overlay!(overlay, overlaid_widge; include_in_measurement = true);
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         paned = Paned(ORIENTATION_HORIZONTAL)
         set_start_child!(paned, generate_child("Left"))
@@ -1356,7 +1344,6 @@ Apart from the speed, we also have a choice of animation **type**, represented b
     ```julia
     main() do app::Application
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         # create child
         child = Frame(Overlay(Separator(), Label("<span size='200%'>[Item]</span>")))
@@ -1393,7 +1380,6 @@ Expander has two children, the label, set with `set_label_widget!`, and its chil
     ```julia
     main() do app::Application
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         child = Frame(Overlay(Separator(), Label("Child")))
         set_margin!(child, 10)
@@ -1430,7 +1416,6 @@ We set the viewports singular child using `set_child!`, after which the user can
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         child = Frame(Overlay(Separator(), Label("<span size='800%'>CHILD</span>")))
         set_margin!(child, 10);
@@ -1500,7 +1485,6 @@ Showing the popover is called **popup**, closing the popover is called **popdown
     ```julia
     main() do app::Application
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
 
         child = Frame(Overlay(Separator(), Label("Child")))
         set_size_request!(child, Vector2f(100, 75))
@@ -1558,111 +1542,54 @@ TODO
 
 ```julia
 list_view = ListView(ORIENTATION_VERTICAL, SELECTION_MODE_SINGLE)
-push_back!(list_view, 
-
-\image html list_view_single_selection.png
-
-\how_to_generate_this_image_begin
-```julia
-auto list_view = ListView(Orientation::HORIZONTAL, SelectionMode::SINGLE);
-
-auto child = [](size_t id)
-{
-    auto overlay = Overlay();
-    overlay.set_child(Separator());
-
-    auto label = Label((id < 10 ? "0" : "") + std::to_string(id));
-    label.set_alignment(Alignment::CENTER);
-    overlay.add_overlay(label);
-
-    auto frame = Frame();
-    frame.set_child(overlay);
-    frame.set_size_request({50, 50});
-
-    auto aspect_frame = AspectFrame(1);
-    aspect_frame.set_child(frame);
-
-    return aspect_frame;
-};
-
-for (size_t i = 0; i < 7; ++i)
-    list_view.push_back(child(i));
-
-window.set_child(list_view);
+push_back!(list_view, Label("Child #01"))
+push_back!(list_view, Label("Child #02"))
+push_back!(list_view, Label("Child #03"))
 ```
-\how_to_generate_this_image_end
 
-Where the blue border indicates that the 4th element (with label `"03"`) is currently selected.
+![](../resources/list_view_simple.png)
 
-When creating the `ListView`, the first argument to its constructor is the \a{Orientation}, while the second is the underlying `SelectionModel`s mode. If left unspecified, `SelectionMode::NONE` is used.
+Where the second child is currently selected.
 
-Much like `Box`, `ListView` supports `ListView::push_back`, `ListView::push_front`, along with `ListView::insert` to insert any widget at the specified position.
-
-`ListView` can be requested to automatically show separators in-between two items by calling `ListView::set_show_separators(true)`.
+`ListView` can be requested to automatically show separators in-between two items by setting `set_show_separators!` to `true`.
 
 ### Nested Trees
 
 By default, `ListView` displays its children in a linear list, either horizontally or vertically. `ListView` also supports **nested lists**, sometimes called a **tree view**:
 
-\image html list_view_nested.png
+![](../resources/list_view_nested.png)
 
-\how_to_generate_this_image_begin
-```julia
-auto list_view = ListView(Orientation::VERTICAL);
-auto child = [](const std::string& string)
-{
-    auto overlay = Overlay();
-    overlay.set_child(Separator());
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
 
-    auto label = Label(string);
-    label.set_alignment(Alignment::CENTER);
-    label.set_margin(5);
-    overlay.add_overlay(label);
+        window = Window(app)
 
-    auto frame = Frame();
-    frame.set_child(overlay);
+        list_view = ListView(ORIENTATION_VERTICAL, SELECTION_MODE_SINGLE)
+        push_back!(list_view, Label("Child #01"))
+        child_02_it = push_back!(list_view, Label("Child #02"))
+        push_back!(list_view, Label("Child #03"))
 
-    return frame;
-};
+        push_back!(list_view, Label("Nested Child #01"), child_02_it)
+        nested_child_02_it = push_back!(list_view, Label("Nested Child #02"), child_02_it)
 
-list_view.push_back(child("outer item #01"));
-auto it = list_view.push_back(child("outer item #02"));
-list_view.push_back(child("inner item #01"), it);
-it = list_view.push_back(child("inner item #02"), it);
-list_view.push_back(child("inner inner item #01"), it);
-list_view.push_back(child("outer item #03"));
+        push_back!(list_view, Label("Inner Child #01"), nested_child_02_it)
 
-auto frame = Frame();
-frame.set_child(list_view);
-list_view.set_margin(50);
-window.set_child(frame);
-```
-\how_to_generate_this_image_end
+        frame = Frame(list_view)
+        set_margin!(frame, 10)
+        set_child!(window, frame)
+        present!(window)
+    end
+    ```
 
-Here, we have a triple nested list. The outer list has the items `outer item #01`, `outer item #02` and `outer item #03`. `outer item #02` is itself a list, with two children `inner item #01` and `inner item #02`, the latter of which is also a list with a single item.
-
-When `ListView::push_back` is called, it returns an **iterator**. When we supply this iterator as the second argument to any of the widget-inserting functions, such as `ListView::push_back`, the new child will be inserted as a child to the item the iterator points to. If no iterator is specified, the item will be inserted in the top-level list.
-
-```julia
-auto it_01 = list_view.push_back(/* outer item #01 */);
-auto it_02 = list_view.push_back(/* outer item #02 */);
-
-  auto inner_it_01 = list_view.push_back(/* inner item #01 */, it_02);
-  auto inner_it_02 = list_view.push_back(/* inner item #02 */, it_02);
-   
-    auto inner_inner_it_01 = list_view.push_back(/* inner inner item #01 */, inner_it_02);
-    
-auto it_03 = list_view.push_back(/* outer item #03 */);
-```
-
-This means, if we only want to show items in a simple, non-nested list, we can ignore the iterator return value completely.
+TODO
 
 ### Reacting to Selection
 
-In order to react to the user selecting a new item in our `ListView` (if its selection mode is anything other than `NONE`), we should connect to the lists `SelectionModel` like so:
+In order to react to the user selecting a new item in our `ListView` (if its selection mode is anything other than `SELECTION_MODE_NONE`), we should connect to the lists `SelectionModel` like so:
 
 ```julia
-auto list_view = ListView(Orientation::HORIZONTAL, SelectionMode::SINGLE);
+list_view = ListView(Orientation::HORIZONTAL, SelectionMode::SINGLE);
 
 list_view.get_selection_model()->connect_signal_selection_changed(
     [](SelectionModel&, int32_t item_i, int32_t n_items){
@@ -1768,83 +1695,6 @@ window.set_child(column_view);
 \how_to_generate_this_image_end
 
 Here, we use `Label`s as items in the `ColumnView`, but any arbitrarily complex widget can be used. Rows or columns do not require one specific widget type, we can put any type of widget at whatever position we want.
-
----
-
-## Grid
-
-Not to be confused with `GridView`, \a{Grid} arranges its children in a **non-uniform** grid:
-
-\image html grid.png
-
-\how_to_generate_this_image_begin
-```julia
-auto grid = Grid();
-
-auto add_child = [&](size_t x, size_t y, size_t width, size_t height)
-{
-    auto overlay = Overlay();
-    overlay.set_child(Separator());
-    static size_t i = 0;
-    auto label = Label((i < 9 ? "0" : "") + std::to_string(i++));
-    label.set_alignment(Alignment::CENTER);
-    overlay.add_overlay(label);
-
-    auto frame = Frame();
-    frame.set_child(overlay);
-    frame.set_size_request({50, 50});
-
-    auto box = Box();
-    box.push_back(frame);
-
-    grid.insert(box, {x, y}, width, height);
-    return box;
-};
-
-add_child(0, 0, 1, 1);
-add_child(0, 1, 2, 1);
-add_child(0, 2, 1, 1);
-add_child(1, 0, 2, 1);
-add_child(2, 1, 1, 2);
-add_child(1, 2, 1, 1);
-add_child(3, 0, 1, 3);
-
-grid.set_row_spacing(5);
-grid.set_column_spacing(5);
-grid.set_columns_homogenous(true);
-
-grid.set_expand(true);
-grid.set_margin(5);
-window.set_child(grid);
-```
-\how_to_generate_this_image_end
-
-Each widget on the grid has four properties, it's **x-index**, **y-index**, **width** and **height**. These are not in pixels, rather they are the conceptional position or number of cells in the grid.
-
-For example, in the above figure, the widget labeled `00` has x- and y-index `0` and a width and height of `1`. The widget next to it, labeled `03` has an x-index `1`, y-index of `0`, a width of `2` and a height of `1`.
-
-To add a widget to a grid, we need to provide the widget along with its desired position and size in the grid:
-
-```julia
-grid.insert(
-    /* child widget */
-    {1, 0},  // x, y
-    2,       // width
-    1        // height
-);
-```
-
-Where `width` and `height` are optional, with `1` being the default value for both arguments.
-
-When a widget is added to a column or row not yet present in the grid, it is added automatically. Valid x- and y-indices are 0-based (`{0, 1, 2, ...}`), while width and height have to be a multiple of 1 (`{1, 2, ...}`).
-
-Note that it is our responsibility to make sure a widgets position and size do not overlap with that of another widget. If carelessly inserted, one widget may obscure another, though in some cases this behavior may also be desirable.
-
-`Grid::set_columns_homogenous` and `Grid::set_rows_homogenous` specifies whether the `Grid` should allocate the exact same width for all columns, or height for all rows, respectively.
-
-Lastly, we can choose the spacing between each cell using `Grid::set_row_spacing` and `Grid::set_column_spacing`.
-
-`Grid` can be seen as a more flexible version of `GridView`. It also arranges arbitrary widgets in columns and rows, but, unlike with `GridView`, in `Grid` a widget can occupy more than one row / column, and we have to manually specify the position and size of each of its children.
 
 ---
 
@@ -1999,75 +1849,138 @@ Mousetrap provides a large number of different animation, which are represented 
 
 ---
 
-## Notebook
+## Grid
 
-\a{Notebook} is very similar to `Stack`, it always displays exactly one child. Unlike `Stack`, it comes with a built-in way for users to select which child to show:
+Not to be confused with `GridView`, [`Grid`](@ref) arranges its children in a **non-uniform** grid:
 
-\image html notebook.png
+![](../resources/grid.png)
 
-\how_to_generate_this_image_begin
-```julia
-auto notebook = Notebook();
-auto child = [](size_t id)
-{
-    auto overlay = Overlay();
-    overlay.set_child(Separator());
+!!! details "How to generate this image"
+    ```julia
+    function generate_child(label::String) ::Widget
+        child = Frame(Overlay(Separator(), Label(label)))
+        set_size_request!(child, Vector2f(50, 50))
+        return child
+    end
 
-    auto label = Label(std::string("Notebook Child #") + (id < 10 ? "0" : "") + std::to_string(id));
-    label.set_alignment(Alignment::CENTER);
-    overlay.add_overlay(label);
+    main() do app::Application
 
-    auto frame = Frame();
-    frame.set_child(overlay);
-    frame.set_size_request({300, 300});
+        window = Window(app)
+        
+        grid = Grid()
 
-    auto aspect_frame = AspectFrame(1);
-    aspect_frame.set_child(frame);
+        mousetrap.insert!(grid, generate_child("01"), 1, 1, 2, 1)
+        mousetrap.insert!(grid, generate_child("02"), 3, 1, 1, 2)
+        mousetrap.insert!(grid, generate_child("03"), 4, 1, 1, 1)
+        mousetrap.insert!(grid, generate_child("04"), 1, 2, 1, 2)
+        mousetrap.insert!(grid, generate_child("05"), 2, 2, 1, 1)
+        mousetrap.insert!(grid, generate_child("06"), 4, 2, 1, 1)
+        mousetrap.insert!(grid, generate_child("07"), 2, 3, 3, 1)
+    
+        set_margin!(grid, 10)
+        set_child!(window, grid)
+        present!(window)
+    end
+    ```
 
-    return aspect_frame;
-};
+Each widget in the grid has a x- and y-position, along with a widget and height, both measured in **number of cells** . 
 
-notebook.push_back(child(01), Label("Page 01"));
-notebook.push_back(child(02), Label("Page 02"));
-notebook.push_back(child(01), Label("Page 03"));
-notebook.set_tabs_reorderable(true);
-
-window.set_child(notebook);
-``` 
-\how_to_generate_this_image_end
-
-We see that each notebook page has a tab with a title. This title widget will usually be a `Label`, though it can be any arbitrarily complex widget. When adding a page using `Notebook::push_back`, the first argument is the widget that should be used as the page, while the second argument is the widget that should be used as the label.
-
-`Notebook` sports some additional features. Setting `Notebook::set_is_scrollable` to `true` allows users to change between pages by scrolling with the mouse or touchscreen.
-When `Notebook::set_tabs_reorderable` is set to `true`, the user can drag and drop pages to reorder them in any order they wish. Users can even **drag pages from one notebook to another**. 
-
-`Notebook` has a number of custom signals that reflect these multiple modes of interaction:
-
-\signals
-\signal_page_added{Notebook}
-\signal_page_reordered{Notebook}
-\signal_page_removed{Notebook}
-\signal_page_selection_changed{Notebook}
-
-Where `_` is an unused argument. For example, we would connect to `page_selection_changed` like so:
+For example, in the image above, the widget labeled `05` has the x-position of 2, y-position of 2, a width of 1 cell and a height of 1 cell. 
 
 ```julia
-notebook.connect_signal_page_selection_changed([](Notebook&, void*, int32_t page_index){
-    std::cout << "Selected Page is now: " << page_index << std::endl;
-});
+mousetrap.insert!(
+    grid, 
+    #= widget =#,
+    2,  # x-position
+    2,  # y-position
+    1,  # width
+    1   # height
+)
 ```
 
-\todo refactor notebook signals to remove unused argument
+Meanwhile, the widget labeled `07` has an x-position of 2, y-position of 3, width of 3 cells and height of 1 cell.
 
-Note that `Notebook` does not provide `get_selection_model`. We use the `page_selection_changed` signal to monitor page selection, and `Notebook::goto_page` to manually switch between pages.
+```julia
+mousetrap.insert!(
+    grid, 
+    #= widget =#, 
+    2,  # x-position
+    3,  # y-position
+    3,  # width
+    1   # height
+)
+```
+
+We have to take care ourselfs that no two widgets overlap. `set_column_spacing!` and `set_row_spacing!` automatically insert margins in between columns and rows, while `set_rows_homogeneous!` and `set_columns_homogeneous!` make it so all rows or columns will allocate the same height and widget, respectively.
+
+`Grid` offers a more flexible, but also more manual way of arranging widgets in 2D space.
 
 ---
+
+## Notebook
+
+[`Notebook`](@ref) is very similar to `Stack`, it always displays exactly one child. Unlike `Stack`, it comes with a built-in way for users to select which child to show.
+
+Each notebook page has two widget, the **child widget**, which is displayed in the content area of each page, and the **label widget**, which is the label used for the tab. This will usually be a `Label`, though any widget can be used.
+
+We add pages using `push_back!`, `push_front!` or `insert!`, which take the child and label widget as their arguments:
+
+```julia
+notebook = Notebook()
+
+push_back!(notebook, #= Child #01 =#, Label("Label #01"))
+push_back!(notebook, #= Child #02 =#, Label("Label #02"))
+push_back!(notebook, #= Child #03 =#, Label("Label #03"))
+```
+![](../resources/notebook.png)
+
+!!! details "How to generate this image"
+    ```julia
+    function generate_child(label::String) ::Widget
+        child = Frame(Overlay(Separator(), Label(label)))
+        set_size_request!(child, Vector2f(150, 150))
+        set_margin!(child, 10)
+        return child
+    end
+
+    main() do app::Application
+        window = Window(app)
+
+        notebook = Notebook()
+
+        push_back!(notebook, generate_child("Child #01"), Label("Label #01"))
+        push_back!(notebook, generate_child("Child #02"), Label("Label #02"))
+        push_back!(notebook, generate_child("Child #03"), Label("Label #03"))
+
+        set_child!(window, notebook)
+        present!(window)
+    end
+    ```
+
+We can allow the user to reorder the pages by setting `set_tabs_reorderable!` to `true`.
+
+If we want to change the currently selected page, we use `next_page!`, `previous_page!`, or `goto_page!`, the latter of which takes the page position as an integer.
+
+To react to the user changing the currently selected page, we have to connect to one of notebooks unique signals, `page_added`, `page_removed`, `page_reordered` and `page_selection_changed`, all of which require a signal handler with the signature 
+
+```julia
+(::Notebook, page_index::Integer, [::Data_t]) -> Cvoid
+```
+
+For example, if we want to react to the user currently selected page changing, we would connect to signal `page_selection_changed` like so:
+
+```julia
+notebook = Notebook()
+connect_signal_page_selection_changed!(notebook) do x::Notebook, index::Integer
+    println("Page #$index is now selected")
+end
+```
 
 ---
 
 ## Compound Widgets
 
-Now that we have many new widgets in our arsenal, a natural question is "how do we make our own?". If we want to construct a completely new widget, pixel-by-pixel, line-by-line, we will have to wait until the chapter on [native rendering](./09_native_rendering.md). Until then, we are already perfeclty capable of creating what is called a **compound widget**.
+Now that we have many new widgets in our arsenal, a natural question is "how do we make our own?". If we want to construct a completely new widget, pixel-by-pixel, line-by-line, we will have to wait until the chapter on [native rendering](./09_native_rendering.md). Until then, we are already perfectly capable of creating what is called a **compound widget**.
 
 A compound widget is a widget that groups many other, pre-made widgets together. Compound widgets give an esy mechanism to 
 logically group a collection of widgets, and treat them as a whole, instead of having to operate on each of its parts individually.

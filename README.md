@@ -27,6 +27,7 @@ with as little time and effort as possible.
 + Simplify installation process to `] add mousetrap` for all operating systems
 + Add support for loading custom themes
 + Allow bundling of the Julia runtime and all necessary binary dependencies into a portable executable
++ Implement Drag & Drop
 + Allow filtering and searching of selectable widgets
 + Implement CI for C++ and Julia components
 + Allow for audio playback & manipulating audio data

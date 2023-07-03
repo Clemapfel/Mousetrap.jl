@@ -3602,8 +3602,8 @@ module mousetrap
 
     Grid() = Grid(detail._Grid())
 
-    function insert!(grid::Grid, widget::Widget, row_i::Signed, column_i::Signed; n_horizontal_cells::Unsigned = Unsigned(1), n_vertical_cells::Unsigned = Unsigned(1))
-        detail.insert!(grid._internal, as_widget_pointer(widget), row_i - 1, column_i - 1, n_horizontal_cells, n_vertical_cells)
+    function insert!(grid::Grid, widget::Widget, row_i::Signed, column_i::Signed, n_horizontal_cells::Integer = 1, n_vertical_cells::Integer = 1)
+        detail.insert!(grid._internal, as_widget_pointer(widget), from_julia_index(row_i), from_julia_index(column_i), n_horizontal_cells, n_vertical_cells)
     end
     export insert!
 
@@ -3732,17 +3732,17 @@ module mousetrap
     Notebook() = Notebook(detail._Notebook())
 
     function push_front!(notebook::Notebook, child_widget::Widget, label_widget::Widget) ::Int64
-        return detail.push_front!(notebook._internal, child_as_widget_pointer(widget), as_widget_pointer(label_widget))
+        return detail.push_front!(notebook._internal, as_widget_pointer(child_widget), as_widget_pointer(label_widget))
     end
     export push_front!
 
     function push_back!(notebook::Notebook, child_widget::Widget, label_widget::Widget) ::Int64
-        return detail.push_back!(notebook._internal, child_as_widget_pointer(widget), as_widget_pointer(label_widget))
+        return detail.push_back!(notebook._internal, as_widget_pointer(child_widget), as_widget_pointer(label_widget))
     end
     export push_back!
 
     function insert!(notebook::Notebook, index::Integer, child_widget::Widget, label_widget::Widget) ::Int64
-        return detail.insert!(notebook._internal, from_julia_index(index), child_as_widget_pointer(widget), as_widget_pointer(label_widget))
+        return detail.insert!(notebook._internal, from_julia_index(index), as_widget_pointer(child_widget), as_widget_pointer(label_widget))
     end
     export insert!
 
@@ -3931,8 +3931,8 @@ module mousetrap
 
     Paned(orientation::Orientation) = Paned(detail._Paned(orientation))
 
-    function Paned(start_child::Widget, end_child::Widget, orientation::Orientation) ::Paned
-        out = Paned()
+    function Paned(orientation::Orientation, start_child::Widget, end_child::Widget) ::Paned
+        out = Paned(orientation)
         set_start_child!(out, start_child)
         set_end_child!(out, end_child)
         return out

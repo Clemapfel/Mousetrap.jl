@@ -1333,8 +1333,10 @@ add_controller!(window, motion_controller)
 
 Widget that arranges its children as a list of pages. Each page
 has exactly one child widget, as well as an optional label widget. Pages
-can be freely reordered by the user, and they can be drag-and-dropped from
-one `Notebook` to another.
+can be freely reordered by the user if [`set_tabs_reorderable!`](@ref) is
+set to true. It furthermore supports a quick-change menu, in which 
+the user can quickly jump to another tab. To enable this, `set_quick_change_menu_enabled!`
+needs to be set to `true`.
 
 $(@type_constructors(
     Notebook()
@@ -1425,7 +1427,7 @@ one side or the other to control the size of both widgets at the same time.
 
 $(@type_constructors(
     Paned(orientation::Orientation),
-    Paned(start_child::Widget, end_child::Widget, orientation::Orientation)
+    Paned(orientation::Orientation, start_child::Widget, end_child::Widget)
 ))
 
 $(@type_signals(Paned, 
