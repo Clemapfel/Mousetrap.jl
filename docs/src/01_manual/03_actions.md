@@ -128,6 +128,29 @@ Where we used a [let-block](https://docs.julialang.org/en/v1/base/base/#let) to 
 
 This way, we do not have to keep track of actions ourself, by simply remembering the actions ID we can - at any point - trigger the action from anywhere in our application.
 
+## Signals
+
+`Action` has a single signal, `activated` (note the `d`, which distinguishes it from signal `activate`), which is emitted when the signals callback is invoked in any way. 
+
+```@eval
+using mousetrap
+mousetrap.@signal_table(Action,
+    activated
+)
+```
+
+We would connect to it like so:
+
+```julia
+action = #...
+connect_signal_activated!(action) do self::Action
+    println("activated")
+end
+```
+
+This can be helpful to trigger additional behavior when an action is activated, without changing the actions callback function. The signal handler can
+also be blocked / unblocked independently of enabling / disabling the action.
+
 ---
 
 ## Stateful vs Stateless Actions

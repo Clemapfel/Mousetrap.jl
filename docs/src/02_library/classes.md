@@ -2935,7 +2935,7 @@ Widget
 + [`mousetrap.get_frame_clock`](@ref)
 + [`mousetrap.get_has_focus`](@ref)
 + [`mousetrap.get_hide_on_overflow`](@ref)
-+ [`mousetrap.get_horizontal_alignemtn`](@ref)
++ [`mousetrap.get_horizontal_alignment`](@ref)
 + [`mousetrap.get_is_focusable`](@ref)
 + [`mousetrap.get_is_realized`](@ref)
 + [`mousetrap.get_is_visible`](@ref)

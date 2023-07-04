@@ -243,6 +243,8 @@ const signal_descriptors = Dict([
     )
 ])
 
+using Latexify
+
 macro signal_table(T, signals...)
 
     ids = ["ID"]

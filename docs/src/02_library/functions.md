@@ -43,6 +43,10 @@ mousetrap.Line
 ```@docs
 mousetrap.LineStrip
 ```
+## `Lines`
+```@docs
+mousetrap.Lines
+```
 ## `Outline`
 ```@docs
 mousetrap.Outline
@@ -50,6 +54,10 @@ mousetrap.Outline
 ## `Point`
 ```@docs
 mousetrap.Point
+```
+## `Points`
+```@docs
+mousetrap.Points
 ```
 ## `Polygon`
 ```@docs
@@ -1375,9 +1383,9 @@ mousetrap.get_homogeneous
 ```@docs
 mousetrap.get_horizontal_adjustment
 ```
-## `get_horizontal_alignemtn`
+## `get_horizontal_alignment`
 ```@docs
-mousetrap.get_horizontal_alignemtn
+mousetrap.get_horizontal_alignment
 ```
 ## `get_horizontal_scrollbar_policy`
 ```@docs

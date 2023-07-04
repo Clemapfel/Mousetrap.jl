@@ -305,13 +305,18 @@ to exit, all its windows only need to be hidden, not permanently destroyed. Ther
 
 ### Close Request
 
-`Window` has three signals, `activate_default_widget`, `activate_focused_widget`, and `close_request`, only the latter of which is relevant to us for now.
+`Window` has three signals, only the latter of which is relevant to us for now.
 
-It requires a signal handler with the signature
+```@eval
+using mousetrap
+mousetrap.@signal_table(Window,
+    activate_default_widget,
+    activate_focused_widget,
+    close_request
+)
+```
 
-```
-(::Window, [::Data_t]) -> WindowCloseRequestResult
-```
+
 
 When the window handler of the users OS asks the window to close, for example by the user pressing the "x" button, this signal will be emitted. It's result, of type [`WindowCloseRequestResult`](@ref) determines whether the window actualls does close. By returning `WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE`, the window will stay open:
 
@@ -582,9 +587,9 @@ Familiar from previous chapters, [`Button`](@ref) is commonly used to trigger be
 
 It has the two signals:
 
-```
-Base.include(Main, "signals.jl")
-@signal_table(Button,
+```@eval
+using mousetrap
+mousetrap.@signal_table(Button,
     clicked,
     activate
 )
@@ -640,9 +645,9 @@ Where the above shown buttons have the following properties:
 
 Unique to `ToggleButton` is that, if clicked, the button will **remain pressed**. When clicked again, it returns to being unpressed. Anytime the state of the `ToggleButton` changes, signal `toggled` will be emitted. In this way, `ToggleButton` can be used to track a boolean state.
 
-```
-Base.include(Main, "signals.jl")
-@signal_table(ToggleButton,
+```@eval
+using mousetrap
+mousetrap.@signal_table(ToggleButton,
     toggled,
     clicked,
     activate
@@ -665,9 +670,9 @@ set_child!(window, toggle_button)
 
 [`CheckButton`](@ref) is very similar to `ToggleButton` in function - but not appearance. `CheckButton` is an empty box in which a checkmark appears when it is toggled. Just like before, we query whether it is pressed by calling `get_is_active`. 
 
-```
-Base.include(Main, "signals.jl")
-@signal_table(ToggleButton,
+```@eval
+using mousetrap
+mousetrap.@signal_table(ToggleButton,
     toggled,
     clicked
 )
@@ -716,9 +721,9 @@ Note that `get_is_active` will only return `true` if the current state is specif
 
 As the last widget intended to convey a boolean state to the user, we have [`Switch`](@ref), which has an appearance similar to a light switch. `Switch` does not emit `toggled`, instead, we connect to the `activate` signal, which is emitted anytime the switch is operated.
 
-```
-Base.include(Main, "signals.jl")
-@signal_table(Switch,
+```@eval
+using mousetrap
+mousetrap.@signal_table(Switch,
     activate
 )
 ```
@@ -785,9 +790,9 @@ We usually do not need to create our own `Adjustment`, rather, it is provided by
 
 Adjustment has two signals:
 
-```
-Base.include(Main, "signals.jl")
-@signal_table(Adjustment,
+```@eval
+using mousetrap
+mousetrap.@signal_table(Adjustment,
     value_changed,
     properties_changed
 )
@@ -858,7 +863,7 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
 
 ![](../resources/scale_no_value.png)
 
-!!! details"How to generate this image"
+!!! details "How to generate this image"
     ```julia
     main() do app::Application
         window = Window(app)
@@ -887,7 +892,7 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
 
 [`Scale`](@ref), just like `SpinButton`, is a widget that allows a user to choose a value from the underlying `Adjustment`. This is done by click-dragging the knob of the scale, or clicking anywhere on its rail. In this way, it is usually harder to pick an exact decimal value on a `Scale` as opposed to a `SpinButton`. We can aid in this task by displaying the exact value next to the scale, which is enabled with [`set_should_draw_value!`](@ref):
 
-!!! details"How to generate this image"
+!!! details "How to generate this image"
     ```julia
     main() do app::Application
         window = Window(app)
@@ -1076,9 +1081,17 @@ While we could control the size of an `Entry` using size-hinting, a better way i
     end
     ```
 
-Lastly, `Entry` is **activatable**, when the user presses the enter key while the cursor is inside the entires text area, it will emite signal `activate`. Its other signal, `text_changed`, is emitted whenever the internal text buffer changes in anyway. We would 
+Lastly, `Entry` is **activatable**, when the user presses the enter key while the cursor is inside the entires text area, it will emite signal `activate`. Its other signal, `text_changed`, is emitted whenever the internal text buffer changes in anyway. 
 
-Other than `activate`, `Entry` has one more signal, `text_changed`, which is emitted whenever the internal buffer changes. Checking this signals signature, we see that we can connect to it like so:
+```@eval
+using mousetrap
+mousetrap.@signal_table(Entry,
+    activate,
+    text_changed
+)
+```
+
+We would therefore connect a handler that reacts to the text of an entry changing like so:
 
 ```julia
 entry = Entry()
@@ -1100,6 +1113,13 @@ Much like `Label`, we can set how the text aligns horizontally using `set_justif
 
 `TextView` does **not** have the `activate` signal, pressing enter while the cursor is inside the widget will simply create a new line. Instead, it only has signal `text_changed`, which behaves identical to that of `Entry`:
 
+```@eval
+using mousetrap
+mousetrap.@signal_table(TextView,
+    text_changed
+)
+```
+
 ```julia
 text_view = TextView()
 set_text!(text_view, "Write here")
@@ -1107,8 +1127,6 @@ connect_signal_text_changed!(text_view) do self::TextView
     println("text is now: $(get_text(self))")
 end
 ```
-
----
 
 ---
 
@@ -1513,7 +1531,16 @@ Manually calling `popup!` or `popdown!` to show / hide the `Popover` can be both
 
 ## PopoverButton
 
-Like `Button`, `PopoverButton` has a single child, can be circular, and has the `activate` signals. Instead of triggering behavior, `PopoverButton`s purpose is to reveal and hide a `Popover`.
+Like `Button`, `PopoverButton` has a single child, can be circular, and has the `activate` signals. 
+
+```@eval
+using mousetrap
+mousetrap.@signal_table(PopoverButton,
+    activate
+)
+```
+
+Instead of triggering behavior, `PopoverButton`s purpose is to reveal and hide a `Popover`.
 
 We first create the `Popover`, then connect it to the button using `set_popover!`. After this, if the user clicks the `PopoverButton`, the popover is shown.
 
@@ -1967,10 +1994,16 @@ We can allow the user to reorder the pages by setting `set_tabs_reorderable!` to
 
 If we want to change the currently selected page, we use `next_page!`, `previous_page!`, or `goto_page!`, the latter of which takes the page position as an integer.
 
-To react to the user changing the currently selected page, we have to connect to one of notebooks unique signals, `page_added`, `page_removed`, `page_reordered` and `page_selection_changed`, all of which require a signal handler with the signature 
+To react to the user changing the currently selected page, we have to connect to one of notebooks unique signals, all of which require a signal handler with the ame signature 
 
-```julia
-(::Notebook, page_index::Integer, [::Data_t]) -> Nothing
+```@eval
+using mousetrap
+mousetrap.@signal_table(Notebook,
+    page_added,
+    page_removed,
+    page_reordered,
+    page_selection_changed
+)
 ```
 
 For example, if we want to react to the user currently selected page changing, we would connect to signal `page_selection_changed` like so:

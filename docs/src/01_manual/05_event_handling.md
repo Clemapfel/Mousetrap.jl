@@ -66,9 +66,9 @@ While the controller will now receive events, nothing else will happen. We need 
 
 `FocusEventController` has two signals:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(FocusEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(FocusEventController,
     focus_gained,
     focus_lost
 )
@@ -104,9 +104,9 @@ Each non-modifier key has a key-code, which will be a constant defined by `mouse
 
 Now that we know how to identify keys, we can instance `KeyEventController`, which has 3 signals:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(KeyEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(KeyEventController,
     key_pressed,
     key_released,
     modifiers_changed
@@ -169,9 +169,9 @@ of events a mouse can emit, **cursor motion**  and **mouse button presses**. The
 
 For cursor motion, the event controller is [`MotionEventController`](@ref), which has 3 signals:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(MotionEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(MotionEventController,
     motion_enter,
     motion,
     motion_leave
@@ -210,9 +210,9 @@ A mouse button is... any button on a mouse, which is less intuitive than it soun
 
 We track mouse button presses with [`ClickEventController`](@ref) which has 3 signals:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(ClickEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(ClickEventController,
     click_pressed,
     click_released,
     click_stopped
@@ -267,9 +267,9 @@ controller for a similar, but slightly different gesture: *long presses*.
 
 [`LongPressEventController`](@ref) reacts to a specific sequence of events, called a **long press** gesture. This gesture is recognized when the users presses a mouse button, then keeps that button depressed without moving the cursor. After enough time has passed, `LongPressEventController` will emit its signals:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(LongPressEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(LongPressEventController,
     pressed,
     press_cancelled
 )
@@ -299,9 +299,9 @@ A long press is a gesture in which a user clicks a mouse button, does not move t
 
 Click-dragging gestures are automatically recognized by [`DragEventController`](@ref), which has three signals:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(DragEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(DragEventController,
     drag_begin,
     drag,
     drag_end
@@ -340,9 +340,9 @@ A pan controller cannot listen to both axes at once, though we can connect two c
 
 `PanEventController` only has one signal:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(PanEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(PanEventController,
     pan
 )
 ```
@@ -371,9 +371,9 @@ add_controller!(window, pan_controller)
 
 Other than clicking and cursor movement, many mice have a third function: scrolling. This is usually done with a designated wheel, though some operating systems also recognize scroll gestures using a trackpad or touchscreen. Either way, scroll events are registered by [`ScrollEventController`](@ref), which has four signals:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(ScrollEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(ScrollEventController,
     scroll_begin,
     scroll,
     scroll_end,
@@ -409,9 +409,9 @@ add_controller(window, scroll_controller)
 
 While `MotionEventController`, `ClickEventController`, etc. recognize both a mouse and touchscreen, mousetrap offers some touch-only gestures, though many trackpads also support them. These are usually gestures performed using two fingers, the first of which is **pinch-zoom**. Pinch-zoom is when the user places two fingers on the touchscreen, then moves either, such that the distance between the fingers changes. This gesture is commonly used to zoom a view in or out. It is recognized by [`PinchZoomEventController`](@ref), which only has one signal:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(PinchZoomEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(PinchZoomEventController,
     scale_changed
 )
 ```
@@ -442,9 +442,9 @@ Another touch-only gesture is the **two-finger-rotate**. With this gesture, the 
 
 This gesture is handled by [`RotateEventController`](@ref), which has one signal:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(RotateEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(RotateEventController,
     rotation_changed
 )
 ```
@@ -471,9 +471,9 @@ The last touch-only gesture is **swiping**, which is very similar to click-dragg
 
 Swiping is recognized by [`SwipeEventController`](@ref), which also only has one signal:
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(SwipeEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(SwipeEventController,
     swipe
 )
 ```
@@ -522,9 +522,9 @@ Additional features such as pressure- or angle-detection are manufacturer-specif
 \signal_proximity{StylusEventController}
 \signal_motion{StylusEventController}
 
-```
-Base.include(Main, "signals.jl")
-return @signal_table(StylusEventController,
+```@eval
+using mousetrap
+return mousetrap.@signal_table(StylusEventController,
     stylus_up,
     stylus_down,
     proximity,
