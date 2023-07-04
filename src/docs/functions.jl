@@ -9,43 +9,56 @@
 ```
 Circle(center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer) -> Shape
 ```
-Create a shape as a circle at given position.
-"""
-
-@document Ellipse """
-```
-Ellipse(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) -> Shape
-```
-Create a shape as an ellipse at given position, where `x_radius` is half the width, `y_radius` half the height of the ellipse.
+Create a shape as a circle, defined by its center and radius. In OpenGL coordinates.
 """
 
 @document CircularRing """
 ```
 CircularRing(center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer) -> Shape 
 ```
-Create a shape as a circular ring, where `outer_radius` is the distance between the center and the outer perimeter of the shape.
+Create a shape as a circular ring, defined by its center, `outer_radius`, which is the distance to the out perimeter, and `thickness` which is the distance between the inner and out perimeter.
+"""
+
+@document Ellipse """
+```
+Ellipse(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) -> Shape
+```
+Create a shape as an ellipse, defined by its center and radii along the x- and y-dimension, in OpenGL coordinates.
 """
 
 @document EllipticalRing """
 ```
 EllipticalRing(center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Unsigned) -> Shape
 ```
-Create a shape as an elliptical ring, where `outer_x_radius` is half the width, `outer_y_radius` half the height of the outer permeter of the shape.
+Create a shape as an elliptical ring, where
++ `center`: center of the ring
++ `outer_x_radius`: distance between the center and the outer perimeter along the x-axis
++ `outer_y_radius`: distance between the center and the outer perimeter along the y-axis
++ `x_thickness`: distance between the outer and inner perimeter along the x-axis
++ `y_thickness``: distance between the outer and inner perimeter along the y-axis
+
+In OpenGL coordinates.
 """
 
 @document Line """
 ```
 Line(a::Vector2f, b::Vector2f) -> Shape
 ```
-Create a shape as a 1-fragment thick line between two points.
+Create a shape as a 1-fragment thick line between two points, in OpenGL coordinates.
+"""
+
+@document Lines """
+```
+Lines(:Vector{Pair{Vector2f, Vector2f}) -> Shape
+```
+Create a shape as a set of unconnected lines, vertex positions in OpenGL coordinates.
 """
 
 @document LineStrip """
 ```
 LineStrip(points::StaticArraysCore.SVector{2, Vector2f}) -> Shape
 ```
-Create a shape as a line-strip. For points `{a1, a2, ..., an}`, 
-lines `{a1, a2}, {a2, a3}, ..., {an-1, an}` will be drawn.
+Create a shape as a line-strip. For points `{a1, a2, ..., an}`, this will be a set of connected lines `{a1, a2}, {a2, a3}, ..., {an-1, an}`, in OpenGL coordinates.
 """
 
 @document Outline """
@@ -59,35 +72,42 @@ Create a shape as an outline of another shape.
 ```
 Point(position::Vector2f) -> Shape
 ```
-Create a shape as 1-fragment point.
+Create a shape as 1-fragment point, in OpenGL coordinates.
+"""
+
+@document Points """
+```
+Point(positions::Vector{Vector2f}) -> Shape
+```
+Create a shape as a set of unconnected points, in OpenGL coordinates.
 """
 
 @document Polygon """
 ```
 Polygon(points::Vector{Vector2f}) -> Shape
 ```
-Create a shape as a convex polygon.
+Create a shape as a convex polygon, the outer hull of `points` will be computed, but no vertex elimination will take place. In OpenGL coordiantes.
 """
 
 @document Rectangle """
 ```
 Rectangle(top_left::Vector2f, size::Vector2f) -> Shape
 ```
-Create a shape as an axis-aligned rectangle.
+Create a shape as an axis-aligned rectangle, in OpenGL coordinates.
 """
 
 @document RectangularFrame """
 ```
 RectangularFrame(top_left::Vector2f, outer_size::Vector2f, x_width::AbstractFloat, y_width::AbstractFloat) -> Shape
 ```
-Create a shape as a rectangular frame, where `x_width`, `y_width` are the "thickness" of the frames filled area.
+Create a shape as a rectangular frame, where `x_width`, `y_width` are the "thickness" of the frames filled area. In OpenGL coordinates.
 """
 
 @document Triangle """
 ```
 Triangle(a::Vector2f, b::Vector2f, c::Vector2f) -> Shape
 ```
-Create a shape as a triangle.
+Create a shape as a triangle defined by three points, in OpenGL coordinates.
 """
 
 @document Wireframe """
@@ -95,7 +115,7 @@ Create a shape as a triangle.
 Wireframe(points::Vector{Vector2f}) -> Shape
 ```
 Create a shape as a wire-frame. For points `{a1, a2, a3, ..., an}`, the shape
-will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a1}`
+will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a1}`. In OpenGL coordinates.
 """
 
 @document activate! """
@@ -132,37 +152,49 @@ Add an "action"-type item to the menu model
 add_action!(shortcut_controller::ShortcutEventController, action::Action) 
 ```
 Register an action with the shortcut controller. Once connected to a widget, the
-controller will listen for keyboard events and trigger the action when its 
-shortcut trigger is pressed.
-
+controller will listen for keyboard events associated with any registered action,
+triggering that action when the shortcut is recognized.
 """
 
 @document add_allow_all_supported_image_formats! """
 ```
 add_allow_all_supported_image_formats!(::FileFilter) 
 ```
-Let all file formats pass through the filter that can be loaded `Image`, `ImageDIsplay`, or `Icon`.
+Let all file formats pass through the filter that can be loaded `Image`, `ImageDisplay`, or `Icon`.
 """
 
 @document add_allowed_mime_type! """
 ```
 add_allowed_mime_type!(::FileFilter, mime_type_id::String) 
 ```
-Let all files whos MIME type correponds to the given string pass through the filter.
+Let all files pass through the filter whose MIME type is equal to the given string.
 """
 
 @document add_allowed_pattern! """
 ```
 add_allowed_pattern!(::FileFilter, pattern::String) 
 ```
-Let all file names that match the shell-style glob pass through the filter.
+Let all files pass through the filter whose name match the given shell-style glob.
+
+## Example
+```julia
+filter = FilterFilter("pass_julia_files")
+add_allowed_pattern!(filter, "*.jl")
+```
 """
 
 @document add_allowed_suffix! """
 ```
 add_allowed_suffix!(::FileFilter, suffix::String) 
 ```
-Allow all files with the given suffix. The suffix should **not** contain a dot, e.g. `"jl"`, rather than `".jl"`.
+Let all files pass through the filter whose file extension equal the given string, where `suffix` should **not** contain a dot.
+
+## Example
+```julia
+filter = FilterFilter("pass_julia_files")
+add_allowed_suffix!(filter, "jl") # "jl", not ".jl"
+```
+````
 """
 
 @document add_button! """
@@ -174,30 +206,30 @@ Insert a button with given label after the given index (1-based), or 0 to insert
 
 @document add_child! """
 ```
-add_child!(fixed::Fixed, ::Widget, position::Vector2f) 
+add_child!(stack::Stack, ::Widget, title::String) 
 ```
-Add a child at given position, in absolute widget coodinates.
+Add a new stack page that will be uniquely identified by `title`.
 
 ---
 
 ```
-add_child!(stack::Stack, ::Widget, title::String) 
+add_child!(fixed::Fixed, ::Widget, position::Vector2f) 
 ```
-Add a new stack page that will be uniquely identified by `title`.
+Add a widget at given position, in absolute widget-space coordinates.
 """
 
 @document add_controller! """
 ```
 add_controller!(::Widget, controller::EventController) 
 ```
-Add an event controller to the widget. Once the widget is realized, it will start listening for events.
+Add an event controller to the widget. Once that widget is realized, the controller will start listening for events.
 """
 
 @document add_filter! """
 ```
 add_filter!(::FileChooser, ::FileFilter)
 ```
-Add a filter to the selection of available file filters.
+Add a filter to the selection of available file filters. Use [`set_initial_filter!`](@ref) to make it the currently selected filter.
 """
 
 @document add_icon! """
@@ -211,15 +243,14 @@ Add an "icon"-type item to the menu model.
 ```
 add_mark!(::Scale, value::Number, position::RelativePosition, [label::String])
 ```
-Add a mark at the specified value, with an optional label. `position` determines 
-on which side of the scale the mark is drawn.
+Add a mark with an option label. `position` determines where the mark is shown relative to the scales center.
 """
 
 @document add_marker! """
 ```
 add_marker!(::LevelBar, name::String, value::AbstractFloat) 
 ```
-Add a marker to the level bar at given position.
+Add a marker with label to the level bar.
 """
 
 @document add_overlay! """
@@ -227,8 +258,11 @@ Add a marker to the level bar at given position.
 add_overlay!(overlay::Overlay, child::Widget ; [include_in_measurement::Bool = true, clip::Bool = false]) 
 ```
 Add an additional overlay widget. It will be display "on top" of previously added widgets. 
-If `inclde_in_measurement` is `true`, the overlaid widget will be included in size allocation of 
+
+If `include_in_measurement` is `true`, the overlaid widget will be included in size allocation of 
 the entire `Overlay`.
+
+If `clip` is `true`, if part of a widget goes outside the overlays allocated area, it will be truncated.
 """
 
 @document add_render_task! """
@@ -243,31 +277,30 @@ the render task will be drawn every frame.
 ```
 add_resource_path!(::IconTheme, path::String) 
 ```
-Add a folder that the `IconTheme` should lookup icons in. The folder has to adhere to the [Freedesktop icon theme specificatins](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
+Add a folder that the `IconTheme` should lookup icons from. This is in addition to the default search path for icons. 
+
+The folder has to adhere to the [Freedesktop icon theme specificatins](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
 """
 
 @document add_section! """
 ```
-add_section!(model::MenuModel, title::String, to_add::MenuModel, [::SectionFormat]) 
+add_section!(self::MenuModel, title::String, to_add::MenuModel, [::SectionFormat]) 
 ```
-Add a "section"-type menu item to the model. A model based on `to_add` will be displayed 
-inside the outer `model`.
+Add a "section"-type menu item to the model, which will be constructed based on `to_add`.
 """
 
 @document add_shortcut! """
 ```
 add_shortcut!(::Action, shortcut::ShortcutTrigger) 
 ```
-Add a shortcut trigger to the list of shortcuts. To listen for shortcuts, register the `Action` 
-with a `ShortcutEventController`.
+Add a shortcut trigger to the list of shortcuts. To make a widget listen for action shortcuts, use [`set_listens_for_shortcut_action!`](@ref), or use a [`ShortcutEventController`](@ref).
 """
 
 @document add_submenu! """
 ```
 add_submenu!(model::MenuModel, label::String, to_add::MenuModel) 
 ```
-Add a "submenu"-type menu item to the model. A single item will be inserted into `model`, that, when clicked,
-reveals a menu based on `to_add`.
+Add a "submenu"-type menu item to the model, which will be constructed based on `to_add`.
 """
 
 @document add_widget! """
@@ -279,31 +312,31 @@ Add a "widget"-type item to the model. This widget should be interactable.
 
 @document alt_pressed """
 ```
-alt_pressed(::ModifierState) 
+alt_pressed(::ModifierState) -> Bool
 ```
-Check if the `Alt` key is currently pressed.
+Check if modifier state indicates that the `Alt` key is currently pressed.
 """
 
 @document apply_to """
 ```
-apply_to(transform::GLTransform, v::Vector2f) -> Vector2f
-apply_to(transform::GLTransform, v::Vector3f) -> Vector3f
+apply_to(::GLTransform, ::Vector2f) -> Vector2f
+apply_to(::GLTransform, ::Vector3f) -> Vector3f
 ```
-Apply transform to a vector. Note that this assume the OpenGL coordinate system.
+Apply transform to a vector, both operate in OpenGL coordinates.
 """
 
 @document as_circle! """
 ```
 as_circle!(::Shape, center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer) 
 ```
-Initialize the shape as a circle at given position.
+Create a shape as a circle, defined by its center and radius. In OpenGL coordinates.
 """
 
 @document as_circular_ring! """
 ```
 as_circular_ring!(::Shape, center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer) 
 ```
-Initialize the shape as a circular ring
+Create a shape as a circular ring, defined by its center, `outer_radius`, which is the distance to the out perimeter, and `thickness` which is the distance between the inner and out perimeter.
 """
 
 @document as_cropped """
@@ -311,7 +344,7 @@ Initialize the shape as a circular ring
 as_cropped(image::Image, offset_x::Signed, offset_y::Signed, new_width::Integer, new_height::Integer) -> Image
 ```
 Crop the image, this is similar to the "resize canvas" operation in many image manipulation programs.
-Note that `offset_x` and `offset_y` can be negative. Any pixeldata that was not part of the 
+Note that `offset_x` and `offset_y` can be negative. Any pixel data that was not part of the 
 original image will be filled with RGBA(0, 0, 0, 0).
 
 This function does not modify the original image.
@@ -328,43 +361,51 @@ Convert the angle to degrees, in [0°, 360°].
 ```
 as_ellipse!(::Shape, center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) 
 ```
-Initialize the shape as an ellipse.
+Create a shape as an ellipse, defined by its center and radii along the x- and y-dimension, in OpenGL coordinates.
 """
 
 @document as_elliptical_ring! """
 ```
 as_elliptical_ring!(::Shape, center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Unsigned) 
 ```
-Initialize the shape as an elliptical ring.
+Create a shape as an elliptical ring, where
++ `center`: center of the ring
++ `outer_x_radius`: distance between the center and the outer perimeter along the x-axis
++ `outer_y_radius`: distance between the center and the outer perimeter along the y-axis
++ `x_thickness`: distance between the outer and inner perimeter along the x-axis
++ `y_thickness``: distance between the outer and inner perimeter along the y-axis
+
+In OpenGL coordinates.
 """
 
 @document as_flipped """
 ```
 as_flipped(::Image, flip_horizontally::Bool, flip_vertically::Bool) -> Image
 ```
-Create a new image that is horizontally and/or vertically mirrored. This does not modify the original image.
+Create a new image that is a horizontally and/or vertically mirrored.
+
+This function does not modify the original image.
 """
 
 @document as_line! """
 ```
 as_line!(::Shape, a::Vector2f, b::Vector2f) 
 ```
-Initialize the shape as a 1-fragment thick line between two points.
+Create a shape as a 1-fragment thick line between two points, in OpenGL coordinates.
 """
 
 @document as_line_strip! """
 ```
 as_line_strip!(::Shape, points::Vector{Vector2f}) 
 ```
-Initialize the shape as a line-strip. For points `{a1, a2, ..., an}`, 
-lines `{a1, a2}, {a2, a3}, ..., {an-1, an}` will be drawn.
+Create a shape as a line-strip. For points `{a1, a2, ..., an}`, this will be a set of connected lines `{a1, a2}, {a2, a3}, ..., {an-1, an}`, in OpenGL coordinates.
 """
 
 @document as_lines! """
 ```
 as_lines!(::Shape, points::Vector{Pair{Vector2f, Vector2f}}) 
 ```
-Initialize the shape as a number of unconnected lines.
+Create a shape as a set of unconnected lines, vertex positions in OpenGL coordinates.
 """
 
 @document as_microseconds """
@@ -399,56 +440,56 @@ Convert to number of nanoseconds.
 ```
 as_outline!(self::Shape, other::Shape) 
 ```
-Initialize shape as an outline of another shape.
+Create a shape as an outline of another shape.
 """
 
 @document as_point! """
 ```
 as_point!(::Shape, position::Vector2f) 
 ```
-Initialize shape as a 1-fragment point.
+Create a shape as 1-fragment point, in OpenGL coordinates.
 """
 
 @document as_points! """
 ```
 as_points!(::Shape, positions::Vector{Vector2f}) 
 ```
-Initialize shape as a number of unconnected 1-fragment points.
+Create a shape as a set of unconnected points, in OpenGL coordinates.
 """
 
 @document as_polygon! """
 ```
 as_polygon!(::Shape, points::Vector{Vector2f}) 
 ```
-Initialize shape as a convex polygon.
+Create a shape as a convex polygon, the outer hull of `points` will be computed, but no vertex elimination will take place. In OpenGL coordiantes.
 """
 
 @document as_radians """
 ```
 as_radians(angle::Angle) 
 ```
-Convert to radians, in [0, 2π]
+Convert to radians, in [0, 2π].
 """
 
 @document as_rectangle! """
 ```
 as_rectangle!(::Shape, top_left::Vector2f, size::Vector2f) 
 ```
-Initialize shape as axis-aligned rectangle.
+Create a shape as an axis-aligned rectangle, in OpenGL coordinates.
 """
 
 @document as_rectangular_frame! """
 ```
 as_rectangular_frame!(::Shape, top_left::Vector2f, outer_size::Vector2f, x_width::AbstractFloat, y_width::AbstractFloat) 
 ```
-Initialize shape as a rectangular frame. `x_width` is the thickness of the frame along the x-axis, `y_width` along the y-axis.
+Create a shape as a rectangular frame, where `x_width`, `y_width` are the "thickness" of the frames filled area. In OpenGL coordinates.
 """
 
 @document as_scaled """
 ```
 as_scaled(::Image, size_x::Integer, size_y::Integer, ::InterpolationType) -> Image
 ```
-Scale the image, this is similar to the "scale image" option in many image manipulation programs.
+Scale the image to a new size. This is similar to the "scale image" option in many image manipulation programs.
 
 Note that this does not modify the original image.
 """
@@ -457,7 +498,7 @@ Note that this does not modify the original image.
 ```
 as_seconds(time::Time) -> Float64
 ```
-Convert to number of seconds.
+Convert to seconds.
 """
 
 @document as_string """
@@ -471,37 +512,39 @@ Serialize file into a string.
 ```
 as_triangle!(::Shape, a::Vector2f, b::Vector2f, c::Vector2f) 
 ```
-Initialize the shape as a triangle.
+Create a shape as a triangle defined by three points, in OpenGL coordinates.
 """
 
 @document as_wireframe! """
 ```
 as_wireframe!(::Shape, points::Vector{Vector2f}) 
 ```
-Initialize the shape as a wire-frame. For points `{a1, a2, a3, ..., an}`, the shape
-will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a1}`
+Create a shape as a wire-frame. For points `{a1, a2, a3, ..., an}`, the shape
+will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a1}`. In OpenGL coordinates.
 """
 
 @document attach_to! """
 ```
 attach_to!(popover::Popover, attachment::Widget) 
 ```
-Attach a popover to a widget, This is required in order for the popover to be visible.
+Attach a popover to a widget, which anchors the graphical element of the popover such that it points to the widget.
 """
 
 @document bind """
 ```
 bind(::TextureObject) 
 ```
-Bind a texture for rendering. This will make it available at `GL_TEXTURE_UNIT_0`.
+Bind a texture for rendering, which will make it available at `GL_TEXTURE_UNIT_0`. This is usually done automatically when a texture was registered with a shape using [`set_texture!`](@ref).
 """
 
 @document bind_as_render_target """
 ```
 bind_as_render_target(render_texture::RenderTexture) 
 ```
-Bind a render texture as the current frame buffer. This should be done inside the callback 
+Bind a render texture as the current frame buffer. This should be done inside the signal handler 
 of `RenderArea`s signal `render`.
+
+Use [`unbind_as_render_target`](@ref) to restore the previously bound frame buffer.
 """
 
 @document cancel! """
@@ -515,14 +558,14 @@ Cancel the file chooser, this will behave identically to the user clicking the c
 ```
 cancel!(::FileMonitor) 
 ```
-Cancel the file monitor.
+Cancel the file monitor. It will no longer monitor the file.
 """
 
 @document clear """
 ```
 clear(::RenderArea) 
 ```
-Clear the current framebuffer with `RGBA(0, 0, 0, 0)`
+Clear the current framebuffer, this will reset `GL_COLOR_BUFFER_BIT` and replace the contents of the currently bound framebuffer with `RGBA(0, 0, 0, 0)`.
 """
 
 @document clear! """
@@ -530,10 +573,10 @@ Clear the current framebuffer with `RGBA(0, 0, 0, 0)`
 clear!(::Box) 
 clear!(::ImageDisplay) 
 clear!(::ListView) 
-clear!(::ListView, iterator::ListViewIterator) 
+clear!(::ListView, [iterator::ListViewIterator]) 
 clear!(::GridView) 
 ```
-Remove all children from the container widget.
+Remove all children from the widget.
 """
 
 @document clear_filters! """
@@ -568,14 +611,14 @@ Remove all registered shortcut triggers.
 ```
 close!(::Window) 
 ```
-Close the window, this will emit signal `close_request`.
+Attempt to close the window, this will emit signal `close_request`.
 """
 
 @document combine_with """
 ```
 combine_with(self::GLTransform, other::GLTransform) -> GLTransform
 ```
-Perform matrix-multiplication and return the resulting transform. 
+Perform matrix-multiplication and return the resulting transform, in OpenGL coordinates.
 """
 
 @document contains_file """
@@ -601,9 +644,9 @@ Check whether the clipboard contains a string.
 
 @document control_pressed """
 ```
-control_pressed(modifier_state::ModifierState) -> Bol
+control_pressed(modifier_state::ModifierState) -> Bool
 ```
-Check whether `Control` is currently pressed.
+Check whether the modifier state indicates that `Control` is currently pressed.
 """
 
 @document copy! """
@@ -616,17 +659,17 @@ Copy a file from one location to another. Returns `true` if the operation was su
 @document create! """
 ```
 create!(::Image, width::Integer, height::Integer, [color::RGBA]) 
-create!(::mousetrap.TextureObject, width::Integer, height::Integer) 
+create!(::TextureObject, width::Integer, height::Integer) 
 ```
-Initialize at given size, filling the pixel data with `RGBA(0, 0, 0, 0)`, unless otherwise specified.
+Clear the current pixeldata and reinitialize it at given size. Will fille each pixel with `RGBA(0, 0, 0, 0)`, unless otherwise specified.
 """
 
 @document create_as_file_preview! """
 ```
 create_as_file_preview!(image_display::ImageDisplay, file::FileDescriptor) 
 ```
-If the `file` points to an image file, create as a preview for that image, otherwise will 
-display the files associated default icon.
+If the `file` points to an image file, create as a preview for that image, otherwise create from the 
+files default icon.
 """
 
 @document create_directory_at! """
@@ -647,8 +690,8 @@ Create file at given location, returns `true` if the operation was succesfull
 ```
 create_from_file!(::Icon, path::String) -> Bool
 create_from_file!(::Image, path::String) -> Bool
-create_from_file!(::KeyFile, path::String) -> Bool
 create_from_file!(::ImageDisplay, path::String) -> Bool
+create_from_file!(::KeyFile, path::String) -> Bool
 create_from_file!(::Shader, type::ShaderType, file::String) -> Bool 
 ```
 Initialize the object from a file. Returns `true` if the operation was succesfull.
@@ -666,36 +709,35 @@ Create as preview of an icon.
 create_from_image!(::TextureObject, ::Image) 
 create_from_image!(::ImageDisplay, ::Image) 
 ```
-Initialize from an image.
+Initialize from an image. This will replace the current pixel data and size.
 """
 
 @document create_from_path! """
 ```
 create_from_path!(::FileDescriptor, path::String) 
 ```
-Create as file descriptor pointing to given path. There is no guarantee that the location exists or points to a valid file or folder.
+Create as file descriptor pointing to given path. Use [`exists`](@ref) to check if this location is valid and contains a file or folde.
 """
 
 @document create_from_string! """
 ```
 create_from_string!(::KeyFile, file::String) 
 ```
-De-serialize from a string.
+De-serialize from a string. If you are loading a `KeyFile` from a file on disk, [`create_from_file!`](@ref) should be preferred.
 
 ---
 
 ```
 create_from_string!(::Shader, type::ShaderType, glsl_code::String) 
 ```
-
-Create from glsl code as string.
+Create from GLSL code. See the manual chapter on native rendering for more information.
 """
 
 @document create_from_theme! """
 ```
 create_from_theme!(::Icon, theme::IconTheme, id::String, square_resolution::Integer, [scale::Integer = 1]) 
 ```
-Read an icon from an icon theme at given resolution. 
+Create an icon from the icon theme.
 """
 
 @document create_from_uri! """
@@ -709,35 +751,35 @@ Create as file descriptor pointing to given URI. There is no guarantee that the 
 ```
 create_monitor(descriptor::FileDescriptor) -> FileMonitor
 ```
-Create a `FileMonitor` monitoring the current file or folder. This may fail if the location does not exist.
+Create a `FileMonitor` monitoring the current file or folder. This may fail if the location does not contain a valid file.
 """
 
 @document degrees """
 ```
 degrees(::Number) -> Angle
 ```
-Create from number of degrees.
+Create angle from degrees, automatically clamped to [0°, 360°].
 """
 
 @document delete_at! """
 ```
 delete_at!(::FileDescriptor) -> Bool
 ```
-Irreversibly delete file at given location, returns `true` if the operation was succesfull
+Irreversibly delete file at given location, returns `true` if the operation was succesfull. 
 """
 
 @document device_axis_to_string """
 ```
 device_axis_to_string(axis::DeviceAxis) -> String
 ```
-Serialize the axis' name.
+Serialize the axes identification.
 """
 
 @document download """
 ```
 download(texture::TextureObject) -> Image
 ```
-Retrieve the pixeldata from the graphics card and return it as an image. This is an extremely costly operation.
+Retrieve the pixel data from the graphics card and return it as an image. This is an extremely costly operation.
 """
 
 @document elapsed """
@@ -751,14 +793,14 @@ Get time since the clock was last restarted.
 ```
 exists(::FileDescriptor) -> Bool
 ```
-Check if file location points to a file or folder on disk.
+Check if file location contains a valid file or folder.
 """
 
 @document flush """
 ```
 flush(::RenderArea) -> Cvoid
 ```
-Equivalent to `glFlush`, requests for the bound framebuffer to be pushed to the screen. This may not necessarily immediately 
+Equivalent to `glFlush`, requests for the bound framebuffer to be pushed to the screen. This may not immediately 
 update the `RenderArea`.
 """
 
@@ -766,14 +808,14 @@ update the `RenderArea`.
 ```
 from_gl_coordinates(area::RenderArea, gl_coordinates::Vector2f) -> Vector2f
 ```
-Convert OpenGL coordinates to absolute widget coordinates
+Convert OpenGL coordinates to absolute widget-space coordinates. This will take into account the `RenderArea`s currently allocated size on screen.
 """
 
 @document get_acceleration_rate """
 ```
 get_acceleration_rate(::SpinButton) -> Float64
 ```
-Get the current rate at which the spin button accelerates, when one of the buttons is held down.
+Get the current rate at which the spin button accelerates when one of the buttons is held down.
 """
 
 @document get_accept_label """
@@ -803,14 +845,14 @@ Retrieve the adjustment of the widget. Modifying the adjustment will modify the 
 ```
 get_allocated_size(::Widget) -> Vector2f
 ```
-Get the size the widget currently occupies on screen. If the widget is not currently shown, it will be `(0, 0)`
+Get the size the widget currently occupies on screen, in pixels. If the widget is not currently shown, this function will return `(0, 0)`.
 """
 
 @document get_allow_only_numeric """
 ```
 get_allow_only_numeric(::SpinButton) -> Bool
 ```
-Get whether the spin button only accepts numerical values for its text-entry.
+Get whether the spin button only accepts numerical strings for its text-entry.
 """
 
 @document get_angle_delta """
@@ -824,21 +866,21 @@ Get the difference between the current angle and the angle recognized when the g
 ```
 get_autohide(::Popover) -> Bool
 ```
-Get whether the popover should automatically hide when it looses focus
+Get whether the popover should automatically hide when it looses focus.
 """
 
 @document get_axis_value """
 ```
 get_axis_value(::StylusEventController, ::DeviceAxis) -> Float32
 ```
-Get value for the devices axis, or 0 if no such axis is present.
+Get value for the devices axis, or 0 if no such axis is present. This value will usually be in `[0, 1]`.
 """
 
 @document get_button_label """
 ```
 get_button_label!(::AlertDialog, index::Integer) -> String
 ```
-Get label of button at given index (1-based).
+Get label of the button at given index (1-based), from left to right.
 """
 
 @document get_bottom_margin """
@@ -852,7 +894,7 @@ Get the distance between the bottom of the text and the bottom of the text views
 ```
 get_bounding_box(::Shape) -> AxisAlignedRectangle
 ```
-Get the axis-aligned bounding box of the shape. This is the smallest rectangle that contains all vertices.
+Get the axis-aligned bounding box of the shape. This is the smallest rectangle that contains all vertices, in OpenGL coordinates.
 """
 
 @document get_can_respond_to_input """
@@ -866,49 +908,49 @@ Get whether the widget can receive and capture input events.
 ```
 get_centroid(::Shape) -> Vector2f
 ```
-Get the centroid of the shape, this is the mathematical average of all its vertices positions.
+Get the centroid of the shape, this is the mathematical average of all its vertices positions, in OpenGL coordinates.
 """
 
 @document get_child_at """
 ```
 get_child_at(::Stack, index::Integer) -> StackID
 ```
-Retrieve the ID of the stack page at given position, or `""` if the index is out of bounds
+Retrieve the ID of the stack page at given position, or `""` if the index is out of bounds.
 """
 
 @document get_child_position """
 ```
 get_child_position(fixed::Fixed, child::Widget) -> Vector2f
 ```
-Get the fixed location of a child.
+Get the fixed location of a child, in absolute widget-space coordinates.
 """
 
 @document get_child_x_alignment """
 ```
 get_child_x_alignment(::AspectFrame) -> Float32
 ```
-Get the horizontal alignment of the aspect frames child. In `[0, 1]`.
+Get the horizontal alignment of the aspect frames child, in `[0, 1]`.
 """
 
 @document get_child_y_alignment """
 ```
 get_child_y_alignment(::AspectFrame) 
 ```
-Get the vertical alignment of the aspect frames child. In `[0, 1]`.
+Get the vertical alignment of the aspect frames child, in `[0, 1]`.
 """
 
 @document get_children """
 ```
 get_children(descriptor::FileDescriptor ; [recursive = false]) -> Vector{FileDescriptor}
 ```
-Get all children of a folder. If the location pointed to by `descriptor` is a file, the resulting vector will be empty.
+Get all children of a folder. If the location pointed to by `descriptor` is a file or does not exist, the resulting vector will be empty.
 """
 
 @document get_clipboard """
 ```
 get_clipboard(::Widget) -> Clipboard
 ```
-Retrieve the clipboard of a widget. This will usually be the top-level window.
+Retrieve the clipboard from a widget, which should usually be the top-level window.
 """
 
 @document get_color """
@@ -922,7 +964,7 @@ Get the currently selected color.
 ```
 get_column_at(column_view::ColumnView, index::Integer) -> ColumnViewColumn
 ```
-Get column at specified position, 1-indexed.
+Get column at specified position, 1-based.
 """
 
 @document get_column_spacing """
@@ -943,7 +985,7 @@ Get column with specified title.
 ```
 get_columns_homogeneous(::Grid) -> Bool
 ```
-Get whether all columns should allocate the same widget.
+Get whether all columns should allocate the same width.
 """
 
 @document get_comment_above """
@@ -951,14 +993,14 @@ Get whether all columns should allocate the same widget.
 get_comment_above(::KeyFile, group::GroupID) -> String
 get_comment_above(::KeyFile, group::GroupID, key::KeyID) -> String
 ```
-Get comment above a group or key declaration. 
+Get the singular comment above a group or key declaration. 
 """
 
 @document get_content_type """
 ```
 get_content_type(::FileDescriptor) -> String
 ```
-Get file type as a MIME identification string.
+Get the file type as a MIME identification string.
 """
 
 @document get_current_button """
@@ -972,7 +1014,7 @@ Get the ID of the button that triggered the current event.
 ```
 get_current_offset(::DragEventController) -> Vecto2f
 ```
-Get offset from starting positin of the drag gesture, in pixels.
+Get the distance between the current cursor position and the point of origin for the drag-gestured, in absolute widget-space coordinates.
 """
 
 @document get_current_page """
@@ -986,14 +1028,14 @@ Get index of currently active page.
 ```
 get_cursor_visible(::TextView) -> Bool
 ```
-Get whether the text caret cursor is currently visible.
+Get whether the text caret should be visible.
 """
 
 @document get_delay_factor """
 ```
 get_delay_factor(::LongPressEventController) -> Float32
 ```
-Get multiplier that determines after how much time a long press gesture is recognized.
+Get multiplier that determines after how much time a long press gesture is recognized, where `1` is no change as compared to the default, `2` is twice as long, `0.5` is half as long.
 """
 
 @document get_destroy_with_parent """
@@ -1037,7 +1079,7 @@ get_enabled_rubberband_selection(::ListView) -> Bool
 get_enabled_rubberband_selection(::GridView) -> Bool
 get_enabled_rubberband_selection(::ColumnView) -> Bool
 ```
-Get whether the user can select multiple children by holding down the mouse button. The selectable widgets
+Get whether the user can select multiple children by click-dragging with the cursor. The selectable widgets
 selection mode has to be `SELECTION_MODE_MULTIPLE` in order for this to be possible.
 """
 
@@ -1052,7 +1094,7 @@ Get whether the end child should resize when the `Paned` is resized.
 ```
 get_end_child_shrinkable(::Paned) -> Bool
 ```
-Get whether the user can resize the end child such that its allocated area inside the paned is smaller than the natural size of the widget.
+Get whether the user can resize the end child such that its allocated area inside the paned is smaller than the natural size of the child.
 """
 
 @document get_expand_horizontally """
@@ -1080,14 +1122,14 @@ Get whether the expanders child is currently visible.
 ```
 get_file_chooser_action(::FileChooser) -> FileChooserAction
 ```
-Get current file chooser action type.
+Get the file chooser action type.
 """
 
 @document get_file_extension """
 ```
 get_file_extension(::FileDescriptor) -> String
 ```
-Get the file extension of the file. This will be the any character after the last `.`.
+Get the file extension of the file. This will be the any characters after the last dot.
 """
 
 @document get_fixed_width """
@@ -1101,7 +1143,7 @@ Get the target width of the column, in pixels, or `-1` if unlimited.
 ```
 get_focus_on_click(::Widget) -> Bool
 ```
-Get whether the input should grab focus when it is clicked.
+Get whether the widget should grab focus when it is clicked.
 """
 
 @document get_focus_visible """
@@ -1122,7 +1164,7 @@ Get the currently displayed fraction of the progress bar, in `[0, 1]`.
 ```
 get_fragment_shader_id(::Shader) -> Cuint
 ```
-Get native OpenGL handle of the shader program.
+Get the native OpenGL handle of the shader program.
 """
 
 @document get_frame_clock """
@@ -1143,7 +1185,7 @@ Get all group IDs currently present in the key file.
 ```
 get_hardware_id(::StylusEventController) -> Cuint
 ```
-Get the native id of the stylus-device that caused the current event.
+Get the native ID of the stylus-device that caused the current event.
 """
 
 @document get_has_base_arrow """
@@ -1164,7 +1206,7 @@ Get whether a border should be drawn around the notebooks perimeter.
 ```
 get_has_close_button(::Window) -> Bool
 ```
-Get whether the "X" button is present.
+Get whether the "x" button is present.
 """
 
 @document get_has_focus """
@@ -1181,35 +1223,35 @@ get_has_frame(::Viewport) -> Bool
 get_has_frame(::Entry) -> Bool
 get_has_frame(::PopoverButton) -> Bool 
 ```
-Get whether the widgets outline should be displayed. This does not impact the widgets interactability.
+Get whether the widgets outline should be displayed, it will remain interactable.
 """
 
 @document get_has_origin """
 ```
 get_has_origin(::Scale) -> Bool
 ```
-Get whether the area between the origin of the scale and the current value should be fille with a solid color
+Get whether the area between the origin of the scales trough and the current value should be fille with a solid color.
 """
 
 @document get_has_wide_handle """
 ```
 get_has_wide_handle(::Paned) -> Bool
 ```
-Get whether the barrier in between the paneds two children is wide or thin.
+Get whether the barrier in between the paneds two children is wide or thin, wide by default.
 """
 
 @document get_hide_on_overflow """
 ```
 get_hide_on_overflow(::Widget) -> Bool
 ```
-Get whether any area of the widget that goes outside of its allocate space should be drawn (as opposed to clipped).
+Get whether the entire widget should be hidden if its allocated area is smaller than its natural size. If `false`, the overflow part of the widget will be truncated.
 """
 
 @document get_homogeneous """
 ```
 get_homogeneous(::Box) -> Bool
 ```
-Get whether all of the boxes children should be allocated the same width (or height, if orientation is vertical).
+Get whether all of the boxes children should be allocated the same width (or height, if orientation is `ORIENTATION_VERTICAL`).
 """
 
 @document get_horizontal_adjustment """
@@ -1219,7 +1261,7 @@ get_horizontal_adjustment(viewport::Viewport) -> Adjustment
 Get the adjustment controlling the horizontal scrollbar.
 """
 
-@document get_horizontal_alignemtn """
+@document get_horizontal_alignment """
 ```
 get_horizontal_alignemtn(::Widget) -> Alignment
 ```
@@ -1237,7 +1279,7 @@ Get the policy governing how and if the horizontal scrollbar is revealed / hidde
 ```
 get_icon_names(theme::IconTheme) -> Vector{String}
 ```
-Get ID of all icons available in the icon theme.
+Get the ID of all icons available in the icon theme.
 """
 
 @document get_id """
@@ -1255,8 +1297,9 @@ get_image(f, ::Clipboard, [::Data_t])
 Register a callback to read an image from the clipboad. Once the clipboard is ready, the callback will be invoked.
 
 `f` is required to be invocable as a function with signature
+
 ```julia
-(::Clipboard, ::Image) -> Cvoid
+(::Clipboard, ::Image, [::Data_t]) -> Cvoid
 ```
 
 ## Example
@@ -1274,7 +1317,7 @@ end
 ```
 get_inverted(::LevelBar) -> Bool
 ```
-Get whether the level bar should be mirrored along the horizontal or vertcial axis, depending on orientation.
+Get whether the level bar should be mirrored along the horizontal or vertical axis, depending on orientation.
 """
 
 @document get_is_active """
@@ -1292,28 +1335,28 @@ get_is_circular(::Button) -> Bool
 get_is_circular(::ToggleButton) -> Bool
 get_is_circular(::PopoverButton)  -> Bool
 ```
-Get whether the button is circular or rectangular.
+Get whether the button is circular (as opposed to rectangular, the default).
 """
 
 @document get_is_decorated """
 ```
 get_is_decorated(::Window) -> Bool
 ```
-Get whether the header bar of the window is visible.
+Get whether the header bar area of the window is visible.
 """
 
 @document is_executable """
 ```
 is_executable(::FileDescriptor) -> Bool
 ```
-Get whether file object can be executed.
+Get whether the file location contains an executable.
 """
 
 @document get_is_focusable """
 ```
 get_is_focusable(::Widget) -> Bool
 ```
-Get whether the widget can hold input focus.
+Get whether the widget can grab input focus.
 """
 
 @document get_is_holding """
@@ -1358,14 +1401,14 @@ Returns `true` if [`mark_as_busy!`](@ref) was called before.
 ```
 get_is_realized(::Widget) -> Bool
 ```
-Get whether the window has emitted its `realize` signal yet.
+Get whether the widget was initialized and is now shown on screen.
 """
 
 @document get_is_resizable """
 ```
 get_is_resizable(::ColumnViewColumn) -> Bool
 ```
-Get whether the column is resizable.
+Get whether the user can choose the width of this column by click-dragging.
 """
 
 @document get_is_scrollable """
@@ -1386,7 +1429,7 @@ Get whether the spinners animation is currently playing.
 ```
 get_is_stateful(::Action) -> Bool
 ```
-Get whether the action is stateful or stateless.
+Get whether the action is stateful (as opposed to stateless).
 """
 
 @document get_is_vertically_homogeneous """
@@ -1408,14 +1451,14 @@ Get whether the object is currently shown on screen.
 ```
 get_is_visible(::Shape) -> Bool
 ```
-Get whether the shape should be omitted from rendering.
+Get whether the shape should be omitted from rendering, where `false` means it will be ommitted.
 """
 
 @document get_item_at """
 ```
-get_item_at(drop_down::DropDown, i::Integer) -> DropDownID
+get_item_at(::DropDown, i::Integer) -> DropDownID
 ```
-Get ID of item currently at given position.
+Get ID of the item at given position.
 """
 
 @document get_justify_mode """
@@ -1423,42 +1466,42 @@ Get ID of item currently at given position.
 get_justify_mode(::Label) -> JustifyMode
 get_justify_mode(::TextView) -> JustifyMode
 ```
-Get currently used justify mode.
+Get the currently used justify mode.
 """
 
 @document get_keys """
 ```
 get_keys(::KeyFile, group::GroupID) -> Vector{KeyID}
 ```
-Get all keys in group.
+Get all keys in this group, or an empty vector if the group does not exist.
 """
 
 @document get_kinetic_scrolling_enabled """
 ```
 get_kinetic_scrolling_enabled(::Viewport) -> Bool
 ```
-Get whether the widget should continue scrolling simulating "inertia" once the user stopped operating the mouse wheel or touchscreen
+Get whether the widget should continue scrolling once the user stopped operating the mouse wheel or touchscreen, simulating "inertia".
 """
 
 @document get_label_x_alignment! """
 ```
 get_label_x_alignment!(::Frame) -> Float32
 ```
-Get the horizontal alignment of the frames optional label widget. In `[0, 1]`.
+Get the horizontal alignment of the frames optional label widget, in `[0, 1]`.
 """
 
 @document get_layout """
 ```
 get_layout(::HeaderBar) -> String
 ```
-Get layout string of the header bar.
+Get the layout string of the header bar. See the manual section on `HeaderBar` in the chapter on widgets for how layout-syntax works.
 """
 
 @document get_left_margin """
 ```
 get_left_margin(::TextView) -> Float32
 ```
-Get distance between the left side of the text and the text views fame.
+Get distance between the left side of the text and the `TextView`s frame.
 """
 
 @document get_lower """
@@ -1474,35 +1517,35 @@ Get the lower bound of the (underlying) adjustment.
 ```
 get_margin_bottom(::Widget) -> Float32
 ```
-Get bottom margin of the widget, in pixels.
+Get the bottom margin of the widget, in pixels.
 """
 
 @document get_margin_end """
 ```
 get_margin_end(::Widget) -> Float32
 ```
-Get right margin of the widget, in pixels.
+Get the right margin of the widget, in pixels.
 """
 
 @document get_margin_start """
 ```
 get_margin_start(::Widget) -> Float32
 ```
-Get left margin of the widget, in pixels.
+Get the left margin of the widget, in pixels.
 """
 
 @document get_margin_top """
 ```
 get_margin_top(::Widget) -> Float32
 ```
-Get top margin of the widget, in pixels.
+Get the top margin of the widget, in pixels.
 """
 
 @document get_max_n_columns """
 ```
 get_max_n_columns(grid_view::GridView) -> Signed
 ```
-Get maximum number of columns, or `-1` if unlimited.
+Get the maximum number of columns, (or rows if orientation is vertical), or `-1` if unlimited.
 """
 
 @document get_max_width_chars """
@@ -1510,7 +1553,7 @@ Get maximum number of columns, or `-1` if unlimited.
 get_max_width_chars(::Entry) -> Signed
 get_max_width_chars(::Label) -> Signed
 ```
-Get maximum number of characters for which the label should allocate horizontal space, or `-1` if unlimited.
+Get the maximum number of characters for which the label should allocate horizontal space, or `-1` if unlimited.
 """
 
 @document get_message """
@@ -1524,14 +1567,14 @@ Get the current message, this is the title of the dialog.
 ```
 get_min_n_columns(grid_view::GridView) -> Signed
 ```
-Get minimum number of columns, or `-1` if unlimited.
+Get the minimum number of columns, or `-1` if unlimited.
 """
 
 @document get_min_value """
 ```
 get_min_value(::LevelBar) -> Float32
 ```
-Get lower bound of the range expressed by level bar.
+Get the lower bound of the underlying range.
 """
 
 @document get_minimum_size """
@@ -1545,28 +1588,28 @@ Get the minimum possible size the widget would have to allocate in order for it 
 ```
 get_mode(::LevelBar) -> LevelBarMode
 ```
-Get whether the level bar should display its value continuous or segmented.
+Get whether the `LevelBar` should display its value as a continuous bar, or segmented.
 """
 
 @document get_n_buttons """
 ```
 get_n_buttons(::AlertDialog) -> Int64
 ```
-Get number of buttons the dialog currently has.
+Get the number of buttons the dialog currently has.
 """
 
 @document get_n_columns """
 ```
 get_n_columns(::ColumnView) -> Unsigned
 ```
-Get current number of columns.
+Get the current number of columns.
 """
 
 @document get_n_digits """
 ```
 get_n_digits(::SpinButton) -> Signed
 ```
-Get number of digits the spin button should display, or `-1` if unlimited.
+Get the number of digits the spin button should display, or `-1` if unlimited.
 """
 
 @document get_n_items """
@@ -1575,35 +1618,35 @@ get_n_items(::Box) -> Unsigned
 get_n_items(::ListView) -> Unsigned
 get_n_items(::GridView) -> Unsigned
 ```
-Get number of children.
+Get the number of children.
 """
 
 @document get_n_pages """
 ```
 get_n_pages(::Notebook) -> Unsigned 
 ```
-Get number of pages.
+Get the number of pages.
 """
 
 @document get_n_pixels """
 ```
 get_n_pixels(::Image) -> Unsigned
 ```
-Get number of pixels, equal to `width * height`.
+Get the number of pixels, equal to `width * height`.
 """
 
 @document get_n_rows """
 ```
 get_n_rows(::ColumnView) -> Unsigned
 ```
-Get current number of rows.
+Get the current number of rows.
 """
 
 @document get_n_vertices """
 ```
 get_n_vertices(::Shape) -> Unsigned
 ```
-Get number of OpenGL vertices.
+Get the number of OpenGL vertices.
 """
 
 @document get_name """
@@ -1612,7 +1655,7 @@ get_name(::Icon) -> String
 get_name(::FileDescriptor) -> String 
 get_name(::FileFilter) -> String
 ```
-Get cleartext identifier.
+Get a cleartext identifier for the object.
 """
 
 @document get_native_handle """
@@ -1620,19 +1663,19 @@ Get cleartext identifier.
 get_native_handle(::TextureObject) -> Cuint
 get_native_handle(::Shape) -> Cuint
 ```
-Get native OpenGL handle.
+Get the native OpenGL handle of the texture- or vertex buffer.
 """
 
 @document get_natural_size """
 ```
 get_natural_size(::Widget) -> Vector2f
 ```
-Get the size the window would prefer to display at, if given infinite space and no expansion.
+Get the size the widget would prefer to display at, if given infinite space and no expansion.
 """
 
 @document get_only_listens_to_button """
 ```
-get_only_listens_to_button(gesture::SingleClickGesture) -> Bool
+get_only_listens_to_button(::SingleClickGesture) -> Bool
 ```
 Get whether the event controller should not capture events send by a touch device.
 """
@@ -1641,7 +1684,7 @@ Get whether the event controller should not capture events send by a touch devic
 ```
 get_opacity(::Widget) -> Float32
 ```
-Get current opacity, in `[0, 1]`.
+Get the widgets current opacity, in `[0, 1]`.
 """
 
 @document get_orientation """
@@ -1673,56 +1716,56 @@ Get along which axis the event controller should recognize pan gestures.
 ```
 get_parent(self::FileDescriptor) -> FileDescriptor
 ```
-Get parent folder. If `self` points to root, the result may not exist.
+Get the files parent folder. If `self` points to root or a location that does not exist, the result may be invalid.
 """
 
 @document get_path """
 ```
 get_path(::FileDescriptor) -> String
 ```
-Get absolute path to object pointed to be file descriptor.
+Get the absolute path to the file location.
 """
 
 @document get_path_relative_to """
 ```
 get_path_relative_to(self::FileDescriptor, other::FileDescriptor) -> String
 ```
-Get relative path from `self` to `other`.
+Get the relative path from `self` to `other`.
 """
 
 @document get_pixel """
 ```
 get_pixel(image::Image, x::Integer, y::Integer) -> RGBA
 ```
-Get pixel at given position, 1-indexed.
+Get the color of the pixel at given position, 1-indexed.
 """
 
 @document get_position """
 ```
 get_position(::Widget) -> Vector2f
 ```
-Get current position in screen, relative to the toplevel widgets origin, in pixels.
+Get the current position on screen, relative to the toplevel windows origin, in pixels.
 
 ---
 
 ```
 get_position(::Grid, ::Widget) -> Vector2i
 ```
-Get row- and column-index of widget, 1-indexed.
+Get row- and column-index of the widget, 1-indexed.
 
 ---
 
 ```
 get_position(::Paned) -> Int32
 ```
-Get the offset of the handle from the center.
+Get the offset of the draggable handle, in absolute widget-space coordinates.
 """
 
 @document get_program_id """
 ```
 get_program_id(::Shader) -> Cuint
 ```
-Get native handle of the OpenGL shader program.
+Get the native handle of the OpenGL shader program.
 """
 
 @document get_propagate_natural_height """
@@ -1744,7 +1787,7 @@ Get whether the viewport should assume the natural width of its child.
 ```
 get_propagation_phase(::EventController) -> PropagationPhase
 ```
-Get phase at which the event controller will capture events.
+Get the phase at which the event controller will capture events, see [here](https://developer-old.gnome.org/gtk4/stable/event-propagation.html) for more information.
 """
 
 @document get_quick_change_menu_enabled """
@@ -1766,7 +1809,7 @@ Get width-to-height aspect ratio.
 get_relative_position(::Popover) -> RelativePosition
 get_relative_position(::PopoverButton) -> RelativePosition
 ```
-Get relative position of the popover relative to its attachment.
+Get the position of the popover relative to the widget it is attached to.
 """
 
 @document get_revealed """
@@ -1787,7 +1830,7 @@ Get distance between the right end of the text and the text views frame.
 ```
 get_row_spacing(::Grid) -> Float32
 ```
-Get distance between two rows.
+Get the margin between two rows, in pixels.
 """
 
 @document get_rows_homogeneous """
@@ -1801,28 +1844,28 @@ Get whether all rows should allocate the same height.
 ```
 get_scale_delta(::PinchZoomEventController) -> Float32
 ```
-Get the difference between the current scale of the pinch-zoom-gesture, and the scale at the point the gesture started.
+Get the difference between the current scale of the pinch-zoom-gesture and the scale at the point the gesture started, in absolute widget-space coordinates.
 """
 
 @document get_scale_mode """
 ```
 get_scale_mode(::TextureObject) -> ScaleMode
 ```
-Get OpenGL scale mode the texture uses.
+Get the OpenGL scale mode the texture uses.
 """
 
 @document get_scope """
 ```
 get_scope(::ShortcutEventController) -> ShortcutScope
 ```
-Get scope in which the controller listens for shortcut events.
+Get the scope in which the controller listens for shortcut events, see [here](https://docs.gtk.org/gtk4/method.ShortcutController.set_scope.html) for more information.
 """
 
 @document get_scrollbar_placement """
 ```
 get_scrollbar_placement(::Viewport) -> CornerPlacement
 ```
-Get position of both scrollbars relative to the viewports center.
+Get the position of both scrollbars relative to the viewports center.
 """
 
 @document get_selectable """
@@ -1836,14 +1879,14 @@ Get whether the user can select part of the label, as would be needed to copy it
 ```
 get_selected(::DropDown) -> DropDownID
 ```
-Get the ID of the currently selected item
+Get the ID of the currently selected item.
 """
 
 @document get_selection """
 ```
 get_selection(::SelectionModel) -> Vector{Int64}
 ```
-Get all currently selected items, 1-based.
+Get all currently selected items indices, 1-based.
 """
 
 @document get_selection_model """
@@ -1860,14 +1903,14 @@ Get the underlying selection model of the selectable widget.
 ```
 get_shortcuts(action::Action) -> Vector{ShortcutTrigger}
 ```
-Get all registered shortcuts.
+Get all registered shortcuts for the action.
 """
 
 @document get_should_draw_value """
 ```
 get_should_draw_value(::Scale) -> Bool
 ```
-Get whether the value of the scales adjustment is drawn next to the knob
+Get whether the value of the scales adjustment is drawn next to the knob.
 """
 
 @document get_should_interpolate_size """
@@ -1888,7 +1931,7 @@ Get whether when the user enters a value using the spin buttons text entry, that
 ```
 get_should_wrap(::SpinButton) -> Bool
 ```
-Get whether the spin button should over- / underflow when reaching the upper or lower end of its range.
+Get whether the spin button should over- or underflow when reaching the upper or lower end of its range. This needs to be set to `true` in order for `SpinButton` to emit its signal `wrapped`.
 """
 
 @document get_always_show_arrow """
@@ -1924,14 +1967,14 @@ Get whether a separator should be drawn between two items.
 ```
 get_show_text(::ProgressBar) - Bool
 ```
-Get whether a percentage or custom label should be displayed above the progress bar.
+Get whether a percentage or custom label should be displayed above the progress bar. User [`set_text!`](@ref) to choose the custom label.
 """
 
 @document get_show_title_buttons """
 ```
 get_show_title_buttons(::HeaderBar) -> Bool
 ```
-Get whether the "close", "minimize", and/or "maximize" button should be visible.
+Get whether the "close", "minimize", and / or "maximize" button should be visible.
 """
 
 @document get_single_click_activate """
@@ -1940,7 +1983,7 @@ get_single_click_activate(::ListView) -> Bool
 get_single_click_activate(::GridView) -> Bool
 get_single_click_activate(::ColumnView) -> Bool
 ```
-Get whether only hovering about an item selects it.
+Get whether simply hovering over an item will select it.
 """
 
 @document get_size """
@@ -1950,11 +1993,13 @@ get_size(::Icon) -> Vector2i
 get_size(::Image) -> Vector2i
 ```
 Get resolution of the underlying image.
---
+
+---
+
 ```
 get_size(::Grid, ::Widget) -> Vector2i
 ```
-Get number of rows and columns.
+Get the number of rows and columns.
 
 ---
 
@@ -1968,21 +2013,21 @@ Get width and height of the axis-aligned bounding box, in OpenGL coordinates.
 ```
 get_size_request(::Widget) -> Vector2f
 ```
-Get size request, or `(0, 0)` if not size was requested.
+Get the size request, where a `0` for either width or height indicates that no size request was made.
 """
 
 @document get_spacing """
 ```
 get_spacing(::Box) -> Float32
 ```
-Get distance drawn between any two items, in pixels.
+Get spacing drawn between any two items, in pixels.
 """
 
 @document get_start_child_resizable """
 ```
 get_start_child_resizable(::Paned) -> Bool
 ```
-Get whether the start child should resize itself when the paned is resized.
+Get whether the start child should resize itself when the `Paned` is resized.
 """
 
 @document get_start_child_shrinkable """
@@ -1996,7 +2041,7 @@ Get whether the start child can be resized such that its allocated area in the p
 ```
 get_start_position(controller::DragEventController) -> Vector2f
 ```
-Get position at which the drag gesture was first recognized, in pixels, relative to the origin of the widget capturing events.
+Get position at which the drag gesture was first recognized, in absolute widget-space coordinates.
 """
 
 @document get_state """
@@ -2027,11 +2072,13 @@ Get minimum step increment of the underlying adjustment.
 get_string(f, clipboard::Clipboard, [::Data_t]) -> Cvoid
 ```
 Register a callback with the signature:
+
 ```
 (::Clipboad, ::String, [::Data_t]) -> Cvoid
 ```
+
 When a string is read from the clipboard, the callback will be invoked and the string will be provided as the 
-an argument for the callback.
+second argument for the callback.
 
 ## Example
 ```julia
@@ -2092,7 +2139,7 @@ Get text currently displayed by the progress bar, or `""` if the percentage is d
 ```
 get_text_visible(::Entry) -> Bool
 ```
-Get whether the text entry is in "password mode"
+Get whether the text entry is in "password mode".
 """
 
 @document get_time_since_last_frame """
@@ -2106,14 +2153,14 @@ Get the actual duration of the last rendered frame.
 ```
 get_title(::Window) -> String
 ```
-Get window title.
+Get the window title.
 
 ---
 
 ```
 get_title(::ColumnViewColumn) -> String 
 ```
-Get the title for this column.
+Get the title for this column, which uniquely identifies it.
 """
 
 @document get_tool_type """
@@ -2168,7 +2215,7 @@ mousetrap.get_top_level_widget(x::CompoundWidget) = x.box
 get_transition_duration(::Stack) -> Time
 get_transition_duration(::Revealer) -> Time
 ```
-Get animation duration.
+Get the duration of the transition animation.
 """
 
 @document get_transition_type """
@@ -2183,63 +2230,63 @@ Get type of animation used for the transition animation.
 ```
 get_uniform_float(::RenderTask, name::String) -> Cfloat
 ```
-Get float registered as uniform, or `0.0` if no such uniform was registered.
+Get a registered uniform `float`, or `0.0` if no such uniform was registered.
 """
 
 @document get_uniform_int """
 ```
 get_uniform_int(::RenderTask, name::String) -> Cint
 ```
-Get int registered as uniform, or `0` if no such uniform was registered.
+Get a registered uniform `int`, or `0` if no such uniform was registered.
 """
 
 @document get_uniform_location """
 ```
 get_uniform_location(::Shader, name::String) -> Cuint
 ```
-Get OpenGL shader program uniform location for the given uniform name, or `0` if no such uniform exists.
+Get the OpenGL shader program uniform location for the given uniform name, or `0` if no such uniform exists.
 """
 
 @document get_uniform_rgba """
 ```
 get_uniform_rgba(task::RenderTask, name::String) -> RGBA
 ```
-Get uniform vec4, or `RGBA(0, 0, 0, 0)` if no such uniform exists.
+Get uniform `vec4`, or `RGBA(0, 0, 0, 0)` if no such uniform exists.
 """
 
 @document get_uniform_transform """
 ```
 get_uniform_transform(task::RenderTask, name::String) -> GLTransform
 ```
-Get uniform mat4x4, or the identity transfrm if no such uniform exists.
+Get uniform `mat4x4`, or the identity transform if no such uniform exists.
 """
 
 @document get_uniform_uint """
 ```
 get_uniform_uint(::RenderTask, name::String) -> Cuint
 ```
-Get uniform uint, or `0` if no such uniform exists.
+Get uniform `uint`, or `0` if no such uniform exists.
 """
 
 @document get_uniform_vec2 """
 ```
 get_uniform_vec2(task::RenderTask, name::String) -> Vector2f
 ```
-Get uniform vec2, or `Vector2f(0, 0)` if no such uniform exists.
+Get uniform `vec2`, or `Vector2f(0, 0)` if no such uniform exists.
 """
 
 @document get_uniform_vec3 """
 ```
 get_uniform_vec3(task::RenderTask, name::String) 
 ```
-Get uniform vec3, or `Vector3f(0, 0, 0)` if no such uniform exists.
+Get uniform `vec3`, or `Vector3f(0, 0, 0)` if no such uniform exists.
 """
 
 @document get_uniform_vec4 """
 ```
 get_uniform_vec4(task::RenderTask, name::String) 
 ```
-Get uniform vec4, or `Vector4f(0, 0, 0, 0)` if no such uniform exists.
+Get uniform `vec4`, or `Vector4f(0, 0, 0, 0)` if no such uniform exists.
 """
 
 @document get_upper """
@@ -2255,14 +2302,14 @@ Get upper bound of the underlying adjustment.
 ```
 get_uri(::FileDescriptor) -> String
 ```
-Get URI to file location, even if it does not point to an existing file.
+Transform the descriptors path to URI format.
 """
 
 @document get_use_markup """
 ```
 get_use_markup(::Label) -> Bool
 ```
-Get whether the label should use pango markup, `true` by default.
+Set whether the label should respect [pango markup syntax](https://docs.gtk.org/Pango/pango_markup.html), `true` by default.
 """
 
 @document get_value """
@@ -2278,11 +2325,11 @@ Get current value of the underlying adjustment.
 
 ```
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:AbstractFloat}) 
-get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T<:AbstractFloat 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T <: AbstractFloat 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:Signed}) 
-get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T<:Signed 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T <: Signed 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:Unsigned}) 
-get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T<:Unsigned 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T <: Unsigned 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Bool}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{Bool}}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{String}) 
@@ -2290,112 +2337,112 @@ get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{String}})
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{RGBA}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Image}) 
 ```
-Deserialize a value from the keyfile. Returns a default value if the key-value pair or group does not
+Deserialize a value from the keyfile. Returns a default value if the key-value pair or group does not exist.
 """
 
 @document get_velocity """
 ```
 get_velocity(SwipeEventController) -> Vector2f
 ```
-Get current velcity, in pixles.
+Get the swipes current velocity, in absolute widget-space coordinates.
 """
 
 @document get_vertex_color """
 ```
 get_vertex_color(::Shape, index::Integer) -> RGBA
 ```
-Get color of vertex at given index.
+Get color of the vertex at given index, or `RGBA(0, 0, 0, 0)` if `index` is out of bounds.
 """
 
 @document get_vertex_color_location """
 ```
 get_vertex_color_location() -> Cuint
 ```
-Get native uniform location for `_vertex_color` input value of all vertex shaders.
+Get the native uniform location for the `_vertex_color` input value of all vertex shaders.
 """
 
 @document get_vertex_position """
 ```
 get_vertex_position(::Shape, ::Integer) -> Vector2f
 ```
-Get position of vertex at given index, in OpenGL coordinates.
+Get the position of vertex at given index, in OpenGL coordinates.
 """
 
 @document get_vertex_position_location """
 ```
 get_vertex_position_location() -> Cuint
 ```
-Get native uniform location for `_vertex_position` input value of all vertex shaders.
+Get the native uniform location for `_vertex_position` input value of all vertex shaders.
 """
 
 @document get_vertex_shader_id """
 ```
 get_vertex_shader_id(::Shader) -> Cuint
 ```
-Get native OpenGL handle of vertex shader component of a shader program.
+Get the native OpenGL handle of vertex shader component of a shader program.
 """
 
 @document get_vertex_texture_coordinate """
 ```
 get_vertex_texture_coordinate(::Shape, index::Integer) -> Vector2f
 ```
-Get texture coordinate of vertex at given index.
+Get the texture coordinate of a vertex at given index, in relative texture-space coordinates.
 """
 
 @document get_vertex_texture_coordinate_location """
 ```
 get_vertex_texture_coordinate_location() -> Cuint
 ```
-Get native uniform location for `_vertex_texture_coordinate` input value of all vertex shaders.
+Get the native uniform location for `_vertex_texture_coordinate` input value of all vertex shaders.
 """
 
 @document get_vertical_adjustment """
 ```
 get_vertical_adjustment(::Viewport) -> Adjustment
 ```
-Get underlying adjustment of the vertical scrollbar.
+Get the underlying adjustment of the vertical scrollbar.
 """
 
 @document get_vertical_alignment """
 ```
 get_vertical_alignment(::Widget) -> Alignment
 ```
-Get alignment along the y-axis.
+Get widget alignment along the y-axis.
 """
 
 @document get_vertical_scrollbar_policy """
 ```
 get_vertical_scrollbar_policy(::Viewport) -> ScrollbarVisibilityPolicy
 ```
-Get policy of vertical scrollbar.
+Get the policy governing how and if the vertical scrollbar is revealed / hidden.
 """
 
 @document get_visible_child """
 ```
 get_visible_child(stack::Stack) -> StackID
 ```
-Get ID of currently selected child.
+Get the ID of currently selected child.
 """
 
 @document get_was_modified """
 ```
 get_was_modified(::TextView) -> Bool
 ```
-Get whether the "was modified" flag of a textview was set to `true`.
+Get whether the "was modified" flag of a `TextView` was set to `true`. 
 """
 
 @document get_wrap_mode """
 ```
-get_wrap_mode(::TextureObject) -> TextureWrapMode
+get_wrap_mode(::Label) -> LabelWrapMode
 ```
-Get OpenGL texture wrap mode.
+Get the mode use to determine at which point in a line a linebreak will be inserted.
 
 ---
 
 ```
-get_wrap_mode(::Label) -> LabelWrapMode
+get_wrap_mode(::TextureObject) -> TextureWrapMode
 ```
-Get wrap mode use to determine at which point in a line a linebreak will be inserted.
+Get the OpenGL texture wrap mode.
 """
 
 @document get_x_alignment """
@@ -2409,7 +2456,7 @@ Get the horizontal alignment of the labels text.
 ```
 get_y_alignment(::Label) -> Float32
 ```
-Get vertical alignment of the labels text.
+Get the vertical alignment of the labels text.
 """
 
 @document goto_page! """
@@ -2444,14 +2491,14 @@ Check whether a stylus-device supports the given axis.
 ```
 has_column_with_title(::ColumnView, title::String) -> Bool
 ```
-Check whether column view has a column with the given title.
+Check whether the `ColumnVIew` has a column with the given title.
 """
 
 @document has_group """
 ```
 has_group(::KeyFile, group::GroupID) -> Bool
 ```
-Check if key file has a group with given id.
+Check if the `KeyFile` has a group with given id.
 """
 
 @document has_icon """
@@ -2466,7 +2513,7 @@ Check whether icon theme has an icon.
 ```
 has_key(::KeyFile, group::GroupID, key::KeyID) -> Bool
 ```
-Check whether key file has a group with given ID, an that group has a key with given ID:
+Check whether the key file has a group with the given ID, and whether that group has a key with given ID.
 """
 
 @document hbox """
@@ -2487,27 +2534,29 @@ Hide the widget, this means its allocated size will become `0` and all of its ch
 ```
 hold!(::Application) 
 ```
-Prevent the application from closing. Use `release!` to undo this.
+Prevent the application from closing. Use [`release!`](@ref) to undo this.
 """
 
 @document hsva_to_rgba """
 ```
-hsva_to_rgba(hsva::HSVA) 
+hsva_to_rgba(hsva::HSVA) -> RGBA
 ```
 Convert HSVA to RGBA.
 """
 
 @document html_code_to_rgba """
 ```
-html_code_to_rgba(code::String) 
+html_code_to_rgba(code::String) -> RGBA
 ```
 Read an html color code of the form `#RRGGBB` or `#RRGGBBAA`, in hexadecimal.
 """
 
 @document insert! """
 ```
-insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
-insert!(f, drop_down::DropDown, index::Integer, label_for_both::String, [::Data_t])
+insert!(::DropDown, index::Integer, label_for_both::String) -> DropDownItemID
+insert!(::DropDown, index::Integer, list_widget::Widget, label_widget::Widget) -> DropDownItemID
+insert!(f, ::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
+insert!(f, ::DropDown, index::Integer, label_for_both::String, [::Data_t]) -> DropDownItemID
 ```
 Add an item to the drop down at given index. When it is selected `label_widget` will appear as the 
 child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
@@ -2517,6 +2566,8 @@ child of the drop down, while `list_widget` will be used as the widget displayed
 (::DropDown, [::Data_t]) -> Cvoid
 ```
 Returns a unique ID identifying the inserted item.
+
+See the manual section on `DropDown` in the chapter on widgets for more information.
 
 ---
 
@@ -2554,14 +2605,14 @@ Insert a column at the given index.
 ```
 insert_column_at!(grid::Grid, column_i::Signed) 
 ```
-Insert an empty column after the given index, may be negative.
+Insert an empty column after the given index (may be negative).
 """
 
 @document insert_row_at! """
 ```
 insert_row_at!(grid::Grid, row_i::Signed) 
 ```
-Insert an empty row after the given index, may be negative.
+Insert an empty row after the given index (may be negative).
 """
 
 @document is_cancelled """
@@ -2596,14 +2647,14 @@ Check whether the content of the cliboard was set from within the currently acti
 ```
 is_symlink(::FileDescriptor) -> Bool
 ```
-Get whether location on disk is a valid symbolic link.
+Get whether the location on disk is a valid symbolic link.
 """
 
 @document is_valid_html_code """
 ```
 is_valid_html_code(code::String) -> Bool
 ```
-Check whether `code` is a string that can be converted to a color using `html_code_to_rgba`.
+Check whether `code` is a string that can be converted to a color using [`html_code_to_rgba`](@ref).
 """
 
 @document main """
@@ -2666,21 +2717,21 @@ Create time from number of minutes.
 ```
 mouse_button_01_pressed(::ModifierState) -> Bool
 ```
-Check whether the left mouse button is currently pressed.
+Check whether the modifier state indicates that the left mouse button is currently pressed.
 """
 
 @document mouse_button_02_pressed """
 ```
 mouse_button_02_pressed(::ModifierState) -> Bool
 ```
-Check whether the right mouse button is currently pressed.
+Check whether the modifier state indicates that the right mouse button is currently pressed.
 """
 
 @document move! """
 ```
 move!(from::FileDescriptor, to::FileDescriptor, allow_overwrite::Bool ; [make_backup::Bool = false, follow_symlink::Bool = true]) -> Bool 
 ```
-Move file to a different location. Returns `true` if the operation was succesfull.
+Move a file to a different location. Returns `true` if the operation was succesfull.
 """
 
 @document move_to_trash! """
@@ -2692,7 +2743,7 @@ Safely move the file to the operating system garbage bin. This operation can be 
 
 @document nanoseconds """
 ```
-nanoseconds(n::Int64) -> Time
+nanoseconds(n::Integer) -> Time
 ```
 Create time from number of nanoseconds.
 """
@@ -2701,19 +2752,27 @@ Create time from number of nanoseconds.
 ```
 next_page!(::Notebook) 
 ```
-Go to the next page, or do not do anything if the current page is already the last page.
+Go to the next page, if possible.
 """
 
 @document on_accept! """
 ```
 on_accept!(f, chooser::FileChooser, [::Data_t]) 
 ```
-Register a callback to be called when the user clicks the "accept" button f the file chooser. 
+Register a callback to be called when the user clicks the "accept" button.
+
 `f` is required to be invocable as a function with signature
 ```
 (::FileChooser, ::Vector{FileDescriptor}, [::Data_t]) -> Cvoid
 ```
 
+## Example
+```julia
+file_chooser = FileChooser(FILE_CHOOSER_ACTION_OPEN_FILE)
+on_accept!(file_chooser) do x::FileChooser, files::Vector{FileDescriptor}
+   # use `files` here
+end
+````
 ---
 
 ```
@@ -2722,6 +2781,14 @@ on_accept!(f, chooser::ColorChooser, [::Data_t])
 Register a callback to be called when the users makes a color selection. `f` is required to be invocable as a function with signature:
 ```
 (::FileChooser, ::RGBA, [::Data_t]) -> Cvoid
+```
+
+## Example
+```julia
+color_chooser = ColorChooser()
+on_accept!(color_chooser) do self::ColorChooser, color::RGBA
+   # use `color` here
+end
 ```
 """
 
@@ -2735,6 +2802,14 @@ Register a callback to be called when the user clicks the "cancel" button f the 
 (::FileChooser, [::Data_t]) -> Cvoid
 ```
 
+## Example
+```julia
+file_chooser = FileChooser(FILE_CHOOSER_ACTION_OPEN_FILE)
+on_cancel!(file_chooser) do x::FileChooser
+    println("file selection cancelled.")
+end
+```
+
 ---
 
 ```
@@ -2744,6 +2819,14 @@ Register a callback to be called the users cancels color selection or otherwise 
 ```
 (::FileChooser, [::Data_t]) -> Cvoid
 ```
+
+## Example
+```julia
+color_chooser = ColorChooser()
+on_cancel!(color_chooser) do self::ColorChooser
+    println("color selection cancelled")
+end
+````
 """
 
 @document on_file_changed! """
@@ -2756,13 +2839,25 @@ invocable as a function with signature
 (::FileMonitor, ::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor) -> Cvoid
 ```
 Where `other` may not point to a valid file, depending on the event type.
+
+## Example
+```julia
+file = FileDescriptor("path/to/file.jl")
+@assert(exists(file))
+monitor = create_monitor(file)
+on_file_changed!(monitor) do x::FileMonitor, event_type::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor
+    if event_type == FILE_MONITOR_EVENT_CHANGED
+        println("File at " * get_path(self) * " was modified.")
+    end
+end
+```
 """
 
 @document on_selection! """
 ```
 on_selection!(f, ::AlertDialog, [::Data_t])
 ```
-Register a callback to be called when the user clicks one of the dialogs buttons, or dismisses the dialog. `f` is required to be invocable as a function with signature
+Register a callback to be called when the user clicks one of the dialogs buttons or dismisses the dialog. `f` is required to be invocable as a function with signature
 ```
 (::AlertDialog, button_index::Signed, [::Data_t]) -> Cvoid
 ```
@@ -2809,7 +2904,7 @@ Close the popover window.
 popup!(::Popover) 
 popup!(::PopoverButton) 
 ```
-Present the popover window
+Present the popover window.
 """
 
 @document present! """
@@ -2827,7 +2922,7 @@ Show the window to the user.
 ```
 previous_page!(::Notebook) 
 ```
-Go to the previous page, or do nothing if the current page is already the first page.
+Go to the previous page, if possible.
 """
 
 @document pulse """
@@ -2850,8 +2945,10 @@ Add a widget to the end of the container.
 ---
 
 ```
+push_back!(::DropDown, label_for_both::String) -> DropDownItemID
+push_back!(::DropDown, list_widget::Widget, label_widget::Widget) -> DropDownItemID
 push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
-push_back!(f, drop_down::DropDown, label_for_both::String, [::Data_t])
+push_back!(f, drop_down::DropDown, label_for_both::String, [::Data_t]) -> DropDownItemID
 ```
 Add an item to the end of the drop down. When it is selected `label_widget` will appear as the 
 child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
@@ -2861,6 +2958,8 @@ child of the drop down, while `list_widget` will be used as the widget displayed
 (::DropDown, [::Data_t]) -> Cvoid
 ```
 Returns a unique ID identifying the inserted item.
+
+See the manual section on `DropDown` in the chapter on widgets for more information.
 
 ---
 
@@ -2883,7 +2982,7 @@ Add a column to the end of the column view.
 push_back_row!(column_view::ColumnView, widgets::Widget...) -> Cvoid
 ```
 Add a number of widgets to the end of the rows, inserting them into the corresponding column. If the number of widgets is
-lower than the number of columns, the leftover columns will contain an empty cell in that row. 
+lower than the number of columns, the left-over columns will contain an empty cell in that row. 
 """
 
 @document push_front! """
@@ -2898,8 +2997,10 @@ Add a widget to the start of the container.
 ---
 
 ```
+push_back!(::DropDown, label_for_both::String) -> DropDownItemID
+push_back!(::DropDown, list_widget::Widget, label_widget::Widget) -> DropDownItemID
 push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
-push_front!(f, drop_down::DropDown, label_for_both::String, [::Data_t])
+push_front!(f, drop_down::DropDown, label_for_both::String, [::Data_t]) -> DropDownItemID
 ```
 Add an item to the start of the drop down. When it is selected `label_widget` will appear as the 
 child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
@@ -2909,6 +3010,8 @@ child of the drop down, while `list_widget` will be used as the widget displayed
 (::DropDown, [::Data_t]) -> Cvoid
 ```
 Returns a unique ID identifying the inserted item.
+
+See the manual section on `DropDown` in the chapter on widgets for more information.
 
 ---
 
@@ -2939,14 +3042,14 @@ lower than the number of columns, the leftover columns will contain an empty cel
 query_info(::FileDescriptor, attribute_id::String) -> String
 ```
 Access metadata info about a file. A list of attribute IDs can be found [here](https://gitlab.gnome.org/GNOME/glib/-/blob/main/gio/gfileinfo.h#L46).
-Note that there is no guaruantee that a file will contain a value for any of these attributes.
+Note that there is no guarantee that a file will contain a value for any of these attributes.
 """
 
 @document queue_render """
 ```
 queue_render(::RenderArea) 
 ```
-Request for the render area to flush the current framebuffer to the screen. There is no guaruantee that this 
+Request for the `RendeArea` to performa a render cycle and flush the current framebuffer to the screen. There is no guarantee that this 
 will happen immediately.
 """
 
@@ -2968,21 +3071,21 @@ Construct angle from radians.
 ```
 read_symlink(self::FileDescriptor) -> FileDescriptor
 ```
-If the pointed to file is a valid symlink, follow that symlink and return the resulting file.
+If the file location is a valid symlink, follow that symlink and return the resulting file.
 """
 
 @document redo! """
 ```
 redo!(::TextView) 
 ```
-Invoke the "redo!" keybinding signal manual. If there is no action on the undo stack, this function does nothing.
+Invoke the "redo!" keybinding signal. If there is no action on the undo stack, this function does nothing.
 """
 
 @document release! """
 ```
 release!(::Application) 
 ```
-Release an application that is currently being prevented from exiting because `hold!` was called before.
+Release an application that is currently being prevented from exiting because [`hold!`](@ref) was called before.
 """
 
 @document remove! """
@@ -3010,7 +3113,7 @@ will be disabled.
 ```
 remove_button!(::AlertDialog, index::Signed) 
 ```
-Remove button at given position (1-based), this means all buttons after its have their index shifted. 
+Remove the button at given position (1-based, left-to-right), this means all buttons after it have their index shifted by 1. 
 """
 
 @document remove_center_child! """
@@ -3036,16 +3139,15 @@ remove_child!(::PopoverButton)
 remove_child!(::Stack, id::String) 
 remove_child!(::Revealer) 
 remove_child!(::Viewport) 
-
 ```
-Remove the widget singular child, such that it is now empty.
+Remove the widgets singular child, such that it is now empty.
 """
 
 @document remove_column! """
 ```
-remove_column!(column_view::ColumnView, column::ColumnViewColumn) 
+remove_column!(::ColumnView, column::ColumnViewColumn) 
 ```
-Remove a column from the column view.
+Remove a column from the column view, this also frees all of its rows.
 """
 
 @document remove_controller! """
@@ -3068,21 +3170,21 @@ Remove the latter child of the widget.
 remove_label_widget!(::Expander) 
 remove_label_widget!(::Frame) 
 ```
-TODO
+Remove the label widget of the widget, such that it now has no label widget.
 """
 
 @document remove_marker! """
 ```
 remove_marker!(::LevelBar, name::String) 
 ```
-Remove a marker with given label from the level bar.
+Remove a marker with the given label from the level bar.
 """
 
 @document remove_overlay! """
 ```
 remove_overlay!(overlay::Overlay, overlayed::Widget) 
 ```
-Remove an overlay widget added via `add_overlay!`
+Remove an overlaid widget added via [`add_overlay!`](@ref).
 """
 
 @document remove_popover! """
@@ -3103,7 +3205,7 @@ Remove the left icon of the entry.
 ```
 remove_row_at!(grid::Grid, row_i::Signed) 
 ```
-Remove a row at specified position (1-based), this may cause children of the row to move to another.
+Remove a row at specified position (1-based).
 """
 
 @document remove_secondary_icon! """
@@ -3153,14 +3255,14 @@ fragment shader to all fragments of the shape.
 
 Note that calling this function is usually not necessary, instead, regsiter a `RenderTask` with a `RenderArea` 
 using `add_render_task!`, after which the task will be automatically rendered every frame, unless a custom
-signal handler was connected to `RenderArea`s signal `render`
+signal handler was connected to `RenderArea`s signal `render`.
 """
 
 @document render_render_tasks """
 ```
 render_render_tasks(::RenderArea) 
 ```
-Render all registered render tasks. This is only necessary when a custom signal handler is connect to the areas
+Render all registered render tasks. This is only necessary when a custom signal handler is connected to the areas
 signal `render`.
 """
 
@@ -3194,14 +3296,14 @@ Restart the clock and return the elapsed time since the last restart.
 
 @document rgba_to_hsva """
 ```
-rgba_to_hsva(rgba::RGBA) 
+rgba_to_hsva(rgba::RGBA) -> HSVA
 ```
-Convert RGBA to HSVA color representation.
+Convert RGBA to HSVA.
 """
 
 @document rgba_to_html_code """
 ```
-rgba_to_html_code(rgba::RGBA) 
+rgba_to_html_code(rgba::RGBA) -> String
 ```
 Convert the color to an html-style hexadecimal string of the form `#RRGGBB`. The alpha component is ignored.
 """
@@ -3211,7 +3313,7 @@ Convert the color to an html-style hexadecimal string of the form `#RRGGBB`. The
 rotate!(::GLTransform, angle::Angle, [origin::Vector2f]) 
 rotate!(::Shape, angle::Angle, [origin::Vector2f]) 
 ```
-Rotate around a point.
+Rotate around a point, in OpenGL coordinates.
 """
 
 @document run! """
@@ -3220,6 +3322,8 @@ run!(app::Application) -> Cint
 ```
 Start the main loop, initializing the internal state and triggering `Application`s signal `activate`. Note that 
 no part of mousetrap should be used or initialized before this function is called.
+
+Usually, users are encouraged to use [`main`](@ref) instead, which does this automatically.
 
 ## Example
 ```julia
@@ -3244,7 +3348,7 @@ Returns `true` if the operation was successfull.
 ```
 save_to_file(::KeyFile, path::String) -> Bool
 ```
-Serialize the key file to a string and save that string to a file. Usually, the extension for this file should be set as `.ini`.
+Serialize the key file to a string and save that string to a file. Usually, the extension for this file should be `.ini`.
 
 Returns `true` if the operation was successfull
 """
@@ -3256,14 +3360,14 @@ scale!(::GLTransform, x_scale::AbstractFloat, y_scale::AbstractFloat)
 Combine the transform with a scale transform. To scale around a point, first `translate!` the transform to that point, 
 then apply `scale!`, then `translate!` the transform back to origin.
 
-Note that this transform uses the OpenGL coordinate system.
+Uses the OpenGL coordinate system.
 """
 
 @document seconds """
 ```
 seconds(n::AbstractFloat) -> Time
 ```
-Create time as number of seconds.
+Create from number of seconds.
 """
 
 @document select! """
@@ -3315,7 +3419,7 @@ set_action!(::Button, ::Action)
 Connect an action to the button. When the button is clicked, the action is activated. When the action is disabled, the button is also disabled.
 
 Note that a button can have both an action and a signal handler connected. If this is the case and the button is clicked, both 
-are executed.
+are triggered.
 """
 
 @document set_active! """
@@ -3329,7 +3433,7 @@ If `true`, set the check button state to [`CHECK_BUTTON_STATE_ACTIVE`](@ref), ot
 ```
 set_alignment!(::Widget, both::Alignment) 
 ```
-Set both the horizontal and vertical alignment of a widget.
+Set both the horizontal and vertical alignment of a widget at the same time.
 """
 
 @document set_allow_only_numeric! """
@@ -3351,7 +3455,7 @@ Set wether an arrow should be drawn next to the label.
 ```
 set_application!(window::Window, app::Application) 
 ```
-Register the window with the application. This is usually not necessary.
+Register the window with the application. This is usually done automatically.
 """
 
 @document set_autohide! """
@@ -3365,7 +3469,7 @@ Set whether the popover should hide itself when the attached widget looses focus
 ```
 set_button_label!(::AlertDialog, index::Integer, label::String)
 ```
-Replace the label of button at given position (1-based)
+Replace the label of the button at given position (1-based, left-to-right).
 """
 
 @document set_bottom_margin! """
@@ -3386,7 +3490,7 @@ Set whether the widget can receive input events. If set to `false`, the widget m
 ```
 set_center_child!(::CenterBox, ::Widget) 
 ```
-Set the middle child of the center box
+Set the middle child of the center box.
 """
 
 @document set_centroid! """
@@ -3418,7 +3522,7 @@ Set the widgets singular child.
 ```
 set_child_position!(::Fixed, child::Widget, position::Vector2f) 
 ```
-Set fixed position of the child, in absolute coordinates relative to the `Fixed`s origin.
+Set fixed position of the child, in absolute widget-space coordinates.
 """
 
 @document set_child_x_alignment! """
@@ -3454,14 +3558,14 @@ Set whether all columns of the grid should be the same width.
 set_comment_above!(::KeyFile, ::GroupID, comment::String) 
 set_comment_above!(::KeyFile, ::GroupID, ::KeyID, comment::String) 
 ```
-Set the comment above a group or key-value pair in the file.
+Set the singular comment above a group or key-value pair in the file.
 """
 
 @document set_current_blend_mode """
 ```
 set_current_blend_mode(::BlendMode; allow_alpha_blending::Bool = true) 
 ```
-Enable blending and set the current OpenGL blend mode. If `allow_alpha_blending` is set to `false`, 
+Enable GPU-side blending and set the current OpenGL blend mode. If `allow_alpha_blending` is set to `false`, 
 only the rgb components of a fragments color will participate in blending.
 """
 
@@ -3474,7 +3578,7 @@ Set which cursor shape should be used when the cursor is over the allocated area
 
 @document set_cursor_from_image! """
 ```
-set_cursor_from_image!(::Widget, image::Image, [offset::Vector2i]) 
+set_cursor_from_image!(::Widget, image::Image, [offset::Vector2i = Vector2i(0, 0)]) 
 ```
 Set which image should be displayed when the cursor is over the allocated area of the widget. `offset` 
 determines the vertical and horizontal offset of the center of the image, relative to the cursor position, in pixels.
@@ -3484,14 +3588,14 @@ determines the vertical and horizontal offset of the center of the image, relati
 ```
 set_cursor_visible!(::TextView, ::Bool) 
 ```
-Set whether the text caret is visible.
+Set whether the caret is visible.
 """
 
 @document set_default_widget! """
 ```
 set_default_widget!(window::Window, ::Widget) 
 ```
-Designate a widget as the default widget. When the widget is activated, for example by the user 
+Designate a widget as the default widget. When the window is activated, for example by the user 
 pressing the enter key, the default widget is activated.
 """
 
@@ -3506,14 +3610,14 @@ Set a factor that multiplies the default delay after which a longpress gesture i
 ```
 set_destroy_with_parent!(::Window, ::Bool) 
 ```
-Set whether the wind should close and be destroyed when the toplevel window is closed.
+Set whether the window should close and be destroyed when the toplevel window is closed.
 """
 
 @document set_detailed_description! """
 ```
 set_detailed_description(::AlertDialog, message::String)
 ```
-Set the detail message, this is the text shown below the dialogs title.
+Set the detailed message, this is the text shown below the dialogs title.
 """
 
 @document set_editable! """
@@ -3536,7 +3640,7 @@ set_enable_rubberband_selection(::ListView, ::Bool)
 set_enable_rubberband_selection(::GridView, ::Bool) 
 set_enable_rubberband_selection(::ColumnView, ::Bool) 
 ```
-Set whether the user can select multiple children by holding down the mouse button. The selectable widgets
+Set whether the user can select multiple children by holding down the mouse button and click-dragging. The selectable widgets
 selection mode has to be `SELECTION_MODE_MULTIPLE` in order for this to be possible.
 """
 
@@ -3567,7 +3671,7 @@ Set whether the end child should resize when the `Paned` is resized.
 ```
 set_end_child_shrinkable(::Paned, ::Bool) 
 ```
-Set whether the user can resize the end child such that its allocated area inside the paned is smaller than the natural size of the widget.
+Set whether the user can resize the end child such that its allocated area inside the paned is smaller than the natural size of the child.
 """
 
 @document set_expand! """
@@ -3583,7 +3687,6 @@ set_expanded(::Expander, ::Bool)
 ```
 Automatically expand or hide the expanders child.
 """
-
 
 @document set_expand_horizontally! """
 ```
@@ -3603,7 +3706,7 @@ Set whether the widget should expand along the y-axis.
 ```
 set_file!(::Clipboard, file::FileDescriptor) 
 ```
-Override the content of the clipboard with a path to a file. Use `get_string(f, ::Clipboard)` to retrieve it.
+Override the content of the clipboard with a path to a file. Use [`get_string`](@ref) to retrieve it.
 """
 
 @document set_file_chooser_action! """
@@ -3667,7 +3770,7 @@ end
 ```
 set_has_base_arrow!(::Popover, ::Bool) 
 ```
-Set whether the "tail" of the popover pointing to the attachment visible should be visited.
+Set whether the "tail" of the popover pointing to widget it is attached to should be visible.
 """
 
 @document set_has_border! """
@@ -3681,7 +3784,7 @@ Set whether a border should be drawn around the notebooks perimeter.
 ```
 set_has_close_button!(::Window, ::Bool) 
 ```
-Set whether the "X" button is present.
+Set whether the "x" button is present.
 """
 
 @document set_has_frame! """
@@ -3698,21 +3801,21 @@ Set whether the widgets outline should be displayed. This does not impact the wi
 ```
 set_has_origin!(::Scale, ::Bool)
 ```
-Set whether the area of the slider between the start of the range and the current value should be filled with a color
+Set whether the area of the slider between the start of the range and the current value should be filled with a color.
 """
 
 @document set_has_wide_handle! """
 ```
 set_has_wide_handle!(::Paned, ::Bool) 
 ```
-Set whether the barrier in between the paneds two children is wide or thin.
+Set whether the barrier in-between the `Paned`s two children is wide or thin, wide by default.
 """
 
 @document set_header_menu! """
 ```
 set_header_menu!(::ColumnViewColumn, model::MenuModel) 
 ```
-Add a menu model to be used as the columns header menu. The use can access it by 
+Add a menu model to be used as the columns header menu, which the user can access by 
 clicking the columns title.
 """
 
@@ -3720,36 +3823,36 @@ clicking the columns title.
 ```
 set_hide_on_close!(::Window, ::Bool) 
 ```
-If set to to `true`, the window will hidden when it is closed, if set to `false`, the window 
-is destroyed when closed. 
+If set to to `true`, the window will be hidden when it is closed, if set to `false`, the window 
+is destroyed when closed. `true` by default.
 """
 
 @document set_hide_on_overflow! """
 ```
 set_hide_on_overflow!(::Widget, ::Bool) 
 ```
-Set whether any area of the widget that goes outside of its allocate space should be drawn (as opposed to clipped).
+Set whether the entire widget should be hidden if its allocated area is smaller than its natural size. If `false`, the overflow part of the widget will be truncated.
 """
 
 @document set_homogeneous! """
 ```
 set_homogeneous!(::Box, ::Bool) 
 ```
-Set whether the box
+Set whether the box allocates the same space for all of its children.
 """
 
 @document set_horizontal_alignment! """
 ```
-set_horizontal_alignment!(::Widget, alignment::mousetrap.detail._Alignment) 
+set_horizontal_alignment!(::Widget, ::Alignment) 
 ```
-Set whether all of the boxes children should be allocated the same width (or height, if orientation is vertical).
+Set alignment along the x-axis.
 """
 
 @document set_horizontal_scrollbar_policy! """
 ```
 set_horizontal_scrollbar_policy!(::Viewport, policy::ScrollbarVisibilityPolicy) 
 ```
-Set the policy that determines when / if the horizontal scrollbar of the viewport hides.
+Set the policy governing how and if the horizontal scrollbar is revealed / hidden.
 """
 
 @document set_icon! """
@@ -3764,7 +3867,7 @@ Replace the buttons label with an icon.
 ```
 set_image!(::Clipboard, image::Image) 
 ```
-Override the clipboards content with an image. Use `get_image` to retrieve it.
+Override the clipboards content with an image. Use [`get_image!`](@ref) to retrieve it.
 """
 
 @document set_initial_file! """
@@ -3779,7 +3882,7 @@ For `FILE_CHOOSER_ACTION_OPEN_FILE` or `FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FILES`
 set_initial_filter!(::FileChooser, ::FileFilter)
 ```
 Set currently selected filter. If the filter was not yet added with [`add_filter!`](@ref), it will 
-still make it such that the filter is active, but the user will be unable to change the filter selection.
+still be made the active filter, but the user will be unable to change the filter selection.
 """
 
 @document set_initial_folder! """
@@ -3793,14 +3896,14 @@ For `FILE_CHOOSER_ACTION_SELECT_FOLDER` or `FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FO
 ```
 set_initial_name!(::FileChooser, ::String)
 ```
-For `FILE_CHOOSER_ACTION_SAVE`, set the name-field that will be used to determine the saved files name.
+For `FILE_CHOOSER_ACTION_SAVE`, set the name field that will be used to determine the saved files name.
 """
 
 @document set_inverted! """
 ```
 set_inverted!(::LevelBar, ::Bool) 
 ```
-TODO
+Set whether the level bar should be mirrored along the horizontal or vertical axis, depending on orientation.
 """
 
 @document set_is_active! """
@@ -3818,14 +3921,14 @@ set_is_circular!(::Button, ::Bool)
 set_is_circular!(::ToggleButton, ::Bool) 
 set_is_circular!(::PopoverButton, ::Bool) 
 ```
-Set whether the button should be rounde, as opposed to rectangular.
+Set whether the button should be circular, as opposed to rectangular.
 """
 
 @document set_is_decorated! """
 ```
 set_is_decorated!(::Window, ::Bool) 
 ```
-Set whether the titlebar of the window is visible.
+Set whether the header bar area of the window is visible.
 """
 
 @document set_is_focusable! """
@@ -3846,7 +3949,7 @@ Set whether the stack should allocate the same width for all of its pages.
 ```
 set_is_inverted!(::ProgressBar, ::Bool) 
 ```
-Set whether the progressbar should be mirrored.
+Set whether the `ProgressBar` should be mirrored.
 """
 
 @document set_is_modal! """
@@ -3856,14 +3959,14 @@ set_is_modal!(::FileChooser, ::Bool)
 set_is_modal!(::ColorChooser, ::Bool) 
 set_is_modal!(::AlertDialog, ::Bool) 
 ```
-Set whether all others windows should be paused while the window is active.
+Set whether all others windows should be paused while this window is active.
 """
 
 @document set_is_resizable! """
 ```
 set_is_resizable!(::ColumnViewColumn, ::Bool) 
 ```
-Set whether the column can be resized. If set to `false`, the size set via `set_fixed_width!` will be used.
+Set whether the column can be resized. If set to `false`, the size set via [`set_fixed_width!`](@ref) will be used.
 """
 
 @document set_is_scrollable! """
@@ -3913,14 +4016,14 @@ Temporarily remove the column and all its rows from the column view.
 set_justify_mode!(::Label, mode::JustifyMode) 
 set_justify_mode!(::TextView, mode:JustifyMode) 
 ```
-Set text justification mode.
+Set the text justification mode.
 """
 
 @document set_kinetic_scrolling_enabled! """
 ```
 set_kinetic_scrolling_enabled!(::Viewport, ::Bool) 
 ```
-Set whether the widget should continue scrolling simulating "inertia" once the user stopped operating the mouse wheel or touchscreen
+Set whether the widget should continue scrolling once the user stopped operating the mouse wheel or touchscreen, simulating "inertia".
 """
 
 @document set_label_widget! """
@@ -3935,7 +4038,7 @@ Choose a widget as the label.
 ```
 set_label_x_alignment!(::Frame, ::AbstractFloat) 
 ```
-Set horizontal alignment of the label widget (if present). In `[0, 1]`
+Set horizontal alignment of the label widget (if present), in `[0, 1]`
 """
 
 @document set_layout! """
@@ -3950,11 +4053,9 @@ This is a list of button IDs. Valid IDs are limited to:
 + `minimize`: Minimize Button
 + `close`: Close Button
 
-Any object left of `:` will be placed left of the title, any after `:` will be place right of the title. Object are deliminated by `,`
+Any object left of `:` will be placed left of the title, any after `:` will be place right of the title. Object are delimited by `,`.
 
 ## Example
-
-Place close button left of the title, maximize and minimize buttons right of the title
 ```julia
 header_bar = HeaderBar()
 set_layout!(header_bar, "close:maximize,minimize")
@@ -3972,9 +4073,9 @@ Set distance between the left end of the text and the text views frame.
 set_log_file(path::String) -> Bool
 ```
 Set file at `path` as the log file. Any logging will be pushed to the file as opposed to being printed to the console. The file
-will be created if it does not exist. If it does exist, the file will be appended to, as opposed to being override.
+will be created if it does not exist. If it does exist, the file will be appended to, as opposed to being overwritten.
 
-Return `true` if the file was succesfully opened.
+Returns `true` if the file was succesfully opened.
 """
 
 @document set_lower! """
@@ -3990,7 +4091,7 @@ Set lower bound of the underlying adjustment.
 ```
 set_listens_for_shortcut_action!(::Widget, ::Action)
 ```
-Adds the action to the widgets internal shortcut event controller. While the widget holds focus,
+Adds the action to the widgets internal `ShortcutEventController`. While the widget holds focus,
 if the user presses the actions associated shortcut, the action will trigger.
 """
 
@@ -4019,7 +4120,7 @@ Set both the left and right margin of the widget, in pixels.
 ```
 set_margin!(::Widget, margin::AbstractFloat) 
 ```
-Set both the left, right, top and bottom margin of the widget, in pixels.
+Set both the left, right, top, and bottom margin of the widget, in pixels.
 """
 
 @document set_margin_start! """
@@ -4090,7 +4191,7 @@ Limit the minimum number of columns, or unlimited if `-1`.
 ```
 set_min_value!(::LevelBar, value::AbstractFloat) 
 ```
-Set lower bound of the underlying range.
+Set the lower bound of the underlying range.
 """
 
 @document set_mode! """
@@ -4104,38 +4205,38 @@ Set whether the level bar should display its value continuous or segmented.
 ```
 set_n_digits!(::SpinButton, n::Integer) 
 ```
-Set number of digits after the decimal point. This only affects the visual display of the number, the internal value of the 
-range is unaffected.
+Set number of digits after the decimal point. This only affects the visuals of the `SpinButton`, the internal value of the 
+underlying adjustment is unaffected.
 """
 
 @document set_only_listens_to_button! """
 ```
 set_only_listens_to_button!(::SingleClickGesture, button::ButtonID) 
 ```
-Set which buttons the event controller should listen to, or `BUTTON_ID_ANY` to listen to all buttons.
+Set which mouse buttons the event controller should listen to, or `BUTTON_ID_ANY` to listen to all buttons.
 """
 
 @document set_opacity! """
 ```
 set_opacity!(::Widget, opacity::AbstractFloat) 
 ```
-Set the opacity of the widget, if the opacity is `0`, the widget will be hidden.
+Set the opacity of the widget, in `[0, 1]`.
 """
 
 @document set_orientation! """
 ```
-set_orientation!(::Box, orientation::Orientation) 
-set_orientation!(::CenterBox, orientation::Orientation) 
-set_orientation!(::LevelBar, orientation::Orientation) 
-set_orientation!(::Grid, orientation::Orientation) 
-set_orientation!(::ProgressBar, orientation::Orientation) 
-set_orientation!(::Scrollbar, orientation::Orientation) 
-set_orientation!(::Separator, orientation::Orientation) 
-set_orientation!(::ListView, orientation::Orientation) 
-set_orientation!(::GridView, orientation::Orientation) 
-set_orientation!(::Paned, orientation::Orientation) 
-set_orientation!(::SpinButton, orientation::Orientation)
-set_orientation!(::Scale, orientation::Orientation)
+set_orientation!(::Box, ::Orientation) 
+set_orientation!(::CenterBox, ::Orientation) 
+set_orientation!(::LevelBar, ::Orientation) 
+set_orientation!(::Grid, ::Orientation) 
+set_orientation!(::ProgressBar, ::Orientation) 
+set_orientation!(::Scrollbar, ::Orientation) 
+set_orientation!(::Separator, ::Orientation) 
+set_orientation!(::ListView, ::Orientation) 
+set_orientation!(::GridView, ::Orientation) 
+set_orientation!(::Paned, ::Orientation) 
+set_orientation!(::SpinButton, ::Orientation)
+set_orientation!(::Scale, ::Orientation)
 ```
 Set orientation of the widget, this governs along which axis it aligns itself and its children.
 
@@ -4159,14 +4260,14 @@ Override the color of a pixel, 1-based indexing.
 ```
 set_popover!(::PopoverButton, popover::Popover) 
 ```
-Attach a popover to the popover button. This will detach any already attached `Popover` or `PopoverMenu`.
+Attach a [`Popover`](@ref) to the popover button. This will detach any already attached `Popover` or `PopoverMenu`.
 """
 
 @document set_popover_menu! """
 ```
 set_popover_menu!(popover_button::PopoverButton, popover_menu::PopoverMenu) 
 ```
-Attach a popover to the popover button. This will detach any already attached `Popover` or `PopoverMenu`.
+Attach a [`PopoverMenu`](@ref) to the popover button. This will detach any already attached `Popover` or `PopoverMenu`.
 """
 
 @document set_position! """
@@ -4201,14 +4302,14 @@ Set whether the viewport should assume the height of its child. This will usuall
 ```
 set_propagation_phase!(controller::EventController) 
 ```
-Set at which phase during event propagation the event controller should capture the event.
+Set the phase at which the event controller will capture events, see [here](https://developer-old.gnome.org/gtk4/stable/event-propagation.html) for more information.
 """
 
 @document set_quick_change_menu_enabled! """
 ```
 set_quick_change_menu_enabled!(::Notebook, ::Bool) 
 ```
-Set phase at which the event controller will capture events.
+Set whether the user can click any of the tabs to open a menu that allows them to jump to a page.
 """
 
 @document set_ratio! """
@@ -4223,7 +4324,7 @@ Set width-to-height aspect ratio.
 set_relative_position!(::Popover, position::RelativePosition) 
 set_relative_position!(::PopoverButton, position::RelativePosition) 
 ```
-Set position of the popover relative to its attachment.
+Set position of the popover relative to the widget it is attached to.
 """
 
 @document set_resource_path! """
@@ -4251,49 +4352,49 @@ Set margin between the right end of the text and the text views frame.
 ```
 set_row_spacing!(::Grid, spacing::AbstractFloat) 
 ```
-Set spacing between rows of the grid.
+Set spacing between rows of the grid, in pixels.
 """
 
 @document set_rows_homogeneous! """
 ```
 set_rows_homogeneous!(::Grid, ::Bool) 
 ```
-Set whether all rows should allocated the same height.
+Set whether all rows should allocate the same height.
 """
 
 @document set_scale! """
 ```
 set_scale!(::ImageDisplay, scale::Integer) 
 ```
-Scale image by a constant factor.
+Scale image by a constant factor, in `{1, 2, 3, ...}`.
 """
 
 @document set_scale_mode! """
 ```
 set_scale_mode!(texture::mousetrap.TextureObject, mode::TextureWrapMode) 
 ```
-Set OpenGL scale mode the texture uses.
+Set the OpenGL scale mode the texture uses.
 """
 
 @document set_scope! """
 ```
 set_scope!(::ShortcutEventController, scope::ShortcutScope) 
 ```
-Set scope in which the event controller listen for shortcut event.
+Set the scope in which the controller listens for shortcut events, see [here](https://docs.gtk.org/gtk4/method.ShortcutController.set_scope.html) for more information.
 """
 
 @document set_scrollbar_placement! """
 ```
 set_scrollbar_placement!(::Viewport, placement::CornerPlacement) 
 ```
-Set placement of both scrollbars relative to the viewports center
+Set placement of both scrollbars relative to the viewports center.
 """
 
 @document set_secondary_icon! """
 ```
 set_secondary_icon!(entry::Entry, icon::Icon) 
 ```
-Set right icon of the entry.
+Set the right icon of the entry.
 """
 
 @document set_selectable! """
@@ -4314,14 +4415,14 @@ Make the item identified by the given ID the currently selected item. This will 
 ```
 set_should_draw_value!(::Scale, ::Bool)
 ```
-Set whether the current value of the scales internal adjustment should be drawn next to the knob
+Set whether the current value of the scales internal adjustment should be drawn next to the knob.
 """
 
 @document set_should_interpolate_size """
 ```
 set_should_interpolate_size(::Stack, ::Bool) 
 ```
-Set whether the stack should slowly transition its size when switching from one page to another.
+Set whether the stack should slowly transition its size when transitioning from one page to another.
 """
 
 @document set_should_snap_to_ticks! """
@@ -4363,7 +4464,7 @@ Set whether separators should be drawn between two items.
 ```
 set_show_text!(::ProgressBar, ::Bool)
 ```
-Set whether a percentage or custom text should be displayed above the progress bar.
+Set whether a percentage or custom text should be displayed above the progress bar. Use [`set_text!`](@ref) to specify the custom text.
 """
 
 @document set_show_title_buttons! """
@@ -4379,21 +4480,21 @@ set_single_click_activate!(::ListView, ::Bool)
 set_single_click_activate!(::ColumnView, ::Bool) 
 set_single_click_activate!(::GridView, ::Bool) 
 ```
-Set whether only hovering about an item selects it.
+Set whether simply hovering about an item selects it.
 """
 
 @document set_size_request! """
 ```
 set_size_request!(::Widget, size::Vector2f) 
 ```
-Set size request, this is minimum amount of space the widget will attempt to allocate, or `(0, 0)` for no size request.
+Set the size request, where a `0` for either width or height indicates that no size request was made.
 """
 
 @document set_spacing! """
 ```
 set_spacing!(::Box, spacing::Number) 
 ```
-Set spacing drawn between two items, in pixels.
+Set the space between two items, in pixels.
 """
 
 @document set_start_child! """
@@ -4415,14 +4516,16 @@ Set whether the first child should resize when the `Paned` is resized.
 ```
 set_start_child_shrinkable(::Paned, ::Bool) 
 ```
-Set whether the user can resize the first child such that its allocated area inside the paned is smaller than the natural size of the widget.
+Set whether the user can resize the first child such that its allocated area inside the paned is smaller than the natural size of the child.
 """
 
 @document set_startup_notification_identifier! """
 ```
 set_startup_notification_identifier!(::Window, id::String) 
 ```
-Register an ID to be used to send a notification when the window is first shown. There is no guaruantee that the users operating system supports this feature.
+Register an ID to be used to send a notification when the window is first shown, which will usually be `"\$id is ready.". 
+
+There is no guarantee that the users operating system supports this feature.
 """
 
 @document set_state! """
@@ -4445,7 +4548,7 @@ set_stateful_function!(f, action::Action, [::Data_t])
 ```
 Set the actions function, after which the action is considered stateful. `f` is required to be invocable as a function with signature
 ```
-(::Action, ::Bool) -> Bool
+(::Action, ::Bool, [::Data_t]) -> Bool
 ```
 
 ## Example
@@ -4460,9 +4563,9 @@ end
 
 @document set_step_increment! """
 ```
-set_step_increment!(::Adjustment, value::AbstractFloat) 
-set_step_increment!(::Scale, value::AbstractFloat) 
-set_step_increment!(::SpinButton, value::AbstractFloat) 
+set_step_increment!(::Adjustment, value::Number) 
+set_step_increment!(::Scale, value::Number) 
+set_step_increment!(::SpinButton, value::Number) 
 ```
 Set minimum distance between two discrete values of the underlying range.
 """
@@ -4471,42 +4574,42 @@ Set minimum distance between two discrete values of the underlying range.
 ```
 set_string!(::Clipboard, string::String) 
 ```
-Override the clipboards contents with a string. Use `get_string` to retrieve it.
+Override the clipboards contents with a string. Use [`get_string!`](@ref) to retrieve it.
 """
 
 @document set_surpress_debug """
 ```
 set_surpress_debug(domain::String, ::Bool) 
 ```
-If set to `false`, log messages with log-level `DEBUG` will no be printed to console or the log file.
+If set to `false`, log messages with log-level `DEBUG` will now be printed to console or the log file. `true` by default.
 """
 
 @document set_surpress_info """
 ```
 set_surpress_info(domain::String, ::Bool) 
 ```
-If set to `false`, log message with log-level `INFO` will now be printed to console or the log file.
+If set to `false`, log message with log-level `INFO` will now be printed to console or the log file. `true` by default.
 """
 
 @document set_tab_position! """
 ```
 set_tab_position!(::Notebook, relative_position::RelativePosition) 
 ```
-Set position of the tab bar relative to the notebooks center.
+Set position of the tab bar, relative to the notebooks center.
 """
 
 @document set_tabs_reorderable! """
 ```
 set_tabs_reorderable!(::Notebook, ::Bool) 
 ```
-Set whether the user can rerder tabs by dragging them.
+Set whether the user can reorder tabs by dragging them.
 """
 
 @document set_tabs_visible! """
 ```
 set_tabs_visible!(::Notebook, ::Bool) 
 ```
-Set whether the tab bar should be displayed
+Set whether the tab bar should be displayed.
 """
 
 @document set_text! """
@@ -4522,7 +4625,7 @@ Override the content of the internal text buffer.
 ```
 set_text!(::ProgressBar, text::String) 
 ```
-Set text that will be displayed instead of the percentage when the progress bars display mode is set to `PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT`.
+Set text that will be displayed instead of the percentage when [`set_show_text!`](@ref) was set to true.
 """
 
 @document set_text_to_value_function! """
@@ -4582,7 +4685,7 @@ end
 ```
 set_title!(::Window, title::String) 
 ```
-Set windows title, which will be shown in its titlebar.
+Set the windows title, which will be shown in its titlebar.
 
 ---
 
@@ -4596,7 +4699,7 @@ Set the columns title, which will uniquely identify that column.
 ```
 set_title_widget!(header_bar::HeaderBar, ::Widget) 
 ```
-Replace the default title with a custom widget.
+Replace the default header bar with a custom widget.
 """
 
 @document set_titlebar_widget! """
@@ -4640,14 +4743,14 @@ Set margin between the top of the text and the text views frame, in pixels.
 ```
 set_touch_only!(::SingleClickGesture) 
 ```
-Make it such that the event controller will exclusively listen to events emitted by touch-devices.
+Make it such that the event controller will exclusively listen to events emitted by touch devices.
 """
 
 @document set_transient_for! """
 ```
 set_transient_for!(self::Window, other::Window) 
 ```
-Make it such that if `self` is and `other` overlap, `self` will always be shown on top.
+Make it such that if `self` and `other` overlap, `self` will always be shown on top.
 """
 
 @document set_transition_duration! """
@@ -4655,7 +4758,7 @@ Make it such that if `self` is and `other` overlap, `self` will always be shown 
 set_transition_duration!(::Stack, duration::Time) 
 set_transition_duration!(::Revealer, duration::Time) 
 ```
-Choose the duration of time the animation should take. This changes the animation speed.
+Choose the duration of the transition animation.
 """
 
 @document set_transition_type! """
@@ -4663,7 +4766,7 @@ Choose the duration of time the animation should take. This changes the animatio
 set_transition_type!(::Stack, transition::StackTransitionType) 
 set_transition_type!(::Revealer, type::RevealerTransitionType) 
 ```
-Set the type of animation used.
+Set the type of transition animation. 
 """
 
 @document set_uniform_float! """
@@ -4671,7 +4774,7 @@ Set the type of animation used.
 set_uniform_float!(::Shader, name::String, v::Cfloat) 
 set_uniform_float!(::RenderTask, name::String, v::Cfloat) 
 ```
-Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
 This value will be a `float` in GLSL.
 """
@@ -4680,7 +4783,7 @@ This value will be a `float` in GLSL.
 ```
 set_uniform_hsva!(task::RenderTask, name::String, hsva::RGBA) 
 ```
-Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
 This value will be a `vec4` in GLSL.
 """
@@ -4690,7 +4793,7 @@ This value will be a `vec4` in GLSL.
 set_uniform_int!(::Shader, name::String, float::Int32) 
 set_uniform_int!(::RenderTask, name::String, v::Int32) 
 ```
-Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
 This value will be a `int` in GLSL.
 """
@@ -4699,7 +4802,7 @@ This value will be a `int` in GLSL.
 ```
 set_uniform_rgba!(::RenderTask, name::String, rgba::RGBA) 
 ```
-Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
 This value will be a `vec4` in GLSL.
 """
@@ -4709,7 +4812,7 @@ This value will be a `vec4` in GLSL.
 set_uniform_transform!(::Shader, name::String, transform::GLTransform) 
 set_uniform_transform!(::RenderTask, name::String, transform::GLTransform) 
 ```
-Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
 This value will be a `mat4x4` in GLSL.
 """
@@ -4719,7 +4822,7 @@ This value will be a `mat4x4` in GLSL.
 set_uniform_uint!(::Shader, name::String, float::UInt32) 
 set_uniform_uint!(::RenderTask, name::String, v::UInt32) 
 ```
-Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
 This value will be a `uint` in GLSL.
 """
@@ -4729,7 +4832,7 @@ This value will be a `uint` in GLSL.
 set_uniform_vec2!(::Shader, name::String, vec2::Vector2f) 
 set_uniform_vec2!(::RenderTask, name::String, v::Vector2f) 
 ```
-Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
 This value will be a `vec2` in GLSL.
 """
@@ -4739,7 +4842,7 @@ This value will be a `vec2` in GLSL.
 set_uniform_vec3!(::Shader, name::String, vec2::Vector2f) 
 set_uniform_vec3!(::RenderTask, name::String, v::StaticArraysCore.SVector{3, Float32}) 
 ```
-Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
 This value will be a `vec3` in GLSL.
 """
@@ -4749,7 +4852,7 @@ This value will be a `vec3` in GLSL.
 set_uniform_vec4!(::Shader, name::String, vec2::Vector2f) 
 set_uniform_vec4!(::RenderTask, name::String, v::StaticArraysCore.SVector{4, Float32}) 
 ```
-Assign value to a uniform in the shader program, whose variable name exactly matches `name`. 
+Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
 This value will be a `vec4` in GLSL.
 """
@@ -4767,7 +4870,7 @@ Set upper bound of th underlying adjustment.
 ```
 set_use_markup!(::Label, ::Bool) 
 ```
-Set whether the label should respect [pango markup syntax](https://docs.gtk.org/Pango/pango_markup.html).
+Set whether the label should respect [pango markup syntax](https://docs.gtk.org/Pango/pango_markup.html). `true` by default.
 """
 
 @document set_value! """
@@ -4776,7 +4879,7 @@ set_value!(::SpinButton, value::Number)
 set_value!(::Scale, value::Number) 
 set_value!(adjustment::Adjustment, ::Number) 
 ```
-Set current value of the underlying range, clamped to `[lower, upper]`.
+Set the current value of the underlying range, clamped to `[lower, upper]`.
 
 ---
 
@@ -4823,7 +4926,7 @@ end
 ```
 set_vertex_color!(::Shape, index::Integer, color::RGBA) 
 ```
-Set color of a specific vertex.
+Set the color of a specific vertex.
 """
 
 @document set_vertex_position! """
@@ -4858,14 +4961,14 @@ Set policy of vertical scrollbar, this determines when/if the scrollbar is shown
 ```
 set_visible_child!(stack::Stack, id::StackID) 
 ```
-Make the current page of the stack to that identified by ID.
+Make the current page of the stack that identified by ID.
 """
 
 @document set_was_modified! """
 ```
 set_was_modified!(::TextView, ::Bool) 
 ```
-Set the flag indicating that a text buffer was modified.
+Override the flag indicating that a text buffer was modified.
 """
 
 @document set_widget_at! """
@@ -4908,14 +5011,14 @@ Set vertical alignment of the label, in `[0, 1]`.
 ```
 shift_pressed(modifier_state::ModifierState) -> Bool
 ```
-Check whether the shift or caps key is currently down.
+Check whether the modifier state indicates that the shift or caps key is currently down.
 """
 
 @document should_shortcut_trigger_trigger """
 ```
 should_shortcut_trigger_trigger(::KeyEventController, trigger::String) -> Bool
 ```
-Text whether the currently active event should trigger the shortcut trigger. This function 
+Test whether the currently active event should trigger the shortcut trigger. This function 
 should only be called from within signal `key_pressed` or `modifiers_changed`.
 
 This is usually not necessary, use `ShortcutEventController` to listen for shortcuts instead.
@@ -4953,7 +5056,7 @@ Stop the spinning animation if it is currently playing.
 ```
 to_gl_coordinates(area::RenderArea, absolute_widget_space_coordinates::Vector2f) -> Vector2f
 ```
-Convert absolute, widget-space coordinates relative to the `RenderArea`s origin to OpenGL coordinates.
+Convert absolute widget-space coordinates to OpenGL coordinates. This will take into account the `RenderArea`s currently allocated size on screen.
 """
 
 @document translate! """
@@ -4974,7 +5077,7 @@ Unbind a texture from rendering. This is usually done automatically.
 ```
 unbind_as_render_target(render_texture::RenderTexture) 
 ```
-Make it such that the render texture is no longe the current render target. This will restore the framebuffer that
+Make it such that the render texture is no longer the current render target. This will restore the framebuffer that
 was active when `bind_as_render_target` was called.
 """
 
@@ -4989,7 +5092,7 @@ Trigger an undo step.
 ```
 unmark_as_busy!(::Application) 
 ```
-Undo the effect of `mark_as_busy!`.
+Undo the effect of [`mark_as_busy!`](@ref).
 """
 
 @document unparent! """
@@ -5010,7 +5113,7 @@ Make item at given position no longer selected.
 ```
 unselect_all!(::SelectionModel) 
 ```
-Make it such that no item is selected, the selection mode allows for that. 
+Make it such that no item is selected, if the selection mode allows for that. 
 """
 
 @document vbox """

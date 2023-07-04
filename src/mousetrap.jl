@@ -4302,7 +4302,7 @@ module mousetrap
     @export_widget_function set_expand! Cvoid Bool b
 
     @export_widget_function set_horizontal_alignment! Cvoid Alignment alignment
-    @export_widget_function get_horizontal_alignemtn Alignment
+    @export_widget_function get_horizontal_alignment Alignment
     @export_widget_function set_vertical_alignment! Cvoid Alignment alignment
     @export_widget_function get_vertical_alignment Alignment
     @export_widget_function set_alignment! Cvoid Alignment both
@@ -4652,7 +4652,7 @@ module mousetrap
         as_points!(shape, position)
         return out
     end
-    export Point
+    export Points
 
     as_triangle!(shape::Shape, a::Vector2f, b::Vector2f, c::Vector2f) = detail.as_triangle!(shape._internal, a, b, c)
     export as_triangle!
@@ -4712,6 +4712,7 @@ module mousetrap
         as_lines!(out, points)
         return out
     end
+    export Lines
 
     as_line_strip!(shape::Shape, points::Vector{Vector2f}) = detail.as_line_strip!(shape._internal, points)
     export as_line_strip!

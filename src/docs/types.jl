@@ -395,7 +395,7 @@ on_accept!(color_chooser) do self::ColorChooser, color::RGBA
     println("Selected \$color")
 end
 on_cancel!(color_chooser) do self::ColorChooser
-    println("color selection canceleld")
+    println("color selection cancelled")
 end
 present!(color_chooser)
 ```

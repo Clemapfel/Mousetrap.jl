@@ -858,7 +858,7 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
 
 ![](../resources/scale_no_value.png)
 
-!!! detail "How to generate this image"
+!!! details"How to generate this image"
     ```julia
     main() do app::Application
         window = Window(app)
@@ -887,7 +887,7 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
 
 [`Scale`](@ref), just like `SpinButton`, is a widget that allows a user to choose a value from the underlying `Adjustment`. This is done by click-dragging the knob of the scale, or clicking anywhere on its rail. In this way, it is usually harder to pick an exact decimal value on a `Scale` as opposed to a `SpinButton`. We can aid in this task by displaying the exact value next to the scale, which is enabled with [`set_should_draw_value!`](@ref):
 
-!!! detail "How to generate this image"
+!!! details"How to generate this image"
     ```julia
     main() do app::Application
         window = Window(app)
