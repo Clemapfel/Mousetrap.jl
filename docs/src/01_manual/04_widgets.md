@@ -1527,18 +1527,35 @@ Additionally, an arrow is shown next to the label of the `PopoverButton`, indica
 
 ---
 
-## Selectable Widgets: SelectionModel
+## SelectionModel
 
 We will now move on to **selectable widgets**, which tend to be the most complex and powerful widgets in mousetrap.
 
-All selectable widgets have on thing in common, their multiple children are managed by a **selection model**. This model is a list of widgets. For each widget, the model will keep track of whether that widget is currently selected.
-Modifying the model will modify the selectable widget, and modifying the selectable widget will modify the model. In this way, the two are linked.
+All selectable widgets have on thing in common: their multiple children are managed by a **selection model**. This model is a list of widgets. For each widget, the model will keep track of whether that widget is currently selected. If it is, a graphical element will be added to the selectable widget that indicates to the user which item(s) are currently selected.
 
-TODO
+![](../resources/list_view_selected.png)
+
+Modifying the model will modify the selectable widget, and modifying the selectable widget will modify the model. In this way, the two are linked, similar to how `Adjustment` works. We use `select!` and `unselect!` to change the selection manually, while `get_selection!` returns a vector with one or more of the selected items indices.
+
+`SelectionModel` has a signal `selection_changed`, which is emitted anytime an item is selected or unselected in any way. This signal requires the signature
+```
+(::SelectionModel, position::Integer, n_items::Integer, [::Data_t]) -> Nothing
+```
+Where `position` is the new index of the changed item (1-based), while `n_items` is the number of currently selected items.
+
+Each model has an associated property called the **selection mode**, which is expressed by the enum [`SelectionMode`](@ref). This governs how many items can be selected. 
+
+| `SelectionMode`           | Number of Items |
+|---------------------------|-----------------|
+| `SELECTION_MODE_NONE`     | exactly zero    |
+| `SELECTION_MODE_SINGLE`   | exactly one     |
+| `SELECTION_MODE_MULTIPLE` | zero or more    |
+
+We specify the selection mode when creating a selectable widget, such as our first widget: `ListView`.
 
 ## ListView
 
-[`ListView`](@ref) is a widget that arranges its children in a row or column, depending on orientation. When creating the `ListView`, we specify this orientation along with the selection mode. We can then add children using `push_back!`, `push_front!` and `insert!`:
+[`ListView`](@ref) is a widget that arranges its children in a row or column, depending on orientation. We add children using `push_back!`, `push_front!` and `insert!`:
 
 ```julia
 list_view = ListView(ORIENTATION_VERTICAL, SELECTION_MODE_SINGLE)
@@ -1551,7 +1568,7 @@ push_back!(list_view, Label("Child #03"))
 
 Where the second child is currently selected.
 
-`ListView` can be requested to automatically show separators in-between two items by setting `set_show_separators!` to `true`.
+`ListView` can be requested to automatically show separators in-between two items by setting `set_show_separators!` to `true`. To check which item is selected, we should instead query its selection model, which we obtain using `get_selection_model`.
 
 ### Nested Trees
 
@@ -1582,119 +1599,142 @@ By default, `ListView` displays its children in a linear list, either horizontal
     end
     ```
 
-TODO
+Each item of a `ListView` can in itself be made a list view. To do this, we use an optional argument of `push_back!` (or `push_front!`, `insert!`), which is an **iterator**.
 
-### Reacting to Selection
-
-In order to react to the user selecting a new item in our `ListView` (if its selection mode is anything other than `SELECTION_MODE_NONE`), we should connect to the lists `SelectionModel` like so:
+This iterator identifies which list view to insert the item in. We obtain this iterator like so:
 
 ```julia
-list_view = ListView(Orientation::HORIZONTAL, SelectionMode::SINGLE);
-
-list_view.get_selection_model()->connect_signal_selection_changed(
-    [](SelectionModel&, int32_t item_i, int32_t n_items){
-        std::cout << "selected: " << item_i << std::endl;
-    }
-);
+list_view = ListView()
+child_01_it = push_back!(list_view, Label("Child #01"))
+child_02_it = push_back!(list_view, Lable("Child #02"))
+child_03_it = push_back!(list_view, Lable("Child #03"))
 ```
 
-This way of accessing the `SelectionModel`, then connecting to one of its signals to monitor the underlying widget will be the same for any of the selectable widgets, as all of them provide `get_selection_model`, which returns a `SelectionModel*`.
+If we now want to insert an item as a child of `Child #02`, we use its operator as the optional argument:
+
+```julia
+nested_child_01_it = push_back!(list_view, Label("Nested Child #01"), child_02_it)
+```
+
+To insert a new widget as the child of this already nested list, we use its iterator. Through this mechanism, we can create arbitrarily deep nested lists.
+
+If we do not want a nested list, we can instead completely ignore the iterator. Specifying no iterator means we will be inserting items into the outer most list.
 
 ---
 
 ## GridView
 
-\a{GridView} supports many of the same functions as `ListView`. Instead of displaying its children in a nested list, it shows them in a grid:
+[`GridView`](@ref) supports many of the same functions as `ListView`, including `push_back!`, `push_front!`, and `insert!`. Unlike `ListView`, `GridView` cannot be nested, as it instead displays its children in a **uniform grid**.
 
-\image html grid_view.png
+`GridView`s constructor also takes an orientation as well as the selection mode. The orientation determines in which order elements will be shown, consider the next two images, the first of which is a `GridView` whose orientation is `ORIENTATION_HORIZONTAL`, while the latters is `ORIENTATION_VERTICAL`:
 
-\how_to_generate_this_image_begin
-```julia
-auto grid_view = GridView(Orientation::HORIZONTAL, SelectionMode::SINGLE);
-grid_view.set_max_n_columns(4);
+![](../resources/grid_view_horizontal.png)
+*A horizontal `GridView`*
+![](../resources/grid_view_vertical.png)
+*A vertical `GridView`
 
-auto child = [](size_t id)
-{
-    auto overlay = Overlay();
-    overlay.set_child(Separator());
+!!! details "How to generate this image"
+    ```julia
+    function generate_child(label::String) ::Widget
 
-    auto label = Label((id < 10 ? "0" : "") + std::to_string(id));
-    label.set_alignment(Alignment::CENTER);
-    overlay.add_overlay(label);
+        child = Frame(Overlay(Separator(), Label(label)))
+        set_size_request!(child, Vector2f(50, 50))
+        set_expand!(child, false)
+        return AspectFrame(1, child)
+    end
 
-    auto frame = Frame();
-    frame.set_child(overlay);
-    frame.set_size_request({50, 50});
+    main() do app::Application
+        window = Window(app)
 
-    auto aspect_frame = AspectFrame(1);
-    aspect_frame.set_child(frame);
+        grid_view = GridView(ORIENTATION_VERTICAL) # or `ORIENTATION_HORIZONTAL`
+        set_expand!(grid_view, true)
 
-    return aspect_frame;
-};
+        for i in 1:9
+            push_back!(grid_view, generate_child("0$i"))
+        end
 
-for (size_t i = 0; i < 7; ++i)
-    grid_view.push_back(child(i));
+        separator = Separator()
+        set_expand!(separator, true)
+        set_expand!(grid_view, false)
 
-window.set_child(grid_view);
-```
-\how_to_generate_this_image_end
+        set_child!(window, vbox(separator, grid_view))
+        present!(window)
+    end
+    ```
 
-Items are dynamically allocated to rows and columns based on the space available to the `GridView` and the number of children.
-
-We can use `GridView::set_min_n_columns` and `GridView::set_max_n_columns` to force one of either row or columns (depending on `Orientation`) to adhere to the given limit, which gives us more control over how the children are arranged.
-
-Other than this, `GridView` supports the same functions as `ListView`, including `push_front`, `push_back`, `insert`, `get_selection_model`, `set_show_separators`, etc.
+We can control the exact distribution of widgets more closely by using `set_max_n_columns!` and `set_min_n_columns!`, which make it so the grid view will always have the given number of columns (or rows, for a horizontal `GridView`).
 
 ---
 
 ## Column View
 
-\a{ColumnView} is used to display widgets as a table, which is split into rows and columns. Each column has a title.
+[`ColumnView`](@ref) is used to display widgets as a table, with rows and columns. Each column has a title, which uniquely identifies it.
 
 To fill our `ColumnView`, we first instance it, then allocate a number of columns:
 
 ```julia
-auto column_view = ColumnView(SelectionMode::SINGLE);
-column_view.push_back_column("Column 01");
-column_view.push_back_column("Column 02");
-column_view.push_back_column("Column 03");
+column_view = ColumnView()
+
+column_01 = push_back_column!(column_view, "Column #01")
+column_02 = push_back_column!(column_view, "Column #02")
+column_03 = push_back_column!(column_view, "Column #03")
 ```
 
-To add a column at a later point, either to the start, end, or at a specific position, we use `ColumnView::push_front_column`, `ColumnView::push_back_column`, or `ColumnView::insert_column`, respectively. Each of these functions takes as their argument the title used for the column.
+We can add a column at any point, even after rows have been added. Along with `push_back_column!`, `push_front_column!`, `insert_column!` are also available. 
+All of these functions return an object of type `ColumnViewColumn`.
 
-Once we have all our columns set up, we can add child widgets either by using \a{ColumnView::set_widget} or the convenience function `push_back_row`, which adds a row of widgets to the end of the table:
+To add a widget into the n-th row (1-based) of a `ColumnViewColumn`, we use `set_widget_at!`
 
 ```julia
-column_view.push_back_row(Label("1 | 1"), Label("1 | 2"), Label("1 | 3"));
-column_view.push_back_row(Label("2 | 1"), Label("2 | 2"), Label("2 | 3"));
-column_view.push_back_row(Label("3 | 1"), Label("3 | 2"), Label("3 | 3"));
+# add 3 labels into column 1 row 1 - 3
+set_widget_at!(column_view, column_01, Label("01"))
+set_widget_at!(column_view, column_01, Label("02"))
+set_widget_at!(column_view, column_01, Label("03"))
 ```
 
-\image html column_view_hello_world.png
+![](../resources/column_view.png)
 
-\how_to_generate_this_image_begin
+!!! details "How to generate this image"
+    ```julia
+    main() do app::Application
+
+        println("called")
+
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+
+        column_view = ColumnView()
+
+        column_01 = push_back_column!(column_view, "Column #01")
+        column_02 = push_back_column!(column_view, "Column #02")
+        column_03 = push_back_column!(column_view, "Column #03")
+
+        column_i = 1
+        for column in [column_01, column_02, column_03]
+            for row_i in 1:9
+                set_widget_at!(column_view, column, row_i, Label("0$column_i | 0$row_i"))
+            end
+            column_i = column_i + 1
+        end
+
+        set_expand!(column_view, true)
+        set_child!(window, column_view)
+        present!(window)
+    end
+    ```
+
+Any rows that do not yet have widgets will be backfilled and appear empty. If we loose track of the `ColumnViewColumn` instance returned when adding a new column, we can retrieve it using `get_column_at` or `get_column_with_title`, the latter of which takes the unique title we chose when adding the column.
+
+Since most of the time we will want all cells in a row to contain a widget, we can also use `push_back_row!`, `push_front_row`, or `insert_row!`, which insert n widgets at once, where n is the number of columns:
+
 ```julia
-auto column_view = ColumnView(SelectionMode::SINGLE);
-auto col1 = column_view.push_back_column("Column 01");
-auto col2 = column_view.push_back_column("Column 02");
-auto col3 = column_view.push_back_column("Column 03");
-
-column_view.push_back_row(Label("1 | 1"), Label("1 | 2"), Label("1 | 3"));
-column_view.push_back_row(Label("2 | 1"), Label("2 | 2"), Label("2 | 3"));
-column_view.push_back_row(Label("3 | 1"), Label("3 | 2"), Label("3 | 3"));
-
-column_view.set_show_row_separators(true);
-column_view.set_show_column_separators(true);
-column_view.set_expand(true);
-
-for (auto* column : {&col1, &col2, &col3})
-    column->set_is_resizable(true);
-
-window.set_child(column_view);
+# add 1st widget to 1st column, 2nd widget to 2nd column, etc.
+push_back_row!(column_view, Label("Column 01 Child"), Label("Column 02 Child"), Label("Column 03 Child"))
 ```
-\how_to_generate_this_image_end
 
-Here, we use `Label`s as items in the `ColumnView`, but any arbitrarily complex widget can be used. Rows or columns do not require one specific widget type, we can put any type of widget at whatever position we want.
+This is a more convenient way to fill the column view, though if we later want to edit it, we will have to use `set_widget_at!` to override widgets in any rows.
+
+`ColumnViewColumn` has a number of other features, we can make it so the user can freely resize each column by setting `set_resizable!` to `true`, or we can force each column to have an exact width using `set_fixed_width!`, which takes a number of pixels.
 
 ---
 
@@ -1707,9 +1747,9 @@ We add a page using `add_child!`, which takes any widget, and the pages title. T
 ```julia
 stack = Stack()
 
-id_01 = add_child!(stack, generate_child("Child #01"), "Page #01")
-id_02 = add_child!(stack, generate_child("Child #02"), "Page #02")
-id_03 = add_child!(stack, generate_child("Child #03"), "Page #03")
+id_01 = add_child!(stack, #= Page Widget #01 =#, "Page #01")
+id_02 = add_child!(stack, #= Page Widget #02 =#, "Page #02")
+id_03 = add_child!(stack, #= Page Widget #03 =#, "Page #03")
 ```
 
 To check which page is currently visible, we use `get_visible_child`, which returns that pages ID. If we loose track of a pages ID, we can retrieve the ID of a stack page at a given position using `get_child_at`.
@@ -1719,129 +1759,84 @@ To keep track of which page is currently selected, we should connect to the stac
 ```julia
 stack = Stack()
 stack_model = get_selection_model(stack)
-connect_signal_selection_changed!(selection_model, stack) do x::SelectionModel, position::Integer, n_items::Integer, stack::Stack
+connect_signal_selection_changed!(stack_model, stack) do x::SelectionModel, position::Integer, n_items::Integer, stack::Stack
     println("Current stack page is now: $(get_child_at(stack, position))")
 end
 ```
 
-Where we provided the `Stack` instance to the selection models signal handler as the optional `Data_t` argument.
+Where we provided the `Stack` instance to the selection models signal handler as the optional `data` argument.
+
+While we can change the currently active page by `set_visible_child!`, our users do not. To allow them to change the page of a `Stack`, we either need
+to provide another widget and modify the stack from within its signals, or we can use one of two widgets whose only purpose is to choose the page of a stack: 
+`StackSwitcher` and `StackSidebar`.
 
 ### StackSwitcher
 
-\a{StackSwitcher} presents the user with a row of buttons, each of which use the corresponding stack pages title:
+[`StackSwitcher`](@ref) presents the user with a row of buttons, each of which use the corresponding stack pages title:
 
-```julia
-auto stack = Stack();
-stack.add_child(/* child #01 */, "Page 01");
-stack.add_child(/* child #02 */, "Page 02");
-stack.add_child(/* child #03 */, "Page 03");
+![](../resources/stack_switcher.png)
 
-auto stack_switcher = StackSwitcher(stack);
+!!! details "How to generate this image"
+    ```julia
+    function generate_child(label::String) ::Widget
+        child = Frame(Overlay(Separator(), Label(label)))
+        set_size_request!(child, Vector2f(150, 150))
+        set_margin!(child, 10)
+        return child
+    end
 
-auto box = Box(Orientation::VERTICAL);
-box.push_back(stack);
-box.push_back(stack_switcher);
-```
+    main() do app::Application
+        window = Window(app)
 
-\image html stack_switcher.png
+        stack = Stack()
 
-\how_to_generate_this_image_begin
-```julia
-auto stack = Stack();
-auto child = [](size_t id)
-{
-    auto overlay = Overlay();
-    overlay.set_child(Separator());
+        add_child!(stack, generate_child("Child #01"), "Page #01")
+        add_child!(stack, generate_child("Child #02"), "Page #02")
+        add_child!(stack, generate_child("Child #03"), "Page #03")
 
-    auto label = Label(std::string("Stack Child #") + (id < 10 ? "0" : "") + std::to_string(id));
-    label.set_alignment(Alignment::CENTER);
-    overlay.add_overlay(label);
+        stack_model = get_selection_model(stack)
+        connect_signal_selection_changed!(stack_model, stack) do x::SelectionModel, position::Integer, n_items::Integer, stack::Stack
+            println("Current stack page is now: $(get_child_at(stack, position))")
+        end
 
-    auto frame = Frame();
-    frame.set_child(overlay);
-    frame.set_size_request({300, 300});
+        set_child!(window, vbox(stack, StackSwitcher(stack))) # create StackSwitcher from stack
+        present!(window)
+    end
+    ```
 
-    auto aspect_frame = AspectFrame(1);
-    aspect_frame.set_child(frame);
-
-    return aspect_frame;
-};
-
-stack.add_child(child(01), "Page 01");
-stack.add_child(child(02), "Page 02");
-stack.add_child(child(01), "Page 03");
-
-auto stack_switcher = StackSwitcher(stack);
-
-stack.set_expand(true);
-stack.set_margin(10);
-stack_switcher.set_expand_vertically(false);
-
-auto box = Box(Orientation::VERTICAL);
-box.push_back(stack);
-box.push_back(stack_switcher);
-window.set_child(box);
-```
-\how_to_generate_this_image_end
-
-`StackSwitcher` has no other methods, it simply provides a user interface to control a `Stack`.
+`StackSwitcher` has no other methods or properties, though it provides the signals that all widgets share.
 
 ### StackSidebar
 
-\a{StackSidebar} has the same purpose as `StackSwitcher`, though it displays the list of stack pages as a vertical list:
+[`StackSidebar`](@ref) has the same purpose as `StackSwitcher`, though it displays the list of stack pages as a vertical list:
 
-```julia
-auto stack = Stack();
-stack.add_child(/* child #01 */, "Page 01");
-stack.add_child(/* child #02 */, "Page 02");
-stack.add_child(/* child #03 */, "Page 03");
+!!! details "How to generate this image"
+    ```julia
+    function generate_child(label::String) ::Widget
+        child = Frame(Overlay(Separator(), Label(label)))
+        set_size_request!(child, Vector2f(150, 150))
+        set_margin!(child, 10)
+        return child
+    end
 
-auto stack_sidebar = StackSidebar(stack);
+    main() do app::Application
+        window = Window(app)
 
-auto box = Box(Orientation::HORIZONTAL);
-box.push_back(stack);
-box.push_back(stack_sidebar);
-```
+        stack = Stack()
 
-\image html stack_sidebar.png
+        add_child!(stack, generate_child("Child #01"), "Page #01")
+        add_child!(stack, generate_child("Child #02"), "Page #02")
+        add_child!(stack, generate_child("Child #03"), "Page #03")
 
-\how_to_generate_this_image_begin
-```julia
-auto stack = Stack();
-auto child = [](size_t id)
-{
-    auto overlay = Overlay();
-    overlay.set_child(Separator());
+        stack_model = get_selection_model(stack)
+        connect_signal_selection_changed!(stack_model, stack) do x::SelectionModel, position::Integer, n_items::Integer, stack::Stack
+            println("Current stack page is now: $(get_child_at(stack, position))")
+        end
 
-    auto label = Label(std::string("Stack Child #") + (id < 10 ? "0" : "") + std::to_string(id));
-    label.set_alignment(Alignment::CENTER);
-    overlay.add_overlay(label);
-
-    auto frame = Frame();
-    frame.set_child(overlay);
-    frame.set_size_request({300, 300});
-
-    auto aspect_frame = AspectFrame(1);
-    aspect_frame.set_child(frame);
-
-    return aspect_frame;
-};
-
-stack.add_child(child(01), "Page 01");
-stack.add_child(child(02), "Page 02");
-stack.add_child(child(01), "Page 03");
-
-auto stack_sidebar = StackSidebar(stack);
-
-stack.set_expand(true);
-stack.set_margin(10);
-
-auto box = Box(Orientation::HORIZONTAL);
-box.push_back(stack);
-box.push_back(stack_sidebar);
-window.set_child(box);
-```
-\how_to_generate_this_image_end
+        set_child!(window, vbox(stack, StackSwitcher(stack))) # Create StackSidebar from stack
+        present!(window)
+    end
+    ```
 
 Other than this visual component, its purpose is identical to that of `StackSwitcher`.
 
@@ -1849,11 +1844,12 @@ Other than this visual component, its purpose is identical to that of `StackSwit
 
 When changing which of the stacks pages is currently shown, regardless of how that selection was triggered, an animation transitioning from one page to the other plays. Similar to `Revealer`, we can influence the type and speed of animation in multiple ways:
 
-+ `Stack::set_transition_duration` governs how long the animation will take, thus influencing its speed
-+ `Stack::set_interpolate_size`, if set to `true`, makes it such that while the transition animation plays, the stack will change from the size of the previous child to the size of the current child gradually. If set to `false`, this size change happens instantly
-+ `Stack::set_animation_type` governs the type of animation
++ `set_transition_duration!` choose how long the animation will take to complete
++ `set_interpolate_size!`, if set to `true`, makes it such that while the transition animation plays, the stack will change from the size of the previous child to the size of the current child gradually. If set to `false`, this size change happens instantly
++ `set_animation_type!` governs the type of animation, which is one of the enum values of `StackTransitionType`.
 
-Mousetrap provides a large number of different animation, which are represented by the enum \a{StackTransitionType}. These include cross-fading, sliding, and rotating between pages. For a full list of animation types, see the \link mousetrap::StackTransitionType corresponding documentation page\endlink, as `Stack` offers an even larger selection of animations than `Revealer`.
+If we want all of the stacks children to allocate the same size, we can set `set_is_vertically_homogeneous!` and `set_is_horizonally_homogeneous!` to `true`, in which case 
+the stack will assume the height or widget of its largest child, respectively.
 
 ---
 
@@ -2153,9 +2149,4 @@ Now that `Placeholder` is a proper widget, all of mousetraps functions, includin
 Using this technique, we can build an application piece by piece. A compound widget itself can be made up of multiple other compound widgets, an in some way the entire application itself is just one giant compound widget, with the `Window` as the top-level widget.
 
 Of course, we are only able to interact with the compound widget by interacting with each of its components, which is fairly limiting. In the next chapter, we will change this. By learning about **event handling**, we will be able to react to any kind of user-interaction, giving us the last tool needed to create an application that isn't just a collection of pre-made widgets, but something we have built ourself.
-
-
-
-
-
 

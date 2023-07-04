@@ -4868,17 +4868,10 @@ set_was_modified!(::TextView, ::Bool)
 Set the flag indicating that a text buffer was modified.
 """
 
-@document set_widget! """
-```
-set_widget!(::ColumnView, ::ColumnViewColumn, row_i::Integer, ::Widget) 
-```
-Insert a widget in column at given row. If the row does not yet exist, empty rows will be inserted until thet column view 
-has enough rows to accomodate the row index.
-"""
-
 @document set_widget_at! """
 ```
 set_widget_at!(::ListView, index::Integer, ::Widget, [::ListViewIterator]) 
+set_widget_at!(::ColumnView, ::ColumnViewColumn, row_i::Integer, ::Widget)
 ```
 Replace the widget at given position.
 """

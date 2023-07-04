@@ -1179,6 +1179,10 @@ mousetrap.get_can_respond_to_input
 ```@docs
 mousetrap.get_centroid
 ```
+## `get_child_at`
+```@docs
+mousetrap.get_child_at
+```
 ## `get_child_position`
 ```@docs
 mousetrap.get_child_position
@@ -1254,10 +1258,6 @@ mousetrap.get_destroy_with_parent
 ## `get_detailed_description`
 ```@docs
 mousetrap.get_detailed_description
-```
-## `get_display_mode`
-```@docs
-mousetrap.get_display_mode
 ```
 ## `get_editable`
 ```@docs
@@ -1515,6 +1515,10 @@ mousetrap.get_margin_top
 ```@docs
 mousetrap.get_max_n_columns
 ```
+## `get_max_value`
+```@docs
+mousetrap.get_max_value
+```
 ## `get_max_width_chars`
 ```@docs
 mousetrap.get_max_width_chars
@@ -1722,6 +1726,10 @@ mousetrap.get_show_row_separators
 ## `get_show_separators`
 ```@docs
 mousetrap.get_show_separators
+```
+## `get_show_text`
+```@docs
+mousetrap.get_show_text
 ```
 ## `get_show_title_buttons`
 ```@docs
@@ -2679,10 +2687,6 @@ mousetrap.set_destroy_with_parent!
 ```@docs
 mousetrap.set_detailed_description!
 ```
-## `set_display_mode!`
-```@docs
-mousetrap.set_display_mode!
-```
 ## `set_editable!`
 ```@docs
 mousetrap.set_editable!
@@ -2707,9 +2711,9 @@ mousetrap.set_end_child!
 ```@docs
 mousetrap.set_end_child_resizable!
 ```
-## `set_end_child_shrinkable`
+## `set_end_child_shrinkable!`
 ```@docs
-mousetrap.set_end_child_shrinkable
+mousetrap.set_end_child_shrinkable!
 ```
 ## `set_expand!`
 ```@docs
@@ -3083,9 +3087,9 @@ mousetrap.set_secondary_icon!
 ```@docs
 mousetrap.set_selectable!
 ```
-## `set_selected`
+## `set_selected!`
 ```@docs
-mousetrap.set_selected
+mousetrap.set_selected!
 ```
 ## `set_should_draw_value!`
 ```@docs
@@ -3114,6 +3118,10 @@ mousetrap.set_show_row_separators
 ## `set_show_separators`
 ```@docs
 mousetrap.set_show_separators
+```
+## `set_show_text!`
+```@docs
+mousetrap.set_show_text!
 ```
 ## `set_show_title_buttons!`
 ```@docs
@@ -3375,9 +3383,9 @@ mousetrap.set_start_child!
 ```@docs
 mousetrap.set_start_child_resizable!
 ```
-## `set_start_child_shrinkable`
+## `set_start_child_shrinkable!`
 ```@docs
-mousetrap.set_start_child_shrinkable
+mousetrap.set_start_child_shrinkable!
 ```
 ## `set_startup_notification_identifier!`
 ```@docs
@@ -3562,10 +3570,6 @@ mousetrap.set_visible_child!
 ## `set_was_modified!`
 ```@docs
 mousetrap.set_was_modified!
-```
-## `set_widget!`
-```@docs
-mousetrap.set_widget!
 ```
 ## `set_widget_at!`
 ```@docs

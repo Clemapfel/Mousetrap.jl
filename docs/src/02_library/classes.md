@@ -24,7 +24,7 @@ Action
 + [`mousetrap.disconnect_signal_activated!`](@ref)
 + [`mousetrap.emit_signal_activated`](@ref)
 + [`mousetrap.get_signal_activated_blocked`](@ref)
-+ [`mousetrap.set_signal_activated_blocked!`()](@ref)
++ [`mousetrap.set_signal_activated_blocked!`](@ref)
 ---
 ## Adjustment
 ```@docs
@@ -432,7 +432,7 @@ ColumnView
 + [`mousetrap.set_show_column_separators`](@ref)
 + [`mousetrap.set_show_row_separators`](@ref)
 + [`mousetrap.set_single_click_activate!`](@ref)
-+ [`mousetrap.set_widget!`](@ref)
++ [`mousetrap.set_widget_at!`](@ref)
 + [`mousetrap.connect_signal_activate!`](@ref)
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -489,7 +489,7 @@ ColumnViewColumn
 + [`mousetrap.set_is_resizable!`](@ref)
 + [`mousetrap.set_is_visible!`](@ref)
 + [`mousetrap.set_title!`](@ref)
-+ [`mousetrap.set_widget!`](@ref)
++ [`mousetrap.set_widget_at!`](@ref)
 ---
 ## DragEventController
 ```@docs
@@ -527,7 +527,7 @@ DropDown
 + [`mousetrap.push_front!`](@ref)
 + [`mousetrap.remove!`](@ref)
 + [`mousetrap.set_always_show_arrow!`](@ref)
-+ [`mousetrap.set_selected`](@ref)
++ [`mousetrap.set_selected!`](@ref)
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.connect_signal_hide!`](@ref)
 + [`mousetrap.connect_signal_map!`](@ref)
@@ -1324,6 +1324,7 @@ LevelBar
 #### Functions that interact with this type:
 + [`mousetrap.add_marker!`](@ref)
 + [`mousetrap.get_inverted`](@ref)
++ [`mousetrap.get_max_value`](@ref)
 + [`mousetrap.get_min_value`](@ref)
 + [`mousetrap.get_mode`](@ref)
 + [`mousetrap.get_orientation`](@ref)
@@ -1718,13 +1719,13 @@ Paned
 + [`mousetrap.remove_start_child!`](@ref)
 + [`mousetrap.set_end_child!`](@ref)
 + [`mousetrap.set_end_child_resizable!`](@ref)
-+ [`mousetrap.set_end_child_shrinkable`](@ref)
++ [`mousetrap.set_end_child_shrinkable!`](@ref)
 + [`mousetrap.set_has_wide_handle!`](@ref)
 + [`mousetrap.set_orientation!`](@ref)
 + [`mousetrap.set_position!`](@ref)
 + [`mousetrap.set_start_child!`](@ref)
 + [`mousetrap.set_start_child_resizable!`](@ref)
-+ [`mousetrap.set_start_child_shrinkable`](@ref)
++ [`mousetrap.set_start_child_shrinkable!`](@ref)
 ---
 ## PinchZoomEventController
 ```@docs
@@ -1910,16 +1911,16 @@ PopoverMenu
 ProgressBar
 ```
 #### Functions that interact with this type:
-+ [`mousetrap.get_display_mode`](@ref)
 + [`mousetrap.get_fraction`](@ref)
 + [`mousetrap.get_is_inverted`](@ref)
 + [`mousetrap.get_orientation`](@ref)
++ [`mousetrap.get_show_text`](@ref)
 + [`mousetrap.get_text`](@ref)
 + [`mousetrap.pulse`](@ref)
-+ [`mousetrap.set_display_mode!`](@ref)
 + [`mousetrap.set_fraction!`](@ref)
 + [`mousetrap.set_is_inverted!`](@ref)
 + [`mousetrap.set_orientation!`](@ref)
++ [`mousetrap.set_show_text!`](@ref)
 + [`mousetrap.set_text!`](@ref)
 ---
 ## RGBA
@@ -2436,6 +2437,7 @@ Stack
 ```
 #### Functions that interact with this type:
 + [`mousetrap.add_child!`](@ref)
++ [`mousetrap.get_child_at`](@ref)
 + [`mousetrap.get_is_horizontally_homogeneous`](@ref)
 + [`mousetrap.get_is_vertically_homogeneous`](@ref)
 + [`mousetrap.get_selection_model`](@ref)
@@ -2995,7 +2997,6 @@ Widget
 + [`mousetrap.set_tooltip_text!`](@ref)
 + [`mousetrap.set_tooltip_widget!`](@ref)
 + [`mousetrap.set_vertical_alignment!`](@ref)
-+ [`mousetrap.set_widget!`](@ref)
 + [`mousetrap.set_widget_at!`](@ref)
 + [`mousetrap.show!`](@ref)
 + [`mousetrap.unparent!`](@ref)

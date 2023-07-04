@@ -1413,6 +1413,11 @@ module mousetrap
     @add_signal_shutdown Application
 
     function main(f; application_id::String = "mousetrap.jl") ::Int64
+
+        if isinteractive()
+            @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. As of version $VERSION, interactive use of mousetrap is discouraged, side-effects may occurr."
+        end
+
         app = Application(application_id)
         typed_f = TypedFunction(f, Any, (Application,))
         connect_signal_activate!(app)  do app::Application
@@ -3807,12 +3812,12 @@ module mousetrap
     export push_back_column!
 
     function push_front_column!(column_view::ColumnView, title::String) ::ColumnViewColumn 
-        ColumnViewColumn(detail.push_front_column!(column_view._internal, title))
+        return ColumnViewColumn(detail.push_front_column!(column_view._internal, title))
     end
     export push_front_column!
 
     function insert_column!(column_view::ColumnView, index::Integer, title::String) ::ColumnViewColumn 
-        ColumnViewColumn(detail.insert_column!(column_view._internal, from_julia_index(index), title))
+        return ColumnViewColumn(detail.insert_column!(column_view._internal, from_julia_index(index), title))
     end
     export insert_column!
 
@@ -3832,10 +3837,10 @@ module mousetrap
     has_column_with_title(column_view::ColumnView, title::String) ::Bool = detail.get_column_with_title(column_view._internal, title)
     export has_column_with_title
 
-    function set_widget!(column_view::ColumnView, column::ColumnViewColumn, row_i::Integer, widget::Widget)
-        detail.set_widget!(column_view._internal, column._internal, from_julia_index(row_i), as_widget_pointer(widget))
+    function set_widget_at!(column_view::ColumnView, column::ColumnViewColumn, row_i::Integer, widget::Widget)
+        detail.set_widget_at!(column_view._internal, column._internal, from_julia_index(row_i), as_widget_pointer(widget))
     end
-    export set_widget!
+    export set_widget_at!
 
     function push_back_row!(column_view::ColumnView, widgets::Widget...)
 

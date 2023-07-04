@@ -5,31 +5,29 @@ Pkg.activate(".")
 using mousetrap 
 @info "Done."
 
-function generate_child(label::String) ::Widget
-    
-    child = Frame(Overlay(Separator(), Label(label)))
-    set_size_request!(child, Vector2f(150, 150))
-    set_margin!(child, 10)
-    return child
-end
-
 main(; application_id = "stack.example") do app::Application
+
+    println("called")
 
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    stack = Stack()
+    column_view = ColumnView()
 
-    add_child!(stack, generate_child("Child #01"), "Page #01")
-    add_child!(stack, generate_child("Child #02"), "Page #02")
-    add_child!(stack, generate_child("Child #03"), "Page #03")
+    column_01 = push_back_column!(column_view, "Column #01")
+    column_02 = push_back_column!(column_view, "Column #02")
+    column_03 = push_back_column!(column_view, "Column #03")
 
-    stack = Stack()
-    stack_model = get_selection_model(stack)
-    connect_signal_selection_changed!(stack_model, stack) do x::SelectionModel, position::Integer, n_items::Integer, stack::Stack
-        println("Current stack page is now: $(get_child_at(stack, position))")
+    n_rows = 9
+    column_i = 1
+    for column in [column_01, column_02, column_03]
+        for row_i in 1:n_rows
+            set_widget_at!(column_view, column, row_i, Label("0$column_i | 0$row_i"))
+        end
+        column_i = column_i + 1
     end
 
-    set_child!(window, hbox(stack, StackSidebar(stack)))
+    set_expand!(column_view, true)
+    set_child!(window, column_view)
     present!(window)
 end

@@ -183,13 +183,6 @@ PAN_DIRECTION_RIGHT
 PAN_DIRECTION_UP
 ```
 ---
-## ProgressBarDisplayMode
-```@docs
-ProgressBarDisplayMode
-PROGRESS_BAR_DISPLAY_MODE_SHOW_PERCENTAGE
-PROGRESS_BAR_DISPLAY_MODE_SHOW_TEXT
-```
----
 ## PropagationPhase
 ```@docs
 PropagationPhase
