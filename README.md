@@ -2,22 +2,34 @@
 
 # Mousetrap
 
-Mousetrap is a GUI library for `Julia`. It, and its [C++-component of the same name](https://github.com/clemapfel/mousetrap), fully wrap the [GTK4](https://docs.gtk.org/gtk4/) GUI library, *vastly* simplyfing its interface to improve ease-of-use without sacrificing flexibility.
+Mousetrap is a GUI library for Julia. It, and its [C++-component of the same name](https://github.com/clemapfel/mousetrap), fully wrap [GTK4](https://docs.gtk.org/gtk4/), *vastly* simplifying its interface to improve ease-of-use without sacrificing flexibility.
 
-It aims to give developers of any skill level the tools to start creating complex applications 
-with as little time and effort as possible.
+It aims to give developers of all skill levels the tools to start creating complex GUI applications with little effort.
 
-> Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability and portability may be affected. Consider participating in the development by[opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error (which - as of now - will most likely happen)
+> **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability and portability may be affected. Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen)
 
 ---
 
 ## Features
-+ Create complex GUI application for Linux and Windows
-+ Choose from over 40 different kinds of widgets for every occasion
-+ Powerful image processing facilities, well-suited for image manipulation programs
++ Create complex GUI application for Linux, Windows, and MacOS
++ Choose from over 40 different kinds of pre-made widgets for every occasion
 + Supports mice, keyboards, touchscreens, touchpads, and stylus devices
-+ Fully abstracted OpenGL interface, allows for high-performance, hardware-accelerated rendering of custom shapes
-+ Hand-written manual & extensive documentation: every exported symbol is documented
++ Image processing facilities, well-suited for image manipulation programs
++ Fully abstracted OpenGL interface, allows for high-performance, hardware-accelerated rendering of custom shapes / shaders
++ [Hand-written manual and extensive documentation](todo): every exported symbol is documented!
+---
+
+## Supported Platforms
+
+| Platform         | Basic GUI Component | Native Rendering Component |
+|------------------|--------------------|----------------------------|
+| Linux            | `✓`                | `✓`                        |
+| FreeBSD          | `✓`                | `✓`                        | 
+| Windows (64-bit) | `✓`                | `✓`                        |
+| Windows (32-bit) | `✓`                | `✕`                        |
+| MacOS            | `✕*`               | `✕`                        |
+
+* The GUI component for MacOS is planned to release in the future
 
 ---
 
@@ -25,11 +37,11 @@ with as little time and effort as possible.
 
 (in order of priority, highest first)
 
-+ Simplify installation process to `] add mousetrap` for all operating systems
-+ Add support for loading custom themes
++ Simplify installation process to `] add mousetrap`
++ Add support for loading custom themes by exposing the CSS interface
 + Allow bundling of the Julia runtime and all necessary binary dependencies into a portable executable
 + Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored at runtime C-side
-+ Implement Drag & Drop of files, images, and widgets
++ Implement drag & drop for files, images, and widgets
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
 + Allow for audio playback and manipulating audio data
 + Add an event controller to capture video game controller / joystick events
@@ -58,9 +70,9 @@ end
 
 ```julia
 list = ListView()
-push_back!(list_view, Button())
-push_back!(list_view, Label("Label")) 
-push_back!(list_view, Entry())
+push_back!(list, Button())
+push_back!(list, Label("Label")) 
+push_back!(list, Entry())
 ```
 ![](todo)
 
@@ -70,7 +82,7 @@ push_back!(list_view, Entry())
 
 ```julia
 file_chooser = FileChooser()
-on_accept!(file_chooser) do self::FileChooser, files::Vector{FileDescriptor}
+on_accept!(file_chooser) do self::FileChooser, files
     println("selected file $(files[1])")
 end
 present!(file_chooser)
@@ -114,9 +126,11 @@ Documentation is available [here](https://clemens-cords.com/mousetrap_jl). This 
 
 The Julia- and C++-component of mousetrap were designed and implement by [C.Cords](https://clemens-cords.com).
 
-Consider donating to supports the continued development of this library [here](TODO). The goal is for 
-mousetrap to be fully featured and completely stable when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of [stable, easy-to-use](https://github.com/JuliaGraphics/Gtk.jl/issues)
-GUI libraries are currently the largest factors as to why Julia is ill-suited for front-end development, which mousetrap aims to change
+Consider donating to support the continued development of this library [here](TODO). 
+
+The goal is for 
+mousetrap to be fully-featured and stable when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of [fully featured, easy-to-use](https://github.com/JuliaGraphics/Gtk.jl/issues)
+GUI libraries are currently the largest factors as to why Julia is ill-suited for front-end development. Mousetrap aims to change this.
 
 ---
 

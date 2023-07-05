@@ -1,3 +1,5 @@
+const __MOUSETRAP_JULIA_BINDING_OVERRIDE = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
+
 module mousetrap
 
     const VERSION = v"0.1.0"
@@ -8,8 +10,12 @@ module mousetrap
     module detail
         using CxxWrap, Pkg.Artifacts
         function __init__() @initcxx end
-        #@wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
-        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
+
+        if isdefined(Main, :__MOUSETRAP_JULIA_BINDING_OVERRIDE)
+            @wrapmodule(Main.__MOUSETRAP_JULIA_BINDING_OVERRIDE)
+        else
+            @wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
+        end
     end
 
 ####### typed_function.jl
