@@ -2,7 +2,7 @@
 
 # Mousetrap
 
-Mousetrap is a GUI library for Julia. It, and its [C++-component of the same name](https://github.com/clemapfel/mousetrap), fully wrap [GTK4](https://docs.gtk.org/gtk4/), *vastly* simplifying its interface to improve ease-of-use without sacrificing flexibility.
+Mousetrap is a GUI library for Julia. It, and its [C++-component of the same name](https://github.com/clemapfel/mousetrap), fully wrap [GTK4](https://docs.gtk.org/gtk4/) (which is written in C), *vastly* simplifying its interface to improve ease-of-use without sacrificing flexibility.
 
 It aims to give developers of all skill levels the tools to start creating complex GUI applications with little effort.
 
@@ -11,8 +11,8 @@ It aims to give developers of all skill levels the tools to start creating compl
 ---
 
 ## Features
-+ Create complex GUI application for Linux, Windows, and MacOS
-+ Choose from over 40 different kinds of pre-made widgets for every occasion
++ Create complex GUI application for Linux, Windows, and MacOS*
++ Choose from over 40 different kinds of pre-made widgets, or create your own
 + Supports mice, keyboards, touchscreens, touchpads, and stylus devices
 + Image processing facilities, well-suited for image manipulation programs
 + Fully abstracted OpenGL interface, allows for high-performance, hardware-accelerated rendering of custom shapes / shaders
@@ -40,7 +40,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 + Simplify installation process to `] add mousetrap`
 + Add support for loading custom themes by exposing the CSS interface
 + Allow bundling of the Julia runtime and all necessary binary dependencies into a portable executable
-+ Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored at runtime C-side
++ Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side
 + Implement drag & drop for files, images, and widgets
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
 + Allow for audio playback and manipulating audio data
@@ -129,7 +129,7 @@ The Julia- and C++-component of mousetrap were designed and implement by [C.Cord
 Consider donating to support the continued development of this library [here](TODO). 
 
 The goal is for 
-mousetrap to be fully-featured and stable when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of [fully featured, easy-to-use](https://github.com/JuliaGraphics/Gtk.jl/issues)
+mousetrap to be fully-featured and stable when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of a [fully featured, easy-to-use](https://github.com/JuliaGraphics/Gtk.jl/issues)
 GUI libraries are currently the largest factors as to why Julia is ill-suited for front-end development. Mousetrap aims to change this.
 
 ---
@@ -137,3 +137,12 @@ GUI libraries are currently the largest factors as to why Julia is ill-suited fo
 ## License
 
 Mousetrap is distributed under [lGPL-3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html). This means it can be used in both free, open-source, as well as commercial, closed-source software.
+
+---
+
+## Citation
+
+If you are using mousetrap for research or work, please cite it as follows:
+```
+TODO
+```             

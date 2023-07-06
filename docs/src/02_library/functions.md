@@ -2747,9 +2747,9 @@ mousetrap.set_file!
 ```@docs
 mousetrap.set_file_chooser_action!
 ```
-## `set_fixed_width`
+## `set_fixed_width!`
 ```@docs
-mousetrap.set_fixed_width
+mousetrap.set_fixed_width!
 ```
 ## `set_focus_on_click!`
 ```@docs

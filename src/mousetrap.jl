@@ -1,5 +1,3 @@
-const __MOUSETRAP_JULIA_BINDING_OVERRIDE = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
-
 module mousetrap
 
     const VERSION = v"0.1.0"
@@ -10,12 +8,7 @@ module mousetrap
     module detail
         using CxxWrap, Pkg.Artifacts
         function __init__() @initcxx end
-
-        if isdefined(Main, :__MOUSETRAP_JULIA_BINDING_OVERRIDE)
-            @wrapmodule(Main.__MOUSETRAP_JULIA_BINDING_OVERRIDE)
-        else
-            @wrapmodule(joinpath(artifact"mousetrap_julia_binding", "mousetrap_julia_binding"))
-        end
+        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
     end
 
 ####### typed_function.jl
@@ -3796,7 +3789,7 @@ module mousetrap
 
     @export_function ColumnViewColumn set_title! Cvoid String title
     @export_function ColumnViewColumn get_title String
-    @export_function ColumnViewColumn set_fixed_width Cvoid Number => Cfloat width
+    @export_function ColumnViewColumn set_fixed_width! Cvoid Number => Cfloat width
     @export_function ColumnViewColumn get_fixed_width Cfloat
 
     set_header_menu!(column::ColumnViewColumn, model::MenuModel) = detail.set_header_menu!(column._internal, model._internal)
@@ -4190,7 +4183,7 @@ module mousetrap
     @export_type Scrollbar Widget
     @declare_native_widget Scrollbar
 
-    Scrollbar() = Scrollbar(detail._ScrollBar)
+    Scrollbar(orientation::Orientation, adjustment::Adjustment) = Scrollbar(detail._Scrollbar(orientation, adjustment._internal))
 
     get_adjustment(scrollbar::Scrollbar) ::Adjustment = Adjustment(detail.get_adjustment(scrollbar._internal))
     export get_adjustment

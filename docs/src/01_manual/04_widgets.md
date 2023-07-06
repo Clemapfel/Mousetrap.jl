@@ -931,18 +931,11 @@ connect_signal_value_changed!(scale) do self::Scale
     println("Value is now: $(get_value(self))")
 end
 ```
-
----           
-
-## ScrollBar
-
-Similar to `Scale`, [`ScrollBar`](@ref) is used to pick a value from an adjustment. It is often used as a way to choose which part of a widget should be shown on screen. For an already automated way of doing this, see `Viewport`.
-
 ---
 
 ## LevelBar
 
-[`LevelBar](@ref) is used to display a fraction to indicate the level of something, for example the volume of a playback device.
+[`LevelBar`](@ref) is used to display a fraction to indicate the level of something, for example the volume of a playback device.
 
 To create a `LevelBar`, we need to specify the minimum and maximum value of the range we wish to display. We can then set the current value using `set_value!`. The resulting fraction is computed automatically, based on the upper and lower limit we supplied to the constructor:
 
@@ -1489,6 +1482,30 @@ If we want to react to the user scrolling the `Viewport`s child, we can either c
 
 With this, scrollbar policy, size propagation we have full control over every aspect of `Viewport`.
 
+--- 
+
+## Scrollbar
+
+`Viewport` comes with two scrollbars, but we can also create our own using [`Scrollbar`](@ref), which takes an `Orientation` as well as an  `Adjustment` for its constructor. 
+
+To react to the user scrolling, we need to connect to the signals of the `Adjustment`:
+
+```julia
+adjustment = Adjustment(0.5, 0, 1, 0.01)
+scrollbar = Scrollbar(ORIENTATION_HORIZONTAL, adjustment)
+connect_signal_value_changed!(adjustment) do self::Adjustment
+    println("Value is now $(get_value(self))")
+end
+
+set_child!(window, scrollbar)
+```
+
+Where we made it such that the scrollbar expresses the range `[0, 1]`, with a step increment of `0.01` and an initial value of `0.5`.
+
+If we loose track of the `Adjustment` instance after constructing the scroll bar, we can retrieve it anytime using `get_adjustment`.
+
+
+
 ---
 
 ## Popover
@@ -1767,7 +1784,7 @@ This is a more convenient way to fill the column view, though if we later want t
 
 ## Stack
 
-[`Stack'](@ref) is a selectable widget that can only ever display exactly one child at a time. Each child of the stack is called a **page**.
+[`Stack`](@ref) is a selectable widget that can only ever display exactly one child at a time. Each child of the stack is called a **page**.
 
 We add a page using `add_child!`, which takes any widget, and the pages title. This title is mandatory and it has to uniquely identify the page. `add_child!` returns the pages ID, which, similarly to how adding elements to `DropDown` works, we need to keep track of in order to later refer to pages in a position-independent manner.
 

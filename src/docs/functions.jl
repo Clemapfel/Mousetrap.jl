@@ -1548,6 +1548,13 @@ get_max_n_columns(grid_view::GridView) -> Signed
 Get the maximum number of columns, (or rows if orientation is vertical), or `-1` if unlimited.
 """
 
+@document get_max_value """
+```
+get_max_value(::LevelBar) -> Float32
+```
+Get the upper bound of the underlying range.
+"""
+
 @document get_max_width_chars """
 ```
 get_max_width_chars(::Entry) -> Signed
@@ -3667,9 +3674,9 @@ set_end_child_resizable!(::Paned, ::Bool)
 Set whether the end child should resize when the `Paned` is resized.
 """
 
-@document set_end_child_shrinkable """
+@document set_end_child_shrinkable! """
 ```
-set_end_child_shrinkable(::Paned, ::Bool) 
+set_end_child_shrinkable!(::Paned, ::Bool)
 ```
 Set whether the user can resize the end child such that its allocated area inside the paned is smaller than the natural size of the child.
 """
@@ -3716,9 +3723,9 @@ set_file_chooser_action!(::FileChooser, ::FileChooserAction)
 Override the current file chooser action type, this may not change the layout until the dialog is hidden, then shown again.
 """
 
-@document set_fixed_width """
+@document set_fixed_width! """
 ```
-set_fixed_width(::ColumnViewColumn, width::AbstractFloat) 
+set_fixed_width!(::ColumnViewColumn, width::AbstractFloat)
 ```
 Set the fixed width of the column, in pixels, or `-1` if unlimited.
 """
@@ -3867,7 +3874,7 @@ Replace the buttons label with an icon.
 ```
 set_image!(::Clipboard, image::Image) 
 ```
-Override the clipboards content with an image. Use [`get_image!`](@ref) to retrieve it.
+Override the clipboards content with an image. Use [`get_image`](@ref) to retrieve it.
 """
 
 @document set_initial_file! """
@@ -4404,9 +4411,9 @@ set_selectable!(::Label, ::Bool)
 Set whether the user can select part of the label, as would be needed to copy its text.
 """
 
-@document set_selected """
+@document set_selected! """
 ```
-set_selected(::DropDown, id::DropDownItemID) 
+set_selected!(::DropDown, id::DropDownItemID)
 ```
 Make the item identified by the given ID the currently selected item. This will invoke its associated callback.
 """
@@ -4512,9 +4519,9 @@ set_start_child_resizable!(::Paned, ::Bool)
 Set whether the first child should resize when the `Paned` is resized.
 """
 
-@document set_start_child_shrinkable """
+@document set_start_child_shrinkable! """
 ```
-set_start_child_shrinkable(::Paned, ::Bool) 
+set_start_child_shrinkable!(::Paned, ::Bool)
 ```
 Set whether the user can resize the first child such that its allocated area inside the paned is smaller than the natural size of the child.
 """
@@ -4574,7 +4581,7 @@ Set minimum distance between two discrete values of the underlying range.
 ```
 set_string!(::Clipboard, string::String) 
 ```
-Override the clipboards contents with a string. Use [`get_string!`](@ref) to retrieve it.
+Override the clipboards contents with a string. Use [`get_string`](@ref) to retrieve it.
 """
 
 @document set_surpress_debug """

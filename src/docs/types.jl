@@ -1793,6 +1793,23 @@ end
 ```
 """
 
+@document Scrollbar """
+# Scrollbar <: Widget
+
+GUI element typically used to scroll another widget. Connect to the `Adjustment`
+obtained using `get_adjustment` to react to the underlying value of
+this widget changing.
+
+$(@type_constructors(
+    Scrollbar(::Orientation)
+))
+
+$(@type_signals(Scrollbar,
+))
+
+$(@type_fields())
+"""
+
 @document ScrollEventController """
 # ScrollEventController <: EventController
 

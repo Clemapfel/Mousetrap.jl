@@ -484,7 +484,7 @@ ColumnViewColumn
 + [`mousetrap.get_is_visible`](@ref)
 + [`mousetrap.get_title`](@ref)
 + [`mousetrap.remove_column!`](@ref)
-+ [`mousetrap.set_fixed_width`](@ref)
++ [`mousetrap.set_fixed_width!`](@ref)
 + [`mousetrap.set_header_menu!`](@ref)
 + [`mousetrap.set_is_resizable!`](@ref)
 + [`mousetrap.set_is_visible!`](@ref)

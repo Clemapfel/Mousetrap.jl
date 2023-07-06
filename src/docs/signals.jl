@@ -243,7 +243,7 @@ const signal_descriptors = Dict([
     )
 ])
 
-using Latexify
+import Latexify
 
 macro signal_table(T, signals...)
 
@@ -260,7 +260,7 @@ macro signal_table(T, signals...)
         push!(descriptions, "**Emitted when: **" * signal_descriptors[signal_id][2])
     end
 
-    return mdtable(ids, signatures, descriptions; latex=false)
+    return Latexify.mdtable(ids, signatures, descriptions; latex=false)
 end
 
 macro type_signals(T)

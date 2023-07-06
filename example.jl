@@ -12,22 +12,13 @@ main(; application_id = "stack.example") do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    column_view = ColumnView()
-
-    column_01 = push_back_column!(column_view, "Column #01")
-    column_02 = push_back_column!(column_view, "Column #02")
-    column_03 = push_back_column!(column_view, "Column #03")
-
-    n_rows = 9
-    column_i = 1
-    for column in [column_01, column_02, column_03]
-        for row_i in 1:n_rows
-            set_widget_at!(column_view, column, row_i, Label("0$column_i | 0$row_i"))
-        end
-        column_i = column_i + 1
+    
+    adjustment = Adjustment(0.5, 0, 1, 0.01)
+    scrollbar = Scrollbar(ORIENTATION_HORIZONTAL, adjustment)
+    connect_signal_value_changed!(adjustment) do self::Adjustment
+        println("Value is now $(get_value(self))")
     end
 
-    set_expand!(column_view, true)
-    set_child!(window, column_view)
+    set_child!(window, scrollbar)
     present!(window)
 end
