@@ -26,7 +26,6 @@ It aims to give developers of all skill levels the tools to start creating compl
 | Linux            | `✓`                | `✓`                        |
 | FreeBSD          | `✓`                | `✓`                        | 
 | Windows (64-bit) | `✓`                | `✓`                        |
-| Windows (32-bit) | `✓`                | `✕`                        |
 | MacOS            | `✕*`               | `✕`                        |
 
 * The GUI component for MacOS is planned to release in the future
@@ -40,12 +39,12 @@ It aims to give developers of all skill levels the tools to start creating compl
 + Simplify installation process to `] add mousetrap`
 + Add support for loading custom themes by exposing the CSS interface
 + Allow bundling of the Julia runtime and all necessary binary dependencies into a portable executable
-+ Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side
 + Implement drag & drop for files, images, and widgets
++ Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side
++ Allow interactive use from within the REPL
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
 + Allow for audio playback and manipulating audio data
 + Add an event controller to capture video game controller / joystick events
-+ Allow [other OpenGL-based libraries](https://github.com/MakieOrg/Makie.jl) to render to `RenderArea`
 + Add 3D shapes and geometry shaders to the OpenGL component
 
 ---

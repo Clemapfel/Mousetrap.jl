@@ -3,19 +3,19 @@
 In this chapter, we will learn:
 + What a widget is
 + Properties that all widgets share
-+ What widgets are available and how to use them
++ What widgets are available in mousetrap and how to use each of them
 + How to create compound widgets
 
 ---
 
 !!! note "Running snippets from this section"
-    To run any partial code snippet from this section, use the following `.jl` file:
+    To run any partial code snippet from this section, we can use the following `.jl` file:
     ```julia
     using mousetrap
     main() do app::Application
         window = Window(app)
 
-        # snippet here, creates widget `x` and adds it to `window'
+        # snippet here, creates widget and adds it to `window'
 
         present!(window)
     end
@@ -30,7 +30,7 @@ using a device such as a mouse, keyboard or touchcsreen.
 
 For example, to interact with the widget [`Button`](@ref) from the previous chapter, the user has to move the mouse cursor
 over the area of the button on screen, then press the left mouse button. This will trigger an animation where the button 
-changes its appearance to look "pressed in", emit its signal `clicked` to trigger custom behavior, then return to its previous state. Having used computers for many years, most of us never thing about how things work in this gradual of a manner, and `Button` specifically makes it so we don't have to, all those actions are already implemented for us, all we have to do is place the button and connect a signal.
+changes its appearance to look "pressed in", emit its signal `clicked` to trigger custom behavior, then return to its previous state. Having used computers for many years, most of us never thing about how things work in this gradual of a manner, and `Button` specifically makes it so we don't have to, all those actions are already implemented for us. All we have to do is place the button and connect to its signals.
 
 ## Widget Signals
 
@@ -1486,9 +1486,9 @@ With this, scrollbar policy, size propagation we have full control over every as
 
 ## Scrollbar
 
-`Viewport` comes with two scrollbars, but we can also create our own using [`Scrollbar`](@ref), which takes an `Orientation` as well as an  `Adjustment` for its constructor. 
+`Viewport` comes with two scrollbars, but we can also create our own. Using [`Scrollbar`](@ref), which takes an `Orientation` as well as an  `Adjustment` for its constructor, we can create a fully custom scrolling widget.
 
-To react to the user scrolling, we need to connect to the signals of the `Adjustment`:
+To react to the user scrolling, we need to connect to the signals of the `Adjustment`, as `Scrollbar` does not provide and signals itself:
 
 ```julia
 adjustment = Adjustment(0.5, 0, 1, 0.01)
@@ -1502,9 +1502,7 @@ set_child!(window, scrollbar)
 
 Where we made it such that the scrollbar expresses the range `[0, 1]`, with a step increment of `0.01` and an initial value of `0.5`.
 
-If we loose track of the `Adjustment` instance after constructing the scroll bar, we can retrieve it anytime using `get_adjustment`.
-
-
+If we loose track of the `Adjustment` instance after constructing the `ScrollBar`, we can retrieve it anytime using `get_adjustment`.
 
 ---
 

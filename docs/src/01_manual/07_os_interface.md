@@ -13,6 +13,77 @@ In this chapter, we will learn:
 
 ---
 
+## Application
+
+### Signals
+
+We have already used it many times so far, but [`Application`](@ref) offers a number of additional functionalities. It is not a widget but it is a signal emitter and provides the following signals:
+
+```@eval
+using mousetrap
+mousetrap.@signal_table(Application,
+    activate,
+    shutdown
+)
+```
+
+We should do all initialization of our app inside the `activate` signal, while `shutdown` can be used to safely free resources. `main`, which we used to do the main loop, is actually just a convenience function, with the following behavior:
+
+```julia
+main("example.app") do app::Application
+    # behavior here
+end
+
+# is equivalent to
+app = Application("example.app")
+connect_signal_activate!(app) do app::Application
+    # behavior here
+end
+run!(app)
+```
+
+### ID
+
+Where `example.app` is the **application ID**. This ID will be used to identify the application on the users OS. It should be unique, meaning that no other application on the users operating system shares this ID. 
+
+The application ID has to contain at least one `.` and should be a human-readable identifier. For example, if our app is called "Foo Image Manipulation Program", a good-practice ID would be `com.foo_image_manipulation_program` or `foo_image_manipulation_program.app`.
+
+!!! warning "Running two apps with the same ID"
+    If two applications with the same ID are active at the same time,
+    **they will share resources**.
+
+    This may introduce side-effects, if both instances modify the same internal variable, it may create a [race-condition](https://en.wikipedia.org/wiki/Race_condition#In_software).
+
+    To avoid this, consider designing your application with this in mind,
+    or give each instance a new ID.
+
+### Starting / Ending Runtime
+
+`run!` starts the application. This function initializes the various back-ends needed to show widgets, after which it emits signal `activate`. This is why we cannot initialize a widget before `run!` was called, or we will get an error:
+
+```
+julia> label = Label()
+
+(process:15357): mousetrap-ERROR **: 21:22:29.003: 
+    Attempting to construct a widget, but the GTK4 backend has not yet been initialized.
+    (...)
+    You have most likely attempted to construct a widget outside of `main` while using mousetrap interactively.
+```
+
+At any point, we can attempt to end runtime by calling `quit!`. This will exit runtime and emit signal `shutdown`. We should always `quit!` before calling Julias `exit()`, otherwise the apps process will be immediately killed, which can lead to undefined behavior.
+
+### Holding & Busy
+
+Each app on a users system has to boolean flags: whether it is currently **holding** and whether is currently **busy**.
+
+Holding means that the application attempts to prevent exiting in any way. We set this flag b calling `hold!`. This should be used to prevent the user from accidentally ending runtime while an important process is running. We have to make sure to call `release!`, which will set the holding flag to `false`, so the app can now exit normally.
+
+Being busy does not prevent runtime, rather, it marks the app such that the OS recognize that it is currently busy. This will prevent the "<app> is not responding" dialog many OS will trigger automatically when an app freezes. Sometimes freezing is unavoidable because a costly operation is taking place. During times like this, we should call `mark_as_busy!`. Once the expensive task is complete, `unmark_as_busy!` reverts this.
+
+
+
+---
+
 ## Logging
 
 ### Introduction

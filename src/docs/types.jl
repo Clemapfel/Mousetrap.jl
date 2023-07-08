@@ -115,14 +115,31 @@ $(@type_fields())
 @document Application """
 # Application <: SignalEmitter
 
-Used to register an application with the users OS. When all 
-windows of an application are closed, the application usually exits.
+Used to register an application with the users OS.
 
 The applications ID is required to contain at least one `.`, and it should be unique, meaning no
 other application on the users operating system shares this ID.
 
+Calling [`run!`](@ref) initializes the GTK4 and OpenGL back-end, after which 
+signal `activate` wil be emitted. All widgets should only be created
+**after** this point. In practice, this means that the entirety of
+initializing for the entire app should happen inside the
+signal handler of the `activate` signal. See [`main`](@ref) for an automated 
+way of doing this, or the example below.
+
+When all windows of an application are closed, or [`quit!`](@ref) is called,
+the application exits. This can be prevented with [`hold!`](@ref), 
+which has to be undone later by calling [`release!`](@ref). When exiting, the 
+application will emit signal `shutdown`, which should be used to safely free resources.
+
+When creating a new application, `allow_multiple_instances` governs whether resources are
+shared between two instances with the same ID. If set to `false`, the most recently 
+created instance will be the primary instance. If set to `true` (default) the instance 
+created **first** will be the primary instance. See [here](https://docs.gtk.org/gio/class.Application.html)
+for more information.
+
 $(@type_constructors(
-    Application(::ApplicationID)
+    Application(::ApplicationID ; [allow_multiple_instances::Bool = true])
 ))
 
 $(@type_signals(Application, 
@@ -136,8 +153,10 @@ $(@type_fields())
 ```julia
 app = Application("example.app")
 connect_signal_activate!(app) app::Application
-    window = Window(app)
-    present!(window)
+    # all initialization has to happen here
+end
+connect_signal_shutdown!(app) app::Application
+    # safely free all resources
 end
 run!(app)
 ```
@@ -1837,23 +1856,6 @@ connect_signal_scroll!(scroll_controller) do self::ScrollEventController, delta_
 end
 add_controller!(window, scroll_controller)
 ```
-"""
-
-@document Scrollbar """
-# Scrollbar <: Widget
-
-Widget usually used to scroll a window or view. Connect to 
-the signals of the [`Adjustment`](@ref) obtained using [`get_adjustment`](@ref)
-to react to the user changing the position of the scrollbar.
-
-$(@type_constructors(
-    Scrollbar()
-))
-
-$(@type_signals(Scrollbar, 
-))
-
-$(@type_fields())
 """
 
 @document SelectionModel """

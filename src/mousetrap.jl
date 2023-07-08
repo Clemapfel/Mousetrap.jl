@@ -1385,7 +1385,7 @@ module mousetrap
     const ApplicationID = String;
     export ApplicationID
 
-    Application(id::String) = Application(detail._Application(id))
+    Application(id::String; allow_multiple_instances = false) = Application(detail._Application(id, allow_multiple_instances))
 
     run!(app::Application) ::Cint = mousetrap.detail.run!(app._internal)
     export run!
@@ -1411,7 +1411,7 @@ module mousetrap
     @add_signal_activate Application
     @add_signal_shutdown Application
 
-    function main(f; application_id::String = "mousetrap.jl") ::Int64
+    function main(f, application_id::String = "mousetrap.jl") ::Int64
 
         if isinteractive()
             @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. As of version $VERSION, interactive use of mousetrap is discouraged, side-effects may occurr."
@@ -1429,7 +1429,6 @@ module mousetrap
                 print(stderr, "\n")
                 quit!(app)
             end
-
             return nothing
         end
         return run!(app)
@@ -4636,19 +4635,23 @@ module mousetrap
 
     function Point(position::Vector2f) ::Shape
         out = Shape()
-        as_point!(shape, position)
+        as_point!(out, position)
         return out
     end
     export Point
 
     function as_points!(shape::Shape, positions::Vector{Vector2f})
-        return detail.as_point!(shape._internal, positions)
+        if isempty(positions)
+            @log_critical MOUSETRAP_DOMAIN "In as_points!: Vector `positions` is empty."
+        end
+        
+        return detail.as_points!(shape._internal, positions)
     end
     export as_points!
 
     function Points(positions::Vector{Vector2f}) ::Shape
         out = Shape()
-        as_points!(shape, position)
+        as_points!(out, positions)
         return out
     end
     export Points
@@ -4683,12 +4686,12 @@ module mousetrap
     end
     export Circle
 
-    as_ellipse!(shape::Shape, center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) = detail.as_ellipse!(shape._internal, x_radius, y_radius, n_outer_vertices)
+    as_ellipse!(shape::Shape, center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) = detail.as_ellipse!(shape._internal, center, convert(Cfloat, x_radius), convert(Cfloat, y_radius), n_outer_vertices)
     export as_ellipse!
 
     function Ellipse(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) ::Shape
         out = Shape()
-        as_ellipse!(out, x_radius, y_radius, n_outer_vertices)
+        as_ellipse!(out, center, x_radius, y_radius, n_outer_vertices)
         return out
     end
     export Ellipse
@@ -4734,7 +4737,7 @@ module mousetrap
     export Polygon
 
     function as_rectangular_frame!(shape::Shape, top_left::Vector2f, outer_size::Vector2f, x_width::AbstractFloat, y_width::AbstractFloat)
-        detail.as_rectangular_frame!(shape._internal, top_left, outer_size, x_width, y_width)
+        detail.as_rectangular_frame!(shape._internal, top_left, outer_size, convert(Cfloat, x_width), convert(Cfloat, y_width))
     end
     export as_rectangular_frame!
 
@@ -4746,25 +4749,25 @@ module mousetrap
     export RectangularFrame
 
     function as_circular_ring!(shape::Shape, center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer)
-        detail.as_circular_ring!(shape._internal, center, outer_radius, thickness, n_outer_vertices)
+        detail.as_circular_ring!(shape._internal, center, convert(Cfloat, outer_radius), convert(Cfloat, thickness), n_outer_vertices)
     end
     export as_circular_ring!
 
     function CircularRing(center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer)
         out = Shape()
-        as_circular_ring!(shape, center, outer_radius, thickness, n_outer_vertices)
+        as_circular_ring!(out, center, outer_radius, thickness, n_outer_vertices)
         return out
     end
     export CircularRing
 
-    function as_elliptical_ring!(shape::Shape, center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Unsigned)
-        detail.as_elliptical_ring!(shape._internal, center, outer_x_radius, outer_y_radius, x_thickness, y_thickness, n_outer_vertices)
+    function as_elliptical_ring!(shape::Shape, center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Integer)
+        detail.as_elliptical_ring!(shape._internal, center, convert(Cfloat, outer_x_radius), convert(Cfloat, outer_y_radius), convert(Cfloat, x_thickness), convert(Cfloat, y_thickness), n_outer_vertices)
     end
     export as_elliptical_ring!
 
-    function EllipticalRing(center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Unsigned) ::Shape
+    function EllipticalRing(center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Integer) ::Shape
         out = Shape()
-        as_elliptical_ring!(out, outer_x_radius, outer_y_radius, x_thickness, y_thickness, n_outer_vertices)
+        as_elliptical_ring!(out, center, outer_x_radius, outer_y_radius, x_thickness, y_thickness, n_outer_vertices)
         return out
     end
     export EllipticalRing
