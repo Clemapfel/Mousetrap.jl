@@ -39,6 +39,7 @@ module mousetrap
                 throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`"))
             end
 
+            @assert precompile(f, arg_ts)
             return new(f, return_t, arg_ts)
         end
     end
@@ -1411,27 +1412,34 @@ module mousetrap
     @add_signal_activate Application
     @add_signal_shutdown Application
 
-    function main(f, application_id::String = "mousetrap.jl") ::Int64
-
-        if isinteractive()
-            @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. As of version $VERSION, interactive use of mousetrap is discouraged, side-effects may occurr."
-        end
-
-        app = Application(application_id)
-        typed_f = TypedFunction(f, Any, (Application,))
-        connect_signal_activate!(app)  do app::Application
-            try
-                typed_f(app)
-            catch(exception)
-                printstyled(stderr, "[ERROR] "; bold = true, color = :red)
-                printstyled(stderr, "In mousetrap.main: "; bold = true)
-                Base.showerror(stderr, exception, catch_backtrace())
-                print(stderr, "\n")
-                quit!(app)
+    function main(f, application_id::String = "mousetrap.jl") 
+        
+        task = Threads.Task() do 
+            app = Application(application_id)
+            typed_f = TypedFunction(f, Any, (Application,))
+            connect_signal_activate!(app)  do app::Application
+                try
+                    typed_f(app)
+                catch(exception)
+                    printstyled(stderr, "[ERROR] "; bold = true, color = :red)
+                    printstyled(stderr, "In mousetrap.main: "; bold = true)
+                    Base.showerror(stderr, exception, catch_backtrace())
+                    print(stderr, "\n")
+                    quit!(app)
+                end
+                return nothing
             end
-            return nothing
+            return run!(app)
+        end 
+
+        if isinteractive() && Threads.nthreads() > 1
+            @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. Interactive use of mousetrap is an experimental feature, side-effects may occurr."
+            task.sticky = false
+            return schedule(task)
         end
-        return run!(app)
+            
+        task.sticky = true
+        return wait(schedule(task))
     end
     export main
 
@@ -1649,7 +1657,7 @@ module mousetrap
 
     abstract type Color end
 
-    struct RGBA <: Color
+    mutable struct RGBA <: Color
         r::Cfloat
         g::Cfloat
         b::Cfloat
@@ -1666,7 +1674,7 @@ module mousetrap
         )
     end
 
-    struct HSVA <: Color
+    mutable struct HSVA <: Color
         h::Cfloat
         s::Cfloat
         v::Cfloat
@@ -4027,7 +4035,13 @@ module mousetrap
     @export_type Revealer Widget
     @declare_native_widget Revealer
 
+    
     Revealer(transition_type::RevealerTransitionType = REVEALER_TRANSITION_TYPE_CROSSFADE) = Revealer(detail._Revealer(transition_type))
+    function Revealer(widget::Widget, transition_type::RevealerTransitionType = REVEALER_TRANSITION_TYPE_CROSSFADE) :: Revealer
+        out = Revealer(transition_type)
+        set_child!(out, widget)
+        return out
+    end
 
     set_child!(revealer::Revealer, child::Widget) = detail.set_child!(revealer._internal, as_widget_pointer(child))
     export set_child!
@@ -4795,14 +4809,35 @@ module mousetrap
     render(shape::Shape, shader::Shader, transform::GLTransform) = detail.render(shape._internal, shader._internal, transform._internal)
     export render
 
-    @export_function Shape get_vertex_color RGBA Integer index
-    @export_function Shape set_vertex_color! Cvoid Integer index RGBA color
+    function get_vertex_color(shape::Shape, index::Integer) ::RGBA
+        return detail.get_vertex_color(shape._internal, from_julia_index(index))
+    end
+    export get_vertex_color
 
-    @export_function Shape get_vertex_texture_coordinate Vector2f Integer index
-    @export_function Shape set_vertex_texture_coordinate Cvoid Integer index Vector2f coordinate
+    function set_vertex_color!(shape::Shape, index::Integer, color::RGBA)
+        detail.set_vertex_color!(shape._internal, from_julia_index(index), color)
+    end
+    export set_vertex_color!
 
-    @export_function Shape get_vertex_position Vector3f Integer index
-    @export_function Shape set_vertex_position! Cvoid Integer index Vector3f position
+    function get_vertex_texture_coordinate(shape::Shape, index::Integer) ::Vector2f
+        return detail.get_vertex_texture_coordinate(shape._internal, from_julia_index(index))
+    end
+    export get_vertex_texture_coordinate
+
+    function set_vertex_texture_coordinate!(shape::Shape, index::Integer, coordinate::Vector2f) 
+        detail.set_vertex_texture_coordinate(shape._internal, from_julia_index(index), coordinate)
+    end
+    export set_vertex_texture_coordinate!
+
+    function get_vertex_position(shape::Shape, index::Integer) ::Vector3f
+        detail.get_vertex_position(shape._internal, from_julia_index(index))
+    end
+    export get_vertex_position
+
+    function set_vertex_position!(shape::Shape, index::Integer, coordinate::Vector3f) 
+        detail.set_vertex_position!(shape._internal, from_julia_index(index), coordinate)
+    end
+    export set_vertex_position!
 
     @export_function Shape get_n_vertices Int64
 

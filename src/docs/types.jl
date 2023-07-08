@@ -1753,7 +1753,8 @@ end
 Container that plays an animation to reveal or hide its singular child.
 
 $(@type_constructors(
-    Revealer(::RevealerTransitionType)
+    Revealer([::RevealerTransitionType]),
+    Revealer(child::Widget, [::RevealerTransitionType])
 ))
 
 $(@type_signals(Revealer, 
