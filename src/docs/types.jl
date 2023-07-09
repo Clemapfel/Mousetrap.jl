@@ -5,17 +5,13 @@
 Memory-managed object that wraps a function. Each action has a unique ID and is registered with 
 the [`Application`](@ref). It can furthermore have any number of shortcut triggers.
 
-Depending on whether [`set_function!`](@ref) or [`set_stateful_function!`](@ref) was called to register
-a callback with the function, the action may have an additional boolean state.
-
-For **stateless** actions, the function is required to have the signature
+Using `set_function!`, we can register a callback to bec alled when the action is activated in any way.
+This function is required to have the signature:
 ```
-(::Action, [::Data_t]) -> Cvoid
+(::Action, [::Data_t]) -> Nothing
 ```
-while for **stateful** actions, the functions signature has to be
-```
-(::Action, current_state::Bool, [::Data_t]) -> next_state::Bool
-```
+Each action can be enabled or disabled. If an action is disabled, all associated widgets, keybindings 
+and menu items will be disabled automatically.
 
 See the manual chapter on actions for more information.
 
@@ -67,7 +63,7 @@ Simple dialog with a message, detailed description, and one or more labeled butt
 
 Using `on_selection!`, you can register a function with the signature
 ```
-(::AlertDialog, button_index::Integer, [::Data_t]) -> Cvoid
+(::AlertDialog, button_index::Integer, [::Data_t]) -> Nothing
 ````
 which is called when the user makes a selection or closes the dialog.
 
@@ -607,7 +603,7 @@ local disk.
 
 Connect a function with the signature
 ```
-(::FileChooser, files::Vector{FileDescriptor}, [::Data_t]) -> Cvoid
+(::FileChooser, files::Vector{FileDescriptor}, [::Data_t]) -> Nothing
 ```
 using [`on_accept!`](@ref). When the user makes a selection, this function 
 will be invoked and `files` will contain one or more selected files.
@@ -698,7 +694,7 @@ Object that monitors a location on disk. If
 anything about the object at that location changes, it will call the function registered using [`on_file_changed!`](@ref),
 which requires a function with signature
 ```
-(::FileMonitor, event::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor, [::Data_t]) -> Cvoid
+(::FileMonitor, event::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor, [::Data_t]) -> Nothing
 ```
 
 Where `event` classifies the type of change, `self` is the file being monitored.
@@ -2456,7 +2452,7 @@ manual section on compound widgets in the chapter on widgets for more informatio
 
 All widgets share the following signals, where `T` is the subclass 
 of `Widget`. For example, signal `realize` of class `Label` has the 
-signature `(::Label, [::Data_t]) -> Cvoid`:
+signature `(::Label, [::Data_t]) -> Nothing`:
 
 $(@type_signals(T,
     realize,

@@ -1526,8 +1526,6 @@ module mousetrap
     end
 
     @export_function Action get_id String
-    @export_function Action set_state! Cvoid Bool b
-    @export_function Action get_state Bool
     @export_function Action activate! Cvoid
     @export_function Action add_shortcut! Cvoid ShortcutTrigger shortcut
 
@@ -1537,7 +1535,6 @@ module mousetrap
     @export_function Action clear_shortcuts! Cvoid
     @export_function Action set_enabled! Cvoid Bool b
     @export_function Action get_enabled Bool
-    @export_function Action get_is_stateful Bool
 
     function set_function!(f, action::Action, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (Action, Data_t))
@@ -1554,24 +1551,9 @@ module mousetrap
     end
     export set_function!
 
-    function set_stateful_function!(f, action::Action, data::Data_t) where Data_t
-        typed_f = TypedFunction(f, Bool, (Action, Bool, Data_t))
-        detail.set_stateful_function!(action._internal, function (internal_ref, state::Bool)
-            typed_f(Action(internal_ref[]), state, data)
-        end)
-    end
-
-    function set_stateful_function!(f, action::Action)
-        typed_f = TypedFunction(f, Bool, (Action, Bool))
-        detail.set_stateful_function!(action._internal, function (internal_ref, state::Bool)
-            typed_f(Action(internal_ref[]), state)
-        end)
-    end
-    export set_stateful_function!
-
     @add_signal_activated Action
 
-    Base.show(io::IO, x::Action) = show_aux(io, x, :id, :enabled, :is_stateful, :state)
+    Base.show(io::IO, x::Action) = show_aux(io, x, :id, :enabled, :state)
 
 ####### adjustment.jl
 
@@ -3489,7 +3471,8 @@ module mousetrap
 
     @export_function SelectionModel select_all! Cvoid
     @export_function SelectionModel unselect_all! Cvoid
-
+    @export_function SelectionModel get_n_items Int64
+    
     select!(model::SelectionModel, i::Integer, unselect_others::Bool = true) = detail.select!(model._internal, from_julia_index(i), unselect_others)
     export select!
 

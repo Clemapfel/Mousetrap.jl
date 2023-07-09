@@ -78,7 +78,7 @@ main() do app::Application
         ),
         "Lines" =>Lines([
             Vector2f(-0.5, 0.5) => Vector2f(0.5, -0.5),
-            Vector2f(0.5, -0.5) => Vector2f(-0.5, 0.5),
+            Vector2f(0.5, -0.5) => Vector2f(-0.5, 0.5)
         ]),
         "LineStrip" =>  LineStrip([
             Vector2f(-0.5, +0.5),
@@ -180,6 +180,23 @@ main() do app::Application
     add_shortcut!(revealer_action, "<Control>h");
     set_listens_for_shortcut_action!(window, revealer_action)
     set_tooltip_text!(revealer, "press <tt>Control + H</tt> to hide this element.")
+
+    # Allow going to next stack page using arrow keys
+    function on_key_pressed(_::KeyEventController, code::KeyCode, modifiers::ModifierState, stack::Stack)
+        
+        stack_model = get_selection_model(stack)
+        current = get_selection(stack_model)[1]
+
+        if code == KEY_Left || code == Key_Up && (current > 1)
+            select!(stack_model, current - 1)
+        elseif code == KEY_Right || code == Key_Down && (current <= get_n_items(stack_model))
+            select!(stack_model, current + 1)
+        end
+    end
+
+    key_controller = KeyEventController()
+    connect_signal_key_pressed!(on_key_pressed, key_controller, stack)
+    add_controller!(window, key_controller)
 
     # main layout
     box = hbox(stack, revealer)

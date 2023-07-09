@@ -23,3 +23,4 @@ area = RenderArea()
 This widget will render as a transparent area, meaning it is invisible because `RenderArea` provides no graphical element itself, instead. we have to create separate **shapes**, then bind them for rendering.
 
 
+
