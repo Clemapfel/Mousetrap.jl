@@ -17,18 +17,22 @@ It aims to give developers of all skill levels the tools to start creating compl
 + Image processing facilities, well-suited for image manipulation programs
 + Fully abstracted OpenGL interface, allows for high-performance, hardware-accelerated rendering of custom shapes / shaders
 + [Hand-written manual and extensive documentation](todo): every exported symbol is documented!
+
 ---
 
 ## Supported Platforms
 
 | Platform         | Basic GUI Component | Native Rendering Component |
-|------------------|--------------------|----------------------------|
-| Linux            | `✓`                | `✓`                        |
-| FreeBSD          | `✓`                | `✓`                        | 
+|------------------|--------------------|-----------------------------|
+| Linux (64-bit)   | `✓`                | `✓`                        |
 | Windows (64-bit) | `✓`                | `✓`                        |
+| FreeBSD          | `✓`                | `?`                        | 
 | MacOS            | `✕*`               | `✕`                        |
 
-* The GUI component for MacOS is planned to release in the future
+`✓` - Available
+`?` - Available, but not yet tested
+`✕*` - Will be available with future updates
+`✕`- Will never be available
 
 ---
 
@@ -38,12 +42,12 @@ It aims to give developers of all skill levels the tools to start creating compl
 
 + Simplify installation process to `] add mousetrap`
 + Add support for loading custom themes by exposing the CSS interface
-+ Allow bundling of the Julia runtime and all necessary binary dependencies into a portable executable
-+ Implement drag & drop for files, images, and widgets
++ Allow bundling of mousetrap apps and all their dependencies into a portable C-executable
 + Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side
-+ Allow interactive use from within the REPL
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
-+ Allow for audio playback and manipulating audio data
++ Implement drag & drop for files, images, and widgets
++ Allow interactive use from within the REPL
++ Make all functions that modify the global state thread-safe
 + Add an event controller to capture video game controller / joystick events
 + Add 3D shapes and geometry shaders to the OpenGL component
 

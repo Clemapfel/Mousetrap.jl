@@ -39,7 +39,7 @@ module mousetrap
                 throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`"))
             end
 
-            @assert precompile(f, arg_ts)
+            precompile(f, arg_ts)
             return new(f, return_t, arg_ts)
         end
     end
@@ -1176,13 +1176,13 @@ module mousetrap
 
         connect_signal_name = :connect_signal_ * snake_case * :!
 
-        Arg1_t = Cint
-        Arg2_t = Cint
-        Arg3_t = ModifierState
-        
+        Arg1_t = Cuint
+        Arg2_t = Cuint
+        Arg3_t = detail._ModifierState
+
         arg1_name = :key_code
         arg2_name = :key_value
-        arg3_name = :modifier
+        arg3_name = :modifiers
 
         push!(out.args, esc(:(
             function $connect_signal_name(f, x::$T)
@@ -3260,16 +3260,16 @@ module mousetrap
 
 ###### key_event_controller.jl
 
-    @export_type KeyEventController EventController
-    KeyEventController() = KeyEventController(detail._KeyEventController())
-
-    @export_function KeyEventController should_shortcut_trigger_trigger Bool String trigger
+    const KeyCode = Cuint
+    export KeyCode
 
     const ModifierState = detail._ModifierState
     export ModifierState
 
-    const KeyCode = Cint
-    export KeyCode
+    @export_type KeyEventController EventController
+    KeyEventController() = KeyEventController(detail._KeyEventController())
+
+    @export_function KeyEventController should_shortcut_trigger_trigger Bool String trigger
 
     @add_key_event_controller_signal KeyEventController key_pressed Cvoid
     @add_key_event_controller_signal KeyEventController key_released Cvoid
