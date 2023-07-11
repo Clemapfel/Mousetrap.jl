@@ -11,15 +11,11 @@ Action
 + [`mousetrap.clear_shortcuts!`](@ref)
 + [`mousetrap.get_enabled`](@ref)
 + [`mousetrap.get_id`](@ref)
-+ [`mousetrap.get_is_stateful`](@ref)
 + [`mousetrap.get_shortcuts`](@ref)
-+ [`mousetrap.get_state`](@ref)
 + [`mousetrap.set_action!`](@ref)
 + [`mousetrap.set_enabled!`](@ref)
 + [`mousetrap.set_function!`](@ref)
 + [`mousetrap.set_listens_for_shortcut_action!`](@ref)
-+ [`mousetrap.set_state!`](@ref)
-+ [`mousetrap.set_stateful_function!`](@ref)
 + [`mousetrap.connect_signal_activated!`](@ref)
 + [`mousetrap.disconnect_signal_activated!`](@ref)
 + [`mousetrap.emit_signal_activated`](@ref)
@@ -1051,6 +1047,7 @@ HSVA
 ```
 #### Functions that interact with this type:
 + [`mousetrap.hsva_to_rgba`](@ref)
++ [`mousetrap.set_color!`](@ref)
 + [`mousetrap.set_pixel!`](@ref)
 ---
 ## HeaderBar
@@ -1208,7 +1205,7 @@ ImageDisplay
 KeyCode
 ```
 #### Functions that interact with this type:
-+ [`mousetrap.set_uniform_int!`](@ref)
++ [`mousetrap.set_uniform_uint!`](@ref)
 + [`mousetrap.emit_signal_key_pressed`](@ref)
 + [`mousetrap.emit_signal_key_released`](@ref)
 ---
@@ -1931,6 +1928,7 @@ RGBA
 + [`mousetrap.create!`](@ref)
 + [`mousetrap.rgba_to_hsva`](@ref)
 + [`mousetrap.rgba_to_html_code`](@ref)
++ [`mousetrap.set_color!`](@ref)
 + [`mousetrap.set_pixel!`](@ref)
 + [`mousetrap.set_uniform_hsva!`](@ref)
 + [`mousetrap.set_uniform_rgba!`](@ref)
@@ -2234,6 +2232,7 @@ Scrollbar
 SelectionModel
 ```
 #### Functions that interact with this type:
++ [`mousetrap.get_n_items`](@ref)
 + [`mousetrap.get_selection`](@ref)
 + [`mousetrap.select!`](@ref)
 + [`mousetrap.select_all!`](@ref)
@@ -2307,12 +2306,13 @@ Shape
 + [`mousetrap.render`](@ref)
 + [`mousetrap.rotate!`](@ref)
 + [`mousetrap.set_centroid!`](@ref)
++ [`mousetrap.set_color!`](@ref)
 + [`mousetrap.set_is_visible!`](@ref)
 + [`mousetrap.set_texture!`](@ref)
 + [`mousetrap.set_top_left!`](@ref)
 + [`mousetrap.set_vertex_color!`](@ref)
 + [`mousetrap.set_vertex_position!`](@ref)
-+ [`mousetrap.set_vertex_texture_coordinate`](@ref)
++ [`mousetrap.set_vertex_texture_coordinate!`](@ref)
 ---
 ## ShortcutEventController
 ```@docs

@@ -1459,10 +1459,6 @@ mousetrap.get_is_scrollable
 ```@docs
 mousetrap.get_is_spinning
 ```
-## `get_is_stateful`
-```@docs
-mousetrap.get_is_stateful
-```
 ## `get_is_vertically_homogeneous`
 ```@docs
 mousetrap.get_is_vertically_homogeneous
@@ -2651,6 +2647,10 @@ mousetrap.set_child_x_alignment!
 ```@docs
 mousetrap.set_child_y_alignment!
 ```
+## `set_color!`
+```@docs
+mousetrap.set_color!
+```
 ## `set_column_spacing!`
 ```@docs
 mousetrap.set_column_spacing!
@@ -3403,10 +3403,6 @@ mousetrap.set_startup_notification_identifier!
 ```@docs
 mousetrap.set_state!
 ```
-## `set_stateful_function!`
-```@docs
-mousetrap.set_stateful_function!
-```
 ## `set_step_increment!`
 ```@docs
 mousetrap.set_step_increment!
@@ -3559,9 +3555,9 @@ mousetrap.set_vertex_color!
 ```@docs
 mousetrap.set_vertex_position!
 ```
-## `set_vertex_texture_coordinate`
+## `set_vertex_texture_coordinate!`
 ```@docs
-mousetrap.set_vertex_texture_coordinate
+mousetrap.set_vertex_texture_coordinate!
 ```
 ## `set_vertical_alignment!`
 ```@docs

@@ -1,7 +1,8 @@
 # Chapter 5: Event Handling
 
 In this chapter, we will learn:
-+ How to manually handle user interaction
++ What input focus is
++ How to react to any user input event
 + What an event controller is
 + How to connect an event controller to any widget
 
@@ -9,7 +10,7 @@ In this chapter, we will learn:
 
 ## Introduction: Event Model
 
-So far, we were able to react to a user interacting with the GUI through widgets. For example, if the user pressed the left mouse button while hovering over a `Button`, that button will emit the signal `clicked`, which can trigger our custom behavior. While this mechanism works, it can also be fairly limiting. Pre-defined widgets will only have pre-defined way of interacting with them. We cannot react to the user pressing a keyboard key using just `Button`. To do that, we will need an **event controller**. 
+So far, we were able to react to a user interacting with the GUI through widgets. For example, if the user clicked a `Button`, that button will emit the signal `clicked`, which can trigger our custom behavior. While this mechanism works, it can also be fairly limiting. Pre-defined widgets will only have pre-defined way of interacting with them. We cannot react to the user pressing a keyboard key using just `Button`. To do that, we will need an **event controller**. 
 
 ### What is an Event?
 

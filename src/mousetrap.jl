@@ -1553,7 +1553,7 @@ module mousetrap
 
     @add_signal_activated Action
 
-    Base.show(io::IO, x::Action) = show_aux(io, x, :id, :enabled, :state)
+    Base.show(io::IO, x::Action) = show_aux(io, x, :id, :enabled)
 
 ####### adjustment.jl
 
@@ -4188,7 +4188,6 @@ module mousetrap
     @export_function Scrollbar get_orientation Orientation
 
     @add_widget_signals Scrollbar
-
     Base.show(io::IO, x::Scrollbar) = show_aux(io, x, :orientation, :adjustment)
 
 ###### separator.jl
@@ -4201,6 +4200,7 @@ module mousetrap
     @export_function Separator set_orientation! Cvoid Orientation orientation
     @export_function Separator get_orientation Orientation
 
+    @add_widget_signals Separator
     Base.show(io::IO, x::Separator) = show_aux(io, x)
 
 ####### frame_clock.jl

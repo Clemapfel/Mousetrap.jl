@@ -281,7 +281,7 @@ macro type_signals(T, signals...)
         description = signal_descriptors[id][2]
 
         push!(out, """
-        ### `$id`
+        > #### `$id`
         > > ```
         > > $signature
         > > ```

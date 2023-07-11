@@ -20,7 +20,16 @@ The central widget of this chapter is [`RenderArea`](@ref), which is a canvas us
 area = RenderArea()
 ```
 
-This widget will render as a transparent area, meaning it is invisible because `RenderArea` provides no graphical element itself, instead. we have to create separate **shapes**, then bind them for rendering.
+This widget by itself will render as a transparent area, meaning it is invisible. For anything to show up, we first need to create a **shape**, then bind it for rendering.
+
+## Shape
+
+All shapes are an instance of [`Shape`](@ref). This is an object that holds all information needed
+to display an arbitrary shape.
+
+### Vertices
+
+Each shape has a number of vertices, which will govern 
 
 
 
