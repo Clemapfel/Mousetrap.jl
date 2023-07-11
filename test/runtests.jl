@@ -3,137 +3,140 @@ using Test
 
 ### GLOBALS
 
+const app_id = "mousetrap.runtests.jl"
 const app = Ref{Union{Application, Nothing}}(nothing)
 const test_action = Ref{Union{Action, Nothing}}(nothing)
 
 ### ACTION
 
-struct ActionTest <: Widget end
-function mousetrap.get_top_level_widget(x::ActionTest)
-    return Button()
-end
+    struct ActionTest <: Widget end
+    mousetrap.get_top_level_widget(::ActionTest) = Separator()
 
-const action_test_action_id = "testset.action"
-const action_test_action = Ref{Union{Action, Nothing}}(nothing)
+    function (::ActionTest)()
+        @testset "Action" begin
+            action_id = "test.action"
+            action = Action(action_id, Main.app[])
+            Base.show(devnull, action)
 
-function (this::ActionTest)()
-    @testset "Action" begin
+            triggered = Ref{Bool}(false)
+            function on_activate(::Action, triggered::Ref{Bool}) 
+                triggered[] = true
+                return nothing
+            end
 
-        action = action_test_action[]
-        println(action)
+            set_function!(on_activate, action, triggered)
+            connect_signal_activated!(on_activate, action, triggered) 
 
-        triggered = Ref{Bool}(false)
-        function on_activate(::Action, triggered::Ref{Bool}) 
-            triggered[] = true
-            return nothing
+            activate!(action)
+            @test triggered[] == true
+            @test get_id(action) == action_id
+            @test get_enabled(action) == true
+            set_enabled!(action, false)
+            @test get_enabled(action) == false
         end
-
-        set_function!(on_activate, action, triggered)
-        connect_signal_activated!(on_activate, action, triggered) 
-
-        activate!(action)
-        @test triggered[] == true
-        @test get_id(action) == action_test_action_id
-        @test get_enabled(action) == true
-        set_enabled!(action, false)
-        @test get_enabled(action) == false
     end
-end
 
 ### APPLICATION
 
+    struct ApplicationTest <: Widget end
+    mousetrap.get_top_level_widget(::ApplicationTest) = Separator()
 
+    function (::ApplicationTest)()
+        @testset "Application" begin
+            app = Main.app[]
+            Base.show(devnull, app)
+            @test get_id(app) == app_id
+
+            action_id = "application.test_action"
+            action = Action(action_id, app) do ::Action end
+
+            add_action!(app, action)
+            @test has_action(app, action_id) == true
+            @test get_id(get_action(app, action_id)) == action_id
+            remove_action!(app, action_id)
+            @test has_action(app, action_id) == false
+            
+            @test get_is_holding(app) == false
+            hold!(app)
+            @test get_is_holding(app) == true
+            release!(app)
+            @test get_is_holding(app) == false
+
+            @test get_is_marked_as_busy(app) == false
+            mark_as_busy!(app)
+            @test get_is_marked_as_busy(app) == true
+            unmark_as_busy!(app)
+            @test get_is_marked_as_busy(app) == false
+        end
+    end
 
 ### BUTTON
 
-struct ButtonTest <: Widget
-    button::Button
-    ButtonTest() = new(Button())
-end
-mousetrap.get_top_level_widget(x::ButtonTest) = x.button
-
-function (this::ButtonTest)()
-    @testset "Button" begin
-        
-        button = this.button
-        println(button)
-        
-        set_child!(button, Label("Button"))
-
-        @test get_has_frame(button)
-        set_has_frame!(button, false)
-        @test !get_has_frame(button)
-
-        @test !get_is_circular(button)
-        set_is_circular!(button, true)
-        @test get_is_circular(button)
-
-        set_action!(button, test_action[])
-
-        connect_signal_activate!(button) do ::Button
-            @test true
-            return nothing
-        end
-
-        connect_signal_clicked!(button) do ::Button
-            @test true
-            return nothing
-        end
-
-        set_has_frame!(button, true)
+    struct ButtonTest <: Widget
+        button::Button
+        ButtonTest() = new(Button())
     end
-end
+    mousetrap.get_top_level_widget(x::ButtonTest) = x.button
+
+    function (this::ButtonTest)()
+        @testset "Button" begin
+            
+            button = this.button
+            Base.show(devnull, button)
+            
+            set_child!(button, Label("Button"))
+
+            @test get_has_frame(button)
+            set_has_frame!(button, false)
+            @test !get_has_frame(button)
+
+            @test !get_is_circular(button)
+            set_is_circular!(button, true)
+            @test get_is_circular(button)
+
+            connect_signal_activate!(button) do ::Button
+                @test true
+                return nothing
+            end
+
+            connect_signal_clicked!(button) do ::Button
+                @test true
+                return nothing
+            end
+
+            set_has_frame!(button, true)
+        end
+    end
 
 ### MAIN
 
-function add_page(grid::Grid, title::String, page::T, x::Integer, y::Integer) where T <: Widget
-    
-    button = Button()
-    set_child!(button, Label("&#11208;"))
-    set_tooltip_text!(button, "Run testset \"$title\"")
-    
-    connect_signal_clicked!(button, page) do _, page
-        page()
-        return nothing
-    end
-
-    connect_signal_realize!(get_top_level_widget(page), page) do _, page
-        page()
-        return nothing
-    end
-
-    label = Label(title)
-    spacer = Separator(; opacity = 0.0)
-
-    set_horizontal_alignment!(label, ALIGNMENT_START)
-    set_horizontal_alignment!(spacer, ALIGNMENT_CENTER)
-    set_horizontal_alignment!(button, ALIGNMENT_END)
-
-    set_margin_start!(label, 10)
-    set_expand!(page, true)
+function add_page(grid::Grid, title::String, page::T, x::Integer = 1, y::Integer = 1) where T <: Widget
 
     frame = Frame()
+    connect_signal_realize!(frame, page) do _, page
+        page()
+        return nothing
+    end
+
     aspect_frame = AspectFrame(1.0)
     frame_spacer = Separator()
     set_expand_vertically!(frame_spacer, false)
     set_size_request!(frame_spacer, Vector2f(0, 1))
 
-    set_child!(frame, vbox(hbox(label, spacer, button), frame_spacer, page))
+    set_label_widget!(frame, Label(title))
+    set_label_x_alignment!(frame, 0.5)
+    set_child!(frame, page)
     set_child!(aspect_frame, frame)
 
     mousetrap.insert!(grid, aspect_frame, x, y, 1, 1)
 end
 
-main("mousetrap.runtests.jl") do app::Application
+main(app_id) do app::Application
     
-    println(app)
-
     Main.app[] = app
     Main.test_action[] = Action("test.action", app) do ::Action
         # noop
     end
-
-    Main.action_test_action[] = Action(action_test_action_id, app)
 
     window = Window(app)
     grid = Grid()
@@ -143,9 +146,18 @@ main("mousetrap.runtests.jl") do app::Application
     set_column_spacing!(grid, 10)
     set_margin!(grid, 10)
         
-    add_page(grid, "Action", ActionTest(), 1, 1)
-    #add_page(grid, "Button", ButtonTest(), 2, 1)
+    add_page(grid, "Action", ActionTest())
+    add_page(grid, "Application", ApplicationTest())
+    add_page(grid, "Button", ButtonTest())
 
-    set_child!(window, grid)
+    sentinel = Separator()
+    connect_signal_realize!(sentinel, app) do _, app
+        quit!(app)
+    end
+    overlay = Overlay()
+    set_child!(overlay, grid)
+    add_overlay!(overlay, sentinel)
+
+    set_child!(window, overlay)
     present!(window)
 end
