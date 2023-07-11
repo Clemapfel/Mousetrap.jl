@@ -39,20 +39,47 @@ let file = open("docs/src/02_library/classes.md", "w+")
 
         for method in methodswith(binding, mousetrap) 
             if isnothing(match(r".*_signal_.*", string(method.name)))
-                push!(non_signal_methods, method.name)
+                # first argument is type, this is the equivalent of a member function in Julia
+                if hasproperty(method.sig, :parameters) && method.sig.parameters[2] == binding
+                    push!(non_signal_methods, method.name)
+                end
             else
                 push!(signal_methods, method.name)
             end
         end
 
-        for m in union(non_signal_methods, signal_methods)
+        # sort by signal, as opposed to alphabetically
+
+        signal = Set{String}()
+        for method in signal_methods
+            m = match(r".*_signal_(.*)_", string(method))
+            if !isnothing(m)
+                push!(signals, m.captures[1])
+            end
+        end
+
+        signal_methods_sorted = []
+        for signal in sort([signals...])
+            for method in signal_methods
+                if occursin("_" * signal, string(method))
+                    push!(signal_methods_sorted, method)
+                end
+            end
+            push!(signal_methods_sorted, Symbol(""))
+        end
+
+        for m in [non_signal_methods..., Symbol(""), signal_methods_sorted...]
 
             if once
-                out *= "#### Functions that interact with this type:\n"
+                out *= "#### Functions that operate on this type:\n"
                 once = false
             end
 
             as_string = string(m)
+            if isempty(as_string)
+                out *= "\n\n"
+                continue
+            end
 
             seen = m in already_seen
             push!(already_seen, m)
