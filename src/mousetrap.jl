@@ -45,8 +45,6 @@ module mousetrap
     end
     export TypedFunction
 
-    typed_function_refs = Ref{TypedFunction}[]
-
     function (instance::TypedFunction)(args...)
         return Base.convert(instance._return_t, instance._apply([Base.convert(instance._arg_ts[i], args[i]) for i in 1:length(args)]...))
     end
@@ -320,7 +318,7 @@ module mousetrap
     
     @generated function get_top_level_widget(x) ::Widget
         return :(
-            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `mousetrap.as_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
+            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
         )
     end
     export get_top_level_widget

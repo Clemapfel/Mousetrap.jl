@@ -113,7 +113,6 @@ include("docs/functions.jl")
 include("docs/types.jl")
 include("docs/enums.jl")
 
-
 macro generate_signal_function_docs(snake_case)
 
     out = Expr(:toplevel)

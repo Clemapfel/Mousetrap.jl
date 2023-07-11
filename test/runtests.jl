@@ -36,6 +36,49 @@ const test_action = Ref{Union{Action, Nothing}}(nothing)
         end
     end
 
+### ADJUSTMENT
+
+    struct AdjustmentTest <: Widget end
+    mousetrap.get_top_level_widget(::AdjustmentTest) = Separator()
+
+    function (::AdjustmentTest)()
+        @testset "Adjustment" begin
+            adjustment = Adjustment(0, -1, 2, 0.05)
+            Base.show(devnull, adjustment)
+
+            properties_changed_called = Ref{Bool}(false)
+            connect_signal_properties_changed!(adjustment, properties_changed_called) do ::Adjustment, properties_changed_called
+                properties_changed_called[] = true
+                return nothing
+            end
+
+            value_changed_called = Ref{Bool}(false)
+            connect_signal_value_changed!(adjustment, value_changed_called) do ::Adjustment, value_changed_called
+                value_changed_called[] = true
+                return nothing
+            end
+
+            @test get_lower(adjustment) == -1.0f0
+            set_lower!(adjustment, 0)
+            @test get_lower(adjustment) == 0.0f0
+
+            @test get_upper(adjustment) == 2.0f0
+            set_upper!(adjustment, 1)
+            @test get_upper(adjustment) == 1.0f0
+
+            @test get_step_increment(adjustment) == 0.05f0
+            set_step_increment!(adjustment, 0.01)
+            @test get_step_increment(adjustment) == 0.01f0
+            
+            @test get_value(adjustment) == 0.0f0
+            set_value!(adjustment, 0.5)
+            @test get_value(adjustment) == 0.5f0
+
+            @test properties_changed_called[] == true
+            @test value_changed_called[] == true
+        end
+    end
+
 ### APPLICATION
 
     struct ApplicationTest <: Widget end
@@ -147,11 +190,14 @@ main(app_id) do app::Application
     set_margin!(grid, 10)
         
     add_page(grid, "Action", ActionTest())
+    add_page(grid, "Adjustment", AdjustmentTest())
     add_page(grid, "Application", ApplicationTest())
     add_page(grid, "Button", ButtonTest())
 
+    # this will be realized after all pages, at which point it will quit the app
     sentinel = Separator()
     connect_signal_realize!(sentinel, app) do _, app
+        sleep(1)
         quit!(app)
     end
     overlay = Overlay()
