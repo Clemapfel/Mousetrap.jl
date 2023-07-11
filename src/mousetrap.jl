@@ -4849,6 +4849,10 @@ module mousetrap
     set_texture!(shape::Shape, texture::TextureObject) = detail.set_texture!(shape._internal, texture._internal.cpp_object)
     export set_texture!
 
+    set_color!(shape::Shape, color::RGBA) = detail.set_color!(shape._internal, color)
+    set_color!(shape::Shape, color::HSVA) = detail.set_color!(shape._internal, hsva_to_rgba(color))
+    export set_color!
+
     Base.show(io::IO, x::Shape) = show_aux(io, x, :native_handle)
 
 ###### render_task.jl

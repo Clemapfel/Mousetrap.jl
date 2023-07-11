@@ -44,6 +44,15 @@ struct ShapePage <: Widget
 
         add_render_task!(out.render_area, RenderTask(shape))
 
+        radius = 0.001
+        n_vertices = get_n_vertices(shape)
+        for i in 1:n_vertices
+            pos = get_vertex_position(shape, i)
+            to_add = Circle(Vector2f(pos.x, pos.y), radius, 16)
+            set_color!(to_add, HSVA(i / n_vertices, 1, 1, 1))
+            add_render_task!(out.render_area, RenderTask(to_add))
+        end
+
         # Widget hierarchy for clarity:
         # 
         # CenterBox \
@@ -62,6 +71,7 @@ mousetrap.get_top_level_widget(x::ShapePage) = x.center_box
 main() do app::Application
 
     window = Window(app)
+    set_title!(window, "mousetrap.jl")
 
     shapes = [
         "Point" => Point(

@@ -2370,9 +2370,9 @@ Get the native uniform location for the `_vertex_color` input value of all verte
 
 @document get_vertex_position """
 ```
-get_vertex_position(::Shape, ::Integer) -> Vector2f
+get_vertex_position(::Shape, ::Integer) -> Vector3f
 ```
-Get the position of vertex at given index, in OpenGL coordinates.
+Get the position of vertex at given index, in 3D OpenGL coordinates.
 """
 
 @document get_vertex_position_location """
@@ -3544,6 +3544,14 @@ Set horizontal alignment of the aspect frames child. `0.5` by default.
 set_child_y_alignment!(::AspectFrame, alignment::AbstractFloat) 
 ```
 Set vertical alignment of the aspect frames child. `0.5` by default.
+"""
+
+@document set_color! """
+```
+set_color!(::Shape, ::RGBA)
+set_color!(::Shape, ::HSVA)
+```
+Set the color of all vertices of the shape.
 """
 
 @document set_column_spacing! """
