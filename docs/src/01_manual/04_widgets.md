@@ -15,7 +15,7 @@ In this chapter, we will learn:
     main() do app::Application
         window = Window(app)
 
-        # snippet here, creates widget and adds it to `window'
+        # snippet here, creates widget and adds it to `window' using `set_child!`
 
         present!(window)
     end
@@ -26,11 +26,11 @@ In this chapter, we will learn:
 ## What is a widget?
 
 Widgets are the central element to any and all GUI applications. In general, a widget is anything that can be rendered on screen. Often, wigdets are **interactable**, which means that the user can trigger behavior by interacting with the widget 
-using a device such as a mouse, keyboard or touchcsreen.
+using a device such as a mouse, keyboard, or touchcsreen.
 
 For example, to interact with the widget [`Button`](@ref) from the previous chapter, the user has to move the mouse cursor
 over the area of the button on screen, then press the left mouse button. This will trigger an animation where the button 
-changes its appearance to look "pressed in", emit its signal `clicked` to trigger custom behavior, then return to its previous state. Having used computers for many years, most of us never thing about how things work in this gradual of a manner, and `Button` specifically makes it so we don't have to, all those actions are already implemented for us. All we have to do is place the button and connect to its signals.
+changes its appearance to look "pressed in", emit its signal `clicked` to trigger custom behavior, then return to its previous state. Having used computers for many years, most of us never think about how things work in this gradual of a manner. `Button` specifically makes it so we don't have to, all those actions are already implemented for us. All we have to do is place the button and connect to its signals.
 
 ## Widget Signals
 
@@ -39,8 +39,8 @@ all widgets are signal emitters, but not all signal emitters are widgets.
 
 All widgets **share a number of signals**. These signals are accessible for every subtype of widget:
 
-| Signal ID  | Signature                     |
-|------------|-------------------------------|
+| Signal ID  | Signature                       |
+|------------|---------------------------------|
 | `realize`  | `(::T, [::Data_t]) -> Nothing`  |
 | `destroy`  | `(::T, [::Data_t]) -> Nothing`  | 
 | `show`     | `(::T, [::Data_t]) -> Nothing`  | 
@@ -50,23 +50,22 @@ All widgets **share a number of signals**. These signals are accessible for ever
 
 Where `T` is the subtype. For example, since `Button` is a widget, the signature of `Button`s signal `realize` is `(::Button, [::Data_t]) -> Nothing`.
 
-By the end of this chapter, we will have learned when exactly all these signals are emitted and what they mean. For now, we will just note that all widgets share these signals. For any widget in this chapter or in the docs, these signals are available. As such, they will not be listed for every `Widget` subtype.
+By the end of this chapter, we will have learned when exactly all these signals are emitted and what they mean. For now, we will just note that all widgets share these signals. For any class subtyping `Widget`, these signals are available. 
 
 ---
 
 ## Widget Properties
 
-When displayed on screen, a widgets size and location will be chosen dynamically. Resizing the window may or may not resize all widgets inside such that they fill the entire window. Multiple properties govern this behavior, and a somewhat complex heuristic determines the exact position and size. We can influence this process using multiple widget properties, which we will learn about in this chapter.
+When displayed on screen, a widgets size and location will be chosen dynamically. Resizing the window may or may not resize all widgets inside such that they fill the entire window. Multiple properties govern this behavior, and a somewhat complex heuristic determines the exact position and size. We can influence this process using multiple properties all widgets share.
 
 Each widget will choose a position and size on screen. We call this area, an axis-aligned rectangle, the widgets **allocated area**.
 
 ### Parent and Children
 
 Widgets can be inside another widget. A widget that can contain other widgets is called a **container** widget. Each widget inside this container is called the **child** of the container.
-Whether a widget can contain any children and how many depends on the type of widgets, some may contain no children, exactly one child, exactly two, or any number of children. Shared for all widgets, however, is that each widget has exactly one **parent**. This is the widget it is contained within.
+Whether a widget can contain any children and how many depends on the type of widget. Some may contain no children, exactly one child, exactly two, or any number of children. Shared for all widgets, however, is that each widget has exactly one **parent**. This is the widget it is contained within.
 
-Because a widget can only have exactly one parent, we cannot put the same widget instance into two containers. If we want two identical buttons on two different positions on screen, 
-we have to create two button instances.
+Because a widget can only have exactly one parent, we cannot put the same widget instance into two containers. If we want two identical `Button`s in two different positions on screen, we have to create two button instances.
 
 ### Size Request
  
@@ -78,23 +77,23 @@ Manipulating the size request to influence a widgets minimum size is also called
 
 ### Accessing Widget Size
 
-We can query information about a widgets current and target size using multiple functions, some of which only are available after a widget is **realized**. Realization means that the widget is initialized, has chosen it's final size on screen, and it ready to be displayed. When these conditions are met, widget will emit signal `realize`. 
+We can query information about a widgets current and target size using multiple functions, some of which are only available after a widget is **realized**. Realization means that the widget is initialized, has chosen its final size on screen, and it ready to be displayed. When these conditions are met, any widget will emit its signal `realize`. 
 
 Once realized, [`get_allocated_size`](@ref) and [`get_position`](@ref) return the current size and position of a widget, in pixels.
 
-This size may or may not be equal to what we size-hinted the widget to, as size-hinting only determines the widgets minimum size. The layout manager is free to allocate a size larger than that.
+This size may or may not be equal to what we size-hinted the widget to, as size-hinting only determines the widgets *minimum size*. The layout manager is free to allocate a size larger than that.
 
-Lastly, [`get_natural_size`](@ref) will access the size preferred by the layout manager. This size will always be equal to or larger than the size request. When trying to predict the size a widget will have, `get_natural_size` will give use the best measurement. Once the widget is realized, `get_allocated_size` and `get_position`  will gives us the exact value.
+Lastly, [`get_natural_size`](@ref) will access the size preferred by the layout manager. This size will always be equal to or larger than the size request. When trying to predict the size a widget will, `get_natural_size` will give us the best estimate. Once the widget is realized, `get_allocated_size` and `get_position`  will gives us the exact value.
 
 Layout management is very complex and the algorithm behind managing the size of the totality of all widgets is highly sophisiticated. Users of mousetrap are not required to understand this exact mechanism, only how to influence it.
 
-On top of a widgets size request, a widgets target final allocated size depends on a number of other variables:
+On top of a widgets size request, a widgets final allocated size depends on a number of other variables:
 
 ### Margin
 
-Any widget has four margins: `start`, `end`, `top` and `bottom`. Usually, these correspond to empty space left, right, above, and below the widget, respectively. Margins are simply added to the corresponding side of the widget. In this way, they work similar to the [css properties of the same name](https://www.w3schools.com/css/css_margin.asp), though in mousetrap, margins may not be negative.
+Any widget has four margins: `start`, `end`, `top` and `bottom`. Usually, these correspond to empty space left, right, above, and below the widget, respectively. Margins are rendered as empty space added to the corresponding side of the widget. In this way, they work similar to the [css properties of the same name](https://www.w3schools.com/css/css_margin.asp), though in mousetrap, margins may not be negative.
 
-We use `set_margin_start`, `set_margin_end`, `set_margin_top` and `set_margin_bottom` to control each individual margin.
+We use `set_margin_start!`, `set_margin_end!`, `set_margin_top!` and `set_margin_bottom!` to control each individual margin;
 
 ```julia
 widget = # ...
@@ -111,30 +110,30 @@ set_margin_vertical(widget, 10)
 set_margin(widget, 10)
 ```
 
-Where `set_margin_horizontal`, `set_margin_vertical` set two of the margins at the same time, while `set_margin` sets all four margins at once.
+Where `set_margin_horizontal!`, `set_margin_vertical!` set two of the margins at the same time, while `set_margin!` sets all four margins at once.
 
 Margins are used extensively in UI design. They make an application look more professional and aesthetically pleasing. A good rule of thumb is that for a 1920x1080 display, the **margin unit** should be 10 pixels. That is, all margins should be a multiple of 10. If the display has a higher or lower resolution, the margin unit should be adjusted.
 
 ### Expansion
 
-If the size of the parent of a widget changes, for example when resizing the window a `Button` is contained in, the widget may or may not **expand**. Expansion governs if a widget should
+If the size of the parent of a widget changes, for example when resizing the window a `Button` is contained within, the widget may or may not **expand**. Expansion governs if a widget should
 fill out the entire space available to it. We set expansion along the x- and y-axis separately using `set_expand_horizontally!` and `set_expand_vertically!`. If set to false, a widget will usually not grow past its natural size.
 
-`set_expand!` is a convenience function that sets expansiong along both axes simultaneously.
+`set_expand!` is a convenience function that sets expansion along both axes simultaneously.
 
 ```julia
 widget = # ...
-set_expand_horizontally(widget, false)
-set_expand_vertically(widget, true)
+set_expand_horizontally!(widget, false)
+set_expand_vertically!(widget, true)
 ```
 
 ### Alignment
 
-Widget **alignment** governs how one or more widgets behave when grouped together, usually because they are all children of the same parent.
+Widget **alignment** governs where inside its container a widget will attempt to align itself.
 
 An example: a `Button` size-hinted to 100x100 pixels has expansion disabled (`set_expand!` was set to `false`). It has a margin of 0 and is placed inside a `Window`. When we scale the window, the button will not change size. Alignment, then, governs **where in the window the button is positioned**.
 
-We set alignment for the horizontal and vertical axis separately, using `set_horizontal_alignment!` and `set_vertical_alignment!`, which both take value of the enum [`Alignment`](@ref). This enum has three possible values, whose meaning depends on whether we use this value for the horizontal or vertical alignment:
+We set alignment for the horizontal and vertical axis separately using `set_horizontal_alignment!` and `set_vertical_alignment!`, which both take value of the enum [`Alignment`](@ref). This enum has three possible values, whose meaning depends on whether we use this value for the horizontal or vertical alignment:
 
 + `ALIGNMENT_START`: left if horizontal, top if vertical
 + `ALIGNMENT_END`: right if horizontal, bottom if vertical
@@ -163,20 +162,17 @@ set_vertical_alignment!(widget, ALIGNMENT_START)
 set_alignment!(widget, ALIGNMENT_START)
 ```
 
-Where `set_alignment!` sets both properties at the same time.
-
-Using alignment, size-hinting, and expansion, we can fully control where and at what size a widget will appear on screen.
+Using alignment, size-hinting, and expansion, we can fully control where and at what size a widget will appear on screen, without having to worry to manually place it by choosing the exact position or size.
 
 ---
 
 ### Visibility & Opacity
 
-Once a widget is realized and we call `present!` on the window it is contained in, it is **shown**, meaning it appears on screen and it emits signal `show`. If the widget leaves the screen, for example because it is removed from a container or its window is closed, it is **hidden**, emitting signal `hide`.
+Once a widget is realized, when we call [`present!`](@ref) on the window it is contained in, it is **shown**, appearing on screen and emitting signal `show`. If the widget leaves the screen, for example because it is removed from a container or its window is closed, it is **hidden**, emitting signal `hide`.
 
 Another way to hide a shown widget or show a hidden widget is `set_is_visible!`:
 
 ```julia
-# hide a button when it is clicked
 button = Button()
 connect_signal_clicked!(button) do self::Button
     set_is_visible!(self, false)
@@ -186,7 +182,7 @@ set_child!(window, button)
 
 Here we hide a button when it is clicked. This means the button cannot be clicked again, as its interactivity is only available while it is shown. 
 
-If we instead just want to make the button invisible, but still have it be clickable, we need use `set_opacity!`, which takes a float in `[0, 1]`, where `0` is fully transparent, `1` is fully opaque:
+If we instead just want to make the button invisible, but still have it be clickable, we need use `set_opacity!`. This functions takes a float in `[0, 1]`, where `0` is fully transparent, `1` is fully opaque:
 
 ```julia
 # make a button invisibile if it is visible, or visible if it is invisible
@@ -202,7 +198,7 @@ end
 set_child!(window, button)
 ```
 
-Setting opacity does emit the `hide` or `show` signals.
+Setting opacity does emit the `hide` or `show` signals, meaning while the widget may be fully transparent and thus invisible to us humans, it retains its allocated area on screen.
 
 ---
 
@@ -250,7 +246,7 @@ button = Button()
 set_cursor!(button, CURSOR_TYPE_POINTER)
 ```
 
-The exact look of each cursor type depends on the users operating system and UI configuration. To choose a fully custom cursor, we use `set_cursor_from_image!`, which takes an `Image`. We will learn more about `Image` in the [chapter dedicated to it](./06_image_and_sound.md). Until then, this is how we set a cursor from a `.png` file on disk:
+The exact look of each cursor type depends on the users operating system and UI configuration. To choose a fully custom cursor, we use [`set_cursor_from_image!`](@ref), which takes an `Image`. We will learn more about `Image` in the [chapter dedicated to it](./06_image_and_sound.md). Until then, this is how we set a cursor from a `.png` file on disk:
 
 ```julia
 widget = # ...
@@ -261,33 +257,33 @@ set_cursor_from_image!(widget, Image("/path/to/image.png"))
 
 ### Tooltip
 
-Each widget can optionally have a **tooltip**. This is a little window that opens when the cursor hovers over a widgets allocated area for enough time. The exact duration is decided by the users OS, we do not have control over it. 
+Each widget can have a **tooltip**. This is a little window that opens when the cursor hovers over a widgets allocated area for enough time. The exact duration is decided by the users OS, we do not have control over it. 
 
-Tooltips are usually a simple text message. For a case like this, we can set the text directly using `set_tooltip_text!`:
+Tooltips are usually a simple text message. In a case like this, we can set the text directly using `set_tooltip_text!`:
 
 ```julia
 button = Button()
-set_tooltip_text!(button, "Click to Open");
+set_tooltip_text!(button, "Click to Open")
 ```
-\image html widget_tooltip_text.png
+![](../resources/widget_tooltip_text.png)
 
 If we want to use something more complex than just simple text, we can register an arbitrarily complex widget as a tooltip by calling `set_tooltip_widget!`. As a matter of style, this widget should not be intractable, though there is no mechanism in place to enforce this.
 
 ---
 
-Now that we know properties shared by all widgets, we can continue onto learning about all the specific widget types. From this point onwards, we can be sure that any of these objects supports all properties and signals discussed so far.
+Now that we know properties shared by all widgets, we can continue onto learning about all the specific widget types. From this point onwards, we can be sure that any of these supports all properties and signals discussed so far.
 
 ## Window
 
 For our first widget, we have [`Window`](@ref). Windows are central to any application, as such, `Window` and `Application` are inherently connected. We cannot create a `Window` without an application. If all windows are closed, the underlying application usually exists.
 
-While windows are widget, they occupy a somewhat of a special place. `Window` is the only widget that does not have a parent, this is called being **top-level**, nothing is "above" the window in the parent-child hierarchy.
+While windows are widget, they occupy a somewhat of a special place. `Window` is the only widget that does not have a parent. This is called being **top-level**, nothing is "above" the window in the parent-child hierarchy.
 
 `Window` has exactly on child, which we set with `set_child!`, as we have many times so far already.
 
 ### Opening / Closing a Window
 
-When we create a `Window` instance, it will be initially hidden. None of its children will be realized or shown, and the user has no way to know that the window exists. A `Window`s lifetime only begins once we call `present!`. This opens the window and shows it to the user. We've seen this in our `main` functions before:
+When we create a `Window` instance, it will be initially hidden. None of its children will be realized or shown, and the user has no way to know that the window exists. A `Window`s lifetime only begins once we call `present!`. This opens the window and shows it to the user, realizing all its children. We've seen this in our `main` functions before:
 
 ```julia
 main() do app::Application
@@ -300,7 +296,7 @@ main() do app::Application
 end
 ```
 
-At any point we can call `close!`, which hides the window. This does not destroy the window permanently, unless `set_hide_on_close!` was set to `false` previously. For an application 
+At any point we can call `close!`, which hides the window. This does not destroy the window permanently, unless [`set_hide_on_close!`](@ref) was set to `false` previously. For an application 
 to exit, all its windows only need to be hidden, not permanently destroyed. Therefore, calling `close!` on all windows will also cause the application to attempt to exit.
 
 ### Close Request
@@ -316,43 +312,40 @@ mousetrap.@signal_table(Window,
 )
 ```
 
-
-
-When the window handler of the users OS asks the window to close, for example by the user pressing the "x" button, this signal will be emitted. It's result, of type [`WindowCloseRequestResult`](@ref) determines whether the window actualls does close. By returning `WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE`, the window will stay open:
+When the window handler of the users OS asks the window to close, for example by the user pressing the "x" button, signal `close_request` will be emitted. Its result of type [`WindowCloseRequestResult`](@ref) determines whether the window actualls does close. By returning `WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE`, the window will stay open:
 
 ```julia
 # create a window that cannot be closed
 window = Window(app)
-connect_signal_close_request!(window) self::Window
+connect_signal_close_request!(window) do self::Window
     return WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE
 end
 present!(window)
 ```
 
-If the signal handler instead returns `WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE`, the window will simply close, which is the default behavior. This is also what happens when no handler
-is connected to signal `close_request`.
+If the signal handler instead returns `WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE`, the window will simply close, which is the default behavior. 
 
 ### Window Properties
 
-Other than its singular child, `Window` has a number of other properties:
+Other than its singular child, `Window` has a number of other properties.
 
 #### Title
 
-`set_title!` sets the name displayed in the window's header bar. By default, this name will be the name of the application. We can choose to hide the title by simply calling `set_title!(window, "")`.
+`set_title!` sets the name displayed in the windows header bar. By default, this name will be the name of the application. We can choose to hide the title by simply calling `set_title!(window, "")`.
 
 #### Modality & Transience
 
 When dealing with multiple windows, we can influence the way two windows interact with each other. Two of these interactions are determined by whether a window is **modal** and whether it is **transient** for another window.
 
-By setting `set_modal!` to true, if the window is revealed, **all other windows of the application will be deactivated**, preventing user interaction with them. This also freezes animations, it essentially pauses all other windows. The most common use-case for this is for dialogs, for example if the user requests to close the application, it is common to open a small dialog requesting the user to confirm exiting the application. While this dialog is shown, the main window should be disabled and all other processes should halt until a selection is made. This is possible by making the dialog *modal*.
+By setting `set_modal!` to true, if the window is revealed, **all other windows of the application will be deactivated**, preventing user interaction with them. This also freezes animations, it essentially pauses all other windows. The most common use-case for this is for dialogs, for example if the user requests to close the application, it is common to open a small dialog requesting the user to confirm exiting the application. While this dialog is shown, the main window should be disabled and all other processes should halt until a selection is made. This is possible by making the dialog window *modal*.
 
 Using `set_transient_for!`, we can make sure a window will always be shown in front of another. `set_transient_for!(A, B)` will make it so, while `A` overlaps `B` on the users desktop, `A` will be shown in front of `B`. 
 
 #### Titlebar
 
-The part on top of a window is called the **title bar**. By default, it will show the window title and a minimize-, maximize- and close-button. We can completely hide the header bar using `set_is_decorated!(window, false)`, which also means the user has now way to move or close the window, as the header bar is not accessible to them.
+The part on top of a window is called the **title bar**. By default, it will show the window title and a minimize-, maximize-, and close-button. We can completely hide the header bar using `set_is_decorated!(window, false)`, which also means the user has now way to move or close the window.
 
-In addition to the child in the content area of the window, `Window` supports inserting a widget into the titlebar using [`set_titlebar_widget!`](@ref), this will usually be a `HeaderBar`, which we will learn about later in this chapter, though any arbitrary widget can be inserted.
+In addition to the child in the content area of the window, `Window` supports inserting a widget into the titlebar using [`set_titlebar_widget!`](@ref), this will usually be a widget of type [`HeaderBar`](@ref), which we will learn about later in this chapter, though any arbitrary widget can be inserted.
 
 ---
 
@@ -364,7 +357,7 @@ In contention for being *the* most used widget, `Label`s are important to unders
 label = Label("text")
 ```
 
-To change a `Label`s text after initialization, we use `set_text!`. This can be any number of lines, `Label` is not just for single-line text. If our text has more than one line, a number of additional formatting options are available:
+To change a `Label`s text after initialization, we use `set_text!`. This can be any number of lines, `Label` is not just for single-line text. If our text has more than one line, a number of additional formatting options are available.
 
 ### Justify Mode
 
@@ -382,11 +375,11 @@ To change a `Label`s text after initialization, we use `set_text!`. This can be 
 ![](../resources/text_justify_fill.png)
 `JUSTIFY_MODE_FILL`
 
-Where the fifth mode is `JUSTIFY_MODE_NONE` which arranges all text in exactly one line.
+Where the fifth mode is `JUSTIFY_MODE_NONE`, which arranges all text in exactly one line.
 
 ### Wrapping
 
-Wrapping determines where a line break is inserted if the text's width exceeds that of `Label` allocated area. For wrapping to happen at all, the `JustifyMode` has to be set to anything **other** than `LABEL_WRAP_MODE_NONE`, which is the default.
+Wrapping determines where a line break is inserted if the a lines width exceeds that of `Label`s allocated area. For wrapping to happen at all, the `JustifyMode` has to be set to anything other than `LABEL_WRAP_MODE_NONE`, which is the default.
 
 Wrapping modes are values of the enum [`LabelWrapMode`](@ref):
 
@@ -435,7 +428,7 @@ Where in the last row, we used the [decimal html code](https://www.compart.com/e
 
 !!! note 
     All `<`, `>` will be parsed as style tags, regardless of whether they are escaped. To display them as characters, we us `&lt;` 
-    (less-than) and `&gt;` (greater-than) instead of `<` and `>`. For example, we would `x < y` as `"x &lt; y"`.
+    (less-than) and `&gt;` (greater-than) instead of `<` and `>`. For example, we would write `x < y` as `"x &lt; y"`.
 
 Pango also supports colors, different fonts, text direction, and more. For these, we can [consult the Pango documentation](https://docs.gtk.org/Pango/pango_markup.html) directly.
 
@@ -447,18 +440,16 @@ set_child!(window, label)
 
 ---
 
----
-
 ## Box
 
-[`Box`](@ref) is a multi-widget container that aligns its children horizontally or vertically, depending on **orientation**. A number of widgets are orientable like this, which means they supports the functions `set_orientation!` and `get_orientation`, which take / return an enum value of enum [`Orientation`](@ref)
+[`Box`](@ref) is a multi-widget container that aligns its children horizontally or vertically, depending on **orientation**. A number of widgets are orientable like this, which means they support the functions `set_orientation!` and `get_orientation`, which take / return an enum value of [`Orientation`](@ref)
 
 | `Orientation` Value       | Meaning                                  |
 |---------------------------|------------------------------------------|
 | `ORIENTATION_HORIZONTAL`  | Oriented left-to-right, along the x-axis |
 | `ORIENTATION_VERTICAL`    | Oriented top-to-bottom, along the y-axis |
 
-To add widgets to the box, we use `push_front!`, `push_back!` and `insert_after!`:
+To add widgets to the `Box`, we use `push_front!`, `push_back!` and `insert_after!`:
 
 ```julia
 left = Label("LEFT")
@@ -484,9 +475,9 @@ insert_after!(box, center, left)
 
 ![](../resources/box_example.png)
 
-In this example, we use margins to add a 10px gap in between each child. This can be done more succinctly using the boxes own **spacing** propety. By setting `set_spacing!` to `10`, we insert 10 pixels in between any two children.
+In this example, we use margins to add a 10px gap in between each child. This can be done more succinctly using the boxes own **spacing** property. By setting `set_spacing!` to `10`, it will automatically insert a 10 pixel gap in between any two children, in addition to the childrens regular margin.
 
-Lastly, `hbox` and `vbox` are two convenience functinos that take a number of widgets and return a horizontal or vertical box with those widgets already inserted. Using this and spacing, we can write the above as two lines:
+`hbox` and `vbox` are two convenience functions that take a number of widgets and return a horizontal or vertical box with those widgets already inserted. Using this and spacing instead of margins, we can write the above as two lines:
 
 ```julia
 box = hbox(Label("LEFT"), Label("CENTER"), Label("RIGHT"))
@@ -510,6 +501,12 @@ set_end_child!(center_box, Label("end"))
 
 ![](../resources/center_box.png)
 
+Using `CenterBox`s constructor, we can also write the above as a one-liner:
+
+```julia
+center_box = CenterBox(ORIENTATION_HORIZONTAL, Label("start"), Button(), Label("end"))
+```
+
 ---
 
 ## Separator
@@ -525,15 +522,15 @@ set_child!(window, separator)
 
 ![](../resources/separator_example.png)
 
-This widget is often used as a background to another widget, to fill empty space, or as en element visually separating two sections. Often, we want to have the separator be a specific thickness. This can be accomplished using size-hinting. For example, to draw a horizontal line similar to the `<hr>` element in HTML, we would do the following:
+This widget is used as a background to another widget, to fill empty space, or as en element visually separating two sections. Often, we want to have the separator be a specific thickness. This can be accomplished using size-hinting. For example, to draw a horizontal line similar to the `<hr>` element in HTML, we would do the following:
 
 ```julia
 hr = Separator()
 set_expand_horizontally!(hr, true)
 set_expand_vertically!(hr, false)
 set_size_request!(hr, Vector2f(
-    0,  // width: any 
-    3   // height: exactly 3 px
+    0,  # width: any 
+    3   # height: exactly 3 px
 ));
 ```
 
