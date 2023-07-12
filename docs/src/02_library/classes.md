@@ -20,160 +20,6 @@ Action
 + [`mousetrap.set_signal_activated_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Adjustment
 ```@docs
@@ -190,98 +36,6 @@ Adjustment
 + [`mousetrap.set_value!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_properties_changed!`](@ref)
 + [`mousetrap.disconnect_signal_properties_changed!`](@ref)
 + [`mousetrap.emit_signal_properties_changed`](@ref)
@@ -291,67 +45,11 @@ Adjustment
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_value_changed!`](@ref)
 + [`mousetrap.disconnect_signal_value_changed!`](@ref)
 + [`mousetrap.emit_signal_value_changed`](@ref)
 + [`mousetrap.get_signal_value_changed_blocked`](@ref)
 + [`mousetrap.set_signal_value_changed_blocked!`](@ref)
-
-
 
 
 
@@ -376,162 +74,6 @@ AlertDialog
 + [`mousetrap.set_message!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Angle
 ```@docs
@@ -540,162 +82,6 @@ Angle
 #### Functions that operate on this type:
 + [`mousetrap.as_degrees`](@ref)
 + [`mousetrap.as_radians`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -726,163 +112,11 @@ Application
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_shutdown!`](@ref)
 + [`mousetrap.disconnect_signal_shutdown!`](@ref)
 + [`mousetrap.emit_signal_shutdown`](@ref)
 + [`mousetrap.get_signal_shutdown_blocked`](@ref)
 + [`mousetrap.set_signal_shutdown_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -891,162 +125,6 @@ Application
 ApplicationID
 ```
 #### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -1065,326 +143,11 @@ AspectFrame
 + [`mousetrap.set_ratio!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## AxisAlignedRectangle
 ```@docs
 AxisAlignedRectangle
 ```
-#### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Box
 ```@docs
@@ -1405,51 +168,11 @@ Box
 + [`mousetrap.set_spacing!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -1459,63 +182,11 @@ Box
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -1525,53 +196,11 @@ Box
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -1586,14 +215,6 @@ Box
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -1619,35 +240,11 @@ Button
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_clicked!`](@ref)
 + [`mousetrap.disconnect_signal_clicked!`](@ref)
 + [`mousetrap.emit_signal_clicked`](@ref)
 + [`mousetrap.get_signal_clicked_blocked`](@ref)
 + [`mousetrap.set_signal_clicked_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
@@ -1657,37 +254,11 @@ Button
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_hide!`](@ref)
 + [`mousetrap.disconnect_signal_hide!`](@ref)
 + [`mousetrap.emit_signal_hide`](@ref)
 + [`mousetrap.get_signal_hide_blocked`](@ref)
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_map!`](@ref)
@@ -1697,44 +268,6 @@ Button
 + [`mousetrap.set_signal_map_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_realize!`](@ref)
 + [`mousetrap.disconnect_signal_realize!`](@ref)
 + [`mousetrap.emit_signal_realize`](@ref)
@@ -1742,53 +275,11 @@ Button
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -1803,14 +294,6 @@ Button
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -1829,51 +312,11 @@ CenterBox
 + [`mousetrap.set_start_child!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -1883,63 +326,11 @@ CenterBox
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -1949,53 +340,11 @@ CenterBox
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -2010,14 +359,6 @@ CenterBox
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -2041,49 +382,11 @@ CheckButton
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -2093,63 +396,11 @@ CheckButton
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -2159,51 +410,11 @@ CheckButton
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_toggled!`](@ref)
@@ -2227,32 +438,12 @@ CheckButton
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## ClickEventController
 ```@docs
 ClickEventController
 ```
 #### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_click_pressed!`](@ref)
@@ -2278,142 +469,6 @@ ClickEventController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Clipboard
 ```@docs
@@ -2429,162 +484,6 @@ Clipboard
 + [`mousetrap.set_string!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Clock
 ```@docs
@@ -2593,162 +492,6 @@ Clock
 #### Functions that operate on this type:
 + [`mousetrap.elapsed`](@ref)
 + [`mousetrap.restart!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -2761,162 +504,6 @@ ColorChooser
 + [`mousetrap.get_is_modal`](@ref)
 + [`mousetrap.present!`](@ref)
 + [`mousetrap.set_is_modal!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -2955,49 +542,11 @@ ColumnView
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -3007,63 +556,11 @@ ColumnView
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -3073,53 +570,11 @@ ColumnView
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -3134,14 +589,6 @@ ColumnView
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -3161,162 +608,6 @@ ColumnViewColumn
 + [`mousetrap.set_title!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## DragEventController
 ```@docs
@@ -3325,36 +616,6 @@ DragEventController
 #### Functions that operate on this type:
 + [`mousetrap.get_current_offset`](@ref)
 + [`mousetrap.get_start_position`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_drag!`](@ref)
@@ -3378,126 +639,6 @@ DragEventController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## DropDown
 ```@docs
@@ -3515,51 +656,11 @@ DropDown
 + [`mousetrap.set_selected!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -3569,63 +670,11 @@ DropDown
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -3635,53 +684,11 @@ DropDown
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -3698,176 +705,12 @@ DropDown
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## DropDownItemID
 ```@docs
 DropDownItemID
 ```
 #### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -3897,49 +740,11 @@ Entry
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -3949,63 +754,11 @@ Entry
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -4015,32 +768,6 @@ Entry
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
@@ -4048,23 +775,11 @@ Entry
 + [`mousetrap.set_signal_show_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_text_changed!`](@ref)
 + [`mousetrap.disconnect_signal_text_changed!`](@ref)
 + [`mousetrap.emit_signal_text_changed`](@ref)
 + [`mousetrap.get_signal_text_changed_blocked`](@ref)
 + [`mousetrap.set_signal_text_changed_blocked!`](@ref)
-
-
 
 
 
@@ -4083,14 +798,6 @@ Entry
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## EventController
 ```@docs
@@ -4099,162 +806,6 @@ EventController
 #### Functions that operate on this type:
 + [`mousetrap.get_propagation_phase`](@ref)
 + [`mousetrap.set_propagation_phase!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -4278,49 +829,11 @@ Expander
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -4330,63 +843,11 @@ Expander
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -4396,53 +857,11 @@ Expander
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -4457,14 +876,6 @@ Expander
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -4487,162 +898,6 @@ FileChooser
 + [`mousetrap.set_initial_folder!`](@ref)
 + [`mousetrap.set_initial_name!`](@ref)
 + [`mousetrap.set_is_modal!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -4680,162 +935,6 @@ FileDescriptor
 + [`mousetrap.show_in_file_explorer`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## FileFilter
 ```@docs
@@ -4849,162 +948,6 @@ FileFilter
 + [`mousetrap.get_name`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## FileMonitor
 ```@docs
@@ -5013,162 +956,6 @@ FileMonitor
 #### Functions that operate on this type:
 + [`mousetrap.cancel!`](@ref)
 + [`mousetrap.is_cancelled`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -5183,51 +970,11 @@ Fixed
 + [`mousetrap.set_child_position!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -5237,63 +984,11 @@ Fixed
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -5303,53 +998,11 @@ Fixed
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -5366,14 +1019,6 @@ Fixed
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## FocusEventController
 ```@docs
@@ -5382,42 +1027,6 @@ FocusEventController
 #### Functions that operate on this type:
 + [`mousetrap.self_is_focused`](@ref)
 + [`mousetrap.self_or_child_is_focused`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_focus_gained!`](@ref)
@@ -5430,120 +1039,6 @@ FocusEventController
 + [`mousetrap.get_signal_focus_lost_blocked`](@ref)
 + [`mousetrap.set_signal_focus_gained_blocked!`](@ref)
 + [`mousetrap.set_signal_focus_lost_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -5564,51 +1059,11 @@ Frame
 + [`mousetrap.set_label_x_alignment!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -5618,63 +1073,11 @@ Frame
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -5684,53 +1087,11 @@ Frame
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -5747,14 +1108,6 @@ Frame
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## FrameClock
 ```@docs
@@ -5765,88 +1118,6 @@ FrameClock
 + [`mousetrap.get_time_since_last_frame`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_paint!`](@ref)
 + [`mousetrap.disconnect_signal_paint!`](@ref)
 + [`mousetrap.emit_signal_paint`](@ref)
@@ -5854,81 +1125,11 @@ FrameClock
 + [`mousetrap.set_signal_paint_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_update!`](@ref)
 + [`mousetrap.disconnect_signal_update!`](@ref)
 + [`mousetrap.emit_signal_update`](@ref)
 + [`mousetrap.get_signal_update_blocked`](@ref)
 + [`mousetrap.set_signal_update_blocked!`](@ref)
-
-
-
-
-
-
 
 
 ---
@@ -5943,162 +1144,6 @@ GLTransform
 + [`mousetrap.rotate!`](@ref)
 + [`mousetrap.scale!`](@ref)
 + [`mousetrap.translate!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -6126,51 +1171,11 @@ Grid
 + [`mousetrap.set_rows_homogeneous!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -6180,63 +1185,11 @@ Grid
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -6246,53 +1199,11 @@ Grid
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -6307,14 +1218,6 @@ Grid
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -6349,49 +1252,11 @@ GridView
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -6401,63 +1266,11 @@ GridView
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -6467,53 +1280,11 @@ GridView
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -6530,176 +1301,12 @@ GridView
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## GroupID
 ```@docs
 GroupID
 ```
 #### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -6709,162 +1316,6 @@ HSVA
 ```
 #### Functions that operate on this type:
 + [`mousetrap.hsva_to_rgba`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -6883,51 +1334,11 @@ HeaderBar
 + [`mousetrap.set_title_widget!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -6937,63 +1348,11 @@ HeaderBar
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -7003,53 +1362,11 @@ HeaderBar
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -7066,14 +1383,6 @@ HeaderBar
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## Icon
 ```@docs
@@ -7086,324 +1395,12 @@ Icon
 + [`mousetrap.get_size`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## IconID
 ```@docs
 IconID
 ```
 #### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -7416,162 +1413,6 @@ IconTheme
 + [`mousetrap.get_icon_names`](@ref)
 + [`mousetrap.has_icon`](@ref)
 + [`mousetrap.set_resource_path!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -7592,162 +1433,6 @@ Image
 + [`mousetrap.set_pixel!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## ImageDisplay
 ```@docs
@@ -7763,51 +1448,11 @@ ImageDisplay
 + [`mousetrap.set_scale!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -7817,63 +1462,11 @@ ImageDisplay
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -7883,53 +1476,11 @@ ImageDisplay
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -7946,14 +1497,6 @@ ImageDisplay
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## KeyCode
 ```@docs
@@ -7962,162 +1505,8 @@ KeyCode
 #### Functions that operate on this type:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.emit_signal_key_pressed`](@ref)
 + [`mousetrap.emit_signal_key_released`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -8127,54 +1516,6 @@ KeyEventController
 ```
 #### Functions that operate on this type:
 + [`mousetrap.should_shortcut_trigger_trigger`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_key_pressed!`](@ref)
@@ -8193,109 +1534,11 @@ KeyEventController
 
 
 
-
-
-
-
-
-
 + [`mousetrap.connect_signal_modifiers_changed!`](@ref)
 + [`mousetrap.disconnect_signal_modifiers_changed!`](@ref)
 + [`mousetrap.emit_signal_modifiers_changed`](@ref)
 + [`mousetrap.get_signal_modifiers_changed_blocked`](@ref)
 + [`mousetrap.set_signal_modifiers_changed_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -8320,324 +1563,12 @@ KeyFile
 + [`mousetrap.set_value!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## KeyID
 ```@docs
 KeyID
 ```
 #### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -8666,51 +1597,11 @@ Label
 + [`mousetrap.set_y_alignment!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -8720,63 +1611,11 @@ Label
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -8786,53 +1625,11 @@ Label
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -8847,14 +1644,6 @@ Label
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -8879,51 +1668,11 @@ LevelBar
 + [`mousetrap.set_value!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -8933,63 +1682,11 @@ LevelBar
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -8999,53 +1696,11 @@ LevelBar
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -9060,14 +1715,6 @@ LevelBar
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -9101,49 +1748,11 @@ ListView
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -9153,63 +1762,11 @@ ListView
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -9219,53 +1776,11 @@ ListView
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -9282,340 +1797,17 @@ ListView
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## ListViewIterator
 ```@docs
 ListViewIterator
 ```
-#### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## LogDomain
 ```@docs
 LogDomain
 ```
 #### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -9626,92 +1818,6 @@ LongPressEventController
 #### Functions that operate on this type:
 + [`mousetrap.get_delay_factor`](@ref)
 + [`mousetrap.set_delay_factor!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_press_cancelled!`](@ref)
@@ -9730,104 +1836,12 @@ LongPressEventController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## MenuBar
 ```@docs
 MenuBar
 ```
 #### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
@@ -9837,37 +1851,11 @@ MenuBar
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_hide!`](@ref)
 + [`mousetrap.disconnect_signal_hide!`](@ref)
 + [`mousetrap.emit_signal_hide`](@ref)
 + [`mousetrap.get_signal_hide_blocked`](@ref)
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_map!`](@ref)
@@ -9877,32 +1865,175 @@ MenuBar
 + [`mousetrap.set_signal_map_blocked!`](@ref)
 
 
++ [`mousetrap.connect_signal_realize!`](@ref)
++ [`mousetrap.disconnect_signal_realize!`](@ref)
++ [`mousetrap.emit_signal_realize`](@ref)
++ [`mousetrap.get_signal_realize_blocked`](@ref)
++ [`mousetrap.set_signal_realize_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_show!`](@ref)
++ [`mousetrap.disconnect_signal_show!`](@ref)
++ [`mousetrap.emit_signal_show`](@ref)
++ [`mousetrap.get_signal_show_blocked`](@ref)
++ [`mousetrap.set_signal_show_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unmap!`](@ref)
++ [`mousetrap.disconnect_signal_unmap!`](@ref)
++ [`mousetrap.emit_signal_unmap`](@ref)
++ [`mousetrap.get_signal_unmap_blocked`](@ref)
++ [`mousetrap.set_signal_unmap_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unrealize!`](@ref)
++ [`mousetrap.disconnect_signal_unrealize!`](@ref)
++ [`mousetrap.emit_signal_unrealize`](@ref)
++ [`mousetrap.get_signal_unrealize_blocked`](@ref)
++ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
+
+
+---
+## MenuModel
+```@docs
+MenuModel
+```
+#### Functions that operate on this type:
++ [`mousetrap.add_action!`](@ref)
++ [`mousetrap.add_icon!`](@ref)
++ [`mousetrap.add_section!`](@ref)
++ [`mousetrap.add_submenu!`](@ref)
++ [`mousetrap.add_widget!`](@ref)
+
+
++ [`mousetrap.connect_signal_items_changed!`](@ref)
++ [`mousetrap.disconnect_signal_items_changed!`](@ref)
++ [`mousetrap.emit_signal_items_changed`](@ref)
++ [`mousetrap.get_signal_items_changed_blocked`](@ref)
++ [`mousetrap.set_signal_items_changed_blocked!`](@ref)
+
+
+
+
+---
+## ModifierState
+```@docs
+ModifierState
+```
+#### Functions that operate on this type:
++ [`mousetrap.alt_pressed`](@ref)
++ [`mousetrap.control_pressed`](@ref)
++ [`mousetrap.mouse_button_01_pressed`](@ref)
++ [`mousetrap.mouse_button_02_pressed`](@ref)
++ [`mousetrap.shift_pressed`](@ref)
+
+
++ [`mousetrap.emit_signal_key_pressed`](@ref)
++ [`mousetrap.emit_signal_key_released`](@ref)
+
+
++ [`mousetrap.emit_signal_modifiers_changed`](@ref)
+
+
+---
+## MotionEventController
+```@docs
+MotionEventController
+```
+#### Functions that operate on this type:
+
+
++ [`mousetrap.connect_signal_motion!`](@ref)
++ [`mousetrap.connect_signal_motion_enter!`](@ref)
++ [`mousetrap.connect_signal_motion_leave!`](@ref)
++ [`mousetrap.disconnect_signal_motion!`](@ref)
++ [`mousetrap.disconnect_signal_motion_enter!`](@ref)
++ [`mousetrap.disconnect_signal_motion_leave!`](@ref)
++ [`mousetrap.emit_signal_motion`](@ref)
++ [`mousetrap.emit_signal_motion_enter`](@ref)
++ [`mousetrap.emit_signal_motion_leave`](@ref)
++ [`mousetrap.get_signal_motion_blocked`](@ref)
++ [`mousetrap.get_signal_motion_enter_blocked`](@ref)
++ [`mousetrap.get_signal_motion_leave_blocked`](@ref)
++ [`mousetrap.set_signal_motion_blocked!`](@ref)
++ [`mousetrap.set_signal_motion_enter_blocked!`](@ref)
++ [`mousetrap.set_signal_motion_leave_blocked!`](@ref)
 
 
 
 
 
 
+---
+## Notebook
+```@docs
+Notebook
+```
+#### Functions that operate on this type:
++ [`mousetrap.get_current_page`](@ref)
++ [`mousetrap.get_has_border`](@ref)
++ [`mousetrap.get_is_scrollable`](@ref)
++ [`mousetrap.get_n_pages`](@ref)
++ [`mousetrap.get_quick_change_menu_enabled`](@ref)
++ [`mousetrap.get_tab_position`](@ref)
++ [`mousetrap.get_tabs_reorderable`](@ref)
++ [`mousetrap.get_tabs_visible`](@ref)
++ [`mousetrap.goto_page!`](@ref)
++ [`mousetrap.insert!`](@ref)
++ [`mousetrap.next_page!`](@ref)
++ [`mousetrap.previous_page!`](@ref)
++ [`mousetrap.push_back!`](@ref)
++ [`mousetrap.push_front!`](@ref)
++ [`mousetrap.remove!`](@ref)
++ [`mousetrap.set_has_border!`](@ref)
++ [`mousetrap.set_is_scrollable!`](@ref)
++ [`mousetrap.set_quick_change_menu_enabled!`](@ref)
++ [`mousetrap.set_tab_position!`](@ref)
++ [`mousetrap.set_tabs_reorderable!`](@ref)
++ [`mousetrap.set_tabs_visible!`](@ref)
 
 
++ [`mousetrap.connect_signal_destroy!`](@ref)
++ [`mousetrap.disconnect_signal_destroy!`](@ref)
++ [`mousetrap.emit_signal_destroy`](@ref)
++ [`mousetrap.get_signal_destroy_blocked`](@ref)
++ [`mousetrap.set_signal_destroy_blocked!`](@ref)
 
 
++ [`mousetrap.connect_signal_hide!`](@ref)
++ [`mousetrap.disconnect_signal_hide!`](@ref)
++ [`mousetrap.emit_signal_hide`](@ref)
++ [`mousetrap.get_signal_hide_blocked`](@ref)
++ [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
++ [`mousetrap.connect_signal_map!`](@ref)
++ [`mousetrap.disconnect_signal_map!`](@ref)
++ [`mousetrap.emit_signal_map`](@ref)
++ [`mousetrap.get_signal_map_blocked`](@ref)
++ [`mousetrap.set_signal_map_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
++ [`mousetrap.connect_signal_page_added!`](@ref)
++ [`mousetrap.connect_signal_page_removed!`](@ref)
++ [`mousetrap.connect_signal_page_reordered!`](@ref)
++ [`mousetrap.connect_signal_page_selection_changed!`](@ref)
++ [`mousetrap.disconnect_signal_page_added!`](@ref)
++ [`mousetrap.disconnect_signal_page_removed!`](@ref)
++ [`mousetrap.disconnect_signal_page_reordered!`](@ref)
++ [`mousetrap.disconnect_signal_page_selection_changed!`](@ref)
++ [`mousetrap.emit_signal_page_added`](@ref)
++ [`mousetrap.emit_signal_page_removed`](@ref)
++ [`mousetrap.emit_signal_page_reordered`](@ref)
++ [`mousetrap.emit_signal_page_selection_changed`](@ref)
++ [`mousetrap.get_signal_page_added_blocked`](@ref)
++ [`mousetrap.get_signal_page_removed_blocked`](@ref)
++ [`mousetrap.get_signal_page_reordered_blocked`](@ref)
++ [`mousetrap.get_signal_page_selection_changed_blocked`](@ref)
++ [`mousetrap.set_signal_page_added_blocked!`](@ref)
++ [`mousetrap.set_signal_page_removed_blocked!`](@ref)
++ [`mousetrap.set_signal_page_reordered_blocked!`](@ref)
++ [`mousetrap.set_signal_page_selection_changed_blocked!`](@ref)
 
 
 
@@ -9922,53 +2053,11 @@ MenuBar
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -9985,74 +2074,130 @@ MenuBar
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
+---
+## Overlay
+```@docs
+Overlay
+```
+#### Functions that operate on this type:
++ [`mousetrap.add_overlay!`](@ref)
++ [`mousetrap.remove_child!`](@ref)
++ [`mousetrap.remove_overlay!`](@ref)
++ [`mousetrap.set_child!`](@ref)
 
 
++ [`mousetrap.connect_signal_destroy!`](@ref)
++ [`mousetrap.disconnect_signal_destroy!`](@ref)
++ [`mousetrap.emit_signal_destroy`](@ref)
++ [`mousetrap.get_signal_destroy_blocked`](@ref)
++ [`mousetrap.set_signal_destroy_blocked!`](@ref)
 
 
++ [`mousetrap.connect_signal_hide!`](@ref)
++ [`mousetrap.disconnect_signal_hide!`](@ref)
++ [`mousetrap.emit_signal_hide`](@ref)
++ [`mousetrap.get_signal_hide_blocked`](@ref)
++ [`mousetrap.set_signal_hide_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_map!`](@ref)
++ [`mousetrap.disconnect_signal_map!`](@ref)
++ [`mousetrap.emit_signal_map`](@ref)
++ [`mousetrap.get_signal_map_blocked`](@ref)
++ [`mousetrap.set_signal_map_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_realize!`](@ref)
++ [`mousetrap.disconnect_signal_realize!`](@ref)
++ [`mousetrap.emit_signal_realize`](@ref)
++ [`mousetrap.get_signal_realize_blocked`](@ref)
++ [`mousetrap.set_signal_realize_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_show!`](@ref)
++ [`mousetrap.disconnect_signal_show!`](@ref)
++ [`mousetrap.emit_signal_show`](@ref)
++ [`mousetrap.get_signal_show_blocked`](@ref)
++ [`mousetrap.set_signal_show_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unmap!`](@ref)
++ [`mousetrap.disconnect_signal_unmap!`](@ref)
++ [`mousetrap.emit_signal_unmap`](@ref)
++ [`mousetrap.get_signal_unmap_blocked`](@ref)
++ [`mousetrap.set_signal_unmap_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unrealize!`](@ref)
++ [`mousetrap.disconnect_signal_unrealize!`](@ref)
++ [`mousetrap.emit_signal_unrealize`](@ref)
++ [`mousetrap.get_signal_unrealize_blocked`](@ref)
++ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
+
+
+---
+## PanEventController
+```@docs
+PanEventController
+```
+#### Functions that operate on this type:
++ [`mousetrap.get_orientation`](@ref)
++ [`mousetrap.set_orientation!`](@ref)
+
+
++ [`mousetrap.connect_signal_pan!`](@ref)
++ [`mousetrap.disconnect_signal_pan!`](@ref)
++ [`mousetrap.emit_signal_pan`](@ref)
++ [`mousetrap.get_signal_pan_blocked`](@ref)
++ [`mousetrap.set_signal_pan_blocked!`](@ref)
+
+
+---
+## Paned
+```@docs
+Paned
+```
+#### Functions that operate on this type:
++ [`mousetrap.get_end_child_resizable`](@ref)
++ [`mousetrap.get_end_child_shrinkable`](@ref)
++ [`mousetrap.get_has_wide_handle`](@ref)
++ [`mousetrap.get_orientation`](@ref)
++ [`mousetrap.get_position`](@ref)
++ [`mousetrap.get_start_child_resizable`](@ref)
++ [`mousetrap.get_start_child_shrinkable`](@ref)
++ [`mousetrap.remove_end_child!`](@ref)
++ [`mousetrap.remove_start_child!`](@ref)
++ [`mousetrap.set_end_child!`](@ref)
++ [`mousetrap.set_end_child_resizable!`](@ref)
++ [`mousetrap.set_end_child_shrinkable!`](@ref)
++ [`mousetrap.set_has_wide_handle!`](@ref)
++ [`mousetrap.set_orientation!`](@ref)
++ [`mousetrap.set_position!`](@ref)
++ [`mousetrap.set_start_child!`](@ref)
++ [`mousetrap.set_start_child_resizable!`](@ref)
++ [`mousetrap.set_start_child_shrinkable!`](@ref)
+
+
+---
+## PinchZoomEventController
+```@docs
+PinchZoomEventController
+```
+#### Functions that operate on this type:
++ [`mousetrap.get_scale_delta`](@ref)
+
+
++ [`mousetrap.connect_signal_scale_changed!`](@ref)
++ [`mousetrap.disconnect_signal_scale_changed!`](@ref)
++ [`mousetrap.emit_signal_scale_changed`](@ref)
++ [`mousetrap.get_signal_scale_changed_blocked`](@ref)
++ [`mousetrap.set_signal_scale_changed_blocked!`](@ref)
 
 
 
 
 ---
-## MenuModel
-```@docs
-MenuModel
-```
-#### Functions that operate on this type:
-+ [`mousetrap.add_action!`](@ref)
-+ [`mousetrap.add_icon!`](@ref)
-+ [`mousetrap.add_section!`](@ref)
-+ [`mousetrap.add_submenu!`](@ref)
-+ [`mousetrap.add_widget!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-+ [`mousetrap.connect_signal_items_changed!`](@ref)
-+ [`mousetrap.disconnect_signal_items_changed!`](@ref)
-+ [`mo## Popover
+## Popover
 ```@docs
 Popover
 ```
@@ -10070,46 +2215,63 @@ Popover
 + [`mousetrap.set_has_base_arrow!`](@ref)
 + [`mousetrap.set_relative_position!`](@ref)
 
+
 + [`mousetrap.connect_signal_closed!`](@ref)
 + [`mousetrap.disconnect_signal_closed!`](@ref)
 + [`mousetrap.emit_signal_closed`](@ref)
 + [`mousetrap.get_signal_closed_blocked`](@ref)
 + [`mousetrap.set_signal_closed_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_hide!`](@ref)
 + [`mousetrap.disconnect_signal_hide!`](@ref)
 + [`mousetrap.emit_signal_hide`](@ref)
 + [`mousetrap.get_signal_hide_blocked`](@ref)
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_map!`](@ref)
-+ [`mousetrap.connect_signal_unmap!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
-+ [`mousetrap.disconnect_signal_unmap!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
-+ [`mousetrap.emit_signal_unmap`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
-+ [`mousetrap.get_signal_unmap_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-+ [`mousetrap.set_signal_unmap_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_realize!`](@ref)
-+ [`mousetrap.connect_signal_unrealize!`](@ref)
 + [`mousetrap.disconnect_signal_realize!`](@ref)
-+ [`mousetrap.disconnect_signal_unrealize!`](@ref)
 + [`mousetrap.emit_signal_realize`](@ref)
-+ [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_realize_blocked`](@ref)
-+ [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
-+ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unmap!`](@ref)
++ [`mousetrap.disconnect_signal_unmap!`](@ref)
++ [`mousetrap.emit_signal_unmap`](@ref)
++ [`mousetrap.get_signal_unmap_blocked`](@ref)
++ [`mousetrap.set_signal_unmap_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unrealize!`](@ref)
++ [`mousetrap.disconnect_signal_unrealize!`](@ref)
++ [`mousetrap.emit_signal_unrealize`](@ref)
++ [`mousetrap.get_signal_unrealize_blocked`](@ref)
++ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
+
+
 ---
 ## PopoverButton
 ```@docs
@@ -10132,46 +2294,63 @@ PopoverButton
 + [`mousetrap.set_popover_menu!`](@ref)
 + [`mousetrap.set_relative_position!`](@ref)
 
+
 + [`mousetrap.connect_signal_activate!`](@ref)
 + [`mousetrap.disconnect_signal_activate!`](@ref)
 + [`mousetrap.emit_signal_activate`](@ref)
 + [`mousetrap.get_signal_activate_blocked`](@ref)
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_hide!`](@ref)
 + [`mousetrap.disconnect_signal_hide!`](@ref)
 + [`mousetrap.emit_signal_hide`](@ref)
 + [`mousetrap.get_signal_hide_blocked`](@ref)
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_map!`](@ref)
-+ [`mousetrap.connect_signal_unmap!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
-+ [`mousetrap.disconnect_signal_unmap!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
-+ [`mousetrap.emit_signal_unmap`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
-+ [`mousetrap.get_signal_unmap_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-+ [`mousetrap.set_signal_unmap_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_realize!`](@ref)
-+ [`mousetrap.connect_signal_unrealize!`](@ref)
 + [`mousetrap.disconnect_signal_realize!`](@ref)
-+ [`mousetrap.disconnect_signal_unrealize!`](@ref)
 + [`mousetrap.emit_signal_realize`](@ref)
-+ [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_realize_blocked`](@ref)
-+ [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
-+ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unmap!`](@ref)
++ [`mousetrap.disconnect_signal_unmap!`](@ref)
++ [`mousetrap.emit_signal_unmap`](@ref)
++ [`mousetrap.get_signal_unmap_blocked`](@ref)
++ [`mousetrap.set_signal_unmap_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unrealize!`](@ref)
++ [`mousetrap.disconnect_signal_unrealize!`](@ref)
++ [`mousetrap.emit_signal_unrealize`](@ref)
++ [`mousetrap.get_signal_unrealize_blocked`](@ref)
++ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
+
+
 ---
 ## PopoverMenu
 ```@docs
@@ -10179,46 +2358,63 @@ PopoverMenu
 ```
 #### Functions that operate on this type:
 
+
 + [`mousetrap.connect_signal_closed!`](@ref)
 + [`mousetrap.disconnect_signal_closed!`](@ref)
 + [`mousetrap.emit_signal_closed`](@ref)
 + [`mousetrap.get_signal_closed_blocked`](@ref)
 + [`mousetrap.set_signal_closed_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_hide!`](@ref)
 + [`mousetrap.disconnect_signal_hide!`](@ref)
 + [`mousetrap.emit_signal_hide`](@ref)
 + [`mousetrap.get_signal_hide_blocked`](@ref)
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_map!`](@ref)
-+ [`mousetrap.connect_signal_unmap!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
-+ [`mousetrap.disconnect_signal_unmap!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
-+ [`mousetrap.emit_signal_unmap`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
-+ [`mousetrap.get_signal_unmap_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-+ [`mousetrap.set_signal_unmap_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_realize!`](@ref)
-+ [`mousetrap.connect_signal_unrealize!`](@ref)
 + [`mousetrap.disconnect_signal_realize!`](@ref)
-+ [`mousetrap.disconnect_signal_unrealize!`](@ref)
 + [`mousetrap.emit_signal_realize`](@ref)
-+ [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_realize_blocked`](@ref)
-+ [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
-+ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unmap!`](@ref)
++ [`mousetrap.disconnect_signal_unmap!`](@ref)
++ [`mousetrap.emit_signal_unmap`](@ref)
++ [`mousetrap.get_signal_unmap_blocked`](@ref)
++ [`mousetrap.set_signal_unmap_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_unrealize!`](@ref)
++ [`mousetrap.disconnect_signal_unrealize!`](@ref)
++ [`mousetrap.emit_signal_unrealize`](@ref)
++ [`mousetrap.get_signal_unrealize_blocked`](@ref)
++ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
+
+
 ---
 ## ProgressBar
 ```@docs
@@ -10237,6 +2433,7 @@ ProgressBar
 + [`mousetrap.set_show_text!`](@ref)
 + [`mousetrap.set_text!`](@ref)
 
+
 ---
 ## RGBA
 ```@docs
@@ -10245,6 +2442,7 @@ RGBA
 #### Functions that operate on this type:
 + [`mousetrap.rgba_to_hsva`](@ref)
 + [`mousetrap.rgba_to_html_code`](@ref)
+
 
 ---
 ## RenderArea
@@ -10262,325 +2460,26 @@ RenderArea
 + [`mousetrap.render_render_tasks`](@ref)
 + [`mousetrap.to_gl_coordinates`](@ref)
 
-+ [`mousetrap.connect_signal_destroy!`](@ref)
-+ [`mousetrap.disconnect_signal_destroy!`](@ref)
-+ [`mousetrap.emit_signal_destroy`](@ref)
-+ [`mousetrap.get_signal_destroy_blocked`](@ref)
-+ [`mousetrap.set_signal_destroy_blocked!`](@ref)
-+ [`mousetrap.connect_signal_hide!`](@ref)
-+ [`mousetrap.disconnect_signal_hide!`](@ref)
-+ [`mousetrap.emit_signal_hide`](@ref)
-+ [`mousetrap.get_signal_hide_blocked`](@ref)
-+ [`mousetrap.set_signal_hide_blocked!`](@ref)
-+ [`mousetrap.connect_signal_map!`](@ref)
-+ [`mousetrap.connect_signal_unmap!`](@ref)
-+ [`mousetrap.disconnect_signal_map!`](@ref)
-+ [`mousetrap.disconnect_signal_unmap!`](@ref)
-+ [`mousetrap.emit_signal_map`](@ref)
-+ [`mousetrap.emit_signal_unmap`](@ref)
-+ [`mousetrap.get_signal_map_blocked`](@ref)
-+ [`mousetrap.get_signal_unmap_blocked`](@ref)
-+ [`mousetrap.set_signal_map_blocked!`](@ref)
-+ [`mousetrap.set_signal_unmap_blocked!`](@ref)
-+ [`mousetrap.connect_signal_realize!`](@ref)
-+ [`mousetrap.connect_signal_unrealize!`](@ref)
-+ [`mousetrap.disconnect_signal_realize!`](@ref)
-+ [`mousetrap.disconnect_signal_unrealize!`](@ref)
-+ [`mousetrap.emit_signal_realize`](@ref)
-+ [`mousetrap.emit_signal_unrealize`](@ref)
-+ [`mousetrap.get_signal_realize_blocked`](@ref)
-+ [`mousetrap.get_signal_unrealize_blocked`](@ref)
-+ [`mousetrap.set_signal_realize_blocked!`](@ref)
-+ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-+ [`mousetrap.connect_signal_render!`](@ref)
-+ [`mousetrap.disconnect_signal_render!`](@ref)
-+ [`mousetrap.emit_signal_render`](@ref)
-+ [`mousetrap.get_signal_render_blocked`](@ref)
-+ [`mousetrap.set_signal_render_blocked!`](@ref)
-+ [`mousetrap.connect_signal_resize!`](@ref)
-+ [`mousetrap.disconnect_signal_resize!`](@ref)
-+ [`mousetrap.emit_signal_resize`](@ref)
-+ [`mousetrap.get_signal_resize_blocked`](@ref)
-+ [`mousetrap.set_signal_resize_blocked!`](@ref)
-+ [`mousetrap.connect_signal_show!`](@ref)
-+ [`mousetrap.disconnect_signal_show!`](@ref)
-+ [`mousetrap.emit_signal_show`](@ref)
-+ [`mousetrap.get_signal_show_blocked`](@ref)
-+ [`mousetrap.set_signal_show_blocked!`](@ref)
----
-## RenderTask
-```@docs
-RenderTask
-```
-#### Functions that operate on this type:
-+ [`mousetrap.get_uniform_float`](@ref)
-+ [`mousetrap.get_uniform_int`](@ref)
-+ [`mousetrap.get_uniform_rgba`](@ref)
-+ [`mousetrap.get_uniform_transform`](@ref)
-+ [`mousetrap.get_uniform_uint`](@ref)
-+ [`mousetrap.get_uniform_vec2`](@ref)
-+ [`mousetrap.get_uniform_vec3`](@ref)
-+ [`mousetrap.get_uniform_vec4`](@ref)
-+ [`mousetrap.render`](@ref)
-+ [`mousetrap.set_uniform_float!`](@ref)
-+ [`mousetrap.set_uniform_hsva!`](@ref)
-+ [`mousetrap.set_uniform_int!`](@ref)
-+ [`mousetrap.set_uniform_rgba!`](@ref)
-+ [`mousetrap.set_uniform_transform!`](@ref)
-+ [`mousetrap.set_uniform_uint!`](@ref)
-+ [`mousetrap.set_uniform_vec2!`](@ref)
-+ [`mousetrap.set_uniform_vec3!`](@ref)
-+ [`mousetrap.set_uniform_vec4!`](@ref)
-
----
-## RenderTexture
-```@docs
-RenderTexture
-```
-#### Functions that operate on this type:
-+ [`mousetrap.bind_as_render_target`](@ref)
-+ [`mousetrap.unbind_as_render_target`](@ref)
-
----
-## Revealer
-```@docs
-Revealer
-```
-#### Functions that operate on this type:
-+ [`mousetrap.get_revealed`](@ref)
-+ [`mousetrap.get_transition_duration`](@ref)
-+ [`mousetrap.get_transition_type`](@ref)
-+ [`mousetrap.remove_child!`](@ref)
-+ [`mousetrap.set_child!`](@ref)
-+ [`mousetrap.set_revealed!`](@ref)
-+ [`mousetrap.set_transition_duration!`](@ref)
-+ [`mousetrap.set_transition_type!`](@ref)
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_hide!`](@ref)
 + [`mousetrap.disconnect_signal_hide!`](@ref)
 + [`mousetrap.emit_signal_hide`](@ref)
 + [`mousetrap.get_signal_hide_blocked`](@ref)
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_map!`](@ref)
-+ [`mousetrap.connect_signal_unmap!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
-+ [`mousetrap.disconnect_signal_unmap!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
-+ [`mousetrap.emit_signal_unmap`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
-+ [`mousetrap.get_signal_unmap_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-+ [`mousetrap.set_signal_unmap_blocked!`](@ref)
-+ [`mousetrap.connect_signal_realize!`](@ref)
-+ [`mousetrap.connect_signal_unrealize!`](@ref)
-+ [`mousetrap.disconnect_signal_realize!`](@ref)
-+ [`mousetrap.disconnect_signal_unrealize!`](@ref)
-+ [`mousetrap.emit_signal_realize`](@ref)
-+ [`mousetrap.emit_signal_unrealize`](@ref)
-+ [`mousetrap.get_signal_realize_blocked`](@ref)
-+ [`mousetrap.get_signal_unrealize_blocked`](@ref)
-+ [`mousetrap.set_signal_realize_blocked!`](@ref)
-+ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-+ [`mousetrap.connect_signal_revealed!`](@ref)
-+ [`mousetrap.disconnect_signal_revealed!`](@ref)
-+ [`mousetrap.emit_signal_revealed`](@ref)
-+ [`mousetrap.get_signal_revealed_blocked`](@ref)
-+ [`mousetrap.set_signal_revealed_blocked!`](@ref)
-+ [`mousetrap.connect_signal_show!`](@ref)
-+ [`mousetrap.disconnect_signal_show!`](@ref)
-+ [`mousetrap.emit_signal_show`](@ref)
-+ [`mousetrap.get_signal_show_blocked`](@ref)
-+ [`mousetrap.set_signal_show_blocked!`](@ref)
----
-## RotateEventController
-```@docs
-RotateEventController
-```
-#### Functions that operate on this type:
-+ [`mousetrap.get_angle_delta`](@ref)
-
-+ [`mousetrap.connect_signal_rotation_changed!`](@ref)
-+ [`mousetrap.disconnect_signal_rotation_changed!`](@ref)
-+ [`mousetrap.emit_signal_rotation_changed`](@ref)
-+ [`mousetrap.get_signal_rotation_changed_blocked`](@ref)
-+ [`mousetrap.set_signal_rotation_changed_blocked!`](@ref)
----
-## Scale
-```@docs
-Scale
-```
-#### Functions that operate on this type:
-+ [`mousetrap.add_mark!`](@ref)
-+ [`mousetrap.clear_marks!`](@ref)
-+ [`mousetrap.get_adjustment`](@ref)
-+ [`mousetrap.get_has_origin`](@ref)
-+ [`mousetrap.get_lower`](@ref)
-+ [`mousetrap.get_orientation`](@ref)
-+ [`mousetrap.get_should_draw_value`](@ref)
-+ [`mousetrap.get_step_increment`](@ref)
-+ [`mousetrap.get_upper`](@ref)
-+ [`mousetrap.get_value`](@ref)
-+ [`mousetrap.set_has_origin!`](@ref)
-+ [`mousetrap.set_lower!`](@ref)
-+ [`mousetrap.set_orientation!`](@ref)
-+ [`mousetrap.set_should_draw_value!`](@ref)
-+ [`mousetrap.set_step_increment!`](@ref)
-+ [`mousetrap.set_upper!`](@ref)
-+ [`mousetrap.set_value!`](@ref)
-
-+ [`mousetrap.connect_signal_destroy!`](@ref)
-+ [`mousetrap.disconnect_signal_destroy!`](@ref)
-+ [`mousetrap.emit_signal_destroy`](@ref)
-+ [`mousetrap.get_signal_destroy_blocked`](@ref)
-+ [`mousetrap.set_signal_destroy_blocked!`](@ref)
-+ [`mousetrap.connect_signal_hide!`](@ref)
-+ [`mousetrap.disconnect_signal_hide!`](@ref)
-+ [`mousetrap.emit_signal_hide`](@ref)
-+ [`mousetrap.get_signal_hide_blocked`](@ref)
-+ [`mousetrap.set_signal_hide_blocked!`](@ref)
-+ [`mousetrap.connect_signal_map!`](@ref)
-+ [`mousetrap.connect_signal_unmap!`](@ref)
-+ [`mousetrap.disconnect_signal_map!`](@ref)
-+ [`mousetrap.disconnect_signal_unmap!`](@ref)
-+ [`mousetrap.emit_signal_map`](@ref)
-+ [`mousetrap.emit_signal_unmap`](@ref)
-+ [`mousetrap.get_signal_map_blocked`](@ref)
-+ [`mousetrap.get_signal_unmap_blocked`](@ref)
-+ [`mousetrap.set_signal_map_blocked!`](@ref)
-+ [`mousetrap.set_signal_unmap_blocked!`](@ref)
-+ [`mousetrap.connect_signal_realize!`](@ref)
-+ [`mousetrap.connect_signal_unrealize!`](@ref)
-+ [`mousetrap.disconnect_signal_realize!`](@ref)
-+ [`mousetrap.disconnect_signal_unrealize!`](@ref)
-+ [`mousetrap.emit_signal_realize`](@ref)
-+ [`mousetrap.emit_signal_unrealize`](@ref)
-+ [`mousetrap.get_signal_realize_blocked`](@ref)
-+ [`mousetrap.get_signal_unrealize_blocked`](@ref)
-+ [`mousetrap.set_signal_realize_blocked!`](@ref)
-+ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-+ [`mousetrap.connect_signal_show!`](@ref)
-+ [`mousetrap.disconnect_signal_show!`](@ref)
-+ [`mousetrap.emit_signal_show`](@ref)
-+ [`mousetrap.get_signal_show_blocked`](@ref)
-+ [`mousetrap.set_signal_show_blocked!`](@ref)
-+ [`mousetrap.connect_signal_value_changed!`](@ref)
-+ [`mousetrap.disconnect_signal_value_changed!`](@ref)
-+ [`mousetrap.emit_signal_value_changed`](@ref)
-+ [`mousetrap.get_signal_value_changed_blocked`](@ref)
-+ [`mousetrap.set_signal_value_changed_blocked!`](@ref)
----
-## ScrollEventController
-```@docs
-ScrollEventController
-```
-#### Functions that operate on this type:
-
-+ [`mousetrap.connect_signal_kinetic_scroll_decelerate!`](@ref)
-+ [`mousetrap.disconnect_signal_kinetic_scroll_decelerate!`](@ref)
-+ [`mousetrap.emit_signal_kinetic_scroll_decelerate`](@ref)
-+ [`mousetrap.get_signal_kinetic_scroll_decelerate_blocked`](@ref)
-+ [`mousetrap.set_signal_kinetic_scroll_decelerate_blocked!`](@ref)
-+ [`mousetrap.connect_signal_scroll!`](@ref)
-+ [`mousetrap.connect_signal_scroll_begin!`](@ref)
-+ [`mousetrap.connect_signal_scroll_end!`](@ref)
-+ [`mousetrap.disconnect_signal_scroll!`](@ref)
-+ [`mousetrap.disconnect_signal_scroll_begin!`](@ref)
-+ [`mousetrap.disconnect_signal_scroll_end!`](@ref)
-+ [`mousetrap.emit_signal_scroll`](@ref)
-+ [`mousetrap.emit_signal_scroll_begin`](@ref)
-+ [`mousetrap.emit_signal_scroll_end`](@ref)
-+ [`mousetrap.get_signal_scroll_begin_blocked`](@ref)
-+ [`mousetrap.get_signal_scroll_blocked`](@ref)
-+ [`mousetrap.get_signal_scroll_end_blocked`](@ref)
-+ [`mousetrap.set_signal_scroll_begin_blocked!`](@ref)
-+ [`mousetrap.set_signal_scroll_blocked!`](@ref)
-+ [`mousetrap.set_signal_scroll_end_blocked!`](@ref)
----
-## Scrollbar
-```@docs
-Scrollbar
-```
-#### Functions that operate on this type:
-+ [`mousetrap.get_adjustment`](@ref)
-+ [`mousetrap.get_orientation`](@ref)
-+ [`mousetrap.set_orientation!`](@ref)
-
-+ [`mousetrap.connect_signal_destroy!`](@ref)
-+ [`mousetrap.disconnect_signal_destroy!`](@ref)
-+ [`mousetrap.emit_signal_destroy`](@ref)
-+ [`mousetrap.get_signal_destroy_blocked`](@ref)
-+ [`mousetrap.set_signal_destroy_blocked!`](@ref)
-+ [`mousetrap.connect_signal_hide!`](@ref)
-+ [`mousetrap.disconnect_signal_hide!`](@ref)
-+ [`mousetrap.emit_signal_hide`](@ref)
-+ [`mousetrap.get_signal_hide_blocked`](@ref)
-+ [`mousetrap.set_signal_hide_blocked!`](@ref)
-+ [`mousetrap.connect_signal_map!`](@ref)
-+ [`mousetrap.connect_signal_unmap!`](@ref)
-+ [`mousetrap.disconnect_signal_map!`](@ref)
-+ [`mousetrap.disconnect_signal_unmap!`](@ref)
-+ [`mousetrap.emit_signal_map`](@ref)
-+ [`mousetrap.emit_signal_unmap`](@ref)
-+ [`mousetrap.get_signal_map_blocked`](@ref)
-+ [`mousetrap.get_signal_unmap_blocked`](@ref)
-+ [`mousetrap.set_signal_map_blocked!`](@ref)
-+ [`mousetrap.set_signal_unmap_blocked!`](@ref)
-+ [`mousetrap.connect_signal_realize!`](@ref)
-+ [`mousetrap.connect_signal_unrealize!`](@ref)
-+ [`mousetrap.disconnect_signal_realize!`](@ref)
-+ [`mousetrap.disconnect_signal_unrealize!`](@ref)
-+ [`mousetrap.emit_signal_realize`](@ref)
-+ [`mousetrap.emit_signal_unrealize`](@ref)
-+ [`mousetrap.get_signal_realize_blocked`](@ref)
-+ [`mousetrap.get_signal_unrealize_blocked`](@ref)
-+ [`mousetrap.set_signal_realize_blocked!`](@ref)
-+ [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-+ [`mousetrap.connect_signal_show!`](@ref)
-+ [`mousetrap.disconnect_signal_show!`](@ref)
-+ [`mousetrap.emit_signal_show`](@ref)
-+ [`mousetrap.get_signal_show_blocked`](@ref)
-+ [`mousetrap.set_signal_show_blocked!`](@ref)
----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -10604,49 +2503,11 @@ Scrollbar
 + [`mousetrap.set_signal_resize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -10661,14 +2522,6 @@ Scrollbar
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -10697,162 +2550,6 @@ RenderTask
 + [`mousetrap.set_uniform_vec4!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## RenderTexture
 ```@docs
@@ -10861,162 +2558,6 @@ RenderTexture
 #### Functions that operate on this type:
 + [`mousetrap.bind_as_render_target`](@ref)
 + [`mousetrap.unbind_as_render_target`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -11035,51 +2576,11 @@ Revealer
 + [`mousetrap.set_transition_type!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -11089,63 +2590,11 @@ Revealer
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -11155,10 +2604,6 @@ Revealer
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
 + [`mousetrap.connect_signal_revealed!`](@ref)
 + [`mousetrap.disconnect_signal_revealed!`](@ref)
 + [`mousetrap.emit_signal_revealed`](@ref)
@@ -11166,47 +2611,11 @@ Revealer
 + [`mousetrap.set_signal_revealed_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -11223,14 +2632,6 @@ Revealer
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## RotateEventController
 ```@docs
@@ -11240,163 +2641,11 @@ RotateEventController
 + [`mousetrap.get_angle_delta`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_rotation_changed!`](@ref)
 + [`mousetrap.disconnect_signal_rotation_changed!`](@ref)
 + [`mousetrap.emit_signal_rotation_changed`](@ref)
 + [`mousetrap.get_signal_rotation_changed_blocked`](@ref)
 + [`mousetrap.set_signal_rotation_changed_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -11426,51 +2675,11 @@ Scale
 + [`mousetrap.set_value!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -11480,63 +2689,11 @@ Scale
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -11546,53 +2703,11 @@ Scale
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -11609,15 +2724,11 @@ Scale
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
 + [`mousetrap.connect_signal_value_changed!`](@ref)
 + [`mousetrap.disconnect_signal_value_changed!`](@ref)
 + [`mousetrap.emit_signal_value_changed`](@ref)
 + [`mousetrap.get_signal_value_changed_blocked`](@ref)
 + [`mousetrap.set_signal_value_changed_blocked!`](@ref)
-
-
 
 
 
@@ -11630,121 +2741,11 @@ ScrollEventController
 #### Functions that operate on this type:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_kinetic_scroll_decelerate!`](@ref)
 + [`mousetrap.disconnect_signal_kinetic_scroll_decelerate!`](@ref)
 + [`mousetrap.emit_signal_kinetic_scroll_decelerate`](@ref)
 + [`mousetrap.get_signal_kinetic_scroll_decelerate_blocked`](@ref)
 + [`mousetrap.set_signal_kinetic_scroll_decelerate_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -11770,42 +2771,6 @@ ScrollEventController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Scrollbar
 ```@docs
@@ -11817,51 +2782,11 @@ Scrollbar
 + [`mousetrap.set_orientation!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -11871,63 +2796,11 @@ Scrollbar
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -11937,53 +2810,11 @@ Scrollbar
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -11998,14 +2829,6 @@ Scrollbar
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -12022,163 +2845,11 @@ SelectionModel
 + [`mousetrap.unselect_all!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_selection_changed!`](@ref)
 + [`mousetrap.disconnect_signal_selection_changed!`](@ref)
 + [`mousetrap.emit_signal_selection_changed`](@ref)
 + [`mousetrap.get_signal_selection_changed_blocked`](@ref)
 + [`mousetrap.set_signal_selection_changed_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -12193,51 +2864,11 @@ Separator
 + [`mousetrap.set_orientation!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -12247,63 +2878,11 @@ Separator
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -12313,53 +2892,11 @@ Separator
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -12374,14 +2911,6 @@ Separator
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -12403,162 +2932,6 @@ Shader
 + [`mousetrap.set_uniform_vec2!`](@ref)
 + [`mousetrap.set_uniform_vec3!`](@ref)
 + [`mousetrap.set_uniform_vec4!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -12605,162 +2978,6 @@ Shape
 + [`mousetrap.set_vertex_texture_coordinate!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## ShortcutEventController
 ```@docs
@@ -12772,162 +2989,6 @@ ShortcutEventController
 + [`mousetrap.set_scope!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## ShortcutTrigger
 ```@docs
@@ -12936,326 +2997,11 @@ ShortcutTrigger
 #### Functions that operate on this type:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## SignalEmitter
 ```@docs
 SignalEmitter
 ```
-#### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## SingleClickGesture
 ```@docs
@@ -13267,162 +3013,6 @@ SingleClickGesture
 + [`mousetrap.get_touch_only`](@ref)
 + [`mousetrap.set_only_listens_to_button!`](@ref)
 + [`mousetrap.set_touch_only!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -13456,51 +3046,11 @@ SpinButton
 + [`mousetrap.set_value!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -13510,63 +3060,11 @@ SpinButton
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -13576,53 +3074,11 @@ SpinButton
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -13637,8 +3093,6 @@ SpinButton
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
 
 
 + [`mousetrap.connect_signal_value_changed!`](@ref)
@@ -13669,162 +3123,6 @@ Spinner
 + [`mousetrap.stop!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Stack
 ```@docs
@@ -13849,51 +3147,11 @@ Stack
 + [`mousetrap.set_visible_child!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -13903,63 +3161,11 @@ Stack
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -13969,53 +3175,11 @@ Stack
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -14030,14 +3194,6 @@ Stack
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -14048,196 +3204,12 @@ StackID
 #### Functions that operate on this type:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## StackSidebar
 ```@docs
 StackSidebar
 ```
 #### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
@@ -14247,37 +3219,11 @@ StackSidebar
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_hide!`](@ref)
 + [`mousetrap.disconnect_signal_hide!`](@ref)
 + [`mousetrap.emit_signal_hide`](@ref)
 + [`mousetrap.get_signal_hide_blocked`](@ref)
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_map!`](@ref)
@@ -14287,44 +3233,6 @@ StackSidebar
 + [`mousetrap.set_signal_map_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_realize!`](@ref)
 + [`mousetrap.disconnect_signal_realize!`](@ref)
 + [`mousetrap.emit_signal_realize`](@ref)
@@ -14332,53 +3240,11 @@ StackSidebar
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -14393,14 +3259,6 @@ StackSidebar
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -14411,51 +3269,11 @@ StackSwitcher
 #### Functions that operate on this type:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -14465,63 +3283,11 @@ StackSwitcher
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -14531,53 +3297,11 @@ StackSwitcher
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -14592,14 +3316,6 @@ StackSwitcher
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -14614,70 +3330,6 @@ StylusEventController
 + [`mousetrap.has_axis`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_motion!`](@ref)
 + [`mousetrap.disconnect_signal_motion!`](@ref)
 + [`mousetrap.emit_signal_motion`](@ref)
@@ -14685,73 +3337,11 @@ StylusEventController
 + [`mousetrap.set_signal_motion_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_proximity!`](@ref)
 + [`mousetrap.disconnect_signal_proximity!`](@ref)
 + [`mousetrap.emit_signal_proximity`](@ref)
 + [`mousetrap.get_signal_proximity_blocked`](@ref)
 + [`mousetrap.set_signal_proximity_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_stylus_down!`](@ref)
@@ -14770,26 +3360,6 @@ StylusEventController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## SwipeEventController
 ```@docs
@@ -14799,165 +3369,11 @@ SwipeEventController
 + [`mousetrap.get_velocity`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_swipe!`](@ref)
 + [`mousetrap.disconnect_signal_swipe!`](@ref)
 + [`mousetrap.emit_signal_swipe`](@ref)
 + [`mousetrap.get_signal_swipe_blocked`](@ref)
 + [`mousetrap.set_signal_swipe_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -14977,49 +3393,11 @@ Switch
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -15029,63 +3407,11 @@ Switch
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -15095,53 +3421,11 @@ Switch
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -15156,14 +3440,6 @@ Switch
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -15194,51 +3470,11 @@ TextView
 + [`mousetrap.undo!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -15248,63 +3484,11 @@ TextView
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -15314,32 +3498,6 @@ TextView
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
@@ -15347,23 +3505,11 @@ TextView
 + [`mousetrap.set_signal_show_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_text_changed!`](@ref)
 + [`mousetrap.disconnect_signal_text_changed!`](@ref)
 + [`mousetrap.emit_signal_text_changed`](@ref)
 + [`mousetrap.get_signal_text_changed_blocked`](@ref)
 + [`mousetrap.set_signal_text_changed_blocked!`](@ref)
-
-
 
 
 
@@ -15382,178 +3528,11 @@ TextView
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## Texture
 ```@docs
 Texture
 ```
-#### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## TextureObject
 ```@docs
@@ -15573,162 +3552,6 @@ TextureObject
 + [`mousetrap.unbind`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Time
 ```@docs
@@ -15740,162 +3563,6 @@ Time
 + [`mousetrap.as_minutes`](@ref)
 + [`mousetrap.as_nanoseconds`](@ref)
 + [`mousetrap.as_seconds`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ---
@@ -15920,35 +3587,11 @@ ToggleButton
 + [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_clicked!`](@ref)
 + [`mousetrap.disconnect_signal_clicked!`](@ref)
 + [`mousetrap.emit_signal_clicked`](@ref)
 + [`mousetrap.get_signal_clicked_blocked`](@ref)
 + [`mousetrap.set_signal_clicked_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
@@ -15958,37 +3601,11 @@ ToggleButton
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_hide!`](@ref)
 + [`mousetrap.disconnect_signal_hide!`](@ref)
 + [`mousetrap.emit_signal_hide`](@ref)
 + [`mousetrap.get_signal_hide_blocked`](@ref)
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_map!`](@ref)
@@ -15998,44 +3615,6 @@ ToggleButton
 + [`mousetrap.set_signal_map_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_realize!`](@ref)
 + [`mousetrap.disconnect_signal_realize!`](@ref)
 + [`mousetrap.emit_signal_realize`](@ref)
@@ -16043,51 +3622,11 @@ ToggleButton
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_toggled!`](@ref)
@@ -16111,670 +3650,26 @@ ToggleButton
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
 ---
 ## TypedFunction
 ```@docs
 TypedFunction
 ```
-#### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Vector2
 ```@docs
 Vector2
 ```
-#### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Vector3
 ```@docs
 Vector3
 ```
-#### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Vector4
 ```@docs
 Vector4
 ```
-#### Functions that operate on this type:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Viewport
 ```@docs
@@ -16801,51 +3696,11 @@ Viewport
 + [`mousetrap.set_vertical_scrollbar_policy!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -16855,20 +3710,6 @@ Viewport
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
@@ -16876,63 +3717,11 @@ Viewport
 + [`mousetrap.set_signal_map_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_realize!`](@ref)
 + [`mousetrap.disconnect_signal_realize!`](@ref)
 + [`mousetrap.emit_signal_realize`](@ref)
 + [`mousetrap.get_signal_realize_blocked`](@ref)
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_scroll_child!`](@ref)
@@ -16944,35 +3733,11 @@ Viewport
 
 
 
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -16987,14 +3752,6 @@ Viewport
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---
@@ -17062,162 +3819,6 @@ Widget
 + [`mousetrap.unparent!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 ## Window
 ```@docs
@@ -17252,33 +3853,19 @@ Window
 
 
 + [`mousetrap.connect_signal_activate_default_widget!`](@ref)
-+ [`mousetrap.connect_signal_activate_focused_widget!`](@ref)
 + [`mousetrap.disconnect_signal_activate_default_widget!`](@ref)
-+ [`mousetrap.disconnect_signal_activate_focused_widget!`](@ref)
 + [`mousetrap.emit_signal_activate_default_widget`](@ref)
-+ [`mousetrap.emit_signal_activate_focused_widget`](@ref)
 + [`mousetrap.get_signal_activate_default_widget_blocked`](@ref)
-+ [`mousetrap.get_signal_activate_focused_widget_blocked`](@ref)
 + [`mousetrap.set_signal_activate_default_widget_blocked!`](@ref)
+
+
+
+
++ [`mousetrap.connect_signal_activate_focused_widget!`](@ref)
++ [`mousetrap.disconnect_signal_activate_focused_widget!`](@ref)
++ [`mousetrap.emit_signal_activate_focused_widget`](@ref)
++ [`mousetrap.get_signal_activate_focused_widget_blocked`](@ref)
 + [`mousetrap.set_signal_activate_focused_widget_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -17292,25 +3879,11 @@ Window
 
 
 
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
 + [`mousetrap.get_signal_destroy_blocked`](@ref)
 + [`mousetrap.set_signal_destroy_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_hide!`](@ref)
@@ -17320,63 +3893,11 @@ Window
 + [`mousetrap.set_signal_hide_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_map!`](@ref)
 + [`mousetrap.disconnect_signal_map!`](@ref)
 + [`mousetrap.emit_signal_map`](@ref)
 + [`mousetrap.get_signal_map_blocked`](@ref)
 + [`mousetrap.set_signal_map_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_realize!`](@ref)
@@ -17386,53 +3907,11 @@ Window
 + [`mousetrap.set_signal_realize_blocked!`](@ref)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 + [`mousetrap.connect_signal_show!`](@ref)
 + [`mousetrap.disconnect_signal_show!`](@ref)
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -17447,14 +3926,6 @@ Window
 + [`mousetrap.emit_signal_unrealize`](@ref)
 + [`mousetrap.get_signal_unrealize_blocked`](@ref)
 + [`mousetrap.set_signal_unrealize_blocked!`](@ref)
-
-
-
-
-
-
-
-
 
 
 ---

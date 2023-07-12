@@ -98,10 +98,31 @@ function abstract_type_docs(type_in, super_type, brief)
     type = string(type_in)
     out = "$brief\n"
     out *= "## Supertype\n`$super_type`\n"
-
     out *= "## Subtypes\n"
-    for t in InteractiveUtils.subtypes(type_in)
-        out *= "+ `$t`\n"
+
+    # get all subtypes and subtypes of subtypes
+    seen = Set()
+    subtypes = []
+    function aux(type, subtypes)
+        
+        if type in seen
+            return
+        else
+            push!(seen, type)
+        end
+
+        if isabstracttype(type)
+            for t in InteractiveUtils.subtypes(type)
+                aux(t, subtypes)
+            end
+        else
+            push!(subtypes, string(type))
+        end
+    end
+    aux(type_in, subtypes)
+
+    for type in sort(subtypes)
+        out *= "+ [`$type`](@ref)\n"
     end
     return out
 end

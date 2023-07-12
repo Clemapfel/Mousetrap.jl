@@ -153,33 +153,6 @@ also be blocked / unblocked independently of enabling / disabling the action.
 
 ---
 
-## Stateful vs Stateless Actions
-
-After using `set_function!` to register a callback with an action, that action will be considered **stateless**; it does not have an internal state. This is in opposition
-to a **stateful** action. To make an action stateful, we use [`set_stateful_function!`](@ref) to register a callback. 
-
-The callback for a stateful function has to have the signature
-
-```julia
-(::Action, ::Bool) -> Bool
-```
-Where the bool argument is the current state of the action, and the boolean return type is the state of the action after the callback has been invoked:
-
-```julia
-stateful_action = Action("example.stateful", app)
-set_stateful_function!(stateful_action) do x::Action, current_state::Bool
-    println("stateful action activated")
-    next_state = !current_state
-    return next_state
-end
-```
-
-We can also modify the state from the outside: [`set_state!`](@ref) and [`get_state`](@ref) access the internal state of a stateful action. If we are unsure about whether an action is stateful or stateless, we can call [`get_is_stateful`](@ref), which returns `true` if the actions callback was registered using `set_stateful_function!`.
-
-Stateful actions will become useful in the [chapter on menus](./08_menus.md), where we will use them to trigger a global boolean flag using an automatically constructed menu. 
-
----
-
 ## Shortcuts
 
 Any action, regardless of whether it is stateful or stateless, can have a number of optional **shortcut triggers**, also commonly called **keybindings**. 

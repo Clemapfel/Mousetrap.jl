@@ -50,7 +50,7 @@ let file = open("docs/src/02_library/classes.md", "w+")
 
         # sort by signal, as opposed to alphabetically
 
-        signal = Set{String}()
+        signals = Set{String}()
         for method in signal_methods
             m = match(r".*_signal_(.*)_", string(method))
             if !isnothing(m)
@@ -68,30 +68,32 @@ let file = open("docs/src/02_library/classes.md", "w+")
             push!(signal_methods_sorted, Symbol(""))
         end
 
-        for m in [non_signal_methods..., Symbol(""), signal_methods_sorted...]
+        if length(non_signal_methods) + length(signal_methods) > 0
+            for m in [non_signal_methods..., Symbol(""), signal_methods_sorted...]
 
-            if once
-                out *= "#### Functions that operate on this type:\n"
-                once = false
+                if once
+                    out *= "#### Functions that operate on this type:\n"
+                    once = false
+                end
+
+                as_string = string(m)
+                if isempty(as_string)
+                    out *= "\n\n"
+                    continue
+                end
+
+                seen = m in already_seen
+                push!(already_seen, m)
+                if seen
+                    continue
+                elseif binding === String # skip ID typedefs
+                    continue
+                elseif getproperty(mousetrap, m) isa Type # omit ctors
+                    continue
+                end
+
+                out *= "+ [`mousetrap.$m`](@ref)\n"
             end
-
-            as_string = string(m)
-            if isempty(as_string)
-                out *= "\n\n"
-                continue
-            end
-
-            seen = m in already_seen
-            push!(already_seen, m)
-            if seen
-                continue
-            elseif binding === String # skip ID typedefs
-                continue
-            elseif getproperty(mousetrap, m) isa Type # omit ctors
-                continue
-            end
-
-            out *= "+ [`mousetrap.$m`](@ref)\n"
         end
 
         out *= "---\n"

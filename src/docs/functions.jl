@@ -1425,13 +1425,6 @@ get_is_spinning(::Spinner) -> Bool
 Get whether the spinners animation is currently playing.
 """
 
-@document get_is_stateful """
-```
-get_is_stateful(::Action) -> Bool
-```
-Get whether the action is stateful (as opposed to stateless).
-"""
-
 @document get_is_vertically_homogeneous """
 ```
 get_is_vertically_homogeneous(::Stack) -> Bool
@@ -4557,25 +4550,6 @@ set_state!(::CheckButton, state::CheckButtonState)
 Set the state of the check button, this will change its visual element and emit the `toggled` signal.
 """
 
-@document set_stateful_function! """
-```
-set_stateful_function!(f, action::Action, [::Data_t]) 
-```
-Set the actions function, after which the action is considered stateful. `f` is required to be invocable as a function with signature
-```
-(::Action, ::Bool, [::Data_t]) -> Bool
-```
-
-## Example
-```
-action = Action("example.stateful_action")
-set_stateful_function!(action) do self::Action, current_state::Bool
-    println("Activated " * get_id(self))
-    next_state = !current_state
-    return next_state
-end
-"""
-
 @document set_step_increment! """
 ```
 set_step_increment!(::Adjustment, value::Number) 
@@ -4951,9 +4925,9 @@ set_vertex_position!(::Shape, index::Integer, position::Vector3f)
 Set position of a specific vertex, in 3D OpenGL coordinates.
 """
 
-@document set_vertex_texture_coordinate """
+@document set_vertex_texture_coordinate! """
 ```
-set_vertex_texture_coordinate(::Shape, inde::Integer, coordinate::Vector2f) 
+set_vertex_texture_coordinate!(::Shape, inde::Integer, coordinate::Vector2f) 
 ```
 Set texture coordinate of a specific vertex.
 """

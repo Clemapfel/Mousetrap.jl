@@ -64,7 +64,7 @@ Simple dialog with a message, detailed description, and one or more labeled butt
 Using `on_selection!`, you can register a function with the signature
 ```
 (::AlertDialog, button_index::Integer, [::Data_t]) -> Nothing
-````
+```
 which is called when the user makes a selection or closes the dialog.
 
 $(@type_constructors(
@@ -285,7 +285,7 @@ $(@type_constructors(
 
 $(@type_signals(CheckButton, 
     toggled,
-    activated
+    activate
 ))
 
 $(@type_fields())
