@@ -39,10 +39,12 @@ let file = open("docs/src/02_library/classes.md", "w+")
 
         for method in methodswith(binding, mousetrap) 
             if isnothing(match(r".*_signal_.*", string(method.name)))
-                # first argument is type, this is the equivalent of a member function in Julia
-                if hasproperty(method.sig, :parameters) && method.sig.parameters[2] == binding
-                    push!(non_signal_methods, method.name)
-                end
+                # first or second argument is type, this is the equivalent of a member function in Julia
+                try
+                    if hasproperty(method.sig, :parameters) && (method.sig.parameters[2] == binding || method.sig.parameters[3] == binding)
+                        push!(non_signal_methods, method.name)
+                    end
+                catch end
             else
                 push!(signal_methods, method.name)
             end

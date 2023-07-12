@@ -3357,6 +3357,9 @@ module mousetrap
     add_action!(shortcut_controller::ShortcutEventController, action::Action) = detail.add_action!(shortcut_controller._internal, action._internal)
     export add_action!
 
+    remove_action!(shortcut_controller::ShortcutEventController, action::Action) = detail.remove_action!(shortcut_controller._internal, action._internal)
+    export remove_action!
+
     @export_enum ShortcutScope begin
         SHORTCUT_SCOPE_LOCAL
         SHORTCUT_SCOPE_GLOBAL

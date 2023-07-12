@@ -482,6 +482,9 @@ $(@type_constructors(
 ))
 
 $(@type_signals(DragEventController, 
+    drag_begin, 
+    drag,
+    drag_end
 ))
 
 $(@type_fields())

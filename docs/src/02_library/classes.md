@@ -5,12 +5,16 @@ Action
 ```
 #### Functions that operate on this type:
 + [`mousetrap.activate!`](@ref)
++ [`mousetrap.add_action!`](@ref)
 + [`mousetrap.add_shortcut!`](@ref)
 + [`mousetrap.clear_shortcuts!`](@ref)
 + [`mousetrap.get_enabled`](@ref)
 + [`mousetrap.get_id`](@ref)
 + [`mousetrap.get_shortcuts`](@ref)
++ [`mousetrap.set_action!`](@ref)
 + [`mousetrap.set_enabled!`](@ref)
++ [`mousetrap.set_function!`](@ref)
++ [`mousetrap.set_listens_for_shortcut_action!`](@ref)
 
 
 + [`mousetrap.connect_signal_activated!`](@ref)
@@ -66,6 +70,7 @@ AlertDialog
 + [`mousetrap.get_is_modal`](@ref)
 + [`mousetrap.get_message`](@ref)
 + [`mousetrap.get_n_buttons`](@ref)
++ [`mousetrap.on_selection!`](@ref)
 + [`mousetrap.present!`](@ref)
 + [`mousetrap.remove_button!`](@ref)
 + [`mousetrap.set_button_label!`](@ref)
@@ -82,6 +87,7 @@ Angle
 #### Functions that operate on this type:
 + [`mousetrap.as_degrees`](@ref)
 + [`mousetrap.as_radians`](@ref)
++ [`mousetrap.rotate!`](@ref)
 
 
 ---
@@ -102,6 +108,7 @@ Application
 + [`mousetrap.release!`](@ref)
 + [`mousetrap.remove_action!`](@ref)
 + [`mousetrap.run!`](@ref)
++ [`mousetrap.set_application!`](@ref)
 + [`mousetrap.unmark_as_busy!`](@ref)
 
 
@@ -478,6 +485,8 @@ Clipboard
 + [`mousetrap.contains_file`](@ref)
 + [`mousetrap.contains_image`](@ref)
 + [`mousetrap.contains_string`](@ref)
++ [`mousetrap.get_image`](@ref)
++ [`mousetrap.get_string`](@ref)
 + [`mousetrap.is_local`](@ref)
 + [`mousetrap.set_file!`](@ref)
 + [`mousetrap.set_image!`](@ref)
@@ -502,6 +511,8 @@ ColorChooser
 #### Functions that operate on this type:
 + [`mousetrap.get_color`](@ref)
 + [`mousetrap.get_is_modal`](@ref)
++ [`mousetrap.on_accept!`](@ref)
++ [`mousetrap.on_cancel!`](@ref)
 + [`mousetrap.present!`](@ref)
 + [`mousetrap.set_is_modal!`](@ref)
 
@@ -601,11 +612,13 @@ ColumnViewColumn
 + [`mousetrap.get_is_resizable`](@ref)
 + [`mousetrap.get_is_visible`](@ref)
 + [`mousetrap.get_title`](@ref)
++ [`mousetrap.remove_column!`](@ref)
 + [`mousetrap.set_fixed_width!`](@ref)
 + [`mousetrap.set_header_menu!`](@ref)
 + [`mousetrap.set_is_resizable!`](@ref)
 + [`mousetrap.set_is_visible!`](@ref)
 + [`mousetrap.set_title!`](@ref)
++ [`mousetrap.set_widget_at!`](@ref)
 
 
 ---
@@ -804,7 +817,9 @@ Entry
 EventController
 ```
 #### Functions that operate on this type:
++ [`mousetrap.add_controller!`](@ref)
 + [`mousetrap.get_propagation_phase`](@ref)
++ [`mousetrap.remove_controller!`](@ref)
 + [`mousetrap.set_propagation_phase!`](@ref)
 
 
@@ -890,6 +905,8 @@ FileChooser
 + [`mousetrap.get_accept_label`](@ref)
 + [`mousetrap.get_file_chooser_action`](@ref)
 + [`mousetrap.get_is_modal`](@ref)
++ [`mousetrap.on_accept!`](@ref)
++ [`mousetrap.on_cancel!`](@ref)
 + [`mousetrap.present!`](@ref)
 + [`mousetrap.set_accept_label!`](@ref)
 + [`mousetrap.set_file_chooser_action!`](@ref)
@@ -907,6 +924,7 @@ FileDescriptor
 ```
 #### Functions that operate on this type:
 + [`mousetrap.copy!`](@ref)
++ [`mousetrap.create_as_file_preview!`](@ref)
 + [`mousetrap.create_directory_at!`](@ref)
 + [`mousetrap.create_file_at!`](@ref)
 + [`mousetrap.create_from_path!`](@ref)
@@ -932,6 +950,9 @@ FileDescriptor
 + [`mousetrap.open_url`](@ref)
 + [`mousetrap.query_info`](@ref)
 + [`mousetrap.read_symlink`](@ref)
++ [`mousetrap.set_file!`](@ref)
++ [`mousetrap.set_initial_file!`](@ref)
++ [`mousetrap.set_initial_folder!`](@ref)
 + [`mousetrap.show_in_file_explorer`](@ref)
 
 
@@ -945,7 +966,9 @@ FileFilter
 + [`mousetrap.add_allowed_mime_type!`](@ref)
 + [`mousetrap.add_allowed_pattern!`](@ref)
 + [`mousetrap.add_allowed_suffix!`](@ref)
++ [`mousetrap.add_filter!`](@ref)
 + [`mousetrap.get_name`](@ref)
++ [`mousetrap.set_initial_filter!`](@ref)
 
 
 ---
@@ -956,6 +979,7 @@ FileMonitor
 #### Functions that operate on this type:
 + [`mousetrap.cancel!`](@ref)
 + [`mousetrap.is_cancelled`](@ref)
++ [`mousetrap.on_file_changed!`](@ref)
 
 
 ---
@@ -1316,6 +1340,7 @@ HSVA
 ```
 #### Functions that operate on this type:
 + [`mousetrap.hsva_to_rgba`](@ref)
++ [`mousetrap.set_color!`](@ref)
 
 
 ---
@@ -1389,10 +1414,16 @@ HeaderBar
 Icon
 ```
 #### Functions that operate on this type:
++ [`mousetrap.add_icon!`](@ref)
 + [`mousetrap.create_from_file!`](@ref)
++ [`mousetrap.create_from_icon!`](@ref)
 + [`mousetrap.create_from_theme!`](@ref)
 + [`mousetrap.get_name`](@ref)
 + [`mousetrap.get_size`](@ref)
++ [`mousetrap.has_icon`](@ref)
++ [`mousetrap.set_icon!`](@ref)
++ [`mousetrap.set_primary_icon!`](@ref)
++ [`mousetrap.set_secondary_icon!`](@ref)
 
 
 ---
@@ -1410,6 +1441,7 @@ IconTheme
 ```
 #### Functions that operate on this type:
 + [`mousetrap.add_resource_path!`](@ref)
++ [`mousetrap.create_from_theme!`](@ref)
 + [`mousetrap.get_icon_names`](@ref)
 + [`mousetrap.has_icon`](@ref)
 + [`mousetrap.set_resource_path!`](@ref)
@@ -1426,10 +1458,13 @@ Image
 + [`mousetrap.as_scaled`](@ref)
 + [`mousetrap.create!`](@ref)
 + [`mousetrap.create_from_file!`](@ref)
++ [`mousetrap.create_from_image!`](@ref)
 + [`mousetrap.get_n_pixels`](@ref)
 + [`mousetrap.get_pixel`](@ref)
 + [`mousetrap.get_size`](@ref)
 + [`mousetrap.save_to_file`](@ref)
++ [`mousetrap.set_cursor_from_image!`](@ref)
++ [`mousetrap.set_image!`](@ref)
 + [`mousetrap.set_pixel!`](@ref)
 
 
@@ -1802,6 +1837,10 @@ ListView
 ```@docs
 ListViewIterator
 ```
+#### Functions that operate on this type:
++ [`mousetrap.clear!`](@ref)
+
+
 ---
 ## LogDomain
 ```@docs
@@ -1904,6 +1943,7 @@ MenuModel
 + [`mousetrap.add_section!`](@ref)
 + [`mousetrap.add_submenu!`](@ref)
 + [`mousetrap.add_widget!`](@ref)
++ [`mousetrap.set_header_menu!`](@ref)
 
 
 + [`mousetrap.connect_signal_items_changed!`](@ref)
@@ -2213,6 +2253,7 @@ Popover
 + [`mousetrap.set_autohide!`](@ref)
 + [`mousetrap.set_child!`](@ref)
 + [`mousetrap.set_has_base_arrow!`](@ref)
++ [`mousetrap.set_popover!`](@ref)
 + [`mousetrap.set_relative_position!`](@ref)
 
 
@@ -2357,6 +2398,7 @@ PopoverButton
 PopoverMenu
 ```
 #### Functions that operate on this type:
++ [`mousetrap.set_popover_menu!`](@ref)
 
 
 + [`mousetrap.connect_signal_closed!`](@ref)
@@ -2442,6 +2484,7 @@ RGBA
 #### Functions that operate on this type:
 + [`mousetrap.rgba_to_hsva`](@ref)
 + [`mousetrap.rgba_to_html_code`](@ref)
++ [`mousetrap.set_color!`](@ref)
 
 
 ---
@@ -2530,6 +2573,7 @@ RenderArea
 RenderTask
 ```
 #### Functions that operate on this type:
++ [`mousetrap.add_render_task!`](@ref)
 + [`mousetrap.get_uniform_float`](@ref)
 + [`mousetrap.get_uniform_int`](@ref)
 + [`mousetrap.get_uniform_rgba`](@ref)
@@ -2925,6 +2969,7 @@ Shader
 + [`mousetrap.get_program_id`](@ref)
 + [`mousetrap.get_uniform_location`](@ref)
 + [`mousetrap.get_vertex_shader_id`](@ref)
++ [`mousetrap.render`](@ref)
 + [`mousetrap.set_uniform_float!`](@ref)
 + [`mousetrap.set_uniform_int!`](@ref)
 + [`mousetrap.set_uniform_transform!`](@ref)
@@ -3042,8 +3087,10 @@ SpinButton
 + [`mousetrap.set_should_snap_to_ticks!`](@ref)
 + [`mousetrap.set_should_wrap!`](@ref)
 + [`mousetrap.set_step_increment!`](@ref)
++ [`mousetrap.set_text_to_value_function!`](@ref)
 + [`mousetrap.set_upper!`](@ref)
 + [`mousetrap.set_value!`](@ref)
++ [`mousetrap.set_value_to_text_function!`](@ref)
 
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
@@ -3548,6 +3595,7 @@ TextureObject
 + [`mousetrap.get_size`](@ref)
 + [`mousetrap.get_wrap_mode`](@ref)
 + [`mousetrap.set_scale_mode!`](@ref)
++ [`mousetrap.set_texture!`](@ref)
 + [`mousetrap.set_wrap_mode!`](@ref)
 + [`mousetrap.unbind`](@ref)
 
@@ -3563,6 +3611,7 @@ Time
 + [`mousetrap.as_minutes`](@ref)
 + [`mousetrap.as_nanoseconds`](@ref)
 + [`mousetrap.as_seconds`](@ref)
++ [`mousetrap.set_transition_duration!`](@ref)
 
 
 ---
@@ -3761,9 +3810,14 @@ Widget
 ```
 #### Functions that operate on this type:
 + [`mousetrap.activate!`](@ref)
++ [`mousetrap.add_child!`](@ref)
 + [`mousetrap.add_controller!`](@ref)
++ [`mousetrap.add_overlay!`](@ref)
++ [`mousetrap.add_widget!`](@ref)
++ [`mousetrap.attach_to!`](@ref)
 + [`mousetrap.get_allocated_size`](@ref)
 + [`mousetrap.get_can_respond_to_input`](@ref)
++ [`mousetrap.get_child_position`](@ref)
 + [`mousetrap.get_clipboard`](@ref)
 + [`mousetrap.get_expand_horizontally`](@ref)
 + [`mousetrap.get_expand_vertically`](@ref)
@@ -3783,17 +3837,30 @@ Widget
 + [`mousetrap.get_natural_size`](@ref)
 + [`mousetrap.get_opacity`](@ref)
 + [`mousetrap.get_position`](@ref)
++ [`mousetrap.get_size`](@ref)
 + [`mousetrap.get_size_request`](@ref)
 + [`mousetrap.get_vertical_alignment`](@ref)
 + [`mousetrap.grab_focus!`](@ref)
 + [`mousetrap.hide!`](@ref)
++ [`mousetrap.insert!`](@ref)
++ [`mousetrap.insert_after!`](@ref)
++ [`mousetrap.push_back!`](@ref)
++ [`mousetrap.push_front!`](@ref)
++ [`mousetrap.remove!`](@ref)
++ [`mousetrap.remove_child!`](@ref)
 + [`mousetrap.remove_controller!`](@ref)
++ [`mousetrap.remove_overlay!`](@ref)
 + [`mousetrap.remove_tick_callback!`](@ref)
 + [`mousetrap.remove_tooltip_widget!`](@ref)
 + [`mousetrap.set_alignment!`](@ref)
 + [`mousetrap.set_can_respond_to_input!`](@ref)
++ [`mousetrap.set_center_child!`](@ref)
++ [`mousetrap.set_child!`](@ref)
++ [`mousetrap.set_child_position!`](@ref)
 + [`mousetrap.set_cursor!`](@ref)
 + [`mousetrap.set_cursor_from_image!`](@ref)
++ [`mousetrap.set_default_widget!`](@ref)
++ [`mousetrap.set_end_child!`](@ref)
 + [`mousetrap.set_expand!`](@ref)
 + [`mousetrap.set_expand_horizontally!`](@ref)
 + [`mousetrap.set_expand_vertically!`](@ref)
@@ -3802,6 +3869,7 @@ Widget
 + [`mousetrap.set_horizontal_alignment!`](@ref)
 + [`mousetrap.set_is_focusable!`](@ref)
 + [`mousetrap.set_is_visible!`](@ref)
++ [`mousetrap.set_label_widget!`](@ref)
 + [`mousetrap.set_listens_for_shortcut_action!`](@ref)
 + [`mousetrap.set_margin!`](@ref)
 + [`mousetrap.set_margin_bottom!`](@ref)
@@ -3812,6 +3880,10 @@ Widget
 + [`mousetrap.set_margin_vertical!`](@ref)
 + [`mousetrap.set_opacity!`](@ref)
 + [`mousetrap.set_size_request!`](@ref)
++ [`mousetrap.set_start_child!`](@ref)
++ [`mousetrap.set_tick_callback!`](@ref)
++ [`mousetrap.set_title_widget!`](@ref)
++ [`mousetrap.set_titlebar_widget!`](@ref)
 + [`mousetrap.set_tooltip_text!`](@ref)
 + [`mousetrap.set_tooltip_widget!`](@ref)
 + [`mousetrap.set_vertical_alignment!`](@ref)

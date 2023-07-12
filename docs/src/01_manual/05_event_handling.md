@@ -10,15 +10,15 @@ In this chapter, we will learn:
 
 ## Introduction: Event Model
 
-So far, we were able to react to a user interacting with the GUI through widgets. For example, if the user clicked a `Button`, that button will emit the signal `clicked`, which can trigger our custom behavior. While this mechanism works, it can also be fairly limiting. Pre-defined widgets will only have pre-defined way of interacting with them. We cannot react to the user pressing a keyboard key using just `Button`. To do that, we will need an **event controller**. 
+So far, we were able to react to a user interacting with the GUI through pre-made widgets. For example, if the user clicked a `Button`, that button will emit the signal `clicked`, which can trigger our custom behavior. While this mechanism works, it can also be fairly limiting. Pre-defined widgets will only have pre-defined way of interacting with them. We cannot react to the user pressing a keyboard key using just `Button`. To do that, we will need an **event controller**. 
 
 ### What is an Event?
 
 When the user interacts with a computer in the physical world, they will control some kind of device, for example a mouse, keyboard, touchpad, webcam, stylus, etc. Through a driver, the device will react to user behavior and send data to the operating system, which then processes the data into what is called an **event**. 
 
-Pressing a keyboard key is an event, releasing the key is a new event. Moving the cursor by one unit is an event, pressing a stylus against a touchpad is an event, etc. Mousetrap is based on GTK4, which has very powerful and versatile event abstraction. We don't have to deal with OS-specific events directly, instead, the GTK backend will automatically transform and distribute events for us, regardless of the operating system or peripheral.
+Pressing a keyboard key is an event, releasing the key is a new event. Moving the cursor by one unit is an event, pressing a stylus against a touchpad is an event, etc. Mousetrap is based on GTK4, which has very powerful and versatile event abstraction. We don't have to deal with OS-specific events directly, instead, the GTK backend will automatically transform and distribute events for us, regardless of the operating system or peripheral manufacturer.
 
-To receive events, we need an [`EventController`](@ref). The `EventController` type is abstract, meaning we cannot use it directly. Instead, we deal with one or more of its subtypes. Each child class handles one one conceptual type of event. 
+To receive events, we need an [`EventController`](@ref). The `EventController` type is abstract, meaning we cannot use it directly. Instead, we deal with one or more of its subtypes. Each child class handles one conceptual type of event. 
 
 **In order for an event controller to be able to capture events, it needs to be connected to a widget**. Once connected, if the widget holds **input focus**, events are forwarded to the event controller, whose signals we can then connect custom behavior to.
 
@@ -30,27 +30,26 @@ The concept of [**input focus**](https://en.wikipedia.org/wiki/Focus_(computing)
 
 ### Preventing Focus
 
-Only `focusable` widgets can hold focus. We can make a widget focusable by calling [`set_is_focusable!`](@ref). Not all widgets are focusable by default. To know which are and are not focusable, we can use common sense: Any widget that has a way of interacting with it (such as a `Button`, `Entry`, `Scale`, `SpinButton` etc.) will be focusable by default. Widgets that have no native way of interacting with them are not focusable unless we specifically request them to be. This includes widget like `Label`, `ImageDisplay`, `Separator`, etc.
+Only `focusable` widgets can hold focus. We can make a widget focusable by calling [`set_is_focusable!`](@ref). Not all widgets are focusable by default. To know which are and are not focusable, we can use common sense: Any widget that has a way of interacting with it (such as a `Button`, `Entry`, `Scale`, `SpinButton` etc.) will be focusable by default. Widgets that have no native way of interacting with them are not focusable unless we specifically request them to be. This includes widgets like `Label`, `ImageDisplay`, `Separator`, etc.
 
 If a container widget has at least one focusable child, it itself is focusable.
 
-To prevent a widget from being able to gain focus, we can either disable it entirely by setting [`set_can_respond_to_input!`](@ref) to `false`, or we can delcare it as not focusable 
-using `set_is_focusable!`.
+To prevent a widget from being able to gain focus, we can either disable it entirely by setting [`set_can_respond_to_input!`](@ref) to `false`, or we can declare it as not focusable using [`set_is_focusable!`](@ref).
 
 ### Requesting Focus
 
 [`grab_focus!`](@ref) will make a widget attempt to gain input focus, stealing it from whatever other widget is currently focused. If this is impossible, for example because the widget is disabled, not yet shown, or is not focusable, nothing will happen. We can check if a widget currently has focus by calling [`get_has_focus`](@ref).
 
-Many widgets will automatically grab focus if interacted with, for example, if the user places the text cursor inside an `Entry`, that entry will grab focus. Pressing enter now activates the entry, even if another widget held focus before. If a `Button` is clicked, it will usually grab focus. We can make any widget, even those that do not require interaction, grab focus when clicked by setting [`set_focus_on_click!`](@ref) to `true`.
+Many widgets will automatically grab focus if interacted with. For example, if the user places the text cursor inside an `Entry`, that entry will grab focus. Pressing enter now activates the entry, even if another widget held focus before. If a `Button` is clicked, it will usually grab focus. We can make any widget, even those that do not require interaction, grab focus when clicked by setting [`set_focus_on_click!`](@ref) to `true`.
 
-The user can also decide which widget should hold focus, usually by pressing the tab key. If [`set_focus_visible!`](@ref) was set to `true` for the toplevel window, the focused widget 
+The user can also decide which widget should hold focus directly, usually by pressing the tab key. If [`set_focus_visible!`](@ref) was set to `true` for the toplevel window, the focused widget 
 will be highlighted using a transparent border.
 
 ## Event Controllers
 
 ### Connecting a Controller
 
-Using our newly gained knowledge about focus, we'll create our first event controller: `FocusEventController`. This controller reacts to a widget gaining or loosing input focus.
+Using our newly gained knowledge about focus, we'll create our first event controller: [`FocusEventController`](@ref). This controller reacts to a widget gaining or loosing input focus.
 
 After creating an event controller, it will not yet react to any events. We need to **add the controller to a widget**. For this chapter, we will assume that this widget is the top-level window, called `window` in the code snippets in this chapter.
 
@@ -90,16 +89,18 @@ we have succesfully created our first event controller and can now react to inpu
 
 ## Keyboard Keys: KeyEventController
 
-Monitoring focus is rarely necessary, for something much more commonly used, we turn to keyboard key strokes, which is whenever a button on keyboard goes from not-pressed to pressed (down), or pressed to not-pressed (up). We capture events of this type using  `KeyEventController`. 
+Monitoring focus is rarely necessary, for something much more commonly used, we turn to keyboard key strokes. Events of this type are emitted whenever a button on keyboard goes from not-pressed to pressed (down), or pressed to not-pressed (up). We capture events of this type using  `KeyEventController`. 
 
-Before we can talk about the controller itself, we need to talk about keyboard keys:
+Before we can talk about the controller itself, we need to talk about keyboard keys.
 
 ### Key Identification
 
 From the [chapter on actions](./03_actions.md) we recall that keyboard keys are split into two groups, **modifiers** and **non-modifiers**. Like with shortcut triggers,
 these are handled separately.
 
-Each non-modifier key has a key-code, which will be a constant defined by `mousetrap`. A full list of constants is available [here](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl). They provide a nice, human-readable way to identify keys. To refer to the space key, mousetrap uses a hard-coded integer, but for us humans all way have to remember is the name of the constant: `KEY_space`.
+Each non-modifier key has a key-code, which will be a constant defined by `mousetrap`. A full list of constants is available [here](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl), which provide a human-readable way to identify keys. 
+
+For example, to refer to the space key, mousetrap uses a hard-coded integer, but for us humans all way have to remember is the name of the constant: `KEY_space`.
 
 ### KeyEventController Signals
 
@@ -116,7 +117,7 @@ return mousetrap.@signal_table(KeyEventController,
 
 We see that pressing and releasing a non-modifier key are handled in separate signals. These can be used to track whether a key is currently up or down. Lastly, pressing or releasing any modifier key (such as control, alt, shift, etc.) is handled by the `modifiers_changed` signal.
 
-The signal handler for any of the three signals is handed to arguments, a `KeyCode`, which is the key code constant of the keyboard key that triggered the signals, as well as `ModifierState`. This is an object that holds information about which modifiers are currently pressed. To query it, we use [`control_pressed`](@ref), [`shift_pressed](@ref), and [`alt_pressed`](@ref), which return `true` or `false` depending on whether the modifier key is currently down.
+The signal handler for any of the three signals is handed two arguments, a `KeyCode`, which is the key code constant of the keyboard key that triggered the signals, as well as `ModifierState`. This is an object that holds information about which modifiers are currently pressed. To query it, we use [`control_pressed`](@ref), [`shift_pressed](@ref), and [`alt_pressed`](@ref), which return `true` or `false` depending on whether the modifier key is currently down.
 
 For example, to test whether the user pressed the space key while shift is held, we would do:
 
@@ -129,15 +130,15 @@ connect_signal_key_pressed(key_controller) do self::KeyController, code::KeyCode
 end
 ```
 
-`KeyEventController` should be used if we have to monitor both pressing and releasing a key or key combination. If all we want to do is trigger behavior when the user presses a key or key combination once, we should use `ShortcutEventController` instead:
+`KeyEventController` should be used if we have to monitor both pressing and releasing a key or key combination. If all we want to do is trigger behavior when the user presses a key or key combination once, we should use `ShortcutEventController` instead.
 
 ## Detecting Key Bindings: ShortcutEventController
 
 Recall that in the [chapter on actions](./03_actions.md), we learned that a shortcut trigger, or keybinding, is made up of any number of modifier keys, along with exactly one non-modifier. 
 
-To react to the user pressing such a shortcut, we should use `ShortcutEventController`, which has an easier-to-use and more flexibl interface as compared to `KeyEventController`. 
+To react to the user pressing such a shortcut, we use [`ShortcutEventController`](@ref), which has an easier-to-use and more flexible interface as compared to `KeyEventController`. 
 
-We first need an `Action`, which we assign a shortcut trigger;
+We first need an `Action`, which we associate a shortcut trigger with:
 
 ```julia
 action = Action("shortcut_controller.example", app) do self::Action
@@ -148,9 +149,9 @@ add_shortcut!(action, "<Shift>space")
 
 Where `app` is an `Application` instance.
 
-We can then create a `ShortcutEventController` instance, and call `add_action!`, after which it will listen for the associated keybinding of that action. Any number of actions can be added to a `ShortcutEventController`, and it's common to have a global one that simply monitors keyboard key events.
+We can then create a `ShortcutEventController` instance, and call `add_action!`, after which it will listen for the associated keybinding of that action. Any number of actions can be added to a `ShortcutEventController`. It's common to have a singular instance of this type handle all global shortcuts.
 
-In order for it to start receiving these events, we - just like before - need to connect it to a widget:
+In order for the shortcut controller to start receiving these events, we also need to connect it to a widget:
 
 ```julia
 shortcut_controller = ShortcutEventController()
@@ -179,16 +180,16 @@ return mousetrap.@signal_table(MotionEventController,
 )
 ```
 
-`motion_enter` is emitted once when the cursor enters the widgets are, then, once per frame, `motion` is emitted to update us about the current cursor position. Lastly, when the cursor leaves the widgets allocated area, `motion_leave` is emitted exactly once.
+`motion_enter` is emitted once when the cursor enters the widget area, then, once per frame, `motion` is emitted to update us about the current cursor position. Lastly, when the cursor leaves the widgets allocated area, `motion_leave` is emitted exactly once.
 
 `motion_enter` and `motion` supply us with the current cursor position, which is relative to the current widgets origin, in pixels.
 
-That is, for a widget whose top-left corner (it's origin) is at position `(widget_position_x, widget_position_y)`,  if the coordinate supplied by the signals is `(x, y)`, then the cursor is at position `(widget_position_x + x, widget_position_y + y)`, in pixels. 
+That is, for a widget whose top-left corner (its origin) is at position `(widget_position_x, widget_position_y)`,  if the coordinate supplied by the signals is `(x, y)`, then the cursor is at position `(widget_position_x + x, widget_position_y + y)`, in pixels. 
 
 Printed here is an example of how to connect to these signals, where we forwarded `window`, the host widget of the controller, as the `data` argument of signal `motion`, in order to calculate the absolute position of the cursor on screen.
 
 ```julia
-function on_motion(self::MotionEventController, x::AbstractFloat, y::AbstractFloat, instance::Widget)
+function on_motion(::MotionEventController, x::AbstractFloat, y::AbstractFloat, instance::Widget)
     widget_position = get_position(instance)
     cursor_position = Vector2f(x, y)
 
@@ -220,9 +221,9 @@ return mousetrap.@signal_table(ClickEventController,
 )
 ```
 
-Much like with `MotionEventController`, the signals provides the handler with `x` and `y`, the absolute position of the cursor at the time the click happened, in widget-space.
+Much like with `MotionEventController`, the signals provides the handler with `x` and `y`, the position of the cursor at the time the click happened, relative to the host widgets origin, in pixels.
 
-The first argument for two of the signals `click_pressed` and `click_released`, `n_presses`, is the number of presses in the current click sequence. For example, `n_presses = 2` means that this is the second time a mouse button was pressed in sequence, `click_stopped` signals that a sequence of clicks has ended. It may be helpful to consider an example:
+The first argument for two of the signals `click_pressed` and `click_released`, `n_presses`, is the number of presses in the current click sequence. For example, `n_presses = 2` means that this is the second time a mouse button was pressed in sequence, `click_stopped` is emitted when that sequence of clicks has ended. It may be helpful to consider an example:
 
 Let's say the user clicks the left mouse button 2 times total, then stops clicking. This will emit the following events in this order:
 1) `click_pressed` (n_pressed = 1)
@@ -231,11 +232,11 @@ Let's say the user clicks the left mouse button 2 times total, then stops clicki
 4) `click_released` (n_pressed = 2)
 5) `click_stopped`
 
-This allows us to easily handle double-clicks without any external function keeping track of them. The delay after which a click sequence stops is system-dependent and usually decided by the users operating system, not mousetrap.
+Thanks to the `n_pressed` argument, we can easily handle double-clicks without any external function keeping track of them. The delay after which a click sequence stops is system-dependent and usually decided by the users operating system, not mousetrap.
 
 ### Differentiating Mouse Buttons
 
-`ClickEventController` is one of a few event controllers that are also a subytpe of from [`SingleClickGesture`](@ref). This interface provides functionality that lets us distinguish between different mouse buttons. Mousetrap supports up to 9 different mouse buttons, identified by the enum [`ButtonID`](@ref):
+`ClickEventController` is one of a few event controllers that are also a subytpe of [`SingleClickGesture`](@ref). This interface provides functionality that lets us distinguish between different mouse buttons. Mousetrap supports up to 9 different mouse buttons, identified by the enum [`ButtonID`](@ref):
 
 + ButtonID::BUTTON_01 is usually the left mouse button (or a touchpad tap)
 + ButtonID::BUTTON_02 is usually the right mouse button
@@ -245,7 +246,7 @@ This allows us to easily handle double-clicks without any external function keep
 
 To check which mouse button was pressed, we use [`get_current_button`](@ref) on the event controller instance from within the signal handler, which returns an ID as stated above.
 
-If we only want signals to be emitted for certain buttons, we can use `set_only_listens_to_button!`](@ref) to restrict the choice of button. [`set_touch_only!`](@ref) filters all click events except those coming from touch devices.
+If we only want signals to be emitted for certain buttons, we can use [`set_only_listens_to_button!`](@ref) to restrict the choice of button. [`set_touch_only!`](@ref) filters all click events except those coming from touch devices.
 
 As an example, if we want to check if the user pressed the left mouse button twice, we can do the following:
 
@@ -278,7 +279,7 @@ return mousetrap.@signal_table(LongPressEventController,
 
 Where `pressed` is emitted the first frame the long press is recognized, `press_cancelled` is emitted once the user releases the mouse button.
 
-Similar to `clicked`, `LongPressEventController` provides us with the location of the cursor, in widget-space coordinates.
+Similar to `clicked`, `LongPressEventController` provides us with the location of the cursor, relative to the host widgets origin.
 
 `LongPressEventController`, like `ClickEventController`, inherits from `SingleClickGesture`, which allows us to differentiate between different mouse buttons or a touchscreen, just as before.
 
@@ -296,7 +297,7 @@ add_controller(window, long_press_controller)
 
 ## Click-Dragging: DragEventController
 
-A long press is a gesture in which a user clicks a mouse button, does not move the cursor, then **holds that position** for an amount of time. In contrast, **click-dragging** is very similar: the user clicks a mouse button, holds it, but **does move the cursor**. This is often used to "drag and drop" an UI element, such as dragging a file icon from one location to another, or dragging the knob of a `Scale`.
+A long press is a gesture in which a user clicks a mouse button, does not move the cursor, then **holds that position** for an amount of time. In contrast, **click-dragging** is slightly different: the user clicks a mouse button, holds it, but **does move the cursor**. This is often used to "drag and drop" an UI element, such as dragging a file icon from one location to another, or dragging the knob of a `Scale`-like widget.
 
 Click-dragging gestures are automatically recognized by [`DragEventController`](@ref), which has three signals:
 
@@ -313,10 +314,10 @@ When a click-drag is first recognized, `drag_begin` is emitted. Each frame the d
 
 All three signals supply two additional arguments with signal-specific meaning:
 
-+ `scroll_begin` supplies the absolute widget-space coordinate of the cursor location
-+ `scroll` and `scroll_end` supply the **offset** between the current cursor position and the start
++ `scroll_begin` supplies the cursor location, relative to the host widgets origin, in pixels
++ `scroll` and `scroll_end` supply the **offset** between the current cursor position, and the position at the start of the gesture, in pixels
 
-To get the current position of the cursor, we have to add the offset from `scroll` or `scroll_end` to the initial position. We can get the initial position either in `scroll_begin` or through by calling [`get_start_position`]:
+To get the current position of the cursor, we have to add the offset from `scroll` or `scroll_end` to the initial position. We can get the initial position either in `scroll_begin`, or by calling [`get_start_position`](@ref):
 
 ```julia
 drag_controller = DragEventController()
@@ -333,7 +334,7 @@ add_controller(window, drag_controller)
 
 ## Panning: PanEventController
 
-**Panning**  is similar to dragging, in that the user presses the mouse button (or touchscreen), then holds it down while moving the cursor to a different location. The difference between panning and click-dragging is that panning can only occur along exactly one of the two axis: left-right (the x-axis) or top-bottom (the y-axis). This is commonly seen in touchscreen UIs, for example, the user may scroll horizontally by using the pan gesture as opposed to a scroll wheel.
+**Panning**  is similar to dragging, in that the user presses the mouse button (or touchscreen), then holds it down while moving the cursor to a different location. The difference between panning and click-dragging is that **panning can only occur along exactly one of the two axis**: left-right (the x-axis) or top-bottom (the y-axis). This is commonly used touchscreen UIs, for example, the user may scroll horizontally by using a pan gesture as opposed to a scroll wheel.
 
 Panning is handled by the appropriately named [`PanEventController`](@ref), which is the first controller in this chapter that takes an argument to its constructor. We supply an [`Orientation`](@ref), which decides along which axis the controller should listen to panning for, `ORIENTATION_HORIZONTAL` for the x-axis, `ORIENTATION_VERTICAL` for the y-axis.
 
@@ -350,9 +351,9 @@ return mousetrap.@signal_table(PanEventController,
 
 Which is emitted once per frame while the gesture is active.
 
-Where `PanDirection` is an enum with four values: `PAN_DIRECTION_LEFT`, `PAN_DIRECTION_RIGHT`, `PAN_DIRECTION_UP` and `PAN_DIRECTION_DOWN`. If the orientation was set to `ORIENTATION_HORIZONTAL`, only left and right can occur, and vice-versa for `ORIENTATION_VERTICAL`.
+[`PanDirection`](@ref) is an enum with four values: `PAN_DIRECTION_LEFT`, `PAN_DIRECTION_RIGHT`, `PAN_DIRECTION_UP` and `PAN_DIRECTION_DOWN`. If the orientation was set to `ORIENTATION_HORIZONTAL`, only left and right can occur, and vice-versa for `ORIENTATION_VERTICAL`.
 
-The second argumnet is the current offset, that is, the distance between the current position of the cursor and the position at which the gesture was first recognized, in pixels.
+The second argument is the current offset, that is, the distance between the current position of the cursor and the position at which the gesture was first recognized, relative to the host widgets origin, in pixels.
 
 ```julia
 pan_controller = PanEventController(ORIENTATION_HORIZONTAL)
@@ -388,10 +389,6 @@ Many systems support both vertical and horizontal scrolling (usually by clicking
 
 When the user stops scrolling, `scroll_end` is emitted once.
 
-### Kinetic Scrolling
-
-`ScrollEventController` has a fourth signal which reacts to **kinetic scrolling**. Kinetic scrolling is a feature of modern UI, where the scroll movement simulates inertia. When the user triggers scrolling, usually through a swipe on a touchscreen, the widget being scrolled will continue scrolling even when the user is no longer touching the screen. The "friction" of the scrolling widget will slowly reduce the scroll speed, until it comes to a stop. `kinetic_scroll_decelerate` is emitted during this period, after the user has stopped touching the screen, but before the widget has a scroll speed of 0. Its additional arguments `x_velocity` and `y_velocity` are equal to the conceptual speed the widget should be scrolling at.
-
 If we want to keep track of how far the user has scrolled a widget that had a `ScrollEventController` connect, we do the following:
 
 ```julia
@@ -404,11 +401,15 @@ end
 add_controller(window, scroll_controller)
 ```
 
+### Kinetic Scrolling
+
+`ScrollEventController` has a fourth signal which reacts to **kinetic scrolling**. Kinetic scrolling is a feature of modern UI, where the scroll movement simulates inertia. When the user triggers scrolling, usually through a swipe on a touchscreen, the widget being scrolled will continue scrolling even when the user is no longer touching the screen. The "friction" of the scrolling widget will slowly reduce the scroll speed, until it comes to a stop. `kinetic_scroll_decelerate` is emitted during this period, after the user has stopped touching the screen, but before the widget has a conceptual scroll velocity of 0. Its additional arguments `x_velocity` and `y_velocity` inform us of the velocity the widget should currently be scrolling at.
+
 ---
 
 ## Pinch-Zoom: PinchZoomEventController
 
-While `MotionEventController`, `ClickEventController`, etc. recognize both a mouse and touchscreen, mousetrap offers some touch-only gestures, though many trackpads also support them. These are usually gestures performed using two fingers, the first of which is **pinch-zoom**. Pinch-zoom is when the user places two fingers on the touchscreen, then moves either, such that the distance between the fingers changes. This gesture is commonly used to zoom a view in or out. It is recognized by [`PinchZoomEventController`](@ref), which only has one signal:
+While `MotionEventController`, `ClickEventController`, etc. recognize both events from a mouse and touchscreen, mousetrap offers some touch-only gestures, though many trackpads also support them. These are usually gestures performed using two fingers, the first of which is **pinch-zoom**. Pinch-zoom is when the user places two fingers on the touchscreen, then moves either, such that the distance between the fingers changes. This gesture is commonly used to zoom a view in or out. It is recognized by [`PinchZoomEventController`](@ref), which only has one signal:
 
 ```@eval
 using mousetrap
@@ -439,7 +440,7 @@ add_controller!(window, zoom_controller)
 
 ## 2-Finger Rotate: RotateEventController
 
-Another touch-only gesture is the **two-finger-rotate**. With this gesture, the user places both fingers on the touchscreen, then rotates them around a constant point in between the two fingers.
+Another touch-only gesture is the **two-finger-rotate**. With this gesture, the user places both fingers on the touchscreen, then rotates them around a constant point in-between the two fingers.
 
 This gesture is handled by [`RotateEventController`](@ref), which has one signal:
 
@@ -479,7 +480,7 @@ return mousetrap.@signal_table(SwipeEventController,
 )
 ```
 
-The signal handler provides two arguments `x_velocity` and `y_velocity`, which describe the velocity along both the x and y axis. The vector `(x_velocity, y_velocity)` describes the direction of the swipe in 2D widget space, in pixels.
+The signal handler provides two arguments `x_velocity` and `y_velocity`, which describe the velocity along both the x and y axis. The vector `(x_velocity, y_velocity)` describes the direction and magnitude of the swipe, in pixels.
 
 To illustrate how to deduce the direction of the swipe, consider this example:
 
@@ -517,12 +518,6 @@ Additional features such as pressure- or angle-detection are manufacturer-specif
 
 `StylusEventController` has four signals:
 
-\signals
-\signal_stylus_up{StylusEventController}
-\signal_stylus_down{StylusEventController}
-\signal_proximity{StylusEventController}
-\signal_motion{StylusEventController}
-
 ```@eval
 using mousetrap
 return mousetrap.@signal_table(StylusEventController,
@@ -533,7 +528,7 @@ return mousetrap.@signal_table(StylusEventController,
 )
 ```
 
-We recognize signal `motion` from `MotionEventController`. It behaves [exactly the same](#cursor-motion-motioneventcontroller), where `x` and `y` are the cursor position in absolute widget space. 
+We recognize signal `motion` from `MotionEventController`. It behaves [exactly the same](#cursor-motion-motioneventcontroller), where `x` and `y` are the cursor position in widget space. 
 
 The three other signals are used to react to the physical distance between the stylus and touchpad. `stylus_down` is emitted when the pens tip makes contact with the touchpad, `stylus_up` is emitted when this contact is broken, `proximity` is emitted when the stylus about to touch the touchpad, or just left the touchpad.
 

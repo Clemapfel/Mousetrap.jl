@@ -6,6 +6,7 @@ using Test
 const app_id = "mousetrap.runtests.jl"
 const app = Ref{Union{Application, Nothing}}(nothing)
 const test_action = Ref{Union{Action, Nothing}}(nothing)
+const main_window = Ref{Union{Window, Nothing}}(nothing)
 
 ### ACTION
 
@@ -160,13 +161,7 @@ const test_action = Ref{Union{Action, Nothing}}(nothing)
 
     function (::AngleTest)()
         @testset "Angle" begin
-            angle = degrees(90)
-            @test as_degrees(angle) == 90
-            angle_rad = as_radians(angle)
-            angle_dg = as_degrees(radians(angle_rad))
-
-            @test 
-            @test isapprox(as_radians(angle), π / 180)
+            @test isapprox(as_degrees(radians(as_radians(degrees(90)))), 90.0)
         end
     end
 
@@ -194,9 +189,9 @@ const test_action = Ref{Union{Action, Nothing}}(nothing)
             set_child_x_alignment!(aspect_frame, 0.0)
             @test get_child_x_alignment(aspect_frame) == 0.0
 
-            @test get_child_y_alignment(aspect_frame) == 0.0
-            set_child_y_alignment!(aspect_frame, 0.5)
             @test get_child_y_alignment(aspect_frame) == 0.5
+            set_child_y_alignment!(aspect_frame, 0.0)
+            @test get_child_y_alignment(aspect_frame) == 0.0
 
             @test get_ratio(aspect_frame) == aspect_frame_test_ratio
             set_ratio!(aspect_frame, 1.0)
@@ -360,6 +355,40 @@ const test_action = Ref{Union{Action, Nothing}}(nothing)
     function (this::EventControllerTest)()
         area = this.area
 
+        let controller = ClickEventController()
+            @testset "ClickEventController" begin
+                connect_signal_click_pressed!(controller) do self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat
+                end
+                @test get_signal_click_pressed_blocked(controller) == false
+
+                connect_signal_click_released!(controller) do self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat
+                end
+                @test get_signal_click_released_blocked(controller) == false
+
+                connect_signal_click_stopped!(controller) do self::ClickEventController
+                end
+                @test get_signal_click_stopped_blocked(controller) == false
+            end
+            add_controller!(area, controller)
+        end
+
+        let controller = DragEventController()
+            @testset "DragEventController" begin
+                connect_signal_drag_begin!(controller) do self::DragEventController, start_x::AbstractFloat, start_y::AbstractFloat
+                end
+                @test get_signal_drag_begin_blocked(controller) == false
+
+                connect_signal_drag!(controller) do self::DragEventController, x_offset::AbstractFloat, y_offset::AbstractFloat
+                end
+                @test get_signal_drag_blocked(controller) == false
+
+                connect_signal_drag_end!(controller) do self::DragEventController, x_offset::AbstractFloat, y_offset::AbstractFloat
+                end
+                @test get_signal_drag_end_blocked(controller) == false
+            end 
+            add_controller!(area, controller)
+        end
+
         let controller = FocusEventController() 
             @testset "FocusEventController" begin
                 connect_signal_focus_gained!(controller) do self::FocusEventController
@@ -369,9 +398,8 @@ const test_action = Ref{Union{Action, Nothing}}(nothing)
                 connect_signal_focus_lost!(controller) do self::FocusEventController
                 end
                 @test get_signal_focus_lost_blocked(controller) == false
-
-                add_controller!(area, controller)
             end
+            add_controller!(area, controller)
         end
 
         let controller = KeyEventController()
@@ -388,9 +416,261 @@ const test_action = Ref{Union{Action, Nothing}}(nothing)
                 end
                 @test get_signal_modifiers_changed_blocked(controller) == false
             end
+            add_controller!(area, controller)
+        end
+
+        let controller = LongPressEventController()
+            @testset "LongPressEventController" begin
+                connect_signal_pressed!(controller) do self::LongPressEventController, x::AbstractFloat, y::AbstractFloat
+                end
+                @test get_signal_pressed_blocked(controller) == false
+
+                connect_signal_press_cancelled!(controller) do self::LongPressEventController
+                end
+                @test get_signal_pess_cancelled_blocked(controller) == false
+            end
+            add_controller!(area, controller)
+        end
+
+        let controller = MotionEventController()
+            @testset "MotionEventController" begin
+                connect_signal_motion!(controller) do self::MotionEventController, x::AbstractFloat, y::AbstractFloat
+                end
+                @test get_signal_motion_blocked(controller) == false
+
+                connect_signal_motion_enter!(controller) do self::MotionEventController, x::AbstractFloat, y::AbstractFloat
+                end
+                @test get_signal_motion_enter_blocked(controller) == false
+
+                connect_signal_motion_leave!(controller) do self::MotionEventController
+                end
+                @test get_signal_motion_leave_blocked(controller) == false
+            end
+            add_controller!(area, controller)
+        end
+
+        let controller = PanEventController(ORIENTATION_HORIZONTAL)
+            @testset "PanEventController" begin
+                connect_signal_pan!(controller) do self::PanEventController, direction::PanDirection, offset::AbstractFloat
+                end
+                @test get_signal_pan_blocked(controller) == false
+
+                @test get_orientation(controller) == ORIENTATION_HORIZONTAL
+                set_orientation!(controller, ORIENTATION_VERTICAL)
+                @test get_orientation(controller) == ORIENTATION_VERTICAL
+            end
+            add_controller!(area, controller)
+        end
+
+        let controller = PinchZoomEventController()
+            @testset "PinchZoomController" begin
+                connect_signal_scale_changed!(controller) do self::PinchZoomEventController, scale::AbstractFloat
+                end
+                @test get_signal_scale_changed_blocked(controller) == false                
+            end
+            add_controller!(area, controller)
+        end
+
+        let controller = RotateEventController()
+            @testset "RotateEventController" begin
+                connect_signal_rotation_changed!(controller) do self::RotateEventController, angle_absolute::AbstractFloat, angle_delta::AbstractFloat
+                end
+                @test get_signal_rotation_changed_blocked(controller) == false
+            end
+            add_controller!(area, controller)
+
+        end
+
+        let controller = ScrollEventController()
+            @testset "ScrollEventController" begin
+                connect_signal_scroll_begin!(controller) do self::ScrollEventController
+                end
+                @test get_signal_scroll_begin_blocked(controller) == false
+
+                connect_signal_scroll!(controller) do self::ScrollEventController, x_delta::AbstractFloat, y_delta::AbstractFloat
+                    return true
+                end
+                @test get_signal_scroll_blocked(controller) == false
+
+                connect_signal_scroll_end!(controller) do self::ScrollEventController
+                end
+                @test get_signal_scroll_end_blocked(controller) == false
+
+                connect_signal_kinetic_scroll_decelerate!(controller) do self::ScrollEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat
+                end
+                @test get_signal_kinetic_scroll_decelerate_blocked(controller) == false
+            end
+            add_controller!(area, controller)
         end
 
         let controller = ShortcutEventController()
+            @testset "ShortcutEventController" begin
+                @test get_scope(controller) == SHORTCUT_SCOPE_LOCAL
+                set_scope!(controller, SHORTCUT_SCOPE_GLOBAL)
+                @test get_scope(controller) == SHORTCUT_SCOPE_GLOBAL
+
+                add_action!(controller, test_action)
+                remove_action!(controller, test_action)
+            end
+            add_controller!(area, controller)
+        end
+
+        let controller = StylusEventController()
+            @testset "StylusEventController" begin
+                connect_signal_stylus_up!(controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
+                end
+                @test get_signal_stylus_up_blocked(controller) == false
+
+                connect_signal_stylus_down!(controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
+                end
+                @test get_signal_stylus_down_blocked(controller) == false
+
+                connect_signal_proximity!(controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
+                end
+                @test get_signal_proximity_blocked(controller) == false
+
+                connect_signal_motion!(controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
+                end
+                @test get_signal_motion_blocked(controller) == false
+
+                @test get_axis_value(controller, DEVICE_AXIS_X) isa Float64
+                @test get_hardware_id(controller) isa Csize_t
+                @test get_tool_type(controller) isa ToolType
+                @test has_axis(controller, DEVICE_AXIS_Y) isa Bool 
+            end
+            add_controller!(area, controller)
+        end
+
+        let controller = SwipeEventController()
+            @testset "SwipeEventController" begin
+                connect_signal_swipe!(controller) do self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat
+                end
+                @test get_signal_swipe_blocked(controller) == false
+            end
+            add_controller!(area, controller)
+        end
+    end
+
+### CLIPBOARD
+
+    struct ClipboardTest end
+    mousetrap.get_top_level_widget(x::ClipboardTest) = Separator()
+
+    function (::ClipboardTest)()
+        @testset "Clipboard" begin
+            clipboard = get_clipboard(main_window[])
+
+            set_string!(clipboard, "test")
+            @test is_local(clipboard) == true
+
+            string_read = Ref{Bool}(false)
+            get_string!(clipboard, string_read) do self::Clipboard, value::String, string_read
+                if value == "test"
+                    string_read[] = true
+                end
+            end
+            sleep(0.1)
+            @test string_read[] == true
+
+            set_image!(clipboard, Image(1, 1, RGBA(1, 0, 0, 1)))
+            @test is_local(clipboard) == true
+
+            image_read = Ref{Bool}(false)
+            get_image!(clipboard, image_read) do self::Clipboard, value::Image, image_read
+                if get_pixel(image, 1, 1) == RGBA(1, 0, 0, 1)
+                    image_read[] = true
+                end
+            end
+            sleep(0.1)
+            @test image_read[] == true
+        end
+    end
+
+### TIME
+
+    struct TimeTest end
+    mousetrap.get_top_level_widget(x::TimeTest) = Separator()
+
+    function (::TimeTest)()
+        @testset "Time" begin
+            value = 1234
+            @test as_minutes(minutes(value)) == value
+            @test as_seconds(seconds(value)) == value
+            @test as_milliseconds(milliseconds(value)) == value
+            @test as_microseconds(microseconds(value)) == value
+            @test as_nanoseconds(nanoseconds(value)) == value
+        end
+
+        @testset "Clock" begin
+            clock = Clock()
+            sleep(0.1)
+            @test as_seconds(elapsed(clock)) > 0.0
+            @test as_seconds(restart!(clock)) > 0.0
+        end
+    end
+
+### COLOR_CHOOSER
+
+    struct ColorChooserTest end
+    mousetrap.get_top_level_widget(x::ColorChooserTest) = Separator()
+
+    function (::ColorChooserTest)()
+        @testset "ColorChooser" begin
+            color_chooser = ColorChooser()
+            on_accept!(color_chooser) do self::ColorChooser, color::RGBA
+            end
+            on_cancel!(color_chooser) do self::ColorChooser
+            end
+
+            @test get_color(color_chooser) isa Color
+            @test get_is_modal(color_chooser) == false
+            set_modal!(color_chooser, true)
+            @test get_is_modal(color_chooser) == true
+        end
+    end
+
+### COLUMN_VIEW
+
+    struct ColumnViewTest 
+        column_view::ColumnView
+        ColumnViewTest() = new(ColumnView())
+    end
+    mousetrap.get_top_level_widget(x::ColumnViewTest) = x.column_view
+
+    struct (this::ColumnViewTest)()
+        @testset "ColumnViewTest" begin
+            column_view = this.column_view
+            push_back_column!(column_view, "column 01")
+            push_front_column!(column_view, "column 03")
+
+            column_name = "column 02"
+            column = insert_column!(column_view, column_name)
+
+            @test get_title(column) == column_name
+
+            new_title = "new title"
+            set_title!(column, new_title)
+            @test get_title(column) == new_title
+
+            @test get_fixed_width(column) isa Float32
+            set_fixed_width(column, 100)
+            @test get_fixed_width(column) == 100
+
+            model = MenuModel()
+            set_header_menu!(column, model)
+
+            @test get_is_visible(column) == true
+            set_is_visible!(column, false)
+            @test get_is_visible(column) == false
+
+            set_is_resizable!(column, true)
+            @test get_is_resizable(column) == true
+
+            remove_column!(column_view, get_column_at(column_view, 0))
+
+            @test has_column_with_title(column_view, new_title) == true
+            other_column = get_column_with_title(column_view, new_title)
+            @test get_title(other_column) == new_title
 
         end
     end
@@ -426,13 +706,15 @@ main(app_id) do app::Application
     end
 
     window = Window(app)
+    Main.main_window[] = window
+
     grid = Grid()
     set_rows_homogeneous!(grid, true)
     set_columns_homogeneous!(grid, true)
     set_row_spacing!(grid, 10)
     set_column_spacing!(grid, 10)
     set_margin!(grid, 10)
-        
+
     add_page!(grid, "Action", ActionTest())
     add_page!(grid, "Adjustment", AdjustmentTest())
     add_page!(grid, "AlertDialog", AlertDialogTest())
@@ -443,6 +725,9 @@ main(app_id) do app::Application
     add_page!(grid, "Box", BoxTest())
     add_page!(grid, "CenterBox", CenterBoxTest())
     add_page!(grid, "CheckButton", CheckButtonTest())
+    add_page!(grid, "Clipboard", ClipboardTest())
+    add_page!(grid, "EventController", EventControllerTest())
+    add_page!(grid, "Time", TimeTest())
 
 
     # this will be realized after all pages, at which point it will quit the app

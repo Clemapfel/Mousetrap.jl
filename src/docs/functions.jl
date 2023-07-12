@@ -3107,6 +3107,13 @@ remove_action!(::Application, id::String)
 ```
 Unregister an action from the application. Any connected widgets such as `Button` or `MenuModel` 
 will be disabled.
+
+---
+
+```
+remove_action!(::ShortcutEventController, ::Action) 
+```
+Remove an action, such that the controller will not longer trigger it if any of its shortcuts are recognized.
 """
 
 @document remove_button! """
