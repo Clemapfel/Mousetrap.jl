@@ -7,6 +7,7 @@ const app_id = "mousetrap.runtests.jl"
 const app = Ref{Union{Application, Nothing}}(nothing)
 const test_action = Ref{Union{Action, Nothing}}(nothing)
 const main_window = Ref{Union{Window, Nothing}}(nothing)
+const icon = Ref{Union{Icon, Nothing}}(nothing)
 
 ### ACTION
 
@@ -215,6 +216,7 @@ const main_window = Ref{Union{Window, Nothing}}(nothing)
             Base.show(devnull, button)
             
             set_child!(button, Label("Button"))
+            set_icon!(button, icon[])
 
             @test get_has_frame(button)
             set_has_frame!(button, false)
@@ -224,17 +226,20 @@ const main_window = Ref{Union{Window, Nothing}}(nothing)
             set_is_circular!(button, true)
             @test get_is_circular(button)
 
-            connect_signal_activate!(button) do ::Button
-                @test true
-                return nothing
+            activate_called = Ref{Bool}(false)
+            connect_signal_activate!(button, activate_called) do ::Button, activate_called
+               activate_called[] = true
             end
 
+            clicked_called = Ref{Bool}(false)
             connect_signal_clicked!(button) do ::Button
-                @test true
-                return nothing
+                clicked_called[] = true
             end
 
-            set_has_frame!(button, true)
+            activate!(button)
+            emit_signal_clicked!(button)
+            @test activate_called[] == true
+            @test clicked_called[] == true
         end
     end
 
@@ -561,7 +566,7 @@ const main_window = Ref{Union{Window, Nothing}}(nothing)
             clipboard = get_clipboard(main_window[])
 
             set_string!(clipboard, "test")
-            @test is_local(clipboard) == true
+            @test get_is_local(clipboard) == true
 
             string_read = Ref{Bool}(false)
             get_string!(clipboard, string_read) do self::Clipboard, value::String, string_read
@@ -573,7 +578,7 @@ const main_window = Ref{Union{Window, Nothing}}(nothing)
             @test string_read[] == true
 
             set_image!(clipboard, Image(1, 1, RGBA(1, 0, 0, 1)))
-            @test is_local(clipboard) == true
+            @test get_is_local(clipboard) == true
 
             image_read = Ref{Bool}(false)
             get_image!(clipboard, image_read) do self::Clipboard, value::Image, image_read
@@ -671,7 +676,205 @@ const main_window = Ref{Union{Window, Nothing}}(nothing)
             @test has_column_with_title(column_view, new_title) == true
             other_column = get_column_with_title(column_view, new_title)
             @test get_title(other_column) == new_title
+        end
+    end
 
+### DROP_DOWN
+
+    struct DropDownTest <: Widget
+        drop_down::DropDown
+    end
+    mousetrap.get_top_level_widget(x::DropDownTest) = x.drop_down
+
+    function (this::DropDownTest)()
+        @testset "DropDown" begin
+            drop_down = this.drop_down
+
+            label = "Label";
+            id_02 = push_back!(drop_down, label, label) do self::DropDown
+            end
+
+            @test get_item_it(drop_down, 1) == id_02
+
+            id_01 = push_front!(drop_down, label, label) do self::DropDown
+            end
+
+            id_03 = insert!(drop_down, 1, label, label) do self::DropDown
+            end
+
+            remove!(drop_down, id_03)
+
+            set_selected!(drop_down, id_01)
+            @test get_selected(drop_down) == id_01
+
+            @test get_always_show_arrow(drop_down) == true
+            set_always_show_arrow(drop_down, false)
+            @test get_always_show_arrow(drop_down) == false
+        end
+    end
+
+### ENTRY
+
+    struct EntryTest <: Widget
+        entry::Entry
+    end
+    mousetrap.get_top_level_widget(x::EntryTest) = x.entry
+
+    function (this::EntryText)()
+        @testset "Entry" begin
+            entry = this.entry
+
+            activate_called = Ref{Bool}(false)
+            connect_signal_activate!(entry, activate_called) do entry::Entry, activate_called
+                activate_called[] = true
+            end
+
+            text_changed_called = Ref{Bool}(false)
+            connect_signal_text_changed!(entry, text_changed_called) do entry::Entry, text_changed_called
+                text_changed_called[] = true
+            end
+
+            @test get_has_frame(entry) == true
+            set_has_frame!(entry, false)
+            @test get_has_frame(entity) == false
+
+            @test get_max_width_chars(entry) == 1
+            set_max_width_chars!(entry, 64)
+            @test get_max_width_chars(entry) == 64
+
+            @test get_text(entry) == ""
+            set_text(entry, "text")
+            @test get_text(entry) == "text"
+            
+            @test get_text_visible(entry) == true
+            set_text_visible(entry, false)
+            @test get_text_visible(entry) == false
+
+            set_primary_icon!(entry, Main.icon[])
+            set_secondary_icon!(entry, Main.icon[])
+            remove_primary_icon!(entry)
+            remove_secondary_icon!(entry)
+
+            activate!(entry)
+
+            @test activate_called[] == true
+            @test text_changed_called[] == true
+        end
+    end
+
+### EXPANDER
+
+    struct ExpanderTest <: Widget
+        expander::Expander
+    end
+    mousetrap.get_top_level_widget(x::ExpanderTest) = x.expander
+
+    function (this::ExpanderTest)()
+        @testset "Expander" begin
+            expander = this.expander
+
+            activate_called = Ref{Bool}(false)
+            connect_signal_activate!(expander, activate_called) do self::Expander, activate_called
+                activate_called[] = true
+            end
+
+            activate!(expander)
+            @test activate_called[] == true
+
+            set_child!(expander, Separator())
+            set_label_widget!(expander, Separator())
+
+            set_is_expanded!(expander, true)
+            @test get_is_expanded(expander) == true
+
+            remove_child!(expander)
+            remove_label_widget!(expander)
+        end
+    end
+
+### FILE_CHOOSER
+
+    struct FileChooserTest <: Widget end
+    mousetrap.get_top_level_widget(x::FileChooserTest) = Separator()
+
+    function (::FileChooserTest)()
+
+        @testset "FileFilter" begin
+            filter = FileFilter("test")
+            add_allow_all_supported_image_formats!(filter)
+            add_allowed_mime_type!(filter, "text/plain")
+            add_allowed_pattern!(filter, "*.jl")
+            add_allowed_suffix!(filter, "jl")
+
+            @test get_name(filter) == "test"
+        end
+
+        @testset "FileChooser" begin
+            file_chooser = FileChooser(FILE_CHOOSER_ACTION_SAVE)
+            add_filter!(file_chooser, filter)
+            set_initial_filter!(file_chooser, filter)
+            set_initial_file!(file_chooser, FileDescriptor("."))
+            set_initial_folder!(file_chooser, FileDescriptor("."))
+            set_initial_name!(file_chooser, "name");
+
+            set_accept_label!(file_chooser, "accept")
+            @test get_accept_label(file_chooser) = "accept"
+
+            @test get_is_modal(file_chooser) == true
+            set_is_modal!(file_chooser, false)
+            @test get_is_modal(file_chooser) == false
+
+            on_accept!(file_chooser) do x::FileChooser, files::Vector{FileDescriptor}
+            end
+
+            on_cancel!(file_chooser) do x::FileChooser
+            end
+
+            present!(file_chooser)
+            cancel!(file_chooser)
+        end
+    end
+
+### FILE_DESCRIPTOR
+
+    struct FileDescriptorTest <: Widget end
+    mousetrap.get_top_level_widget(::FileDescriptorText) = Separator()
+    
+    function (::FileDescriptorTest)()
+        @testset "FileDescriptor" begin
+           
+            name = tempname()
+            path = name * ".txt"
+            file = open(path, "w+")
+
+            descriptor = FileDescriptor()
+            create_from_ptah!(descriptor, path)
+
+            @test exists(descriptor)
+
+            @test get_name(descriptor) == name
+            @test get_path(descriptor) == path
+            @test get_uri(descriptor) isa String
+
+            @test get_path_relative_to(descriptor, descriptor) =) "."
+            @test exists(get_parent(descriptor))
+            
+            @test is_file(descriptor) == true
+            @test is_folder(descriptor) == false
+            @test is_symlink(descriptor) == false
+
+            # todo read_symlink
+
+            @test is_executable(descriptor) == false
+            @test get_content_type(descriptor) == "text/plain"
+            @test query_info(descriptor, "standard::name") == get_name(descriptor)
+
+            monitor = create_monitor(descriptor)
+            on_file_changed!(monitor) do ::FileMonitor, ::FileMonitorEvent, ::FileDescriptor, ::FileDescriptor
+            end
+            cancel!(monitor)
+
+            close(file)
         end
     end
 
@@ -708,6 +911,8 @@ main(app_id) do app::Application
     window = Window(app)
     Main.main_window[] = window
 
+    Main.icon[] = Icon()
+
     grid = Grid()
     set_rows_homogeneous!(grid, true)
     set_columns_homogeneous!(grid, true)
@@ -728,7 +933,6 @@ main(app_id) do app::Application
     add_page!(grid, "Clipboard", ClipboardTest())
     add_page!(grid, "EventController", EventControllerTest())
     add_page!(grid, "Time", TimeTest())
-
 
     # this will be realized after all pages, at which point it will quit the app
     sentinel = Separator()

@@ -1111,9 +1111,9 @@ get_expand_vertically(::Widget) -> Bool
 Get whether the widget can expand along the y-axis.
 """
 
-@document get_expanded """
+@document get_is_expanded """
 ```
-get_expanded(::Expander) -> Bool
+get_is_expanded(::Expander) -> Bool
 ```
 Get whether the expanders child is currently visible.
 """
@@ -2636,9 +2636,9 @@ is_folder(::FileDescriptor) -> Bool
 Check whether the location on disk contains points to a valid folder (not file).
 """
 
-@document is_local """
+@document get_is_local """
 ```
-is_local(::Clipboard) -> Bool
+get_is_local(::Clipboard) -> Bool
 ```
 Check whether the content of the cliboard was set from within the currently active mousetrap application.
 """
@@ -3696,9 +3696,9 @@ set_expand!(::Widget, ::Bool)
 Set whether the widget should expand along both the horizontal and vertical axis.
 """
 
-@document set_expanded! """
+@document set_is_expanded! """
 ```
-set_expanded(::Expander, ::Bool) 
+set_is_expanded(::Expander, ::Bool) 
 ```
 Automatically expand or hide the expanders child.
 """

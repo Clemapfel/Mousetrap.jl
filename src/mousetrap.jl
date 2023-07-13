@@ -2688,8 +2688,8 @@ module mousetrap
     export set_label_widget!
 
     @export_function Expander remove_label_widget! Cvoid
-    @export_function Expander set_expanded! Cvoid Bool b
-    @export_function Expander get_expanded Bool
+    @export_function Expander set_is_expanded! Cvoid Bool b
+    @export_function Expander get_is_expanded Bool
 
     @add_widget_signals Expander
     @add_signal_activate Expander
@@ -4387,7 +4387,7 @@ module mousetrap
         out = Clipboard(detail._Clipboard(internal))
     end
 
-    @export_function Clipboard is_local Bool
+    @export_function Clipboard get_is_local Bool
     @export_function Clipboard contains_string Bool
 
     set_string!(clipboard::Clipboard, string::String) = detail.set_string!(clipboard._internal, string)
