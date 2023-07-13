@@ -856,7 +856,7 @@ const icon = Ref{Union{Icon, Nothing}}(nothing)
             @test get_path(descriptor) == path
             @test get_uri(descriptor) isa String
 
-            @test get_path_relative_to(descriptor, descriptor) =) "."
+            @test get_path_relative_to(descriptor, descriptor) = "."
             @test exists(get_parent(descriptor))
             
             @test is_file(descriptor) == true
@@ -874,9 +874,19 @@ const icon = Ref{Union{Icon, Nothing}}(nothing)
             end
             cancel!(monitor)
 
+            gtk_file = FileDescriptor(tempname() * ".txt";
+            create_file_at!(gtk_file))
+            delete_at!(gtk_file)
+            create_direcotry_at!(gtk_file)
+            move_to_trash!(gtk_file)
+
             close(file)
         end
     end
+
+### FIXED
+
+
 
 ### MAIN
 

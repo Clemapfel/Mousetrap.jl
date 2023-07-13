@@ -2035,7 +2035,7 @@ module mousetrap
 
     # File System
 
-    create_file_at!(destination::FileDescriptor; replace::Bool) ::Bool = detail.create_file_at!(destination._internal, replace)
+    create_file_at!(destination::FileDescriptor; replace::Bool = false) ::Bool = detail.create_file_at!(destination._internal, replace)
     export create_file_at!
 
     create_directory_at!(destination::FileDescriptor) ::Bool = detail.create_directory_at!(destination._internal)
