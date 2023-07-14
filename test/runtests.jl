@@ -19,41 +19,26 @@ function add_page!(container::Container, title::String, x::Widget)
     add_child!(container, title, x)
 end
 
-main("mousetrap.runtests.jl") do app::Application
-
-    Main.app[] = app
-    window = Window(app)
-
-    container = Container()
-    viewport = Viewport()
-    set_child!(viewport, container)
-    set_child!(window, viewport)
-
-    connect_signal_realize!(container) do self::Container
-        test_action(self)
-        test_adjustment(self)
-        test_application(self)
-        test_alert_dialog(self)
-        test_angle(self)
-        test_aspect_frame(self)
-        test_button(self)
-        test_box(self)
-        test_center_box(self)
-        test_check_button(self)
-        test_event_controller(self)
-        test_clipboard(self)
-        test_time(self)
-        test_color_chooser(self)
-        test_column_view(self)
-        test_drop_down(self)
-        test_entry(self)
-        test_expander(self)
-        test_file_chooser(self)
-
-        return nothing
-    end
-
-    present!(window)
+function test_all()
+    test_action(self)
+    test_adjustment(self)
+    test_application(self)
+    test_alert_dialog(self)
+    test_angle(self)
+    test_aspect_frame(self)
+    test_button(self)
+    test_box(self)
+    test_center_box(self)
+    test_check_button(self)
+    test_event_controller(self)
+    test_clipboard(self)
+    test_time(self)
+    test_color_chooser(self)
+    test_column_view(self)
+    test_drop_down(self)
+    test_entry(self)
+    test_expander(self)
+    test_file_chooser(self)
 end
 
 ### 
@@ -91,6 +76,8 @@ function test_action(::Container)
         @test isempty(get_shortcuts(action))
     end
 end
+
+### ADJUSTMENT
 
 function test_adjustment(::Container)
     @testset "Adjustment" begin
@@ -222,9 +209,9 @@ function test_button(::Container)
         set_has_frame!(button, false)
         @test !get_has_frame(button)
 
-        @test !get_is_circular(button)
+        @test get_is_circular(button) == false
         set_is_circular!(button, true)
-        @test get_is_circular(button)
+        @test get_is_circular(button) == true
 
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(button, activate_called) do ::Button, activate_called
@@ -772,3 +759,1285 @@ function test_file_chooser(::Container)
     end
 end
 
+function test_file_descriptor(::Container)
+    @testset "FileDescriptor" begin
+           
+        name = tempname()
+        path = name * ".txt"
+        file = open(path, "w+")
+
+        descriptor = FileDescriptor()
+        create_from_ptah!(descriptor, path)
+
+        @test exists(descriptor)
+
+        @test get_name(descriptor) == name
+        @test get_path(descriptor) == path
+        @test get_uri(descriptor) isa String
+
+        @test get_path_relative_to(descriptor, descriptor) == "."
+        @test exists(get_parent(descriptor))
+        
+        @test is_file(descriptor) == true
+        @test is_folder(descriptor) == false
+        @test is_symlink(descriptor) == false
+
+        # todo read_symlink
+
+        @test is_executable(descriptor) == false
+        @test get_content_type(descriptor) == "text/plain"
+        @test query_info(descriptor, "standard::name") == get_name(descriptor)
+
+        monitor = create_monitor(descriptor)
+        on_file_changed!(monitor) do ::FileMonitor, ::FileMonitorEvent, ::FileDescriptor, ::FileDescriptor
+        end
+        cancel!(monitor)
+        @test is_cancelled(monitor)
+
+        gtk_file = FileDescriptor(tempname() * ".txt")
+        create_file_at!(gtk_file)
+        delete_at!(gtk_file)
+        create_direcotry_at!(gtk_file)
+        move_to_trash!(gtk_file)
+
+        close(file)
+    end
+end
+
+function test_fixed(::Container)
+    @testset "Fixed" begin
+        fixed = Fixed()
+        child = Label("(32, 32)")
+
+        add_child!(fixed, child, Vector2f(32, 32))
+        @test get_child_position(fixed, child) == Vector2f(32, 32)
+        set_child_position(fixed, child, Vector2f(64, 64))
+        @test get_child_position(fixed, child) == Vector2f(64, 64)
+
+        remove_child!(fixed, child)
+    end
+end
+
+function test_frame(::Container)
+    @testset "Frame" begin
+
+        frame = Frame()
+        set_child!(frame, Separator())
+        @test get_label_x_alignment(frame) == 0.5
+        set_label_x_alignment!(frame, 0.0)
+        @test get_label_x_alignment(frame) = 0.0
+        
+        @test get_label_y_alignmetn(frame) == 0.5
+        set_label_y_alignemtn(frame, 0.0)
+        @test get_label_y_alignmetn(frame) == 0.0
+
+        set_child!(frame, Separator())
+        set_label_widget!(frame, Label())
+        remove_child!(frame)
+        remove_label_widget!(frame)
+    end
+end
+
+function test_frame_clock(container::Container)
+    @testset "FrameClock" begin
+        clock = get_frame_clock(container)
+        @test get_target_frame_duration(clock) isa Time
+        @test get_time_since_last_frame(clock) isa Time
+
+        paint_called = Ref{Bool}(false)
+        connect_signal_paint!(clock, paint_called) do self::FrameClock, paint_called
+            paint_called[] = true
+        end
+
+        update_called = Ref{Bool}(false)
+        connect_signal_update!(clock, update_called) do self::FrameClock, update_called
+            update_called[] = true
+        end
+    end
+end
+
+function test_gl_transform(::Container) begin
+    @testset "GLTransform" begin
+        transform = GLTransform()
+        rotate!(transform, degrees(90))
+        scale!(transform, 1.5, 1.5)
+        translate!(transform, Vector2f(0.5, 0.5))
+
+        new_transform = combine_with(transform, Transform())
+        for x in 1:3
+            for y in 1:3
+                @test transform[x, y] == new_transform[x, y]
+            end
+        end
+
+        reset!(new_transform)
+    end
+end
+
+function test_grid(::Container) begin
+    @testset "Grid" begin
+        grid = Grid()
+
+        @test get_column_spacing(grid) == 0.0
+        set_column_spacing!(grid, 2.0)
+        @test get_column_spacing(grid) == 2.0
+
+        @test get_row_spacing(grid) == 0.0
+        set_row_spacing!(grid, 2.0)
+        @test get_row_spacing(grid) == 2.0
+
+        @test get_orientation(grid) == ORIENTATION_HORIZONTAL
+        set_orientation!(grid, ORIENTATION_VERTICAL)
+        @test get_orientation(grid) == ORIENTATION_VERTICAL
+
+        @test get_rows_homogeneous(grid) == false
+        set_rows_homogeneous!(grid, true)
+        @test get_rows_homogeneous(grid) == true
+
+        @test get_columns_homogeneous(grid) == false
+        set_columns_homogeneous!(grid, true)
+        @test get_columns_homogeneous(grid) == true
+
+        widget = Separator()
+        insert!(grid, Separator(), 1, 2, 1, 1)
+        @test get_position(grid, widget) == Vector2i(1, 1)
+        @test get_size(grid, widget) == Vector2i(1, 1)
+
+        insert_row_at!(grid, 1)
+        insert_column_at!(grid, 1)
+        remove_row_at!(grid, 1)
+        remove_column_at!(grid, 1)
+    end
+end
+
+### GRID_VIEW
+
+function test_grid_view(::Container)
+    @testset "GridView" begin
+        grid_view = GridView(ORIENTATION_HORIZONTAL,SELECTION_MODE_MULTIPLE)
+
+        @test get_orientation(grid_view) == ORIENTATION_HORIZONTAL
+        set_orientation!(grid_view, ORIENTATION_VERTICAL)
+        @test get_orientation(grid_view) == ORIENTATION_VERTICAL
+
+        @test get_max_n_columns(grid_view) == -1
+        set_max_n_columns!(grid_view, 3)
+        @test get_max_n_columns(grid_view) == 3
+        
+        @test get_min_n_columns(grid_view) == -1
+        set_min_n_columns!(grid_view, 3)
+        @test get_min_n_columns(grid_view) == 3
+
+        set_enable_rubberband_selection!(grid_view, true)
+        @test get_enable_rubberband_selection(grid_vie) == true
+
+        @test get_single_click_activate(grid_view) == false
+        set_single_click_activate!(grid_view, true)
+        @test get_single_click_activate(grid_view) == true
+
+        push_front!(grid_view, Separator())
+        push_back!(grid_view, Separator())
+        insert!(grid_view, 1, Separator())
+        remove!(grid_view, 1)
+
+        @test get_n_items(grid_view) == 3
+
+        @test get_selection_model(grid_view) isa SelectionModel
+
+        activate_called = Ref{Bool}(false)
+        connect_signal_activate!(grid_view, activate_called) do self::GridView, activate_called
+            activate_called[] = true
+        end
+        activate!(grid_view)
+        @test activate_called[] == true
+    end
+end
+
+### COLORS
+
+function test_colors(::Container)
+    @testset "Colors" begin
+        color_rgba = RGBA(1, 0, 1, 1)
+        color_hsva = HSVA(1, 0, 1, 1)
+        
+        @test color_rgba == as_rgba(as_hsva(color_rgba))
+        @test color_hsva == as_hsva(as_rgba(color_hsva))
+    end
+end
+
+### HEADER_BAR
+
+function test_header_bar(::Container)
+    @testset "HeaderBar" begin
+
+        layout = "close:minimize,maximize"
+        header_bar = HeaderBar(layout)
+        @test get_layout(header_bar) == layout
+        set_layout(header_bar, "")
+        @test get_layout(header_bar) == ""
+        
+        @test get_show_title_buttons(header_bar) == true
+        set_show_title_buttons!(header_bar, false)
+        @test get_show_title_buttons(header_bar) == false
+
+        widget = Separator()
+        push_front!(header_bar, widget)
+        push_back!(header_bar, Separator())
+        remove!(header_bar, widget)
+
+        set_title_widget!(header_bar, Label("title"))
+        remove_titlebar_widget!(header_bar)
+    end
+end
+
+function test_icon(::Container)
+
+    theme = IconTheme()
+
+    @testset "IconTheme" begin
+        names = get_icon_names(theme)
+        @test isempty(names) == false
+        @test has_icon(theme, names[1])
+        
+        # TODO: validate resource path
+    end
+
+    @testset "Icon" begin
+        icon_name = get_icon_names(theme)[1]
+        icon = Icon(theme, icon_name, 64)
+        @test get_size(icon) == 64
+    end
+end
+
+### IMAGE
+
+function test_image(::Container)
+    @testset "Image" begin
+        image = Image(1, 1, RGBA(1, 0, 1, 1))
+        @test get_size(image) == Vector2i(1, 1)
+        @test get_n_pixels(image) == 1
+
+        @test get_pixel(image, 1, 1) == RGBA(1, 0, 1, 1)
+        set_pixel!(image, 1, 1, RGBA(0, 0, 1, 1))
+        @test get_pixel(image, 1, 1) == RGBA(0, 0, 1, 1)
+
+        @test get_size(as_flipped(image, true, true)) == Vector2i(1, 1)
+        @test get_size(as_scaled(Image, 2, 2, INTERPOLATION_TYPE_HYPERBOLIC)) == Vector2i(2, 2)
+        @test get_size(as_cropped(image, 0, 0, 2, 2)) == Vector2i(2, 2)
+
+        save_to_file!(image, tempname() * ".png")
+    end
+end
+
+### IMAGE_DISPLAY
+
+function test_image_display(::Container)
+    @testset "ImageDisplay" begin
+        image_display = ImageDisplay()
+        image = Image(1, 1, RGBA(1, 0, 1, 1))
+        create_from_image!(image_display, image)
+        @test get_size(image_display) == Vector2i(1, 1)
+        clear!(image_display)
+
+        theme = IconTheme()
+        icon_name = get_icon_names(theme)[1]
+        icon = Icon(theme, icon_name, 64)
+        create_from_icon!(image_display, icon)
+        @test get_size(image_display) == Vector2i(1, 1)
+        clear!(image_display)
+    end
+end
+
+### KEY_FILE
+
+function test_key_file(::Container)
+    @testset "KeyFile" begin
+        file = KeyFile()
+
+        group_name = "group_01"
+        bool_key = "bool"
+        float_key = "float"
+        integer_key = "integer"
+        string_key = "string"
+
+        bool_list_key = "bool_list"
+        float_list_key = "float_list"
+        integer_list_key = "integer_list"
+        color_key = "color"
+        string_list_key = "string_list"
+
+        group_comment = " group comment"
+        key_comment = " key comment"
+
+        create_from_string!(file, """
+        #$group_comment
+        [$group_name]
+        $bool_key = true
+        $float_key = 1234.0
+        $integer_key = 1234
+        $string_key = abcd
+
+        $bool_list_key = true;false
+        $float_list_key = 1234.0;5678.0
+        $integer_list_key = 1234;5678
+        $string_list_key = abcd;efgh
+
+        #$key_comment
+        $color_key = 1.0;0.0;1.0;1.0
+        """)
+
+        @test get_groups(file) == [group_name]
+        @test has_group(file, group_name) == true
+        @test isempty(get_keys(file, group_name)) == false
+        @test has_key(file, group, color_key) == true
+
+        @test get_comment_above!(file, group_name) == group_comment
+        @test get_comment_above!(file, group_name, color_key) == key_comment
+
+        @test get_value(file, group_name, bool_key, Bool) == true
+        @test get_value(file, group_name, float_key, Float32) == 1234.0
+        @test get_value(file, group_name, integer_key, Int64) == 1234
+        @test get_value(file, group_name, string_key, String) == "abcd"
+        @test get_value(file, group_name, color_key, RGBA) == RGBA(1, 0, 1, 1)
+        @test get_value(file, group_name, bool_list_key, Vector{Bool}) == [true, false]
+        @test get_value(file, group_name, float_list_key, Vector{Float32}) == Float32[1234.0, 5678.0]
+        @test get_value(file, group_name, integer_list_key, Vector{Int64}) == Int64[1234, 5678]
+        @test get_value(file, group_name, string_list_key, Vector{String}) == ["abcd", "efgh"]
+
+        set_value(file, group_name, bool_key, false)
+        @test get_value(file, group_name, bool_key, Bool) == false
+
+        set_value(file, group_name, float_key, Float32(999))
+        @test get_value(file, group_name, float_key, Float32) == 999
+
+        set_value(file, group_name, integer_key, Int64(999))
+        @test get_value(file, group_name, integer_key, Int64) == 999
+
+        set_value(file, group_name, string_key, String("none"))
+        @test get_value(file, group_name, string_key, String) == "none"
+
+        set_value(file, group_name, color_key, RGBA(0, 0, 0, 1))
+        @test get_value(file, group_name, color_key, RGBA) == RGBA(1, 0, 1, 1)
+
+        set_value(file, group_name, bool_list_key, [false, true])
+        @test get_value(file, group_name, bool_list_key, Vector{Bool}) == [false, true]
+
+        set_value(file, group_name, float_list_key, [Float32(1), Float32(2)])
+        @test get_value(file, group_name, float_list_key, Vector{Float32}) == Float32[1.0, 2.0]
+
+        set_value(file, group_name, integer_list_key, [Int64(1), Int64(2)])
+        @test get_value(file, group_name, integer_list_key, Vector{Int64}) == Int64[1, 2]
+
+        set_value(file, group_name, string_list_key, ["none", "nothing"])
+        @test get_value(file, group_name, string_list_key, Vector{String}) == ["none", "nothing"]
+    end
+end
+
+### LABEL
+
+function test_label(::Container)
+    @testset "Label" begin
+        label_string = "label"
+        label = Label(label_string)
+
+        @test get_ellipsize_mode(label) == ELLIPSIZE_MODE_NONE
+        set_ellipsize_mode!(label, ELLIPSIZE_MODE_MIDDLE)
+        @test get_ellipsize_model(label) == ELLIPSIZE_MODE_MIDDLE
+
+        @test get_justfy_mode(label) == JUSTIFY_MODE_LEFT
+        set_justifymode!(label, JUSTIFY_MODE_CENTER)
+        @test get_justify_mode(label) == JUSTIFY_MODE_CENTER
+
+        @test get_is_selectable(label) == true
+        set_is_selectable!(label, false)
+        @test get_is_selectable(label) == false
+
+        @test get_max_width_chars(label) == -1
+        set_max_width_chars!(label, 1234)
+        @test get_max_width_chars(label) == 1234
+
+        @test get_text(label) == label_string
+        set_text!(label, "new")
+        @test get_text(label) == "new"
+
+        @test get_use_markup(label) == true
+        set_use_markup!(label, false)
+        @test get_use_markup(label) == false
+
+        @test get_wrap_mode(label) == LABEL_WRAP_MODE_NONE
+        set_wrap_mode!(label, LABEL_WRAP_MODE_WORD_OR_CHAR)
+        @test get_wrap_mode(label) == LABEL_WRAP_MODE_WORD_OR_CHAR
+
+        @test get_x_alignment(label) == 0.5
+        set_x_alignment!(label, 0.0)
+        @test get_x_alignment(label) == 0.0
+
+        @test get_y_alignment(label) == 0.5
+        set_y_alignment!(label, 0.0)
+        @test get_y_alignment(label) == 0.0
+    end
+end
+
+### LEVEL_BAR
+
+function test_level_bar(::Container)
+    @testset "LevelBar" begin    
+        level_bar = LevelBar(0, 1)
+
+        @test get_max_value(level_bar) == 1
+        set_max_value!(level_bar, 2)
+        @test get_max_value(level_bar) == 2
+
+        @test get_min_value(level_bar) == 0
+        set_min_value!(level_bar, 1)
+        @test get_min_value(level_bar) == 1
+
+        @test get_mode(level_bar) == LEVEL_BAR_MODE_CONTINUOUS
+        set_mode!(level_bar, LEVEL_BAR_MODE_DISCRETE)
+        @test get_mode(level_bar) == LEVEL_BAR_MODE_DISCRETE
+
+        @test get_orientation(level_bar) == ORIENTATION_HORIZONTAL
+        set_orientatin!(level_bar, ORIENTATION_VERTICAL)
+        @test get_orientation(level_bar) == ORIENTATION_VERTICAL
+        
+        set_value!(level_bar, 1)
+        @test get_value(level_bar) == 1
+
+        marker_label = "marker"
+        add_marker!(level_bar, marker_label, 1)
+        remove_marker!(level_bar, marker_label)
+    end
+end
+
+### LIST_VIEW
+
+function test_list_view(::Container)
+    @testset "ListView" begin
+        list_view = ListView(ORIENTATION_HORIZONTAL, SELECTION_MODE_MULTIPLE)
+
+        @test get_orientation(list_view) == ORIENTATION_HORIZONTAL
+        set_orientation!(list_view, ORIENTATION_VERTICAL)
+        @test get_orientation(list_view) == ORIENTATION_VERTICAL
+
+        set_enable_rubberband_selection!(list_view, true)
+        @test get_enable_rubberband_selection(grid_vie) == true
+
+        @test get_single_click_activate(list_view) == false
+        set_single_click_activate!(list_view, true)
+        @test get_single_click_activate(list_view) == true
+
+        @test get_show_separators(list_view) == false
+        set_show_separators!(list_view, true)
+        @test get_show_separators(list_view) == true
+
+
+        push_front!(list_view, Separator())
+        push_back!(list_view, Separator())
+        it = insert!(list_view, 1, Separator())
+        remove!(list_view, 1)
+
+        push_back!(list_view, Separator(), it)
+        set_widget_at(list_view, 1, Separator(), it)
+
+        @test get_n_items(list_view) == 3
+
+        @test get_selection_model(list_view) isa SelectionModel
+
+        activate_called = Ref{Bool}(false)
+        connect_signal_activate!(list_view, activate_called) do self::ListView, activate_called
+            activate_called[] = true
+        end
+        activate!(list_view)
+        @test activate_called[] == true
+    end
+end
+
+### LOG
+
+function test_log(::Container)
+    @testset "Log" begin
+        @test get_surpress_debug(MOUSETRAP_DOMAIN) == true
+        set_surpress_debug!(MOUSETRAP_DOMAIN, false)
+        @test get_surpress_debug(MOUSETRAP_DOMAIN) == false
+        
+        @test get_surpress_info(MOUSETRAP_DOMAIN) == true
+        set_surpress_info!(MOUSETRAP_DOMAIN, false)
+        @test get_surpress_debug(MOUSETRAP_DOMAIN) == false
+
+        @test set_log_file!(tempname()) == false
+
+        message = "message"
+        @log_debug MOUSETRAP_DOMAIN message
+        log_debug(MOUSETRAP_DOMAIN, message)
+
+        @log_info MOUSETRAP_DOMAIN message
+        log_info(MOUSETRAP_DOMAIN, message)
+
+        @log_warning MOUSETRAP_DOMAIN message
+        log_warning(MOUSETRAP_DOMAIN, message)
+
+        @log_critical MOUSETRAP_DOMAIN message
+        log_critical(MOUSETRAP_DOMAIN, message)
+
+        # no log fatal
+    end
+end
+
+### MENU_MODEL
+
+function test_menus(::Container)
+   
+    icon = Icon(IconTheme(), get_icon_names(theme)[1], 64)
+    action = Action("test.action", Main.app[]) do self::Action
+    end
+
+    root = MenuModel()
+    submenu = MenuModel()
+    section = MenuModel()
+
+    items_changed_called = Ref{Bool}(false)
+    connect_signal_items_changed!(root, items_changed_called) do self::MenuModel, n_remove::Integer, n_added::Integer, items_changed_called
+        items_changed_called[] = true
+    end
+
+    add_action!(submenu, "Action", action)
+    add_icon!(submenu, icon, action)
+    add_widget!(submenu, Separator())
+
+    add_action(section, "Section", action)
+    add_section!(submenu, "section", section)
+    add_submenu(root, "Submenu", submenu)
+
+    @testset "MenuModel" begin
+        @test items_changed_called[] == true
+    end
+   
+    @testset "MenuBar" begin
+        @test MenuBar(root) isa Widget
+    end
+
+    @testset "PopoverMenu" begin
+        @test PopoverMenu(root) isa Widget
+    end
+end
+
+### NOTE_BOOK
+
+function test_notebook(::Container)
+
+    @testset "Notebook" begin
+        notebook = Notebook()
+
+        page_added_called = Ref{Bool}(false)
+        connect_signal_page_added!(notebook, page_added_called) do self::Notebook, page_index::Integer, page_added_called
+            page_added_called[] = true
+        end
+
+        page_removed_called = Ref{Bool}(false)
+        connect_signal_page_added!(notebook, page_removed_called) do self::Notebook, page_index::Integer, page_removed_called
+            page_removed_called[] = true
+        end
+
+        page_reordered_called = Ref{Bool}(false)
+        connect_signal_page_added!(notebook, page_reordered_called) do self::Notebook, page_index::Integer, page_reordered_called
+            page_reordered_called[] = true
+        end
+
+        page_selection_changed_called = Ref{Bool}(false)
+        connect_signal_page_added!(notebook, page_selection_changed_called) do self::Notebook, page_index::Integer, page_selection_changed_called
+            page_selection_changed_called[] = true
+        end
+
+        push_front!(notebook, Separator(), Label("01"))
+        push_back!(notebook, Separator(), Label("02"))
+        insert!(notebook, 1 Separator(), Label("03"))
+
+        @test get_current_page(notebook) == 1
+
+        next_page!(notebook)
+        @test get_current_page(notebook) == 2
+
+        previous_page!(notebook)
+        @test get_current_page(notebook) == 1
+
+        @test get_n_pages(notebook) == 3
+        remove!(notebook, 1)
+        @test get_n_pages(notebook) == 2
+
+        @test get_is_scrollable(notebook) == false
+        set_is_scrollable!(notebook, true)
+        @test get_is_scrollable(notebook) == true
+        
+        @test get_has_border(notebook) == true
+        set_has_border!(notebook, false)
+        @test get_has_border(notebook) == false
+
+        @test get_tabs_visible(notebook) == true
+        set_tabs_visible!(notebook, false)
+        @test get_tabs_visible(notebook) == false
+
+        @test get_quick_change_menu_enabled(notebook) == false
+        set_quick_change_menu_enabled!(notebook, true)
+        @test get_quick_change_menu_enabled(notebook) == true
+
+        @test get_tab_position(notebook) == RELATIVE_POSITION_ABOVE
+        set_tab_position!(notebook, RELATIVE_POSITION_BELOW)
+        @test get_tab_position(notebook) == RELATIVE_POSITION_BELOW
+
+        @test get_tabs_reorderable(notebook) == false
+        set_tabs_reorderable!(notebook, false)
+        @test get_tabs_reorderable(notebook) == true
+
+        @test page_added_called[]
+        @test page_removed_called[]
+        @test page_reordered_called[]
+        @test page_selection_changed_called[]
+    end
+end
+
+### OVERLAY
+
+function test_overlay(::Container)
+    @testset "Overlay" begin
+        overlay = Overlay()
+
+        overlay_child = Separator()
+
+        set_child!(overlay, Separator())
+        add_overlay!(overlay, overlay_child)
+
+        remove_child!(overlay)
+        remove_overlay!(overlay, overlay_child)
+
+    end
+end
+
+### PANED
+
+function test_paned(::Container)
+    @testset "Paned" begin
+        paned = Paned(ORIENTATION_HORIZONTAL)
+
+        set_start_child!(paned, Separator())
+        set_end_child!(paned, Separator())
+
+        @test get_start_child_resizable(paned) == true
+        set_start_child_resizable!(paned, false)
+        @test get_start_child_resizable(paned) == false
+
+        @test get_start_child_shrinkable(paned) == true
+        set_start_child_shrinkable!(paned, false)
+        @test get_start_child_shrinkable(paned) == false
+
+        @test get_end_child_resizable(paned) == true
+        set_end_child_resizable!(paned, false)
+        @test get_end_child_resizable(paned) == false
+
+        @test get_end_child_shrinkable(paned) == true
+        set_end_child_shrinkable!(paned, false)
+        @test get_end_child_shrinkable(paned) == false
+
+        @test get_has_wide_handle(paned) == true
+        set_has_wide_handle!(paned, false)
+        @test get_has_wide_handle(paned) == false
+
+        @test get_orientation(paned) == ORIENTATION_HORIZONTAL
+        set_orientation!(paned)
+
+        set_position!(paned, 32)
+        @test get_position(paned) == 32
+
+        remove_start_child!(paned)
+        remove_end_child!(paned)
+    end
+end
+
+### POPOVER 
+
+function test_popover(container::Container)
+
+    @testset "Popover" begin
+        popover = Popover()
+        set_child!(popover, Separator())
+
+        attach_to!(popover, container)
+
+        @test get_has_base_arrow(popover) == true
+        set_has_base_arrow!(popover, false)
+        @test get_has_base_arrow(popover) == false
+
+        @test get_autohide(popover) == true
+        set_autohide!(popover, false)
+        @test get_autohide(popover) == false
+
+        set_relative_position!(popover, RELATIVE_POSITION_BELOW)
+        @test get_relative_position(popover, RELATIVE_POSITION_BELOW)
+
+        closed_called = Ref{Bool}(false)
+        connect_signal_closed!(popover, closed_called) do self::Popover, closed_called
+            closed_called[] = true
+        end
+
+        present!(popover)
+        popup!(popover)
+        popdown!(popover)
+
+        @test closed_called[]
+    end
+
+    @testset "PopoverButton" begin
+        popover_button = PopoverButton()
+
+        @test get_always_show_arrow(popover_button) == true
+        set_always_show_arrow!(popover_button, false)
+        @test get_always_show_arrow(popover_button) == false
+
+        @test get_has_frame(popover_button) == true
+        set_has_frame!(popover_button, false)
+        @test get_has_frame!(popover_button) == false
+
+        @test get_is_circular(popover_button) == false
+        set_is_circular(popover_button, true)
+        @test get_is_circular(popover_button) == true
+
+        set_child!(popover_button, Separator())
+        remove_child!(popover_button)
+
+        set_popover!(popover_button, Popover())
+        remove_popover!(popover_button)
+
+        set_popover_menu!(popover_button, PopoverMenu(MenuModel()))
+        remove_popover!(popover_button)
+
+        set_relative_position!(popover_button, RELATIVE_POSITION_BELOW)
+        @test get_relative_position(popover_button) == RELATIVE_POSITION_BELOW
+
+        activate_called = Ref{Bool}(false)
+        connect_signal_activate!(popover_button, activate_called) do self::PopoverButton, activate_called
+            activate_called[] = true
+        end
+        activate!(popover_button)
+        @test activate_called[] == true
+    end
+end
+
+### PROGRESS_BAR
+
+function test_progress_bar(::Container)
+    @testset "ProgressBar" begin
+        progress_bar = ProgressBar()
+
+        @test get_fraction(progress_bar) == 0.0
+        set_fraction!(progress_bar, 0.5)
+        @test get_fraction!(progress_bar) == 0.5
+
+        @test get_orientation(progress_bar) == ORIENTATION_HORIZONTAL
+        set_orientation!(progress_bar, ORIENTATION_VERTICAL)
+        @test get_orientation(progress_bar) == ORIENTATION_VERTICAL
+
+        @test get_is_inverted(progress_bar) == false
+        set_is_inverted(progress_bar, true)
+        @test get_is_inverted(progress_bar) == true
+
+        @test get_show_text(progress_bar) == false
+        set_show_text!(progress_bar, true)
+        set_text!(progress_bar, "text")
+        @test get_show_text(progress_bar) == true
+
+        pulse(progress_bar)
+    end
+end
+
+### REVEALER
+
+function test_revelaer(::Container)
+    @testset "Revealer" begin
+        revealer = Revealer()
+
+        revealed_called = Ref{Bool}(false)
+        connect_signal_revealed!(revealer, revealed_called) do self::Revealer, revealed_called
+            revealed_called[] = true
+        end
+
+        set_child!(revealer, Separator())
+        set_is_revealed!(revealer, false)
+        @test get_is_revealed(revealer) == false
+        set_is_revealed!(revealer, true)
+        @test get_is_revealed(revealer) == true
+    
+        set_transition_duration!(revealer, seconds(1))
+        @test get_transition_duration(revealer) == seconds(1)
+
+        set_transition_type!(revealer, REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
+        @test get_transition_type(revealer) == REVEALER_TRANSITION_TYPE_SLIDE_DOWN
+
+        @test revealed_called[] == true
+    end
+end
+
+### SCALE
+
+function test_scale(::Container)
+    @testset "Scale" begin
+        scale = Scale(0, 1, 0.01)
+
+        value_changed_called = Ref{Bool}(false)
+        connect_signal_value_changed!(scale, value_changed_called) do self::Scale, value_changed_called
+            value_changed_called[] = true
+        end
+
+        set_value!(scale, 0.5)
+        @test get_value(scale) == 0.5
+
+        @test get_lower(scale) == 0.0
+        set_lower!(scale, 1.0)
+        @test get_lower(scale) == 1.0
+
+        @test get_upper(scale) == 1.0
+        set_upper!(scale, 2.0)
+        @test get_upper(scale) == 2.0
+
+        @test get_step_increment(scale) == 0.01
+        set_step_increment!(scale, 0.5)
+        @test get_step_increment(scale) == 0.5
+
+        @test get_has_origin(scale) == true
+        set_has_origin(scale, false)
+        @test get_has_origin(scale) == false
+
+        @test get_orientation(scale) == ORIENTATION_HORIZONTAL
+        set_orientation!(scale, ORIENTATION_VERTICAL)
+        @test get_orientation(scale) == ORIENTATION_VERTICAL
+
+        @test get_should_draw_value(scale) == false
+        set_should_draw_value!(scale, true)
+        @test get_should_draw_value(scale) == true
+
+        @test get_adjustment(scale) isa Adjustment
+        add_mark!(scale, 1.5, RELATIVE_POSITION_RIGHT_OF, "label")
+        clear_marks!(scale)
+
+        @test value_changed_called[] == true
+    end
+end
+
+### SCROLLBAR
+
+function test_scrollbar(::Container)
+    @testset "Scrollbar" begin
+        scrollbar = Scrollbar(ORIENTATION_HORIZONTAL, Adjustment(0, 0, 1, 0.01))
+        @test get_value(get_adjustment(scrollbar)) == 0.0
+        
+        @test get_orientation(scrollbar) == ORIENTATION_HORIZONTAL
+        set_orientation!(scrollbar, ORIENTATION_VERTICAL)
+        @test get_orientation!(scrollbar) == ORIENTATION_VERTICAL 
+    end
+end
+
+### SELECTION_MODEL
+
+function test_selection_model(::Container)
+    @testset "SelectionModel" begin
+        list_view = ListView(SELECTION_MODE_MULTIPLE)
+        push_back!(list_view, Separator())
+        push_back!(list_view, Separator())
+        push_back!(list_view, Separator())
+
+        selection_model = get_selection_model(list_view)
+        @test get_n_items(selection_model) == 3
+        select!(selection_model, 1)
+        select_all!(selection_model)
+        @test length(get_selection(selection_model)) == 3
+        unselect_all!(selection_model)
+        @test length(get_selection(selection_model)) == 0
+    end
+end
+
+### SEPARATOR 
+
+function test_separator(::Container)
+    @testset "Separator" begin
+        separator = Separator(ORIENTATION_HORIZONTAL; opacity = 0.5)
+        @test get_orientation(separator) == ORIENTATION_HORIZONTAL
+        set_orientation(separator, ORIENTATION_VERTICAL)
+        @test get_orientation(separator) == ORIENTATION_VERTICAL
+    end
+end
+
+### SPIN_BUTTON
+
+function test_spin_button(::Container)
+    @testset "SpinButton" begin
+
+        scale = SpinButton(0, 1, 0.01)
+
+        value_changed_called = Ref{Bool}(false)
+        connect_signal_value_changed!(scale, value_changed_called) do self::Scale, value_changed_called
+            value_changed_called[] = true
+        end
+
+        set_value!(scale, 0.5)
+        @test get_value(scale) == 0.5
+
+        @test get_lower(scale) == 0.0
+        set_lower!(scale, 1.0)
+        @test get_lower(scale) == 1.0
+
+        @test get_upper(scale) == 1.0
+        set_upper!(scale, 2.0)
+        @test get_upper(scale) == 2.0
+
+        @test get_step_increment(scale) == 0.01
+        set_step_increment!(scale, 0.5)
+        @test get_step_increment(scale) == 0.5
+
+        @test get_acceleration_rate(scale) == 1.0
+        set_acceleration_rate!(scale, 2)
+        @test get_acceleration_rate(scale) == 2
+
+        @test get_allow_only_numeric(scale) == true
+        set_allow_only_numeric!(scale, false)
+        @test get_allow_only_numeric(scale) == false
+        
+        @test get_n_digits(scale) == -1
+        set_n_digits!(scale, 10)
+        @test get_n_digits(scale) == 10
+
+        @test get_should_wrap(scale) == false
+        set_should_wrap!(scale, true)
+        @test get_should_wrap(scale) == true
+
+        @test get_should_snap_to_ticks(scale) == true
+        set_should_snap_to_ticks(scale, false)
+        @test get_should_snap_to_ticks(scale) == false
+
+        set_text_to_value_function!(scale) do self::SpinButton, text::String
+            value::Float32 = 0
+            return value
+        end
+
+        set_value_to_text_function!(spin_button) do self::SpinButton, value::AbstractFloat
+            result = ""
+            return result
+        end
+
+        @test value_changed_called[] == true
+    end
+end
+
+### SPINNER
+
+function test_spinner(::Container)
+    @testset "Spinner" begin
+        spinner = Spinner()
+        @test get_is_spinning(spinner) == false
+        set_is_spinning!(spinner, true)
+        @test get_is_spinning(spinner) == true
+        stop!(spinner)
+        @test get_is_spinning(spinner) == false
+        start!(spinner)
+        @test get_is_spinning(spinner) == true
+    end
+end
+
+### STACK
+
+function test_stack(::Container)
+    @testset "Stack" begin
+        stack = Stack()
+
+        id_01 = add_child!(stack, Separator())
+        id_02 = add_child!(stack, Separator())
+
+        @test get_child_at(stack, 1) == id_01
+
+        @test get_is_horizontally_homogeneous(stack) == false
+        set_is_horizontally_homogeneous!(stack, true)
+        @test get_is_horizontally_homogeneous(stack) == true
+
+        @test get_is_vertically_homogeneous(stack) == false
+        set_is_vertically_homogeneous!(stack, true)
+        @test get_is_vertically_homogeneous(stack) == false
+
+        @test get_should_interpolate_size(stack) == false
+        set_should_interpolate_size!(stack, true)
+        @test get_should_interpolate_size(stack) == true
+
+        set_transition_type!(stack, STACK_TRANSITION_TYPE_OVER_UP)
+        @test get_transition_type!(stack) == STACK_TRANSITION_TYPE_OVER_UP
+
+        set_transition_duration!(stack, seconds(1))
+        @test get_set_transition_duration!(stack) == seconds(1)
+
+        @test get_selection_model(stack) isa SelectionModel
+        set_visible_child!(stack, id_02)
+
+        sidebar = StackSiderbar(stack)
+        @test sidebar isa Widget
+
+        switcher = StackSwitcher(stack)
+        @test switcher isa Widget
+    end
+end
+
+### SWITCH
+
+function test_switch(::Container)
+    @testset "Switch" begin
+        switch = Switch()
+
+        activate_called = Ref{Bool}(false)
+        connect_signal_activate!(switch, activate_called) do self::Switcher, activate_called
+            activate_called[] = true
+        end
+
+        set_is_active!(switch, false)
+        @test get_is_active(switch) == false
+        activate!(switch)
+        @test get_is_active(switch) == true
+        @test activate_called[] == true
+    end
+end
+
+### TEXT_VIEW
+
+function test_text_view(::Container)
+    @testset "TextView" begin
+        text_view = TextView()
+
+        text_changed_called = Ref{Bool}(false)
+        connect_signal_text_changed!(text_view, text_changed_called) do self::TextVie, text_changed_called
+            text_changed_called[] = true
+        end
+
+        @test get_bottom_margin(text_view) == 0
+        set_bottom_margin(text_view, 10)
+        @test get_bottom_margin(text_view) == 10
+
+        @test get_left_margin(text_view) == 0
+        set_left_margin(text_view, 10)
+        @test get_left_margin(text_view) == 10
+
+        @test get_right_margin(text_view) == 0
+        set_right_margin(text_view, 10)
+        @test get_right_margin(text_view) == 10
+
+        @test get_top_margin(text_view) == 0
+        set_top_margin(text_view, 10)
+        @test get_top_margin(text_view) == 10
+
+        @test get_editable(text_view) == true
+        set_editable!(text_view, false)
+        @test get_editable(text_view) == false
+
+        set_was_modified!(text_view, false)
+        @test get_was_modified(text_view) == false
+        set_text!(text_view, "modified")
+        @test get_was_modified(text_view) == true
+
+        undo!(text_view)
+        redo!(text_view)
+
+        @test text_changed_called[] == true
+    end
+end
+
+### TOGGLE_BUTTON
+
+function test_toggle_button(::Container)
+    @testset "ToggleButton" begin
+        
+        button = ToggleButton()
+
+        toggled_called = Ref{Bool}(false)
+        connect_signal_toggled!(button, toggled_called) do self::ToggleButton, toggled_called
+            toggled_called[] = true
+        end
+
+        clicked_called = Ref{Bool}(false)
+        connect_signal_clicked!(button, clicked_called) do self::ToggleButton, clicked_called
+            clicked_called[] = true
+        end
+
+        activate_called = Ref{Bool}(false)
+        connect_signal_activate!(button, activate_called) do self::ToggleButton, activate_called
+            activate_called[] = true
+        end
+
+        set_is_active!(button, true)
+        @test get_is_active(button) == true
+
+        set_child!(button, Separator())
+        set_icon!(button, Icon(IconTheme(), get_icon_names(theme)[1], 64))
+        remove_child!(button)
+
+        @test get_is_circular(button) == false
+        set_is_circular!(button, true)
+        @test get_is_circular(button) == true
+    end
+end
+
+function test_typed_function(::Container)
+    @testset "TypedFunction" begin
+        yes_f(x::Int64) ::Nothing = return nothing
+        no_f1(x::Int32) ::Nothing = return nothing
+        no_f2(x::Int64) ::Int64 = return 1234
+
+        Test.@test TypedFunction(yes_f, Nothing, (Int64,)) isa TypedFunction
+        Test.@test_throws TypedFunction(no_f1, Nothing, (Int64,))
+        Test.@test_throws TypedFunction(no_f2, Nothing, (Int64,))
+
+    end
+end
+
+function test_viewport(::Container)
+    @testset "Viewport" begin
+        viewport = Viewport()
+
+        connect_signal_scroll_child!(viewport) do self::Viewport, scroll_type::ScrollType, is_horizontal::Bool
+        end
+
+        @test get_has_frame(viewport) == true
+        set_has_frame!(viewport, false)
+        @test get_has_frame(viewport) == false
+
+        @test get_horizontal_adjustment(viewport) isa Adjustment
+        @test get_vertical_adjustment(viewport) isa Adjustment
+
+        @test get_kinetic_scrolling_enabled(viewport) == true
+        set_kinetics_scrolling_enabled!(viewport, false)
+        @test get_kinetic_scrolling_enabled(viewport) == false
+
+        @test get_propagate_natural_width(viewport) == false
+        set_propagate_natural_width!(viewport, true)
+        @test get_propagate_natural_width(viewport) == true
+
+        @test get_propagate_natural_height(viewport) == false
+        set_propagate_natural_height(viewport, true)
+        @test get_propagate_natural_height(viewport) == true
+
+        @test get_vertical_scrollbar_policy(viewport) == SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC
+        set_vertical_scrollbar_policy!(viewport, SCROLLBAR_VISIBILITY_POLICY_NEVER)
+        @test get_vertical_scrollbar_policy(viewport) == SCROLLBAR_VISIBILITY_POLICY_NEVER
+
+        @test get_horizontal_scrollbar_policy(viewport) == SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC
+        set_horizontal_scrollbar_policy!(viewport, SCROLLBAR_VISIBILITY_POLICY_NEVER)
+        @test get_horizontal_scrollbar_policy(viewport) == SCROLLBAR_VISIBILITY_POLICY_NEVER
+
+        set_scrollbar_placement!(viewport, CORNER_PLACEMENT_TOP_LEFT)
+        @test get_scrollbar_placement(viewport) == CORNER_PLACEMENT_TOP_LEFT
+    end
+end
+
+function test_window(::Container)
+    @testset "Window" begin
+        window = Window(Main.app[])
+
+        close_request_called = Ref{Bool}(false)
+        connect_signal_close_request!(window, close_request_called) do self::Window, close_request_called
+            close_request_called[] = true
+            return WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE
+        end
+
+        activate_default_widget_called = Ref{Bool}(false)
+        connect_signal_activate_default_widget!(window, activate_default_widget_called) do self::Window, activate_default_widget_called
+            activate_default_widget_called[] = true
+        end
+
+        activate_focused_widget_called = Ref{Bool}(false)
+        connect_signal_activate_focused_widget!(window, activate_focused_widget_called) do self::Window, activate_focused_widget_called
+            activate_focused_widget_called[] = true
+        end
+
+        @test get_destroy_with_parent!(window) == true
+        set_destroy_with_parent!(window, false)
+        @test get_destroy_with_parent!(window) == false
+        
+        @test get_focus_visible(window) == true
+        set_focus_visible!(window, false)
+        @test get_focus_visible(window) == false
+
+        @test get_has_close_button(window) == true
+        set_has_close_button!(window, false)
+        @test get_has_close_button(window) == false
+
+        @test get_is_decorated(window) == true
+        set_is_decorated!(window, false)
+        @test get_is_decorated(window) == false
+
+        @test get_is_modal(window) == false
+        set_is_modal!(window, true)
+        @test get_is_modal(window) == true
+
+        set_title!(window, "test")
+        @test get_title(window) == "test"
+
+        button = Button()
+        set_child!(window, button)
+        set_default_widget!(window, button)
+        activate!(button)
+
+        @test activate_default_widget_called[] == true
+        @test activate_focus_widget_called[] == true
+
+        set_titlebar_widget!(window, Separator())
+
+        set_minimized!(window, true)
+        set_maximized!(window, true)
+        set_hide_on_close!(window, false)
+        close!(window)
+    end
+end
+
+### RENDER_AREA
+
+function test_render_area(::Container)
+
+    @testset "RenderArea" begin
+        # TODO
+    end
+
+    @testset "RenderTask" begin
+        # TODO
+    end
+
+    @testset "RenderTexture" begin
+        # TODO
+    end
+
+    @testset "Shader" begin
+        # TODO
+    end
+
+    @testset "Shape" begin
+        # TODO
+    end
+
+    @testset "Texture" begin
+        # TODO
+    end
+
+
+end
+
+### MAIN
+
+main("mousetrap.runtests.jl") do app::Application
+
+    Main.app[] = app
+    window = Window(app)
+
+    println("TODO: Base.show")
+
+    container = Container()
+    viewport = Viewport()
+    set_child!(viewport, container)
+    set_child!(window, viewport)
+
+    connect_signal_realize!(container) do self::Container
+        test_all()
+        return nothing
+    end
+
+    present!(window)
+end

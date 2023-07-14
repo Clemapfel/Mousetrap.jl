@@ -284,7 +284,7 @@ macro type_signals(T, signals...)
     for i in 1:n_signals
 
         id = signals[i]
-        signature = replace(signal_descriptors[id][1], "T" => string(T))
+        signature = replace(signal_descriptors[id][1], "::T" => "::" * string(T))
         description = signal_descriptors[id][2]
 
         push!(out, """

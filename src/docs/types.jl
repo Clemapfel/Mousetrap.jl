@@ -1464,6 +1464,7 @@ $(@type_fields())
 paned = Paned(ORIENTATION_HORIZONTAL)
 set_start_child!(paned, Label("Left"))
 set_end_child!(paned, Label("Right"))
+```
 """
 
 @document PinchZoomEventController """
@@ -1821,18 +1822,24 @@ end
 @document Scrollbar """
 # Scrollbar <: Widget
 
-GUI element typically used to scroll another widget. Connect to the `Adjustment`
-obtained using `get_adjustment` to react to the underlying value of
-this widget changing.
+GUI element typically used to scroll another widget. Connect to the signals of the
+underlying adjustment to react to the user scrolling.
 
 $(@type_constructors(
-    Scrollbar(::Orientation)
+    Scrollbar(::Orientation, ::Adjustment)
 ))
 
 $(@type_signals(Scrollbar,
 ))
 
 $(@type_fields())
+
+## Example
+```julia
+scrollbar = Scrollbar(ORIENTATION_HORIZONTAL, Adjustment(0, 0, 1, 0.01))
+connect_signal_value_changed!(get_adjustment(scrollbar)) do self::Adjustment
+    println("value is now \$(get_value(self))")
+end
 """
 
 @document ScrollEventController """

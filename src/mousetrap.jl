@@ -1832,7 +1832,7 @@ module mousetrap
     @export_function Image create_from_file! Bool String path
     @export_function Image save_to_file Bool String path
     @export_function Image get_n_pixels Int64
-    @export_function Image get_size Vector2f
+    @export_function Image get_size Vector2i
 
     function as_scaled(image::Image, size_x::Integer, size_y::Integer, interpolation::InterpolationType)
         return Image(detail.as_scaled(image._internal, UInt64(size_x), UInt64(size_y), interpolation))
@@ -1958,52 +1958,52 @@ module mousetrap
 
     ##
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Bool})
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{Bool})
         return detail.get_value_as_bool(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<: AbstractFloat})
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{<: AbstractFloat})
         return detail.get_value_as_double(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<: Signed})
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{<: Signed})
         return detail.get_value_as_int(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{<: Unsigned})
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{<: Unsigned})
         return detail.get_value_as_uint(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{String})
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{String})
         return detail.get_value_as_string(file._internal, group, key)
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{RGBA})
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{RGBA})
         vec = get_value(file, Vector{Cfloat}, group, key)
         return RGBA(vec[1], vec[2], vec[3], vec[4])
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Image})
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{Image})
         return Image(detail.get_value_as_image(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{Bool}})
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{Vector{Bool}})
         return convert(Vector{Bool}, detail.get_value_as_bool_list(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T <: AbstractFloat
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{Vector{T}}) where T <: AbstractFloat
         return convert(Vector{T}, detail.get_value_as_double_list(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T <: Signed
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{Vector{T}}) where T <: Signed
         return convert(Vector{T}, detail.get_value_as_int_list(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{T}}) where T <: Unsigned
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{Vector{T}}) where T <: Unsigned
         return convert(Vector{T}, detail.get_value_as_uint_list(file._internal, group, key))
     end
 
-    function get_value(file::KeyFile, group::GroupID, key::KeyID, type::Type{Vector{String}})
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{Vector{String}})
         return convert(Vector{String}, detail.get_value_as_string_list(file._internal, group, key))
     end
 
@@ -2328,7 +2328,8 @@ module mousetrap
 
     @export_function ImageDisplay clear! Cvoid
     @export_function ImageDisplay set_scale! Cvoid Integer scale
-    @export_function ImageDisplay get_size Vector2f
+    @export_function ImageDisplay get_scale Int64
+    @export_function ImageDisplay get_size Vector2i
 
     @add_widget_signals ImageDisplay
 
@@ -2853,8 +2854,8 @@ module mousetrap
     @export_function Label get_x_alignment Cfloat
     @export_function Label set_y_alignment! Cvoid AbstractFloat => Cfloat x
     @export_function Label get_y_alignment Cfloat
-    @export_function Label set_selectable! Cvoid Bool b
-    @export_function Label get_selectable Bool
+    @export_function Label set_is_selectable! Cvoid Bool b
+    @export_function Label get_is_selectable Bool
 
     @add_widget_signals Label
 
@@ -3936,7 +3937,7 @@ module mousetrap
     export get_selection_model
 
     @export_function ColumnView set_enable_rubberband_selection Cvoid Bool b
-    @export_function ColumnView get_enabled_rubberband_selection Bool
+    @export_function ColumnView get_enable_rubberband_selection Bool
     @export_function ColumnView set_show_row_separators Cvoid Bool b
     @export_function ColumnView get_show_row_separators Bool
     @export_function ColumnView set_show_column_separators Cvoid Bool b
@@ -3966,6 +3967,8 @@ module mousetrap
 
     set_title_widget!(header_bar::HeaderBar, widget::Widget) = detail.set_title_widget!(header_bar._internal, as_widget_pointer(widget))
     export set_title_widget!
+
+    @export_function HeaderBar remove_title_widget! Cvoid    
 
     push_front!(header_bar::HeaderBar, widget::Widget) = detail.push_front!(header_bar._internal, as_widget_pointer(widget))
     export push_front!
@@ -4077,7 +4080,6 @@ module mousetrap
     @export_type Revealer Widget
     @declare_native_widget Revealer
 
-    
     Revealer(transition_type::RevealerTransitionType = REVEALER_TRANSITION_TYPE_CROSSFADE) = Revealer(detail._Revealer(transition_type))
     function Revealer(widget::Widget, transition_type::RevealerTransitionType = REVEALER_TRANSITION_TYPE_CROSSFADE) :: Revealer
         out = Revealer(transition_type)
@@ -4089,8 +4091,8 @@ module mousetrap
     export set_child!
 
     @export_function Revealer remove_child! Cvoid
-    @export_function Revealer set_revealed! Cvoid Bool child_visible
-    @export_function Revealer get_revealed Bool
+    @export_function Revealer set_is_revealed! Cvoid Bool child_visible
+    @export_function Revealer get_is_revealed Bool
     @export_function Revealer set_transition_type! Cvoid RevealerTransitionType type
     @export_function Revealer get_transition_type RevealerTransitionType
 

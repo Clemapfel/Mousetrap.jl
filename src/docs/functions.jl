@@ -345,8 +345,9 @@ Create a shape as a circular ring, defined by its center, `outer_radius`, which 
 as_cropped(image::Image, offset_x::Signed, offset_y::Signed, new_width::Integer, new_height::Integer) -> Image
 ```
 Crop the image, this is similar to the "resize canvas" operation in many image manipulation programs.
-Note that `offset_x` and `offset_y` can be negative. Any pixel data that was not part of the 
-original image will be filled with RGBA(0, 0, 0, 0).
+`offset_x` and `offset_y` is the offset between the top-left pixel of the image and the top-left pixel of the
+newly allocated area, where an offset of 0 means the new image is anchored at the same pixel as the original.
+Offsets can be negative.
 
 This function does not modify the original image.
 """
@@ -1813,9 +1814,9 @@ get_relative_position(::PopoverButton) -> RelativePosition
 Get the position of the popover relative to the widget it is attached to.
 """
 
-@document get_revealed """
+@document get_is_revealed """
 ```
-get_revealed(::Revealer) -> Bool
+get_is_revealed(::Revealer) -> Bool
 ```
 Get whether the revealers child is currently visible.
 """
@@ -1839,6 +1840,13 @@ Get the margin between two rows, in pixels.
 get_rows_homogeneous(::Grid) -> Bool
 ```
 Get whether all rows should allocate the same height.
+"""
+
+@document get_scale """
+```
+get_scale(::ImageDisplay) -> Signed
+```
+Get scale factor, in `{1, 2, 3, ...}``.
 """
 
 @document get_scale_delta """
@@ -1869,9 +1877,9 @@ get_scrollbar_placement(::Viewport) -> CornerPlacement
 Get the position of both scrollbars relative to the viewports center.
 """
 
-@document get_selectable """
+@document get_is_selectable """
 ```
-get_selectable(::Label) -> Bool
+get_is_selectable(::Label) -> Bool
 ```
 Get whether the user can select part of the label, as would be needed to copy its text.
 """
@@ -3256,6 +3264,7 @@ within the tick callback function.
 @document remove_titlebar_widget! """
 ```
 remove_titlebar_widget!(::Window) 
+remove_titlebar_widget!(::HeaderBar)
 ```
 Reset the titlebar widget such that the default window decoration is used instead.
 """
@@ -4364,9 +4373,9 @@ set_resource_path!(::IconTheme, path::String)
 Override all resource paths with the given path. The pointed-to folder has to adhere to the [Freedesktop icon theme specificatins](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
 """
 
-@document set_revealed! """
+@document set_is_revealed! """
 ```
-set_revealed!(::Revealer, child_visible::Bool) 
+set_is_revealed!(::Revealer, child_visible::Bool) 
 ```
 Set whether the revealers child should be visible. If the visibility changes, an animation is played.
 """
@@ -4427,9 +4436,9 @@ set_secondary_icon!(entry::Entry, icon::Icon)
 Set the right icon of the entry.
 """
 
-@document set_selectable! """
+@document set_is_selectable! """
 ```
-set_selectable!(::Label, ::Bool) 
+set_is_selectable!(::Label, ::Bool) 
 ```
 Set whether the user can select part of the label, as would be needed to copy its text.
 """
