@@ -1,9 +1,10 @@
 
-# Note: @doc can't document macros apparently, done inline in `mousetrap.jl`
-# @document @log_info 
-# @document @log_warning 
-# @document @log_critical 
-# @document @log_fatal 
+#
+# Author: C. Cords (mail@clemens-cords.com)
+# https://github.com/clemapfel/mousetrap.jl
+#
+# Copyright © 2023, Licensed under lGPL3-0
+#
 
 @document Circle """
 ```
@@ -2089,6 +2090,20 @@ if contains_string(clipboard)
     end
 end
 ```
+"""
+
+@document get_surpress_debug """
+```
+get_surpress_debug(::LogDomain) -> Bool
+```
+Get whether log message of level "DEBUG" will be ommitted from the console output.
+"""
+
+@document get_surpress_info """
+```
+get_surpress_info(::LogDomain) -> Bool
+```
+Get whether log message of level "INFO" will be ommitted from the console output.
 """
 
 @document get_tab_position """
@@ -4573,16 +4588,16 @@ set_string!(::Clipboard, string::String)
 Override the clipboards contents with a string. Use [`get_string`](@ref) to retrieve it.
 """
 
-@document set_surpress_debug """
+@document set_surpress_debug! """
 ```
-set_surpress_debug(domain::String, ::Bool) 
+set_surpress_debug!(domain::String, ::Bool) 
 ```
 If set to `false`, log messages with log-level `DEBUG` will now be printed to console or the log file. `true` by default.
 """
 
-@document set_surpress_info """
+@document set_surpress_info! """
 ```
-set_surpress_info(domain::String, ::Bool) 
+set_surpress_info!(domain::String, ::Bool) 
 ```
 If set to `false`, log message with log-level `INFO` will now be printed to console or the log file. `true` by default.
 """

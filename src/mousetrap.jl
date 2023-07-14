@@ -1,7 +1,13 @@
+#
+# Author: C. Cords (mail@clemens-cords.com)
+# https://github.com/clemapfel/mousetrap.jl
+#
+# Copyright © 2023, Licensed under lGPL3-0
+#
+
 module mousetrap
 
     const VERSION = v"0.1.0"
-    macro do_not_compile(args...) return :() end
     
 ####### detail.jl
 
@@ -24,7 +30,7 @@ module mousetrap
             actual_return_ts = Base.return_types(f, arg_ts)
             match_found = false
             for type in actual_return_ts
-                if type <: return_t
+                if type <: return_t || type == Nothing 
                     match_found = true
                     break;
                 end
@@ -64,9 +70,12 @@ module mousetrap
 
     const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN * ".jl"
 
+    # only macros are documented in this file, all other documentatino is in `mousetrap.jl/src/docs``
+   
     """
     ```
-    @log_debug(domain::LogDomain, message::Message)
+    @log_debug(domain::LogDomain, message::String)
+    log_debug(domain::LogDomain, message::String)
     ```
     Send a log message with log level "DEBUG". Messages of
     this level will only be displayed once `set_surpress_debug`
@@ -77,11 +86,14 @@ module mousetrap
     end
     export @log_debug
 
+    log_debug(domain::LogDomain, message::String) = detail.log_debug(message, domain)
+    export log_debug
+
     """
     ```
-    @log_info(domain::LogDomain, message::Message)
+    @log_info(domain::LogDomain, message::String)
+    log_info(domain::LogDomain, message::String)
     ```
-
     Send a log message with log level "INFO". Messages of
     this level will only be displayed once `set_surpress_info`
     is set to `false` for this log domain.
@@ -91,9 +103,13 @@ module mousetrap
     end
     export @log_info
 
+    log_info(domain::LogDomain, message::String) = detail.log_info(message, domain)
+    export log_info
+
     """
     ```
-    @log_warning(domain::LogDomain, message::Message)
+    @log_warning(domain::LogDomain, message::String)
+    log_warning(domain::LogDomain, message::String)
     ```
     Send a log message with log level "WARNING".
     """
@@ -102,9 +118,13 @@ module mousetrap
     end
     export @log_warning
 
+    log_warning(domain::LogDomain, message::String) = detail.log_warning(message, domain)
+    export log_warning
+
     """
     ```
-    @log_critical(domain::LogDomain, message::Message)
+    @log_critical(domain::LogDomain, message::String)
+    log_critical(domain::LogDomain, message::String)
     ```
     Send a log message with log level "CRITICAL".
     """
@@ -113,9 +133,13 @@ module mousetrap
     end
     export @log_critical
 
+    log_critical(domain::LogDomain, message::String) = detail.log_critical(message, domain)
+    export log_critical
+
     """
     ```
-    @log_fatal(domain::LogDomain, message::Message)
+    @log_fatal(domain::LogDomain, message::String)
+    log_fatal(domain::LogDomain, message::String)
     ```
     Send a log mess with log level "FATAL". Immediately after
     this messages is printed, runtime will exit.
@@ -125,22 +149,27 @@ module mousetrap
     end
     export @log_fatal
 
-    set_surpress_debug(domain::LogDomain, b::Bool) = detail.log_set_surpress_debug(domain, b)
-    export set_surpress_debug
+    log_fatal(domain::LogDomain, message::String) = detail.log_fatal(message, domain)
+    export log_fatal
 
-    set_surpress_info(domain::LogDomain, b::Bool) = detail.log_set_surpress_info(domain, b)
-    export set_surpress_info
+    set_surpress_debug!(domain::LogDomain, b::Bool) = detail.log_set_surpress_debug(domain, b)
+    export set_surpress_debug!
+
+    set_surpress_info!(domain::LogDomain, b::Bool) = detail.log_set_surpress_info(domain, b)
+    export set_surpress_info!
 
     get_surpress_debug(domain::LogDomain) ::Bool = detail.log_get_surpress_debug(domain, b)
-    export set_surpress_debug
+    export get_surpress_debug
 
     get_surpress_info(domain::LogDomain) ::Bool = detail.log_get_surpress_info(domain, b)
-    export set_surpress_info
+    export get_surpress_info
 
-    set_log_file(path::String) ::Bool = detail.log_set_file(path)
-    export set_log_file
+    set_log_file!(path::String) ::Bool = detail.log_set_file(path)
+    export set_log_file!
 
 ####### common.jl
+
+    macro do_not_compile(args...) return :() end
 
     function safe_call(scope::String, f, args...)
         try
@@ -1439,6 +1468,35 @@ module mousetrap
         task.sticky = true
         return wait(schedule(task))
     end
+
+    function main(f, app::Application)
+        task = Threads.Task() do 
+            typed_f = TypedFunction(f, Any, (Application,))
+            connect_signal_activate!(app)  do app::Application
+                try
+                    typed_f(app)
+                catch(exception)
+                    printstyled(stderr, "[ERROR] "; bold = true, color = :red)
+                    printstyled(stderr, "In mousetrap.main: "; bold = true)
+                    Base.showerror(stderr, exception, catch_backtrace())
+                    print(stderr, "\n")
+                    quit!(app)
+                end
+                return nothing
+            end
+            return run!(app)
+        end 
+
+        if isinteractive() && Threads.nthreads() > 1
+            @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. Interactive use of mousetrap is an experimental feature, side-effects may occurr."
+            task.sticky = false
+            return schedule(task)
+        end
+            
+        task.sticky = true
+        return wait(schedule(task))
+    end
+
     export main
 
     Base.show(io::IO, x::Application) = show_aux(io, x, :is_holding, :is_marked_as_busy)

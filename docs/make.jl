@@ -1,9 +1,12 @@
-using Documenter, Pkg
+#
+# Author: C. Cords (mail@clemens-cords.com)
+# https://github.com/clemapfel/mousetrap.jl
+#
+# Copyright © 2023, Licensed under lGPL3-0
+#
 
-Pkg.activate(".")
+using Documenter, Pkg, InteractiveUtils
 using mousetrap
-
-using InteractiveUtils
 
 let file = open("docs/src/02_library/classes.md", "w+")
     @info "Exporting..."

@@ -1,3 +1,10 @@
+#
+# Author: C. Cords (mail@clemens-cords.com)
+# https://github.com/clemapfel/mousetrap.jl
+#
+# Copyright © 2023, Licensed under lGPL3-0
+#
+
 void_signature = "(::T, [::Data_t]) -> Nothing"
 const signal_descriptors = Dict([
 

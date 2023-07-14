@@ -1,3 +1,10 @@
+#
+# Author: C. Cords (mail@clemens-cords.com)
+# https://github.com/clemapfel/mousetrap.jl
+#
+# Copyright © 2023, Licensed under lGPL3-0
+#
+
 @document Alignment enum_docs(:Alignment,
     "Determines alignment of widgets along the horizontal or vertical axis.", [
     :ALIGNMENT_CENTER,
