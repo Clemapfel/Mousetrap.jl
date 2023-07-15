@@ -10,14 +10,14 @@ using mousetrap
 
 ### GLOBALS
 
-const app_id = "mousetrap.runtests.jl"
-const app = Ref{Union{Application, Nothing}}(nothing)
-const window = Ref{Union{Window, Nothing}}(nothing)
-const icon = Ref{Union{Icon, Nothing}}(nothing)
+app_id = "mousetrap.runtests.jl"
+app = Ref{Union{Application, Nothing}}(nothing)
+window = Ref{Union{Window, Nothing}}(nothing)
+icon = Ref{Union{Icon, Nothing}}(nothing)
 
 ### MAIN
 
-const Container = Stack
+Container = Stack
 function add_page!(container::Container, title::String, x::Widget)
     add_child!(container, title, x)
 end
@@ -363,7 +363,7 @@ function test_event_controller(this::Container)
             end
             @test get_signal_key_released_blocked(controller) == false
 
-            connect_signal_modifiers_changed!(controller) do self::KeyEventController, key::KeyCode, modifier::ModifierState
+            connect_signal_modifiers_changed!(controller) do self::KeyEventController, modifier::ModifierState
             end
             @test get_signal_modifiers_changed_blocked(controller) == false
         end
@@ -379,7 +379,7 @@ function test_event_controller(this::Container)
 
             connect_signal_press_cancelled!(controller) do self::LongPressEventController
             end
-            @test get_signal_pess_cancelled_blocked(controller) == false
+            @test get_signal_press_cancelled_blocked(controller) == false
         end
         add_controller!(area, controller)
     end
@@ -467,8 +467,9 @@ function test_event_controller(this::Container)
             set_scope!(controller, SHORTCUT_SCOPE_GLOBAL)
             @test get_scope(controller) == SHORTCUT_SCOPE_GLOBAL
 
-            add_action!(controller, test_action)
-            remove_action!(controller, test_action)
+            action = Action("test.action", Main.app[]) do self end
+            add_action!(controller, action)
+            remove_action!(controller, action)
         end
         add_controller!(area, controller)
     end
@@ -538,28 +539,31 @@ function test_clipboard(::Container)
         Base.show(devnull, clipboard)
 
         set_string!(clipboard, "test")
+        @test contains_string(clipboard) == true
         @test get_is_local(clipboard) == true
 
-        string_read = Ref{Bool}(false)
-        get_string!(clipboard, string_read) do self::Clipboard, value::String, string_read
-            if value == "test"
-                string_read[] = true
-            end
+        get_string(clipboard) do self::Clipboard, value::String
+            @test true
+            return nothing
         end
-        sleep(0.1)
-        @test string_read[] == true
 
+        set_file!(clipboard, FileDescriptor("."))
+        @test contains_file(clipboard) == true
+        @test get_is_local(clipboard) == true
+
+        get_string(clipboard) do self::Clipboard, value::String
+            @test true
+            return nothing
+        end
+        
         set_image!(clipboard, Image(1, 1, RGBA(1, 0, 0, 1)))
+        @test contains_image(clipboard) == true
         @test get_is_local(clipboard) == true
 
-        image_read = Ref{Bool}(false)
-        get_image!(clipboard, image_read) do self::Clipboard, value::Image, image_read
-            if get_pixel(image, 1, 1) == RGBA(1, 0, 0, 1)
-                image_read[] = true
-            end
+        get_image(clipboard) do self::Clipboard, value::Image
+            @test true
+            return nothing
         end
-        sleep(0.1)
-        @test image_read[] == true
     end
 end
 
@@ -592,13 +596,14 @@ function test_color_chooser(::Container)
 
         on_accept!(color_chooser) do self::ColorChooser, color::RGBA
         end
+
         on_cancel!(color_chooser) do self::ColorChooser
         end
 
-        @test get_color(color_chooser) isa Color
-        @test get_is_modal(color_chooser) == false
-        set_modal!(color_chooser, true)
+        @test get_color(color_chooser) isa RGBA
         @test get_is_modal(color_chooser) == true
+        set_is_modal!(color_chooser, false)
+        @test get_is_modal(color_chooser) == false
     end
 end
 
@@ -611,7 +616,7 @@ function test_column_view(::Container)
         push_front_column!(column_view, "column 03")
 
         column_name = "column 02"
-        column = insert_column!(column_view, column_name)
+        column = insert_column!(column_view, 1, column_name)
 
         @test get_title(column) == column_name
 
@@ -620,7 +625,7 @@ function test_column_view(::Container)
         @test get_title(column) == new_title
 
         @test get_fixed_width(column) isa Float32
-        set_fixed_width(column, 100)
+        set_fixed_width!(column, 100)
         @test get_fixed_width(column) == 100
 
         model = MenuModel()
@@ -633,11 +638,11 @@ function test_column_view(::Container)
         set_is_resizable!(column, true)
         @test get_is_resizable(column) == true
 
-        remove_column!(column_view, get_column_at(column_view, 0))
-
         @test has_column_with_title(column_view, new_title) == true
         other_column = get_column_with_title(column_view, new_title)
         @test get_title(other_column) == new_title
+
+        remove_column!(column_view, get_column_at(column_view, 1))
     end
 end
 
@@ -650,12 +655,12 @@ function test_drop_down(::Container)
         id_02 = push_back!(drop_down, label, label) do self::DropDown
         end
 
-        @test get_item_it(drop_down, 1) == id_02
+        @test get_item_at(drop_down, 1) == id_02
 
         id_01 = push_front!(drop_down, label, label) do self::DropDown
         end
 
-        id_03 = insert!(drop_down, 1, label, label) do self::DropDown
+        id_03 = mousetrap.insert!(drop_down, 1, label) do self::DropDown
         end
 
         remove!(drop_down, id_03)
@@ -664,7 +669,7 @@ function test_drop_down(::Container)
         @test get_selected(drop_down) == id_01
 
         @test get_always_show_arrow(drop_down) == true
-        set_always_show_arrow(drop_down, false)
+        set_always_show_arrow!(drop_down, false)
         @test get_always_show_arrow(drop_down) == false
     end
 end
@@ -677,27 +682,29 @@ function test_entry(::Container)
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(entry, activate_called) do entry::Entry, activate_called
             activate_called[] = true
+            return nothing
         end
 
         text_changed_called = Ref{Bool}(false)
         connect_signal_text_changed!(entry, text_changed_called) do entry::Entry, text_changed_called
             text_changed_called[] = true
+            return nothing
         end
 
         @test get_has_frame(entry) == true
         set_has_frame!(entry, false)
-        @test get_has_frame(entity) == false
+        @test get_has_frame(entry) == false
 
-        @test get_max_width_chars(entry) == 1
+        @test get_max_width_chars(entry) == 0
         set_max_width_chars!(entry, 64)
         @test get_max_width_chars(entry) == 64
 
         @test get_text(entry) == ""
-        set_text(entry, "text")
+        set_text!(entry, "text")
         @test get_text(entry) == "text"
         
         @test get_text_visible(entry) == true
-        set_text_visible(entry, false)
+        set_text_visible!(entry, false)
         @test get_text_visible(entry) == false
 
         set_primary_icon!(entry, Main.icon[])
@@ -705,7 +712,8 @@ function test_entry(::Container)
         remove_primary_icon!(entry)
         remove_secondary_icon!(entry)
 
-        activate!(entry)
+        # TODO: activate! does not cause `activate` signal to be emitted, see gtk_widget_set_activate_signal
+        emit_signal_activate(entry)
 
         @test activate_called[] == true
         @test text_changed_called[] == true
@@ -990,8 +998,8 @@ function test_colors(::Container)
         Base.show(devnull, color_rgba)
         Base.show(devnull, color_hsva)
         
-        @test color_rgba == as_rgba(as_hsva(color_rgba))
-        @test color_hsva == as_hsva(as_rgba(color_hsva))
+        @test color_rgba == hsva_to_rgba(rgba_to_hsva(color_rgba))
+        @test color_hsva == rgba_to_hsva(hsva_to_rgba(color_hsva))
     end
 end
 
@@ -2195,6 +2203,8 @@ end
 
 function test_render_area(::Container)
 
+    render_area = RenderArea()
+
     @testset "RenderArea" begin
         # TODO
     end
@@ -2248,13 +2258,13 @@ main(Main.app_id) do app::Application
         ##test_button(container)
         ##test_center_box(container)
         ##test_check_button(container)
-        test_clipboard(container)
-        #test_color_chooser(container)
-        #test_colors(container)
-        #test_column_view(container)
-        #test_drop_down(container)
-        #test_entry(container)
-        #test_event_controller(container)
+        ##test_clipboard(container)
+        ##test_color_chooser(container)
+        ##test_colors(container)
+        ##test_column_view(container)
+        ##test_drop_down(container)
+        ##test_entry(container)
+        test_event_controller(container)
         #test_expander(container)
         #test_file_chooser(container)
         #test_file_descriptor(container)

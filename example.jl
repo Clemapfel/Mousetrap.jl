@@ -5,6 +5,22 @@ Pkg.activate(".")
 using mousetrap
 @info "Done."
 
+main() do app::Application
+    window = Window(app)
+    clipboard = get_clipboard(window)
+
+    string_read = Ref{Bool}(false)
+    get_string(clipboard, string_read) do self::Clipboard, value::String, string_read
+        string_read[] = true
+        return nothing
+    end
+        println(string_read[])
+
+    present!(window)
+end
+
+if false
+
 # compound widget that is an entire stack page, render area with the shape + a label below
 struct ShapePage <: Widget
 
@@ -211,3 +227,5 @@ main() do app::Application
     set_child!(window, box)
     present!(window)
 end
+
+end # if false

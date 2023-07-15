@@ -457,6 +457,9 @@ module mousetrap
     clamp(x::AbstractFloat, lower::AbstractFloat, upper::AbstractFloat) = if x < lower return lower elseif x > upper return upper else return x end
 
     function from_julia_index(x::Integer) ::UInt64
+        if x <= 0
+            throw(AssertionError("Index $x < 1; Indices in Julia are 1-based."))
+        end
         return x - 1
     end
 
@@ -1728,6 +1731,17 @@ module mousetrap
             convert(Cfloat, a)
         )
     end
+
+    import Base.==
+    ==(x::RGBA, y::RGBA) = x.r == y.r && x.g == y.g && x.b == y.b && x.a == y.a
+    function ==(x::HSVA, y::HSVA) 
+        hue_equal = x.h == y.h || abs(x.h - y.h) == 1
+        return hue_equal && x.s == y.s && x.v == y.v && x.a == y.a
+    end
+
+    import Base.!=
+    !=(x::RGBA, y::RGBA) = !(x == y)
+    !=(x::HSVA, y::HSVA) = !(x == y)
 
     rgba_to_hsva(rgba::RGBA) ::HSVA = detail.rgba_to_hsva(rgba)
     export rgba_to_hsva
@@ -3124,7 +3138,7 @@ module mousetrap
 
     DropDown() = DropDown(detail._DropDown())
 
-    const DropDownItemID = String
+    const DropDownItemID = UInt64
     export DropDownItemID
 
     @export_function DropDown remove! Cvoid DropDownItemID id
@@ -3502,7 +3516,7 @@ module mousetrap
     @export_type PanEventController SingleClickGesture
     PanEventController(orientation::Orientation) = PanEventController(detail._PanEventController(orientation))
 
-    set_orientation!(pan_controller::PanEventController) = detail.set_orientation!(pan_controller._internal)
+    set_orientation!(pan_controller::PanEventController, orientation::Orientation) = detail.set_orientation!(pan_controller._internal, orientation)
     export set_orientation!
 
     get_orientation(pan_controller::PanEventController) ::Orientation = detail.get_orientation(pan_controller._internal)
@@ -3883,7 +3897,7 @@ module mousetrap
     end
     export get_column_with_title
 
-    has_column_with_title(column_view::ColumnView, title::String) ::Bool = detail.get_column_with_title(column_view._internal, title)
+    has_column_with_title(column_view::ColumnView, title::String) ::Bool = detail.has_column_with_title(column_view._internal, title)
     export has_column_with_title
 
     function set_widget_at!(column_view::ColumnView, column::ColumnViewColumn, row_i::Integer, widget::Widget)
@@ -4475,13 +4489,13 @@ module mousetrap
     function get_image(f, clipboard::Clipboard, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (Clipboard, Image, Data_t))
         detail.get_image(clipboard._internal, function(internal_ref, image_ref)
-            typed_f(Clipboard(internal_ref[], Image(image_ref[]), data))
+            typed_f(Clipboard(internal_ref[]), Image(image_ref[], data))
         end)
     end
     function get_image(f, clipboard::Clipboard)
         typed_f = TypedFunction(f, Cvoid, (Clipboard, Image))
         detail.get_image(clipboard._internal, function(internal_ref, image_ref)
-            typed_f(Clipboard(internal_ref[], Image(image_ref[])))
+            typed_f(Clipboard(internal_ref[]), Image(image_ref[]))
         end)
     end
     export get_image
