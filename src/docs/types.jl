@@ -966,9 +966,13 @@ $(@type_fields()))
 # IconTheme <: Any
 
 Allows loading of items from a folder if that folder strictly adheres to 
-the [freedesktop icon theme specifications](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
+the [freedesktop icon theme specifications](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html). A [`Window`](@ref)
+is required to construct the icon theme, at which point the default icons for that windows display are loaded. This is OS-dependent.
 
 $(@type_constructors(
+```julia
+IconTheme(::Window)
+```
 ))
 
 $(@type_fields())

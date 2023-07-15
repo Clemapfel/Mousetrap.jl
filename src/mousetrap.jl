@@ -4494,7 +4494,7 @@ module mousetrap
     get_clipboard(widget::Widget) ::Clipboard = Clipboard(detail.get_clipboard(as_widget_pointer(widget)))
     export get_clipboard
 
-    Base.show(io::IO, x::Clipboard) = show_aux(io, x, :contains_image, :contains_string, :contains_file)
+    Base.show(io::IO, x::Clipboard) = show_aux(io, x)
 
 ####### blend_mode.jl
 

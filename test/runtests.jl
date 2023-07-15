@@ -10,7 +10,10 @@ using mousetrap
 
 ### GLOBALS
 
+const app_id = "mousetrap.runtests.jl"
 const app = Ref{Union{Application, Nothing}}(nothing)
+const window = Ref{Union{Window, Nothing}}(nothing)
+const icon = Ref{Union{Icon, Nothing}}(nothing)
 
 ### MAIN
 
@@ -99,7 +102,7 @@ function test_application(::Container)
     @testset "Application" begin
         app = Main.app[]
         Base.show(devnull, app)
-        @test get_id(app) == app_id
+        @test get_id(app) == Main.app_id
 
         action_id = "application.test_action"
         action = Action(action_id, app) do ::Action end
@@ -158,32 +161,33 @@ end
 function test_aspect_frame(::Container)
     @testset "AspectFrame" begin
 
-        aspect_frame = this.aspect_frame
+        aspect_frame = AspectFrame(1.0)
         Base.show(devnull, aspect_frame)
 
         @test get_child_x_alignment(aspect_frame) == 0.5
-        set_child_x_alignment!(aspect_frame, 0.0)
-        @test get_child_x_alignment(aspect_frame) == 0.0
-
         @test get_child_y_alignment(aspect_frame) == 0.5
-        set_child_y_alignment!(aspect_frame, 0.0)
-        @test get_child_y_alignment(aspect_frame) == 0.0
 
-        @test get_ratio(aspect_frame) == aspect_frame_test_ratio
-        set_ratio!(aspect_frame, 1.0)
+        set_child_x_alignment!(aspect_frame, 1.0)
+        set_child_y_alignment!(aspect_frame, 1.0)
+
+        @test get_child_x_alignment(aspect_frame) == 1.0
+        @test get_child_y_alignment(aspect_frame) == 1.0
+
         @test get_ratio(aspect_frame) == 1.0
+        set_ratio!(aspect_frame, 1.5)
+        @test get_ratio(aspect_frame) == 1.5
     end
 end
 
 function test_button(::Container)
     @testset "Button" begin
             
-        button = this.button
+        button = Button()
         Base.show(devnull, button)
         
         set_child!(button, Label("Button"))
-        set_icon!(button, icon[])
-
+        
+    
         @test get_has_frame(button)
         set_has_frame!(button, false)
         @test !get_has_frame(button)
@@ -195,15 +199,17 @@ function test_button(::Container)
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(button, activate_called) do ::Button, activate_called
            activate_called[] = true
+           return nothing
         end
 
         clicked_called = Ref{Bool}(false)
         connect_signal_clicked!(button) do ::Button
             clicked_called[] = true
+            return nothing
         end
 
         activate!(button)
-        emit_signal_clicked!(button)
+        emit_signal_clicked(button)
         @test activate_called[] == true
         @test clicked_called[] == true
     end
@@ -211,7 +217,7 @@ end
 
 function test_box(::Container)
     @testset "Box" begin
-        box = this.box
+        box = Box(ORIENTATION_HORIZONTAL)
         Base.show(devnull, box)
 
         @test get_homogeneous(box) == false
@@ -238,7 +244,7 @@ end
 
 function test_center_box(::Container)
     @testset "CenterBox" begin
-        center_box = this.center_box
+        center_box = CenterBox(ORIENTATION_HORIZONTAL)
         Base.show(devnull, center_box)
 
         @test get_orientation(center_box) == ORIENTATION_HORIZONTAL
@@ -258,7 +264,7 @@ end
 
 function test_check_button(::Container)
     @testset "CheckButton" begin
-        check_button = this.check_button
+        check_button = CheckButton()
         Base.show(devnull, check_button)
 
         toggled_called = Ref{Bool}(false)
@@ -293,9 +299,9 @@ function test_check_button(::Container)
     end
 end
 
-function test_event_controller(::Container)
+function test_event_controller(this::Container)
 
-    area = this.area
+    area = this
     let controller = ClickEventController()
         Base.show(devnull, controller)
         @testset "ClickEventController" begin
@@ -528,7 +534,7 @@ end
 
 function test_clipboard(::Container)
     @testset "Clipboard" begin
-        clipboard = get_clipboard(main_window[])
+        clipboard = get_clipboard(Main.window[])
         Base.show(devnull, clipboard)
 
         set_string!(clipboard, "test")
@@ -598,7 +604,7 @@ end
 
 function test_column_view(::Container)
     @testset "ColumnViewTest" begin
-        column_view = this.column_view
+        column_view = ColumnView()
         Base.show(devnull, column_view)
 
         push_back_column!(column_view, "column 01")
@@ -637,7 +643,7 @@ end
 
 function test_drop_down(::Container)
     @testset "DropDown" begin
-        drop_down = this.drop_down
+        drop_down = DropDown()
         Base.show(devnull, drop_down)
 
         label = "Label";
@@ -665,7 +671,7 @@ end
 
 function test_entry(::Container)
     @testset "Entry" begin
-        entry = this.entry
+        entry = Entry()
         Base.show(devnull, entry)
 
         activate_called = Ref{Bool}(false)
@@ -708,7 +714,7 @@ end
 
 function test_expander(::Container)
     @testset "Expander" begin
-        expander = this.expander
+        expander = Expander()
         Base.show(devnull, expander)
 
         activate_called = Ref{Bool}(false)
@@ -1019,7 +1025,7 @@ end
 
 function test_icon(::Container)
 
-    theme = IconTheme()
+    theme = IconTheme(Main.window[])
 
     @testset "IconTheme" begin
 
@@ -1075,10 +1081,7 @@ function test_image_display(::Container)
         @test get_size(image_display) == Vector2i(1, 1)
         clear!(image_display)
 
-        theme = IconTheme()
-        icon_name = get_icon_names(theme)[1]
-        icon = Icon(theme, icon_name, 64)
-        create_from_icon!(image_display, icon)
+        create_from_icon!(image_display, Main.icon[])
         @test get_size(image_display) == Vector2i(1, 1)
         clear!(image_display)
     end
@@ -1327,7 +1330,7 @@ end
 
 function test_menus(::Container)
    
-    icon = Icon(IconTheme(), get_icon_names(theme)[1], 64)
+    icon = Main.icon[]
     action = Action("test.action", Main.app[]) do self::Action
     end
 
@@ -1934,7 +1937,7 @@ function test_toggle_button(::Container)
         @test get_is_active(button) == true
 
         set_child!(button, Separator())
-        set_icon!(button, Icon(IconTheme(), get_icon_names(theme)[1], 64))
+        set_icon!(button, Main.icon[])
         remove_child!(button)
 
         @test get_is_circular(button) == false
@@ -2219,29 +2222,33 @@ end
 
 ### MAIN
 
-main("mousetrap.runtests.jl") do app::Application
+main(Main.app_id) do app::Application
+
+    window = Window(app)
 
     Main.app[] = app
-    window = Window(app)
+    Main.window[] = window
+
+    theme = IconTheme(Main.window[])
+    Main.icon[] = Icon(theme, get_icon_names(theme)[1], 64)
 
     container = Container()
     viewport = Viewport()
     set_child!(viewport, container)
     set_child!(window, viewport)
 
-    connect_signal_realize!(container, app) do container::Container, app
-        #test_action(container)
-        #test_adjustment(container)
-        #test_alert_dialog(container)
-        #test_all(container)
-        #test_angle(container)
-        #test_application(container)
-        #test_aspect_frame(container)
-        #test_box(container)
-        #test_button(container)
-        #test_center_box(container)
-        #test_check_button(container)
-        #test_clipboard(container)
+    connect_signal_realize!(container, window) do container::Container, window
+        ##test_action(container)
+        ##test_adjustment(container)
+        ##test_alert_dialog(container)
+        ##test_angle(container)
+        ##test_application(container)
+        ##test_aspect_frame(container)
+        ##test_box(container)
+        ##test_button(container)
+        ##test_center_box(container)
+        ##test_check_button(container)
+        test_clipboard(container)
         #test_color_chooser(container)
         #test_colors(container)
         #test_column_view(container)
@@ -2289,8 +2296,10 @@ main("mousetrap.runtests.jl") do app::Application
         #test_viewport(container)
         #test_widget(container)
         #test_window(container)
+
         return nothing
     end
 
     present!(window)
+    close!(window)
 end
