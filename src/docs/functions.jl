@@ -4339,7 +4339,7 @@ Set whether the viewport should assume the height of its child. This will usuall
 
 @document set_propagation_phase! """
 ```
-set_propagation_phase!(controller::EventController) 
+set_propagation_phase!(controller::EventController, ::PropagationPhase) 
 ```
 Set the phase at which the event controller will capture events, see [here](https://developer-old.gnome.org/gtk4/stable/event-propagation.html) for more information.
 """

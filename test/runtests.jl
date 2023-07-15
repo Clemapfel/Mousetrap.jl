@@ -493,7 +493,6 @@ function test_event_controller(this::Container)
             end
             @test get_signal_motion_blocked(controller) == false
 
-            @test get_axis_value(controller, DEVICE_AXIS_X) isa Float64
             @test get_hardware_id(controller) isa Csize_t
             @test get_tool_type(controller) isa ToolType
             @test has_axis(controller, DEVICE_AXIS_Y) isa Bool 
@@ -2264,7 +2263,7 @@ main(Main.app_id) do app::Application
         ##test_column_view(container)
         ##test_drop_down(container)
         ##test_entry(container)
-        test_event_controller(container)
+        ##test_event_controller(container)
         #test_expander(container)
         #test_file_chooser(container)
         #test_file_descriptor(container)

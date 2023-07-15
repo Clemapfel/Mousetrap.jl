@@ -422,6 +422,7 @@ module mousetrap
         to_int_name = Symbol(enum) * :_to_int
         push!(out.args, :(Base.string(x::$enum) = string(mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(mousetrap.detail.to_int_name(x))))
+
         return out
     end
 
@@ -3253,10 +3254,10 @@ module mousetrap
         PROPAGATION_PHASE_TARGET
     end
 
-    set_propagation_phase!(controller::EventController) = detail.set_propagation_phase!(controller._internal.cpp_object)
+    set_propagation_phase!(controller::EventController, phase::PropagationPhase) = detail.set_propagation_phase!(controller._internal.cpp_object, phase)
     export set_propagation_phase!
 
-    get_propagation_phase(controller::EventController) = detail.get_propagation_phase(controller._internal.cpp_object)
+    get_propagation_phase(controller::EventController) ::PropagationPhase = detail.get_propagation_phase(controller._internal.cpp_object)
     export get_propagation_phase
 
     @export_enum ButtonID begin
@@ -3276,13 +3277,13 @@ module mousetrap
     get_current_button(gesture::SingleClickGesture) ::ButtonID = detail.get_current_button(gesture._internal.cpp_object)
     export get_current_button
 
-    set_only_listens_to_button!(gesture::SingleClickGesture, button::ButtonID) = detail.set_only_listens_to_button!(gesture._internal.cpp_object)
+    set_only_listens_to_button!(gesture::SingleClickGesture, button::ButtonID) = detail.set_only_listens_to_button!(gesture._internal.cpp_object, button)
     export set_only_listens_to_button!
 
     get_only_listens_to_button(gesture::SingleClickGesture) = detail.get_only_listens_to_button(gesture._internal.cpp_object)
     export get_only_listens_to_button
 
-    set_touch_only!(gesture::SingleClickGesture) = detail.set_touch_only!(gesture._internal.cpp_object)
+    set_touch_only!(gesture::SingleClickGesture, b::Bool) = detail.set_touch_only!(gesture._internal.cpp_object, b)
     export set_touch_only!
 
     get_touch_only(gesture::SingleClickGesture) = detail.get_touch_only(gesture._internal.cpp_object)
