@@ -19,28 +19,6 @@ function add_page!(container::Container, title::String, x::Widget)
     add_child!(container, title, x)
 end
 
-function test_all()
-    test_action(self)
-    test_adjustment(self)
-    test_application(self)
-    test_alert_dialog(self)
-    test_angle(self)
-    test_aspect_frame(self)
-    test_button(self)
-    test_box(self)
-    test_center_box(self)
-    test_check_button(self)
-    test_event_controller(self)
-    test_clipboard(self)
-    test_time(self)
-    test_color_chooser(self)
-    test_column_view(self)
-    test_drop_down(self)
-    test_entry(self)
-    test_expander(self)
-    test_file_chooser(self)
-end
-
 ### 
 
 function test_action(::Container)
@@ -149,9 +127,9 @@ end
 function test_alert_dialog(::Container)
     @testset "AlertDialog" begin
         message = "message"
-        detailed_message = "detailed message
-        "
+        detailed_message = "detailed message"
         alert_dialog = AlertDialog(["01", "02"], message, detailed_message)
+        Base.show(devnull, alert_dialog)
         
         button_label = "Label"
         add_button!(alert_dialog, 1, button_label)
@@ -181,6 +159,7 @@ function test_aspect_frame(::Container)
     @testset "AspectFrame" begin
 
         aspect_frame = this.aspect_frame
+        Base.show(devnull, aspect_frame)
 
         @test get_child_x_alignment(aspect_frame) == 0.5
         set_child_x_alignment!(aspect_frame, 0.0)
@@ -233,6 +212,7 @@ end
 function test_box(::Container)
     @testset "Box" begin
         box = this.box
+        Base.show(devnull, box)
 
         @test get_homogeneous(box) == false
         set_homogeneous!(box, true)
@@ -259,6 +239,7 @@ end
 function test_center_box(::Container)
     @testset "CenterBox" begin
         center_box = this.center_box
+        Base.show(devnull, center_box)
 
         @test get_orientation(center_box) == ORIENTATION_HORIZONTAL
         set_orientation!(center_box, ORIENTATION_VERTICAL)
@@ -278,6 +259,7 @@ end
 function test_check_button(::Container)
     @testset "CheckButton" begin
         check_button = this.check_button
+        Base.show(devnull, check_button)
 
         toggled_called = Ref{Bool}(false)
         connect_signal_toggled!(check_button, toggled_called) do _, toggled_called
@@ -315,6 +297,7 @@ function test_event_controller(::Container)
 
     area = this.area
     let controller = ClickEventController()
+        Base.show(devnull, controller)
         @testset "ClickEventController" begin
             connect_signal_click_pressed!(controller) do self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat
             end
@@ -332,6 +315,7 @@ function test_event_controller(::Container)
     end
 
     let controller = DragEventController()
+        Base.show(devnull, controller)
         @testset "DragEventController" begin
             connect_signal_drag_begin!(controller) do self::DragEventController, start_x::AbstractFloat, start_y::AbstractFloat
             end
@@ -349,6 +333,7 @@ function test_event_controller(::Container)
     end
 
     let controller = FocusEventController() 
+        Base.show(devnull, controller)
         @testset "FocusEventController" begin
             connect_signal_focus_gained!(controller) do self::FocusEventController
             end
@@ -362,6 +347,7 @@ function test_event_controller(::Container)
     end
 
     let controller = KeyEventController()
+        Base.show(devnull, controller)
         @testset "KeyEventController" begin
             connect_signal_key_pressed!(controller) do self::KeyEventController, key::KeyCode, modifier::ModifierState
             end
@@ -379,6 +365,7 @@ function test_event_controller(::Container)
     end
 
     let controller = LongPressEventController()
+        Base.show(devnull, controller)
         @testset "LongPressEventController" begin
             connect_signal_pressed!(controller) do self::LongPressEventController, x::AbstractFloat, y::AbstractFloat
             end
@@ -392,6 +379,7 @@ function test_event_controller(::Container)
     end
 
     let controller = MotionEventController()
+        Base.show(devnull, controller)
         @testset "MotionEventController" begin
             connect_signal_motion!(controller) do self::MotionEventController, x::AbstractFloat, y::AbstractFloat
             end
@@ -409,6 +397,7 @@ function test_event_controller(::Container)
     end
 
     let controller = PanEventController(ORIENTATION_HORIZONTAL)
+        Base.show(devnull, controller)
         @testset "PanEventController" begin
             connect_signal_pan!(controller) do self::PanEventController, direction::PanDirection, offset::AbstractFloat
             end
@@ -422,6 +411,7 @@ function test_event_controller(::Container)
     end
 
     let controller = PinchZoomEventController()
+        Base.show(devnull, controller)
         @testset "PinchZoomController" begin
             connect_signal_scale_changed!(controller) do self::PinchZoomEventController, scale::AbstractFloat
             end
@@ -431,6 +421,7 @@ function test_event_controller(::Container)
     end
 
     let controller = RotateEventController()
+        Base.show(devnull, controller)
         @testset "RotateEventController" begin
             connect_signal_rotation_changed!(controller) do self::RotateEventController, angle_absolute::AbstractFloat, angle_delta::AbstractFloat
             end
@@ -441,6 +432,7 @@ function test_event_controller(::Container)
     end
 
     let controller = ScrollEventController()
+        Base.show(devnull, controller)
         @testset "ScrollEventController" begin
             connect_signal_scroll_begin!(controller) do self::ScrollEventController
             end
@@ -463,6 +455,7 @@ function test_event_controller(::Container)
     end
 
     let controller = ShortcutEventController()
+        Base.show(devnull, controller)
         @testset "ShortcutEventController" begin
             @test get_scope(controller) == SHORTCUT_SCOPE_LOCAL
             set_scope!(controller, SHORTCUT_SCOPE_GLOBAL)
@@ -475,6 +468,7 @@ function test_event_controller(::Container)
     end
 
     let controller = StylusEventController()
+        Base.show(devnull, controller)
         @testset "StylusEventController" begin
             connect_signal_stylus_up!(controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
             end
@@ -501,6 +495,7 @@ function test_event_controller(::Container)
     end
 
     let controller = SwipeEventController()
+        Base.show(devnull, controller)
         @testset "SwipeEventController" begin
             connect_signal_swipe!(controller) do self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat
             end
@@ -510,7 +505,8 @@ function test_event_controller(::Container)
     end
 
     let controller = ClickEventController()
-        
+        Base.show(devnull, controller)
+
         @testset "SingleClickGesture" begin
             @test get_current_button(controller) isa ButtonID
             @test get_only_listens_to_button(controller) == BUTTON_ID_ANY
@@ -533,6 +529,7 @@ end
 function test_clipboard(::Container)
     @testset "Clipboard" begin
         clipboard = get_clipboard(main_window[])
+        Base.show(devnull, clipboard)
 
         set_string!(clipboard, "test")
         @test get_is_local(clipboard) == true
@@ -568,6 +565,8 @@ function test_time(::Container)
         @test as_milliseconds(milliseconds(value)) == value
         @test as_microseconds(microseconds(value)) == value
         @test as_nanoseconds(nanoseconds(value)) == value
+
+        Base.show(devnull, milliseconds(1234))
     end
 
     @testset "Clock" begin
@@ -575,12 +574,16 @@ function test_time(::Container)
         sleep(0.1)
         @test as_seconds(elapsed(clock)) > 0.0
         @test as_seconds(restart!(clock)) > 0.0
+
+        Base.show(devnull, clock)
     end
 end
 
 function test_color_chooser(::Container)
     @testset "ColorChooser" begin
         color_chooser = ColorChooser()
+        Base.show(devnull, color_chooser)
+
         on_accept!(color_chooser) do self::ColorChooser, color::RGBA
         end
         on_cancel!(color_chooser) do self::ColorChooser
@@ -596,6 +599,8 @@ end
 function test_column_view(::Container)
     @testset "ColumnViewTest" begin
         column_view = this.column_view
+        Base.show(devnull, column_view)
+
         push_back_column!(column_view, "column 01")
         push_front_column!(column_view, "column 03")
 
@@ -633,6 +638,7 @@ end
 function test_drop_down(::Container)
     @testset "DropDown" begin
         drop_down = this.drop_down
+        Base.show(devnull, drop_down)
 
         label = "Label";
         id_02 = push_back!(drop_down, label, label) do self::DropDown
@@ -660,6 +666,7 @@ end
 function test_entry(::Container)
     @testset "Entry" begin
         entry = this.entry
+        Base.show(devnull, entry)
 
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(entry, activate_called) do entry::Entry, activate_called
@@ -702,6 +709,7 @@ end
 function test_expander(::Container)
     @testset "Expander" begin
         expander = this.expander
+        Base.show(devnull, expander)
 
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(expander, activate_called) do self::Expander, activate_called
@@ -725,6 +733,7 @@ end
 function test_file_chooser(::Container)
     @testset "FileFilter" begin
         filter = FileFilter("test")
+        Base.show(devnull, filter)
         add_allow_all_supported_image_formats!(filter)
         add_allowed_mime_type!(filter, "text/plain")
         add_allowed_pattern!(filter, "*.jl")
@@ -735,6 +744,7 @@ function test_file_chooser(::Container)
 
     @testset "FileChooser" begin
         file_chooser = FileChooser(FILE_CHOOSER_ACTION_SAVE)
+        Base.show(devnull, file_chooser)
         add_filter!(file_chooser, filter)
         set_initial_filter!(file_chooser, filter)
         set_initial_file!(file_chooser, FileDescriptor("."))
@@ -767,8 +777,9 @@ function test_file_descriptor(::Container)
         file = open(path, "w+")
 
         descriptor = FileDescriptor()
-        create_from_ptah!(descriptor, path)
+        Base.show(devnull, descriptor)
 
+        create_from_path!(descriptor, path)
         @test exists(descriptor)
 
         @test get_name(descriptor) == name
@@ -807,6 +818,8 @@ end
 function test_fixed(::Container)
     @testset "Fixed" begin
         fixed = Fixed()
+        Base.show(devnull, fixed)
+
         child = Label("(32, 32)")
 
         add_child!(fixed, child, Vector2f(32, 32))
@@ -822,6 +835,8 @@ function test_frame(::Container)
     @testset "Frame" begin
 
         frame = Frame()
+        Base.show(devnull, frame)
+
         set_child!(frame, Separator())
         @test get_label_x_alignment(frame) == 0.5
         set_label_x_alignment!(frame, 0.0)
@@ -841,6 +856,8 @@ end
 function test_frame_clock(container::Container)
     @testset "FrameClock" begin
         clock = get_frame_clock(container)
+        Base.show(devnull, clock)
+
         @test get_target_frame_duration(clock) isa Time
         @test get_time_since_last_frame(clock) isa Time
 
@@ -856,9 +873,11 @@ function test_frame_clock(container::Container)
     end
 end
 
-function test_gl_transform(::Container) begin
+function test_gl_transform(::Container)
     @testset "GLTransform" begin
         transform = GLTransform()
+        Base.show(devnull, transform)
+
         rotate!(transform, degrees(90))
         scale!(transform, 1.5, 1.5)
         translate!(transform, Vector2f(0.5, 0.5))
@@ -874,9 +893,10 @@ function test_gl_transform(::Container) begin
     end
 end
 
-function test_grid(::Container) begin
+function test_grid(::Container)
     @testset "Grid" begin
         grid = Grid()
+        Base.show(devnull, grid)
 
         @test get_column_spacing(grid) == 0.0
         set_column_spacing!(grid, 2.0)
@@ -915,6 +935,7 @@ end
 function test_grid_view(::Container)
     @testset "GridView" begin
         grid_view = GridView(ORIENTATION_HORIZONTAL,SELECTION_MODE_MULTIPLE)
+        Base.show(devnull, grid_view)
 
         @test get_orientation(grid_view) == ORIENTATION_HORIZONTAL
         set_orientation!(grid_view, ORIENTATION_VERTICAL)
@@ -959,6 +980,9 @@ function test_colors(::Container)
     @testset "Colors" begin
         color_rgba = RGBA(1, 0, 1, 1)
         color_hsva = HSVA(1, 0, 1, 1)
+
+        Base.show(devnull, color_rgba)
+        Base.show(devnull, color_hsva)
         
         @test color_rgba == as_rgba(as_hsva(color_rgba))
         @test color_hsva == as_hsva(as_rgba(color_hsva))
@@ -972,6 +996,9 @@ function test_header_bar(::Container)
 
         layout = "close:minimize,maximize"
         header_bar = HeaderBar(layout)
+
+        Base.show(devnull, header_bar)
+
         @test get_layout(header_bar) == layout
         set_layout(header_bar, "")
         @test get_layout(header_bar) == ""
@@ -995,6 +1022,9 @@ function test_icon(::Container)
     theme = IconTheme()
 
     @testset "IconTheme" begin
+
+        Base.show(devnull, theme)
+
         names = get_icon_names(theme)
         @test isempty(names) == false
         @test has_icon(theme, names[1])
@@ -1005,6 +1035,8 @@ function test_icon(::Container)
     @testset "Icon" begin
         icon_name = get_icon_names(theme)[1]
         icon = Icon(theme, icon_name, 64)
+        Base.show(devnull, icon)
+
         @test get_size(icon) == 64
     end
 end
@@ -1014,6 +1046,8 @@ end
 function test_image(::Container)
     @testset "Image" begin
         image = Image(1, 1, RGBA(1, 0, 1, 1))
+        Base.show(devnull, image)
+
         @test get_size(image) == Vector2i(1, 1)
         @test get_n_pixels(image) == 1
 
@@ -1034,6 +1068,8 @@ end
 function test_image_display(::Container)
     @testset "ImageDisplay" begin
         image_display = ImageDisplay()
+        Base.show(devnull, image_display)
+
         image = Image(1, 1, RGBA(1, 0, 1, 1))
         create_from_image!(image_display, image)
         @test get_size(image_display) == Vector2i(1, 1)
@@ -1053,6 +1089,7 @@ end
 function test_key_file(::Container)
     @testset "KeyFile" begin
         file = KeyFile()
+        Base.show(devnull, file)
 
         group_name = "group_01"
         bool_key = "bool"
@@ -1139,6 +1176,7 @@ function test_label(::Container)
     @testset "Label" begin
         label_string = "label"
         label = Label(label_string)
+        Base.show(devnull, label)
 
         @test get_ellipsize_mode(label) == ELLIPSIZE_MODE_NONE
         set_ellipsize_mode!(label, ELLIPSIZE_MODE_MIDDLE)
@@ -1183,6 +1221,7 @@ end
 function test_level_bar(::Container)
     @testset "LevelBar" begin    
         level_bar = LevelBar(0, 1)
+        Base.show(devnull, level_bar)
 
         @test get_max_value(level_bar) == 1
         set_max_value!(level_bar, 2)
@@ -1214,6 +1253,7 @@ end
 function test_list_view(::Container)
     @testset "ListView" begin
         list_view = ListView(ORIENTATION_HORIZONTAL, SELECTION_MODE_MULTIPLE)
+        Base.show(devnull, list_view)
 
         @test get_orientation(list_view) == ORIENTATION_HORIZONTAL
         set_orientation!(list_view, ORIENTATION_VERTICAL)
@@ -1309,15 +1349,20 @@ function test_menus(::Container)
     add_submenu(root, "Submenu", submenu)
 
     @testset "MenuModel" begin
+        Base.show(devnull, root)
         @test items_changed_called[] == true
     end
    
     @testset "MenuBar" begin
-        @test MenuBar(root) isa Widget
+        bar = MenuBar(root)
+        @test bar isa Widget
+        Base.show(devnull, bar)
     end
 
     @testset "PopoverMenu" begin
-        @test PopoverMenu(root) isa Widget
+        popover = PopoverMenu(root)
+        @test popover isa Widget
+        Base.show(devnull, popover)
     end
 end
 
@@ -1327,6 +1372,7 @@ function test_notebook(::Container)
 
     @testset "Notebook" begin
         notebook = Notebook()
+        Base.show(devnull, notebook)
 
         page_added_called = Ref{Bool}(false)
         connect_signal_page_added!(notebook, page_added_called) do self::Notebook, page_index::Integer, page_added_called
@@ -1350,7 +1396,7 @@ function test_notebook(::Container)
 
         push_front!(notebook, Separator(), Label("01"))
         push_back!(notebook, Separator(), Label("02"))
-        insert!(notebook, 1 Separator(), Label("03"))
+        insert!(notebook, 1, Separator(), Label("03"))
 
         @test get_current_page(notebook) == 1
 
@@ -1400,6 +1446,7 @@ end
 function test_overlay(::Container)
     @testset "Overlay" begin
         overlay = Overlay()
+        Base.show(devnull, overlay)
 
         overlay_child = Separator()
 
@@ -1417,6 +1464,7 @@ end
 function test_paned(::Container)
     @testset "Paned" begin
         paned = Paned(ORIENTATION_HORIZONTAL)
+        Base.show(devnull, paned)
 
         set_start_child!(paned, Separator())
         set_end_child!(paned, Separator())
@@ -1458,8 +1506,9 @@ function test_popover(container::Container)
 
     @testset "Popover" begin
         popover = Popover()
-        set_child!(popover, Separator())
+        Base.show(devnull, popover)
 
+        set_child!(popover, Separator())
         attach_to!(popover, container)
 
         @test get_has_base_arrow(popover) == true
@@ -1487,6 +1536,7 @@ function test_popover(container::Container)
 
     @testset "PopoverButton" begin
         popover_button = PopoverButton()
+        Base.show(devnull, popover_button)
 
         @test get_always_show_arrow(popover_button) == true
         set_always_show_arrow!(popover_button, false)
@@ -1526,6 +1576,7 @@ end
 function test_progress_bar(::Container)
     @testset "ProgressBar" begin
         progress_bar = ProgressBar()
+        Base.show(devnull, progress_bar)
 
         @test get_fraction(progress_bar) == 0.0
         set_fraction!(progress_bar, 0.5)
@@ -1553,6 +1604,7 @@ end
 function test_revelaer(::Container)
     @testset "Revealer" begin
         revealer = Revealer()
+        Base.show(devnull, revealer)
 
         revealed_called = Ref{Bool}(false)
         connect_signal_revealed!(revealer, revealed_called) do self::Revealer, revealed_called
@@ -1580,6 +1632,7 @@ end
 function test_scale(::Container)
     @testset "Scale" begin
         scale = Scale(0, 1, 0.01)
+        Base.show(devnull, scale)
 
         value_changed_called = Ref{Bool}(false)
         connect_signal_value_changed!(scale, value_changed_called) do self::Scale, value_changed_called
@@ -1626,6 +1679,8 @@ end
 function test_scrollbar(::Container)
     @testset "Scrollbar" begin
         scrollbar = Scrollbar(ORIENTATION_HORIZONTAL, Adjustment(0, 0, 1, 0.01))
+        Base.show(devnull, scrollbar)
+        
         @test get_value(get_adjustment(scrollbar)) == 0.0
         
         @test get_orientation(scrollbar) == ORIENTATION_HORIZONTAL
@@ -1644,6 +1699,8 @@ function test_selection_model(::Container)
         push_back!(list_view, Separator())
 
         selection_model = get_selection_model(list_view)
+        Base.show(devnull, selection_model)
+
         @test get_n_items(selection_model) == 3
         select!(selection_model, 1)
         select_all!(selection_model)
@@ -1658,6 +1715,8 @@ end
 function test_separator(::Container)
     @testset "Separator" begin
         separator = Separator(ORIENTATION_HORIZONTAL; opacity = 0.5)
+        Base.show(devnull, separator)
+
         @test get_orientation(separator) == ORIENTATION_HORIZONTAL
         set_orientation(separator, ORIENTATION_VERTICAL)
         @test get_orientation(separator) == ORIENTATION_VERTICAL
@@ -1670,6 +1729,7 @@ function test_spin_button(::Container)
     @testset "SpinButton" begin
 
         scale = SpinButton(0, 1, 0.01)
+        Base.show(devnull, scale)
 
         value_changed_called = Ref{Bool}(false)
         connect_signal_value_changed!(scale, value_changed_called) do self::Scale, value_changed_called
@@ -1730,6 +1790,8 @@ end
 function test_spinner(::Container)
     @testset "Spinner" begin
         spinner = Spinner()
+        Base.show(devnull, spinner)
+
         @test get_is_spinning(spinner) == false
         set_is_spinning!(spinner, true)
         @test get_is_spinning(spinner) == true
@@ -1745,6 +1807,7 @@ end
 function test_stack(::Container)
     @testset "Stack" begin
         stack = Stack()
+        Base.show(devnull, stack)
 
         id_01 = add_child!(stack, Separator())
         id_02 = add_child!(stack, Separator())
@@ -1785,9 +1848,10 @@ end
 function test_switch(::Container)
     @testset "Switch" begin
         switch = Switch()
+        Base.show(devnull, switch)
 
         activate_called = Ref{Bool}(false)
-        connect_signal_activate!(switch, activate_called) do self::Switcher, activate_called
+        connect_signal_activate!(switch, activate_called) do self::Switch, activate_called
             activate_called[] = true
         end
 
@@ -1804,9 +1868,10 @@ end
 function test_text_view(::Container)
     @testset "TextView" begin
         text_view = TextView()
+        Base.show(devnull, text_view)
 
         text_changed_called = Ref{Bool}(false)
-        connect_signal_text_changed!(text_view, text_changed_called) do self::TextVie, text_changed_called
+        connect_signal_text_changed!(text_view, text_changed_called) do self::TextView, text_changed_called
             text_changed_called[] = true
         end
 
@@ -1848,6 +1913,7 @@ function test_toggle_button(::Container)
     @testset "ToggleButton" begin
         
         button = ToggleButton()
+        Base.show(devnull, button)
 
         toggled_called = Ref{Bool}(false)
         connect_signal_toggled!(button, toggled_called) do self::ToggleButton, toggled_called
@@ -1884,15 +1950,17 @@ function test_typed_function(::Container)
         no_f2(x::Int64) ::Int64 = return 1234
 
         Test.@test TypedFunction(yes_f, Nothing, (Int64,)) isa TypedFunction
-        Test.@test_throws TypedFunction(no_f1, Nothing, (Int64,))
-        Test.@test_throws TypedFunction(no_f2, Nothing, (Int64,))
+        Test.@test_throws AssertionError TypedFunction(no_f1, Nothing, (Int64,))
+        Test.@test_throws AssertionError TypedFunction(no_f2, Nothing, (Int64,))
 
+        Base.show(devnull, TypedFunction(() -> nothing, Nothing, ()))
     end
 end
 
 function test_viewport(::Container)
     @testset "Viewport" begin
         viewport = Viewport()
+        Base.show(devnull, viewport)
 
         connect_signal_scroll_child!(viewport) do self::Viewport, scroll_type::ScrollType, is_horizontal::Bool
         end
@@ -1932,6 +2000,7 @@ end
 function test_window(::Container)
     @testset "Window" begin
         window = Window(Main.app[])
+        Base.show(devnull, window)
 
         close_request_called = Ref{Bool}(false)
         connect_signal_close_request!(window, close_request_called) do self::Window, close_request_called
@@ -1989,6 +2058,136 @@ function test_window(::Container)
     end
 end
 
+### WIDGET
+
+function test_widget(widget::Container)
+    @testset "Widget" begin
+
+        for s in [:reaize, :unrealize, :destroy, :hide, :show, :map, :unmap]
+            signal_called = Ref{Bool}(false)
+            connect_signal_f = Symbol("connect_signal_$s!")
+            eval(:(
+                $connect_signal_f(this, signal_called) do self::Container, signal_called
+                    signal_called[] = true
+                    @test signal_called[]
+                end
+            ))
+        end
+
+        for w in mousetrap.widgets
+            @test mousetrap.is_native_widget(getproperty(mousetrap, w))
+        end
+
+        set_size_request!(widget, Vector2f(50, 100))
+        @test get_size_request(widget) == Vector2f(50, 100)
+
+        set_margin_top!(widget, 1)
+        @test get_margin_top(widget) == 1
+        
+        set_margin_bottom!(widget, 2)
+        @test get_margin_bottom(widget) == 2
+
+        set_margin_start!(widget, 3)
+        @test get_margin_star(widget) == 3
+
+        set_margin_end!(widget, 4)
+        @test get_margin_end(widget) == 4
+
+        set_margin_horizontal!(widget, 5)
+        @test get_margin_start(widget) == 5
+        @test get_margin_end(widget) == 5
+
+        set_margin_vertical!(widget, 6)
+        @test get_margin_top(widget) == 6
+        @test get_margin_bottom(widget) == 6
+
+        set_margin!(widget, 7)
+        @test get_margin_top(widget) == 7
+        @test get_margin_bottom(widget) == 7
+        @test get_margin_start(widget) == 7
+        @test get_margin_end(widget) == 7
+
+        set_expand_horizontally!(widget, true)
+        @test get_expand_horizontally(widget) == true
+
+        set_expand_vertically!(widget, true)
+        @test get_expand_horizontally(widget) == true
+
+        set_expand!(widget, false)
+        @test get_expand_horizontally(widget) == false
+        @test get_expand_horizontally(widget) == false 
+
+        set_horizontal_alignment!(widget, ALIGNMENT_START)
+        @test get_horizontal_alignment(widget) == ALIGNMENT_START
+
+        set_vertical_alignment!(widget, ALIGNMENT_START)
+        @test get_vertical_alignment(widget) == ALIGNMENT_START
+
+        set_alignment!(widget, ALIGNMENT_END)
+        @test get_vertical_alignment(widget) == ALIGNMENT_END
+        @test get_horizontal_alignment(widget) == ALIGNMENT_END
+
+        @test get_opacity(widget) == 1.0
+        set_opacity!(widget, 0.5)
+        @test get_opacity(widget) == 0.5
+        set_opacity!(widget, 1.0)
+
+        set_is_visible!(widget, false)
+        @test get_is_visible(widget) == false
+        set_is_visible!(widget, true)
+
+        set_tooltip_text!(widget, "test")
+        set_tooltip_widget!(widget, Label("test"))
+        remove_tooltip_widget!(widget)
+
+        set_cursor!(widget, CURSOR_TYPE_NONE)
+        set_cursor_from_image!(widget, Image(1, 1, RGBA(1, 0, 0, 1)))
+
+        hide!(widget)
+        show!(widget)
+
+        set_is_focusable!(widget, true)
+        @test get_is_focusable(widget) == true
+        set_is_focusable!(widget, false)
+        @test get_is_focusable(widget) == false
+
+        set_focus_on_click!(widget, true)
+        @test get_focus_on_click(widget) == true
+
+        grab_focus!(widget)
+        @test get_has_focus(widget) isa Bool
+
+        set_can_respond_to_input!(widget, false)
+        @test get_can_respond_to_input!(widget) == false
+        set_can_resopnt_to_input!(widget, true)
+        @test get_can_respond_to_input!(widget) == true
+
+        @test get_is_realized(widget) == true
+
+        minimum_size = get_minimum_size(widget)
+        @test minimum_size.x > 0 && minimum_size.y > 0
+
+        natural_size = get_natural_size(widget)
+        @test natural_size.x > 0 && natural_size.y > 0
+
+        position = get_position(widget)
+        @test position.x >= 0 && position.y >= 0
+
+        allocated_size = get_allocated_size(widget)
+        @test allocated_size.x > 0 && allocated_size.y > 0
+
+        set_hide_on_overflow!(widget, true)
+        @test get_hide_on_overflow(widget) == true
+        set_hide_on_overflow!(widget, false)
+
+        tick_callback_called = Ref{Bool}(false)
+        set_tick_callback!(widget, tick_callback_called) do self::Widget, clock::FrameClock, tick_callback_called
+            tick_callback_called[] = true
+        end
+        @test tick_callback_called[] == true
+    end
+end
+
 ### RENDER_AREA
 
 function test_render_area(::Container)
@@ -2016,8 +2215,6 @@ function test_render_area(::Container)
     @testset "Texture" begin
         # TODO
     end
-
-
 end
 
 ### MAIN
@@ -2027,15 +2224,71 @@ main("mousetrap.runtests.jl") do app::Application
     Main.app[] = app
     window = Window(app)
 
-    println("TODO: Base.show")
-
     container = Container()
     viewport = Viewport()
     set_child!(viewport, container)
     set_child!(window, viewport)
 
-    connect_signal_realize!(container) do self::Container
-        test_all()
+    connect_signal_realize!(container, app) do container::Container, app
+        #test_action(container)
+        #test_adjustment(container)
+        #test_alert_dialog(container)
+        #test_all(container)
+        #test_angle(container)
+        #test_application(container)
+        #test_aspect_frame(container)
+        #test_box(container)
+        #test_button(container)
+        #test_center_box(container)
+        #test_check_button(container)
+        #test_clipboard(container)
+        #test_color_chooser(container)
+        #test_colors(container)
+        #test_column_view(container)
+        #test_drop_down(container)
+        #test_entry(container)
+        #test_event_controller(container)
+        #test_expander(container)
+        #test_file_chooser(container)
+        #test_file_descriptor(container)
+        #test_fixed(container)
+        #test_frame(container)
+        #test_frame_clock(container)
+        #test_gl_transform(container)
+        #test_grid(container)
+        #test_grid_view(container)
+        #test_header_bar(container)
+        #test_icon(container)
+        #test_image(container)
+        #test_image_display(container)
+        #test_key_file(container)
+        #test_label(container)
+        #test_level_bar(container)
+        #test_list_view(container)
+        #test_log(container)
+        #test_menus(container)
+        #test_notebook(container)
+        #test_overlay(container)
+        #test_paned(container)
+        #test_popover(container)
+        #test_progress_bar(container)
+        #test_render_area(container)
+        #test_revelaer(container)
+        #test_scale(container)
+        #test_scrollbar(container)
+        #test_selection_model(container)
+        #test_separator(container)
+        #test_spin_button(container)
+        #test_spinner(container)
+        #test_stack(container)
+        #test_switch(container)
+        #test_text_view(container)
+        #test_time(container)
+        #test_toggle_button(container)
+        #test_typed_function(container)
+        #test_viewport(container)
+        #test_widget(container)
+        #test_window(container)
         return nothing
     end
 
