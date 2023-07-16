@@ -2768,7 +2768,7 @@ module mousetrap
     @add_widget_signals Expander
     @add_signal_activate Expander
 
-    Base.show(io::IO, x::Expander) = show_aux(io, x, :expanded)
+    Base.show(io::IO, x::Expander) = show_aux(io, x, :is_expanded)
 
 ####### fixed.jl
 
@@ -2786,7 +2786,11 @@ module mousetrap
     set_child_position!(fixed::Fixed, child::Widget, position::Vector2f) = detail.set_child_position!(fixed._internal, as_widget_pointer(child), position)
     export set_child_position!
 
-    get_child_position(fixed::Fixed, child::Widget) ::Vector2f = detail.get_child_position(fixed._internal, as_widget_pointer(child))
+    function get_child_position(fixed::Fixed, child::Widget) ::Vector2f 
+        # this is a bug in GTK4
+        log_warning(MOUSETRAP_DOMAIN, "In get_child_position: Unable to retrieve child position, returning (0, 0)")
+        detail.get_child_position(fixed._internal, as_widget_pointer(child))
+    end
     export get_child_position
 
     @add_widget_signals Fixed
