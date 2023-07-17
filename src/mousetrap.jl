@@ -2,7 +2,7 @@
 # Author: C. Cords (mail@clemens-cords.com)
 # https://github.com/clemapfel/mousetrap.jl
 #
-# Copyright © 2023, Licensed under lGPL3-0
+# Copyright © 2023, Licensed under lGPL-3.0
 #
 
 module mousetrap
@@ -70,7 +70,7 @@ module mousetrap
 
     const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN * ".jl"
 
-    # only macros are documented in this file, all other documentatino is in `mousetrap.jl/src/docs``
+    # only macros are documented in this file, all other documentation is in `mousetrap.jl/src/docs``
    
     """
     ```
@@ -179,7 +179,7 @@ module mousetrap
             printstyled(stderr, "In " * scope * ": "; bold = true)
             Base.showerror(stderr, exception, catch_backtrace())
             print(stderr, "\n")
-            throw(exception) # this causes jl_call to return nullptr, which we can check against C-side
+            throw(exception) # this causes jl_call to return nullptr C-side, as opposed to jl_nothing
         end
     end
 
@@ -990,6 +990,75 @@ module mousetrap
     macro add_signal_resize(x) return :(@add_signal $x resize Cvoid Integer width Integer height) end
 
     macro add_signal_modifiers_changed(x) return :(@add_signal $x modifiers_changed Cvoid ModifierState state) end
+
+    macro add_signal_activate_item(T)
+
+        snake_case = :activate_item
+        Return_t = Cvoid 
+        Arg1_t = Integer
+        arg1_name = :index
+
+        out = Expr(:block)
+        connect_signal_name = :connect_signal_ * snake_case * :!
+
+        push!(out.args, esc(:(
+            function $connect_signal_name(f, x::$T)
+                typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t))
+                detail.$connect_signal_name(x._internal, function(x)
+                    typed_f($T(x[1][]), to_julia_index(x[2]))
+                end)
+            end
+        )))
+
+        push!(out.args, esc(:(
+            function $connect_signal_name(f, x::$T, data::Data_t) where Data_t
+                typed_f = TypedFunction(f, $Return_t, ($T, $Arg1_t, Data_t))
+                detail.$connect_signal_name(x._internal, function(x)
+                    typed_f($T(x[1][]), to_julia_index(x[2]), data)
+                end)
+            end
+        )))
+
+        emit_signal_name = :emit_signal_ * snake_case
+
+        push!(out.args, esc(:(
+            function $emit_signal_name(x::$T, $arg1_name::$Arg1_t) ::$Return_t
+                return convert($Return_t, detail.$emit_signal_name(x._internal, from_julia_index($arg1_name)))
+            end
+        )))
+
+        disconnect_signal_name = :disconnect_signal_ * snake_case * :!
+
+        push!(out.args, esc(:(
+            function $disconnect_signal_name(x::$T)
+                detail.$disconnect_signal_name(x._internal)
+            end
+        )))
+
+        set_signal_blocked_name = :set_signal_ * snake_case * :_blocked * :!
+
+        push!(out.args, esc(:(
+            function $set_signal_blocked_name(x::$T, b)
+                detail.$set_signal_blocked_name(x._internal, b)
+            end
+        )))
+
+        get_signal_blocked_name = :get_signal_ * snake_case * :_blocked
+
+        push!(out.args, esc(:(
+            function $get_signal_blocked_name(x::$T)
+                return detail.$get_signal_blocked_name(x._internal)
+            end
+        )))
+
+        push!(out.args, esc(:(export $connect_signal_name)))
+        push!(out.args, esc(:(export $disconnect_signal_name)))
+        push!(out.args, esc(:(export $set_signal_blocked_name)))
+        push!(out.args, esc(:(export $get_signal_blocked_name)))
+        push!(out.args, esc(:(export $emit_signal_name)))
+
+        return out
+    end
 
     macro add_signal_activated(T)
 
@@ -1932,7 +2001,11 @@ module mousetrap
     end
 
     function set_value!(file::KeyFile, group::GroupID, key::KeyID, value::RGBA)
-        detail.set_value_as_float_list!(file._internal, group, key, Cfloat[value.r, value.g, value.b, value.a])
+        detail.set_value_as_rgba!(file._internal, group, key, value)
+    end
+
+    function set_value!(file::KeyFile, group::GroupID, key::KeyID, value::HSVA)
+        detail.set_value_as_hsva!(file._internal, group, key, value)
     end
 
     function set_value!(file::KeyFile, group::GroupID, key::KeyID, value::Image)
@@ -1994,8 +2067,11 @@ module mousetrap
     end
 
     function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{RGBA})
-        vec = get_value(file, Vector{Cfloat}, group, key)
-        return RGBA(vec[1], vec[2], vec[3], vec[4])
+        return detail.get_value_as_rgba(file._internal, group, key)
+    end
+
+    function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{HSVA})
+        return detail.get_value_as_hsva(file._internal, group, key)
     end
 
     function get_value(file::KeyFile, group::GroupID, key::KeyID, ::Type{Image})
@@ -2326,6 +2402,7 @@ module mousetrap
     @export_type ImageDisplay Widget
     @declare_native_widget ImageDisplay
 
+    ImageDisplay() = ImageDisplay(detail._ImageDisplay())
     ImageDisplay(path::String) = ImageDisplay(detail._ImageDisplay(path))
     ImageDisplay(image::Image) = ImageDisplay(detail._ImageDisplay(image._internal))
     ImageDisplay(icon::Icon) = ImageDisplay(detail._ImageDisplay(icon._internal))
@@ -2945,7 +3022,7 @@ module mousetrap
     @export_function Frame remove_child! Cvoid
     @export_function Frame remove_label_widget! Cvoid
     @export_function Frame set_label_x_alignment! Cvoid AbstractFloat => Cfloat x
-    @export_function Frame get_label_x_alignment! Cfloat
+    @export_function Frame get_label_x_alignment Cfloat
 
     @add_widget_signals Frame
 
@@ -3552,6 +3629,8 @@ module mousetrap
     @export_function SelectionModel unselect_all! Cvoid
     @export_function SelectionModel get_n_items Int64
     
+    @export_function SelectionModel get_selection_mode SelectionMode
+    
     select!(model::SelectionModel, i::Integer, unselect_others::Bool = true) = detail.select!(model._internal, from_julia_index(i), unselect_others)
     export select!
 
@@ -3598,9 +3677,13 @@ module mousetrap
     set_widget_at!(list_view::ListView, index::Integer, widget::Widget, iterator::ListViewIterator) = detail.set_widget_at!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), iterator._internal)
     export set_widget_at!
 
+    find(list_view::ListView, widget::Widget, iterator::ListViewIterator) ::Signed = to_julia_index(detail.find(list_view._internal, as_widget_pointer(widget), iterator._internal))
+    find(list_view::ListView, widget::Widget) ::Signed = to_julia_index(detail.find(list_view._internal, as_widget_pointer(widget, Ptr{Cvoid}())))
+    export find
+
     get_selection_model(list_view::ListView) ::SelectionModel = SelectionModel(detail.get_selection_model(list_view._internal))
     export get_selection_model
-
+    
     @export_function ListView set_enable_rubberband_selection Cvoid Bool b
     @export_function ListView get_enabled_rubberband_selection Bool
     @export_function ListView set_show_separators Cvoid Bool b
@@ -3612,7 +3695,7 @@ module mousetrap
     @export_function ListView get_orientation Orientation
 
     @add_widget_signals ListView
-    @add_signal_activate ListView
+    @add_signal_activate_item ListView
 
     Base.show(io::IO, x::ListView) = show_aux(io, x, :selection_model, :orientation)
 
@@ -3627,21 +3710,24 @@ module mousetrap
     push_back!(grid_view::GridView, widget::Widget) = detail.push_back!(grid_view._internal, as_widget_pointer(widget))
     export push_back!
 
-    push_front!(grid_view::GridView, widget::Widget) = detail.push_ront!(grid_view._internal, as_widget_pointer(widget))
+    push_front!(grid_view::GridView, widget::Widget) = detail.push_front!(grid_view._internal, as_widget_pointer(widget))
     export push_front!
 
     insert!(grid_view::GridView, index::Integer, widget::Widget) = detail.insert!(grid_view._internal, from_julia_index(index), as_widget_pointer(widget))
     export insert!
 
-    remove!(grid_view::GridView, widget::Widget) = detail.remove!(grid_view._internal, as_widget_pointer(widget))
+    remove!(grid_view::GridView, index::Integer) = detail.remove!(grid_view._internal, from_julia_index(index))
     export remove!
 
     clear!(grid_view::GridView) = detail.clear!(grid_view._internal)
     export clear!
 
+    find(grid_view::GridView, widget::Widget) ::Signed = to_julia_index(detail.find(grid_view._internal, as_widget_pointer(widget)))
+    export find
+
     @export_function GridView get_n_items Int64
-    @export_function GridView set_enable_rubberband_selection Cvoid Bool b
-    @export_function GridView get_enabled_rubberband_selection Bool
+    @export_function GridView set_enable_rubberband_selection! Cvoid Bool b
+    @export_function GridView get_enable_rubberband_selection Bool
     @export_function GridView get_single_click_activate Bool
     @export_function GridView set_single_click_activate! Cvoid Bool b
 
@@ -3664,7 +3750,7 @@ module mousetrap
     export get_selection_model
 
     @add_widget_signals GridView
-    @add_signal_activate GridView
+    @add_signal_activate_item GridView
 
     Base.show(io::IO, x::GridView) = show_aux(io, x, :selection_model)
 
@@ -3702,7 +3788,7 @@ module mousetrap
     export insert_column_at!
 
     remove_column_at!(grid::Grid, column_i::Signed) = detail.remove_column_at!(grid._internal, column_i -1)
-    export insert_column_at!
+    export remove_column_at!
 
     @export_function Grid get_column_spacing Cfloat
     @export_function Grid set_column_spacing! Cvoid Number => Cfloat spacing
@@ -4291,7 +4377,7 @@ module mousetrap
     get_time_since_last_frame(frame_clock::FrameClock) ::Time = microseconds(detail.get_time_since_last_frame(frame_clock._internal))
     export get_time_since_last_frame
 
-    get_target_frame_duration(frame_clock::FrameClock) ::Time = microseconds(detal.get_target_frame_duration(frame_clock._internal))
+    get_target_frame_duration(frame_clock::FrameClock) ::Time = microseconds(detail.get_target_frame_duration(frame_clock._internal))
     export get_target_frame_duration
 
     @add_signal_update FrameClock
@@ -4539,12 +4625,12 @@ module mousetrap
     GLTransform() = GLTransform(detail._GLTransform())
 
     import Base.setindex!
-    function Base.setindex!(transform::GLTransform, x::Integer, y::Integer, value::AbstractFloat)
+    function Base.setindex!(transform::GLTransform, x::Integer, y::Integer, value::Number)
         if x == 0 || x > 4 || y == 0 || y > 4
             throw(BoundsError(transform, (x, y)))
         end
 
-        detail.setindex!(transform._internal, from_julia_index(x), from_julia_index(y), value)
+        detail.setindex!(transform._internal, from_julia_index(x), from_julia_index(y), convert(Float32, value))
     end
 
     import Base.getindex
@@ -4553,18 +4639,18 @@ module mousetrap
             throw(BoundsError(transform, (x, y)))
         end
 
-        return detail.setindex(transform._internal, from_julia_index(x), from_julia_index(y))
+        return detail.getindex(transform._internal, from_julia_index(x), from_julia_index(y))
     end
 
     apply_to(transform::GLTransform, v::Vector2f) ::Vector2f = detail.apply_to_2f(transform, v.x, v.y)
     apply_to(transform::GLTransform, v::Vector3f) ::Vector3f = detail.apply_to_3f(transform, v.x, v.y, v.z)
     export apply_to
 
-    combine_with(self::GLTransform, other::GLTransform) = GLTransform(detail.combin_with(self._internal, other._internal))
+    combine_with(self::GLTransform, other::GLTransform) = GLTransform(detail.combine_with(self._internal, other._internal))
     export combine_with
 
     function rotate!(transform::GLTransform, angle::Angle, origin::Vector2f = Vector2f(0, 0))
-        detail.rotate!(transform._internal, as_radians(angle), origin.x, origin.y)
+        detail.rotate!(transform._internal, convert(Float32, as_radians(angle)), origin.x, origin.y)
     end
     export rotate!
 
@@ -4574,7 +4660,7 @@ module mousetrap
     export translate!
 
     function scale!(transform::GLTransform, x_scale::AbstractFloat, y_scale::AbstractFloat)
-        detail.scale!(transform._internal, x_scale, y_scale)
+        detail.scale!(transform._internal, convert(Float32, x_scale), convert(Float32, y_scale))
     end
     export scale!
 

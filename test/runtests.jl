@@ -857,13 +857,9 @@ function test_frame(::Container)
         Base.show(devnull, frame)
 
         set_child!(frame, Separator())
+        @test get_label_x_alignment(frame) == 0.0
+        set_label_x_alignment!(frame, 0.5)
         @test get_label_x_alignment(frame) == 0.5
-        set_label_x_alignment!(frame, 0.0)
-        @test get_label_x_alignment(frame) = 0.0
-        
-        @test get_label_y_alignmetn(frame) == 0.5
-        set_label_y_alignemtn(frame, 0.0)
-        @test get_label_y_alignmetn(frame) == 0.0
 
         set_child!(frame, Separator())
         set_label_widget!(frame, Label())
@@ -877,18 +873,23 @@ function test_frame_clock(container::Container)
         clock = get_frame_clock(container)
         Base.show(devnull, clock)
 
-        @test get_target_frame_duration(clock) isa Time
-        @test get_time_since_last_frame(clock) isa Time
-
         paint_called = Ref{Bool}(false)
         connect_signal_paint!(clock, paint_called) do self::FrameClock, paint_called
             paint_called[] = true
+            @test get_target_frame_duration(clock) isa Time
+            @test get_time_since_last_frame(clock) isa Time
+            return nothing
         end
 
         update_called = Ref{Bool}(false)
         connect_signal_update!(clock, update_called) do self::FrameClock, update_called
             update_called[] = true
+            @test get_target_frame_duration(clock) isa Time
+            @test get_time_since_last_frame(clock) isa Time
+            return nothing
         end
+
+        @test clock isa FrameClock
     end
 end
 
@@ -901,7 +902,7 @@ function test_gl_transform(::Container)
         scale!(transform, 1.5, 1.5)
         translate!(transform, Vector2f(0.5, 0.5))
 
-        new_transform = combine_with(transform, Transform())
+        new_transform = combine_with(transform, GLTransform())
         for x in 1:3
             for y in 1:3
                 @test transform[x, y] == new_transform[x, y]
@@ -938,9 +939,9 @@ function test_grid(::Container)
         @test get_columns_homogeneous(grid) == true
 
         widget = Separator()
-        insert!(grid, Separator(), 1, 2, 1, 1)
-        @test get_position(grid, widget) == Vector2i(1, 1)
-        @test get_size(grid, widget) == Vector2i(1, 1)
+        mousetrap.insert!(grid, widget, 1, 2, 3, 4)
+        @test get_position(grid, widget) == Vector2i(1, 2)
+        @test get_size(grid, widget) == Vector2i(3, 4)
 
         insert_row_at!(grid, 1)
         insert_column_at!(grid, 1)
@@ -960,16 +961,16 @@ function test_grid_view(::Container)
         set_orientation!(grid_view, ORIENTATION_VERTICAL)
         @test get_orientation(grid_view) == ORIENTATION_VERTICAL
 
-        @test get_max_n_columns(grid_view) == -1
+        @test get_max_n_columns(grid_view) > 0
         set_max_n_columns!(grid_view, 3)
         @test get_max_n_columns(grid_view) == 3
         
-        @test get_min_n_columns(grid_view) == -1
+        @test get_min_n_columns(grid_view) > 0
         set_min_n_columns!(grid_view, 3)
         @test get_min_n_columns(grid_view) == 3
 
         set_enable_rubberband_selection!(grid_view, true)
-        @test get_enable_rubberband_selection(grid_vie) == true
+        @test get_enable_rubberband_selection(grid_view) == true
 
         @test get_single_click_activate(grid_view) == false
         set_single_click_activate!(grid_view, true)
@@ -977,19 +978,24 @@ function test_grid_view(::Container)
 
         push_front!(grid_view, Separator())
         push_back!(grid_view, Separator())
-        insert!(grid_view, 1, Separator())
+
+        child = Separator()
+        mousetrap.insert!(grid_view, 1, child)
+        @test find(grid_view, child) == 1 
         remove!(grid_view, 1)
 
-        @test get_n_items(grid_view) == 3
+        @test get_n_items(grid_view) == 2
 
         @test get_selection_model(grid_view) isa SelectionModel
 
-        activate_called = Ref{Bool}(false)
-        connect_signal_activate!(grid_view, activate_called) do self::GridView, activate_called
-            activate_called[] = true
+        activate_item_called = Ref{Bool}(false)
+        connect_signal_activate_item!(grid_view, activate_item_called) do self::GridView, index, activate_item_called
+            activate_item_called[] = true
+            return nothing
         end
-        activate!(grid_view)
-        @test activate_called[] == true
+        
+        #@test activate_called[] == true
+        @test false
     end
 end
 
@@ -1019,7 +1025,7 @@ function test_header_bar(::Container)
         Base.show(devnull, header_bar)
 
         @test get_layout(header_bar) == layout
-        set_layout(header_bar, "")
+        set_layout!(header_bar, "")
         @test get_layout(header_bar) == ""
         
         @test get_show_title_buttons(header_bar) == true
@@ -1032,13 +1038,21 @@ function test_header_bar(::Container)
         remove!(header_bar, widget)
 
         set_title_widget!(header_bar, Label("title"))
-        remove_titlebar_widget!(header_bar)
+        remove_title_widget!(header_bar)
     end
 end
 
 function test_icon(::Container)
 
     theme = IconTheme(Main.window[])
+
+    @testset "Icon" begin
+        icon_name = get_icon_names(theme)[1]
+        icon = Icon(theme, icon_name, 64)
+        Base.show(devnull, icon)
+
+        @test get_size(icon).x == 64 && get_size(icon).y == 64
+    end 
 
     @testset "IconTheme" begin
 
@@ -1047,16 +1061,11 @@ function test_icon(::Container)
         names = get_icon_names(theme)
         @test isempty(names) == false
         @test has_icon(theme, names[1])
+
+        add_resource_path!(theme, ".")
+        set_resource_path!(theme, ".")
         
         # TODO: validate resource path
-    end
-
-    @testset "Icon" begin
-        icon_name = get_icon_names(theme)[1]
-        icon = Icon(theme, icon_name, 64)
-        Base.show(devnull, icon)
-
-        @test get_size(icon) == 64
     end
 end
 
@@ -1074,11 +1083,12 @@ function test_image(::Container)
         set_pixel!(image, 1, 1, RGBA(0, 0, 1, 1))
         @test get_pixel(image, 1, 1) == RGBA(0, 0, 1, 1)
 
-        @test get_size(as_flipped(image, true, true)) == Vector2i(1, 1)
-        @test get_size(as_scaled(Image, 2, 2, INTERPOLATION_TYPE_HYPERBOLIC)) == Vector2i(2, 2)
+        flipped = as_flipped(image, true, true)
+        @test get_size(flipped) == Vector2i(1, 1)
+        @test get_size(as_scaled(image, 2, 2, INTERPOLATION_TYPE_HYPERBOLIC)) == Vector2i(2, 2)
         @test get_size(as_cropped(image, 0, 0, 2, 2)) == Vector2i(2, 2)
 
-        save_to_file!(image, tempname() * ".png")
+        save_to_file(image, tempname() * ".png")
     end
 end
 
@@ -1095,8 +1105,9 @@ function test_image_display(::Container)
         clear!(image_display)
 
         create_from_icon!(image_display, Main.icon[])
-        @test get_size(image_display) == Vector2i(1, 1)
+        @test get_size(image_display) == Vector2i(64, 64)
         clear!(image_display)
+        @test get_size(image_display) == Vector2i(0, 0)
     end
 end
 
@@ -1116,7 +1127,7 @@ function test_key_file(::Container)
         bool_list_key = "bool_list"
         float_list_key = "float_list"
         integer_list_key = "integer_list"
-        color_key = "color"
+        color_key = "rgba"
         string_list_key = "string_list"
 
         group_comment = " group comment"
@@ -1125,6 +1136,7 @@ function test_key_file(::Container)
         create_from_string!(file, """
         #$group_comment
         [$group_name]
+        #$key_comment
         $bool_key = true
         $float_key = 1234.0
         $integer_key = 1234
@@ -1134,54 +1146,53 @@ function test_key_file(::Container)
         $float_list_key = 1234.0;5678.0
         $integer_list_key = 1234;5678
         $string_list_key = abcd;efgh
-
-        #$key_comment
         $color_key = 1.0;0.0;1.0;1.0
         """)
 
         @test get_groups(file) == [group_name]
         @test has_group(file, group_name) == true
         @test isempty(get_keys(file, group_name)) == false
-        @test has_key(file, group, color_key) == true
+        @test has_key(file, group_name, color_key) == true
 
-        @test get_comment_above!(file, group_name) == group_comment
-        @test get_comment_above!(file, group_name, color_key) == key_comment
+        @test get_comment_above(file, group_name) == group_comment
+        @test get_comment_above(file, group_name, bool_key) == key_comment
 
         @test get_value(file, group_name, bool_key, Bool) == true
         @test get_value(file, group_name, float_key, Float32) == 1234.0
         @test get_value(file, group_name, integer_key, Int64) == 1234
         @test get_value(file, group_name, string_key, String) == "abcd"
         @test get_value(file, group_name, color_key, RGBA) == RGBA(1, 0, 1, 1)
+        @test get_value(file, group_name, color_key, HSVA) == HSVA(1, 0, 1, 1)
         @test get_value(file, group_name, bool_list_key, Vector{Bool}) == [true, false]
         @test get_value(file, group_name, float_list_key, Vector{Float32}) == Float32[1234.0, 5678.0]
         @test get_value(file, group_name, integer_list_key, Vector{Int64}) == Int64[1234, 5678]
         @test get_value(file, group_name, string_list_key, Vector{String}) == ["abcd", "efgh"]
 
-        set_value(file, group_name, bool_key, false)
+        set_value!(file, group_name, bool_key, false)
         @test get_value(file, group_name, bool_key, Bool) == false
 
-        set_value(file, group_name, float_key, Float32(999))
+        set_value!(file, group_name, float_key, Float32(999))
         @test get_value(file, group_name, float_key, Float32) == 999
 
-        set_value(file, group_name, integer_key, Int64(999))
+        set_value!(file, group_name, integer_key, Int64(999))
         @test get_value(file, group_name, integer_key, Int64) == 999
 
-        set_value(file, group_name, string_key, String("none"))
+        set_value!(file, group_name, string_key, String("none"))
         @test get_value(file, group_name, string_key, String) == "none"
 
-        set_value(file, group_name, color_key, RGBA(0, 0, 0, 1))
-        @test get_value(file, group_name, color_key, RGBA) == RGBA(1, 0, 1, 1)
+        set_value!(file, group_name, color_key, RGBA(0, 0, 0, 1))
+        @test get_value(file, group_name, color_key, RGBA) == RGBA(0, 0, 0, 1)
 
-        set_value(file, group_name, bool_list_key, [false, true])
+        set_value!(file, group_name, bool_list_key, [false, true])
         @test get_value(file, group_name, bool_list_key, Vector{Bool}) == [false, true]
 
-        set_value(file, group_name, float_list_key, [Float32(1), Float32(2)])
+        set_value!(file, group_name, float_list_key, [Float32(1), Float32(2)])
         @test get_value(file, group_name, float_list_key, Vector{Float32}) == Float32[1.0, 2.0]
 
-        set_value(file, group_name, integer_list_key, [Int64(1), Int64(2)])
+        set_value!(file, group_name, integer_list_key, [Int64(1), Int64(2)])
         @test get_value(file, group_name, integer_list_key, Vector{Int64}) == Int64[1, 2]
 
-        set_value(file, group_name, string_list_key, ["none", "nothing"])
+        set_value!(file, group_name, string_list_key, ["none", "nothing"])
         @test get_value(file, group_name, string_list_key, Vector{String}) == ["none", "nothing"]
     end
 end
@@ -1276,7 +1287,7 @@ function test_list_view(::Container)
         @test get_orientation(list_view) == ORIENTATION_VERTICAL
 
         set_enable_rubberband_selection!(list_view, true)
-        @test get_enable_rubberband_selection(grid_vie) == true
+        @test get_enable_rubberband_selection(list_view) == true
 
         @test get_single_click_activate(list_view) == false
         set_single_click_activate!(list_view, true)
@@ -1286,10 +1297,12 @@ function test_list_view(::Container)
         set_show_separators!(list_view, true)
         @test get_show_separators(list_view) == true
 
-
         push_front!(list_view, Separator())
         push_back!(list_view, Separator())
-        it = insert!(list_view, 1, Separator())
+
+        child = Separator()
+        it = insert!(list_view, 1, child)
+        @test find(list_view, child) == 1
         remove!(list_view, 1)
 
         push_back!(list_view, Separator(), it)
@@ -2465,16 +2478,16 @@ main(Main.app_id) do app::Application
         ##test_file_chooser(container)
         ##test_file_descriptor(container)
         ##test_fixed(container)
-        test_frame(container)
-        #test_frame_clock(container)
-        #test_gl_transform(container)
-        #test_grid(container)
-        #test_grid_view(container)
-        #test_header_bar(container)
-        #test_icon(container)
-        #test_image(container)
-        #test_image_display(container)
-        #test_key_file(container)
+        ##test_frame(container)
+        ##test_frame_clock(container)
+        ##test_gl_transform(container)
+        ##test_grid(container)
+        ##test_grid_view(container)
+        ##test_header_bar(container)
+        ##test_icon(container)
+        ##test_image(container)
+        ##test_image_display(container)
+        test_key_file(container)
         #test_label(container)
         #test_level_bar(container)
         #test_list_view(container)

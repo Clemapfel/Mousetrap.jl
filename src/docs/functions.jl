@@ -798,6 +798,14 @@ exists(::FileDescriptor) -> Bool
 Check if file location contains a valid file or folder.
 """
 
+@document find """
+```
+find(::ListView, ::Widget, [::ListViewIterator]) -> Signed
+find(::GridView, ::Widget) -> Signed
+``` 
+Get index of widget in view, or -1 if widget is not part of view.
+"""
+
 @document flush """
 ```
 flush(::RenderArea) -> Cvoid
@@ -2358,6 +2366,7 @@ get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{Bool}})
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{String}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{String}}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{RGBA}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{HSVA}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Image}) 
 ```
 Deserialize a value from the keyfile. Returns a default value if the key-value pair or group does not exist.
@@ -4914,7 +4923,8 @@ set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Bool)
 set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Vector{Bool}) 
 set_value!(file::KeyFile, ::GroupID, ::KeyID, ::String) 
 set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Vector{String}) 
-set_value!(file::KeyFile, ::GroupID, ::KeyID, ::RGBA) 
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::RGBA)
+set_value!(file::KeyFile, ::GroupID, ::KeyID, ::HSVA) 
 set_value!(file::KeyFile, ::GroupID, ::KeyID, ::Image) 
 ```
 Serialize a value and save it to a key-value pair in given group. If the group or key does not yet exist, it is created.

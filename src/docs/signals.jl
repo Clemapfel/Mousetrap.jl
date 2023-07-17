@@ -12,6 +12,10 @@ const signal_descriptors = Dict([
         void_signature, 
         "Emitted when [`activate!`](@ref) is called or an activatble widget is otherwise activated, for example by the user clicking the widget or pressing enter while the widget has keyboard focus."
     ),
+    :activate_item => (
+        "(::T, index::Integer, [::Data_t]) -> Nothing",
+        "Emitted when the user activates a selected item of the view."
+    ),
     :startup => (
         void_signature, 
         "Emitted when an [`Application`](@ref) instance has initialized the backend."

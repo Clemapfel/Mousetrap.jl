@@ -865,7 +865,7 @@ $(@type_constructors(
 ))
 
 $(@type_signals(GridView, 
-    activate
+    activate_item
 ))
 
 $(@type_fields())
@@ -1159,7 +1159,7 @@ $(@type_constructors(
 ))
 
 $(@type_signals(ListView, 
-    selection_changed
+    activate_item
 ))
 
 $(@type_fields())

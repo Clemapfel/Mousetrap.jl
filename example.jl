@@ -7,15 +7,17 @@ using mousetrap
 
 main() do app::Application
     window = Window(app)
-    clipboard = get_clipboard(window)
 
-    string_read = Ref{Bool}(false)
-    get_string(clipboard, string_read) do self::Clipboard, value::String, string_read
-        string_read[] = true
-        return nothing
+    view = GridView()
+    push_back!(view, Separator())
+    push_back!(view, Separator())
+    push_back!(view, Separator())
+
+    connect_signal_activate_item!(view) do self::GridView, index::Integer
+        println(index)
     end
-        println(string_read[])
 
+    set_child!(window, view)
     present!(window)
 end
 
