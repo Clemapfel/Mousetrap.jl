@@ -848,9 +848,9 @@ $(@type_fields())
 ## Example
 ```julia
 grid = Grid()
-insert!(grid, Label("Label"), 1, 1, 1, 1)
-insert!(grid, Button(), 1, 2, 1, 1)
-insert!(grid, Separator, 2, 1, 2, 1)
+insert_at!(grid, Label("Label"), 1, 1, 1, 1)
+insert_at!(grid, Button(), 1, 2, 1, 1)
+insert_at!(grid, Separator, 2, 1, 2, 1)
 ```
 """
 

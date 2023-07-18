@@ -2583,12 +2583,12 @@ html_code_to_rgba(code::String) -> RGBA
 Read an html color code of the form `#RRGGBB` or `#RRGGBBAA`, in hexadecimal.
 """
 
-@document insert! """
+@document insert_at! """
 ```
-insert!(::DropDown, index::Integer, label_for_both::String) -> DropDownItemID
-insert!(::DropDown, index::Integer, list_widget::Widget, label_widget::Widget) -> DropDownItemID
-insert!(f, ::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
-insert!(f, ::DropDown, index::Integer, label_for_both::String, [::Data_t]) -> DropDownItemID
+insert_at!(::DropDown, index::Integer, label_for_both::String) -> DropDownItemID
+insert_at!(::DropDown, index::Integer, list_widget::Widget, label_widget::Widget) -> DropDownItemID
+insert_at!(f, ::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
+insert_at!(f, ::DropDown, index::Integer, label_for_both::String, [::Data_t]) -> DropDownItemID
 ```
 Add an item to the drop down at given index. When it is selected `label_widget` will appear as the 
 child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
@@ -2604,7 +2604,7 @@ See the manual section on `DropDown` in the chapter on widgets for more informat
 ---
 
 ```
-insert!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget) 
+insert_at!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget)
 ```
 Insert a page at the given position, where `child_widget` is the widget used as the page, and `label_widget` is the 
 widget displayed in the tab bar.
@@ -2612,9 +2612,9 @@ widget displayed in the tab bar.
 ---
 
 ```
-insert!(::ListView, ::Widget, index::Integer, [::ListViewIterator]) -> ListViewIterator
-insert!(::GridView, inde::Integer, ::Widget) -> Cvoid
-insert!(::Grid, ::Widget, row_i::Signed, column_i::Signed ; n_horizontal_cells:Unsigned = 1, n_vertical_cells::Unsigned = 1) -> Cvoid
+insert_at!(::ListView, ::Widget, index::Integer, [::ListViewIterator]) -> ListViewIterator
+insert_at!(::GridView, inde::Integer, ::Widget) -> Cvoid
+insert_at!(::Grid, ::Widget, row_i::Signed, column_i::Signed, [n_horizontal_cells:Unsigned = 1, n_vertical_cells::Unsigned = 1]) -> Cvoid
 ```
 Insert a widget at the given position.
 """
@@ -2638,6 +2638,13 @@ Insert a column at the given index.
 insert_column_at!(grid::Grid, column_i::Signed) 
 ```
 Insert an empty column after the given index (may be negative).
+"""
+
+@document insert_next_to! """
+```
+insert_next_to!(::Grid, to_insert::Widget, already_in_grid::Widget, position::RelativePosition, [n_horizontal_cells:Unsigned = 1, n_vertical_cells::Unsigned = 1]) -> Cvoid
+```
+Insert widget into a grid such that it is now next to `already_in_grid`, where `position` describes the relative position of `already_in_grid` to `to_insert`.
 """
 
 @document insert_row_at! """

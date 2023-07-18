@@ -3287,34 +3287,34 @@ module mousetrap
     push_front!(drop_down::DropDown, label::String) = push_front!((_::DropDown) -> nothing, drop_down, label)
     export push_front!
 
-    function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
+    function insert_at!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
         return detail.insert!(drop_down._internal, from_julia_index(index), as_widget_pointer(list_widget), as_widget_pointer(label_widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
-    function insert!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget)
+    function insert_at!(f, drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
         return detail.insert!(drop_down._internal, from_julia_index(index), as_widget_pointer(list_widget), as_widget_pointer(label_widget), function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
-    function insert!(f, drop_down::DropDown, index::Integer, label::String, data::Data_t) where Data_t
+    function insert_at!(f, drop_down::DropDown, index::Integer, label::String, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (DropDown, Data_t))
         return detail.insert!(drop_down._internal, from_julia_index(index), detail._Label(label).cpp_object, detail._Label(label).cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]), data)
         end)
     end
-    function insert!(f, drop_down::DropDown, index::Integer, label::String)
+    function insert_at!(f, drop_down::DropDown, index::Integer, label::String)
         typed_f = TypedFunction(f, Cvoid, (DropDown,))
         return detail.insert!(drop_down._internal, from_julia_index(index), detail._Label(label).cpp_object, detail._Label(label).cpp_object, function (drop_down_internal_ref)
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
 
-    insert!(drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget) = insert!((_::DropDown) -> nothing, drop_down, index, list_widget, label_widget)
-    insert!(drop_down::DropDown, index::Integer, label::String) = insert!((_::DropDown) -> nothing, drop_down, index, label)
-    export insert!
+    insert_at!(drop_down::DropDown, index::Integer, list_widget::Widget, label_widget::Widget) = insert_at!((_::DropDown) -> nothing, drop_down, index, list_widget, label_widget)
+    insert_at!(drop_down::DropDown, index::Integer, label::String) = insert_at!((_::DropDown) -> nothing, drop_down, index, label)
+    export insert_at!
 
     @add_widget_signals DropDown
 
@@ -3661,9 +3661,9 @@ module mousetrap
     push_front!(list_view::ListView, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.push_front!(list_view._internal, as_widget_pointer(widget), iterator._internal))
     export push_front!
 
-    insert!(list_view::ListView, index::Integer, widget::Widget) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), Ptr{Cvoid}()))
-    insert!(list_view::ListView, index::Integer, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), iterator._internal))
-    export insert!
+    insert_at!(list_view::ListView, index::Integer, widget::Widget) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), Ptr{Cvoid}()))
+    insert_at!(list_view::ListView, index::Integer, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), iterator._internal))
+    export insert_at!
 
     remove!(list_view::ListView, index::Integer) = detail.remove!(list_view._internal, from_julia_index(index), Ptr{Cvoid}())
     remove!(list_view::ListView, index::Integer, iterator::ListViewIterator) = detail.remove!(list_view._internal, from_julia_index(index), iterator._internal)
@@ -3719,8 +3719,8 @@ module mousetrap
     push_front!(grid_view::GridView, widget::Widget) = detail.push_front!(grid_view._internal, as_widget_pointer(widget))
     export push_front!
 
-    insert!(grid_view::GridView, index::Integer, widget::Widget) = detail.insert!(grid_view._internal, from_julia_index(index), as_widget_pointer(widget))
-    export insert!
+    insert_at!(grid_view::GridView, index::Integer, widget::Widget) = detail.insert!(grid_view._internal, from_julia_index(index), as_widget_pointer(widget))
+    export insert_at!
 
     remove!(grid_view::GridView, index::Integer) = detail.remove!(grid_view._internal, from_julia_index(index))
     export remove!
@@ -3770,10 +3770,10 @@ module mousetrap
 
     Grid() = Grid(detail._Grid())
 
-    function insert!(grid::Grid, widget::Widget, row_i::Signed, column_i::Signed, n_horizontal_cells::Integer = 1, n_vertical_cells::Integer = 1)
+    function insert_at!(grid::Grid, widget::Widget, row_i::Signed, column_i::Signed, n_horizontal_cells::Integer = 1, n_vertical_cells::Integer = 1)
         detail.insert!(grid._internal, as_widget_pointer(widget), from_julia_index(row_i), from_julia_index(column_i), n_horizontal_cells, n_vertical_cells)
     end
-    export insert!
+    export insert_at!
 
     function insert_next_to!(grid::Grid, to_insert::Widget, already_in_grid::Widget, position::RelativePosition, n_horizontal_cells::Integer, n_vertical_cells::Integer)
         detail.insert_next_to!(grid._internal, as_widget_pointer(to_insert), as_widget_pointer(already_in_grid), position, n_horizontal_cells, n_vertical_cells)
@@ -3917,10 +3917,10 @@ module mousetrap
     end
     export push_back!
 
-    function insert!(notebook::Notebook, index::Integer, child_widget::Widget, label_widget::Widget) ::Int64
+    function insert_at!(notebook::Notebook, index::Integer, child_widget::Widget, label_widget::Widget) ::Int64
         return detail.insert!(notebook._internal, from_julia_index(index), as_widget_pointer(child_widget), as_widget_pointer(label_widget))
     end
-    export insert!
+    export insert_at!
 
     @export_function Notebook remove! Cvoid Integer position
     @export_function Notebook next_page! Cvoid
