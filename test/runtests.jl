@@ -1329,30 +1329,32 @@ end
 
 function test_log(::Container)
     @testset "Log" begin
-        @test get_surpress_debug(MOUSETRAP_DOMAIN) == true
-        set_surpress_debug!(MOUSETRAP_DOMAIN, false)
-        @test get_surpress_debug(MOUSETRAP_DOMAIN) == false
+    
+        name = tempname()
+        @test set_log_file!(name) == true
+
+        set_surpress_debug!(mousetrap.MOUSETRAP_DOMAIN, false)
+        set_surpress_info!(mousetrap.MOUSETRAP_DOMAIN, false)
+
+        message = "LOG TEST"
+        log_info(mousetrap.MOUSETRAP_DOMAIN, message)
+        log_debug(mousetrap.MOUSETRAP_DOMAIN, message)
+        log_warning(mousetrap.MOUSETRAP_DOMAIN, message)
+        log_critical(mousetrap.MOUSETRAP_DOMAIN, message)
+        # log_fatal(mousetrap.MOUSETRAP_DOMAIN, message) # this would quit runtime 
+
+        file = open(name)
+        lines = readlines(file)
+        @test isempty(lines) == false
+        close(file)
+
+        @test get_surpress_debug(mousetrap.MOUSETRAP_DOMAIN) == false
+        set_surpress_debug!(mousetrap.MOUSETRAP_DOMAIN, true)
+        @test get_surpress_debug(mousetrap.MOUSETRAP_DOMAIN) == true
         
-        @test get_surpress_info(MOUSETRAP_DOMAIN) == true
-        set_surpress_info!(MOUSETRAP_DOMAIN, false)
-        @test get_surpress_debug(MOUSETRAP_DOMAIN) == false
-
-        @test set_log_file!(tempname()) == false
-
-        message = "message"
-        @log_debug MOUSETRAP_DOMAIN message
-        log_debug(MOUSETRAP_DOMAIN, message)
-
-        @log_info MOUSETRAP_DOMAIN message
-        log_info(MOUSETRAP_DOMAIN, message)
-
-        @log_warning MOUSETRAP_DOMAIN message
-        log_warning(MOUSETRAP_DOMAIN, message)
-
-        @log_critical MOUSETRAP_DOMAIN message
-        log_critical(MOUSETRAP_DOMAIN, message)
-
-        # no log fatal
+        @test get_surpress_info(mousetrap.MOUSETRAP_DOMAIN) == false
+        set_surpress_info!(mousetrap.MOUSETRAP_DOMAIN, true)
+        @test get_surpress_info(mousetrap.MOUSETRAP_DOMAIN) == true
     end
 end
 
@@ -1369,17 +1371,18 @@ function test_menus(::Container)
     section = MenuModel()
 
     items_changed_called = Ref{Bool}(false)
-    connect_signal_items_changed!(root, items_changed_called) do self::MenuModel, n_remove::Integer, n_added::Integer, items_changed_called
+    connect_signal_items_changed!(root, items_changed_called) do self::MenuModel, position::Integer, n_removed::Integer, n_added::Integer, items_changed_called
         items_changed_called[] = true
+        return nothing
     end
 
     add_action!(submenu, "Action", action)
     add_icon!(submenu, icon, action)
     add_widget!(submenu, Separator())
 
-    add_action(section, "Section", action)
+    add_action!(section, "Section", action)
     add_section!(submenu, "section", section)
-    add_submenu(root, "Submenu", submenu)
+    add_submenu!(root, "Submenu", submenu)
 
     @testset "MenuModel" begin
         Base.show(devnull, root)
@@ -2494,9 +2497,9 @@ main(Main.app_id) do app::Application
         ##test_key_file(container)
         ##test_label(container)
         ##test_level_bar(container)
-        test_list_view(container)
-        #test_log(container)
-        #test_menus(container)
+        ##test_list_view(container)
+        ##test_log(container)
+        test_menus(container)
         #test_notebook(container)
         #test_overlay(container)
         #test_paned(container)

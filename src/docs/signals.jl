@@ -249,7 +249,7 @@ const signal_descriptors = Dict([
         "Emitted when the currently active page changes by any means, where `page_index is the index of the now-visible page." 
     ),
     :items_changed => (
-        "(::T, position::Integer, n_removed::Integer, n_added::Integet, [::Data_t]) -> Cvoid", 
+        "(::T, position::Integer, n_removed::Integer, n_added::Integer, [::Data_t]) -> Cvoid", 
         "The number of menu items or any property of any menu item already inside the [`MenuModel`](@ref) is modified."
     )
 ])

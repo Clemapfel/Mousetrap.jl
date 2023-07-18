@@ -27,22 +27,27 @@ module mousetrap
 
         function TypedFunction(f::Function, return_t::Type, arg_ts::Tuple)
 
+            arg_ts_string = "("
+            for i in 1:length(arg_ts)
+                arg_ts_string = arg_ts_string * string(arg_ts[i]) * ((i < length(arg_ts)) ? ", " : ")")
+            end
+            signature = arg_ts_string  * " -> $return_t"
+
             actual_return_ts = Base.return_types(f, arg_ts)
+            if isempty(actual_return_ts)
+                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`, because it does not have a method with the correct argument types"))
+            end
+
             match_found = false
             for type in actual_return_ts
-                if type <: return_t || type == Nothing 
+                if type <: return_t
                     match_found = true
                     break;
                 end
             end
 
             if !match_found
-                signature = "("
-                for i in 1:length(arg_ts)
-                    signature = signature * string(arg_ts[i]) * ((i < length(arg_ts)) ? ", " : ")")
-                end
-                signature = signature * " -> $return_t"
-                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`"))
+                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`, because it does not have a method with the correct argument types *and* return type `$return_t`"))
             end
 
             precompile(f, arg_ts)
@@ -69,6 +74,7 @@ module mousetrap
     export LogDomain
 
     const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN * ".jl"
+    # no export
 
     # only macros are documented in this file, all other documentation is in `mousetrap.jl/src/docs``
    
@@ -158,10 +164,10 @@ module mousetrap
     set_surpress_info!(domain::LogDomain, b::Bool) = detail.log_set_surpress_info(domain, b)
     export set_surpress_info!
 
-    get_surpress_debug(domain::LogDomain) ::Bool = detail.log_get_surpress_debug(domain, b)
+    get_surpress_debug(domain::LogDomain) ::Bool = detail.log_get_surpress_debug(domain)
     export get_surpress_debug
 
-    get_surpress_info(domain::LogDomain) ::Bool = detail.log_get_surpress_info(domain, b)
+    get_surpress_info(domain::LogDomain) ::Bool = detail.log_get_surpress_info(domain)
     export get_surpress_info
 
     set_log_file!(path::String) ::Bool = detail.log_set_file(path)
