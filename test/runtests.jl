@@ -938,10 +938,15 @@ function test_grid(::Container)
         set_columns_homogeneous!(grid, true)
         @test get_columns_homogeneous(grid) == true
 
-        widget = Separator()
-        mousetrap.insert!(grid, widget, 1, 2, 3, 4)
-        @test get_position(grid, widget) == Vector2i(1, 2)
-        @test get_size(grid, widget) == Vector2i(3, 4)
+        widget_01 = Separator()
+        widget_02 = Separator()
+
+        mousetrap.insert!(grid, widget_01, 1, 2, 3, 4)
+        insert_next_to!(grid, widget_02, widget_01, RELATIVE_POSITION_RIGHT_OF, 3, 4)
+
+        @test get_position(grid, widget_01) == Vector2i(1, 2)
+        @test get_size(grid, widget_01) == Vector2i(3, 4)
+        @test get_size(grid, widget_02) == Vector2i(3, 4)
 
         insert_row_at!(grid, 1)
         insert_column_at!(grid, 1)
@@ -980,7 +985,7 @@ function test_grid_view(::Container)
         push_back!(grid_view, Separator())
 
         child = Separator()
-        mousetrap.insert!(grid_view, 1, child)
+        mousetrap.insert!(grid_view, child, 1)
         @test find(grid_view, child) == 1 
         remove!(grid_view, 1)
 
@@ -1207,15 +1212,15 @@ function test_label(::Container)
 
         @test get_ellipsize_mode(label) == ELLIPSIZE_MODE_NONE
         set_ellipsize_mode!(label, ELLIPSIZE_MODE_MIDDLE)
-        @test get_ellipsize_model(label) == ELLIPSIZE_MODE_MIDDLE
+        @test get_ellipsize_mode(label) == ELLIPSIZE_MODE_MIDDLE
 
-        @test get_justfy_mode(label) == JUSTIFY_MODE_LEFT
-        set_justifymode!(label, JUSTIFY_MODE_CENTER)
+        @test get_justify_mode(label) == JUSTIFY_MODE_LEFT
+        set_justify_mode!(label, JUSTIFY_MODE_CENTER)
         @test get_justify_mode(label) == JUSTIFY_MODE_CENTER
 
-        @test get_is_selectable(label) == true
-        set_is_selectable!(label, false)
         @test get_is_selectable(label) == false
+        set_is_selectable!(label, true)
+        @test get_is_selectable(label) == true
 
         @test get_max_width_chars(label) == -1
         set_max_width_chars!(label, 1234)
@@ -1263,7 +1268,7 @@ function test_level_bar(::Container)
         @test get_mode(level_bar) == LEVEL_BAR_MODE_DISCRETE
 
         @test get_orientation(level_bar) == ORIENTATION_HORIZONTAL
-        set_orientatin!(level_bar, ORIENTATION_VERTICAL)
+        set_orientation!(level_bar, ORIENTATION_VERTICAL)
         @test get_orientation(level_bar) == ORIENTATION_VERTICAL
         
         set_value!(level_bar, 1)
@@ -1301,23 +1306,22 @@ function test_list_view(::Container)
         push_back!(list_view, Separator())
 
         child = Separator()
-        it = insert!(list_view, 1, child)
+        it = mousetrap.insert!(list_view, 1, child)
         @test find(list_view, child) == 1
-        remove!(list_view, 1)
 
         push_back!(list_view, Separator(), it)
-        set_widget_at(list_view, 1, Separator(), it)
+        set_widget_at!(list_view, 1, Separator(), it)
 
         @test get_n_items(list_view) == 3
+        remove!(list_view, 1)
+        @test get_n_items(list_view) == 2
 
         @test get_selection_model(list_view) isa SelectionModel
 
-        activate_called = Ref{Bool}(false)
-        connect_signal_activate!(list_view, activate_called) do self::ListView, activate_called
-            activate_called[] = true
+        connect_signal_activate_item!(list_view) do self::ListView, index::Integer
+            @test true
+            return nothing
         end
-        activate!(list_view)
-        @test activate_called[] == true
     end
 end
 
@@ -2487,10 +2491,10 @@ main(Main.app_id) do app::Application
         ##test_icon(container)
         ##test_image(container)
         ##test_image_display(container)
-        test_key_file(container)
-        #test_label(container)
-        #test_level_bar(container)
-        #test_list_view(container)
+        ##test_key_file(container)
+        ##test_label(container)
+        ##test_level_bar(container)
+        test_list_view(container)
         #test_log(container)
         #test_menus(container)
         #test_notebook(container)

@@ -4449,7 +4449,7 @@ Set the right icon of the entry.
 ```
 set_is_selectable!(::Label, ::Bool) 
 ```
-Set whether the user can select part of the label, as would be needed to copy its text.
+Set whether the user can select part of the label, as would be needed to copy its text. `false` by default.
 """
 
 @document set_selected! """

@@ -2886,7 +2886,7 @@ module mousetrap
 
     LevelBar(min::Number, max::Number) = LevelBar(detail._LevelBar(convert(Cfloat, min), convert(Cfloat, max)))
 
-    @export_function LevelBar add_marker! Cvoid String name AbstractFloat => Cfloat value
+    @export_function LevelBar add_marker! Cvoid String name Number => Cfloat value
     @export_function LevelBar remove_marker! Cvoid String name
     @export_function LevelBar set_inverted! Cvoid Bool b
     @export_function LevelBar get_inverted Bool
@@ -3661,8 +3661,8 @@ module mousetrap
     push_front!(list_view::ListView, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.push_front!(list_view._internal, as_widget_pointer(widget), iterator._internal))
     export push_front!
 
-    insert!(list_view::ListView, widget::Widget, index::Integer) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), Ptr{Cvoid}()))
-    insert!(list_view::ListView, widget::Widget, index::Integer, iterator::ListViewIterator) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), iterator._internal))
+    insert!(list_view::ListView, index::Integer, widget::Widget) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), Ptr{Cvoid}()))
+    insert!(list_view::ListView, index::Integer, widget::Widget, iterator::ListViewIterator) = ListViewIterator(detail.insert!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), iterator._internal))
     export insert!
 
     remove!(list_view::ListView, index::Integer) = detail.remove!(list_view._internal, from_julia_index(index), Ptr{Cvoid}())
@@ -3677,20 +3677,26 @@ module mousetrap
     set_widget_at!(list_view::ListView, index::Integer, widget::Widget, iterator::ListViewIterator) = detail.set_widget_at!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), iterator._internal)
     export set_widget_at!
 
-    find(list_view::ListView, widget::Widget, iterator::ListViewIterator) ::Signed = to_julia_index(detail.find(list_view._internal, as_widget_pointer(widget), iterator._internal))
-    find(list_view::ListView, widget::Widget) ::Signed = to_julia_index(detail.find(list_view._internal, as_widget_pointer(widget, Ptr{Cvoid}())))
+    function find(list_view::ListView, widget::Widget, iterator::ListViewIterator) ::Signed 
+        i = detail.find(list_view._internal, as_widget_pointer(widget), iterator._internal)
+        return i == -1 ? -1 : to_julia_index(i)
+    end
+    function find(list_view::ListView, widget::Widget) ::Signed 
+        i = detail.find(list_view._internal, as_widget_pointer(widget), Ptr{Cvoid}())
+        return i == -1 ? -1 : to_julia_index(i)
+    end
     export find
 
     get_selection_model(list_view::ListView) ::SelectionModel = SelectionModel(detail.get_selection_model(list_view._internal))
     export get_selection_model
     
-    @export_function ListView set_enable_rubberband_selection Cvoid Bool b
-    @export_function ListView get_enabled_rubberband_selection Bool
-    @export_function ListView set_show_separators Cvoid Bool b
+    @export_function ListView set_enable_rubberband_selection! Cvoid Bool b
+    @export_function ListView get_enable_rubberband_selection Bool
+    @export_function ListView set_show_separators! Cvoid Bool b
     @export_function ListView get_show_separators Bool
     @export_function ListView set_single_click_activate! Cvoid Bool b
     @export_function ListView get_single_click_activate Bool
-    @export_function ListView get_n_items Cuint
+    @export_function ListView get_n_items Int64
     @export_function ListView set_orientation! Cvoid Orientation orientation
     @export_function ListView get_orientation Orientation
 
@@ -3722,7 +3728,10 @@ module mousetrap
     clear!(grid_view::GridView) = detail.clear!(grid_view._internal)
     export clear!
 
-    find(grid_view::GridView, widget::Widget) ::Signed = to_julia_index(detail.find(grid_view._internal, as_widget_pointer(widget)))
+    function find(grid_view::GridView, widget::Widget) ::Signed 
+        i = detail.find(grid_view._internal, as_widget_pointer(widget))
+        return i == -1 ? -1 : to_julia_index(i)
+    end
     export find
 
     @export_function GridView get_n_items Int64
@@ -3765,6 +3774,11 @@ module mousetrap
         detail.insert!(grid._internal, as_widget_pointer(widget), from_julia_index(row_i), from_julia_index(column_i), n_horizontal_cells, n_vertical_cells)
     end
     export insert!
+
+    function insert_next_to!(grid::Grid, to_insert::Widget, already_in_grid::Widget, position::RelativePosition, n_horizontal_cells::Integer, n_vertical_cells::Integer)
+        detail.insert_next_to!(grid._internal, as_widget_pointer(to_insert), as_widget_pointer(already_in_grid), position, n_horizontal_cells, n_vertical_cells)
+    end
+    export insert_next_to!
 
     remove!(grid::Grid, widget::Widget) = detail.remove!(grid._internal, as_widget_pointer(widget))
     export remove!
