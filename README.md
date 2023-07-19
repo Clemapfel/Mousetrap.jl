@@ -2,11 +2,13 @@
 
 # Mousetrap
 
+![](docs/src/assets/logo.png)
+
 Mousetrap is a GUI library for Julia. It, and its [C++-component of the same name](https://github.com/clemapfel/mousetrap), fully wrap [GTK4](https://docs.gtk.org/gtk4/) (which is written in C), *vastly* simplifying its interface to improve ease-of-use without sacrificing flexibility.
 
-It aims to give developers of all skill levels the tools to start creating complex GUI applications with little effort.
+It aims to give developers of all skill levels the tools to start creating complex GUI applications with little effort and studying.
 
-> **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability and portability may be affected. Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen)
+> **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability and portability may be affected. Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen.
 
 ---
 
@@ -16,7 +18,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 + Supports mice, keyboards, touchscreens, touchpads, and stylus devices
 + Image processing facilities, well-suited for image manipulation programs
 + Fully abstracted OpenGL interface, allows for high-performance, hardware-accelerated rendering of custom shapes / shaders
-+ [Hand-written manual and extensive documentation](todo): every exported symbol is documented!
++ [Hand-written manual and extensive documentation](todo): every exported symbol is documented
 
 ---
 
@@ -29,10 +31,10 @@ It aims to give developers of all skill levels the tools to start creating compl
 | FreeBSD          | `✓`                | `?`                        | 
 | MacOS            | `✕*`               | `✕`                        |
 
-`✓` - Available
-`?` - Available, but not yet tested
-`✕*` - Will be available with future updates
-`✕`- Will never be available
+`✓` - Available<br>
+`?` - Available, but not yet tested<br>
+`✕*` - Will be available with future updates<br>
+`✕`- Will never be available<br>
 
 ---
 
@@ -41,12 +43,13 @@ It aims to give developers of all skill levels the tools to start creating compl
 (in order of priority, highest first)
 
 + Simplify installation process to `] add mousetrap`
-+ Add support for loading custom themes by exposing the CSS interface
-+ Allow bundling of mousetrap apps and all their dependencies into a portable C-executable
++ Add support for global and per-widget custom themes by exposing the CSS interface
++ Implement installation of .desktop files on end-user computers
++ Allow bundling of mousetrap apps, their resources, and all their dependencies into a portable C-executable
 + Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
 + Implement drag & drop for files, images, and widgets
-+ Allow interactive use from within the REPL
++ Fully polish interactive use from within the REPL
 + Make all functions that modify the global state thread-safe
 + Add an event controller to capture video game controller / joystick events
 + Add 3D shapes and geometry shaders to the OpenGL component
@@ -121,7 +124,7 @@ add_render_task!(render_area, RenderTask(rectangle))
 
 ## Documentation
 
-Documentation is available [here](https://clemens-cords.com/mousetrap_jl). This includes a tutorial on how to install mousetrap, a user manual introducing users to mousetrap and GUI programming in general, as well as an index of all functions and classes.
+Documentation is available [here](https://clemens-cords.com/mousetrap). This includes a tutorial on how to install mousetrap, a user manual introducing users to mousetrap and GUI programming in general, as well as an index of all functions and classes.
 
 --- 
 
@@ -129,10 +132,8 @@ Documentation is available [here](https://clemens-cords.com/mousetrap_jl). This 
 
 The Julia- and C++-component of mousetrap were designed and implement by [C.Cords](https://clemens-cords.com).
 
-Consider donating to support the continued development of this library [here](TODO). 
-
-The goal is for 
-mousetrap to be fully-featured and stable when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of a [fully featured, easy-to-use](https://github.com/JuliaGraphics/Gtk.jl/issues)
+Consider donating to support the continued development of this library [here](TODO). The goal is for 
+mousetrap to be fully-featured and stable when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of [fully featured, easy-to-use](https://github.com/JuliaGraphics/Gtk.jl/issues)
 GUI libraries are currently the largest factors as to why Julia is ill-suited for front-end development. Mousetrap aims to change this.
 
 ---

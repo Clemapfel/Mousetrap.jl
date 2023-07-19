@@ -123,7 +123,7 @@ will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a
 ```
 activate!(::Widget)
 ```
-If the widget is activatable, trigger it. This will cause it to emit signal `activate`, as well as possibly changings its state and playing an animation on screen.
+If the widget is activatable, trigger it. Depending on the widget, this may not necssarily emit signal `activate`. Use [`emit_signal_activate`](@ref) to manually emit the signal instead.
 
 ---
 
