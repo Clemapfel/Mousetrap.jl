@@ -11,6 +11,7 @@ Action
 + [`mousetrap.get_enabled`](@ref)
 + [`mousetrap.get_id`](@ref)
 + [`mousetrap.get_shortcuts`](@ref)
++ [`mousetrap.remove_action!`](@ref)
 + [`mousetrap.set_action!`](@ref)
 + [`mousetrap.set_enabled!`](@ref)
 + [`mousetrap.set_function!`](@ref)
@@ -103,6 +104,7 @@ Application
 + [`mousetrap.get_is_marked_as_busy`](@ref)
 + [`mousetrap.has_action`](@ref)
 + [`mousetrap.hold!`](@ref)
++ [`mousetrap.main`](@ref)
 + [`mousetrap.mark_as_busy!`](@ref)
 + [`mousetrap.quit!`](@ref)
 + [`mousetrap.release!`](@ref)
@@ -486,8 +488,8 @@ Clipboard
 + [`mousetrap.contains_image`](@ref)
 + [`mousetrap.contains_string`](@ref)
 + [`mousetrap.get_image`](@ref)
++ [`mousetrap.get_is_local`](@ref)
 + [`mousetrap.get_string`](@ref)
-+ [`mousetrap.is_local`](@ref)
 + [`mousetrap.set_file!`](@ref)
 + [`mousetrap.set_image!`](@ref)
 + [`mousetrap.set_string!`](@ref)
@@ -525,7 +527,7 @@ ColumnView
 #### Functions that operate on this type:
 + [`mousetrap.get_column_at`](@ref)
 + [`mousetrap.get_column_with_title`](@ref)
-+ [`mousetrap.get_enabled_rubberband_selection`](@ref)
++ [`mousetrap.get_enable_rubberband_selection`](@ref)
 + [`mousetrap.get_n_columns`](@ref)
 + [`mousetrap.get_n_rows`](@ref)
 + [`mousetrap.get_selection_model`](@ref)
@@ -539,7 +541,7 @@ ColumnView
 + [`mousetrap.push_front_column!`](@ref)
 + [`mousetrap.push_front_row!`](@ref)
 + [`mousetrap.remove_column!`](@ref)
-+ [`mousetrap.set_enable_rubberband_selection`](@ref)
++ [`mousetrap.set_enable_rubberband_selection!`](@ref)
 + [`mousetrap.set_show_column_separators`](@ref)
 + [`mousetrap.set_show_row_separators`](@ref)
 + [`mousetrap.set_single_click_activate!`](@ref)
@@ -661,7 +663,7 @@ DropDown
 + [`mousetrap.get_always_show_arrow`](@ref)
 + [`mousetrap.get_item_at`](@ref)
 + [`mousetrap.get_selected`](@ref)
-+ [`mousetrap.insert!`](@ref)
++ [`mousetrap.insert_at!`](@ref)
 + [`mousetrap.push_back!`](@ref)
 + [`mousetrap.push_front!`](@ref)
 + [`mousetrap.remove!`](@ref)
@@ -724,6 +726,8 @@ DropDown
 DropDownItemID
 ```
 #### Functions that operate on this type:
++ [`mousetrap.remove!`](@ref)
++ [`mousetrap.set_selected!`](@ref)
 
 
 ---
@@ -829,11 +833,11 @@ EventController
 Expander
 ```
 #### Functions that operate on this type:
-+ [`mousetrap.get_expanded`](@ref)
++ [`mousetrap.get_is_expanded`](@ref)
 + [`mousetrap.remove_child!`](@ref)
 + [`mousetrap.remove_label_widget!`](@ref)
 + [`mousetrap.set_child!`](@ref)
-+ [`mousetrap.set_expanded!`](@ref)
++ [`mousetrap.set_is_expanded!`](@ref)
 + [`mousetrap.set_label_widget!`](@ref)
 
 
@@ -1075,7 +1079,7 @@ FocusEventController
 Frame
 ```
 #### Functions that operate on this type:
-+ [`mousetrap.get_label_x_alignment!`](@ref)
++ [`mousetrap.get_label_x_alignment`](@ref)
 + [`mousetrap.remove_child!`](@ref)
 + [`mousetrap.remove_label_widget!`](@ref)
 + [`mousetrap.set_child!`](@ref)
@@ -1183,10 +1187,12 @@ Grid
 + [`mousetrap.get_row_spacing`](@ref)
 + [`mousetrap.get_rows_homogeneous`](@ref)
 + [`mousetrap.get_size`](@ref)
-+ [`mousetrap.insert!`](@ref)
++ [`mousetrap.insert_at!`](@ref)
 + [`mousetrap.insert_column_at!`](@ref)
++ [`mousetrap.insert_next_to!`](@ref)
 + [`mousetrap.insert_row_at!`](@ref)
 + [`mousetrap.remove!`](@ref)
++ [`mousetrap.remove_column_at!`](@ref)
 + [`mousetrap.remove_row_at!`](@ref)
 + [`mousetrap.set_column_spacing!`](@ref)
 + [`mousetrap.set_columns_homogeneous!`](@ref)
@@ -1251,29 +1257,32 @@ GridView
 ```
 #### Functions that operate on this type:
 + [`mousetrap.clear!`](@ref)
-+ [`mousetrap.get_enabled_rubberband_selection`](@ref)
++ [`mousetrap.find`](@ref)
++ [`mousetrap.get_enable_rubberband_selection`](@ref)
 + [`mousetrap.get_max_n_columns`](@ref)
 + [`mousetrap.get_min_n_columns`](@ref)
 + [`mousetrap.get_n_items`](@ref)
 + [`mousetrap.get_orientation`](@ref)
 + [`mousetrap.get_selection_model`](@ref)
 + [`mousetrap.get_single_click_activate`](@ref)
-+ [`mousetrap.insert!`](@ref)
++ [`mousetrap.insert_at!`](@ref)
 + [`mousetrap.push_back!`](@ref)
 + [`mousetrap.push_front!`](@ref)
 + [`mousetrap.remove!`](@ref)
-+ [`mousetrap.set_enable_rubberband_selection`](@ref)
++ [`mousetrap.set_enable_rubberband_selection!`](@ref)
 + [`mousetrap.set_max_n_columns!`](@ref)
 + [`mousetrap.set_min_n_columns!`](@ref)
 + [`mousetrap.set_orientation!`](@ref)
 + [`mousetrap.set_single_click_activate!`](@ref)
 
 
-+ [`mousetrap.connect_signal_activate!`](@ref)
-+ [`mousetrap.disconnect_signal_activate!`](@ref)
-+ [`mousetrap.emit_signal_activate`](@ref)
-+ [`mousetrap.get_signal_activate_blocked`](@ref)
-+ [`mousetrap.set_signal_activate_blocked!`](@ref)
++ [`mousetrap.connect_signal_activate_item!`](@ref)
++ [`mousetrap.disconnect_signal_activate_item!`](@ref)
++ [`mousetrap.emit_signal_activate_item`](@ref)
++ [`mousetrap.get_signal_activate_item_blocked`](@ref)
++ [`mousetrap.set_signal_activate_item_blocked!`](@ref)
+
+
 
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
@@ -1354,6 +1363,7 @@ HeaderBar
 + [`mousetrap.push_back!`](@ref)
 + [`mousetrap.push_front!`](@ref)
 + [`mousetrap.remove!`](@ref)
++ [`mousetrap.remove_title_widget!`](@ref)
 + [`mousetrap.set_layout!`](@ref)
 + [`mousetrap.set_show_title_buttons!`](@ref)
 + [`mousetrap.set_title_widget!`](@ref)
@@ -1479,6 +1489,7 @@ ImageDisplay
 + [`mousetrap.create_from_file!`](@ref)
 + [`mousetrap.create_from_icon!`](@ref)
 + [`mousetrap.create_from_image!`](@ref)
++ [`mousetrap.get_scale`](@ref)
 + [`mousetrap.get_size`](@ref)
 + [`mousetrap.set_scale!`](@ref)
 
@@ -1613,18 +1624,18 @@ Label
 ```
 #### Functions that operate on this type:
 + [`mousetrap.get_ellipsize_mode`](@ref)
++ [`mousetrap.get_is_selectable`](@ref)
 + [`mousetrap.get_justify_mode`](@ref)
 + [`mousetrap.get_max_width_chars`](@ref)
-+ [`mousetrap.get_selectable`](@ref)
 + [`mousetrap.get_text`](@ref)
 + [`mousetrap.get_use_markup`](@ref)
 + [`mousetrap.get_wrap_mode`](@ref)
 + [`mousetrap.get_x_alignment`](@ref)
 + [`mousetrap.get_y_alignment`](@ref)
 + [`mousetrap.set_ellipsize_mode!`](@ref)
++ [`mousetrap.set_is_selectable!`](@ref)
 + [`mousetrap.set_justify_mode!`](@ref)
 + [`mousetrap.set_max_width_chars!`](@ref)
-+ [`mousetrap.set_selectable!`](@ref)
 + [`mousetrap.set_text!`](@ref)
 + [`mousetrap.set_use_markup!`](@ref)
 + [`mousetrap.set_wrap_mode!`](@ref)
@@ -1759,28 +1770,31 @@ ListView
 ```
 #### Functions that operate on this type:
 + [`mousetrap.clear!`](@ref)
-+ [`mousetrap.get_enabled_rubberband_selection`](@ref)
++ [`mousetrap.find`](@ref)
++ [`mousetrap.get_enable_rubberband_selection`](@ref)
 + [`mousetrap.get_n_items`](@ref)
 + [`mousetrap.get_orientation`](@ref)
 + [`mousetrap.get_selection_model`](@ref)
 + [`mousetrap.get_show_separators`](@ref)
 + [`mousetrap.get_single_click_activate`](@ref)
-+ [`mousetrap.insert!`](@ref)
++ [`mousetrap.insert_at!`](@ref)
 + [`mousetrap.push_back!`](@ref)
 + [`mousetrap.push_front!`](@ref)
 + [`mousetrap.remove!`](@ref)
-+ [`mousetrap.set_enable_rubberband_selection`](@ref)
++ [`mousetrap.set_enable_rubberband_selection!`](@ref)
 + [`mousetrap.set_orientation!`](@ref)
-+ [`mousetrap.set_show_separators`](@ref)
++ [`mousetrap.set_show_separators!`](@ref)
 + [`mousetrap.set_single_click_activate!`](@ref)
 + [`mousetrap.set_widget_at!`](@ref)
 
 
-+ [`mousetrap.connect_signal_activate!`](@ref)
-+ [`mousetrap.disconnect_signal_activate!`](@ref)
-+ [`mousetrap.emit_signal_activate`](@ref)
-+ [`mousetrap.get_signal_activate_blocked`](@ref)
-+ [`mousetrap.set_signal_activate_blocked!`](@ref)
++ [`mousetrap.connect_signal_activate_item!`](@ref)
++ [`mousetrap.disconnect_signal_activate_item!`](@ref)
++ [`mousetrap.emit_signal_activate_item`](@ref)
++ [`mousetrap.get_signal_activate_item_blocked`](@ref)
++ [`mousetrap.set_signal_activate_item_blocked!`](@ref)
+
+
 
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
@@ -2019,7 +2033,8 @@ Notebook
 + [`mousetrap.get_tabs_reorderable`](@ref)
 + [`mousetrap.get_tabs_visible`](@ref)
 + [`mousetrap.goto_page!`](@ref)
-+ [`mousetrap.insert!`](@ref)
++ [`mousetrap.insert_at!`](@ref)
++ [`mousetrap.move_page_to!`](@ref)
 + [`mousetrap.next_page!`](@ref)
 + [`mousetrap.previous_page!`](@ref)
 + [`mousetrap.push_back!`](@ref)
@@ -2610,12 +2625,12 @@ RenderTexture
 Revealer
 ```
 #### Functions that operate on this type:
-+ [`mousetrap.get_revealed`](@ref)
++ [`mousetrap.get_is_revealed`](@ref)
 + [`mousetrap.get_transition_duration`](@ref)
 + [`mousetrap.get_transition_type`](@ref)
 + [`mousetrap.remove_child!`](@ref)
 + [`mousetrap.set_child!`](@ref)
-+ [`mousetrap.set_revealed!`](@ref)
++ [`mousetrap.set_is_revealed!`](@ref)
 + [`mousetrap.set_transition_duration!`](@ref)
 + [`mousetrap.set_transition_type!`](@ref)
 
@@ -2883,6 +2898,7 @@ SelectionModel
 #### Functions that operate on this type:
 + [`mousetrap.get_n_items`](@ref)
 + [`mousetrap.get_selection`](@ref)
++ [`mousetrap.get_selection_mode`](@ref)
 + [`mousetrap.select!`](@ref)
 + [`mousetrap.select_all!`](@ref)
 + [`mousetrap.unselect!`](@ref)
@@ -3031,6 +3047,7 @@ ShortcutEventController
 #### Functions that operate on this type:
 + [`mousetrap.add_action!`](@ref)
 + [`mousetrap.get_scope`](@ref)
++ [`mousetrap.remove_action!`](@ref)
 + [`mousetrap.set_scope!`](@ref)
 
 
@@ -3815,6 +3832,7 @@ Widget
 + [`mousetrap.add_overlay!`](@ref)
 + [`mousetrap.add_widget!`](@ref)
 + [`mousetrap.attach_to!`](@ref)
++ [`mousetrap.find`](@ref)
 + [`mousetrap.get_allocated_size`](@ref)
 + [`mousetrap.get_can_respond_to_input`](@ref)
 + [`mousetrap.get_child_position`](@ref)
@@ -3842,8 +3860,9 @@ Widget
 + [`mousetrap.get_vertical_alignment`](@ref)
 + [`mousetrap.grab_focus!`](@ref)
 + [`mousetrap.hide!`](@ref)
-+ [`mousetrap.insert!`](@ref)
 + [`mousetrap.insert_after!`](@ref)
++ [`mousetrap.insert_at!`](@ref)
++ [`mousetrap.insert_next_to!`](@ref)
 + [`mousetrap.push_back!`](@ref)
 + [`mousetrap.push_front!`](@ref)
 + [`mousetrap.remove!`](@ref)

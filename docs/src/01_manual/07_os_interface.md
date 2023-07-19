@@ -27,7 +27,7 @@ mousetrap.@signal_table(Application,
 )
 ```
 
-We should do all initialization of our app inside the `activate` signal, while `shutdown` can be used to safely free resources. `main`, which we used to do the main loop, is actually just a convenience function, with the following behavior:
+We should do all initialization of our app inside the `activate` signal, while `shutdown` can be used to safely free assets. `main`, which we used to do the main loop, is actually just a convenience function, with the following behavior:
 
 ```julia
 main("example.app") do app::Application
@@ -50,7 +50,7 @@ The application ID has to contain at least one `.` and should be a human-readabl
 
 !!! warning "Running two apps with the same ID"
     If two applications with the same ID are active at the same time,
-    **they will share resources**.
+    **they will share assets**.
 
     This may introduce side-effects, if both instances modify the same internal variable, it may create a [race-condition](https://en.wikipedia.org/wiki/Race_condition#In_software).
 
@@ -218,7 +218,7 @@ readonly = FileDescriptor()
 create_from_path!(readonly, "/home/user/Desktop/example.txt");
 ```
 
-Where the argument to `create_from_path!` will be automatically detected as either a relative or absolute path. If it is not an absolute path, it will be prefixed with the applications runtime directory. For example if we create a `FileDescriptor` from path `"resources/image.png"`, and our application is located in `/usr/bin`, then the path will be treated as `/usr/bin/resources/image.png`.
+Where the argument to `create_from_path!` will be automatically detected as either a relative or absolute path. If it is not an absolute path, it will be prefixed with the applications runtime directory. For example if we create a `FileDescriptor` from path `"assets/image.png"`, and our application is located in `/usr/bin`, then the path will be treated as `/usr/bin/assets/image.png`.
 
 `FileDescriptor` does not make sure the undelying file or folder actually exists, or that it is a valid file. Creating a descriptor from an invalid path or a path that does not point to a file or folder works just fine, and we won't get a warning. To check wether a file descriptor points to a valid file or folder, we have to use [`exists`](@ref). 
 
@@ -367,7 +367,7 @@ file_chooser = FileChooser(FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FILES)
 present!(file_chooser)
 ```
 
-![](../resources/file_chooser.png)
+![](../assets/file_chooser.png)
 
 In order to react to the user making a selection or canceling the operation, we need to register a callback with the file chooser.
 
@@ -429,7 +429,7 @@ add_allowed_suffix!(filter, "jl")
 add_filter!(file_chooser, filter)
 ```
 
-![](../resources/file_chooser_filter.png)
+![](../assets/file_chooser_filter.png)
 
 By default, no `FileFilter`s will be registered, which means the `FileChooser` will display all possible file types. We can control which filter is active when the dialog opens using [`set_initial_filter!`](@ref)
 
@@ -453,7 +453,7 @@ overwrite_file_warning_dialog = AlertDialog(
 
 While we could `present!` this dialog to the user now
 
-![](../resources/alert_dialog.png)
+![](../assets/alert_dialog.png)
 
 We haven't yet connected any behavior to the user pressing a button. To do this, we use `on_selection!`, which takes a callback with the following signature:
 
@@ -540,11 +540,11 @@ Key-value pairs belong to the group that was last opened. Groups cannot be neste
 
 ### Accessing Values
 
-If the above keyfile is stored at `resources/example_key_file.txt`, we can access the values of the above named keys like so:
+If the above keyfile is stored at `assets/example_key_file.txt`, we can access the values of the above named keys like so:
 
 ```julia
 file = KeyFile()
-load_from_file!(file, "resources/example_key_file.txt")
+load_from_file!(file, "assets/example_key_file.txt")
 
 # retrieve value as String
 save_file_keybinding = get_value(file, "image_view.key_binding", "save_file", String)
@@ -604,11 +604,11 @@ A better way to handle images in a context like is this is provided by [`Icon`](
 
 ### Creating and Viewing Icons
 
-The simplest way to create an `Icon` is to load it as if it was an `Image`. If we have a vector graphics file at`resources/save_icon.svg`, we would load it like so:
+The simplest way to create an `Icon` is to load it as if it was an `Image`. If we have a vector graphics file at`assets/save_icon.svg`, we would load it like so:
 
 ```cpp
 icon = Icon()
-create_from_file!(icon, "resources/save_icon.svg", 48);
+create_from_file!(icon, "assets/save_icon.svg", 48);
 ```
 
 Where `48` means the icon will be initialized with a resolution of 48x48 pixels. `Icon`s can only be square.

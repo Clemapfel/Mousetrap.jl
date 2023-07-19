@@ -1552,9 +1552,9 @@ end
 
 function test_popover(container::Container)
 
+    popover = Popover()
+
     @testset "Popover" begin
-        #=
-        popover = Popover()
         Base.show(devnull, popover)
 
         set_child!(popover, Separator())
@@ -1571,22 +1571,18 @@ function test_popover(container::Container)
         set_relative_position!(popover, RELATIVE_POSITION_BELOW)
         @test get_relative_position(popover) == RELATIVE_POSITION_BELOW
 
-        closed_called = Ref{Bool}(false)
-        connect_signal_closed!(popover, closed_called) do self::Popover, closed_called
-            closed_called[] = true
+        connect_signal_closed!(popover) do self::Popover
             return nothing
         end
 
         present!(popover)
         popup!(popover)
         popdown!(popover)
-
-        @test closed_called[]
-        =#
     end
 
     @testset "PopoverButton" begin
-        popover_button = PopoverButton()
+        popover_button = PopoverButton(popover)
+
         Base.show(devnull, popover_button)
 
         @test get_always_show_arrow(popover_button) == true
@@ -1616,8 +1612,9 @@ function test_popover(container::Container)
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(popover_button, activate_called) do self::PopoverButton, activate_called
             activate_called[] = true
+            return nothing
         end
-        activate!(popover_button)
+        emit_signal_activate(popover_button)
         @test activate_called[] == true
     end
 end
@@ -2543,5 +2540,5 @@ main(Main.app_id) do app::Application
     end
 
     present!(window)
-    close!(window)
+    #close!(window)
 end

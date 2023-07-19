@@ -60,7 +60,7 @@ add_action!(model, "Action item #2", action)
 add_action!(model, "Action item #3", action)
 ```
 
-![](../resources/menu_model_actions.png)
+![](../assets/menu_model_actions.png)
 
 ### Item Type #2: Widgets
 
@@ -74,7 +74,7 @@ add_widget!(model, Scale(0, 1, 0.01, ORIENTATION_HORIZONTAL))
 add_widget!(model, hbox(Label("Enter Text:  "), Entry()))
 ```
 
-![](../resources/menu_model_widgets.png)
+![](../assets/menu_model_widgets.png)
 
 Widgets are the most flexible of menu items. They should be used with caution, and only if absolutely necessary. It is often better to create an action that opens a separate dialog which contains the widget, as opposed to directly adding the widget to the menu.
 
@@ -95,11 +95,11 @@ submenu_02 = MenuModel()
 add_widget!(submenu_02, submenu_content())
 add_submenu!(model, "Submenu #2", submenu_02)
 ```
-![](../resources/menu_model_submenu_outer.png)
+![](../assets/menu_model_submenu_outer.png)
 
 Clicking on of these items will reveal the submenu content:
 
-![](../resources/menu_model_submenu_inner.png)
+![](../assets/menu_model_submenu_inner.png)
 
 Where `submenu_content()` returns a simple place-holder widget.
 
@@ -113,7 +113,7 @@ add_icon!(model, Icon(#=...=#), action)
 add_icon!(model, Icon(#=...=#), action)
 add_icon!(model, Icon(#=...=#), action)    
 ```
-![](../resources/menu_model_icons.png)
+![](../assets/menu_model_icons.png)
 
 Where we used the default icons for weather-indicators as placeholders.
 
@@ -136,7 +136,7 @@ add_action!(section, "Section Item #02", #= action =#)
 add_action!(section, "Section Item #03", #= action =#)
 add_section!(model, "Section Label", section)
 ```
-![](../resources/menu_model_section.png)
+![](../assets/menu_model_section.png)
 
 We see that the section label, `"Section Label"` in this case, is displayed above all its items, which are inserted into the outer menu. In this way, sections can be helpful to group a number of menu items together, which makes a menu easier to parse without adding another nested level via a submenu.
 
@@ -167,7 +167,7 @@ add_icon_section("Horizontal Buttons", SECTION_FORMAT_HORIZONTAL_BUTTONS)
 add_icon_section("Inline Buttons:  ", SECTION_FORMAT_INLINE_BUTTONS)
 add_icon_section("Circular Buttons", SECTION_FORMAT_CIRCULAR_BUTTONS)
 ```
-![](../resources/menu_model_section_formats.png)
+![](../assets/menu_model_section_formats.png)
 
 Using `SectionFormat` and mixing number of menu item types, we can construct arbitrarily complex menus, which is why we should take care that the highest priority for constructing menus it user experience. It's okay if they are complex and look nice, as long as they are easy to parse.
 
@@ -209,7 +209,7 @@ The `PopoverMenu`-`PopoverButton` combo should be reserved for **context menus**
 
 Familiar to any user of a modern desktop GUI, [`MenuBar`] is a widget that is usually displayed at the top of the main application window:
 
-![](../resources/menu_bar.png)
+![](../assets/menu_bar.png)
 
 We see `MenuBar` it is a horizontal list of items. When the user clicks on one of the items, a nested menu opens. Just like before, menus can be nested a theoretically infinite amount of times.
 
@@ -297,7 +297,7 @@ Regarding menu depth, best practice is to never go deeper than 3 levels. The abo
 
 Lastly, some schools of UI design believe that **every menu item should be inside a section**. For example, if we were to follow this philosophy for our above `MenuBar` example, we would redesign it like so:
 
-![](../resources/menu_bar_with_sections.png)
+![](../assets/menu_bar_with_sections.png)
 
 This adds considerable complexity to the code (adding 4 models, one for each section, making our total 8). In return, items are grouped logically and each item gets a "heading", which helps make long menus easier to understand, which for this small example is most likely unnecessary, but will be more attractive for a menubar with dozens of tiems.
 

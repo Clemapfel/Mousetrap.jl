@@ -265,7 +265,7 @@ Tooltips are usually a simple text message. In a case like this, we can set the 
 button = Button()
 set_tooltip_text!(button, "Click to Open")
 ```
-![](../resources/widget_tooltip_text.png)
+![](../assets/widget_tooltip_text.png)
 
 If we want to use something more complex than just simple text, we can register an arbitrarily complex widget as a tooltip by calling `set_tooltip_widget!`. As a matter of style, this widget should not be intractable, though there is no mechanism in place to enforce this.
 
@@ -363,16 +363,16 @@ To change a `Label`s text after initialization, we use `set_text!`. This can be 
 
 [Justification](https://en.wikipedia.org/wiki/Typographic_alignment) determines how words are distributed along the horizontal axis. There are 5 modes in total, all of which are part of the enum [`JustifyMode`](@ref), set using `set_justify_mode!`:
 
-![](../resources/text_justify_left.png)
+![](../assets/text_justify_left.png)
 `JUSTIFY_MODE_LEFT`
 
-![](../resources/text_justify_center.png)
+![](../assets/text_justify_center.png)
 `JUSTIFY_MODE_CENTER`
 
-![](../resources/text_justify_right.png)
+![](../assets/text_justify_right.png)
 `JUSTIFY_MODE_RIGHT`
 
-![](../resources/text_justify_fill.png)
+![](../assets/text_justify_fill.png)
 `JUSTIFY_MODE_FILL`
 
 Where the fifth mode is `JUSTIFY_MODE_NONE`, which arranges all text in exactly one line.
@@ -436,7 +436,7 @@ Pango also supports colors, different fonts, text direction, and more. For these
 label = Label("&lt;tt&gt;01234&lt;/tt&gt; is rendered as <tt>01234</tt>")
 set_child!(window, label)
 ```
-![](../resources/label_example.png)
+![](../assets/label_example.png)
 
 ---
 
@@ -473,7 +473,7 @@ push_back!(box, right)
 insert_after!(box, center, left)
 ```
 
-![](../resources/box_example.png)
+![](../assets/box_example.png)
 
 In this example, we use margins to add a 10px gap in between each child. This can be done more succinctly using the boxes own **spacing** property. By setting `set_spacing!` to `10`, it will automatically insert a 10 pixel gap in between any two children, in addition to the childrens regular margin.
 
@@ -499,7 +499,7 @@ set_center_child!(center_box, Button())
 set_end_child!(center_box, Label("end"))
 ```
 
-![](../resources/center_box.png)
+![](../assets/center_box.png)
 
 Using `CenterBox`s constructor, we can also write the above as a one-liner:
 
@@ -520,7 +520,7 @@ set_expand!(separator, true)
 set_child!(window, separator)
 ```
 
-![](../resources/separator_example.png)
+![](../assets/separator_example.png)
 
 This widget is used as a background to another widget, to fill empty space, or as en element visually separating two sections. Often, we want to have the separator be a specific thickness. This can be accomplished using size-hinting. For example, to draw a horizontal line similar to the `<hr>` element in HTML, we would do the following:
 
@@ -542,14 +542,14 @@ This will render as a line that has a height of `3` px at all times, but will as
 
 [`ImageDisplay`](@ref) is used to display static images.
 
-Assuming we have an image at the absolute path `/resources/image.png`, we can create an `ImageDisplay` like so:
+Assuming we have an image at the absolute path `/assets/image.png`, we can create an `ImageDisplay` like so:
 
 ```julia
 image_display = ImageDisplay()
-create_from_file!(image_display, "/resources/image.png")
+create_from_file!(image_display, "/assets/image.png")
 
 # equivalent to
-image_display = ImageDisplay("/resources/image.png")
+image_display = ImageDisplay("/assets/image.png")
 ```
 
 The following image formats are supported by `ImageDisplay`:
@@ -599,7 +599,7 @@ emitting signal `activate` is shared by a number of other widgets, while `clicke
 
 Other than the child widget, we can customize the look of a button further. `set_has_frame!` will make all graphical elements of the button other than its label invisible, while `set_is_circular!` changes the button from rectangular to fully rounded:
 
-![](../resources/button_types.png)
+![](../assets/button_types.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -677,7 +677,7 @@ mousetrap.@signal_table(ToggleButton,
 
 `CheckButton` can be in one of **three** states, which are represented by the enum [`CheckButtonState`](@ref). The button can either be `CHECK_BUTTON_STATE_ACTIVE`, `CHECK_BUTTON_STATE_INACTIVE`, or `CHECK_BUTTON_STATE_INCONSISTENT`. This changes the appearance of the button:
 
-![](../resources/check_button_states.png)
+![](../assets/check_button_states.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -725,7 +725,7 @@ mousetrap.@signal_table(Switch,
 )
 ```
 
-![](../resources/switch_states.png)
+![](../assets/switch_states.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -810,7 +810,7 @@ We supply the properties of the range underlying the `SpinButton` to its constru
 spin_button = SpinButton(0, 2, 0.5)
 ```
 
-![](../resources/spin_button.png)
+![](../assets/spin_button.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -858,7 +858,7 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
 
 ## Scale
 
-![](../resources/scale_no_value.png)
+![](../assets/scale_no_value.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -946,7 +946,7 @@ Unlike the previous widgets, `LevelBar` does not have a step increment.
 
 Once the bar reaches 75%, it changes color:
 
-![](../resources/level_bar.png)
+![](../assets/level_bar.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -992,7 +992,7 @@ Similarly to `LevelBar`, [`ProgressBar`](@ref) communicates a fraction to the us
 
 Using `set_show_text!`, we can make it so the current percentage is drawn along with the progress bar, or we can draw a custom label using `set_text!`
 
-![](../resources/progress_bar.png)
+![](../assets/progress_bar.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1018,7 +1018,7 @@ Using `set_show_text!`, we can make it so the current percentage is drawn along 
 
 To signal progress when we do not have an exact fraction, we use [`Spinner`](@ref) which is a small spinning icon. Once we set [`set_is_spinning!`](@ref) to `true`, a spinning animatino will play, indicating to the user that work is being done.
 
-![](../resources/spinner.png)
+![](../assets/spinner.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1046,7 +1046,7 @@ While we could control the size of an `Entry` using size-hinting, a better way i
 
 `Entry` supports "password mode", which is when each character typed is replaced with a dot. This is to prevent a third party looking at a user screen and seeing what they typed. To enter password mode, we set `set_text_visible!` to `false`. Note that this does not actually encrypt the text buffer in memory, it is a purely visual change.
 
-![](../resources/entry.png)
+![](../assets/entry.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1133,7 +1133,7 @@ item_02_id = push_back!(dropdown, "Item #02")
 item_03_id = push_back!(dropdown, "Item #03")
 ```
 
-![](../resources/dropdown_simple.png)
+![](../assets/dropdown_simple.png)
 
 `push_back!` returns the internal id of the item. We should keep track of this ID, as it will be used to identify the currently selected item, which we can compare against the result of `get_selected`.
 
@@ -1173,7 +1173,7 @@ push_back!(dropdown, Label("Item #02"), Label("02"))
 push_back!(dropdown, Label("Item #03"), Label("03"))
 ```
 
-![](../resources/dropdown_separate.png)
+![](../assets/dropdown_separate.png)
 
 Where we had to first create a `Label` instance, then use it as the label widget, as this method of `push_back!` takes any two *widgets*, as opposed to just strings. This gives us incredible flexibility with how we want the dropdown to be displayed. This method, along with all methods of `push_front!` and `insert!`, also supports adding a callback as the first argument, which behaves exactly as before.
 
@@ -1185,7 +1185,7 @@ Where we had to first create a `Label` instance, then use it as the label widget
 
 [`Frame`](@ref) is a purely cosmetic widget that displays its singular child in a frame with a small border and rounded corners:
 
-![](../resources/frame.png)
+![](../assets/frame.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1240,7 +1240,7 @@ So far, all widget containers have aligned their children such that they do not 
 
 `Overlay` has one "base" widget, which is at the conceptual bottom of the overlay. We set this widget using `set_child!`. We can then add any number of widgets on top of the base widget using `add_overlay!`:
 
-![](../resources/overlay_buttons.png)
+![](../assets/overlay_buttons.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1281,7 +1281,7 @@ add_overlay!(overlay, overlaid_widge; include_in_measurement = true);
 
 `Paned` is orientable, depending on its orientation, `set_start_child!` and  `set_end_child!` add a widget to the corresponding side.
 
-![](../resources/paned.png)
+![](../assets/paned.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1318,7 +1318,7 @@ set_start_child_shrinkable!(paned, true)
 set_end_child_shrinkable!(paned, true)
 ```
 
-![](../resources/paned_shrinkable.png)
+![](../assets/paned_shrinkable.png)
 
 ---
 
@@ -1346,7 +1346,7 @@ Where `seconds` returns a [`mousetrap.Time`](@ref).
 
 Apart from the speed, we also have a choice of animation **type**, represented by the enum [`RevealerTransitionType`](@ref). Animations include a simple cross-fade, sliding, swinging, or no animation at all, which instantly shows or hides the widget.
 
-![](../resources/revealer.png)
+![](../assets/revealer.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1382,7 +1382,7 @@ Apart from the speed, we also have a choice of animation **type**, represented b
 
 Expander has two children, the label, set with `set_label_widget!`, and its child, set with `set_child!`, which is the widget that will be shown / hidden.
 
-![](../resources/expander.png)
+![](../assets/expander.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1417,7 +1417,7 @@ Someimtes, widgets that are this large are unavoidable, which is why there is a 
 
 We set the viewports singular child using `set_child!`, after which the user can operate the two scrollbars to change which part of the child is currently visible:
 
-![](../resources/viewport.png)
+![](../assets/viewport.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1447,7 +1447,7 @@ set_propagate_natural_width!(viewport, true)
 set_propagate_natural_height!(viewport, false)
 ```
 
-![](../resources/viewport_propagation.png)
+![](../assets/viewport_propagation.png)
 
 Here, the viewport will be the same width as the child, but the viewports height is independent of that of its child. 
 
@@ -1509,7 +1509,7 @@ A [`Popover`](@ref) is a special kind of window. It is always [modal](#modality-
 
 Showing the popover is called **popup**, closing the popover is called **popdown**, `Popover` correspondingly has `popup!` and `popdown!` to trigger this behavior.
 
-![](../resources/popover.png)
+![](../assets/popover.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1572,7 +1572,7 @@ We will now move on to **selectable widgets**, which tend to be the most complex
 
 All selectable widgets have on thing in common: their multiple children are managed by a **selection model**. This model is a list of widgets. For each widget, the model will keep track of whether that widget is currently selected. If it is, a graphical element will be added to the selectable widget that indicates to the user which item(s) are currently selected.
 
-![](../resources/list_view_selected.png)
+![](../assets/list_view_selected.png)
 
 Modifying the model will modify the selectable widget, and modifying the selectable widget will modify the model. In this way, the two are linked, similar to how `Adjustment` works. We use `select!` and `unselect!` to change the selection manually, while `get_selection!` returns a vector with one or more of the selected items indices.
 
@@ -1603,7 +1603,7 @@ push_back!(list_view, Label("Child #02"))
 push_back!(list_view, Label("Child #03"))
 ```
 
-![](../resources/list_view_simple.png)
+![](../assets/list_view_simple.png)
 
 Where the second child is currently selected.
 
@@ -1613,7 +1613,7 @@ Where the second child is currently selected.
 
 By default, `ListView` displays its children in a linear list, either horizontally or vertically. `ListView` also supports **nested lists**, sometimes called a **tree view**:
 
-![](../resources/list_view_nested.png)
+![](../assets/list_view_nested.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1667,9 +1667,9 @@ If we do not want a nested list, we can instead completely ignore the iterator. 
 
 `GridView`s constructor also takes an orientation as well as the selection mode. The orientation determines in which order elements will be shown, consider the next two images, the first of which is a `GridView` whose orientation is `ORIENTATION_HORIZONTAL`, while the latters is `ORIENTATION_VERTICAL`:
 
-![](../resources/grid_view_horizontal.png)
+![](../assets/grid_view_horizontal.png)
 *A horizontal `GridView`*
-![](../resources/grid_view_vertical.png)
+![](../assets/grid_view_vertical.png)
 *A vertical `GridView`
 
 !!! details "How to generate this image"
@@ -1731,7 +1731,7 @@ set_widget_at!(column_view, column_01, Label("02"))
 set_widget_at!(column_view, column_01, Label("03"))
 ```
 
-![](../resources/column_view.png)
+![](../assets/column_view.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1813,7 +1813,7 @@ to provide another widget and modify the stack from within its signals, or we ca
 
 [`StackSwitcher`](@ref) presents the user with a row of buttons, each of which use the corresponding stack pages title:
 
-![](../resources/stack_switcher.png)
+![](../assets/stack_switcher.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1896,7 +1896,7 @@ the stack will assume the height or widget of its largest child, respectively.
 
 Not to be confused with `GridView`, [`Grid`](@ref) arranges its children in a **non-uniform** grid:
 
-![](../resources/grid.png)
+![](../assets/grid.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -1977,7 +1977,7 @@ push_back!(notebook, #= Child #01 =#, Label("Label #01"))
 push_back!(notebook, #= Child #02 =#, Label("Label #02"))
 push_back!(notebook, #= Child #03 =#, Label("Label #03"))
 ```
-![](../resources/notebook.png)
+![](../assets/notebook.png)
 
 !!! details "How to generate this image"
     ```julia
@@ -2048,7 +2048,7 @@ In this section we will work through an example, which will help explain what bo
 
 In the previous section on selectable containers such as a `ListView` and `GridView`, we used this "placeholder" widget:
 
-![](../resources/compound_widget_list_view.png)
+![](../assets/compound_widget_list_view.png)
 
 This is a list view with four elements, each of the elements is an object of type `Placeholder`. 
 
@@ -2187,7 +2187,7 @@ main() do app::Application
 end
 ```
 
-![](../resources/compound_widget_complete.png)
+![](../assets/compound_widget_complete.png)
 
 Now that `Placeholder` is a proper widget, all of mousetraps functions, including all widget signals, have become avaialable to use.
 

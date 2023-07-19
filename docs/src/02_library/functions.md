@@ -331,6 +331,10 @@ mousetrap.connect_signal_activate_default_widget!
 ```@docs
 mousetrap.connect_signal_activate_focused_widget!
 ```
+## `connect_signal_activate_item!`
+```@docs
+mousetrap.connect_signal_activate_item!
+```
 ## `connect_signal_activated!`
 ```@docs
 mousetrap.connect_signal_activated!
@@ -647,6 +651,10 @@ mousetrap.disconnect_signal_activate_default_widget!
 ```@docs
 mousetrap.disconnect_signal_activate_focused_widget!
 ```
+## `disconnect_signal_activate_item!`
+```@docs
+mousetrap.disconnect_signal_activate_item!
+```
 ## `disconnect_signal_activated!`
 ```@docs
 mousetrap.disconnect_signal_activated!
@@ -891,6 +899,10 @@ mousetrap.emit_signal_activate_default_widget
 ```@docs
 mousetrap.emit_signal_activate_focused_widget
 ```
+## `emit_signal_activate_item`
+```@docs
+mousetrap.emit_signal_activate_item
+```
 ## `emit_signal_activated`
 ```@docs
 mousetrap.emit_signal_activated
@@ -1119,6 +1131,10 @@ mousetrap.emit_signal_wrapped
 ```@docs
 mousetrap.exists
 ```
+## `find`
+```@docs
+mousetrap.find
+```
 ## `flush`
 ```@docs
 mousetrap.flush
@@ -1275,13 +1291,13 @@ mousetrap.get_editable
 ```@docs
 mousetrap.get_ellipsize_mode
 ```
+## `get_enable_rubberband_selection`
+```@docs
+mousetrap.get_enable_rubberband_selection
+```
 ## `get_enabled`
 ```@docs
 mousetrap.get_enabled
-```
-## `get_enabled_rubberband_selection`
-```@docs
-mousetrap.get_enabled_rubberband_selection
 ```
 ## `get_end_child_resizable`
 ```@docs
@@ -1298,10 +1314,6 @@ mousetrap.get_expand_horizontally
 ## `get_expand_vertically`
 ```@docs
 mousetrap.get_expand_vertically
-```
-## `get_expanded`
-```@docs
-mousetrap.get_expanded
 ```
 ## `get_file_chooser_action`
 ```@docs
@@ -1419,6 +1431,10 @@ mousetrap.get_is_circular
 ```@docs
 mousetrap.get_is_decorated
 ```
+## `get_is_expanded`
+```@docs
+mousetrap.get_is_expanded
+```
 ## `get_is_focusable`
 ```@docs
 mousetrap.get_is_focusable
@@ -1434,6 +1450,10 @@ mousetrap.get_is_horizontally_homogeneous
 ## `get_is_inverted`
 ```@docs
 mousetrap.get_is_inverted
+```
+## `get_is_local`
+```@docs
+mousetrap.get_is_local
 ```
 ## `get_is_marked_as_busy`
 ```@docs
@@ -1451,9 +1471,17 @@ mousetrap.get_is_realized
 ```@docs
 mousetrap.get_is_resizable
 ```
+## `get_is_revealed`
+```@docs
+mousetrap.get_is_revealed
+```
 ## `get_is_scrollable`
 ```@docs
 mousetrap.get_is_scrollable
+```
+## `get_is_selectable`
+```@docs
+mousetrap.get_is_selectable
 ```
 ## `get_is_spinning`
 ```@docs
@@ -1483,9 +1511,9 @@ mousetrap.get_keys
 ```@docs
 mousetrap.get_kinetic_scrolling_enabled
 ```
-## `get_label_x_alignment!`
+## `get_label_x_alignment`
 ```@docs
-mousetrap.get_label_x_alignment!
+mousetrap.get_label_x_alignment
 ```
 ## `get_layout`
 ```@docs
@@ -1651,10 +1679,6 @@ mousetrap.get_ratio
 ```@docs
 mousetrap.get_relative_position
 ```
-## `get_revealed`
-```@docs
-mousetrap.get_revealed
-```
 ## `get_right_margin`
 ```@docs
 mousetrap.get_right_margin
@@ -1666,6 +1690,10 @@ mousetrap.get_row_spacing
 ## `get_rows_homogeneous`
 ```@docs
 mousetrap.get_rows_homogeneous
+```
+## `get_scale`
+```@docs
+mousetrap.get_scale
 ```
 ## `get_scale_delta`
 ```@docs
@@ -1683,10 +1711,6 @@ mousetrap.get_scope
 ```@docs
 mousetrap.get_scrollbar_placement
 ```
-## `get_selectable`
-```@docs
-mousetrap.get_selectable
-```
 ## `get_selected`
 ```@docs
 mousetrap.get_selected
@@ -1694,6 +1718,10 @@ mousetrap.get_selected
 ## `get_selection`
 ```@docs
 mousetrap.get_selection
+```
+## `get_selection_mode`
+```@docs
+mousetrap.get_selection_mode
 ```
 ## `get_selection_model`
 ```@docs
@@ -1750,6 +1778,10 @@ mousetrap.get_signal_activate_default_widget_blocked
 ## `get_signal_activate_focused_widget_blocked`
 ```@docs
 mousetrap.get_signal_activate_focused_widget_blocked
+```
+## `get_signal_activate_item_blocked`
+```@docs
+mousetrap.get_signal_activate_item_blocked
 ```
 ## `get_signal_activated_blocked`
 ```@docs
@@ -2015,6 +2047,14 @@ mousetrap.get_step_increment
 ```@docs
 mousetrap.get_string
 ```
+## `get_surpress_debug`
+```@docs
+mousetrap.get_surpress_debug
+```
+## `get_surpress_info`
+```@docs
+mousetrap.get_surpress_info
+```
 ## `get_tab_position`
 ```@docs
 mousetrap.get_tab_position
@@ -2243,13 +2283,13 @@ mousetrap.hsva_to_rgba
 ```@docs
 mousetrap.html_code_to_rgba
 ```
-## `insert!`
-```@docs
-mousetrap.insert!
-```
 ## `insert_after!`
 ```@docs
 mousetrap.insert_after!
+```
+## `insert_at!`
+```@docs
+mousetrap.insert_at!
 ```
 ## `insert_column!`
 ```@docs
@@ -2258,6 +2298,10 @@ mousetrap.insert_column!
 ## `insert_column_at!`
 ```@docs
 mousetrap.insert_column_at!
+```
+## `insert_next_to!`
+```@docs
+mousetrap.insert_next_to!
 ```
 ## `insert_row_at!`
 ```@docs
@@ -2279,10 +2323,6 @@ mousetrap.is_file
 ```@docs
 mousetrap.is_folder
 ```
-## `is_local`
-```@docs
-mousetrap.is_local
-```
 ## `is_symlink`
 ```@docs
 mousetrap.is_symlink
@@ -2290,6 +2330,26 @@ mousetrap.is_symlink
 ## `is_valid_html_code`
 ```@docs
 mousetrap.is_valid_html_code
+```
+## `log_critical`
+```@docs
+mousetrap.log_critical
+```
+## `log_debug`
+```@docs
+mousetrap.log_debug
+```
+## `log_fatal`
+```@docs
+mousetrap.log_fatal
+```
+## `log_info`
+```@docs
+mousetrap.log_info
+```
+## `log_warning`
+```@docs
+mousetrap.log_warning
 ```
 ## `main`
 ```@docs
@@ -2326,6 +2386,10 @@ mousetrap.mouse_button_02_pressed
 ## `move!`
 ```@docs
 mousetrap.move!
+```
+## `move_page_to!`
+```@docs
+mousetrap.move_page_to!
 ```
 ## `move_to_trash!`
 ```@docs
@@ -2459,6 +2523,10 @@ mousetrap.remove_child!
 ```@docs
 mousetrap.remove_column!
 ```
+## `remove_column_at!`
+```@docs
+mousetrap.remove_column_at!
+```
 ## `remove_controller!`
 ```@docs
 mousetrap.remove_controller!
@@ -2502,6 +2570,10 @@ mousetrap.remove_start_child!
 ## `remove_tick_callback!`
 ```@docs
 mousetrap.remove_tick_callback!
+```
+## `remove_title_widget!`
+```@docs
+mousetrap.remove_title_widget!
 ```
 ## `remove_titlebar_widget!`
 ```@docs
@@ -2703,9 +2775,9 @@ mousetrap.set_editable!
 ```@docs
 mousetrap.set_ellipsize_mode!
 ```
-## `set_enable_rubberband_selection`
+## `set_enable_rubberband_selection!`
 ```@docs
-mousetrap.set_enable_rubberband_selection
+mousetrap.set_enable_rubberband_selection!
 ```
 ## `set_enabled!`
 ```@docs
@@ -2734,10 +2806,6 @@ mousetrap.set_expand_horizontally!
 ## `set_expand_vertically!`
 ```@docs
 mousetrap.set_expand_vertically!
-```
-## `set_expanded!`
-```@docs
-mousetrap.set_expanded!
 ```
 ## `set_file!`
 ```@docs
@@ -2859,6 +2927,10 @@ mousetrap.set_is_circular!
 ```@docs
 mousetrap.set_is_decorated!
 ```
+## `set_is_expanded!`
+```@docs
+mousetrap.set_is_expanded!
+```
 ## `set_is_focusable!`
 ```@docs
 mousetrap.set_is_focusable!
@@ -2879,9 +2951,17 @@ mousetrap.set_is_modal!
 ```@docs
 mousetrap.set_is_resizable!
 ```
+## `set_is_revealed!`
+```@docs
+mousetrap.set_is_revealed!
+```
 ## `set_is_scrollable!`
 ```@docs
 mousetrap.set_is_scrollable!
+```
+## `set_is_selectable!`
+```@docs
+mousetrap.set_is_selectable!
 ```
 ## `set_is_spinning!`
 ```@docs
@@ -2923,9 +3003,9 @@ mousetrap.set_left_margin!
 ```@docs
 mousetrap.set_listens_for_shortcut_action!
 ```
-## `set_log_file`
+## `set_log_file!`
 ```@docs
-mousetrap.set_log_file
+mousetrap.set_log_file!
 ```
 ## `set_lower!`
 ```@docs
@@ -3055,10 +3135,6 @@ mousetrap.set_relative_position!
 ```@docs
 mousetrap.set_resource_path!
 ```
-## `set_revealed!`
-```@docs
-mousetrap.set_revealed!
-```
 ## `set_right_margin!`
 ```@docs
 mousetrap.set_right_margin!
@@ -3091,10 +3167,6 @@ mousetrap.set_scrollbar_placement!
 ```@docs
 mousetrap.set_secondary_icon!
 ```
-## `set_selectable!`
-```@docs
-mousetrap.set_selectable!
-```
 ## `set_selected!`
 ```@docs
 mousetrap.set_selected!
@@ -3123,9 +3195,9 @@ mousetrap.set_show_column_separators
 ```@docs
 mousetrap.set_show_row_separators
 ```
-## `set_show_separators`
+## `set_show_separators!`
 ```@docs
-mousetrap.set_show_separators
+mousetrap.set_show_separators!
 ```
 ## `set_show_text!`
 ```@docs
@@ -3146,6 +3218,10 @@ mousetrap.set_signal_activate_default_widget_blocked!
 ## `set_signal_activate_focused_widget_blocked!`
 ```@docs
 mousetrap.set_signal_activate_focused_widget_blocked!
+```
+## `set_signal_activate_item_blocked!`
+```@docs
+mousetrap.set_signal_activate_item_blocked!
 ```
 ## `set_signal_activated_blocked!`
 ```@docs
@@ -3411,13 +3487,13 @@ mousetrap.set_step_increment!
 ```@docs
 mousetrap.set_string!
 ```
-## `set_surpress_debug`
+## `set_surpress_debug!`
 ```@docs
-mousetrap.set_surpress_debug
+mousetrap.set_surpress_debug!
 ```
-## `set_surpress_info`
+## `set_surpress_info!`
 ```@docs
-mousetrap.set_surpress_info
+mousetrap.set_surpress_info!
 ```
 ## `set_tab_position!`
 ```@docs

@@ -414,6 +414,6 @@ main() do app::Application
 end
 ```
 
-![](../resources/double_button_signal_blocking.png)
+![](../assets/double_button_signal_blocking.png)
 
 ---

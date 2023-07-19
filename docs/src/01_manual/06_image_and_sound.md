@@ -74,11 +74,11 @@ color_chooser = ColorChooser("Choose Color")
 present!(color_chooser)
 ```
 
-![](../resources/color_chooser_selection.png)
+![](../assets/color_chooser_selection.png)
 
 If the user clicks on the `+` in the bottom left corner, they are taken to a new page that lets the select any color in RGBA:
 
-![](../resources/color_chooser_custom_color.png)
+![](../assets/color_chooser_custom_color.png)
 
 While this is nice, we will most likely want to react to the user selected a color. To do this, we register a callback using `on_accept!` and `on_cancel!`.
 
@@ -169,7 +169,7 @@ If unspecified, the image will be filled with `RGBA(0, 0, 0, 0)`, making it appe
 
 ### Saving an Image to Disk
 
-We use [`save_to_file`](@ref) to store an image to the disk. This will save the image data to the given path, automatically determining the correct file type based on the file extension given in the path. For example, using the path `/resources/save_image.png` will store the image as a PNG file.
+We use [`save_to_file`](@ref) to store an image to the disk. This will save the image data to the given path, automatically determining the correct file type based on the file extension given in the path. For example, using the path `/assets/save_image.png` will store the image as a PNG file.
 
 ### Modifying an Image
 
@@ -196,16 +196,16 @@ Only `scaled` will be of size `800x600`, `image` has not changed.
 
 When scaling, we have a choice of scaling algorithm, which fills in newly generated pixels through **interpolation**. Mousetrap offers four interpolation types, supplied by the enum [`InterpolationType`](@ref). Below, we see how each type affects the final image, where the image labeled with `1x` is the original image with a resolution of 10x10 pixels.
 
-![](../resources/interpolation_nearest.png) 
+![](../assets/interpolation_nearest.png) 
 *INTERPOLATION_TYPE_NEAREST*
 
-![](../resources/interpolation_bilinear.png) 
+![](../assets/interpolation_bilinear.png) 
 *INTERPOLATION_TYPE_BILINEAR* 
 
-![](../resources/interpolation_hyperbolic.png) 
+![](../assets/interpolation_hyperbolic.png) 
 *INTERPOLATION_TYPE_HYPERBOLIC*
 <
-![](../resources/interpolation_tiles.png) 
+![](../assets/interpolation_tiles.png) 
 *INTERPOLATION_TYPE_ILES* 
 
 The main difference between `BILINEAR` and `HYPERBOLIC` is that of performance, `HYPERBOLIC` offers superior smoothing, but does so at about 1.5 times the speed when compared to `BILINEAR` interpolation, meaning `HYPERBOLIC` is about 50% slower. If no interpolation type is specified when calling `as_scaled`, `INTERPOLATION_TYPE_TILES` will be chosen by default.

@@ -47,7 +47,7 @@ The folder contains:
 
 + Our Julia package
 + All our packages dependencies
-+ Project resources such as image, text, binaries, themes, settings files
++ Project assets such as image, text, binaries, themes, settings files
 + mousetrap and all of its dependencies
 + entire Julia runtime
 + C executable launcher

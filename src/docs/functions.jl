@@ -1083,11 +1083,11 @@ get_enabled(::Action) -> Bool
 Get whether the action is enabled. A disabled action cannot be activated and all its connected widgets are disabled.
 """
 
-@document get_enabled_rubberband_selection """
+@document get_enable_rubberband_selection """
 ```
-get_enabled_rubberband_selection(::ListView) -> Bool
-get_enabled_rubberband_selection(::GridView) -> Bool
-get_enabled_rubberband_selection(::ColumnView) -> Bool
+get_enable_rubberband_selection(::ListView) -> Bool
+get_enable_rubberband_selection(::GridView) -> Bool
+get_enable_rubberband_selection(::ColumnView) -> Bool
 ```
 Get whether the user can select multiple children by click-dragging with the cursor. The selectable widgets
 selection mode has to be `SELECTION_MODE_MULTIPLE` in order for this to be possible.
@@ -1486,9 +1486,9 @@ get_kinetic_scrolling_enabled(::Viewport) -> Bool
 Get whether the widget should continue scrolling once the user stopped operating the mouse wheel or touchscreen, simulating "inertia".
 """
 
-@document get_label_x_alignment! """
+@document get_label_x_alignment """
 ```
-get_label_x_alignment!(::Frame) -> Float32
+get_label_x_alignment(::Frame) -> Float32
 ```
 Get the horizontal alignment of the frames optional label widget, in `[0, 1]`.
 """
@@ -1914,6 +1914,13 @@ get_selection_model(::Stack) -> SelectionModel
 get_selection_model(::ColumnView) -> SelectionModel
 ```
 Get the underlying selection model of the selectable widget.
+"""
+
+@document get_selection_mode """
+```
+get_selection_mode(::SelectionModel) -> SelectionMode
+```
+Get the underlying selection mode of the model.
 """
 
 @document get_shortcuts """
@@ -2717,6 +2724,41 @@ main() do app::Application
 end
 """
 
+@document log_debug """
+```
+log_debug(::LogDomain, message::Sting)
+```
+Display a log message with level `DEBUG`. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
+"""
+
+@document log_info """
+```
+log_info(::LogDomain, message::Sting)
+```
+Display a log message with level `INFO`. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
+"""
+
+@document log_warning """
+```
+log_warning(::LogDomain, message::Sting)
+```
+Display a log message with level `WARNING`. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
+"""
+
+@document log_critical """
+```
+log_critical(::LogDomain, message::Sting)
+```
+Display a log message with level `CRITICAL`. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
+"""
+
+@document log_fatal """
+```
+log_fatal(::LogDomain, message::Sting)
+```
+Dispay a log message with level `FATAL`. Immediately after, runtime ends.
+"""
+
 @document make_current """
 ```
 make_current(::RenderArea) 
@@ -3203,6 +3245,13 @@ remove_column!(::ColumnView, column::ColumnViewColumn)
 Remove a column from the column view, this also frees all of its rows.
 """
 
+@document remove_column_at! """
+```
+remove_column_at!(::Grid, column_i::Signed)
+```
+Remove column at given index (1-based, may be negative). Any following columns will be shifted to the left.
+"""
+
 @document remove_controller! """
 ```
 remove_controller!(::Widget, controller::EventController) 
@@ -3287,9 +3336,15 @@ within the tick callback function.
 @document remove_titlebar_widget! """
 ```
 remove_titlebar_widget!(::Window) 
-remove_titlebar_widget!(::HeaderBar)
 ```
 Reset the titlebar widget such that the default window decoration is used instead.
+"""
+
+@document remove_title_widget! """
+```
+remove_title_widget!(::HeaderBar)
+```
+Remove widget that is currently used as the title element.
 """
 
 @document remove_tooltip_widget! """
@@ -3696,11 +3751,11 @@ set_ellipsize_mode!(::Label, mode::EllipsizeMode)
 Set the ellipsize mode of a label, `ELLIPSIZE_MODE_NONE` by default.
 """
 
-@document set_enable_rubberband_selection """
+@document set_enable_rubberband_selection! """
 ```
-set_enable_rubberband_selection(::ListView, ::Bool) 
-set_enable_rubberband_selection(::GridView, ::Bool) 
-set_enable_rubberband_selection(::ColumnView, ::Bool) 
+set_enable_rubberband_selection!(::ListView, ::Bool) 
+set_enable_rubberband_selection!(::GridView, ::Bool) 
+set_enable_rubberband_selection!(::ColumnView, ::Bool) 
 ```
 Set whether the user can select multiple children by holding down the mouse button and click-dragging. The selectable widgets
 selection mode has to be `SELECTION_MODE_MULTIPLE` in order for this to be possible.
@@ -4130,9 +4185,9 @@ set_left_margin!(::TextView, margin::AbstractFloat)
 Set distance between the left end of the text and the text views frame.
 """
 
-@document set_log_file """
+@document set_log_file! """
 ```
-set_log_file(path::String) -> Bool
+set_log_file!(path::String) -> Bool
 ```
 Set file at `path` as the log file. Any logging will be pushed to the file as opposed to being printed to the console. The file
 will be created if it does not exist. If it does exist, the file will be appended to, as opposed to being overwritten.
@@ -4515,9 +4570,9 @@ set_show_row_separators(::ColumnView, ::Bool)
 Set whether separators should be drawn between each row.
 """
 
-@document set_show_separators """
+@document set_show_separators! """
 ```
-set_show_separators(::ListView, ::Bool) 
+set_show_separators!(::ListView, ::Bool) 
 ```
 Set whether separators should be drawn between two items.
 """

@@ -3175,18 +3175,8 @@ module mousetrap
     @export_type PopoverButton Widget
     @declare_native_widget PopoverButton
 
-    PopoverButton() = PopoverButton(detail._PopoverButton())
-    function PopoverButton(popover_menu::PopoverMenu) ::PopoverButton
-        out = PopoverButton()
-        set_popover_menu!(out, popover_menu)
-        return out
-    end
-
-    function PopoverButton(popover::Popover) ::PopoverButton
-        out = PopoverButton()
-        set_popover!(out, popover)
-        return out
-    end
+    PopoverButton(popover::Popover) = PopoverButton(detail._PopoverButton(popover._internal))
+    PopoverButton(popover_menu::PopoverMenu) = PopoverButton(detail._PopoverButton(popover_menu._internal))
 
     set_child!(popover_button::PopoverButton, child::Widget) = detail.set_child!(popover_button._internal, as_widget_pointer(child))
     export set_child!
@@ -4073,7 +4063,7 @@ module mousetrap
     get_selection_model(column_view::ColumnView) ::SelectionModel = SelectionModel(detail.get_selection_model(column_view._internal))
     export get_selection_model
 
-    @export_function ColumnView set_enable_rubberband_selection Cvoid Bool b
+    @export_function ColumnView set_enable_rubberband_selection! Cvoid Bool b
     @export_function ColumnView get_enable_rubberband_selection Bool
     @export_function ColumnView set_show_row_separators Cvoid Bool b
     @export_function ColumnView get_show_row_separators Bool

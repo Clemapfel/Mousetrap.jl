@@ -1532,7 +1532,6 @@ Button that has automatically shows or hides its associated [`Popover`](@ref) or
 when clicked.
 
 $(@type_constructors(
-    PopoverButton(),
     PopoverButton(::Popover),
     PopoverButton(::PopoverMenu)
 ))
