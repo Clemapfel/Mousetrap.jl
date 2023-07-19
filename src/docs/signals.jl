@@ -10,47 +10,47 @@ const signal_descriptors = Dict([
 
     :activate => (
         void_signature, 
-        "Emitted when [`activate!`](@ref) is called or an activatble widget is otherwise activated, for example by the user clicking the widget or pressing enter while the widget has keyboard focus."
+        "Emitted when an activatable widget is activated by the user, usually by pressing the enter key."
     ),
     :activate_item => (
         "(::T, index::Integer, [::Data_t]) -> Nothing",
-        "Emitted when the user activates a selected item of the view."
+        "Emitted when the user presses the enter key while one or more items are selected."
     ),
     :startup => (
         void_signature, 
-        "Emitted when an [`Application`](@ref) instance has initialized the backend."
+        "Emitted when an `Application` has initialzed the back-end and is about to start the main loop."
     ),
     :shutdown => (
         void_signature, 
-        "Emitted when an [`Application`](@ref) is exiting the main loop and attempting to shut down."
+        "Emitted when an `Application` is exiting the main loop and attempting to shut down."
     ),
     :update => (
         void_signature, 
-        "Emitted exactly once per frame, when the widget the `FrameClock` is associated with updates its properties at the start of the frame."
+        "Emitted exactly once per frame, when the widget associated with the `FrameClock` is about to be drawn."
     ),
     :paint => (
         void_signature, 
-        "Emitted exactly once per frame, when the widget the `FrameClock` is associated with is drawn."
+        "Emitted exactly once per frame, when the widget associated with the `FrameClock` is was drawn."
     ),
     :realize => (
         void_signature, 
-        "Emitted when a widget is done initializing and is shown for the first time."
+        "Emitted when a widget is shown for the first time after being initialized."
     ),
     :unrealize => (
         void_signature, 
-        "Emitted when a widget is hidden or otherwise made inactive, at which point it will free associated objects and free it's allocated area."
+        "Emitted when a widget was hidden and no longer has an allocated area on screen."
     ),
     :destroy => (
         void_signature, 
-        "Emitted when a widgets reference count reaches 0 and it should be finalized and deleted."
+        "Emitted when a widgets reference count reaches 0, it will be finalized and deleted permanently."
     ),
     :hide => (
         void_signature, 
-        "Emitted when [`hide!`](@ref) is called or a widget is otherwise hidden from view, at which point it will no longer allocate any area on screen."
+        "Emitted when a widget is hidden, for example by calling `hide!`, being removed from its parent, or its parent being hidden."
     ),
     :show => (
         void_signature, 
-        "Emitted when [`show!`](@ref) is called or a widget is otherwise made visible for the first time."
+        "Emitted when a widget is shown, for example by calling `show!` or its parent being shown."
     ),
     :map => (
         void_signature, 
@@ -62,67 +62,67 @@ const signal_descriptors = Dict([
     ),
     :close_request => (
         "(::T, [::Data_t]) -> WindowCloseRequestResult", 
-        "The window or the users operating system requests the window to close. Return [`WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE`](@ref) or [`WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE`](@ref) to control whether this is permitted"
+        "Emitted when the window is requested to be closed, for example by the user pressing the close button. Depending on whether the return value of the signal handler is `WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE` or `WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE`, closing of the window will be permitted or prevented."
     ),
     :closed => (
         void_signature, 
-        "A [`Popover`](@ref) window is closed, either by automatcally closing or when [`popdown!`](@ref) was called."
+        "Emitted when a popover-window is closed, for example by calling `popdown!`, or it loosing focus while `set_autohide!` is set to `true`."
     ),
     :activate_default_widget => (
         void_signature, 
-        "The widget assigned via [`set_default_widget!`](@ref) emits its `activate` signal."
+        "Emitted when the child widget designated via `set_default_widget!` was activated."
     ),
     :activate_focused_widget => (
         void_signature, 
-        "Widget that is a direct or indirect child of this window and holds input focus emits its `activate` signal."
+        "Emitted when the child widget that currently holds input focus is activated."
     ),
     :clicked => (
         void_signature, 
-        "The widget is clicked by the user, either with a mouse or touch-device"
+        "Emitted when the user clicks a widget using a mouse or touchscreen."
     ),
     :toggled => (
         void_signature, 
-        "The buttons internal state goes from active to inactive or vice-versa."
+        "Emitted when the widgets internal state changes from active to inactive, or inactive to active."
     ),
     :text_changed => (
         void_signature, 
-        "The underlying text buffer is modified in any way."
+        "Emitted when underlying text buffer is modified in any way."
     ),
     :selection_changed => (
         "(::T, position::Integer, n_items::Integer, [::Data_t]) -> Nothing", 
-        "The number or position of one or more selected items has changed, where `position` is the item index that was modifier, and `n_items` is the number of items currently selected."
+        "The number or position of one or more selected items has changed, where `position` is the item index that was modified, `n_items` is the number of items currently selected."
     ),
     :key_pressed => (
         "(::T, code::KeyCode, modifiers::ModifierState, [::Data_t]) -> Nothing", 
-        "The user presses a non-modifier key that is currently not pressed."
+        "Emitted when the user presses a non-modifier key (which is currently not pressed), while the controllers associated widget holds input focus."
     ),
     :key_released => (
         "(::T, code::KeyCode, modifiers::ModifierState, [::Data_t]) -> Nothing", 
-        "The user releaes a non-modifier key that is currently pressed."
+        "Emitted when the user releases a non-modifier key (which is currently pressed), while the controllers associated widget holds input focus."
     ),
     :modifiers_changed => (
         "(::T, code::KeyCode, modifiers::ModifierState, [::Data_t]) -> Nothing", 
-        "The set of depresses modifier keys changes in any way."
+        "Emitted when the user presses or releases a modifier key, while the controllers associated widget holds input focus."
     ),
     :drag_begin => (
         "(::T, start_x::AbstractFloat, start_y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted exaclty once, on the first frame a drag gesture is recognized. `start_y` and `start_x` are intial position of the cursor, in pixels."
+        "Emitted exaclty once, on the first frame a drag gesture is recognized, where `start_y` and `start_x` are the initial position of the cursor, in pixels."
     ),
     :drag => (
         "(::T, x_offset::AbstractFloat, y_offset::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted once per frame while a drag gesture is active, where `x_offset` and `y_offset` are the distance form the current position to the cursor to the position at the start of the drag gesture."
+        "Emitted once per frame while a drag gesture is active, where `x_offset` and `y_offset` are the distance between the current position of the cursor, and the position at the start of the gesture, in pixels."
     ),
     :drag_end => (
         "(::T, x_offset::AbstractFloat, y_offset::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted exactly once, when the drag gesture seizes to be active, where where `x_offset` and `y_offset` are the distance form the current position to the cursor to the position at the start of the drag gesture."
+        "Emitted exactly once, when the drag gesture seizes to be active, where `x_offset` and `y_offset` are the distance between the current position of the cursor, and the position at the start of the gesture, in pixels."
     ),
     :click_pressed => (
         "(::T, n_presses::Integer, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "User presses a mouse button that is currently up, or presses a touch device, where `n_presses` is the number of clicks in the current sequence, `x` and `y` are the current cursor position."
+        "User presses a mouse button (which is currently not pressed), while the controllers associated widget holds input focus. Where `n_presses` are the current number of clicks in the sequence, `x`, `y` are the current cursor position, in pixels."
     ),
     :click_released => (
         "(::T, n_presses::Integer, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "User releaes a mouse button that is currently down, or seizes to press a touch device, where `n_presses` is the number of clicks in the current sequence, `x` and `y` are the current cursor position."
+        "User releases a mouse button (which is currently pressed), while the controllers associated widget holds input focus. Where `n_presses` are the current number of clicks in the sequence, `x`, `y` are the current cursor position, in pixels."
     ),
     :click_stopped => (
         void_signature, 
@@ -130,27 +130,27 @@ const signal_descriptors = Dict([
     ),
     :focus_gained => (
         void_signature, 
-        "Emitted once when a widget grabs input focus."
+        "Emitted when a widget that is currently not focused becomes focus."
     ),
     :focus_lost => (
         void_signature, 
-        "Emitted once when a widget looses input focus."
+        "Emitted when a widget that is currently focused looses focus."
     ),
     :pressed => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted once when a long-press gesture is recognized, where `x` and `y` are the current position of the cursor."
+        "Emitted once when a long-press gesture is recognized, where `x` and `y` are the current position of the cursor, in pixels."
     ),
     :press_cancelled => (
         void_signature, 
-        "Emitted once a long-press gesture seizes, usually when the users stops keeping the button or touchscreen depressed."
+        "Emitted once when the user releases the button of a long-press gesture."
     ),
     :motion_enter => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted exactly once when the users cursor first enters the allocated area of the widget, where `x` and `y` are the current position of the cursor."
+        "Emitted once when the users cursor first enters the allocated area of the widget on screen, where `x` and `y` are the current position of the cursor, in pixels."
     ),
     :motion => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted once per frame, while the cursor is inside the allocated area of the widget, where `x` and `y` are the current cursor position"
+        "Emitted once per frame, while the cursor is inside the allocated area of the widget, where `x` and `y` are the current cursor position, in pixels."
     ),
     :motion_leave => (
         void_signature, 
@@ -158,15 +158,15 @@ const signal_descriptors = Dict([
     ),
     :scale_changed => (
         "(::T, scale::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted anytime the distance between the two fingers of the pinch-zoom-gesture changes, where `scale` is factor by which the current scale is different than the distance between the two fingers at the start of the gesture."
+        "Emitted any time the distance between two fingers of a pinch-zoom-gesture changes, where `scale` is the factor of the current distance between the two fingers, compared to the distance at the start of the gesture."
     ),
     :rotation_changed => (
         "(::T, angle_absolute::AbstractFloat, angle_delta::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "Emitted when the angle between the two finger sof a rotate-gesture changes, where `angle_delta` is the offset and `angle_absolute` the current angle, both in radians."
+        "Emitted when the angle between the two fingers of a rotate-gesture changes, where `angle_delta` is the offset, `angle_absolute` the current angle, in radians."
     ),
     :scroll_begin => (
         void_signature, 
-        "Emitted exaclty once when a scroll gesture is first recognized."
+        "Emitted once when a scroll gesture is first recognized."
     ),
     :scroll => (
         "(::T, x_delta::AbstractFloat, y_delta::AbstractFloat, [::Data_t]) -> also_invoke_default_handlers::Bool", 
@@ -174,7 +174,7 @@ const signal_descriptors = Dict([
     ),
     :scroll_end => (
         void_signature, 
-        "Emitted exactly once when a scroll gesture ends."
+        "Emitted to signal the end of a scroll gesture."
     ),
     :kinetic_scroll_decelerate => (
         "(::T, x_velocity::AbstractFloat, y_velocity::AbstractFloat, [::Data_t]) -> Cvoid", 
@@ -182,15 +182,15 @@ const signal_descriptors = Dict([
     ),
     :stylus_down => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "Emitted once when the stylus first makes contact with the touchpad, where `x` and `y` is the cursor position in widget-space."
+        "Emitted once when the stylus makes contact with the touchpad, where `x` and `y` are the cursor position, in pixels."
     ),
     :stylus_up => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "Emitted once when the stylus seizes to be in physical contact with the touchpad, where `x` and `y` is the cursor position in widget-space."
+        "Emitted once when the stylus seizes to make contact with the touchpad, where `x` and `y` is the cursor position, in pixels."
     ),
     :proximity => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "Emitted anytime the stylus enters or exits the distance recognized by the touchpad. This will usually precede a `stylus_down` signal and follow a `stylus_up` signal."
+        "Emitted when the stylus enters or exits the proximity distance recognized by the touchpad. This will usually precede a `stylus_down` or `stylus_up` signal."
     ),
     :swipe => (
         "(::T, x_velocity::AbstractFloat, y_velocity::AbstractFloat, [::Data_t]) -> Cvoid", 
@@ -198,59 +198,59 @@ const signal_descriptors = Dict([
     ),
     :pan => (
         "(::T, ::PanDirection, offset::AbstractFloat, [::Data_t]) -> Cvoid", 
-        "Emitted once per frame while a pan gesture is active, where `offset` is the distance between the current position of the cursor and the position at the start of the gesture."
+        "Emitted once per frame while a pan gesture is active, where `offset` is the horizontal (or vertical) distance between the current position of the cursor, and the position at the start of the gesture, in pixels."
     ),
     :value_changed => (
         void_signature, 
-        "Emitted when the `value` property of the [`Adjustment`](@ref) changes."
+        "Emitted when the `value` property of the `Adjustment` changes."
     ),
     :properties_changed => (
         void_signature, 
-        "Emitted when any property of the [`Adjustment`](@ref) other than `value` changes."
+        "Emitted when any property of the `Adjustment` other than `value` changes."
     ),
     :wrapped => (
         void_signature,
-        "Emitted when a `SpinButton`s value wraps from the minimum to the maximum or vice-versa. For this signal to be emitted, [`set_should_wrap!`](@ref) needs to be set to `true` first." 
+        "Emitted when a `SpinButton`s value wraps from the minimum to the maximum, or vice-versa, while `set_should_wrap!` was set to `true`." 
     ),
     :scroll_child => (
         "(::T, scroll_type::ScrollType, is_horizontal::Bool, [::Data_t]) -> Cvoid", 
-        "Emitted anytime a user triggers a scroll action that moves one or both of the [`Viewport`]s scrollbars. `scroll_type` identifies the type of action that triggered the scrolling, while `is_horizontal` can be determined whether the horizontal or vertical scrollbar was operated."
+        "Emitted any time a user triggers a scroll action that moves one or both of the `Viewport`s scroll bars, where `scroll_type` identifies the type of action that triggered the scrolling, while `is_horizontal` determines along which axis the scrolling took place."
     ),
     :render => (
         void_signature, 
-        "Emitted once per frame, right before [`RenderArea`](@ref) pushes the current frame buffer to the monitor."
+        "Emitted once per frame before the `RenderArea` flushes the current frame buffer to the monitor."
     ),
     :resize => (
         "(::T, width::Integer, height::Integer, [::Data_t]) -> void", 
-        "Emitted whenver the allocated area of a [`RenderArea`](@ref) changes, where `width` and `height` are the new size, in pixels. Emission of this signal usually means the OpenGL viewport size changed as well."
+        "Emitted whenver the allocated area of a `RenderArea` changes, where `width` and `height` are the new size, in pixels."
     ),
     :activated => (
         void_signature, 
-        "Emitted when [`activate!`](@ref) is called or the [`Action`](@ref) is otherwise activated."
+        "Emitted when `activate!` is called, or the `Action` is otherwise activated."
     ),
     :revealed => (
         void_signature, 
-        "Emitted once when a [`Revealer`](@ref)s child goes from hidden to shown or shown to hidden, and the corresponding animation has finished playing."
+        "Emitted once when a `Revealer`s child goes from hidden to shown (or shown to hidden) and the corresponding animation has finished playing."
     ),
     :page_reordered => (
         "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
-        "Emitted when a page of a [`Notebook`](@ref) changes position, where `page_index` is the new position of the page."
+        "Emitted when a page changes position, where `page_index` is the new position of the page."
     ),
     :page_added => (
         "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
-        "Emitted when the total number of pages of a [`Notebook`](@ref) increases, where `page_index` is the position of the page that was inserted."
+        "Emitted when the total number of pages increases, where `page_index` is the position of the page that was inserted."
     ),
     :page_removed => (
         "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
-        "Emitted when a page is removed from the [`Notebook`](@ref), where `page_index` is the old index of the page that was removed."
+        "Emitted when a page is removed, where `page_index` is the old index of the page that was removed."
     ),
     :page_selection_changed => (
         "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
-        "Emitted when the currently active page changes by any means, where `page_index is the index of the now-visible page." 
+        "Emitted when the currently active page changes by any means, where `page_index` is the index of the now visible page." 
     ),
     :items_changed => (
         "(::T, position::Integer, n_removed::Integer, n_added::Integer, [::Data_t]) -> Cvoid", 
-        "The number of menu items or any property of any menu item already inside the [`MenuModel`](@ref) is modified."
+        "Emitted when the number of menu items, or any of their properties, changes.
     )
 ])
 
