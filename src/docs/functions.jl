@@ -2773,6 +2773,13 @@ move!(from::FileDescriptor, to::FileDescriptor, allow_overwrite::Bool ; [make_ba
 Move a file to a different location. Returns `true` if the operation was succesfull.
 """
 
+@document move_page_to! """
+```
+move_page_to!(::Notebook, current_index::Integer, new_index::Integer)
+```
+Move notebook page at position `current_index` to position `new_index`, 1-based. This will emit signal `page_reordered`.
+"""
+
 @document move_to_trash! """
 ```
 move_to_trash!(file::FileDescriptor) ::Bool

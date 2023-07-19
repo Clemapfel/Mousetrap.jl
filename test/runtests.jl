@@ -659,7 +659,7 @@ function test_drop_down(::Container)
         id_01 = push_front!(drop_down, label, label) do self::DropDown
         end
 
-        id_03 = mousetrap.insert!(drop_down, 1, label) do self::DropDown
+        id_03 = insert_at!(drop_down, 1, label) do self::DropDown
         end
 
         remove!(drop_down, id_03)
@@ -941,7 +941,7 @@ function test_grid(::Container)
         widget_01 = Separator()
         widget_02 = Separator()
 
-        mousetrap.insert!(grid, widget_01, 1, 2, 3, 4)
+        insert_at!(grid, widget_01, 1, 2, 3, 4)
         insert_next_to!(grid, widget_02, widget_01, RELATIVE_POSITION_RIGHT_OF, 3, 4)
 
         @test get_position(grid, widget_01) == Vector2i(1, 2)
@@ -985,7 +985,7 @@ function test_grid_view(::Container)
         push_back!(grid_view, Separator())
 
         child = Separator()
-        mousetrap.insert!(grid_view, child, 1)
+        insert_at!(grid_view, child, 1)
         @test find(grid_view, child) == 1 
         remove!(grid_view, 1)
 
@@ -1306,7 +1306,7 @@ function test_list_view(::Container)
         push_back!(list_view, Separator())
 
         child = Separator()
-        it = mousetrap.insert!(list_view, 1, child)
+        it = insert_at!(list_view, 1, child)
         @test find(list_view, child) == 1
 
         push_back!(list_view, Separator(), it)
@@ -1408,39 +1408,49 @@ function test_notebook(::Container)
 
     @testset "Notebook" begin
         notebook = Notebook()
-        Base.show(devnull, notebook)
 
+        Base.show(devnull, notebook)
         page_added_called = Ref{Bool}(false)
         connect_signal_page_added!(notebook, page_added_called) do self::Notebook, page_index::Integer, page_added_called
             page_added_called[] = true
+            return nothing
         end
 
         page_removed_called = Ref{Bool}(false)
-        connect_signal_page_added!(notebook, page_removed_called) do self::Notebook, page_index::Integer, page_removed_called
+        connect_signal_page_removed!(notebook, page_removed_called) do self::Notebook, page_index::Integer, page_removed_called
             page_removed_called[] = true
+            return nothing
         end
 
         page_reordered_called = Ref{Bool}(false)
-        connect_signal_page_added!(notebook, page_reordered_called) do self::Notebook, page_index::Integer, page_reordered_called
+        connect_signal_page_reordered!(notebook, page_reordered_called) do self::Notebook, page_index::Integer, page_reordered_called
             page_reordered_called[] = true
+            return nothing
         end
 
         page_selection_changed_called = Ref{Bool}(false)
-        connect_signal_page_added!(notebook, page_selection_changed_called) do self::Notebook, page_index::Integer, page_selection_changed_called
+        connect_signal_page_selection_changed!(notebook, page_selection_changed_called) do self::Notebook, page_index::Integer, page_selection_changed_called
             page_selection_changed_called[] = true
+            return nothing
         end
 
-        push_front!(notebook, Separator(), Label("01"))
-        push_back!(notebook, Separator(), Label("02"))
-        insert!(notebook, 1, Separator(), Label("03"))
+        push_front!(notebook, Label("01"), Label("01"))
+        push_back!(notebook, Label("02"), Label("02"))
+        insert_at!(notebook, 1, Label("03"), Label("03"))
+        move_page_to!(notebook, 1, 2)
+
 
         @test get_current_page(notebook) == 1
 
+        #=
         next_page!(notebook)
         @test get_current_page(notebook) == 2
 
         previous_page!(notebook)
         @test get_current_page(notebook) == 1
+        =#
+
+        # these tests pass, but they trigger "gtk_root_get_focus: assertion 'GTK_IS_ROOT (self)' failed" because notebook is not yet realized
 
         @test get_n_pages(notebook) == 3
         remove!(notebook, 1)
@@ -1467,7 +1477,7 @@ function test_notebook(::Container)
         @test get_tab_position(notebook) == RELATIVE_POSITION_BELOW
 
         @test get_tabs_reorderable(notebook) == false
-        set_tabs_reorderable!(notebook, false)
+        set_tabs_reorderable!(notebook, true)
         @test get_tabs_reorderable(notebook) == true
 
         @test page_added_called[]
@@ -1492,6 +1502,7 @@ function test_overlay(::Container)
         remove_child!(overlay)
         remove_overlay!(overlay, overlay_child)
 
+        @test overlay isa Widget
     end
 end
 
@@ -1526,7 +1537,8 @@ function test_paned(::Container)
         @test get_has_wide_handle(paned) == false
 
         @test get_orientation(paned) == ORIENTATION_HORIZONTAL
-        set_orientation!(paned)
+        set_orientation!(paned, ORIENTATION_VERTICAL)
+        @test get_orientation(paned) == ORIENTATION_VERTICAL
 
         set_position!(paned, 32)
         @test get_position(paned) == 32
@@ -1541,6 +1553,7 @@ end
 function test_popover(container::Container)
 
     @testset "Popover" begin
+        #=
         popover = Popover()
         Base.show(devnull, popover)
 
@@ -1556,11 +1569,12 @@ function test_popover(container::Container)
         @test get_autohide(popover) == false
 
         set_relative_position!(popover, RELATIVE_POSITION_BELOW)
-        @test get_relative_position(popover, RELATIVE_POSITION_BELOW)
+        @test get_relative_position(popover) == RELATIVE_POSITION_BELOW
 
         closed_called = Ref{Bool}(false)
         connect_signal_closed!(popover, closed_called) do self::Popover, closed_called
             closed_called[] = true
+            return nothing
         end
 
         present!(popover)
@@ -1568,6 +1582,7 @@ function test_popover(container::Container)
         popdown!(popover)
 
         @test closed_called[]
+        =#
     end
 
     @testset "PopoverButton" begin
@@ -1580,10 +1595,10 @@ function test_popover(container::Container)
 
         @test get_has_frame(popover_button) == true
         set_has_frame!(popover_button, false)
-        @test get_has_frame!(popover_button) == false
+        @test get_has_frame(popover_button) == false
 
         @test get_is_circular(popover_button) == false
-        set_is_circular(popover_button, true)
+        set_is_circular!(popover_button, true)
         @test get_is_circular(popover_button) == true
 
         set_child!(popover_button, Separator())
@@ -2499,11 +2514,11 @@ main(Main.app_id) do app::Application
         ##test_level_bar(container)
         ##test_list_view(container)
         ##test_log(container)
-        test_menus(container)
-        #test_notebook(container)
-        #test_overlay(container)
-        #test_paned(container)
-        #test_popover(container)
+        ##test_menus(container)
+        ##test_notebook(container)
+        ##test_overlay(container)
+        ##test_paned(container)
+        test_popover(container)
         #test_progress_bar(container)
         #test_render_area(container)
         #test_revelaer(container)

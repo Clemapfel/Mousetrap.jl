@@ -34,6 +34,7 @@ module mousetrap
             signature = arg_ts_string  * " -> $return_t"
 
             actual_return_ts = Base.return_types(f, arg_ts)
+
             if isempty(actual_return_ts)
                 throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`, because it does not have a method with the correct argument types"))
             end
@@ -42,7 +43,7 @@ module mousetrap
             for type in actual_return_ts
                 if type <: return_t
                     match_found = true
-                    break;
+                    break
                 end
             end
 
@@ -3060,7 +3061,7 @@ module mousetrap
     end
     export add_overlay!
 
-    remove_overlay!(overlay::Overlay, child::Widget) = detail.remove_overlay(overlay._internal, as_widget_pointer(child))
+    remove_overlay!(overlay::Overlay, child::Widget) = detail.remove_overlay!(overlay._internal, as_widget_pointer(child))
     export remove_overlay!
 
     @add_widget_signals Overlay
@@ -3928,12 +3929,23 @@ module mousetrap
     end
     export insert_at!
 
-    @export_function Notebook remove! Cvoid Integer position
+    function move_page_to!(notebook::Notebook, current_index::Integer, new_index::Integer) ::Cvoid
+        detail.move_page_to!(notebook._internal, from_julia_index(current_index), from_julia_index(new_index))
+    end
+    export move_page_to!
+
+    remove!(notebook::Notebook, index::Integer) = detail.remove!(notebook._internal, from_julia_index(index)) 
+    export remove!
+
     @export_function Notebook next_page! Cvoid
     @export_function Notebook previous_page! Cvoid
-    @export_function Notebook goto_page! Cvoid Integer position
 
-    @export_function Notebook get_current_page Int64
+    goto_page!(notebook::Notebook, index::Integer) = detail.goto_page!(notebook._internal, from_julia_index(index))
+    export goto_page!
+
+    get_current_page(notebook::Notebook) ::Int64 = to_julia_index(detail.get_current_page(notebook._internal))
+    export get_current_page
+
     @export_function Notebook get_n_pages Int64
     @export_function Notebook set_is_scrollable! Cvoid Bool b
     @export_function Notebook get_is_scrollable Bool
@@ -3942,7 +3954,7 @@ module mousetrap
     @export_function Notebook set_tabs_visible! Cvoid Bool b
     @export_function Notebook get_tabs_visible Bool
     @export_function Notebook set_quick_change_menu_enabled! Cvoid Bool b
-    @export_function Notebook get_quick_change_menu_enabled Cvoid
+    @export_function Notebook get_quick_change_menu_enabled Bool
     @export_function Notebook set_tab_position! Cvoid RelativePosition relative_position
     @export_function Notebook get_tab_position RelativePosition
     @export_function Notebook set_tabs_reorderable! Cvoid Bool b
