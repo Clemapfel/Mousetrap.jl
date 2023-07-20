@@ -3144,7 +3144,6 @@ module mousetrap
 
     @export_function Popover popup! Cvoid
     @export_function Popover popdown! Cvoid
-    @export_function Popover present! Cvoid
 
     function set_child!(popover::Popover, child::Widget)
         detail.set_child!(popover._internal, as_widget_pointer(child))
@@ -3152,11 +3151,6 @@ module mousetrap
     export set_child!
 
     @export_function Popover remove_child! Cvoid
-
-    function attach_to!(popover::Popover, attachment::Widget)
-        detail.attach_to!(popover._internal, as_widget_pointer(attachment))
-    end
-    export attach_to!
 
     @export_function Popover set_relative_position! Cvoid RelativePosition position
     @export_function Popover get_relative_position RelativePosition

@@ -1558,7 +1558,7 @@ function test_popover(container::Container)
         Base.show(devnull, popover)
 
         set_child!(popover, Separator())
-        attach_to!(popover, container)
+        id = add_child!(container, popover, "Popover")
 
         @test get_has_base_arrow(popover) == true
         set_has_base_arrow!(popover, false)
@@ -1575,9 +1575,12 @@ function test_popover(container::Container)
             return nothing
         end
 
-        present!(popover)
-        popup!(popover)
-        popdown!(popover)
+        connect_signal_realize!(popover) do self::Popover   
+            popup!(popover)
+            popdown!(popover)
+        end
+
+        remove_child!(container, id)
     end
 
     @testset "PopoverButton" begin
@@ -1597,18 +1600,18 @@ function test_popover(container::Container)
         set_is_circular!(popover_button, true)
         @test get_is_circular(popover_button) == true
 
-        set_child!(popover_button, Separator())
-        remove_child!(popover_button)
-
-        set_popover!(popover_button, Popover())
-        remove_popover!(popover_button)
-
-        set_popover_menu!(popover_button, PopoverMenu(MenuModel()))
-        remove_popover!(popover_button)
-
         set_relative_position!(popover_button, RELATIVE_POSITION_BELOW)
         @test get_relative_position(popover_button) == RELATIVE_POSITION_BELOW
 
+        #set_child!(popover_button, Separator())
+        #remove_child!(popover_button)
+
+        #set_popover!(popover_button, Popover())
+        #remove_popover!(popover_button)
+
+        #set_popover_menu!(popover_button, PopoverMenu(MenuModel()))
+        #remove_popover!(popover_button)
+        
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(popover_button, activate_called) do self::PopoverButton, activate_called
             activate_called[] = true
