@@ -27,6 +27,8 @@ module mousetrap
 
         function TypedFunction(f::Function, return_t::Type, arg_ts::Tuple)
 
+            precompile(f, arg_ts)
+
             arg_ts_string = "("
             for i in 1:length(arg_ts)
                 arg_ts_string = arg_ts_string * string(arg_ts[i]) * ((i < length(arg_ts)) ? ", " : ")")
@@ -36,7 +38,7 @@ module mousetrap
             actual_return_ts = Base.return_types(f, arg_ts)
 
             if isempty(actual_return_ts)
-                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`, because it does not have a method with the correct argument types"))
+                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`, because it does not have a method with argument types `$arg_ts_string`"))
             end
 
             match_found = false
@@ -48,10 +50,9 @@ module mousetrap
             end
 
             if !match_found
-                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`, because it does not have a method with the correct argument types *and* return type `$return_t`"))
+                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`, because its return type is not `$return_t`"))
             end
 
-            precompile(f, arg_ts)
             return new(f, return_t, arg_ts)
         end
     end
