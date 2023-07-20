@@ -1603,21 +1603,21 @@ function test_popover(container::Container)
         set_relative_position!(popover_button, RELATIVE_POSITION_BELOW)
         @test get_relative_position(popover_button) == RELATIVE_POSITION_BELOW
 
-        #set_child!(popover_button, Separator())
-        #remove_child!(popover_button)
+        set_child!(popover_button, Separator())
+        remove_child!(popover_button)
 
-        #set_popover!(popover_button, Popover())
-        #remove_popover!(popover_button)
+        set_popover!(popover_button, Popover())
+        remove_popover!(popover_button)
 
-        #set_popover_menu!(popover_button, PopoverMenu(MenuModel()))
-        #remove_popover!(popover_button)
+        set_popover_menu!(popover_button, PopoverMenu(MenuModel()))
+        remove_popover!(popover_button)
         
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(popover_button, activate_called) do self::PopoverButton, activate_called
             activate_called[] = true
             return nothing
         end
-        emit_signal_activate(popover_button)
+        activate!(popover_button)
         @test activate_called[] == true
     end
 end
@@ -1631,20 +1631,21 @@ function test_progress_bar(::Container)
 
         @test get_fraction(progress_bar) == 0.0
         set_fraction!(progress_bar, 0.5)
-        @test get_fraction!(progress_bar) == 0.5
+        @test get_fraction(progress_bar) == 0.5
 
         @test get_orientation(progress_bar) == ORIENTATION_HORIZONTAL
         set_orientation!(progress_bar, ORIENTATION_VERTICAL)
         @test get_orientation(progress_bar) == ORIENTATION_VERTICAL
 
         @test get_is_inverted(progress_bar) == false
-        set_is_inverted(progress_bar, true)
+        set_is_inverted!(progress_bar, true)
         @test get_is_inverted(progress_bar) == true
 
         @test get_show_text(progress_bar) == false
         set_show_text!(progress_bar, true)
         set_text!(progress_bar, "text")
         @test get_show_text(progress_bar) == true
+        @test get_text(progress_bar) == "text"
 
         pulse(progress_bar)
     end
@@ -1652,7 +1653,7 @@ end
 
 ### REVEALER
 
-function test_revelaer(::Container)
+function test_revealer(::Container)
     @testset "Revealer" begin
         revealer = Revealer()
         Base.show(devnull, revealer)
@@ -2518,11 +2519,9 @@ main(Main.app_id) do app::Application
         ##test_notebook(container)
         ##test_overlay(container)
         ##test_paned(container)
-        test_popover(container)
-        #test_progress_bar(container)
-        #test_render_area(container)
-        #test_revelaer(container)
-        #test_render_area(container)
+        ##test_popover(container)
+        ##test_progress_bar(container)
+        test_revealer(container)
         #test_scale(container)
         #test_scrollbar(container)
         #test_selection_model(container)
@@ -2538,6 +2537,8 @@ main(Main.app_id) do app::Application
         #test_viewport(container)
         #test_widget(container)
         #test_window(container)
+
+        #test_render_area(container)
 
         return nothing
     end

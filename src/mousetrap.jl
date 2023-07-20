@@ -416,6 +416,7 @@ module mousetrap
         detail_enum_name = :_ * enum
         @assert isdefined(detail, detail_enum_name)
 
+        names = Symbol[]
         push!(out.args, :(const $(esc(enum)) = mousetrap.detail.$detail_enum_name))
         for name in block.args
             if !(name isa Symbol)
@@ -424,14 +425,22 @@ module mousetrap
 
             push!(out.args, :(const $(esc(name)) = detail.$name))
             push!(out.args, :(export $name))
+
+            push!(names, name)
         end
 
+        enum_str = string(enum)
+        enum_sym = QuoteNode(enum)
         to_int_name = Symbol(enum) * :_to_int
+
         push!(out.args, :(Base.string(x::$enum) = string(mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(mousetrap.detail.to_int_name(x))))
-
+        push!(out.args, :(Base.instances(x::Type{$enum}) = [$(names...)]))
+        push!(out.args, :(Base.show(io::IO, x::Type{$enum}) = print(io, (isdefined(Main, $enum_sym) ? "" : "mousetrap.") * $enum_str)))
+        push!(out.args, :(Base.show(io::IO, x::$enum) = print(io, string($enum) * "(" * string(convert(Int64, x)) * ")")))
         return out
     end
+
 
     function show_aux(io::IO, x::T, fields::Symbol...) where T
 
@@ -4167,7 +4176,7 @@ module mousetrap
     @export_function ProgressBar set_orientation! Cvoid Orientation orientation
     @export_function ProgressBar get_orientation Orientation
 
-    Base.show(io::IO, x::ProgressBar) = show_aux(io, x, :fraction, :orientation, :display_mode)
+    Base.show(io::IO, x::ProgressBar) = show_aux(io, x, :fraction, :orientation, :show_text, :text)
 
 ###### spinner.jl
 
@@ -4226,7 +4235,7 @@ module mousetrap
     @add_widget_signals Revealer
     @add_signal_revealed Revealer
 
-    Base.show(io::IO, x::Revealer) = show_aux(io, x, :revealed, :transition_type)
+    Base.show(io::IO, x::Revealer) = show_aux(io, x, :is_revealed, :transition_type)
 
 ###### scale.jl
 
