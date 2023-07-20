@@ -250,7 +250,7 @@ const signal_descriptors = Dict([
     ),
     :items_changed => (
         "(::T, position::Integer, n_removed::Integer, n_added::Integer, [::Data_t]) -> Cvoid", 
-        "Emitted when the number of menu items, or any of their properties, changes.
+        "Emitted when the number of menu items, or any of their properties, changes."
     )
 ])
 
