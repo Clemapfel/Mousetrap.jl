@@ -308,7 +308,7 @@ module mousetrap
     end
     export get_top_level_widget
 
-    @generated function is_native_widget(x)
+    @generated function is_native_widget(x::Any)
         :(return false)
     end
     # no export
@@ -570,7 +570,7 @@ module mousetrap
     elapsed(clock::Clock) ::Time = microseconds(detail.elapsed(clock._internal))
     export elapsed
 
-    Base.show(io, x::Clock) = print(io, "Clock($(elapsed(x))s)")
+    Base.show(io::IO, x::Clock) = print(io, "Clock($(elapsed(x))s)")
 
 ####### angle.jl
 
@@ -1557,10 +1557,13 @@ module mousetrap
     export set_application!
 
     @export_function Window set_maximized! Cvoid Bool b
-    @export_function Window set_fullscreen! Cvoid
+    @export_function Window set_fullscreen! Cvoid Bool b
+    @export_function Window set_minimized! Cvoid Bool b
     @export_function Window present! Cvoid
     @export_function Window set_hide_on_close! Cvoid Bool b
+    @export_function Window get_hide_on_close Bool
     @export_function Window close! Cvoid
+    @export_function Window destroy! Cvoid
 
     function set_child!(window::Window, child::Widget)
         detail.set_child!(window._internal, as_widget_pointer(child))
@@ -1605,7 +1608,7 @@ module mousetrap
     @add_signal_activate_default_widget Window
     @add_signal_activate_focused_widget Window
 
-    Base.show(io::IO, x::Window) = Base.show_aux(io, x, :title)
+    Base.show(io::IO, x::Window) = show_aux(io, x, :title)
 
 ####### action.jl
 
@@ -2270,7 +2273,7 @@ module mousetrap
 
     @export_type AlertDialog SignalEmitter
     AlertDialog(buttons::Vector{String}, message::String, detailed_message::String = "") = AlertDialog(detail._AlertDialog(buttons, message, detailed_message))
-
+    
     function add_button!(dialog::AlertDialog, index::Integer, label::String)
         detail.add_button!(dialog._internal, from_julia_index(index), label)
     end
@@ -2739,7 +2742,7 @@ module mousetrap
 
     Base.show(io::IO, x::Viewport) = show_aux(io, x, 
         :propagate_natural_height, 
-        :propagate_natural_widget
+        :propagate_natural_width
     )
 
 ####### entry.jl
@@ -3824,23 +3827,23 @@ module mousetrap
     get_visible_child(stack::Stack) ::StackID = detail.get_visible_child(stack._internal)
     export get_visible_child
 
-    get_child_at(stack::Stack, index::Integer) ::StackID = detail.get_child_at(stack._internal, convert(Csize_t, index))
+    get_child_at(stack::Stack, index::Integer) ::StackID = detail.get_child_at(stack._internal, from_julia_index(convert(Csize_t, index)))
     export get_child_at
 
     @export_function Stack set_transition_type! Cvoid StackTransitionType transition
     @export_function Stack get_transition_type StackTransitionType
 
-    set_transition_duration!(stack::Stack, duration::Time) = detail.set_transition_duration!(stack._internal, as_microseconds(duration))
+    set_transition_duration!(stack::Stack, duration::Time) = detail.set_transition_duration!(stack._internal, convert(Cfloat, as_microseconds(duration)))
     export set_transition_duration!
 
     get_transition_duration(stack::Stack) ::Time = microseconds(detail.get_transition_duration(stack._internal))
     export get_transition_duration
 
-    @export_function Stack set_is_horizontally_homogeneous Cvoid Bool b
+    @export_function Stack set_is_horizontally_homogeneous! Cvoid Bool b
     @export_function Stack get_is_horizontally_homogeneous Bool
-    @export_function Stack set_is_vertically_homogeneous Cvoid Bool b
+    @export_function Stack set_is_vertically_homogeneous! Cvoid Bool b
     @export_function Stack get_is_vertically_homogeneous Bool
-    @export_function Stack set_should_interpolate_size Cvoid Bool b
+    @export_function Stack set_should_interpolate_size! Cvoid Bool b
     @export_function Stack get_should_interpolate_size Bool
 
     @add_widget_signals Stack
@@ -4457,7 +4460,7 @@ module mousetrap
     @export_widget_function set_cursor! Cvoid CursorType cursor
 
     function set_cursor_from_image!(widget::Widget, image::Image, offset::Vector2i = Vector2i(0, 0))
-        detail.set_cursor_from_image(as_widget_pointer(widget), image._internal, offset.x, offset.y)
+        detail.set_cursor_from_image!(as_widget_pointer(widget), image._internal, offset.x, offset.y)
     end
     export set_cursor_from_image!
 

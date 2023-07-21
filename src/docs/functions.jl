@@ -777,6 +777,13 @@ device_axis_to_string(axis::DeviceAxis) -> String
 Serialize the axes identification.
 """
 
+@document destroy! """
+```
+destroy!(::Window) -> Cvoid
+```
+Free the internally held reference, causing the window to be deallocated. This is only necessary if [`set_hide_on_close`](@ref) was set to `true`.
+"""
+
 @document download """
 ```
 download(texture::TextureObject) -> Image
@@ -1250,6 +1257,13 @@ get_has_wide_handle(::Paned) -> Bool
 Get whether the barrier in between the paneds two children is wide or thin, wide by default.
 """
 
+@document get_hide_on_close """
+```
+get_hide_on_close(::Window) -> Bool
+```
+Get whether the window will be hidden when it is closed, as opposed to destroyed.
+"""
+
 @document get_hide_on_overflow """
 ```
 get_hide_on_overflow(::Widget) -> Bool
@@ -1619,7 +1633,7 @@ Get the current number of columns.
 ```
 get_n_digits(::SpinButton) -> Signed
 ```
-Get the number of digits the spin button should display, or `-1` if unlimited.
+Get the number of digits the spin button should display.
 """
 
 @document get_n_items """
@@ -3520,7 +3534,7 @@ Check if the widget the controller was added to, or any of the widgets children 
 ```
 set_acceleration_rate!(::SpinButton, factor::AbstractFloat) 
 ```
-Multiply the default acceleration rate by given factor. This is the speed at which numbers increase when one of the buttons of a spin button is held down.
+Set the rate at which the spin buttons value accelerates when a button is held down, where `0.0` is default rate, `0.1` is 10%, `1.0` is 100%, etc. May not be negative.
 """
 
 @document set_accept_label! """
@@ -3950,7 +3964,9 @@ clicking the columns title.
 set_hide_on_close!(::Window, ::Bool) 
 ```
 If set to to `true`, the window will be hidden when it is closed, if set to `false`, the window 
-is destroyed when closed. `true` by default.
+is destroyed when closed. `false` by default.
+
+If set to `true`, the caller of this function is responsible for deallocating the window by calling [`destroy!`](@ref).
 """
 
 @document set_hide_on_overflow! """
@@ -4331,7 +4347,7 @@ Set whether the level bar should display its value continuous or segmented.
 ```
 set_n_digits!(::SpinButton, n::Integer) 
 ```
-Set number of digits after the decimal point. This only affects the visuals of the `SpinButton`, the internal value of the 
+Set number of digits after the decimal point, up to a maximum of `20`. This only affects the visuals of the `SpinButton`, the internal value of the 
 underlying adjustment is unaffected.
 """
 
