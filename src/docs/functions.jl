@@ -2727,13 +2727,19 @@ end
 @document log_debug """
 ```
 log_debug(::LogDomain, message::Sting)
+@log_debug(::LogDomain, message::Sting)
 ```
-Display a log message with level `DEBUG`. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
+Display a log message with level `DEBUG`. Messages of
+this level will only be displayed once `set_surpress_debug!`
+is set to `false` for this log domain.
+    
+If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
 """
 
 @document log_info """
 ```
 log_info(::LogDomain, message::Sting)
+@log_info(::LogDomain, message::Sting)
 ```
 Display a log message with level `INFO`. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
 """
@@ -2741,6 +2747,7 @@ Display a log message with level `INFO`. If [`set_log_file!`](@ref) was called b
 @document log_warning """
 ```
 log_warning(::LogDomain, message::Sting)
+@log_warning(::LogDomain, message::Sting)
 ```
 Display a log message with level `WARNING`. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
 """
@@ -2748,6 +2755,7 @@ Display a log message with level `WARNING`. If [`set_log_file!`](@ref) was calle
 @document log_critical """
 ```
 log_critical(::LogDomain, message::Sting)
+@log_critical(::LogDomain, message::Sting)
 ```
 Display a log message with level `CRITICAL`. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
 """
@@ -2755,6 +2763,7 @@ Display a log message with level `CRITICAL`. If [`set_log_file!`](@ref) was call
 @document log_fatal """
 ```
 log_fatal(::LogDomain, message::Sting)
+@log_fatal(::LogDomain, message::Sting)
 ```
 Dispay a log message with level `FATAL`. Immediately after, runtime ends.
 """

@@ -38,7 +38,7 @@ module mousetrap
             actual_return_ts = Base.return_types(f, arg_ts)
 
             if isempty(actual_return_ts)
-                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`, because it does not have a method with argument types `$arg_ts_string`"))
+                throw(AssertionError("Object `$f` is not invokable as function with signature `$signature`, because it does not have a method with argument type(s) `$arg_ts_string`"))
             end
 
             match_found = false
@@ -76,89 +76,37 @@ module mousetrap
     export LogDomain
 
     const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN * ".jl"
-    # no export
+    # no export   
 
-    # only macros are documented in this file, all other documentation is in `mousetrap.jl/src/docs``
-   
-    """
-    ```
-    @log_debug(domain::LogDomain, message::String)
-    log_debug(domain::LogDomain, message::String)
-    ```
-    Send a log message with log level "DEBUG". Messages of
-    this level will only be displayed once `set_surpress_debug`
-    is set to `false` for this log domain.
-    """
     macro log_debug(domain, message)
         return :(mousetrap.detail.log_debug($message, $domain))
     end
-    export @log_debug
-
     log_debug(domain::LogDomain, message::String) = detail.log_debug(message, domain)
-    export log_debug
+    export @log_debug, log_debug
 
-    """
-    ```
-    @log_info(domain::LogDomain, message::String)
-    log_info(domain::LogDomain, message::String)
-    ```
-    Send a log message with log level "INFO". Messages of
-    this level will only be displayed once `set_surpress_info`
-    is set to `false` for this log domain.
-    """
     macro log_info(domain, message)
         return :(mousetrap.detail.log_info($message, $domain))
     end
-    export @log_info
-
     log_info(domain::LogDomain, message::String) = detail.log_info(message, domain)
-    export log_info
+    export @log_info, log_info
 
-    """
-    ```
-    @log_warning(domain::LogDomain, message::String)
-    log_warning(domain::LogDomain, message::String)
-    ```
-    Send a log message with log level "WARNING".
-    """
     macro log_warning(domain, message)
         return :(mousetrap.detail.log_warning($message, $domain))
     end
-    export @log_warning
-
     log_warning(domain::LogDomain, message::String) = detail.log_warning(message, domain)
-    export log_warning
+    export @log_warning, log_warning
 
-    """
-    ```
-    @log_critical(domain::LogDomain, message::String)
-    log_critical(domain::LogDomain, message::String)
-    ```
-    Send a log message with log level "CRITICAL".
-    """
     macro log_critical(domain, message)
         return :(mousetrap.detail.log_critical($message, $domain))
     end
-    export @log_critical
-
     log_critical(domain::LogDomain, message::String) = detail.log_critical(message, domain)
-    export log_critical
+    export @log_critical, log_critical
 
-    """
-    ```
-    @log_fatal(domain::LogDomain, message::String)
-    log_fatal(domain::LogDomain, message::String)
-    ```
-    Send a log mess with log level "FATAL". Immediately after
-    this messages is printed, runtime will exit.
-    """
     macro log_fatal(domain, message)
         return :(mousetrap.detail.log_fatal($message, $domain))
     end
-    export @log_fatal
-
     log_fatal(domain::LogDomain, message::String) = detail.log_fatal(message, domain)
-    export log_fatal
+    export @log_fatal, log_fatal
 
     set_surpress_debug!(domain::LogDomain, b::Bool) = detail.log_set_surpress_debug(domain, b)
     export set_surpress_debug!
@@ -611,7 +559,7 @@ module mousetrap
     Base.convert(::Type{Dates.Microsecond}, time::Time) = Dates.Microsecond(as_microsecond(time))
     Base.convert(::Type{Dates.Nanosecond}, time::Time) = Dates.Nanosecond(as_nanoseconds(time))
     
-    Base.show(io::IO, x::Time) = print(io, "Time($(as_seconds(x)))")
+    Base.show(io::IO, x::Time) = print(io, "Time($(as_seconds(x))s)")
 
     @export_type Clock SignalEmitter
     Clock() = Clock(detail._Clock())

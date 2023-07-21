@@ -1661,6 +1661,7 @@ function test_revealer(::Container)
         revealed_called = Ref{Bool}(false)
         connect_signal_revealed!(revealer, revealed_called) do self::Revealer, revealed_called
             revealed_called[] = true
+            return nothing
         end
 
         set_child!(revealer, Separator())
@@ -1689,10 +1690,12 @@ function test_scale(::Container)
         value_changed_called = Ref{Bool}(false)
         connect_signal_value_changed!(scale, value_changed_called) do self::Scale, value_changed_called
             value_changed_called[] = true
+            return nothing
         end
 
-        set_value!(scale, 0.5)
         @test get_value(scale) == 0.5
+        set_value!(scale, 0.6)
+        @test get_value(scale) == 0.6f0
 
         @test get_lower(scale) == 0.0
         set_lower!(scale, 1.0)
@@ -1702,12 +1705,12 @@ function test_scale(::Container)
         set_upper!(scale, 2.0)
         @test get_upper(scale) == 2.0
 
-        @test get_step_increment(scale) == 0.01
+        @test get_step_increment(scale) == 0.01f0
         set_step_increment!(scale, 0.5)
         @test get_step_increment(scale) == 0.5
 
         @test get_has_origin(scale) == true
-        set_has_origin(scale, false)
+        set_has_origin!(scale, false)
         @test get_has_origin(scale) == false
 
         @test get_orientation(scale) == ORIENTATION_HORIZONTAL
@@ -2521,9 +2524,9 @@ main(Main.app_id) do app::Application
         ##test_paned(container)
         ##test_popover(container)
         ##test_progress_bar(container)
-        test_revealer(container)
-        #test_scale(container)
-        #test_scrollbar(container)
+        ##test_revealer(container)
+        ##test_scale(container)
+        test_scrollbar(container)
         #test_selection_model(container)
         #test_separator(container)
         #test_spin_button(container)
