@@ -4497,11 +4497,6 @@ module mousetrap
     @export_widget_function set_hide_on_overflow! Cvoid Bool b
     @export_widget_function get_hide_on_overflow Bool
 
-    get_frame_clock(widget::Widget) = FrameClock(detail.get_frame_clock(as_widget_pointer(widget)))
-    export get_frame_clock
-
-    @export_widget_function remove_tick_callback! Cvoid
-
     function set_tick_callback!(f, widget::Widget, data::Data_t) where Data_t
         typed_f = TypedFunction(f, TickCallbackResult, (FrameClock, Data_t))
         detail.set_tick_callback!(as_widget_pointer(widget), function(frame_clock_ref)
@@ -4515,6 +4510,8 @@ module mousetrap
         end)
     end
     export set_tick_callback!
+
+    @export_widget_function remove_tick_callback! Cvoid
 
     function set_listens_for_shortcut_action!(widget::Widget, action::Action) ::Cvoid
         detail.set_listens_for_shortcut_action!(as_widget_pointer(widget), action._internal)

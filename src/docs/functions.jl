@@ -939,7 +939,8 @@ Retrieve the ID of the stack page at given position, or `""` if the index is out
 ```
 get_child_position(fixed::Fixed, child::Widget) -> Vector2f
 ```
-Get the fixed location of a child, in absolute widget-space coordinates.
+Get the fixed location of a child, in absolute widget-space coordinates. If the `Fixed` is not
+yet realized, `(0, 0)` will be returned.
 """
 
 @document get_child_x_alignment """
@@ -1182,13 +1183,6 @@ Get the currently displayed fraction of the progress bar, in `[0, 1]`.
 get_fragment_shader_id(::Shader) -> Cuint
 ```
 Get the native OpenGL handle of the shader program.
-"""
-
-@document get_frame_clock """
-```
-get_frame_clock(::Widget) -> FrameClock
-```
-Get a `FrameClock` that is synched to the widgets render cycle.
 """
 
 @document get_groups """
