@@ -1,8 +1,6 @@
- **NOTE**: This repo is under active development and should not be interacted with by the public. I will make an announcement in all the relevant channels when it is ready to be used by third parties
+ ## **NOTE**: This repo is under active development and should not be interacted with by the public. I will make an announcement in all the relevant channels when it is ready to be used by third parties
 
- ---
-
- ---
+ 
 
 # Mousetrap
 
@@ -10,7 +8,7 @@
 
 Mousetrap is a GUI library for Julia. It, and its [C++-component of the same name](https://github.com/clemapfel/mousetrap), fully wrap [GTK4](https://docs.gtk.org/gtk4/) (which is written in C), *vastly* simplifying its interface to improve ease-of-use without sacrificing flexibility.
 
-It aims to give developers of all skill levels the tools to start creating complex GUI applications with little effort and studying.
+It aims to give developers of all skill levels the tools to start creating complex GUI applications with little effort or study.
 
 > **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability and portability may be affected. Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen.
 
@@ -32,13 +30,12 @@ It aims to give developers of all skill levels the tools to start creating compl
 |------------------|--------------------|-----------------------------|
 | Linux (64-bit)   | `✓`                | `✓`                        |
 | Windows (64-bit) | `✓`                | `✓`                        |
-| FreeBSD          | `✓`                | `?`                        | 
+| FreeBSD          | `✓`                | `✕*`                        | 
 | MacOS            | `✕*`               | `✕`                        |
 
-`✓` - Available<br>
-`?` - Available, but not yet tested<br>
-`✕*` - Will be available with future updates<br>
-`✕`- Will never be available<br>
+`✓ ` Vailable<br>
+`✕ ` Will never be available<br>
+`✕*` Will be available with future updates<br>
 
 ---
 
@@ -49,6 +46,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 + Simplify installation process to `] add mousetrap`
 + Add support for global and per-widget custom themes by exposing the CSS interface
 + Implement installation of .desktop files on end-user computers
++ Add a toggle to `RenderTexture` that allows rendering to a MSAA buffer
 + Allow bundling of mousetrap apps, their resources, and all their dependencies into a portable C-executable
 + Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
@@ -56,6 +54,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 + Fully polish interactive use from within the REPL
 + Make all functions that modify the global state thread-safe
 + Add an event controller to capture video game controller / joystick events
++ Allow binding textures to fragment shader uniforms at texture unit 1 or higher, currently, only texture unit 0 is supported
 + Add 3D shapes and geometry shaders to the OpenGL component
 
 ---

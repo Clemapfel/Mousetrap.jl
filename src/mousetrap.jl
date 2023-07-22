@@ -487,7 +487,7 @@ module mousetrap
         w::T
         
         Vector4{T}(all::Number) where T = new{T}(convert(T, all), convert(T, all), convert(T, all), convert(T, all))
-        Vector4{T}(x::Number, y::Number, z::Number) where T = new{T}(convert(T, x), convert(T, y), convert(T, z), convert(T, w))
+        Vector4{T}(x::Number, y::Number, z::Number, w::Number) where T = new{T}(convert(T, x), convert(T, y), convert(T, z), convert(T, w))
     end
     export Vector4
 
@@ -502,7 +502,7 @@ module mousetrap
     const Vector4i = Vector4{Cint}
     const Vector4ui = Vector4{Csize_t}
 
-    export Vector3, Vector3f, Vector3i, Vector3ui
+    export Vector4, Vector4f, Vector4i, Vector4ui
 
     Base.show(io::IO, x::Vector2{T}) where T = print(io, "Vector2{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ")")
     Base.show(io::IO, x::Vector3{T}) where T = print(io, "Vector3{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")")
@@ -4640,6 +4640,18 @@ module mousetrap
 
     @export_function GLTransform reset! Cvoid
 
+    function Base.:(==)(a::GLTransform, b::GLTransform)
+        for i in 1:4
+            for j in 1:4
+                if a[i, j] != b[i, j]
+                    return false
+                end
+            end
+        end
+        return true
+    end
+
+    Base.:(!=)(a::GLTransform, b::GLTransform) = !(a == b)
     Base.show(io::IO, x::GLTransform) = show_aux(io, x)
 
 ###### shader.jl
@@ -4657,28 +4669,28 @@ module mousetrap
     @export_function Shader get_vertex_shader_id Cuint
 
     function create_from_string!(shader::Shader, type::ShaderType, glsl_code::String) ::Bool
-        return detail.create_from_string!(shader._internal, type, code)
+        return detail.create_from_string!(shader._internal, type, glsl_code)
     end
     export create_from_string!
 
-    function create_from_file!(shader::Shader, type::ShaderType, file::String) ::Bool
-        return detail.create_from_file!(shader._internal, type, file)
+    function create_from_file!(shader::Shader, type::ShaderType, path::String) ::Bool
+        return detail.create_from_file!(shader._internal, type, path)
     end
     export create_from_file!
 
     @export_function Shader get_uniform_location Cint String name
 
-    @export_function Shader set_uniform_float! Cint String name Cfloat float
-    @export_function Shader set_uniform_int! Cint String name Cint float
-    @export_function Shader set_uniform_uint! Cint String name Cuint float
+    @export_function Shader set_uniform_float! Cvoid String name Cfloat float
+    @export_function Shader set_uniform_int! Cvoid String name Cint float
+    @export_function Shader set_uniform_uint! Cvoid String name Cuint float
 
     set_uniform_vec2!(shader::Shader, name::String, vec2::Vector2f) = detail.set_uniform_vec2!(shader._internal, name, vec2)
     export set_uniform_vec2!
 
-    set_uniform_vec3!(shader::Shader, name::String, vec2::Vector2f) = detail.set_uniform_vec3!(shader._internal, name, vec2)
+    set_uniform_vec3!(shader::Shader, name::String, vec3::Vector3f) = detail.set_uniform_vec3!(shader._internal, name, vec3)
     export set_uniform_vec3!
 
-    set_uniform_vec4!(shader::Shader, name::String, vec2::Vector2f) = detail.set_uniform_vec4!(shader._internal, name, vec2)
+    set_uniform_vec4!(shader::Shader, name::String, vec4::Vector4f) = detail.set_uniform_vec4!(shader._internal, name, vec4)
     export set_uniform_vec4!
 
     set_uniform_transform!(shader::Shader, name::String, transform::GLTransform) = detail.set_uniform_transform!(shader._internal, name, transform._internal)
@@ -4731,13 +4743,13 @@ module mousetrap
     create!(texture::TextureObject, width::Integer, height::Integer) = detail.texture_create!(texture._internal.cpp_object, width, height)
     export create!
 
-    create_from_image!(texture::TextureObject, image::Image) = detail.texture_create_from_image(texture._internal.cpp_object, image._internal)
+    create_from_image!(texture::TextureObject, image::Image) = detail.texture_create_from_image!(texture._internal.cpp_object, image._internal)
     export create_from_image!
 
-    set_wrap_mode!(texture::TextureObject, mode::TextureWrapMode) = detail.texture_set_wrap_mode(texture._internal.cpp_object, mode)
+    set_wrap_mode!(texture::TextureObject, mode::TextureWrapMode) = detail.texture_set_wrap_mode!(texture._internal.cpp_object, mode)
     export set_wrap_mode!
 
-    set_scale_mode!(texture::TextureObject, mode::TextureWrapMode) = detail.set_scale_mode(texture._internal.cpp_object, mode)
+    set_scale_mode!(texture::TextureObject, mode::TextureScaleMode) = detail.texture_set_scale_mode!(texture._internal.cpp_object, mode)
     export set_scale_mode!
 
     get_wrap_mode(texture::TextureObject) ::TextureWrapMode = detail.texture_get_wrap_mode(texture._internal.cpp_object)
@@ -4813,20 +4825,20 @@ module mousetrap
     end
     export Rectangle
 
-    as_circle!(shape::Shape, center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer) = detail.as_circle!(shape._internal, center, convert(Cfloat, radius), n_outer_vertices)
+    as_circle!(shape::Shape, center::Vector2f, radius::Number, n_outer_vertices::Integer) = detail.as_circle!(shape._internal, center, convert(Cfloat, radius), n_outer_vertices)
     export as_circle!
 
-    function Circle(center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer) ::Shape
+    function Circle(center::Vector2f, radius::Number, n_outer_vertices::Integer) ::Shape
         out = Shape()
         as_circle!(out, center, radius, n_outer_vertices)
         return out
     end
     export Circle
 
-    as_ellipse!(shape::Shape, center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) = detail.as_ellipse!(shape._internal, center, convert(Cfloat, x_radius), convert(Cfloat, y_radius), n_outer_vertices)
+    as_ellipse!(shape::Shape, center::Vector2f, x_radius::Number, y_radius::Number, n_outer_vertices::Integer) = detail.as_ellipse!(shape._internal, center, convert(Cfloat, x_radius), convert(Cfloat, y_radius), n_outer_vertices)
     export as_ellipse!
 
-    function Ellipse(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) ::Shape
+    function Ellipse(center::Vector2f, x_radius::Number, y_radius::Number, n_outer_vertices::Integer) ::Shape
         out = Shape()
         as_ellipse!(out, center, x_radius, y_radius, n_outer_vertices)
         return out
@@ -4873,36 +4885,36 @@ module mousetrap
     end
     export Polygon
 
-    function as_rectangular_frame!(shape::Shape, top_left::Vector2f, outer_size::Vector2f, x_width::AbstractFloat, y_width::AbstractFloat)
+    function as_rectangular_frame!(shape::Shape, top_left::Vector2f, outer_size::Vector2f, x_width::Number, y_width::Number)
         detail.as_rectangular_frame!(shape._internal, top_left, outer_size, convert(Cfloat, x_width), convert(Cfloat, y_width))
     end
     export as_rectangular_frame!
 
-    function RectangularFrame(top_left::Vector2f, outer_size::Vector2f, x_width::AbstractFloat, y_width::AbstractFloat)
+    function RectangularFrame(top_left::Vector2f, outer_size::Vector2f, x_width::Number, y_width::Number)
         out = Shape()
         as_rectangular_frame!(out, top_left, outer_size, x_width, y_width)
         return out
     end
     export RectangularFrame
 
-    function as_circular_ring!(shape::Shape, center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer)
+    function as_circular_ring!(shape::Shape, center::Vector2f, outer_radius::Number, thickness::Number, n_outer_vertices::Integer)
         detail.as_circular_ring!(shape._internal, center, convert(Cfloat, outer_radius), convert(Cfloat, thickness), n_outer_vertices)
     end
     export as_circular_ring!
 
-    function CircularRing(center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer)
+    function CircularRing(center::Vector2f, outer_radius::Number, thickness::Number, n_outer_vertices::Integer)
         out = Shape()
         as_circular_ring!(out, center, outer_radius, thickness, n_outer_vertices)
         return out
     end
     export CircularRing
 
-    function as_elliptical_ring!(shape::Shape, center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Integer)
+    function as_elliptical_ring!(shape::Shape, center::Vector2f, outer_x_radius::Number, outer_y_radius::Number, x_thickness::Number, y_thickness::Number, n_outer_vertices::Integer)
         detail.as_elliptical_ring!(shape._internal, center, convert(Cfloat, outer_x_radius), convert(Cfloat, outer_y_radius), convert(Cfloat, x_thickness), convert(Cfloat, y_thickness), n_outer_vertices)
     end
     export as_elliptical_ring!
 
-    function EllipticalRing(center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Integer) ::Shape
+    function EllipticalRing(center::Vector2f, outer_x_radius::Number, outer_y_radius::Number, x_thickness::Number, y_thickness::Number, n_outer_vertices::Integer) ::Shape
         out = Shape()
         as_elliptical_ring!(out, center, outer_x_radius, outer_y_radius, x_thickness, y_thickness, n_outer_vertices)
         return out
@@ -4982,7 +4994,7 @@ module mousetrap
     @export_function Shape get_top_left Vector2f
 
     function rotate!(shape::Shape, angle::Angle, origin::Vector2f = Vector2f(0, 0))
-        detail.rotate!(shape._internal, as_radians(angle), origin.x, origin.y)
+        detail.rotate!(shape._internal, convert(Cfloat, as_radians(angle)), origin.x, origin.y)
     end
     export rotate!
 
@@ -5040,19 +5052,19 @@ module mousetrap
     get_uniform_vec4(task::RenderTask, name::String) ::Vector4f = detail.get_uniform_vec4(task._internal, name)
     export get_uniform_vec4
 
-    set_uniform_rgba!(task::RenderTask, name::String, rgba::RGBA) = detail.set_uniform_rgba!(task._internal, name, rbga)
+    set_uniform_rgba!(task::RenderTask, name::String, rgba::RGBA) = detail.set_uniform_rgba!(task._internal, name, rgba)
     export set_uniform_rgba!
 
-    get_uniform_rgba(task::RenderTask, name::String) ::RGBA = detail.get_uniform_rgba(task._internal, name, rgba)
+    get_uniform_rgba(task::RenderTask, name::String) ::RGBA = detail.get_uniform_rgba(task._internal, name)
     export get_uniform_rgba
 
-    set_uniform_hsva!(task::RenderTask, name::String, hsva::RGBA) = detail.set_uniform_hsva!(task._internal, name, rbga)
+    set_uniform_hsva!(task::RenderTask, name::String, hsva::HSVA) = detail.set_uniform_hsva!(task._internal, name, hsva)
     export set_uniform_hsva!
 
-    get_uniform_hsva(task::RenderTask, name::String) ::HSVA = detail.get_uniform_hsva(task._internal, name, hsva)
-    export get_uniform_rgba
+    get_uniform_hsva(task::RenderTask, name::String) ::HSVA = detail.get_uniform_hsva(task._internal, name)
+    export get_uniform_hsva
 
-    set_uniform_transform!(task::RenderTask, name::String, transform::GLTransform) = detail.set_uniform_transform(task._internal, transform._internal)
+    set_uniform_transform!(task::RenderTask, name::String, transform::GLTransform) = detail.set_uniform_transform!(task._internal, name, transform._internal)
     export set_uniform_transform!
 
     get_uniform_transform(task::RenderTask, name::String) ::GLTransform = GLTransform(detail.get_uniform_transform(task._internal, name))

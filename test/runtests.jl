@@ -2301,27 +2301,29 @@ function test_render_area(::Container)
     render_area = RenderArea()
 
     @testset "RenderArea" begin
-        make_current(render_area)
+        #make_current(render_area) # would print soft warning because render area is not yet realized
         queue_render(render_area)
         @test render_area isa RenderArea
     end
 
-    @testset "Shape" begin
-        for shape in [
-            Point(Vector2f(0, 0)),
-            Points([Vector2f(0.5, 0.5), Vector2f(0, 0,)]),
-            Triangle(Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5), Vector2f(0.5, -0.5)),
-            Rectangle(Vector2f(-0.5, -0.5), Vector2f(1, 1)),
-            Circle(Vector2f(0, 0), 1, 16),
-            Ellipse(Vector2f(0, 0), 0.5, 1, 16),
-            Line(Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5)),
-            LineStrip([Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5), Vector2f(0.5, -0.5)]),
-            Polygon([Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5), Vector2f(0.5, -0.5)]),
-            RectangularFrame(Vector2f(-0.5, 0.5), Vector2f(1, 1), 0.1, 0.1),
-            CircularRing(Vector2f(0.0, 0.0), 1.0, 0.1, 16),
-            CircularRing(Vector2f(0.0, 0.0), 1.0, 0.1, 0.2, 16),
-            WireFrame([Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5), Vector2f(0.5, -0.5)])
-        ]
+    for pair in [
+        "Point" => Point(Vector2f(0, 0)),
+        "Points" => Points([Vector2f(0.5, 0.5), Vector2f(0, 0,)]),
+        "Triangle" => Triangle(Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5), Vector2f(0.5, -0.5)),
+        "Rectangle" => Rectangle(Vector2f(-0.5, -0.5), Vector2f(1, 1)),
+        "Circle" => Circle(Vector2f(0, 0), 1, 16),
+        "Ellipse" => Ellipse(Vector2f(0, 0), 0.5, 1, 16),
+        "Line" => Line(Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5)),
+        "LineStrip" => LineStrip([Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5), Vector2f(0.5, -0.5)]),
+        "Polygon" => Polygon([Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5), Vector2f(0.5, -0.5)]),
+        "RectangularFrame" => RectangularFrame(Vector2f(-0.5, 0.5), Vector2f(1, 1), 0.1, 0.1),
+        "CircularRing" => CircularRing(Vector2f(0.0, 0.0), 1.0, 0.1, 8),
+        "EllipticalRing" => EllipticalRing(Vector2f(0.0, 0.0), 1.0, 0.1, 0.2, 0.1, 8),
+        "Wireframe" => Wireframe([Vector2f(-0.5, 0.5), Vector2f(0.5, 0.5), Vector2f(0.5, -0.5)])
+    ]
+        @testset "$(pair[1])" begin
+        
+            shape = pair[2]
             add_render_task!(render_area, RenderTask(shape))
             add_render_task!(render_area, RenderTask(Outline(shape)))
 
@@ -2346,16 +2348,20 @@ function test_render_area(::Container)
             @test bounding_box.top_left == get_top_left(shape)
             @test bounding_box.size == get_size(shape)
 
-            set_top_left!(Vector2f(1, 2))
+            set_top_left!(shape, Vector2f(1, 2))
             @test get_top_left(shape) == Vector2f(1, 2)
 
-            set_centroid!(Vector2f(1, 2))
-            @test get_centroid(shape) == Vector2f(1, 2)
+            set_centroid!(shape, Vector2f(1, 2))
+            centroid = get_centroid(shape)
+            @test isapprox(centroid.x, 1) && isapprox(centroid.y, 2)
 
             rotate!(shape, degrees(180), get_centroid(shape))
 
+            new_centroid = get_centroid(shape)
+            @test isapprox(centroid.x, new_centroid.x) && isapprox(centroid.y, new_centroid.y)
+
             set_color!(shape, RGBA(0, 1, 1, 1))
-            @test get_color(shape, 1) == RGBA(0, 1, 1, 1)
+            @test get_vertex_color(shape, 1) == RGBA(0, 1, 1, 1)
         end
     end
 
@@ -2373,14 +2379,6 @@ function test_render_area(::Container)
         out vec4 _vertex_color;
         out vec2 _texture_coordinates;
         out vec3 _vertex_position;
-
-        uniform float _float;
-        uniform int _int;
-        uniform uint _uint;
-        uniform vec2 _vec2;
-        uniform vec3 _vec3;
-        uniform vec4 _vec4;
-        uniform mat4 _mat4;
 
         void main()
         {
@@ -2413,16 +2411,15 @@ function test_render_area(::Container)
 
         void main()
         {
-            if (_texture_set != 1)
-                _fragment_color = _vertex_color;
-            else
-                _fragment_color = texture2D(_texture, _texture_coordinates) * _vertex_color;
+            // prevent optimizing uniform away
+            float value = _float + _int + _uint + _vec2.x + _vec3.x + _vec4.x + _mat4[0][0];
+            _fragment_color = vec4(vec3(value), 1);
         }
         """
 
         shader = Shader()
-        create_from_string!(shader, SHADER_TYPE_FRAGMENT, fragment_shader_source)
-        create_from_string!(shader, SHADER_TYPE_VERTEX, vertex_shader_source)
+        @test create_from_string!(shader, SHADER_TYPE_FRAGMENT, fragment_shader_source)
+        @test create_from_string!(shader, SHADER_TYPE_VERTEX, vertex_shader_source)
 
         @test get_program_id(shader) != 0
         @test get_fragment_shader_id(shader) != 0
@@ -2432,9 +2429,9 @@ function test_render_area(::Container)
             @test get_uniform_location(shader, name) >= 0
         end
 
-        set_uniform_float!(shader, "_float", 1234.0)
-        set_uniform_int!(shader, "_int", 1234)
-        set_uniform_uint!(shader, "_uint", UInt64(1234))
+        set_uniform_float!(shader, "_float", Cfloat(1234.0))
+        set_uniform_int!(shader, "_int", Cint(1234))
+        set_uniform_uint!(shader, "_uint", Cuint(1234))
         set_uniform_vec2!(shader, "_vec2", Vector2f(1, 2))
         set_uniform_vec3!(shader, "_vec3", Vector3f(1, 2, 3))
         set_uniform_vec4!(shader, "_vec4", Vector4f(1, 2, 3, 4))
@@ -2449,16 +2446,16 @@ function test_render_area(::Container)
         blend_mode = BLEND_MODE_NONE
         transform = GLTransform()
 
-        task = RenderTask(shape, shader, transform, blend_mode)
+        task = RenderTask(shape; shader = shader, transform = transform, blend_mode = blend_mode)
 
-        set_uniform_float!(task, "_float", 1234.0)
+        set_uniform_float!(task, "_float", Cfloat(1234.0))
         @test get_uniform_float(task, "_float") == 1234.0
 
-        set_uniform_int!(task, "_int", 1234)
+        set_uniform_int!(task, "_int", Cint(1234))
         @test get_uniform_int(task, "_int") == 1234
 
-        set_uniform_uint!(task, "_uint", UInt64(1234))
-        @test get_uniform_uint(task, "_uint") == UInt64(1234)
+        set_uniform_uint!(task, "_uint", UInt32(1234))
+        @test get_uniform_uint(task, "_uint") == UInt(1234)
 
         set_uniform_vec2!(task, "_vec2", Vector2f(1, 2))
         @test get_uniform_vec2(task, "_vec2") == Vector2f(1, 2)
@@ -2493,9 +2490,9 @@ function test_render_area(::Container)
             create!(t, 100, 100)
             create_from_image!(t, image)
 
-            download(texture) == image
-            bind(t)
-            unbind(t)
+            mousetrap.download(texture) == image
+            mousetrap.bind(t)
+            mousetrap.unbind(t)
 
             @test get_wrap_mode(t) == TEXTURE_WRAP_MODE_REPEAT
             set_wrap_mode!(t, TEXTURE_WRAP_MODE_STRETCH)
@@ -2505,7 +2502,7 @@ function test_render_area(::Container)
             set_scale_mode!(t, TEXTURE_SCALE_MODE_LINEAR)
             @test get_scale_mode(t) == TEXTURE_SCALE_MODE_LINEAR
 
-            @test get_size(t) == Vecto2i(32, 32)
+            @test get_size(t) == Vector2i(32, 32)
             @test get_native_handle(t) != 0
 
             Base.show(devnull, t)
@@ -2577,6 +2574,7 @@ main(Main.app_id) do app::Application
         test_popover(container)
         test_progress_bar(container)
         test_revealer(container)
+        test_render_area(container)
         test_scale(container)
         test_scrollbar(container)
         test_selection_model(container)
@@ -2592,9 +2590,7 @@ main(Main.app_id) do app::Application
         test_viewport(container)
         test_widget(container)
         test_window(container)
-
-        #test_render_area(container)
-
+                
         return nothing
     end
 

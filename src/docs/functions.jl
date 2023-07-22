@@ -8,28 +8,28 @@
 
 @document Circle """
 ```
-Circle(center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer) -> Shape
+Circle(center::Vector2f, radius::Number, n_outer_vertices::Integer) -> Shape
 ```
 Create a shape as a circle, defined by its center and radius. In OpenGL coordinates.
 """
 
 @document CircularRing """
 ```
-CircularRing(center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer) -> Shape 
+CircularRing(center::Vector2f, outer_radius::Number, thickness::Number, n_outer_vertices::Integer) -> Shape 
 ```
 Create a shape as a circular ring, defined by its center, `outer_radius`, which is the distance to the out perimeter, and `thickness` which is the distance between the inner and out perimeter.
 """
 
 @document Ellipse """
 ```
-Ellipse(center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) -> Shape
+Ellipse(center::Vector2f, x_radius::Number, y_radius::Number, n_outer_vertices::Integer) -> Shape
 ```
 Create a shape as an ellipse, defined by its center and radii along the x- and y-dimension, in OpenGL coordinates.
 """
 
 @document EllipticalRing """
 ```
-EllipticalRing(center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Unsigned) -> Shape
+EllipticalRing(center::Vector2f, outer_x_radius::Number, outer_y_radius::Number, x_thickness::Number, y_thickness::Number, n_outer_vertices::Unsigned) -> Shape
 ```
 Create a shape as an elliptical ring, where
 + `center`: center of the ring
@@ -99,7 +99,7 @@ Create a shape as an axis-aligned rectangle, in OpenGL coordinates.
 
 @document RectangularFrame """
 ```
-RectangularFrame(top_left::Vector2f, outer_size::Vector2f, x_width::AbstractFloat, y_width::AbstractFloat) -> Shape
+RectangularFrame(top_left::Vector2f, outer_size::Vector2f, x_width::Number, y_width::Number) -> Shape
 ```
 Create a shape as a rectangular frame, where `x_width`, `y_width` are the "thickness" of the frames filled area. In OpenGL coordinates.
 """
@@ -328,14 +328,14 @@ Apply transform to a vector, both operate in OpenGL coordinates.
 
 @document as_circle! """
 ```
-as_circle!(::Shape, center::Vector2f, radius::AbstractFloat, n_outer_vertices::Integer) 
+as_circle!(::Shape, center::Vector2f, radius::Number, n_outer_vertices::Integer) 
 ```
 Create a shape as a circle, defined by its center and radius. In OpenGL coordinates.
 """
 
 @document as_circular_ring! """
 ```
-as_circular_ring!(::Shape, center::Vector2f, outer_radius::AbstractFloat, thickness::AbstractFloat, n_outer_vertices::Integer) 
+as_circular_ring!(::Shape, center::Vector2f, outer_radius::Number, thickness::Number, n_outer_vertices::Integer) 
 ```
 Create a shape as a circular ring, defined by its center, `outer_radius`, which is the distance to the out perimeter, and `thickness` which is the distance between the inner and out perimeter.
 """
@@ -361,14 +361,14 @@ Convert the angle to degrees, in [0°, 360°].
 
 @document as_ellipse! """
 ```
-as_ellipse!(::Shape, center::Vector2f, x_radius::AbstractFloat, y_radius::AbstractFloat, n_outer_vertices::Integer) 
+as_ellipse!(::Shape, center::Vector2f, x_radius::Number, y_radius::Number, n_outer_vertices::Integer) 
 ```
 Create a shape as an ellipse, defined by its center and radii along the x- and y-dimension, in OpenGL coordinates.
 """
 
 @document as_elliptical_ring! """
 ```
-as_elliptical_ring!(::Shape, center::Vector2f, outer_x_radius::AbstractFloat, outer_y_radius::AbstractFloat, x_thickness::AbstractFloat, y_thickness::AbstractFloat, n_outer_vertices::Unsigned) 
+as_elliptical_ring!(::Shape, center::Vector2f, outer_x_radius::Number, outer_y_radius::Number, x_thickness::Number, y_thickness::Number, n_outer_vertices::Unsigned) 
 ```
 Create a shape as an elliptical ring, where
 + `center`: center of the ring
@@ -482,7 +482,7 @@ Create a shape as an axis-aligned rectangle, in OpenGL coordinates.
 
 @document as_rectangular_frame! """
 ```
-as_rectangular_frame!(::Shape, top_left::Vector2f, outer_size::Vector2f, x_width::AbstractFloat, y_width::AbstractFloat) 
+as_rectangular_frame!(::Shape, top_left::Vector2f, outer_size::Vector2f, x_width::Number, y_width::Number) 
 ```
 Create a shape as a rectangular frame, where `x_width`, `y_width` are the "thickness" of the frames filled area. In OpenGL coordinates.
 """
@@ -2290,7 +2290,7 @@ Get a registered uniform `int`, or `0` if no such uniform was registered.
 ```
 get_uniform_location(::Shader, name::String) -> Cuint
 ```
-Get the OpenGL shader program uniform location for the given uniform name, or `0` if no such uniform exists.
+Get the OpenGL shader program uniform location for the given uniform name, or `-1` if no such uniform exists. Note that uniform names may be optimized away by the GLSL compiler if they go unused.
 """
 
 @document get_uniform_rgba """
@@ -4507,9 +4507,9 @@ Scale image by a constant factor, in `{1, 2, 3, ...}`.
 
 @document set_scale_mode! """
 ```
-set_scale_mode!(texture::mousetrap.TextureObject, mode::TextureWrapMode) 
+set_scale_mode!(texture:TextureObject, ::TextureScaleMode) 
 ```
-Set the OpenGL scale mode the texture uses.
+Set the OpenGL scale mode the texture uses, `TEXTURE_SCALE_MODE_NEAREST` by default.
 """
 
 @document set_scope! """
@@ -4888,8 +4888,8 @@ Set the type of transition animation.
 
 @document set_uniform_float! """
 ```
-set_uniform_float!(::Shader, name::String, v::Cfloat) 
-set_uniform_float!(::RenderTask, name::String, v::Cfloat) 
+set_uniform_float!(::Shader, name::String, ::Cfloat) 
+set_uniform_float!(::RenderTask, name::String, ::Cfloat) 
 ```
 Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
@@ -4898,7 +4898,7 @@ This value will be a `float` in GLSL.
 
 @document set_uniform_hsva! """
 ```
-set_uniform_hsva!(task::RenderTask, name::String, hsva::RGBA) 
+set_uniform_hsva!(task::RenderTask, name::String, ::RGBA) 
 ```
 Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
@@ -4907,8 +4907,8 @@ This value will be a `vec4` in GLSL.
 
 @document set_uniform_int! """
 ```
-set_uniform_int!(::Shader, name::String, float::Int32) 
-set_uniform_int!(::RenderTask, name::String, v::Int32) 
+set_uniform_int!(::Shader, name::String, ::Cint) 
+set_uniform_int!(::RenderTask, name::String, ::Cint) 
 ```
 Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
@@ -4917,7 +4917,7 @@ This value will be a `int` in GLSL.
 
 @document set_uniform_rgba! """
 ```
-set_uniform_rgba!(::RenderTask, name::String, rgba::RGBA) 
+set_uniform_rgba!(::RenderTask, name::String, ::RGBA) 
 ```
 Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
@@ -4926,8 +4926,8 @@ This value will be a `vec4` in GLSL.
 
 @document set_uniform_transform! """
 ```
-set_uniform_transform!(::Shader, name::String, transform::GLTransform) 
-set_uniform_transform!(::RenderTask, name::String, transform::GLTransform) 
+set_uniform_transform!(::Shader, name::String, ::GLTransform) 
+set_uniform_transform!(::RenderTask, name::String, ::GLTransform) 
 ```
 Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
@@ -4936,8 +4936,8 @@ This value will be a `mat4x4` in GLSL.
 
 @document set_uniform_uint! """
 ```
-set_uniform_uint!(::Shader, name::String, float::UInt32) 
-set_uniform_uint!(::RenderTask, name::String, v::UInt32) 
+set_uniform_uint!(::Shader, name::String, ::Cuint) 
+set_uniform_uint!(::RenderTask, name::String, ::Cuint) 
 ```
 Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
@@ -4946,8 +4946,8 @@ This value will be a `uint` in GLSL.
 
 @document set_uniform_vec2! """
 ```
-set_uniform_vec2!(::Shader, name::String, vec2::Vector2f) 
-set_uniform_vec2!(::RenderTask, name::String, v::Vector2f) 
+set_uniform_vec2!(::Shader, name::String, ::Vector2f) 
+set_uniform_vec2!(::RenderTask, name::String, ::Vector2f) 
 ```
 Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
@@ -4956,8 +4956,8 @@ This value will be a `vec2` in GLSL.
 
 @document set_uniform_vec3! """
 ```
-set_uniform_vec3!(::Shader, name::String, vec2::Vector2f) 
-set_uniform_vec3!(::RenderTask, name::String, v::StaticArraysCore.SVector{3, Float32}) 
+set_uniform_vec3!(::Shader, name::String, ::Vector3f) 
+set_uniform_vec3!(::RenderTask, name::String, ::Vector3f) 
 ```
 Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
@@ -4966,8 +4966,8 @@ This value will be a `vec3` in GLSL.
 
 @document set_uniform_vec4! """
 ```
-set_uniform_vec4!(::Shader, name::String, vec2::Vector2f) 
-set_uniform_vec4!(::RenderTask, name::String, v::StaticArraysCore.SVector{4, Float32}) 
+set_uniform_vec4!(::Shader, name::String, ::Vector4f) 
+set_uniform_vec4!(::RenderTask, name::String, ::Vector4f) 
 ```
 Assign a value to a uniform in the shader program, whose variable name exactly matches `name`. 
 
@@ -4980,7 +4980,7 @@ set_upper!(::Adjustment, ::Number)
 set_upper!(::Scale, ::Number) 
 set_upper!(::SpinButton, ::Number) 
 ```
-Set upper bound of th underlying adjustment.
+Set upper bound of the underlying adjustment.
 """
 
 @document set_use_markup! """
@@ -5108,7 +5108,7 @@ Set wrap mode, this determines at which point of a line a linebreak will be inse
 ```
 set_wrap_mode!(::TextureObject, mode::TextureWrapMode) 
 ```
-Set OpenGL texture wrap mode.
+Set OpenGL texture wrap mode, `TEXTURE_WRAP_MODE_REPEAT` by default.
 """
 
 @document set_x_alignment! """
