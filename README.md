@@ -1,8 +1,12 @@
-# NOTE: This repo is under active development and should not be interacted with by the public. I will make an announcement in all the relevant channels when it is ready to be used by third parties
+ **NOTE**: This repo is under active development and should not be interacted with by the public. I will make an announcement in all the relevant channels when it is ready to be used by third parties
+
+ ---
+
+ ---
 
 # Mousetrap
 
-![](docs/src/assets/logo.png)
+![](docs/src/assets/banner.png)
 
 Mousetrap is a GUI library for Julia. It, and its [C++-component of the same name](https://github.com/clemapfel/mousetrap), fully wrap [GTK4](https://docs.gtk.org/gtk4/) (which is written in C), *vastly* simplifying its interface to improve ease-of-use without sacrificing flexibility.
 
