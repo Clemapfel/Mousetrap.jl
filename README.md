@@ -6,7 +6,7 @@
 
 Mousetrap is a GUI library for Julia. It, and its [stand-alone C++-component of the same name](https://github.com/clemapfel/mousetrap), fully wrap [GTK4](https://docs.gtk.org/gtk4/) (which is written in C), *vastly* simplifying its interface to improve ease-of-use without sacrificing flexibility.
 
-It aims to give developers of all skill levels the tools to start creating complex GUI applications with little effort or study.
+It aims to give developers of all skill levels the tools to start creating complex GUI applications with little time and effort.
 
 > **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability, portability, and polish of documentation may be affected. <br>
 Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen).
@@ -33,18 +33,18 @@ Consider participating in the development by [opening an issue](https://github.c
 ---
 
 ## Features
-+ Create complex GUI application for Linux, Windows, and MacOS*
++ Create complex GUI application for Linux, Windows, ~~and MacOS~~*
 + Choose from over 40 different kinds of pre-made widgets, or create your own
 + Supports mice, keyboards, touchscreens, touchpads, and stylus devices
 + Image processing facilities, well-suited for image manipulation programs
 + Fully abstracted OpenGL interface, allows for high-performance, hardware-accelerated rendering of custom shapes / shaders
-+ [Hand-written manual and extensive documentation](todo): every exported symbol is documented
++ [Hand-written manual and extensive documentation](https://clemens-cords.com/mousetrap): every exported symbol is documented
 
 ---
 
 ## Planned Features
 
-(in order of priority, highest first)
+Inn order of priority, highest first:
 
 + Simplify installation process to `] add mousetrap`
 + [Add support for global and per-widget custom themes by exposing the CSS interface](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978016)
@@ -59,7 +59,7 @@ Consider participating in the development by [opening an issue](https://github.c
 + Make all functions that modify the global state thread-safe
 + Add an event controller to capture video game controller / joystick events
 + Allow binding textures to fragment shader uniforms at texture unit 1 or higher, currently, only texture unit 0 is supported
-+ Add 3D shapes and geometry shaders to the OpenGL component
++ Add 3D shapes and geometry shaders
 
 ---
 
@@ -191,6 +191,8 @@ Consider contributing by taking on one of these bounty projects:
 + [Cross-Platform App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
 
 I am unable to offer any monetary reward, but I'd be happy to credit you as a co-author of mousetrap in the [GitHub Readme](https://github.com/Clemapfel/mousetrap.jl#credits), [citation](https://github.com/Clemapfel/mousetrap.jl#citation), and [as a Julia package author](https://github.com/Clemapfel/mousetrap.jl/blob/main/Project.toml#L3) if your work contributes significantly to the implementation of these bounty projects.
+
+You can also submit your own custom CSS theme or icon set. These may be added to the defaults with a name of your choice! See the manual section on theming for more information.
 
 Thank you for your consideration.
 C.
