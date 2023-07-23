@@ -6852,11 +6852,7 @@ export KEY_LogGrabInfo
         first = true
         previous_char_is_lowercase = false
         for c in split(lines[i][1:(end-1)], "GDK_KEY_")[2]
-        
-            #if !first && isletter(c) && isuppercase(c) && previous_char_is_lowercase
-            #    new_name *= '_'
-            #end
-
+            
             new_name *= c
             previous_char_is_lowercase = islowercase(c)
             first = false

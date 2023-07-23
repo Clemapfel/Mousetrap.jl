@@ -551,14 +551,7 @@ module mousetrap
     Base.:(!=)(a::Time, b::Time) = !(a == b)
     Base.:(<)(a::Time, b::Time) = a._ns < b._ns
     Base.:(>)(a::Time, b::Time) = a._ns > b._ns
-
-    import Dates
-    Base.convert(::Type{Dates.Minute}, time::Time) = Dates.Minute(as_minutes(time))
-    Base.convert(::Type{Dates.Second}, time::Time) = Dates.Second(as_seconds(time))
-    Base.convert(::Type{Dates.Millisecond}, time::Time) = Dates.Millisecond(as_millisecond(time))
-    Base.convert(::Type{Dates.Microsecond}, time::Time) = Dates.Microsecond(as_microsecond(time))
-    Base.convert(::Type{Dates.Nanosecond}, time::Time) = Dates.Nanosecond(as_nanoseconds(time))
-    
+  
     Base.show(io::IO, x::Time) = print(io, "Time($(as_seconds(x))s)")
 
     @export_type Clock SignalEmitter
