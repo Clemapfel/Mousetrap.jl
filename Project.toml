@@ -13,3 +13,7 @@ Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 mousetrap_linux_jll = "b6bb2801-a71f-530d-97b4-a6ed24b69d40"
 mousetrap_windows_jll = "1923bf96-b834-50bb-8499-88d15429481f"
+
+[compat]
+mousetrap_linux_jll = ">= 0.1.0"
+mousetrap_windows_jll = ">= 0.1.0"
