@@ -162,7 +162,9 @@ Consider contributing by taking on one of these bounty projects:
 + [Native Rendering on MacOS](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978341)
 + ["Mousehole" App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
 
-Or by making a feature proposal / request.
+I am unable to offer any monetary reward, but I'd be happy to credit you as a co-author of mousetrap in the [GitHub Readme](https://github.com/Clemapfel/mousetrap.jl#credits), [citation](https://github.com/Clemapfel/mousetrap.jl#citation), and [as a Julia package author](https://github.com/Clemapfel/mousetrap.jl/blob/main/Project.toml#L3) if your work contributes significantly to the implementation of these bounty projects.
+
+Thank you for your consideration.
 
 ---
 
