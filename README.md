@@ -8,7 +8,7 @@ Mousetrap is a GUI library for Julia. It, and its [stand-alone C++-component of 
 
 It aims to give developers of all skill levels the tools to start creating complex GUI applications with little time and effort.
 
-> **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability, portability, and polish of documentation may be affected. <br>
+> **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability, portability, the quality of the documentation may be affected. <br>
 Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen).
 
 ---
@@ -65,7 +65,7 @@ Inn order of priority, highest first:
 
 ## Showcase
 
-#### Hello World
+### Hello World
 
 ```julia
 using mousetrap
@@ -75,23 +75,11 @@ main() do app::Application
     present!(window)
 end
 ```
-![](todo)
+![](docs/src/assets/readme_hello_world.png)
 
 ---
 
-#### Creating a Selectable List of Widgets
-
-```julia
-list = ListView()
-push_back!(list, Button())
-push_back!(list, Label("Label")) 
-push_back!(list, Entry())
-```
-![](todo)
-
----
-
-#### Opening a File Explorer Dialog
+### Opening a File Explorer Dialog
 
 ```julia
 file_chooser = FileChooser()
@@ -100,11 +88,22 @@ on_accept!(file_chooser) do self::FileChooser, files
 end
 present!(file_chooser)
 ```
-![](todo)
+![](docs/src/assets/readme_file_chooser.png)
 
 ---
 
-#### Reacting to Mouse / Touchscreen Presses
+### Rendering a Rectangle with OpenGL
+
+```julia
+render_area = RenderArea()
+rectangle = Rectangle(Vector2f(-0.5, -0.5), Vector2f(1, 1))
+add_render_task!(render_area, RenderTask(rectangle))
+```
+![](docs/src/assets/readme_opengl_rectangle.png)
+
+---
+
+### Reacting to Mouse / Touchscreen Presses
 
 ```julia
 function on_click(::ClickEventController, x_position, y_position)
@@ -115,28 +114,17 @@ click_controller = ClickEventController()
 connect_signal_clicked!(on_click, click_controller)
 add_controller!(window, click_controller)
 ```
-
----
-
-#### Rendering a Rectangle with OpenGL
-
-```julia
-render_area = RenderArea()
-rectangle = Rectangle(Vector2f(-0.5, -0.5), Vector2f(1, 1))
-add_render_task!(render_area, RenderTask(rectangle))
 ```
-![](todo)
-
----
-
+Click registered at (367.5, 289.0)
+```
 
 ---
 
 ## Supported Platforms
 
-`✓ ` Available<br>
-`✕ ` Will never be available<br>
-`✕*` Will be available in the future<br>
+`✓ `   Available<br>
+`⭘ `   Will be available in the future<br>
+`✕ `   Will never be available<br>
 
 | Platform         | Basic GUI Component | Native Rendering Component |
 |------------------|---------------------|-----------------------------|
@@ -144,15 +132,15 @@ add_render_task!(render_area, RenderTask(rectangle))
 | Linux (32-bit)   | `✓`                | `✓`                        |
 | Windows (64-bit) | `✓`                | `✓`                        |
 | Windows (32-bit) | `✓`                | `✕`                        |
-| FreeBSD          | `✓`                | `✕*`                       | 
-| MacOS            | `✕*`               | `✕`                        |
+| FreeBSD          | `✓`                | `⭘`                       | 
+| MacOS            | `⭘`               | `✕`                        |
 
 ---
 
 
 ## Installation
 
-Regardless of the operating system, to install mousetrap, in the Julia REPL, press the `]` key to enter `Pkg` mode, then:
+In the Julia REPL, press the `]` key to enter `Pkg` mode, then:
 
 ```julia
 add https://github.com/Clemapfel/mousetrap_windows_jll
@@ -161,7 +149,9 @@ add https://github.com/Clemapfel/mousetrap.jl
 test mousetrap
 ```
 
-Installation may take a long time. Once it's done, loading mousetrap for future development will only take a few seconds.
+Where all three packages need to be installed, regardless of the operating system.
+
+Installation may take a long time. Once it's done, loading mousetrap for future development will only take a few seconds each time.
 
 ---
 
@@ -183,8 +173,6 @@ The goal is for mousetrap to be 100% stable and flawless when Julia [static comp
 
 ## Contributing
 
-(There are currently no other contributors)
-
 Consider contributing by taking on one of these bounty projects:
 
 + [Native Rendering on MacOS](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978341)
@@ -192,9 +180,9 @@ Consider contributing by taking on one of these bounty projects:
 
 I am unable to offer any monetary reward, but I'd be happy to credit you as a co-author of mousetrap in the [GitHub Readme](https://github.com/Clemapfel/mousetrap.jl#credits), [citation](https://github.com/Clemapfel/mousetrap.jl#citation), and [as a Julia package author](https://github.com/Clemapfel/mousetrap.jl/blob/main/Project.toml#L3) if your work contributes significantly to the implementation of these bounty projects.
 
-You can also submit your own custom CSS theme or icon set. These may be added to the defaults with a name of your choice! See the manual section on theming for more information.
+~~You can also submit your own custom CSS theme or icon set. These may be added to the defaults with a name of your choice! See the manual section on theming for more information.~~
 
-Thank you for your consideration.
+Thank you for your consideration.<br>
 C.
 
 ---
