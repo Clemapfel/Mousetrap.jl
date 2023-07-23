@@ -12,9 +12,17 @@ module mousetrap
 ####### detail.jl
 
     module detail
-        using CxxWrap, Pkg.Artifacts
+        using CxxWrap
+        using mousetrap_linux_jll, mousetrap_windows_jll
         function __init__() @initcxx end
-        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
+
+        if Sys.isapple()
+            @error "In mousetrap::initialize: MacOS is not currently supported, see `https://github.com/Clemapfel/mousetrap.jl` for more information".
+        elseif Sys.iswindows()
+            @wrapmodule(mousetrap_windows_jll.mousetrap_julia_binding_windows)
+        else
+            @wrapmodule(mousetrap_linux_jll.mousetrap_julia_binding_linux)
+        end
     end
 
 ####### typed_function.jl
@@ -1490,33 +1498,10 @@ module mousetrap
             return run!(app)
         end 
 
-        if isinteractive() && Threads.nthreads() > 1
-            @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. Interactive use of mousetrap is an experimental feature, side-effects may occurr."
-            task.sticky = false
-            return schedule(task)
+        if Sys.isapple() 
+            @warn "In mousetrap::main: You are running mousetrap on MacOS, which is not currently supported. See `https://github.com/Clemapfel/mousetrap.jl` for more information."
+            # use Julia warning because even log_warning might not work on mac
         end
-            
-        task.sticky = true
-        return wait(schedule(task))
-    end
-
-    function main(f, app::Application)
-        task = Threads.Task() do 
-            typed_f = TypedFunction(f, Any, (Application,))
-            connect_signal_activate!(app)  do app::Application
-                try
-                    typed_f(app)
-                catch(exception)
-                    printstyled(stderr, "[ERROR] "; bold = true, color = :red)
-                    printstyled(stderr, "In mousetrap.main: "; bold = true)
-                    Base.showerror(stderr, exception, catch_backtrace())
-                    print(stderr, "\n")
-                    quit!(app)
-                end
-                return nothing
-            end
-            return run!(app)
-        end 
 
         if isinteractive() && Threads.nthreads() > 1
             @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. Interactive use of mousetrap is an experimental feature, side-effects may occurr."
@@ -1527,7 +1512,6 @@ module mousetrap
         task.sticky = true
         return wait(schedule(task))
     end
-
     export main
 
     Base.show(io::IO, x::Application) = show_aux(io, x, :is_holding, :is_marked_as_busy)
