@@ -17,7 +17,7 @@ module mousetrap
         function __init__() @initcxx end
 
         if Sys.isapple()
-            @error "In mousetrap::initialize: MacOS is not currently supported, see `https://github.com/Clemapfel/mousetrap.jl` for more information".
+            @error "In mousetrap::initialize: MacOS is not currently supported, see `https://github.com/Clemapfel/mousetrap.jl` for more information."
         elseif Sys.iswindows()
             @wrapmodule(mousetrap_windows_jll.mousetrap_julia_binding_windows)
         else
