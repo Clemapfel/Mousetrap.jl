@@ -44,13 +44,13 @@ It aims to give developers of all skill levels the tools to start creating compl
 (in order of priority, highest first)
 
 + Simplify installation process to `] add mousetrap`
-+ Add support for global and per-widget custom themes by exposing the CSS interface
-+ Implement installation of .desktop files on end-user computers
-+ Add a toggle to `RenderTexture` that allows rendering to a MSAA buffer
-+ Allow bundling of mousetrap apps, their resources, and all their dependencies into a portable C-executable
-+ Implement drag & drop for files, images, and widgets
-+ Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side
-+ Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
++ [Add support for global and per-widget custom themes by exposing the CSS interface](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978016)
++ [Implement installation of .desktop files on end-user computers](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978007)
++ [Add a toggle to `RenderTexture` that allows rendering to a MSAA buffer](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978073)
++ [Allow bundling of mousetrap apps, their resources, and all their dependencies into a portable C-executable](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
++ [Implement drag-and-drop for files, images, and widgets](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978042)
++ [Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978134)
++ [Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978048)
 + Allow adding custom signals that use the GLib marshalling system
 + Fully polish interactive use from within the REPL
 + Make all functions that modify the global state thread-safe
@@ -157,7 +157,12 @@ The goal is for mousetrap to be 100% stable and flawless when Julia [static comp
 
 ## Contributors
 
-(there are currently no 3rd party contributors)
+Consider contributing by taking on one of these bounty projects:
+
++ [Native Rendering on MacOS](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978341)
++ ["Mousehole" App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
+
+Or by making a feature proposal / request.
 
 ---
 
