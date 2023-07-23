@@ -8,7 +8,27 @@ Mousetrap is a GUI library for Julia. It, and its [stand-alone C++-component of 
 
 It aims to give developers of all skill levels the tools to start creating complex GUI applications with little effort or study.
 
-> **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability and portability may be affected. Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen), or by [proposing / implementing a feature](https://github.com/users/Clemapfel/projects/2).
+> **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability, portability, and polish of documentation may be affected. <br>
+Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen).
+
+---
+
+## Table of Contents
+0. [Introduction](https://github.com/Clemapfel/mousetrap.jl)<br>
+1. [Features](#features)<br>
+2. [Planned Features](#planned-features)<br>
+3. [Showcase](#showcase)<br>
+3.1 [Hello World](#hello-world)<br>
+3.2 [Opening a File Explorer Dialog](#opening-a-file-explorer-dialog)<br>
+3.3 [Reacting to Mouse / Touchscreen Events](#reacting-to-mouse--touchscreen-presses)<br>
+3.4 [Rendering a Rectangle using OpenGL](#rendering-a-rectangle-with-opengl)<br>
+4. [Supported Platforms](#supported-platforms)<br>
+5. [Installation](#installation)<br>
+6. [Documentation](#documentation)<br>
+7. [Credits & Donations](#credits--donations)<br>
+8. [Contributing](#contributing)<br>
+9. [License](#license)<br>
+10. [Citation](#citation)<br>
 
 ---
 
@@ -19,23 +39,6 @@ It aims to give developers of all skill levels the tools to start creating compl
 + Image processing facilities, well-suited for image manipulation programs
 + Fully abstracted OpenGL interface, allows for high-performance, hardware-accelerated rendering of custom shapes / shaders
 + [Hand-written manual and extensive documentation](todo): every exported symbol is documented
-
----
-
-## Supported Platforms
-
-`✓ ` Available<br>
-`✕ ` Will never be available<br>
-`✕*` Will be available with future updates<br>
-
-| Platform         | Basic GUI Component | Native Rendering Component |
-|------------------|---------------------|-----------------------------|
-| Linux (64-bit)   | `✓`                | `✓`                        |
-| Linux (32-bit)   | `✓`                | `✓`                        |
-| Windows (64-bit) | `✓`                | `✓`                        |
-| Windows (32-bit) | `✓`                | `✕`                        |
-| FreeBSD          | `✓`                | `✕*`                       | 
-| MacOS            | `✕*`               | `✕`                        |
 
 ---
 
@@ -126,11 +129,26 @@ add_render_task!(render_area, RenderTask(rectangle))
 
 ---
 
-## Documentation
-
-Documentation is available [here](https://clemens-cords.com/mousetrap). This includes a tutorial on how to install mousetrap, a user manual introducing users to mousetrap and GUI programming in general, as well as an index of all classes, enums, and functions.
 
 ---
+
+## Supported Platforms
+
+`✓ ` Available<br>
+`✕ ` Will never be available<br>
+`✕*` Will be available in the future<br>
+
+| Platform         | Basic GUI Component | Native Rendering Component |
+|------------------|---------------------|-----------------------------|
+| Linux (64-bit)   | `✓`                | `✓`                        |
+| Linux (32-bit)   | `✓`                | `✓`                        |
+| Windows (64-bit) | `✓`                | `✓`                        |
+| Windows (32-bit) | `✓`                | `✕`                        |
+| FreeBSD          | `✓`                | `✕*`                       | 
+| MacOS            | `✕*`               | `✕`                        |
+
+---
+
 
 ## Installation
 
@@ -145,26 +163,37 @@ test mousetrap
 
 Installation may take a long time. Once it's done, loading mousetrap for future development will only take a few seconds.
 
+---
+
+## Documentation
+
+Documentation is available [here](https://clemens-cords.com/mousetrap). This includes a tutorial on how to install mousetrap, a user manual introducing users to mousetrap and GUI programming in general, as well as an index of all classes, enums, and functions.
+
 --- 
 
-## Credits
+## Credits & Donations
 
 The Julia and C++ component of mousetrap were designed and implemented by [C.Cords](https://clemens-cords.com).
 
 Consider donating to support the continued development of this library [here](TODO).
 
-The goal is for mousetrap to be 100% stable and flawless when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of [fully featured, easy-to-use](https://github.com/JuliaGraphics/Gtk.jl/issues) GUI libraries are currently the largest factors as to why Julia is ill-suited for front-end development. Mousetrap aims to address this.
+The goal is for mousetrap to be 100% stable and flawless when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of [fully featured, easy-to-use](https://github.com/JuliaGraphics/Gtk.jl/issues) GUI libraries are currently the largest factors as to why Julia is ill-suited for front-end development. Mousetrap aims to address the latter factor.
 
-## Contributors
+---
+
+## Contributing
+
+(There are currently no other contributors)
 
 Consider contributing by taking on one of these bounty projects:
 
 + [Native Rendering on MacOS](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978341)
-+ ["Mousehole" App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
++ [Cross-Platform App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
 
 I am unable to offer any monetary reward, but I'd be happy to credit you as a co-author of mousetrap in the [GitHub Readme](https://github.com/Clemapfel/mousetrap.jl#credits), [citation](https://github.com/Clemapfel/mousetrap.jl#citation), and [as a Julia package author](https://github.com/Clemapfel/mousetrap.jl/blob/main/Project.toml#L3) if your work contributes significantly to the implementation of these bounty projects.
 
 Thank you for your consideration.
+C.
 
 ---
 
