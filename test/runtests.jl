@@ -822,7 +822,7 @@ function test_file_descriptor(::Container)
         # todo read_symlink
 
         @test is_executable(descriptor) == false
-        @test get_content_type(descriptor) == "text/plain"
+        @test get_content_type(descriptor) isa String # type is OS-specific
         @test query_info(descriptor, "standard::name") == get_name(descriptor)
 
         monitor = create_monitor(descriptor)
