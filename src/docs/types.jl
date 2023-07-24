@@ -2323,8 +2323,7 @@ $(@type_constructors(
 
 $(@type_signals(ToggleButton, 
     toggled,
-    clicked,
-    activate
+    clicked
 ))
 
 $(@type_fields())

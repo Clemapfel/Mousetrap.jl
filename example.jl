@@ -1,33 +1,17 @@
 import Pkg
 
-@info "Importing `mousetrap_julia_binding` shared library"
-Pkg.activate(".")
 using mousetrap
-@info "Done."
 
 main() do app::Application
     window = Window(app)
 
-    button_01 = Button()
-    button_02 = Button()
-    
-    connect_signal_clicked!(button_01) do self::Button
-        println("01 clicked")
-        
-        set_signal_activate_blocked!(self, true)
-        activate!(button_02)
-        set_signal_activate_blocked!(self, false)
+    #=
+    switch = Switch()
+    connect_signal_switched!(switch) do self::Switch
+        println("switched")
     end
-    
-    connect_signal_clicked!(button_02) do self::Button
-        println("02 clicked")
-    
-        set_signal_activate_blocked!(self, true)
-        activate!(button_01)
-        set_signal_activate_blocked!(self, false)
-    end
-    
-    set_child!(window, hbox(button_01, button_02))
+    activate!(switch)
+    =#
     present!(window)
 end
 

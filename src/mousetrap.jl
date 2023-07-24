@@ -16,6 +16,7 @@ module mousetrap
         using mousetrap_linux_jll, mousetrap_windows_jll
         function __init__() @initcxx end
 
+        #=
         if Sys.isapple()
             @error "In mousetrap::initialize: MacOS is not currently supported, see `https://github.com/Clemapfel/mousetrap.jl` for more information."
         elseif Sys.iswindows()
@@ -23,6 +24,9 @@ module mousetrap
         else
             @wrapmodule(mousetrap_linux_jll.mousetrap_julia_binding_linux)
         end
+        =#
+
+        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
     end
 
 ####### typed_function.jl
@@ -1097,6 +1101,73 @@ module mousetrap
 
         out = Expr(:block)
         snake_case = :revealed
+        Return_t = Cvoid
+
+        connect_signal_name = :connect_signal_ * snake_case * :!
+
+        push!(out.args, esc(:(
+            function $connect_signal_name(f, x::$T)
+                typed_f = TypedFunction(f, $Return_t, ($T,))
+                detail.$connect_signal_name(x._internal, function(x)
+                    typed_f($T(x[1][]))
+                end)
+            end
+        )))
+
+        push!(out.args, esc(:(
+            function $connect_signal_name(f, x::$T, data::Data_t) where Data_t
+                typed_f = TypedFunction(f, $Return_t, ($T, Data_t))
+                detail.$connect_signal_name(x._internal, function(x)
+                    typed_f($T(x[1][]), data)
+                end)
+            end
+        )))
+
+        emit_signal_name = :emit_signal_ * snake_case
+
+        push!(out.args, esc(:(
+            function $emit_signal_name(x::$T) ::$Return_t
+                return convert($Return_t, detail.$emit_signal_name(x._internal, nothing))
+            end
+        )))
+
+        disconnect_signal_name = :disconnect_signal_ * snake_case * :!
+
+        push!(out.args, esc(:(
+            function $disconnect_signal_name(x::$T)
+                detail.$disconnect_signal_name(x._internal)
+            end
+        )))
+
+        set_signal_blocked_name = :set_signal_ * snake_case * :_blocked * :!
+
+        push!(out.args, esc(:(
+            function $set_signal_blocked_name(x::$T, b)
+                detail.$set_signal_blocked_name(x._internal, b)
+            end
+        )))
+
+        get_signal_blocked_name = :get_signal_ * snake_case * :_blocked
+
+        push!(out.args, esc(:(
+            function $get_signal_blocked_name(x::$T)
+                return detail.$get_signal_blocked_name(x._internal)
+            end
+        )))
+
+        push!(out.args, esc(:(export $connect_signal_name)))
+        push!(out.args, esc(:(export $disconnect_signal_name)))
+        push!(out.args, esc(:(export $set_signal_blocked_name)))
+        push!(out.args, esc(:(export $get_signal_blocked_name)))
+        push!(out.args, esc(:(export $emit_signal_name)))
+
+        return out
+    end
+
+    macro add_signal_switched(T)
+
+        out = Expr(:block)
+        snake_case = :switched
         Return_t = Cvoid
 
         connect_signal_name = :connect_signal_ * snake_case * :!
@@ -2581,12 +2652,12 @@ module mousetrap
 
     @add_widget_signals CheckButton
     @add_signal_toggled CheckButton
-    @add_signal_activate CheckButton
 
     Base.show(io::IO, x::CheckButton) = show_aux(io, x, :state)
 
 ####### switch.jl
 
+    #=
     @export_type Switch Widget
     @declare_native_widget Switch
 
@@ -2596,9 +2667,10 @@ module mousetrap
     @export_function Switch set_is_active! Cvoid Bool b
 
     @add_widget_signals Switch
-    @add_signal_activate Switch
+    @add_signal_switched Switch
 
     Base.show(io::IO, x::Switch) = show_aux(io, x, :is_active)
+    =#
 
 ####### toggle_button.jl
 
@@ -2636,7 +2708,6 @@ module mousetrap
     @export_function ToggleButton remove_child! Cvoid
 
     @add_widget_signals ToggleButton
-    @add_signal_activate ToggleButton
     @add_signal_clicked ToggleButton
     @add_signal_toggled ToggleButton
 
@@ -2752,7 +2823,6 @@ module mousetrap
     @export_function Entry remove_secondary_icon! Cvoid
 
     @add_widget_signals Entry
-    @add_signal_activate Entry
     @add_signal_text_changed Entry
 
     Base.show(io::IO, x::Entry) = show_aux(io, x, :text)
