@@ -271,10 +271,6 @@ mousetrap.as_triangle!
 ```@docs
 mousetrap.as_wireframe!
 ```
-## `attach_to!`
-```@docs
-mousetrap.attach_to!
-```
 ## `bind`
 ```@docs
 mousetrap.bind
@@ -634,6 +630,10 @@ mousetrap.degrees
 ## `delete_at!`
 ```@docs
 mousetrap.delete_at!
+```
+## `destroy!`
+```@docs
+mousetrap.destroy!
 ```
 ## `device_axis_to_string`
 ```@docs
@@ -1343,10 +1343,6 @@ mousetrap.get_fraction
 ```@docs
 mousetrap.get_fragment_shader_id
 ```
-## `get_frame_clock`
-```@docs
-mousetrap.get_frame_clock
-```
 ## `get_groups`
 ```@docs
 mousetrap.get_groups
@@ -1382,6 +1378,10 @@ mousetrap.get_has_origin
 ## `get_has_wide_handle`
 ```@docs
 mousetrap.get_has_wide_handle
+```
+## `get_hide_on_close`
+```@docs
+mousetrap.get_hide_on_close
 ```
 ## `get_hide_on_overflow`
 ```@docs
@@ -2118,6 +2118,10 @@ mousetrap.get_transition_type
 ## `get_uniform_float`
 ```@docs
 mousetrap.get_uniform_float
+```
+## `get_uniform_hsva`
+```@docs
+mousetrap.get_uniform_hsva
 ```
 ## `get_uniform_int`
 ```@docs
@@ -2935,9 +2939,9 @@ mousetrap.set_is_expanded!
 ```@docs
 mousetrap.set_is_focusable!
 ```
-## `set_is_horizontally_homogeneous`
+## `set_is_horizontally_homogeneous!`
 ```@docs
-mousetrap.set_is_horizontally_homogeneous
+mousetrap.set_is_horizontally_homogeneous!
 ```
 ## `set_is_inverted!`
 ```@docs
@@ -2967,9 +2971,9 @@ mousetrap.set_is_selectable!
 ```@docs
 mousetrap.set_is_spinning!
 ```
-## `set_is_vertically_homogeneous`
+## `set_is_vertically_homogeneous!`
 ```@docs
-mousetrap.set_is_vertically_homogeneous
+mousetrap.set_is_vertically_homogeneous!
 ```
 ## `set_is_visible!`
 ```@docs
@@ -3066,6 +3070,10 @@ mousetrap.set_min_n_columns!
 ## `set_min_value!`
 ```@docs
 mousetrap.set_min_value!
+```
+## `set_minimized!`
+```@docs
+mousetrap.set_minimized!
 ```
 ## `set_mode!`
 ```@docs
@@ -3175,9 +3183,9 @@ mousetrap.set_selected!
 ```@docs
 mousetrap.set_should_draw_value!
 ```
-## `set_should_interpolate_size`
+## `set_should_interpolate_size!`
 ```@docs
-mousetrap.set_should_interpolate_size
+mousetrap.set_should_interpolate_size!
 ```
 ## `set_should_snap_to_ticks!`
 ```@docs

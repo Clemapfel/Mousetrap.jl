@@ -8,16 +8,26 @@ using mousetrap
 main() do app::Application
     window = Window(app)
 
-    view = GridView()
-    push_back!(view, Separator())
-    push_back!(view, Separator())
-    push_back!(view, Separator())
-
-    connect_signal_activate_item!(view) do self::GridView, index::Integer
-        println(index)
+    button_01 = Button()
+    button_02 = Button()
+    
+    connect_signal_clicked!(button_01) do self::Button
+        println("01 clicked")
+        
+        set_signal_activate_blocked!(self, true)
+        activate!(button_02)
+        set_signal_activate_blocked!(self, false)
     end
-
-    set_child!(window, view)
+    
+    connect_signal_clicked!(button_02) do self::Button
+        println("02 clicked")
+    
+        set_signal_activate_blocked!(self, true)
+        activate!(button_01)
+        set_signal_activate_blocked!(self, false)
+    end
+    
+    set_child!(window, hbox(button_01, button_02))
     present!(window)
 end
 

@@ -237,7 +237,6 @@ $(@type_constructors(
 ))
 
 $(@type_signals(Button, 
-    activate,
     clicked
 ))
 
@@ -869,11 +868,6 @@ $(@type_signals(GridView,
 ))
 
 $(@type_fields())
-
-## Example
-```julia
-grid_view = GridView()
-
 """
 
 @document GroupID """
@@ -912,10 +906,8 @@ $(@type_fields(
 @document HeaderBar """
 # HeaderBar <: Widget
 
-Widget that is ideal to be used as the title bar of a window. Has a title, 
-close, maximize, minimize buttons, as well as an area for widgets left of and right 
-of the title.
-
+Widget that usually used as the title bar of a window. It contains a title, 
+close-, maximize-, minimize buttons, as well as an area for widgets on both sides of the title.
 
 $(@type_constructors(
     HeaderBar(),

@@ -10,7 +10,7 @@ In this chapter, we will learn:
 
 ## Signal Architecture
 
-Central to mousetrap, as well as other GUI libraries like GT4 and QT, is **signal architecture** or [**signal programming**](https://en.wikipedia.org/wiki/Signal_programming), which is a software architecture that triggers behavior using signals.
+Central to mousetrap, as well as other GUI libraries like [GTK4](https://docs.gtk.org/gtk4/) and Qt, is **signal architecture** or [**signal programming**](https://en.wikipedia.org/wiki/Signal_programming), which is a software architecture that triggers behavior using signals.
 
 A **signal**, in this context, has three components:
 + an **ID**, which uniquely identifies it. IDs may not be shared between signals
@@ -23,7 +23,7 @@ One of the simpler interactions with a GUI is clicking a button. In mousetrap, t
 
 In this case, the signals' **ID** is `clicked`, while the signal **emitter** is an instance of `Button`. When a user clicks the button, the in-memory object emits signal `clicked`. 
 
-If we want to tie program behavior to the user clicking the button, we **connect a callback** (a function) to this signal. Once connected, when the button is clicked, `clicked` is emitted, which in turn will trigger invocation of the connected function.
+If we want to tie program behavior to the user clicking the button, we **connect a callback** (a function) to this signal. Once connected, when the button is clicked, `clicked` is emitted, which in turn will trigger invocation of the connected function:
 
 
 ```julia
@@ -33,11 +33,11 @@ button = Button()
 # create a signal handler
 on_clicked(self::Button) = println("clicked")
 
-# connect the signal handle to the signal
+# connect signal handler to the signal
 connect_signal_clicked!(on_clicked, button)
 ```
 
-Which can be written more succinctly using [do-syntax](https://docs.julialang.org/en/v1/manual/functions/#Do-Block-Syntax-for-Function-Arguments):
+Which can also be written more succinctly using [do-syntax](https://docs.julialang.org/en/v1/manual/functions/#Do-Block-Syntax-for-Function-Arguments):
 
 ```julia
 button = Button()
@@ -46,7 +46,7 @@ connect_signal_clicked!(button) do self::Button
 end
 ```
 
-!!! note "Running Code Snippets"
+!!! details "Running Code Snippets"
 
     In this section, code snippets will only show the relevant lines. To actually compile and run the code stated here, we need to create a Julia script with the following content:
 
@@ -62,7 +62,7 @@ end
     end
     ```
 
-    For example, running the just mentioned button example, we would create the following `.jl` file:
+    For example, running the just mentioned button example, we would create the following `main.jl` file:
 
     ```julia
     using mousetrap
@@ -79,10 +79,25 @@ end
     end
     ```
 
-Executing this code we see that a small window opens which contains our button. Clicking it, and we get:
+    Then execute it from the console using `julia main.jl`
+
+Executing this code we see that a small window opens which contains our button. Clicking it, we get:
 
 ```
 clicked
+```
+
+Only one callback can be connected to each signal of a signal emitter. If we call `connect_signal_clicked!` again with a new callback, the old callback will be overridden. If we want to trigger two functions, `callback_01` and `callback_02` at the same time, we can simply do the following:
+
+```julia
+callback_01() = # ...
+callback_02() = # ...
+
+# call both functions from the signal handler
+connect_signal_clicked!(button) do self::Button
+    callback_01()
+    callback_02()
+end
 ```
 
 ---
@@ -91,7 +106,7 @@ clicked
 
 `Button`, as most classes in mousetrap, is a subtype of an abstract type called [`SignalEmitter`](@ref). 
 
-Inheriting from `SignalEmitter` is equivalent to saying "this object can emit signals". Not all objects in mousetrap are signal emitters, but most are.
+Subtyping `SignalEmitter` is equivalent to saying "this object can emit signals". Not all objects in mousetrap are signal emitters, but most are. 
 
 When we say "an object can emit signal `<id>`", what that means is that the following functions are defined for that object:
 
@@ -144,7 +159,7 @@ What may not have been obvious is that the signal handler, the anonymous functio
 
     For a function with an optional argument like this:
     ```julia
-    function foo_optional(i::Int32, string::String; optional::Bool = true) ::String
+    function foo_optional(i::Int32, string::String, optional::Bool = true) ::String
         return string(i) * string * string(optional)
     end
     ```
@@ -156,7 +171,7 @@ What may not have been obvious is that the signal handler, the anonymous functio
     (Arg1_t, Arg2_t, ..., [Optional1_t, Optional2_t, ...]) -> Return_t`.
     ```
 
-Each signal requires its handler to conform to a specific signature. This signature  may be different between signals. If we attempt to connect a handler that has the wrong signature, an `AssertionError` will be thrown at compile time. This makes it important to know how to check which signal requires which signature. 
+Each signal requires its a callback to conform to a specific signature. This signature is different for each signals. If we attempt to connect a handler that has the wrong signature, an `AssertionError` will be thrown at compile time. This makes it important to know how to check which signal requires which signature. 
 
 ## Checking Signal Signature
 
@@ -166,30 +181,28 @@ To find out, we check the mousetrap documentation, either by visting [`Button`](
 ```
 help?> mousetrap.Button
 ```
+```@docs
+mousetrap.Button
+```
 
-We see that in the `Signals` section, a table is shown which contains all signals unique to that class. We see that `Button` has two signals, `activate` and `clicked`. The table tells us
-that `clicked` requires the signature `(instance::Button, [::Data_t]) -> Nothing`. 
-
-Unlike in our example before, this signature mentions an optional argument `::Data_t`. Indeed, all signals support this last optional argument, which allows us to pass arbitary data to the signal handler.
-
----
+We see that in the section for signals, it describes the buttons two signals, `activate`, which we will ignore for now, and `clicked`. For signal `clicked`, it describes when that signal is emitted, and that its signature is `(::Button, [::Data_t]) -> Nothing`, where `Data_t` is an optional argument of arbitrary type, which we can use to hand data to the signal handler.
 
 ## Handing Data to Signal Handlers
 
 While we do get passed the signal emitter instance as the first argument to the signal handler, `::Button` in this case, we will often need to reference other objects. This may necessitate 
-accessing potentially global variables, which [is discouraged in Julia](https://docs.julialang.org/en/v1/manual/performance-tips/#Avoid-untyped-global-variables).
+accessing global variables, which [is discouraged in Julia](https://docs.julialang.org/en/v1/manual/performance-tips/#Avoid-untyped-global-variables).
 
-Instead, mousetrap allows adding an optional, arbitrarily typed, *single* argument to the end of any signal handler signature. This object is often referred to as `data`, its type is therefore called `Data_t`.
+Instead, mousetrap allows adding an optional, arbitrarily typed, *single* argument to the end of any signal handler signature. This object is often referred to as `data`, its type will therefore called `Data_t`.
 
 Expanding on our previous example, if we want to send a customized message when the user clicks our button, we can change the snippet as follows:
 
 ```julia
 button = Button()
 
-# signal handler with an additional argument
+# new signal handler that takes two arguments
 on_clicked(self::Button, data) = println(data)  
 
-# pass the data (a string) we want to forward as the last argument of `connect_signal_*!`
+# connect the signal handler, providing a third argument as `data`
 connect_signal_clicked!(on_clicked, button, "custom message")
 ```
 
@@ -212,8 +225,8 @@ Any and all objects can be provided as `data`, however, they have to be packaged
 
 ### Grouping Data Arguments
 
-Because there is only one `data`, it may seem limiting as to what or how much data we can pass to the signal handlers. This is not true, 
-because we can use a simple trick to group any amount of objects into a single argument:
+Because there is only one `data`, it may seem limiting as to what or how much data we can pass to the signal handlers. In practice, this is not true, 
+because we can use a simple trick to group any amount of objects into a single argument.
 
 Let's say we want to forward a string `"abc"`, an integer `999` and a vector of floats `[1.0, 2.0, 3.0]` to the signal handler. To achieve this, we can do the following:
 
@@ -226,22 +239,25 @@ function on_clicked(self::Button, data)
     println(data.vector_value)
 end
 
+# create a named tuple that groups the arguments
 named_tuple = (
     string_value = "abc",
     integer_value = 999,
     vector_value = [1.0, 2.0, 3.0]
 )
 
+# provide the named tuple as
 connect_signal_clicked!(on_clicked, button, named_tuple)
 ```
 
-Here, we grouped the values in a [named tuple](https://docs.julialang.org/en/v1/manual/types/#Named-Tuple-Types), then accessed each individual value by an
+Here, we grouped the values in a [named tuple](https://docs.julialang.org/en/v1/manual/types/#Named-Tuple-Types), then accessed each individual value using an
 easy-to-read name.
 
 Again, we can write the above more succinctly using do-syntax:
 
 ```julia
 button = Button()
+
 connect_signal_clicked!(button, (
     string_value = "abc", integer_value = 999, vector_value = [1.0, 2.0, 3.0]
 )) do self::Button, data
@@ -251,7 +267,7 @@ connect_signal_clicked!(button, (
 end
 ```
 
-Using this technique, we can forward any and all objects to the signal handler via the optional `[::Data_t]` argument.
+Using this technique, we can forward any and all objects to the signal handler via the optional `[::Data_t]` argument. This technique is available for all signals.
 
 ---
 
@@ -261,17 +277,16 @@ If we want an object to *not* call the signal handler on signal emission, we hav
 
 Using `disconnect_signal_<id>`, we can **disconnect** the signal, which will permanently remove the registered signal handler, deallocating it and fully dissociating it from the original signal emitter instance. This is a quite costly operation and should only rarely be necessary. 
 
-A much more performant and convenient method to temporarily prevent signal emission is that of **blocking** the signal.
+A much more performant and convenient method to **temporarily** prevent signal emission is that of **blocking** the signal.
 
 Blocking a signal will prevent invocation (calling) of the signal handler. This means, for our `Button` example, once we call:
 
 ```julia
 set_signal_clicked_blocked(button, true)
 ```
-
 the user can still click the button, however the connected handler is not called.
 
-To block a signal, we use `set_signal_<id>_blocked`, which takes a boolean as its argument. We can check whether a signal is currently blocked using `get_signal_<id>_blocked`.
+To block a signal, we use `set_signal_<id>_blocked!`, which takes a boolean as its second argument. We can check whether a signal is currently blocked using `get_signal_<id>_blocked`, which returns a boolean. If no signal handler is connected, this function will return `true`.
 
 ### Signal Blocking: An Example
 
@@ -351,13 +366,13 @@ connect_signal_clicked!(button_02) do self::Button
     println("02 clicked")
 
     # block self (button 02)
-    set_signal_clicked_blocked(self, true)
+    set_signal_clicked_blocked!(self, true)
 
     # activate button 01
     activate!(button_01)
 
     # unblock self
-    set_signal_clicked_blocked(self, false)
+    set_signal_clicked_blocked!(self, false)
 end
 
 set_child!(window, hbox(button_01, button_02))

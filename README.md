@@ -107,7 +107,7 @@ add_render_task!(render_area, RenderTask(rectangle))
 
 ```julia
 function on_click(::ClickEventController, x_position, y_position)
-    println("Click registered at ($x_position, $y_position)")
+    println("Click registered at ($x_position, $y_position)") # in pixels
 end
 
 click_controller = ClickEventController()
@@ -131,9 +131,9 @@ Click registered at (367.5, 289.0)
 | Linux (64-bit)   | `✓`                | `✓`                        |
 | Linux (32-bit)   | `✓`                | `✓`                        |
 | Windows (64-bit) | `✓`                | `✓`                        |
-| Windows (32-bit) | `✓`                | `✕`                        |
+| Windows (32-bit) | `✕`                | `✕`                        |
 | FreeBSD          | `✓`                | `⭘`                       | 
-| MacOS            | `⭘`               | `✕`                        |
+| MacOS            | `⭘`                | `✕`                        |
 
 ---
 

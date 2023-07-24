@@ -51,7 +51,7 @@ module mousetrap
 
             match_found = false
             for type in actual_return_ts
-                if type <: return_t
+                if type <: return_t || return_t == Nothing
                     match_found = true
                     break
                 end
@@ -2506,7 +2506,6 @@ module mousetrap
     export set_action!
 
     @add_widget_signals Button
-    @add_signal_activate Button
     @add_signal_clicked Button
 
     Base.show(io::IO, x::Button) = show_aux(io, x)
