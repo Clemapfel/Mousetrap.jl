@@ -7,15 +7,16 @@
 
 ## Classification
 
-widgets = Symbol[]
-event_controllers = Symbol[]
-signal_emitters = Symbol[]
-abstract_types = Symbol[]
-types = Symbol[]
-functions = Symbol[]
-enums = Symbol[]
-enum_values = Symbol[]
-other = Symbol[]
+const widgets = Symbol[]
+const event_controllers = Symbol[]
+const signal_emitters = Symbol[]
+const abstract_types = Symbol[]
+const types = Symbol[]
+const functions = Symbol[]
+const enums = Symbol[]
+const enum_values = Symbol[]
+const key_codes = Symbol[]
+const other = Symbol[]
 
 for n in names(mousetrap)
 
@@ -41,6 +42,8 @@ for n in names(mousetrap)
                 push!(functions, n)
             end
         #end
+    elseif occursin("KEY_", string(n))
+        push!(key_codes, n)
     elseif typeof(binding) <: Int64
         push!(enum_values, n)
     else

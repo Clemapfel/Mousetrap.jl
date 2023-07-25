@@ -232,6 +232,10 @@ const signal_descriptors = Dict([
         void_signature, 
         "Emitted once when a `Revealer`s child goes from hidden to shown (or shown to hidden) and the corresponding animation has finished playing."
     ),
+    :switched => (
+        void_signature,
+        "Emitted whenever the internal state of a `Switch` changes, for example by `set_is_active!`, or by the user operating the `Switch`."
+    ),
     :page_reordered => (
         "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
         "Emitted when a page changes position, where `page_index` is the new position of the page."

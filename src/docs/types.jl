@@ -38,7 +38,7 @@ action = Action("example.action", app)
 set_function!(action) do self::Action
     println(get_id(self) * " activated.")
 end
-activate(action)
+activate!(action)
 ```
 """
 
@@ -289,8 +289,7 @@ $(@type_constructors(
 ))
 
 $(@type_signals(CheckButton, 
-    toggled,
-    activate
+    toggled
 ))
 
 $(@type_fields())
@@ -2228,7 +2227,7 @@ $(@type_constructors(
 ))
 
 $(@type_signals(Switch, 
-    activate
+    switched
 ))
 
 $(@type_fields())
