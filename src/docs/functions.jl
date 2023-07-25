@@ -1490,8 +1490,9 @@ Get all keys in this group, or an empty vector if the group does not exist.
 @document get_kinetic_scrolling_enabled """
 ```
 get_kinetic_scrolling_enabled(::Viewport) -> Bool
+get_kinetic_scrolling_enabled(::ScrollEventController) -> Bool
 ```
-Get whether the widget should continue scrolling once the user stopped operating the mouse wheel or touchscreen, simulating "inertia".
+Get whether scrolling should continue once the user stopped operating the mouse wheel or touchscreen, simulating "inertia".
 """
 
 @document get_label_x_alignment """
@@ -4158,8 +4159,9 @@ Set the text justification mode.
 @document set_kinetic_scrolling_enabled! """
 ```
 set_kinetic_scrolling_enabled!(::Viewport, ::Bool) 
+set_kinetic_scrolling_enabled!(::ScrollEventController, ::Bool)
 ```
-Set whether the widget should continue scrolling once the user stopped operating the mouse wheel or touchscreen, simulating "inertia".
+Set whether scrolling should continue once the user stopped operating the mouse wheel or touchscreen, simulating "inertia".
 """
 
 @document set_label_widget! """

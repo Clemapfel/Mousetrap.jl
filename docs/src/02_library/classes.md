@@ -241,13 +241,6 @@ Button
 + [`mousetrap.set_is_circular!`](@ref)
 
 
-+ [`mousetrap.connect_signal_activate!`](@ref)
-+ [`mousetrap.disconnect_signal_activate!`](@ref)
-+ [`mousetrap.emit_signal_activate`](@ref)
-+ [`mousetrap.get_signal_activate_blocked`](@ref)
-+ [`mousetrap.set_signal_activate_blocked!`](@ref)
-
-
 + [`mousetrap.connect_signal_clicked!`](@ref)
 + [`mousetrap.disconnect_signal_clicked!`](@ref)
 + [`mousetrap.emit_signal_clicked`](@ref)
@@ -381,13 +374,6 @@ CheckButton
 + [`mousetrap.set_child!`](@ref)
 + [`mousetrap.set_is_active!`](@ref)
 + [`mousetrap.set_state!`](@ref)
-
-
-+ [`mousetrap.connect_signal_activate!`](@ref)
-+ [`mousetrap.disconnect_signal_activate!`](@ref)
-+ [`mousetrap.emit_signal_activate`](@ref)
-+ [`mousetrap.get_signal_activate_blocked`](@ref)
-+ [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
@@ -747,13 +733,6 @@ Entry
 + [`mousetrap.set_secondary_icon!`](@ref)
 + [`mousetrap.set_text!`](@ref)
 + [`mousetrap.set_text_visible!`](@ref)
-
-
-+ [`mousetrap.connect_signal_activate!`](@ref)
-+ [`mousetrap.disconnect_signal_activate!`](@ref)
-+ [`mousetrap.emit_signal_activate`](@ref)
-+ [`mousetrap.get_signal_activate_blocked`](@ref)
-+ [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
 + [`mousetrap.connect_signal_destroy!`](@ref)
@@ -3448,13 +3427,6 @@ Switch
 + [`mousetrap.set_is_active!`](@ref)
 
 
-+ [`mousetrap.connect_signal_activate!`](@ref)
-+ [`mousetrap.disconnect_signal_activate!`](@ref)
-+ [`mousetrap.emit_signal_activate`](@ref)
-+ [`mousetrap.get_signal_activate_blocked`](@ref)
-+ [`mousetrap.set_signal_activate_blocked!`](@ref)
-
-
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
@@ -3488,6 +3460,13 @@ Switch
 + [`mousetrap.emit_signal_show`](@ref)
 + [`mousetrap.get_signal_show_blocked`](@ref)
 + [`mousetrap.set_signal_show_blocked!`](@ref)
+
+
++ [`mousetrap.connect_signal_switched!`](@ref)
++ [`mousetrap.disconnect_signal_switched!`](@ref)
++ [`mousetrap.emit_signal_switched`](@ref)
++ [`mousetrap.get_signal_switched_blocked`](@ref)
++ [`mousetrap.set_signal_switched_blocked!`](@ref)
 
 
 + [`mousetrap.connect_signal_unmap!`](@ref)
@@ -3642,13 +3621,6 @@ ToggleButton
 + [`mousetrap.set_icon!`](@ref)
 + [`mousetrap.set_is_active!`](@ref)
 + [`mousetrap.set_is_circular!`](@ref)
-
-
-+ [`mousetrap.connect_signal_activate!`](@ref)
-+ [`mousetrap.disconnect_signal_activate!`](@ref)
-+ [`mousetrap.emit_signal_activate`](@ref)
-+ [`mousetrap.get_signal_activate_blocked`](@ref)
-+ [`mousetrap.set_signal_activate_blocked!`](@ref)
 
 
 + [`mousetrap.connect_signal_clicked!`](@ref)

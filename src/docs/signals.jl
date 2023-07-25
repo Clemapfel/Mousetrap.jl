@@ -101,7 +101,7 @@ const signal_descriptors = Dict([
         "Emitted when the user releases a non-modifier key (which is currently pressed), while the controllers associated widget holds input focus."
     ),
     :modifiers_changed => (
-        "(::T, code::KeyCode, modifiers::ModifierState, [::Data_t]) -> Nothing", 
+        "(::T, modifiers::ModifierState, [::Data_t]) -> Nothing", 
         "Emitted when the user presses or releases a modifier key, while the controllers associated widget holds input focus."
     ),
     :drag_begin => (
@@ -272,7 +272,7 @@ macro signal_table(T, signals...)
         signature = signal_descriptors[signal_id][1]
         push!(signatures, replace(signature, "T" => string(T)))
 
-        push!(descriptions, "**Emitted when: **" * signal_descriptors[signal_id][2])
+        push!(descriptions, signal_descriptors[signal_id][2])
     end
 
     return Latexify.mdtable(ids, signatures, descriptions; latex=false)

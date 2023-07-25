@@ -1843,7 +1843,7 @@ end
 Controller recognizing scrolling gestures, such as a mouse scrollwheel or 2-finger touch-screen scrolling.
 
 $(@type_constructors(
-    ScrollEventController(; [emit_vertical::Bool = true, emit_horizontal::Bool = true])
+    ScrollEventController([kinetic_scrolling_enabled::Bool = false])
 ))
 
 $(@type_signals(ScrollEventController, 

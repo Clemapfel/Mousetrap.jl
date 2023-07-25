@@ -527,6 +527,10 @@ mousetrap.connect_signal_stylus_up!
 ```@docs
 mousetrap.connect_signal_swipe!
 ```
+## `connect_signal_switched!`
+```@docs
+mousetrap.connect_signal_switched!
+```
 ## `connect_signal_text_changed!`
 ```@docs
 mousetrap.connect_signal_text_changed!
@@ -851,6 +855,10 @@ mousetrap.disconnect_signal_stylus_up!
 ```@docs
 mousetrap.disconnect_signal_swipe!
 ```
+## `disconnect_signal_switched!`
+```@docs
+mousetrap.disconnect_signal_switched!
+```
 ## `disconnect_signal_text_changed!`
 ```@docs
 mousetrap.disconnect_signal_text_changed!
@@ -1098,6 +1106,10 @@ mousetrap.emit_signal_stylus_up
 ## `emit_signal_swipe`
 ```@docs
 mousetrap.emit_signal_swipe
+```
+## `emit_signal_switched`
+```@docs
+mousetrap.emit_signal_switched
 ```
 ## `emit_signal_text_changed`
 ```@docs
@@ -1978,6 +1990,10 @@ mousetrap.get_signal_stylus_up_blocked
 ## `get_signal_swipe_blocked`
 ```@docs
 mousetrap.get_signal_swipe_blocked
+```
+## `get_signal_switched_blocked`
+```@docs
+mousetrap.get_signal_switched_blocked
 ```
 ## `get_signal_text_changed_blocked`
 ```@docs
@@ -3426,6 +3442,10 @@ mousetrap.set_signal_stylus_up_blocked!
 ## `set_signal_swipe_blocked!`
 ```@docs
 mousetrap.set_signal_swipe_blocked!
+```
+## `set_signal_switched_blocked!`
+```@docs
+mousetrap.set_signal_switched_blocked!
 ```
 ## `set_signal_text_changed_blocked!`
 ```@docs

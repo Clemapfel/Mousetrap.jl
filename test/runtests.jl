@@ -441,9 +441,14 @@ function test_event_controller(this::Container)
 
     end
 
-    let controller = ScrollEventController()
+    let controller = ScrollEventController(false)
         Base.show(devnull, controller)
         @testset "ScrollEventController" begin
+
+            @test get_kinetic_scrolling_enabled(controller) == false
+            set_kinetic_scrolling_enabled!(controller, true)
+            @test get_kinetic_scrolling_enabled(controller) == true
+
             connect_signal_scroll_begin!(controller) do self::ScrollEventController
             end
             @test get_signal_scroll_begin_blocked(controller) == false

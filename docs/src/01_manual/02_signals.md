@@ -185,7 +185,7 @@ help?> mousetrap.Button
 mousetrap.Button
 ```
 
-We see that in the section for signals, it describes the buttons two signals, `activate`, which we will ignore for now, and `clicked`. For signal `clicked`, it describes when that signal is emitted, and that its signature is `(::Button, [::Data_t]) -> Nothing`, where `Data_t` is an optional argument of arbitrary type, which we can use to hand data to the signal handler.
+We see that button has a single signal, `clicked`. Along with this information, a description of when that signal is emitted is given, and that its signature is `(::Button, [::Data_t]) -> Nothing`, where `Data_t` is an optional argument of arbitrary type, which we can use to hand data to the signal handler.
 
 ## Handing Data to Signal Handlers
 
