@@ -26,7 +26,7 @@ module mousetrap
         end
         =#
 
-        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
+        @wrapmodule("/home/clem/Workspace/mousetrap/cmake-build-debug/libmousetrap_julia_binding.so")
     end
 
 ####### typed_function.jl
@@ -2657,7 +2657,6 @@ module mousetrap
 
 ####### switch.jl
 
-    #=
     @export_type Switch Widget
     @declare_native_widget Switch
 
@@ -2670,7 +2669,7 @@ module mousetrap
     @add_signal_switched Switch
 
     Base.show(io::IO, x::Switch) = show_aux(io, x, :is_active)
-    =#
+
 
 ####### toggle_button.jl
 
@@ -3493,7 +3492,10 @@ module mousetrap
 ###### scroll_event_controller.jl
 
     @export_type ScrollEventController EventController
-    ScrollEventController(; emit_vertical = true, emit_horizontal = true) = ScrollEventController(detail._ScrollEventController(emit_vertical, emit_horizontal))
+    ScrollEventController(kinetic_scrolling_enabled::Bool = false) = ScrollEventController(detail._ScrollEventController(kinetic_scrolling_enabled))
+
+    @export_function ScrollEventController get_kinetic_scrolling_enabled Bool
+    @export_function ScrollEventController set_kinetic_scrolling_enabled! Cvoid Bool b
 
     @add_signal_kinetic_scroll_decelerate ScrollEventController
     @add_signal_scroll_begin ScrollEventController

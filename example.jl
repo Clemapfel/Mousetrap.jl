@@ -2,18 +2,81 @@ import Pkg
 
 using mousetrap
 
+
+using mousetrap
+main() do app::Application
+
+    # create a window
+    window = Window(app)
+
+    function on_stylus_up(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
+        println("stylus is no longer touching touchpad, position: ($x, $y)")
+    end
+
+    function on_stylus_down(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
+        println("stylus is ow touching touchpad, position: ($x, $y)")
+    end
+
+    function on_proximity(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
+        println("stylus entered proximity range, position: ($x, $y)")
+    end
+
+    function on_motion(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
+        println("stylus position: ($x, $y)")
+    end
+
+    stylus_controller = StylusEventController()
+    connect_signal_stylus_up!(on_stylus_up, stylus_controller)
+    connect_signal_stylus_down!(on_stylus_down, stylus_controller)
+    connect_signal_proximity!(on_proximity, stylus_controller)
+    connect_signal_motion!(on_motion, stylus_controller)
+
+    add_controller!(window, stylus_controller)
+
+    # show the window to the user
+    present!(window)
+end
+
+
+#=
+
 main() do app::Application
     window = Window(app)
 
+    button_01 = Button()
+    
     #=
-    switch = Switch()
-    connect_signal_switched!(switch) do self::Switch
-        println("switched")
+    connect_signal_clicked!(button_01) do self::Button
+        println("01 clicked")
+        
+        # block self (button 01) 
+        set_signal_clicked_blocked!(self, true)
+    
+        # activate button 02
+        activate!(button_02)
+    
+        # unblock self
+        set_signal_clicked_blocked(self, false)
     end
-    activate!(switch)
+    
+    connect_signal_clicked!(button_02) do self::Button
+        println("02 clicked")
+    
+        # block self (button 02)
+        set_signal_clicked_blocked!(self, true)
+    
+        # activate button 01
+        activate!(button_01)
+    
+        # unblock self
+        set_signal_clicked_blocked!(self, false)
+    end
+
+    set_child!(window, button_01)#hbox(button_01, button_02))
     =#
     present!(window)
 end
+=#
 
 if false
 
