@@ -490,9 +490,9 @@ function on_scroll_begin(self::ScrollEventController)
 end
 
 # each frame, increase distance scrolled
-function on_scroll(self::ScrollEventController, x_delta::AbstractFloat, y_delta::AbstractFloat) ::Bool
+function on_scroll(self::ScrollEventController, x_delta::AbstractFloat, y_delta::AbstractFloat) ::Nothing
     global distance_scrolled[] += Vector2f(x_delta, y_delta)
-    return true 
+    return nothing
 end
 
 # at the end of scroll, print distance
