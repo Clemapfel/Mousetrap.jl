@@ -939,7 +939,7 @@ module mousetrap
     
     macro add_signal_kinetic_scroll_decelerate(x) return :(@add_signal $x kinetic_scroll_decelerate Cvoid AbstractFloat x_velocity AbstractFloat y_velocity) end
     macro add_signal_scroll_begin(x) return :(@add_signal $x scroll_begin Cvoid) end
-    macro add_signal_scroll(x) return :(@add_signal $x scroll Bool AbstractFloat delta_x AbstractFloat delta_y) end
+    macro add_signal_scroll(x) return :(@add_signal $x scroll Cvoid AbstractFloat delta_x AbstractFloat delta_y) end # sic, jl_unbox_bool(jl_nothing) == true
     macro add_signal_scroll_end(x) return :(@add_signal $x scroll_end Cvoid) end
    
     macro add_signal_stylus_up(x) return :(@add_signal $x stylus_up Cvoid AbstractFloat x AbstractFloat y) end
@@ -956,6 +956,7 @@ module mousetrap
     macro add_signal_properties_changed(x) return :(@add_signal $x properties_changed Cvoid) end
     
     macro add_signal_wrapped(x) return :(@add_signal $x wrapped Cvoid) end
+
     macro add_signal_scroll_child(x) return :(@add_signal $x scroll_child Cvoid ScrollType type Bool is_horizontal) end
     macro add_signal_resize(x) return :(@add_signal $x resize Cvoid Integer width Integer height) end
 
@@ -2823,6 +2824,7 @@ module mousetrap
 
     @add_widget_signals Entry
     @add_signal_text_changed Entry
+    @add_signal_activate Entry
 
     Base.show(io::IO, x::Entry) = show_aux(io, x, :text)
 
@@ -3771,11 +3773,11 @@ module mousetrap
     Grid() = Grid(detail._Grid())
 
     function insert_at!(grid::Grid, widget::Widget, row_i::Signed, column_i::Signed, n_horizontal_cells::Integer = 1, n_vertical_cells::Integer = 1)
-        detail.insert!(grid._internal, as_widget_pointer(widget), from_julia_index(row_i), from_julia_index(column_i), n_horizontal_cells, n_vertical_cells)
+        detail.insert!(grid._internal, as_widget_pointer(widget), row_i + 1, column_i + 1, n_horizontal_cells, n_vertical_cells)
     end
     export insert_at!
 
-    function insert_next_to!(grid::Grid, to_insert::Widget, already_in_grid::Widget, position::RelativePosition, n_horizontal_cells::Integer, n_vertical_cells::Integer)
+    function insert_next_to!(grid::Grid, to_insert::Widget, already_in_grid::Widget, position::RelativePosition, n_horizontal_cells::Integer = 1, n_vertical_cells::Integer = 1)
         detail.insert_next_to!(grid._internal, as_widget_pointer(to_insert), as_widget_pointer(already_in_grid), position, n_horizontal_cells, n_vertical_cells)
     end
     export insert_next_to!

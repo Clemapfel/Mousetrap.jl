@@ -1860,7 +1860,6 @@ $(@type_fields())
 scroll_controller = ScrollEventController()
 connect_signal_scroll!(scroll_controller) do self::ScrollEventController, delta_x::AbstractFloat, delta_y::AbstractFloat
     println("current scroll offset: (\$delta_x, \$delta_y)")
-    return false # do not prevent default handlers from being invoked
 end
 add_controller!(window, scroll_controller)
 ```

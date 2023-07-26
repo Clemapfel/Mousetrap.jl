@@ -197,12 +197,6 @@ function test_button(::Container)
         set_is_circular!(button, true)
         @test get_is_circular(button) == true
 
-        activate_called = Ref{Bool}(false)
-        connect_signal_activate!(button, activate_called) do ::Button, activate_called
-           activate_called[] = true
-           return nothing
-        end
-
         clicked_called = Ref{Bool}(false)
         connect_signal_clicked!(button) do ::Button
             clicked_called[] = true
@@ -211,7 +205,6 @@ function test_button(::Container)
 
         activate!(button)
         emit_signal_clicked(button)
-        @test activate_called[] == true
         @test clicked_called[] == true
     end
 end
@@ -277,12 +270,6 @@ function test_check_button(::Container)
             return nothing
         end
 
-        activate_called = Ref{Bool}(false)
-        connect_signal_activate!(check_button, activate_called) do _, activate_called
-            activate_called[] = true
-            return nothing
-        end
-
         set_is_active!(check_button, true)
         @test get_is_active(check_button) == true
 
@@ -306,9 +293,33 @@ end
 function test_event_controller(this::Container)
 
     area = this
+
+    function test_single_click_gesture(controller)
+        
+    end
+
+    function test_event_controller(controller)
+        @test get_propagation_phase(controller) != PROPAGATION_PHASE_NONE
+        set_propagation_phase!(controller, PROPAGATION_PHASE_NONE)
+        @test get_propagation_phase(controller) == PROPAGATION_PHASE_NONE
+
+        if controller isa SingleClickGesture
+            @test get_current_button(controller) isa ButtonID
+            set_only_listens_to_button!(controller, BUTTON_ID_NONE)
+            @test get_only_listens_to_button(controller) == BUTTON_ID_NONE
+
+            @test get_touch_only(controller) == false
+            set_touch_only!(controller, true)
+            @test get_touch_only(controller) == true
+        end
+    end
+
     let controller = ClickEventController()
         Base.show(devnull, controller)
         @testset "ClickEventController" begin
+            
+            test_event_controller(controller)
+
             connect_signal_click_pressed!(controller) do self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat
             end
             @test get_signal_click_pressed_blocked(controller) == false
@@ -327,6 +338,9 @@ function test_event_controller(this::Container)
     let controller = DragEventController()
         Base.show(devnull, controller)
         @testset "DragEventController" begin
+
+            test_event_controller(controller)
+
             connect_signal_drag_begin!(controller) do self::DragEventController, start_x::AbstractFloat, start_y::AbstractFloat
             end
             @test get_signal_drag_begin_blocked(controller) == false
@@ -345,6 +359,9 @@ function test_event_controller(this::Container)
     let controller = FocusEventController() 
         Base.show(devnull, controller)
         @testset "FocusEventController" begin
+
+            test_event_controller(controller)
+
             connect_signal_focus_gained!(controller) do self::FocusEventController
             end
             @test get_signal_focus_gained_blocked(controller) == false
@@ -359,6 +376,9 @@ function test_event_controller(this::Container)
     let controller = KeyEventController()
         Base.show(devnull, controller)
         @testset "KeyEventController" begin
+
+            test_event_controller(controller)
+
             connect_signal_key_pressed!(controller) do self::KeyEventController, key::KeyCode, modifier::ModifierState
             end
             @test get_signal_key_pressed_blocked(controller) == false
@@ -377,6 +397,9 @@ function test_event_controller(this::Container)
     let controller = LongPressEventController()
         Base.show(devnull, controller)
         @testset "LongPressEventController" begin
+
+            test_event_controller(controller)
+
             connect_signal_pressed!(controller) do self::LongPressEventController, x::AbstractFloat, y::AbstractFloat
             end
             @test get_signal_pressed_blocked(controller) == false
@@ -391,6 +414,9 @@ function test_event_controller(this::Container)
     let controller = MotionEventController()
         Base.show(devnull, controller)
         @testset "MotionEventController" begin
+
+            test_event_controller(controller)
+
             connect_signal_motion!(controller) do self::MotionEventController, x::AbstractFloat, y::AbstractFloat
             end
             @test get_signal_motion_blocked(controller) == false
@@ -409,6 +435,9 @@ function test_event_controller(this::Container)
     let controller = PanEventController(ORIENTATION_HORIZONTAL)
         Base.show(devnull, controller)
         @testset "PanEventController" begin
+            
+            test_event_controller(controller)
+
             connect_signal_pan!(controller) do self::PanEventController, direction::PanDirection, offset::AbstractFloat
             end
             @test get_signal_pan_blocked(controller) == false
@@ -423,6 +452,9 @@ function test_event_controller(this::Container)
     let controller = PinchZoomEventController()
         Base.show(devnull, controller)
         @testset "PinchZoomController" begin
+            
+            test_event_controller(controller)
+
             connect_signal_scale_changed!(controller) do self::PinchZoomEventController, scale::AbstractFloat
             end
             @test get_signal_scale_changed_blocked(controller) == false                
@@ -433,6 +465,9 @@ function test_event_controller(this::Container)
     let controller = RotateEventController()
         Base.show(devnull, controller)
         @testset "RotateEventController" begin
+            
+            test_event_controller(controller)
+
             connect_signal_rotation_changed!(controller) do self::RotateEventController, angle_absolute::AbstractFloat, angle_delta::AbstractFloat
             end
             @test get_signal_rotation_changed_blocked(controller) == false
@@ -445,6 +480,8 @@ function test_event_controller(this::Container)
         Base.show(devnull, controller)
         @testset "ScrollEventController" begin
 
+            test_event_controller(controller)
+            
             @test get_kinetic_scrolling_enabled(controller) == false
             set_kinetic_scrolling_enabled!(controller, true)
             @test get_kinetic_scrolling_enabled(controller) == true
@@ -472,6 +509,9 @@ function test_event_controller(this::Container)
     let controller = ShortcutEventController()
         Base.show(devnull, controller)
         @testset "ShortcutEventController" begin
+            
+            test_event_controller(controller)
+
             @test get_scope(controller) == SHORTCUT_SCOPE_LOCAL
             set_scope!(controller, SHORTCUT_SCOPE_GLOBAL)
             @test get_scope(controller) == SHORTCUT_SCOPE_GLOBAL
@@ -486,6 +526,9 @@ function test_event_controller(this::Container)
     let controller = StylusEventController()
         Base.show(devnull, controller)
         @testset "StylusEventController" begin
+            
+            test_event_controller(controller)
+
             connect_signal_stylus_up!(controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
             end
             @test get_signal_stylus_up_blocked(controller) == false
@@ -512,32 +555,14 @@ function test_event_controller(this::Container)
     let controller = SwipeEventController()
         Base.show(devnull, controller)
         @testset "SwipeEventController" begin
+            
+            test_event_controller(controller)
+            
             connect_signal_swipe!(controller) do self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat
             end
             @test get_signal_swipe_blocked(controller) == false
         end
         add_controller!(area, controller)
-    end
-
-    let controller = ClickEventController()
-        Base.show(devnull, controller)
-
-        @testset "SingleClickGesture" begin
-            @test get_current_button(controller) isa ButtonID
-            @test get_only_listens_to_button(controller) == BUTTON_ID_ANY
-            set_only_listens_to_button!(controller, BUTTON_ID_NONE)
-            @test get_only_listens_to_button(controller) == BUTTON_ID_NONE
-
-            @test get_touch_only(controller) == false
-            set_touch_only!(controller, true)
-            @test get_touch_only(controller) == true
-        end
-
-        @testset "EventController" begin
-            @test get_propagation_phase(controller) != PROPAGATION_PHASE_NONE
-            set_propagation_phase!(controller, PROPAGATION_PHASE_NONE)
-            @test get_propagation_phase(controller) == PROPAGATION_PHASE_NONE
-        end
     end
 end
 
@@ -1921,18 +1946,16 @@ function test_switch(::Container)
         Base.show(devnull, switch)
         @test mousetrap.is_native_widget(switch)
 
-        activate_called = Ref{Bool}(false)
-        connect_signal_activate!(switch, activate_called) do self::Switch, activate_called
-            activate_called[] = true
+        switched_called = Ref{Bool}(false)
+        connect_signal_switched!(switch, switched_called) do self::Switch, switched_called
+            switched_called[] = true
             set_is_active!(self, true) # `activate!` toggles switch only once it is realized, so we do it manually to avoid having to wait for the window to render
             return nothing
         end
 
         set_is_active!(switch, false)
         @test get_is_active(switch) == false
-        activate!(switch)
-        @test get_is_active(switch) == true
-        @test activate_called[] == true
+        @test switched_called[] == true
     end
 end
 
@@ -2000,12 +2023,6 @@ function test_toggle_button(::Container)
         clicked_called = Ref{Bool}(false)
         connect_signal_clicked!(button, clicked_called) do self::ToggleButton, clicked_called
             clicked_called[] = true
-            return nothing
-        end
-
-        activate_called = Ref{Bool}(false)
-        connect_signal_activate!(button, activate_called) do self::ToggleButton, activate_called
-            activate_called[] = true
             return nothing
         end
 
@@ -2529,7 +2546,8 @@ main(Main.app_id) do app::Application
     set_is_decorated!(window, false) # prevent user from closing the window during tests
 
     theme = IconTheme(Main.window[])
-    Main.icon[] = Icon(theme, get_icon_names(theme)[1], 64)
+    Main.icon[] = Icon()
+    create_from_image!(Main.icon[], Image(64, 64, RGBA(0, 1, 0, 1)))
 
     container = Container()
     viewport = Viewport()

@@ -735,6 +735,13 @@ Entry
 + [`mousetrap.set_text_visible!`](@ref)
 
 
++ [`mousetrap.connect_signal_activate!`](@ref)
++ [`mousetrap.disconnect_signal_activate!`](@ref)
++ [`mousetrap.emit_signal_activate`](@ref)
++ [`mousetrap.get_signal_activate_blocked`](@ref)
++ [`mousetrap.set_signal_activate_blocked!`](@ref)
+
+
 + [`mousetrap.connect_signal_destroy!`](@ref)
 + [`mousetrap.disconnect_signal_destroy!`](@ref)
 + [`mousetrap.emit_signal_destroy`](@ref)
@@ -2775,6 +2782,8 @@ Scale
 ScrollEventController
 ```
 #### Functions that operate on this type:
++ [`mousetrap.get_kinetic_scrolling_enabled`](@ref)
++ [`mousetrap.set_kinetic_scrolling_enabled!`](@ref)
 
 
 + [`mousetrap.connect_signal_kinetic_scroll_decelerate!`](@ref)

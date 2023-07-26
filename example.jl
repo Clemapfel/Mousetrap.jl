@@ -1,42 +1,36 @@
 import Pkg
 
-using mousetrap
-
-
-using mousetrap
-main() do app::Application
-
-    # create a window
-    window = Window(app)
-
-    function on_stylus_up(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
-        println("stylus is no longer touching touchpad, position: ($x, $y)")
-    end
-
-    function on_stylus_down(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
-        println("stylus is ow touching touchpad, position: ($x, $y)")
-    end
-
-    function on_proximity(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
-        println("stylus entered proximity range, position: ($x, $y)")
-    end
-
-    function on_motion(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
-        println("stylus position: ($x, $y)")
-    end
-
-    stylus_controller = StylusEventController()
-    connect_signal_stylus_up!(on_stylus_up, stylus_controller)
-    connect_signal_stylus_down!(on_stylus_down, stylus_controller)
-    connect_signal_proximity!(on_proximity, stylus_controller)
-    connect_signal_motion!(on_motion, stylus_controller)
-
-    add_controller!(window, stylus_controller)
-
-    # show the window to the user
-    present!(window)
+struct Placeholder <: Widget
+    label::Label
+    separator::Separator
+    overlay::Overlay
+    frame::Frame
+    aspect_frame::AspectFrame
 end
 
+function Placeholder(text::String)
+    out = Placeholder(
+        Label("<tt>" * text * "</tt>"),
+        Separator(),
+        Overlay(),
+        Frame(),
+        AspectFrame(1.0)
+    )     
+    
+    set_child!(out.overlay, out.separator)
+    add_overlay!(out.overlay, out.label; include_in_measurement = true)
+    set_child!(out.frame, out.overlay)
+    set_child!(out.aspect_frame, out.frame)
+    return out
+end
+
+mousetrap.get_top_level_widget(x::Placeholder) = x.aspect_frame
+
+main() do app::Application
+    window = Window(app)
+    set_child!(window, Placeholder("TEST"))
+    present!(window)
+end
 
 #=
 

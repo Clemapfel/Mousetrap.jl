@@ -58,6 +58,7 @@ Inn order of priority, highest first:
 + Fully polish interactive use from within the REPL
 + Make all functions that modify the global state thread-safe
 + Add an event controller to capture video game controller / joystick events
++ Expose the full `GtkTextView` and `GtkSourceView` interface, making `TextView` a fully feature editor
 + Allow binding textures to fragment shader uniforms at texture unit 1 or higher, currently, only texture unit 0 is supported
 + Add 3D shapes and geometry shaders
 

@@ -169,7 +169,7 @@ const signal_descriptors = Dict([
         "Emitted once when a scroll gesture is first recognized."
     ),
     :scroll => (
-        "(::T, x_delta::AbstractFloat, y_delta::AbstractFloat, [::Data_t]) -> also_invoke_default_handlers::Bool", 
+        "(::T, x_delta::AbstractFloat, y_delta::AbstractFloat, [::Data_t]) -> Nothing", 
         "Emitted once per frame while a scroll gesture is active, where `x_delta` and `y_delta` are the offset along the horizontal and vertical axis, in pixels."
     ),
     :scroll_end => (
