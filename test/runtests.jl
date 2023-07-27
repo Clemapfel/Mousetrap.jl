@@ -600,6 +600,24 @@ function test_clipboard(::Container)
     end
 end
 
+function test_clamp_frame(::Container)
+    @testset "ClampFrame" begin
+        frame = ClampFrame(150)
+        Base.show(devnull, frame)
+
+        set_child!(frame, Separator())
+        remove_child!(frame)
+
+        @test get_orientation(frame) == ORIENTATION_HORIZONTAL
+        set_orientation!(frame, ORIENTATION_VERTICAL)
+        @test get_orientation(frame) == ORIENTATION_VERTICAL
+
+        @test get_maximum_size(frame) == 150
+        set_maximum_size!(frame, 50)
+        @test get_maximum_size(frame) == 50
+    end
+end
+
 function test_time(::Container)
     @testset "Time" begin
         value = 1234
@@ -2566,6 +2584,7 @@ main(Main.app_id) do app::Application
         test_button(container)
         test_center_box(container)
         test_check_button(container)
+        test_clamp_frame(container)
         test_clipboard(container)
         test_color_chooser(container)
         test_colors(container)
