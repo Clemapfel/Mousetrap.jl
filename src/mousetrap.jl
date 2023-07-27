@@ -2473,6 +2473,29 @@ module mousetrap
 
     Base.show(io::IO, x::AspectFrame) = show_aux(io, x, :ratio)
 
+####### clamp_frame.jl
+
+    @export_type ClampFrame Widget
+    @declare_native_widget ClampFrame
+
+    function ClampFrame(size::AbstractFloat, orientation::Orientation = ORIENTATION_HORIZONTAL) 
+        out = ClampFrame(detail._ClampFrame(orientation))
+        set_maximum_size!(out, size)
+        return out
+    end
+
+    @export_function ClampFrame set_orientation! Cvoid Orientation orientation
+    @export_function ClampFrame get_orientation Orientation
+    @export_function ClampFrame set_maximum_size! Cvoid Number => Cfloat px
+    @export_function ClampFrame get_maximum_size Cfloat
+
+    @export_function ClampFrame remove_child! Cvoid
+
+    set_child!(clamp_frame::ClampFrame, child::Widget) = detail.set_child!(clamp_frame._internal, as_widget_pointer(child))
+    export set_child!
+
+    Base.show(io::IO, x::ClampFrame) = show_aux(io, x, :maximum_size)
+
 ####### box.jl
 
     @export_type Box Widget

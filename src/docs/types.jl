@@ -313,6 +313,22 @@ set_child!(window, check_button)
 ```
 """
 
+@document ClampFrame """
+# ClampFrame <: Widget
+
+Constrains its single child such that the childs width (or height, if vertically orientated) cannot
+exceed the size set using `set_maximum_size!`. 
+
+$(@type_constructors(
+    ClampFrame(size_px::AbstractFloat, [::Orientation])
+))
+
+$(@type_signals(ClampFrame))
+
+$(@type_fields())
+"""
+"""
+
 @document ClickEventController """
 # ClickEventController <: SingleClickGesture <: EventController
 

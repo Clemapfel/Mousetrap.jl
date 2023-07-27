@@ -1259,6 +1259,25 @@ set_child!(aspect_frame, child_widget);
 
 ---
 
+## ClampFrame
+
+Using size-hinting, we are able to control the *minimum* size of a widget. There is no widet property that lets us control the *maximum size*, however. For this, we need [`ClampFrame`](@ref), a widget which constrains it singular child to never exceed the given maximum width, or height if the frames orientation is `ORIENTATION_VERTICAL`.
+
+We choose the maximum size in pixels during construction, or using [`set_maximum_size!`](@ref):
+
+```julia
+child_widget = # ...
+width_clamp_frame = ClampFrame(150, ORIENTATION_HORIZONTAL)
+height_clamp_frame = ClampFame(150, ORIENTATION_VERTICAL)
+
+set_child!(width_clamp_frame, child_widget)
+set_child!(height_clamp_frame, width_clamp_frame)
+```
+
+In which we use two nested `ClampFrame`s, such that `child_widget` can never exceed `150px` for both its width and height.
+
+---
+
 
 ## Overlay
 

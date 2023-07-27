@@ -1553,6 +1553,13 @@ get_margin_top(::Widget) -> Float32
 Get the top margin of the widget, in pixels.
 """
 
+@document get_maximum_size """
+```
+get_maximum_size(::ClampFrame) -> Float32
+```
+Get the maximum width (or height, if vertical) the frame should constrain its child to, in pixels.
+"""
+
 @document get_max_n_columns """
 ```
 get_max_n_columns(grid_view::GridView) -> Signed
@@ -1710,6 +1717,7 @@ Get the widgets current opacity, in `[0, 1]`.
 ```
 get_orientation(::Box) -> Orientation
 get_orientation(::CenterBox) -> Orientation 
+get_orientation(::ClampFrame) -> Orientation
 get_orientation(::LevelBar) -> Orientation 
 get_orientation(::ListView) -> Orientation 
 get_orientation(::GridView) -> Orientation 
@@ -4282,6 +4290,13 @@ set_margin_vertical!(::Widget, margin::AbstractFloat)
 Set both the top and bottom margin of the widget, in pixels.
 """
 
+@document set_maximum_size! """
+```
+set_maximum_size!(::ClampFrame, size::AbstractFloat)
+```
+Set the maximum width (or height, if vertical) the frame should constrain its child to, in pixels.
+"""
+
 @document set_max_n_columns! """
 ```
 set_max_n_columns!(grid_view::GridView, n::Integer) 
@@ -4365,6 +4380,7 @@ Set the opacity of the widget, in `[0, 1]`.
 ```
 set_orientation!(::Box, ::Orientation) 
 set_orientation!(::CenterBox, ::Orientation) 
+set_orientation!(::ClampFrame, ::Orientation)
 set_orientation!(::LevelBar, ::Orientation) 
 set_orientation!(::Grid, ::Orientation) 
 set_orientation!(::ProgressBar, ::Orientation) 
