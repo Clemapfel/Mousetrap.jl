@@ -1035,6 +1035,13 @@ get_current_offset(::DragEventController) -> Vecto2f
 Get the distance between the current cursor position and the point of origin for the drag-gestured, in absolute widget-space coordinates.
 """
 
+@document get_current_theme """
+```
+get_current_theme(::Application) -> Theme
+```
+Get the currently used theme, or `THEME_DEFAULT_LIGHT` if the application is uninitialized and no theme was chosen yet.
+"""
+
 @document get_current_page """
 ```
 get_current_page(::Notebook) -> Int64
@@ -3710,6 +3717,13 @@ set_current_blend_mode(::BlendMode; allow_alpha_blending::Bool = true)
 ```
 Enable GPU-side blending and set the current OpenGL blend mode. If `allow_alpha_blending` is set to `false`, 
 only the rgb components of a fragments color will participate in blending.
+"""
+
+@document set_current_theme! """
+```
+set_current_theme!(::Application, ::Theme)
+```
+Swap the global theme used to determine all widgets looks and colors. This function is only available, after the backend has been initialized.
 """
 
 @document set_cursor! """

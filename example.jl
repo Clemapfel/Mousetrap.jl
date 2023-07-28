@@ -3,6 +3,36 @@ using mousetrap
 main() do app::Application
 
     window = Window(app)
+    header_bar = HeaderBar()
+
+    swap_button = Button()
+    set_tooltip_tex(swap_button, "Click to Swap Themes")
+    connect_signal_clicked!(swap_button, app) do self::Button, app::Application
+        current = get_current_theme!(app)
+
+        # swap light and dark, preservng whether the theme is high contrast
+        if current == THEME_DEFAULT_DARK
+            next = THEME_DEFAULT_LIGHT
+        elseif current == THEME_DEFAULT_LIGHT
+            next = THEME_DEFAULT_DARK
+        elseif current == THEME_HIGH_CONTRAST_DARK
+            next = THEME_HIGH_CONTRAST_LIGHT
+        elseif current == THEME_HIGH_CONTRAST_LIGHT
+            next = THEME_HIGH_CONTRAST_DARK
+        end
+
+        set_current_theme!(app, next)
+    end
+    push_front!(header_bar, swap_button)
+    set_titlebar_widget!(window, header_bar)
+    present!(window)
+end
+
+exit(0)
+
+main() do app::Application
+
+    window = Window(app)
     set_title!(window, "mousetrap.jl")
 
     shapes = [

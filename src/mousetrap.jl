@@ -13,7 +13,7 @@ module mousetrap
 
     module detail
         using CxxWrap
-        using mousetrap_linux_jll, mousetrap_windows_jll
+        #using mousetrap_linux_jll, mousetrap_windows_jll
         function __init__() @initcxx end
 
         #=
@@ -26,7 +26,7 @@ module mousetrap
         end
         =#
 
-        @wrapmodule("/home/clem/Workspace/mousetrap/cmake-build-debug/libmousetrap_julia_binding.so")
+        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
     end
 
 ####### typed_function.jl
@@ -1516,6 +1516,15 @@ module mousetrap
         return out
     end
 
+####### theme.jl
+
+    @export_enum Theme begin
+        THEME_DEFAULT_LIGHT,
+        THEME_DEFAULT_DARK,
+        THEME_HIGH_CONTRAST_LIGHT,
+        THEME_HIGH_CONTRAST_DARK
+    end
+
 ####### application.jl
 
     @export_type Application SignalEmitter
@@ -1537,6 +1546,8 @@ module mousetrap
     @export_function Application unmark_as_busy! Cvoid
     @export_function Application get_is_marked_as_busy Bool
     @export_function Application get_id String
+    @export_function Application get_current_theme Theme
+    @export_function Application set_current_theme Cvoid Theme theme
 
     add_action!(app::Application, action::Action) = detail.add_action!(app._internal, action._internal)
     export add_action!
@@ -4590,6 +4601,10 @@ module mousetrap
         detail.set_listens_for_shortcut_action!(as_widget_pointer(widget), action._internal)
     end
     export set_listens_for_shortcut_action!
+
+    @export_widget_function add_css_class! Cvoid String class
+    @export_widget_function remove_css_class! Cvoid String class
+    @export_widget_function get_css_classes Vector{String}
 
 ####### clipboard.jl
 

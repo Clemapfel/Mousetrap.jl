@@ -482,6 +482,19 @@
 @document TEXTURE_WRAP_MODE_STRETCH "Stretch the outermost fragment of the closest edge"
 @document TEXTURE_WRAP_MODE_ZERO "RGBA(0, 0, 0, 0)"
 
+@document Theme enum_docs(:Theme,
+    "Determines the look of all widgets when made active using `Application`s `set_current_theme!`."
+    :THEME_DEFAULT_LIGHT,
+    :THEME_DEFAULT_DARK,
+    :THEME_HIGH_CONTRAST_LIGHT,
+    :THEME_HIGH_CONTRAST_DARK
+)
+
+@document THEME_DEFAULT_LIGHT "Default light theme, this theme is available for all operating systems."
+@document THEME_DEFAULT_DARK "Default dark theme, this theme is available for all operating systems."
+@document THEME_HIGH_CONTRAST_LIGHT "Default high contrast theme, light variant. Not all operating systems support this."
+@document THEME_HIGH_CONTRAST_DARK "Default high contrast theme, dark variant. Not all operating systems support this."
+
 @document TickCallbackResult enum_docs(:TickCallbackResult,
     "Return value of a callback registered via [`set_tick_callback!`](@ref). Determines whether the callback should be removed.", [
     :TICK_CALLBACK_RESULT_CONTINUE,
