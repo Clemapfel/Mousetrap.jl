@@ -7,6 +7,3 @@ In this chapter we will learn:
 + How to render to a (multi-sampled) texture
 
 ---
-
-I
-

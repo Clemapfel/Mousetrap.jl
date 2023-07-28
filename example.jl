@@ -1,141 +1,4 @@
-import Pkg
-
-struct Placeholder <: Widget
-    label::Label
-    separator::Separator
-    overlay::Overlay
-    frame::Frame
-    aspect_frame::AspectFrame
-end
-
-function Placeholder(text::String)
-    out = Placeholder(
-        Label("<tt>" * text * "</tt>"),
-        Separator(),
-        Overlay(),
-        Frame(),
-        AspectFrame(1.0)
-    )     
-    
-    set_child!(out.overlay, out.separator)
-    add_overlay!(out.overlay, out.label; include_in_measurement = true)
-    set_child!(out.frame, out.overlay)
-    set_child!(out.aspect_frame, out.frame)
-    return out
-end
-
-mousetrap.get_top_level_widget(x::Placeholder) = x.aspect_frame
-
-main() do app::Application
-    window = Window(app)
-    set_child!(window, Placeholder("TEST"))
-    present!(window)
-end
-
-#=
-
-main() do app::Application
-    window = Window(app)
-
-    button_01 = Button()
-    
-    #=
-    connect_signal_clicked!(button_01) do self::Button
-        println("01 clicked")
-        
-        # block self (button 01) 
-        set_signal_clicked_blocked!(self, true)
-    
-        # activate button 02
-        activate!(button_02)
-    
-        # unblock self
-        set_signal_clicked_blocked(self, false)
-    end
-    
-    connect_signal_clicked!(button_02) do self::Button
-        println("02 clicked")
-    
-        # block self (button 02)
-        set_signal_clicked_blocked!(self, true)
-    
-        # activate button 01
-        activate!(button_01)
-    
-        # unblock self
-        set_signal_clicked_blocked!(self, false)
-    end
-
-    set_child!(window, button_01)#hbox(button_01, button_02))
-    =#
-    present!(window)
-end
-=#
-
-if false
-
-# compound widget that is an entire stack page, render area with the shape + a label below
-struct ShapePage <: Widget
-
-    separator::Separator
-    render_area::RenderArea
-    overlay::Overlay
-    frame::Frame
-    aspect_frame::AspectFrame
-    label::Label
-    center_box::CenterBox
-
-    function ShapePage(title::String, shape::Shape)
-
-        out = new(
-            Separator(),
-            RenderArea(),
-            Overlay(),
-            Frame(),
-            AspectFrame(1.0),
-            Label(title),
-            CenterBox(ORIENTATION_VERTICAL)
-        )
-
-        set_child!(out.overlay, out.separator)
-        add_overlay!(out.overlay, out.render_area)
-        set_child!(out.frame, out.overlay)
-        set_child!(out.aspect_frame, out.frame)
-    
-        set_center_child!(out.center_box, out.aspect_frame)
-        set_end_child!(out.center_box, out.label)
-
-        set_size_request!(out.aspect_frame, Vector2f(150, 150))
-        set_expand!(out.aspect_frame, true)
-
-        set_margin!(out.aspect_frame, 10)
-        set_margin!(out.label, 10)
-
-        add_render_task!(out.render_area, RenderTask(shape))
-
-        radius = 0.001
-        n_vertices = get_n_vertices(shape)
-        for i in 1:n_vertices
-            pos = get_vertex_position(shape, i)
-            to_add = Circle(Vector2f(pos.x, pos.y), radius, 16)
-            set_color!(to_add, HSVA(i / n_vertices, 1, 1, 1))
-            add_render_task!(out.render_area, RenderTask(to_add))
-        end
-
-        # Widget hierarchy for clarity:
-        # 
-        # CenterBox \
-        #   AspectFrame \
-        #       Frame \
-        #           Overlay \
-        #               RenderArea 
-        #               Separator
-        #   Label
-
-        return out
-    end
-end
-mousetrap.get_top_level_widget(x::ShapePage) = x.center_box
+using mousetrap
 
 main() do app::Application
 
@@ -260,7 +123,6 @@ main() do app::Application
     set_listens_for_shortcut_action!(window, revealer_action)
     set_tooltip_text!(revealer, "press <tt>Control + H</tt> to hide this element.")
 
-
     key_controller = KeyEventController()
     connect_signal_key_released!(key_controller, stack) do _::KeyEventController, code::KeyCode, modifiers::ModifierState, stack::Stack
         
@@ -280,5 +142,3 @@ main() do app::Application
     set_child!(window, box)
     present!(window)
 end
-
-end # if false

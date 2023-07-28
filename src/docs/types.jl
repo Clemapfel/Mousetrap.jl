@@ -320,13 +320,12 @@ Constrains its single child such that the childs width (or height, if vertically
 exceed the size set using `set_maximum_size!`. 
 
 $(@type_constructors(
-    ClampFrame(size_px::AbstractFloat, [::Orientation])
+    ClampFrame(size_px::AbstractFloat, [::Orientation = ORIENTATION_HORIZONTAL])
 ))
 
 $(@type_signals(ClampFrame))
 
 $(@type_fields())
-"""
 """
 
 @document ClickEventController """
