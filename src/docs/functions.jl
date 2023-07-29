@@ -1258,6 +1258,13 @@ get_has_wide_handle(::Paned) -> Bool
 Get whether the barrier in between the paneds two children is wide or thin, wide by default.
 """
 
+@document get_header_bar """
+```
+get_header_bar(::Window) -> header_bar
+```
+Access the `HeaderBar` instance used as the windows titlebar widget.
+"""
+
 @document get_hide_on_close """
 ```
 get_hide_on_close(::Window) -> Bool
@@ -3366,18 +3373,11 @@ Remove a registered tick callback. Usually, this should be done by returning `TI
 within the tick callback function.
 """
 
-@document remove_titlebar_widget! """
-```
-remove_titlebar_widget!(::Window) 
-```
-Reset the titlebar widget such that the default window decoration is used instead.
-"""
-
 @document remove_title_widget! """
 ```
 remove_title_widget!(::HeaderBar)
 ```
-Remove widget that is currently used as the title element.
+Remove widget that is currently used as the title element, and instead use the default window title. To completely hide the title, use `set_title!(window, "")` on the associated window instance.
 """
 
 @document remove_tooltip_widget! """
@@ -4849,13 +4849,6 @@ Set the columns title, which will uniquely identify that column.
 set_title_widget!(header_bar::HeaderBar, ::Widget) 
 ```
 Replace the default header bar with a custom widget.
-"""
-
-@document set_titlebar_widget! """
-```
-set_titlebar_widget!(window::Window, titlebar::Widget) 
-```
-Set a widget used as the titlebar. This will usually be a `HeaderBar`.
 """
 
 @document set_tooltip_text! """

@@ -483,12 +483,12 @@
 @document TEXTURE_WRAP_MODE_ZERO "RGBA(0, 0, 0, 0)"
 
 @document Theme enum_docs(:Theme,
-    "Determines the look of all widgets when made active using `Application`s `set_current_theme!`."
+    "Determines the look of all widgets when made active using `Application`s `set_current_theme!`.", [
     :THEME_DEFAULT_LIGHT,
     :THEME_DEFAULT_DARK,
     :THEME_HIGH_CONTRAST_LIGHT,
     :THEME_HIGH_CONTRAST_DARK
-)
+])
 
 @document THEME_DEFAULT_LIGHT "Default light theme, this theme is available for all operating systems."
 @document THEME_DEFAULT_DARK "Default dark theme, this theme is available for all operating systems."

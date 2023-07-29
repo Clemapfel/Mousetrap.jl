@@ -31,7 +31,7 @@ Mousetrap supports four default themes, which are an value of enum [`Theme`](@re
 [Image: high contrast dark widget gallery]
 `THEME_HIGH_CONTRAST_DARK`
 
-At any point after the back-end has been initialized, we can swap the global theme using [`set_current_theme!`](@ref). This will immediately change all widgets looks, allowing apps to change the entire GUI with just one function at run-time.
+At any point after the back-end has been initialized, we can swap the global theme using [`set_current_theme!`](@ref). This will immediately change all widgets looks, allowing apps to change the entire GUI with just one function call at run-time.
 
 For example, to create a window that has button to switch between light and dark themes, we could do the following:
 
@@ -45,6 +45,8 @@ main() do app::Application
     swap_button = Button()
     set_tooltip_tex(swap_button, "Click to Swap Themes")
     connect_signal_clicked!(swap_button, app) do self::Button, app::Application
+
+        # get currently used theme
         current = get_current_theme!(app)
 
         # swap light with dark, preservng whether the theme is high contrast
@@ -58,6 +60,7 @@ main() do app::Application
             next = THEME_HIGH_CONTRAST_DARK
         end
 
+        # set new theme
         set_current_theme!(app, next)
     end
     push_front!(header_bar, swap_button)

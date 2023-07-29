@@ -1519,9 +1519,9 @@ module mousetrap
 ####### theme.jl
 
     @export_enum Theme begin
-        THEME_DEFAULT_LIGHT,
-        THEME_DEFAULT_DARK,
-        THEME_HIGH_CONTRAST_LIGHT,
+        THEME_DEFAULT_LIGHT
+        THEME_DEFAULT_DARK
+        THEME_HIGH_CONTRAST_LIGHT
         THEME_HIGH_CONTRAST_DARK
     end
 
@@ -1636,12 +1636,11 @@ module mousetrap
     @export_function Window set_title! Cvoid String title
     @export_function Window get_title String
 
-    function set_titlebar_widget!(window::Window, titlebar::Widget)
-        detail.set_titlebar_widget!(window._internal, as_widget_pointer(titlebar))
+    function get_header_bar(window::Window) ::HeaderBar
+        return HeaderBar(detail.get_header_bar(window._internal))
     end
-    export set_titlebar_widget!
+    export get_header_bar
 
-    @export_function Window remove_titlebar_widget! Cvoid
     @export_function Window set_is_modal! Cvoid Bool b
     @export_function Window get_is_modal Bool
 
@@ -4124,6 +4123,7 @@ module mousetrap
     @declare_native_widget HeaderBar
 
     HeaderBar() = HeaderBar(detail._HeaderBar())
+    HeaderBar(internal::Ptr{Cvoid}) = HeaderBar(detail._HeaderBar(internal))
     HeaderBar(layout::String) = HeaderBar(detail._HeaderBar(layout))
 
     @export_function HeaderBar set_layout! Cvoid String layout

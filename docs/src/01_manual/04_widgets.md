@@ -8,8 +8,8 @@ In this chapter, we will learn:
 
 ---
 
-!!! note "Running snippets from this section"
-    To run any partial code snippet from this section, we can use the following `.jl` file:
+!!! note "Running snippets from this Chapter"
+    To run any partial code snippet from this section, we can use the following `main.jl` file:
     ```julia
     using mousetrap
     main() do app::Application
@@ -20,6 +20,9 @@ In this chapter, we will learn:
         present!(window)
     end
     ```
+
+!!! note "Images in this Chapter"
+    Images for this chapter were captured on a Fedora Linux machine running Gnome 44.2. The exact look of each window and widget may be slightly different, depending on the users operating system and application theme. We will learn how to manually change the global theme in the [chapter on app customization](./10_app_distribution.md). 
 
 ---
 
@@ -358,8 +361,6 @@ Other than its singular child, `Window` has a number of other properties.
 
 By default, the header bar will show the window title, a minimize-, maximize-, and close-button. We can completely hide the header bar using `set_is_decorated!(window, false)`, which also means the user has now way to move or close the window.
 
-In addition to the child in the content area of the window, `Window` supports inserting a widget into the titlebar using [`set_titlebar_widget!`](@ref), this will usually be a widget of type [`HeaderBar`](@ref), which we will learn about later in this chapter, though any arbitrary widget can be inserted.
-
 #### Modality & Transience
 
 When dealing with multiple windows, we can influence the way two windows interact with each other. Two of these interactions are determined by whether a window is **modal** and whether it is **transient** for another window.
@@ -536,6 +537,48 @@ center_box = CenterBox(ORIENTATION_HORIZONTAL, Label("start"), Button(), Label("
 ```
 
 `CenterBox` is useful when symmetry is desired.
+
+---
+
+## HeaderBar
+
+The visual element on top of a window, which usually contains the window title along with the title buttons is actually its own separate widget called [`HeaderBar`](@ref). All `Window` instances come with their own `HeaderBar`, which we can access using [`get_header_bar`](@ref). It's rarely necessary to create a `HeaderBar` on our own.
+
+Each `HeaderBar` has a title widget, which will usually be a `Label`, along with two areas for widgets to be inserted. To insert widgets left of the title, we use [`push_front!](@ref), while inserting widgets right of the title is done using [`push_back!`](@ref).
+
+Each `HeaderBar` can have a close-, minimize- and maximize- button. Each of these is optional. To specify which buttons should appear and in what order, we use [`set_layout!`](@ref). This function takes a string, which has the following components:
+
++ `close`
++ `minimize`
++ `maximize`
+
+Each element is separated using `,`. The string has to furthermore contain a `:`. Each element before the `:` will appear left of the title, while elements after `:` will appear right of the title. Note that this just affects the close-, minimize-, and maximize-buttons, any widget inserted using `push_front!` or `push_back!` is unaffected.
+
+A few examples:
+
+| `set_layout!` string | close button | minimize button | maximize button |
+|----------------------|--------------|----------------|-----------------|
+| `:minimize,maximize,close` | right of title | right of title | right of title |
+| `close:`             | left of title | hidden        | hidden |
+| `minimize:maximize`  | hidden | left of title | right of title |
+| `:`                  | hidden | hidden | hidden |
+
+For example, to create a `HeaderBar` that has no elements, meaning no title and none of the title buttons, we would do the following:
+
+```julia
+window = Window(app)
+
+# access windows header bar instance
+header_bar = get_header_bar(window)
+
+# hide title buttons
+set_layout!(header_bar, ":")
+
+# hide default title by replacing it with an empty label
+set_title_widget!(header_bar, Label(""))
+```
+![](../assets/header_bar_blank.png)
+
 
 ---
 
