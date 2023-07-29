@@ -3,8 +3,9 @@
 In this chapter, we will learn:
 + How to install mousetrap.jl
 + How to create our first mousetrap program
++ Basic Julia skills that are needed to understand the rest of this manual
 
-# Installation
+## Installation
 
 Installation of the Julia component is only a few lines. After pressing `]` while in the REPL to enter Pkg mode, we execute
 
@@ -16,49 +17,312 @@ add https://github.com/Clemapfel/mousetrap.jl
 
 We can make sure everything works by calling `test mousetrap`, while still in Pkg mode.
 
-# Workflow
+## Hello World
 
-To create an app using mousetrap, we first need to create our own Julia package. Assuming our desired package name is `Foo`, we navigate to the folder we want to create our project in, then execute (from within the REPL):
+To create our first mousetrap app, we create a Julia file `main.jl`, with the following contents:
 
 ```julia
-project_name = "foo"
-
-import Pkg;
-Pkg.generate(project_name)
-Pkg.add("mousetrap")
-cd(project_name)
-mkdir("test")
-cd("test") do
-    file = open("./runtests.jl", "w+")
-    close(file)
+using mousetrap
+main() do app::Application
+    window = Window(app)
+    set_child!(window, Label("Hello World!"))
+    present!(window)
 end
 ```
 
-When can then enter Pkg mode by pressing `]`, and execute
+To start our app, we navigate to the location of `main.jl` in our console, then execute:
 
+```shell
+# in same directory as `main.jl`
+julia main.jl
 ```
-dev .
-```
+![](../assets/readme_hello_world.png)
 
-
-This will create the following project structure:
-
-```
-Foo \
-    Project.toml
-    src \
-        Foo.jl
-    test \
-        runtest.jl
-```
-We then replace the contents of `Foo.jl` with the following:
-
-```julia
-module Foo
-    using mousetrap
-    function main()
-    end
-end
-```
-
+!!! danger "Using mousetrap from within the REPL"
+    As of version `v0.1.0`, **interactive use of mousetrap is discouraged**. 
     
+    `main` will stall, meaning as long as the application from our `main.jl` is running, the REPL will "hang". When the application exits, `main` will exit.
+
+    One compromise that will keep startup-time to a minimum is to open the REPL in the same directory as our `main.jl`, then execute:
+
+    ```julia
+    using mousetrap
+    include("main.jl")
+    ```
+
+    This way, `include` will stall because it called `main` inside `main.jl`. Once the app exits, the `include` call will exit. We can then call `include` again to restart our app. With this technique, the mousetrap back-end will stay initialized and the mousetrap Julia module will stay in memory between runs, making startup time very fast.
+
+    This technique should only be used during development, when distributing the app to users, we should always prefer starting the `main.jl` using a script that executes `julia main.jl`.
+
+---
+
+## Programming Crash Course
+
+The rest of this manual will assume that readers are familiar with the basics of Julia and graphics programming in general. To bring anyone who considers themselves not in this group up to speed, this section contains a crash course on programming basics needed to understand the rest of this manual.
+
+### Glossary
+#### Invokation
+
+To "invoke" a function means to execute it using a command, potentially using arguments. For example, the second line in the following snippet *invokes function `foo`*:
+
+```julia
+foo(x) = println(x)
+foo(1234) # invokation
+```
+
+#### Instantiation, Construction
+
+In Julia, if we have a type `T`, to create an actual object of this type, we need to call its *constructor*. This is a function that returns an object of that type:
+
+```julia
+# define object
+struct T end
+
+# define constructor
+T() = return T()
+```
+
+We call an object returned by a constructor an **instance** of `T`. The act of creating an instance is called **instantiation**. 
+
+In the above, `T()` (the constructor, which is a function), *instantiates* an object of type `T`, then returns that *instance*.
+
+#### Scope
+
+"Scope" refers to where a variable is available after it is defined. For example, the following function introduces what is called a "hard scope", meaning we do not have access to any variable defined inside the *functions scope*, which is the block of code between `function` and `end`
+
+```julia
+function f(x) # hard scope begin
+    y = x + 1
+    return y
+end # hard scope end
+
+println(y) # errors because y not available, it was defined in hard scope
+```
+
+`begin`-`end` blocks are a "soft scope", meaning we can access definitions from within this soft scope from the outer scope:
+
+```julia
+begin # soft scope begin
+    z = 1234
+end # soft scope end
+
+println(z) # works
+```
+```
+1234
+```
+
+A "global" variable is a variable that is defined in *module scope*. For example, in the following snippet, **both** `a` and `b` are defined in module scope:
+
+```julia
+a = 1234
+module M
+    b = "abcd"
+end
+```
+
+This is because all Julia code is scoped in module `Main`. In the above, `a`s scope is `Main`, while `b`s scope is `Main.M`. Both are global in respect to their module.
+#### Front-End, Back-End, Engine
+Regarding GUI apps, developers will often refer to "front-end" vs. "back-end" code. The exact meaning of these can vary depending on the field; in this manual, * front-end*  refers to any code that produces an object the user can see on screen, meaning the actual GUI. *back-end*, then, is anything that is not *front-end*. 
+
+An *engine* is a programming library that allows developers to create the *front-end*. For this package, mousetrap is an *engine* for your (the readers) code.
+
+#### Rendering, Frames
+
+In our `main.jl` above, mousetrap created a window and showed it to us on our physical screen. This process of drawing graphics to the screen is also called *rendering*.
+
+Each screen updates at a set frequency, for example 60hz, which means a new image is drawn to the screen every 1/60th of a second. Each of these drawing steps is called a *frame*. This is why we often refer to the speed at which an app updates as *frames-per-second* (fps), the number of times a new frame is drawn to the screen - per second.
+
+In mousetrap, fps is tied to  the monitors refresh rate. If the user's monitor updates at 120Hz, mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why mousetrap features a "lazy" rendering process. An area on screen will only be updated if it needs to be. For example, in the `main.jl` above, the label `"Hello World!"` will only be drawn once. Because it is static (it stays the same) there is no need to redraw it every frame, because nothing has changed.
+
+This is in opposition to how many video games work. Usually, in video game engines, each frame will make it such that the entire screen is re-drawn every time. This difference is important to realize.
+
+---
+
+### Object Oriented Design
+
+While Julia is technically object-oriented, it lacks many of the features of "proper" OOP languages such as C++ or Java. Examples include [member functions](https://en.cppreference.com/w/cpp/language/member_functions) and [inheritance from concrete types](https://learn.microsoft.com/en-us/cpp/cpp/inheritance-cpp?view=msvc-170). Additionally, in mousetrap, most objects will have **no public properties**.
+
+To interact with an object, we use *outer methods*, which are functions defined in global scope that operate on one of their arguments. 
+
+If our object is of type `T`, an outer method will have the structure
+
+```julia
+function get_foo(instance::T) ::Foo
+    # ...
+end
+
+function set_foo!(instance::T) ::Nothing
+    # ...
+end
+```
+
+Where `get_foo` accesses a hidden property of our `T` instance, while `set_foo!` modifies that property of the instance. The `!` at the end of the method name signals that it will modify the `T` instance. In mousetrap, only functions marked with `!` will mutate (modify). This is the equivalent of [non-const methods](https://learn.microsoft.com/en-us/cpp/cpp/const-cpp?view=msvc-170#const-member-functions) in other OOP languages.
+
+Because we cannot inspect an object's properties to learn about it, we are reliant on the mousetrap documentation to know which functions are available for which object. Navigating to the [index of classes](../02_library/classes.md), we see that after each class, there is a list of all "member functions", that is, all functions that operate on that object.
+
+Another way to find out which functions are available is to use [`methodswith](https://docs.julialang.org/en/v1/stdlib/InteractiveUtils/#InteractiveUtils.methodswith) from within the REPL:
+
+```julia
+using mousetrap
+methodswith(Window)
+```
+
+Which will print a list of all functions that  have at least one argument of type `Window`.
+
+---
+
+### C Enums   
+
+Mousetraps back-end is written in C++, whose enums differ from Julia enums in a number of ways. To assure compatibility, mousetrap uses it's own enum definitions, it does not use Julias `@enum`.
+
+Each enum is a proper mousetrap type, while each enum *value* is a numerical constant which is defined as being of that type. 
+
+For example, the enum `Orientation`, which describes whether on object is vertically or horizontally oriented, is a type called `mousetrap.Orientation`.
+
+The **values** of `Orientation` are global constants:
+
++ `ORIENTATION_HORIZONTAL`
++ `ORIENTATION_VERTICAL`
+
+In this example, `Orientation` is the enum, while `ORIENTATION_HORIZONTAL` and `ORIENTATION_VERTICAL` are the enums values.
+
+Inspecting the values in the REPL, we see that they are actually just numbers:
+
+```
+julia> ORIENTATION_HORIZONTAL
+Orientation(0)
+
+julia> ORIENTATION_VERTICAL
+Orientation(1)
+```
+
+But both are of type `Orientation`:
+
+```julia
+julia> ORIENTATION_HORIZONTAL isa Orientation && ORIENTATION_VERTICAL isa Orientation
+true
+```
+
+All enum values are written in `SCREAMING_SNAKE_CASE`, while the enum type's name uses `UpperCamelCase`. 
+
+To check which enum has which values, we can again use the [mousetrap documentation](../02_library/enums.md):
+
+```@docs
+mousetrap.Orientation
+```
+
+Each enum value furthermore has their own documentation, describing what that value means:
+
+```@docs
+mousetrap.ORIENTATION_HORIZONTAL
+```
+
+---
+
+### Do Syntax
+
+In Julia, any function whose **first argument is another function** can use **do-syntax**.
+
+For example, the following function takes two arguments:
+
+```julia
+function example_f(f, arg)
+    f(arg)
+end
+```
+It applies its first argument, a function, to its second argument.
+
+Invoking `example_f` regularly, we could do:
+
+```julia
+to_invoke(x::Integer) = println(x)
+example_f(to_invoke, 1234)
+```
+```
+1234
+```
+
+Where `to_invoke` is used as the **fisrt** argument. Because of this, we can also write the above using do-syntax:
+
+```julia
+example_f(1234) do x::Integer
+    println(x)
+end
+```
+
+Here, the first argument of `example_f` was ommitted, while the second argument, `1234` remained. Instead of the first argument, we append the line `do x::Integer`, where `x` is the name of the anonymous functions argument. After this line, we define the functions body, then `end`.
+
+### Anonymous Functions in Stacktraces
+
+In the REPL, we can print any objects name to inspect it. Creating a new function, which prints its argument's name:
+
+```julia
+print_f_name(f) = println(f)
+```
+
+We see that if we invoke this function using regular function syntax, we get the following output:
+
+```julia
+function to_invoke()
+    # do nothing
+end
+
+print_f_name(to_invoke)
+```
+```
+to_invoke
+```
+
+If we instead call this function using do-syntax:
+
+```julia
+print_f_name() do 
+    # do nothing
+end
+```
+```
+#9
+```
+
+We get `#9`. This is a **temporary name** used by Julia to keep track of anonymous functions. A stacktrace in mousetrap will often contain many anonymous function names like this:
+
+```julia
+main() do app::Application
+    throw(ErrorException("error"))
+end
+```
+```
+[ERROR] In mousetrap.main: error
+Stacktrace:
+ [1] (::var"#11#12")(app::Application)
+   @ Main ./REPL[15]:2
+ [2] (::TypedFunction)(args::Application)
+   @ mousetrap ~/Workspace/mousetrap.jl/src/mousetrap.jl:74
+ [3] (::mousetrap.var"#15#17"{TypedFunction})(app::Application)
+   @ mousetrap ~/Workspace/mousetrap.jl/src/mousetrap.jl:1571
+ [4] (::TypedFunction)(args::Application)
+   @ mousetrap ~/Workspace/mousetrap.jl/src/mousetrap.jl:74
+ [5] (::mousetrap.var"#6#8"{TypedFunction})(x::Tuple{CxxWrap.CxxWrapCore.CxxRef{mousetrap.detail._Application}})
+   @ mousetrap ~/Workspace/mousetrap.jl/src/mousetrap.jl:620
+ [6] safe_call(scope::String, f::Function, args::Tuple{CxxWrap.CxxWrapCore.CxxRef{mousetrap.detail._Application}})
+   @ mousetrap ~/Workspace/mousetrap.jl/src/mousetrap.jl:144
+ [7] run!(arg1::mousetrap.detail._ApplicationAllocated)
+   @ mousetrap.detail ~/.julia/packages/CxxWrap/aXNBY/src/CxxWrap.jl:624
+ [8] run!(app::Application)
+   @ mousetrap ~/Workspace/mousetrap.jl/src/mousetrap.jl:1538
+ [9] (::mousetrap.var"#14#16"{var"#11#12", String})()
+   @ mousetrap ~/Workspace/mousetrap.jl/src/mousetrap.jl:1581
+```
+
+We see that the anonymous functions was allocated as `var"#11#12"`. This refers to the function defined using the do-block after `main()`.
+
+Mousetrap stack traces can get quite long, so it's best to parse them by reading the original message at the top first:
+
+```
+[ERROR] In mousetrap.main: error
+```
+We see that the message mentions that the error occured during invokation of `mousetrap.main`. We should therefore look for an error inside the do-block after `main`.
+
+Knowledge about anonymous functions and how to read stacktraces will greatly aid us in debugging mousetrap applications.
+
