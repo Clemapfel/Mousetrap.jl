@@ -2772,7 +2772,9 @@ If [`set_log_file!`](@ref) was called before, the message will also be appended 
 log_info(::LogDomain, message::Sting)
 @log_info(::LogDomain, message::Sting)
 ```
-Display a log message with level `INFO`. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
+Display a log message with level `INFO`. Messages of this level can be surpressed by setting [`set_surpress_info!`](@ref) for this log domain to `true`. 
+
+If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
 """
 
 @document log_warning """
@@ -2796,7 +2798,7 @@ Display a log message with level `CRITICAL`. If [`set_log_file!`](@ref) was call
 log_fatal(::LogDomain, message::Sting)
 @log_fatal(::LogDomain, message::Sting)
 ```
-Dispay a log message with level `FATAL`. Immediately after, runtime ends.
+Dispay a log message with level `FATAL`. Immediately after, runtime ends. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
 """
 
 @document make_current """
@@ -2810,26 +2812,26 @@ Bind the associated frame buffer as the one currently being rendered to. This is
 ```
 mark_as_busy!(::Application) 
 ```
-Mark the application as busy, this will tell the OS that the application is currently processing something.
+Mark the application as busy, this will tell the OS that the application is currently processing something. The caller of this function is reponsible for calling [`unmark_as_busy!`](@ref) to undo this action.
 """
 
 @document microseconds """
 ```
-microseconds(n::AbstractFloat) -> Time
+microseconds(n::Number) -> Time
 ```
 Create time from number of microseconds.
 """
 
 @document milliseconds """
 ```
-milliseconds(n::AbstractFloat) -> Time
+milliseconds(n::Number) -> Time
 ```
 Create time from number of milliseconds.
 """
 
 @document minutes """
 ```
-minutes(n::AbstractFloat) -> Time
+minutes(n::Number) -> Time
 ```
 Create time from number of minutes.
 """
@@ -3507,7 +3509,7 @@ Uses the OpenGL coordinate system.
 
 @document seconds """
 ```
-seconds(n::AbstractFloat) -> Time
+seconds(n::Number) -> Time
 ```
 Create from number of seconds.
 """

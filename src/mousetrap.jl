@@ -90,30 +90,45 @@ module mousetrap
     const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN * ".jl"
     # no export   
 
+    """
+    See [`log_debug`](@ref).
+    """
     macro log_debug(domain, message)
         return :(mousetrap.detail.log_debug($message, $domain))
     end
     log_debug(domain::LogDomain, message::String) = detail.log_debug(message, domain)
     export @log_debug, log_debug
 
+    """
+    See [`log_info`](@ref).
+    """
     macro log_info(domain, message)
         return :(mousetrap.detail.log_info($message, $domain))
     end
     log_info(domain::LogDomain, message::String) = detail.log_info(message, domain)
     export @log_info, log_info
 
+    """
+    See [`log_warning`](@ref).
+    """
     macro log_warning(domain, message)
         return :(mousetrap.detail.log_warning($message, $domain))
     end
     log_warning(domain::LogDomain, message::String) = detail.log_warning(message, domain)
     export @log_warning, log_warning
 
+    """
+    See [`log_critical`](@ref).
+    """
     macro log_critical(domain, message)
         return :(mousetrap.detail.log_critical($message, $domain))
     end
     log_critical(domain::LogDomain, message::String) = detail.log_critical(message, domain)
     export @log_critical, log_critical
 
+    """
+    See [`log_fatal`](@ref).
+    """
     macro log_fatal(domain, message)
         return :(mousetrap.detail.log_fatal($message, $domain))
     end

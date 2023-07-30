@@ -97,7 +97,7 @@ let file = open("docs/src/02_library/classes.md", "w+")
                     continue
                 end
 
-                out *= "+ [`mousetrap.$m`](@ref)\n"
+                out *= "+ [`$m`](@ref)\n"
             end
         end
 
@@ -133,7 +133,7 @@ let file = open("docs/src/02_library/classes.md", "w+")
     for f in mousetrap.functions
         write(file, "## `$f`\n")
         write(file, "```@docs\n")
-        write(file, "mousetrap.", f, "\n")
+        write(file, "mousetrap.$f\n")
         write(file, "```\n")
     end
     close(file)

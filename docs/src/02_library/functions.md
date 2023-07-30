@@ -115,6 +115,10 @@ mousetrap.add_child!
 ```@docs
 mousetrap.add_controller!
 ```
+## `add_css_class!`
+```@docs
+mousetrap.add_css_class!
+```
 ## `add_filter!`
 ```@docs
 mousetrap.add_filter!
@@ -1267,6 +1271,10 @@ mousetrap.get_comment_above
 ```@docs
 mousetrap.get_content_type
 ```
+## `get_css_classes`
+```@docs
+mousetrap.get_css_classes
+```
 ## `get_current_button`
 ```@docs
 mousetrap.get_current_button
@@ -1278,6 +1286,10 @@ mousetrap.get_current_offset
 ## `get_current_page`
 ```@docs
 mousetrap.get_current_page
+```
+## `get_current_theme`
+```@docs
+mousetrap.get_current_theme
 ```
 ## `get_cursor_visible`
 ```@docs
@@ -1390,6 +1402,10 @@ mousetrap.get_has_origin
 ## `get_has_wide_handle`
 ```@docs
 mousetrap.get_has_wide_handle
+```
+## `get_header_bar`
+```@docs
+mousetrap.get_header_bar
 ```
 ## `get_hide_on_close`
 ```@docs
@@ -1566,6 +1582,10 @@ mousetrap.get_max_value
 ## `get_max_width_chars`
 ```@docs
 mousetrap.get_max_width_chars
+```
+## `get_maximum_size`
+```@docs
+mousetrap.get_maximum_size
 ```
 ## `get_message`
 ```@docs
@@ -2551,6 +2571,10 @@ mousetrap.remove_column_at!
 ```@docs
 mousetrap.remove_controller!
 ```
+## `remove_css_class!`
+```@docs
+mousetrap.remove_css_class!
+```
 ## `remove_end_child!`
 ```@docs
 mousetrap.remove_end_child!
@@ -2594,10 +2618,6 @@ mousetrap.remove_tick_callback!
 ## `remove_title_widget!`
 ```@docs
 mousetrap.remove_title_widget!
-```
-## `remove_titlebar_widget!`
-```@docs
-mousetrap.remove_titlebar_widget!
 ```
 ## `remove_tooltip_widget!`
 ```@docs
@@ -2758,6 +2778,10 @@ mousetrap.set_comment_above!
 ## `set_current_blend_mode`
 ```@docs
 mousetrap.set_current_blend_mode
+```
+## `set_current_theme`
+```@docs
+mousetrap.set_current_theme
 ```
 ## `set_cursor!`
 ```@docs
@@ -3074,6 +3098,10 @@ mousetrap.set_max_width_chars!
 ## `set_maximized!`
 ```@docs
 mousetrap.set_maximized!
+```
+## `set_maximum_size!`
+```@docs
+mousetrap.set_maximum_size!
 ```
 ## `set_message!`
 ```@docs
@@ -3562,10 +3590,6 @@ mousetrap.set_title!
 ## `set_title_widget!`
 ```@docs
 mousetrap.set_title_widget!
-```
-## `set_titlebar_widget!`
-```@docs
-mousetrap.set_titlebar_widget!
 ```
 ## `set_tooltip_text!`
 ```@docs

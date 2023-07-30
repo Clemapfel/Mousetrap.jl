@@ -41,7 +41,8 @@ julia main.jl
 !!! danger "Using mousetrap from within the REPL"
     As of version `v0.1.0`, **interactive use of mousetrap is discouraged**. 
     
-    `main` will stall, meaning as long as the application from our `main.jl` is running, the REPL will "hang". When the application exits, `main` will exit.
+    `main` will stall, meaning as long as the application from our `main.jl` is running, the REPL will "hang". When the application exits, `main` will exit, 
+    restoring the interactivity of the REPL.
 
     One compromise that will keep startup-time to a minimum is to open the REPL in the same directory as our `main.jl`, then execute:
 
@@ -56,11 +57,12 @@ julia main.jl
 
 ---
 
-## Programming Crash Course
+## Julia Crash Course
 
 The rest of this manual will assume that readers are familiar with the basics of Julia and graphics programming in general. To bring anyone who considers themselves not in this group up to speed, this section contains a crash course on programming basics needed to understand the rest of this manual.
 
 ### Glossary
+
 #### Invokation
 
 To "invoke" a function means to execute it using a command, potentially using arguments. For example, the second line in the following snippet *invokes function `foo`*:
@@ -75,14 +77,14 @@ foo(1234) # invokation
 In Julia, if we have a type `T`, to create an actual object of this type, we need to call its *constructor*. This is a function that returns an object of that type:
 
 ```julia
-# define object
+# define object type
 struct T end
 
 # define constructor
 T() = return T()
 ```
 
-We call an object returned by a constructor an **instance** of `T`. The act of creating an instance is called **instantiation**. 
+We call an object returned by a constructor an **instance** of `T`. The act of creating an instance is called **instantiation** of `T`. 
 
 In the above, `T()` (the constructor, which is a function), *instantiates* an object of type `T`, then returns that *instance*.
 
@@ -122,7 +124,9 @@ end
 ```
 
 This is because all Julia code is scoped in module `Main`. In the above, `a`s scope is `Main`, while `b`s scope is `Main.M`. Both are global in respect to their module.
+
 #### Front-End, Back-End, Engine
+
 Regarding GUI apps, developers will often refer to "front-end" vs. "back-end" code. The exact meaning of these can vary depending on the field; in this manual, * front-end*  refers to any code that produces an object the user can see on screen, meaning the actual GUI. *back-end*, then, is anything that is not *front-end*. 
 
 An *engine* is a programming library that allows developers to create the *front-end*. For this package, mousetrap is an *engine* for your (the readers) code.
@@ -143,7 +147,7 @@ This is in opposition to how many video games work. Usually, in video game engin
 
 While Julia is technically object-oriented, it lacks many of the features of "proper" OOP languages such as C++ or Java. Examples include [member functions](https://en.cppreference.com/w/cpp/language/member_functions) and [inheritance from concrete types](https://learn.microsoft.com/en-us/cpp/cpp/inheritance-cpp?view=msvc-170). Additionally, in mousetrap, most objects will have **no public properties**.
 
-To interact with an object, we use *outer methods*, which are functions defined in global scope that operate on one of their arguments. 
+To interact with an object, we use *outer methods*, which are functions defined in global scope that operate on one of their arguments by modifying its hidden properties.
 
 If our object is of type `T`, an outer method will have the structure
 
@@ -168,13 +172,13 @@ using mousetrap
 methodswith(Window)
 ```
 
-Which will print a list of all functions that  have at least one argument of type `Window`.
+Which will print a list of all functions that have at least one argument of type `Window`.
 
 ---
 
 ### C Enums   
 
-Mousetraps back-end is written in C++, whose enums differ from Julia enums in a number of ways. To assure compatibility, mousetrap uses it's own enum definitions, it does not use Julias `@enum`.
+Mousetraps back-end is written in C++, whose enums differ from Julia enums in a number of ways. To assure compatibility, mousetrap uses its own enum definitions, it does not use Julias `@enum`.
 
 Each enum is a proper mousetrap type, while each enum *value* is a numerical constant which is defined as being of that type. 
 
@@ -243,7 +247,7 @@ example_f(to_invoke, 1234)
 1234
 ```
 
-Where `to_invoke` is used as the **fisrt** argument. Because of this, we can also write the above using do-syntax:
+Where `to_invoke` is used as the **fisrt** argument. Because it is the first, we can also write the above using do-syntax:
 
 ```julia
 example_f(1234) do x::Integer
@@ -324,5 +328,5 @@ Mousetrap stack traces can get quite long, so it's best to parse them by reading
 ```
 We see that the message mentions that the error occured during invokation of `mousetrap.main`. We should therefore look for an error inside the do-block after `main`.
 
-Knowledge about anonymous functions and how to read stacktraces will greatly aid us in debugging mousetrap applications.
+Knowledge about anonymous functions and how to read stacktraces will greatly aid us in debugging mousetrap applications while learning.
 
