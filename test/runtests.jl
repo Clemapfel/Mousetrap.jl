@@ -2338,6 +2338,11 @@ end
 
 function test_render_area(::Container)
 
+    if !mousetrap.MOUSETRAP_ENABLE_OPENGL_COMPONENT
+        @test Sys.isapple()
+        return
+    end
+    
     render_area = RenderArea()
 
     @testset "RenderArea" begin

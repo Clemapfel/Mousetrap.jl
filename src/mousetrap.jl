@@ -8,25 +8,25 @@
 module mousetrap
 
     const VERSION = v"0.1.0"
-    
+    const MOUSETRAP_ENABLE_OPENGL_COMPONENT = Sys.isapple()
+
 ####### detail.jl
 
     module detail
         using CxxWrap
-        #using mousetrap_linux_jll, mousetrap_windows_jll
+        #using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
         function __init__() @initcxx end
 
-        #=
         if Sys.isapple()
-            @error "In mousetrap::initialize: MacOS is not currently supported, see `https://github.com/Clemapfel/mousetrap.jl` for more information."
+            lib = mousetrap_apple_jll.mousetrap_julia_binding_apple
         elseif Sys.iswindows()
-            @wrapmodule(mousetrap_windows_jll.mousetrap_julia_binding_windows)
+            lib = mousetrap_windows_jll.mousetrap_julia_binding_windows
         else
-            @wrapmodule(mousetrap_linux_jll.mousetrap_julia_binding_linux)
+            lib = mousetrap_linux_jll.mousetrap_julia_binding_linux
         end
-        =#
 
-        @wrapmodule("/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so")
+        lib = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
+        @wrapmodule(lib)
     end
 
 ####### typed_function.jl
@@ -4678,6 +4678,20 @@ module mousetrap
 
     Base.show(io::IO, x::Clipboard) = show_aux(io, x)
 
+### opengl_common.jl
+
+    macro define_opengl_error_type(name)
+        message =  "In mousetrap::$name(): Type $name is disabled on MacOS. It and any function operating on it cannot be used in any way.\nSee the manual chapter on native rendering for more information."
+        return :(struct $name
+            function $name()
+                mousetrap.log_fatal(mousetrap.MOUSETRAP_DOMAIN, $message)
+                return new()
+            end
+        end)
+    end
+
+if MOUSETRAP_ENABLE_OPENGL_COMPONENT
+
 ####### blend_mode.jl
 
     @export_enum BlendMode begin
@@ -5209,12 +5223,49 @@ module mousetrap
 
     Base.show(io::IO, x::RenderArea) = show_aux(io, x)
 
+else # if MOUSETRAP_ENABLE_OPENGL_COMPONENT
+
+    @define_opengl_error_type BlendMode
+    export BlendMode
+
+    @define_opengl_error_type GLTransform
+    export GLTransform
+
+    @define_opengl_error_type Shape
+    export Shape
+
+    @define_opengl_error_type Shader
+    export Shader
+
+    @define_opengl_error_type ShaderType
+    export ShaderType
+
+    @define_opengl_error_type TextureWrapMode
+    export TextureWrapMode
+
+    @define_opengl_error_type TextureScaleMode
+    export TextureScaleMode
+
+    @define_opengl_error_type Texture
+    export Texture
+
+    @define_opengl_error_type RenderTexture
+    export RenderTexture
+
+    @define_opengl_error_type RenderTask
+    export RenderTask
+
+    @define_opengl_error_type RenderArea
+    export RenderArea
+
+end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
+
 ###### key_codes.jl
 
     include("./key_codes.jl")
 
 ###### documentation
         
-    include("./docs.jl")
+    #include("./docs.jl")
 
 end # module mousetrap

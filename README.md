@@ -123,18 +123,14 @@ Click registered at (367.5, 289.0)
 
 ## Supported Platforms
 
-`✓ `   Available<br>
-`⭘ `   Will be available in the future<br>
-`✕ `   Will never be available<br>
-
 | Platform         | Basic GUI Component | Native Rendering Component |
 |------------------|---------------------|-----------------------------|
 | Linux (64-bit)   | `✓`                | `✓`                        |
 | Linux (32-bit)   | `✓`                | `✓`                        |
 | Windows (64-bit) | `✓`                | `✓`                        |
 | Windows (32-bit) | `✕`                | `✕`                        |
-| FreeBSD          | `✓`                | `⭘`                       | 
-| MacOS            | `⭘`                | `✕`                        |
+| FreeBSD          | `✓`                | `✓`                       | 
+| MacOS            | `✓`                | `✕`                        |
 
 ---
 

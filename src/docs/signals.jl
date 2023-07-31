@@ -306,3 +306,5 @@ macro type_signals(T, signals...)
     end
     return join(out)
 end
+
+const ONLY_AVAILABLE_IF_OPENGL_ENABLED = "test"
