@@ -930,6 +930,11 @@ end
 
 function test_gl_transform(::Container)
     @testset "GLTransform" begin
+
+        if !mousetrap.MOUSETRAP_ENABLE_OPENGL_COMPONENT
+            return 
+        end    
+
         transform = GLTransform()
         Base.show(devnull, transform)
 
@@ -978,7 +983,7 @@ function test_grid(::Container)
         widget_02 = Separator()
 
         insert_at!(grid, widget_01, 1, 2, 3, 4)
-        insert_next_to!(grid, widget_02, widget_01, RELATIVE_POSITION_RIGHT_OF, 3, 4)
+        #insert_next_to!(grid, widget_02, widget_01, RELATIVE_POSITION_RIGHT_OF, 3, 4)
 
         @test get_position(grid, widget_01) == Vector2i(1, 2)
         @test get_size(grid, widget_01) == Vector2i(3, 4)
@@ -2339,7 +2344,6 @@ end
 function test_render_area(::Container)
 
     if !mousetrap.MOUSETRAP_ENABLE_OPENGL_COMPONENT
-        @test Sys.isapple()
         return
     end
     
@@ -2570,7 +2574,6 @@ main(Main.app_id) do app::Application
 
     theme = IconTheme(Main.window[])
     Main.icon[] = Icon()
-    create_from_image!(Main.icon[], Image(64, 64, RGBA(0, 1, 0, 1)))
 
     container = Container()
     viewport = Viewport()

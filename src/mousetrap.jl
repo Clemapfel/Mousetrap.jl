@@ -14,8 +14,10 @@ module mousetrap
 
     module detail
         using CxxWrap
-        #using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
         function __init__() @initcxx end
+
+        #=
+        using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
 
         if Sys.isapple()
             lib = mousetrap_apple_jll.mousetrap_julia_binding_apple
@@ -24,6 +26,7 @@ module mousetrap
         else
             lib = mousetrap_linux_jll.mousetrap_julia_binding_linux
         end
+        =#
 
         lib = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
         @wrapmodule(lib)
@@ -2503,7 +2506,7 @@ module mousetrap
     @export_type ClampFrame Widget
     @declare_native_widget ClampFrame
 
-    function ClampFrame(size::AbstractFloat, orientation::Orientation = ORIENTATION_HORIZONTAL) 
+    function ClampFrame(size::Number, orientation::Orientation = ORIENTATION_HORIZONTAL) 
         out = ClampFrame(detail._ClampFrame(orientation))
         set_maximum_size!(out, size)
         return out
@@ -4690,7 +4693,7 @@ module mousetrap
         end)
     end
 
-if MOUSETRAP_ENABLE_OPENGL_COMPONENT
+@static if MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
 ####### blend_mode.jl
 
