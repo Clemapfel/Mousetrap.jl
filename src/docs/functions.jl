@@ -4020,6 +4020,7 @@ Set the policy governing how and if the horizontal scrollbar is revealed / hidde
 ```
 set_icon!(::Button, ::Icon) 
 set_icon!(::ToggleButton, ::Icon)
+set_icon!(::PopoverButton, ::Icon)
 ```
 Replace the buttons label with an icon.
 """

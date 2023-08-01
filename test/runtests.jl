@@ -124,6 +124,10 @@ function test_application(::Container)
         @test get_is_marked_as_busy(app) == true
         unmark_as_busy!(app)
         @test get_is_marked_as_busy(app) == false
+
+        @test get_current_theme(app) isa Theme
+        set_current_theme!(app, THEME_DEFAULT_LIGHT)
+        @test get_current_theme(app) == THEME_DEFAULT_LIGHT
     end
 end
 
@@ -983,10 +987,11 @@ function test_grid(::Container)
         widget_02 = Separator()
 
         insert_at!(grid, widget_01, 1, 2, 3, 4)
-        #insert_next_to!(grid, widget_02, widget_01, RELATIVE_POSITION_RIGHT_OF, 3, 4)
+        insert_next_to!(grid, widget_02, widget_01, RELATIVE_POSITION_RIGHT_OF, 3, 4)
 
         @test get_position(grid, widget_01) == Vector2i(1, 2)
         @test get_size(grid, widget_01) == Vector2i(3, 4)
+        @test get_position(grid, widget_02) == Vector2i(4, 2)
         @test get_size(grid, widget_02) == Vector2i(3, 4)
 
         insert_row_at!(grid, 1)
@@ -1152,7 +1157,7 @@ function test_image_display(::Container)
         clear!(image_display)
 
         create_from_icon!(image_display, Main.icon[])
-        @test get_size(image_display) == Vector2i(64, 64)
+        @test get_size(image_display) == get_size(Main.icon[])
         clear!(image_display)
         @test get_size(image_display) == Vector2i(0, 0)
     end
@@ -1978,6 +1983,8 @@ function test_switch(::Container)
 
         set_is_active!(switch, false)
         @test get_is_active(switch) == false
+        set_is_active!(switch, true)
+        @test get_is_active(switch) == true
         @test switched_called[] == true
     end
 end
@@ -2070,7 +2077,8 @@ function test_typed_function(::Container)
 
         Test.@test TypedFunction(yes_f, Nothing, (Int64,)) isa TypedFunction
         Test.@test_throws AssertionError TypedFunction(no_f1, Nothing, (Int64,))
-        Test.@test_throws AssertionError TypedFunction(no_f2, Nothing, (Int64,))
+        Test.@test TypedFunction(no_f2, Nothing, (Int64,)) isa TypedFunction
+            # if return_t is nothing, the result is ignored, regardless of the results type
 
         Base.show(devnull, TypedFunction(() -> nothing, Nothing, ()))
     end
@@ -2119,6 +2127,7 @@ end
 
 function test_window(::Container)
     @testset "Window" begin
+        
         window = Window(Main.app[])
         Base.show(devnull, window)
         @test mousetrap.is_native_widget(window)
@@ -2164,7 +2173,7 @@ function test_window(::Container)
         set_title!(window, "test")
         @test get_title(window) == "test"
 
-        button = Button()
+        button = Entry()
         set_child!(window, button)
         set_default_widget!(window, button)
         activate!(button)
@@ -2172,7 +2181,7 @@ function test_window(::Container)
         #@test activate_default_widget_called[] == true
         #@test activate_focused_widget_called[] == true
 
-        set_titlebar_widget!(window, Separator())
+        @test get_header_bar(window) isa HeaderBar
 
         @test get_hide_on_close(window) == false
         set_hide_on_close!(window, true)
@@ -2307,6 +2316,11 @@ function test_widget(widget::Container)
         set_hide_on_overflow!(widget, true)
         @test get_hide_on_overflow(widget) == true
         set_hide_on_overflow!(widget, false)
+
+        add_css_class!(widget, "test")
+        @test !isempty(get_css_classes(widget))
+        remove_css_class!(widget, "test")
+        @test isempty(get_css_classes(widget))
 
         tick_callback_called = Ref{Bool}(false)
         set_tick_callback!(widget, tick_callback_called) do clock::FrameClock, tick_callback_called
@@ -2581,7 +2595,7 @@ main(Main.app_id) do app::Application
     set_child!(window, viewport)
 
     connect_signal_realize!(container, window) do container::Container, window
-
+        
         test_action(container)
         test_adjustment(container)
         test_alert_dialog(container)
@@ -2640,7 +2654,7 @@ main(Main.app_id) do app::Application
         test_viewport(container)
         test_widget(container)
         test_window(container)
-                
+        
         return nothing
     end
 

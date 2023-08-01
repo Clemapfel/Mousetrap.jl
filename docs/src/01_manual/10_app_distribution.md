@@ -47,7 +47,7 @@ main() do app::Application
     connect_signal_clicked!(swap_button, app) do self::Button, app::Application
 
         # get currently used theme
-        current = get_current_theme!(app)
+        current = get_current_theme(app)
 
         # swap light with dark, preservng whether the theme is high contrast
         if current == THEME_DEFAULT_DARK

@@ -1,39 +1,76 @@
 using mousetrap
 
-main() do app::Application
 
-    window = Window(app)
 
-    # add theme swap button to windows header bar
-    header_bar = HeaderBar()
-    swap_button = Button()
-    set_tooltip_text!(swap_button, "Click to Swap Themes")
-    connect_signal_clicked!(swap_button, app) do self::Button, app::Application
 
-        # get currently used theme
-        current = get_current_theme!(app)
+############################################
 
-        # swap light with dark, preservng whether the theme is high contrast
-        if current == THEME_DEFAULT_DARK
-            next = THEME_DEFAULT_LIGHT
-        elseif current == THEME_DEFAULT_LIGHT
-            next = THEME_DEFAULT_DARK
-        elseif current == THEME_HIGH_CONTRAST_DARK
-            next = THEME_HIGH_CONTRAST_LIGHT
-        elseif current == THEME_HIGH_CONTRAST_LIGHT
-            next = THEME_HIGH_CONTRAST_DARK
+@static if false
+
+using mousetrap
+
+# compound widget that is an entire stack page, render area with the shape + a label below
+struct ShapePage <: Widget
+
+    separator::Separator
+    render_area::RenderArea
+    overlay::Overlay
+    frame::Frame
+    aspect_frame::AspectFrame
+    label::Label
+    center_box::CenterBox
+
+    function ShapePage(title::String, shape::Shape)
+
+        out = new(
+            Separator(),
+            RenderArea(),
+            Overlay(),
+            Frame(),
+            AspectFrame(1.0),
+            Label(title),
+            CenterBox(ORIENTATION_VERTICAL)
+        )
+
+        set_child!(out.overlay, out.separator)
+        add_overlay!(out.overlay, out.render_area)
+        set_child!(out.frame, out.overlay)
+        set_child!(out.aspect_frame, out.frame)
+    
+        set_center_child!(out.center_box, out.aspect_frame)
+        set_end_child!(out.center_box, out.label)
+
+        set_size_request!(out.aspect_frame, Vector2f(150, 150))
+        set_expand!(out.aspect_frame, true)
+
+        set_margin!(out.aspect_frame, 10)
+        set_margin!(out.label, 10)
+
+        add_render_task!(out.render_area, RenderTask(shape))
+
+        radius = 0.001
+        n_vertices = get_n_vertices(shape)
+        for i in 1:n_vertices
+            pos = get_vertex_position(shape, i)
+            to_add = Circle(Vector2f(pos.x, pos.y), radius, 16)
+            set_color!(to_add, HSVA(i / n_vertices, 1, 1, 1))
+            add_render_task!(out.render_area, RenderTask(to_add))
         end
 
-        # set new theme
-        set_current_theme!(app, next)
+        # Widget hierarchy for clarity:
+        # 
+        # CenterBox \
+        #   AspectFrame \
+        #       Frame \
+        #           Overlay \
+        #               RenderArea 
+        #               Separator
+        #   Label
+
+        return out
     end
-    push_front!(header_bar, swap_button)
-    set_titlebar_widget!(window, header_bar)
-
-    present!(window)
 end
-
-exit(0)
+mousetrap.get_top_level_widget(x::ShapePage) = x.center_box
 
 main() do app::Application
 
@@ -118,6 +155,38 @@ main() do app::Application
         )
     ]
 
+    # add button that allow switching between light and dark theme
+    button = Button()
+    connect_signal_clicked!(button, app) do self::Button, app::Application
+
+        current = get_current_theme(app)
+
+        # swap light to dark, dark to light
+        if current == THEME_DEFAULT_DARK
+            next = THEME_DEFAULT_LIGHT
+        elseif current == THEME_DEFAULT_LIGHT
+            next = THEME_DEFAULT_DARK
+        elseif current == THEME_HIGH_CONTRAST_DARK
+            next = THEME_HIGH_CONTRAST_LIGHT
+        elseif current == THEME_HIGH_CONTRAST_LIGHT
+            next = THEME_HIGH_CONTRAST_DARK
+        end
+
+        set_current_theme!(app, next)
+
+        # also swap colors to contrast well
+        for pair in shapes
+            shape = pair[2]
+            if next == THEME_DEFAULT_LIGHT || next == THEME_HIGH_CONTRAST_LIGHT
+                set_color!(shape, RGBA(0, 0, 0, 1))
+            else
+                set_color!(shape, RGBA(1, 1, 1, 1))
+            end
+        end
+    end
+    set_tooltip_text!(button, "Click to Swap UI Theme")
+    push_front!(get_header_bar(window), button)
+
     # add outline shapes for shapes that have a volume
     for name in ["Triangle", "Rectangle", "Circle", "Ellipse", "Polygon", "RectangularFrame", "CircularRing", "EllipticalRing"]
         
@@ -152,7 +221,7 @@ main() do app::Application
     # To do this, we create an action that triggers the revealer, then add a shortcut
     revealer_action = Action("trigger_revealer", app)
     set_function!(revealer_action, revealer) do self::Action, revealer::Revealer
-        set_revealed!(revealer, !get_revealed(revealer))
+        set_is_revealed!(revealer, !get_is_revealed(revealer))
     end
     add_shortcut!(revealer_action, "<Control>h");
     set_listens_for_shortcut_action!(window, revealer_action)
@@ -177,3 +246,5 @@ main() do app::Application
     set_child!(window, box)
     present!(window)
 end
+
+end # @static if

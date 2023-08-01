@@ -8,7 +8,6 @@
 module mousetrap
 
     const VERSION = v"0.1.0"
-    const MOUSETRAP_ENABLE_OPENGL_COMPONENT = Sys.isapple()
 
 ####### detail.jl
 
@@ -31,6 +30,8 @@ module mousetrap
         lib = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
         @wrapmodule(lib)
     end
+
+    const MOUSETRAP_ENABLE_OPENGL_COMPONENT = convert(Bool, detail.MOUSETRAP_ENABLE_OPENGL_COMPONENT)
 
 ####### typed_function.jl
     
@@ -1565,7 +1566,7 @@ module mousetrap
     @export_function Application get_is_marked_as_busy Bool
     @export_function Application get_id String
     @export_function Application get_current_theme Theme
-    @export_function Application set_current_theme Cvoid Theme theme
+    @export_function Application set_current_theme! Cvoid Theme theme
 
     add_action!(app::Application, action::Action) = detail.add_action!(app._internal, action._internal)
     export add_action!
@@ -3234,6 +3235,9 @@ module mousetrap
     set_child!(popover_button::PopoverButton, child::Widget) = detail.set_child!(popover_button._internal, as_widget_pointer(child))
     export set_child!
 
+    set_icon!(popover_button::PopoverButton, icon::Icon) = detail.set_icon!(popover_button._internal, icon._internal)
+    export set_icon!
+
     @export_function PopoverButton remove_child! Cvoid
 
     function set_popover!(popover_button::PopoverButton, popover::Popover)
@@ -3824,7 +3828,7 @@ module mousetrap
     Grid() = Grid(detail._Grid())
 
     function insert_at!(grid::Grid, widget::Widget, row_i::Signed, column_i::Signed, n_horizontal_cells::Integer = 1, n_vertical_cells::Integer = 1)
-        detail.insert!(grid._internal, as_widget_pointer(widget), row_i + 1, column_i + 1, n_horizontal_cells, n_vertical_cells)
+        detail.insert!(grid._internal, as_widget_pointer(widget), row_i - 1, column_i - 1, n_horizontal_cells, n_vertical_cells)
     end
     export insert_at!
 
@@ -4684,7 +4688,7 @@ module mousetrap
 ### opengl_common.jl
 
     macro define_opengl_error_type(name)
-        message =  "In mousetrap::$name(): Type $name is disabled on MacOS. It and any function operating on it cannot be used in any way.\nSee the manual chapter on native rendering for more information."
+        message =  "In mousetrap::$name(): `$name` cannot be instantiated, because the mousetrap OpenGL component is disabled for MacOS. It and any function operating on it cannot be used in any way.\n\nSee the manual chapter on native rendering for more information."
         return :(struct $name
             function $name()
                 mousetrap.log_fatal(mousetrap.MOUSETRAP_DOMAIN, $message)
@@ -5269,6 +5273,6 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
 ###### documentation
         
-    #include("./docs.jl")
+    include("./docs.jl")
 
 end # module mousetrap
