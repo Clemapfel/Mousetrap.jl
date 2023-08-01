@@ -1,11 +1,22 @@
 using mousetrap
 
+main() do app::Application
+    window = Window(app)
+    set_title!(window, "mousetrap.jl")
+    render_area = RenderArea()
+    shape = Rectangle(Vector2f(-0.5, 0.5), Vector2f(1, 1))
+    add_render_task!(render_area, RenderTask(shape))
+    set_child!(window, AspectFrame(1, render_area))
 
+    set_vertex_color!(shape, 1, hsva_to_rgba(HSVA(0.1, 1, 1, 1)))
+    set_vertex_color!(shape, 2, hsva_to_rgba(HSVA(0.3, 1, 1, 1)))
+    set_vertex_color!(shape, 3, hsva_to_rgba(HSVA(0.6, 1, 1, 1)))
+    set_vertex_color!(shape, 4, hsva_to_rgba(HSVA(0.9, 1, 1, 1)))
+    present!(window)
+end
+exit(0)
 
-
-############################################
-
-@static if false
+@static if true
 
 using mousetrap
 

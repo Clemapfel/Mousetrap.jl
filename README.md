@@ -80,6 +80,15 @@ end
 
 ---
 
+### Swapping between Light- and Dark-Themes
+
+```julia
+set_current_theme!(app, THEME_DEFAULT_LIGHT) # or THEME_DEFAULT_DARK
+```
+![](docs/src/assets/light_dark_theme.png)
+
+---
+
 ### Opening a File Explorer Dialog
 
 ```julia

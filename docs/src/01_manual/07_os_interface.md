@@ -2,6 +2,7 @@
 
 In this chapter, we will learn:
 + What other features `Application` has
++ How to change our apps UI theme
 + How to properly do logging
 + How to copy / move / create / delete files 
 + How to automatically open a file or url for the user
@@ -78,6 +79,63 @@ Each app on a user's system has two boolean flags: whether it is currently **hol
 Holding means that the application attempts to prevent exiting in any way. We set this flag by calling [`hold!`](@ref). This should be used to prevent the user from accidentally ending runtime while an important process is running. We have to make sure to call [`release!`](@ref), which will set the holding flag to `false`, after which the app can normally exit again.
 
 Being **busy** marks the app so that the OS recognizes that it is currently busy. This will prevent the "<app> is not responding" dialog many OS will trigger automatically when an app freezes. Sometimes, freezing is unavoidable because a costly operation is taking place. During times like this, we should call [`mark_as_busy!`](@ref), which notifies the OS that everything is still working as intended, it will just take a while. Once the expensive task is complete, [`unmark_as_busy!`](@ref) reverts the flag.
+
+### Theme 
+
+Each pre-made widget in mousetrap has their exact look specified in what is called a **theme**. This theme is a collection of css classes, which determine how a widget will look. These themes are applied globally, we cannot choose a theme for just one widget, it applies to all of them.
+
+Mousetrap supports four default themes, which are an value of enum [`Theme`](@ref):
+
+[Image: default light widget gallery]
+`THEME_DEFAULT_LIGHT`
+
+[Image: default dark widget gallery]
+`THEME_DEFAULT_DARK`
+
+[Image: high contrast light widget gallery]
+`THEME_HIGH_CONTRAST_LIGHT`
+
+[Image: high contrast dark widget gallery]
+`THEME_HIGH_CONTRAST_DARK`
+
+At any point after the back-end has been initialized, we can swap the global theme using [`set_current_theme!`](@ref). This will immediately change all widgets looks, allowing apps to change the entire GUI with just one function call at run-time.
+
+For example, to create a window that has button to switch between light and dark themes, we could do the following:
+
+```julia
+main() do app::Application
+
+    window = Window(app)
+
+    # add theme swap button to windows header bar
+    header_bar = HeaderBar()
+    swap_button = Button()
+    set_tooltip_tex(swap_button, "Click to Swap Themes")
+    connect_signal_clicked!(swap_button, app) do self::Button, app::Application
+
+        # get currently used theme
+        current = get_current_theme(app)
+
+        # swap light with dark, preservng whether the theme is high contrast
+        if current == THEME_DEFAULT_DARK
+            next = THEME_DEFAULT_LIGHT
+        elseif current == THEME_DEFAULT_LIGHT
+            next = THEME_DEFAULT_DARK
+        elseif current == THEME_HIGH_CONTRAST_DARK
+            next = THEME_HIGH_CONTRAST_LIGHT
+        elseif current == THEME_HIGH_CONTRAST_LIGHT
+            next = THEME_HIGH_CONTRAST_DARK
+        end
+
+        # set new theme
+        set_current_theme!(app, next)
+    end
+    push_front!(header_bar, swap_button)
+    set_titlebar_widget!(window, header_bar)
+
+    present!(window)
+end
+```
 
 ---
 
