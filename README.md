@@ -94,7 +94,7 @@ set_current_theme!(app, THEME_DEFAULT_LIGHT) # or THEME_DEFAULT_DARK
 ```julia
 file_chooser = FileChooser()
 on_accept!(file_chooser) do self::FileChooser, files
-    println("selected file $(files[1])")
+    println("selected files: $files")
 end
 present!(file_chooser)
 ```
