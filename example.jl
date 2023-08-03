@@ -1,22 +1,96 @@
 using mousetrap
 
 main() do app::Application
+
     window = Window(app)
     set_title!(window, "mousetrap.jl")
     render_area = RenderArea()
-    shape = Rectangle(Vector2f(-0.5, 0.5), Vector2f(1, 1))
-    add_render_task!(render_area, RenderTask(shape))
-    set_child!(window, AspectFrame(1, render_area))
+    shape = Rectangle(Vector2f(-1, 1), Vector2f(2, 2))
 
-    set_vertex_color!(shape, 1, hsva_to_rgba(HSVA(0.1, 1, 1, 1)))
-    set_vertex_color!(shape, 2, hsva_to_rgba(HSVA(0.3, 1, 1, 1)))
-    set_vertex_color!(shape, 3, hsva_to_rgba(HSVA(0.6, 1, 1, 1)))
-    set_vertex_color!(shape, 4, hsva_to_rgba(HSVA(0.9, 1, 1, 1)))
+    shader = Shader()
+    create_from_string!(shader, SHADER_TYPE_FRAGMENT, """
+        #version 330
+            
+        in vec4 _vertex_color;
+        in vec2 _texture_coordinates;
+        in vec3 _vertex_position;
+    
+        out vec4 _fragment_color;
+    
+        void main()
+        {
+            vec2 pos = _vertex_position.xy;
+            _fragment_color = vec4(pos.y, dot(pos.x, pos.y), pos.x, 1);
+        }
+    """)
+    
+    task = RenderTask(shape; shader = shader)
+    add_render_task!(render_area, task)
+
+    frame = AspectFrame(1.0, Frame(render_area))
+    set_size_request!(frame, Vector2f(150, 150))
+    set_margin!(frame, 10)
+    set_child!(window, frame)
     present!(window)
 end
-exit(0)
 
-@static if true
+
+@static if false
+
+main() do app::Application
+
+    window = Window(app)
+    set_title!(window, "mousetrap.jl")
+
+    # create render areas with different MSAA modes
+    left_area = RenderArea(ANTI_ALIASING_QUALITY_OFF)
+    right_area = RenderArea(ANTI_ALIASING_QUALITY_BEST)
+
+    # paned that will hold both areas
+    paned = Paned(ORIENTATION_HORIZONTAL)
+
+    # create singular shape, which will be shared between areas
+    shape = Rectangle(Vector2f(-0.5, 0.5), Vector2f(1, 1))
+    add_render_task!(left_area, RenderTask(shape))
+    add_render_task!(right_area, RenderTask(shape))
+
+    # rotate shape 1° per frame
+    set_tick_callback!(paned) do clock::FrameClock
+
+        # rotate shape 
+        rotate!(shape, degrees(1), get_centroid(shape))
+
+        # force redraw for both areas
+        queue_render(left_area) 
+        queue_render(right_area)
+
+        # continue callback indefinitely
+        return TICK_CALLBACK_RESULT_CONTINUE
+    end
+
+    # setup window layout for viewing
+    for area in [left_area, right_area]
+        set_size_request!(area, Vector2f(150, 150))
+    end
+
+    # caption labels
+    left_label = Label("<tt>OFF</tt>")
+    right_label = Label("<tt>BEST</tt>")
+
+    for label in [left_label, right_label]
+        set_margin!(label, 10)
+    end
+
+    # format paned
+    set_start_child_shrinkable!(paned, false)
+    set_end_child_shrinkable!(paned, false)
+    set_start_child!(paned, vbox(AspectFrame(1.0, left_area), left_label))
+    set_end_child!(paned, vbox(AspectFrame(1.0, right_area), right_label))
+
+    # present
+    set_child!(window, paned)
+    present!(window)
+end
 
 using mousetrap
 

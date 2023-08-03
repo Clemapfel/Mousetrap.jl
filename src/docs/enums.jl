@@ -15,6 +15,20 @@
 @document ALIGNMENT_CENTER "Aligned centered, regardless of orientation"
 @document ALIGNMENT_END "Aligned right if horizontal, bottom if vertical."
 
+@document AntiAliasingQuality enum_docs(:AntiAliasingQuality,
+    "Number of samples when performing multi-sampled anti aliasing (MSAA)", [
+    :ANTI_ALIASING_QUALITY_OFF,
+    :ANTI_ALIASING_QUALITY_MINIMAL,
+    :ANTI_ALIASING_QUALITY_GOOD,
+    :ANTI_ALIASING_QUALITY_BETTER,
+    :ANTI_ALIASING_QUALITY_BEST
+])
+@document ANTI_ALIASING_QUALITY_OFF "0 MSAA Samples, optimal speed"
+@document ANTI_ALIASING_QUALITY_MINIMAL "2 MSAA Samples"
+@document ANTI_ALIASING_QUALITY_GOOD "4 MSAA Samples"
+@document ANTI_ALIASING_QUALITY_BETTER "8 MSAA Samples"
+@document ANTI_ALIASING_QUALITY_BEST "16 MSAA Samples, optimal quality"
+
 @document BlendMode enum_docs(:BlendMode,
     "Governs how colors are mixed when two fragments are rendered on top of each other.", [
     :BLEND_MODE_ADD,

@@ -5198,10 +5198,18 @@ module mousetrap
 
 ###### render_area.jl
 
+    @export_enum AntiAliasingQuality begin
+        ANTI_ALIASING_QUALITY_OFF
+        ANTI_ALIASING_QUALITY_MINIMAL
+        ANTI_ALIASING_QUALITY_GOOD
+        ANTI_ALIASING_QUALITY_BETTER
+        ANTI_ALIASING_QUALITY_BEST
+    end
+
     @export_type RenderArea Widget
     @declare_native_widget RenderArea
 
-    RenderArea() = RenderArea(detail._RenderArea())
+    RenderArea(msaa_quality::AntiAliasingQuality = ANTI_ALIASING_QUALITY_OFF) = RenderArea(detail._RenderArea(msaa_quality))
 
     add_render_task!(area::RenderArea, task::RenderTask) = detail.add_render_task!(area._internal, task._internal)
     export add_render_task!

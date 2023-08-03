@@ -1629,17 +1629,17 @@ $(@type_fields(
 @document RenderArea """
 # RenderArea <: Widget
 
-OpenGL canvas. 
+Canvas for rendering custom shapes.
 
 See the manual chapter on native rendering for more
 information.
 
 $(@type_constructors(
-    RenderArea()
+    RenderArea([AntiAliasingQuality = ANTI_ALIASING_QUALITY_OFF])
 ))
 
 $(@type_signals(RenderArea,
-    render,
+    #render,
     resize 
 ))
 
