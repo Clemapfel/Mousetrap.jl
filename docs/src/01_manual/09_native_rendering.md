@@ -502,17 +502,21 @@ Which are roughly equivalent to `Image`s `INTERPOLATION_TYPE_NEAREST` and `INTER
 
 Wrap mode governs how the texture behaves when a vertices texture coordinates are outside of `[0, 1]`. Mousetrap offers the following wrap modes, which are all part of the enum [`TextureWrapMode`](@ref):
 
-+ `TEXTURE_WRAP_MODE_ZERO`: Pixels will appear as `RGBA(0, 0, 0, 0)`
-+ `TEXTURE_WRAP_MODE_ONE`: Pixels will appear as `RGBA(1, 1, 1, 1)`
-+ `TEXTURE_WRAP_MODE_STRETCH`: clamp to the outer most row/column of pixels
-+ `TEXTURE_WRAP_MODE_REPEAT`: repeat texture
-+ `TEXTURE_WRAP_MODE_MIRROR`: mirror texture
+| `TextureWrapMode` | New Pixels will be filled with |
+|-------------------|--------|
+| `TEXTURE_WRAP_MODE_ZERO` | `RGBA(0, 0, 0, 0)` | 
+| `TEXTURE_WRAP_MODE_ONE`| `RGBA(1, 1, 1, 1)` |
+| `TEXTURE_WRAP_MODE_STRETCH` | Nearest outer Edge |
+| `TEXTURE_WRAP_MODE_REPEAT` | Equivalent pixel in `([0, 1], [0, 1]) ` |
+| `TEXTURE_WRAP_MODE_MIRROR` | Equivalent pixel in `(1 - [0, 1], 1 - [0, 1])`| 
 
 ![](../assets/texture_wrap_modes.png)
 
 !!! details "How to generate this Image"
     ```julia
     using mousetrap
+
+    # compound widget that displays a texture with a label
     struct TexturePage <: Widget
         center_box::CenterBox
         label::Label
@@ -540,6 +544,8 @@ Wrap mode governs how the texture behaves when a vertices texture coordinates ar
             set_wrap_mode!(out.texture, wrap_mode)
             
             set_texture!(out.shape, out.texture)
+
+            # zoom out texture coordinates by 1 unit
             set_vertex_texture_coordinate!(out.shape, 1, Vector2f(-1, -1))
             set_vertex_texture_coordinate!(out.shape, 2, Vector2f(2, -1))
             set_vertex_texture_coordinate!(out.shape, 3, Vector2f(2, 2))
@@ -561,6 +567,7 @@ Wrap mode governs how the texture behaves when a vertices texture coordinates ar
         create_from_file!(image, "docs/src/assets/logo.png")
             # this assumes the script is run in `mousetrap.jl` root
 
+        # replace RGBA(0, 0, 0, 0) pixels with rainbow color
         size = get_size(image)
         hue_step = 1 / size.x
         for i in 1:size.y
