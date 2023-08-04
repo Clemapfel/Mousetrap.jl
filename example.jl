@@ -1,5 +1,4 @@
 using mousetrap
-
 main() do app::Application
 
     window = Window(app)
@@ -16,15 +15,18 @@ main() do app::Application
         in vec3 _vertex_position;
     
         out vec4 _fragment_color;
+
+        uniform vec4 _color_rgba;
     
         void main()
         {
-            vec2 pos = _vertex_position.xy;
-            _fragment_color = vec4(pos.y, dot(pos.x, pos.y), pos.x, 1);
+            _fragment_color = _color_rgba;
         }
     """)
     
     task = RenderTask(shape; shader = shader)
+    set_uniform_rgba!(task, "_color_rgba", RGBA(1, 0, 1, 1))
+
     add_render_task!(render_area, task)
 
     frame = AspectFrame(1.0, Frame(render_area))

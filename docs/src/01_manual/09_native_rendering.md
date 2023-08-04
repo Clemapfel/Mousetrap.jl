@@ -4,10 +4,9 @@ In this chapter we will learn:
 + How to use `RenderArea`
 + How to draw any shape
 + How to efficiently show an image as a texture
-+ How to compile a GLSL Shader and set its uniforms
 + What blend modes mousetrap offers
 + How to apply a 3D transform to a shape
-+ How to render to a texture
++ How to compile a GLSL Shader and set its uniforms
 ---
 
 !!! danger "Native Rendering on MacOS"
@@ -19,6 +18,78 @@ In this chapter we will learn:
     If we try to use a disabled object on MacOS, a **fatal error** will be thrown at runtime.
 
 ---
+
+
+!!! details "Running snippets from this Chapter"
+    To run any partial code snippet from this section, we can use the following `main.jl` file:
+    ```julia
+    using mousetrap
+    main() do app::Application
+        window = Window(app)
+
+        render_area = RenderArea()
+
+        # snippet code here
+
+        aspect_frame = AspectFrame(1)
+        set_child!(aspect_frame, render_area)
+        set_size_request!(aspect_frame, Vector2f(200, 200))
+        set_child!(window, aspect_frame)
+        present!(window)
+    end
+    ```
+
+In the [chapter on widgets](04_widgets.md), we learned that we can create new widgets by combining already pre-defined widgets as a *compound widget*. We can create a new widget that has a `Scale`, but we can't render our own scale with, for example, a square knob. In this chapter, this will change.
+
+By using the native rendering facilities mousetrap provides, we are free to create any shape we want, assembling displays and new widgets pixel-by-pixel, line-by-line.
+
+## RenderArea
+
+The central widget of this chapter is [`RenderArea`](@ref), which is a canvas used to display native graphics. At first, it may seem very simple:
+
+```julia
+render_area = RenderAre()
+```
+
+This will render as a transparent area, because `RenderArea` has no graphic properties of its own. Instead, we need to create separate **shapes**, then **bind them for rendering**, after which `RenderArea` will display the shapes for us.
+
+## Shapes
+
+In general, shapes are defined by a number of **vertices**. A vertex has a position in 2D space, a color, and a texture coordinate. In this chapter, we will learn how to user each of these, starting with the position.
+
+### Vertex Coordinate System
+
+A shape's vertices define where inside the `RenderArea` it will be rendered. The coordinate system for these is different from the one we used for widgets. OpenGL, and thus mousetraps `Shape`, use the **right hand coordinate system**, which is familiar from traditional math:
+
+![](https://learnopengl.com/img/getting-started/coordinate_systems_right_handed.png)
+
+(source: [learnopengl.com]())
+
+Where for now, we assume the z-coordinate for any vertex is set to 0, reducing the coordinate system to a 2D plane. 
+
+We will refer to this coordinate system as **gl coordinates**, while the widget coordinate system used for `ClickEventController` and the like as **widget space coordinates**.
+
+To further illustrate the difference between gl and widget space coordinates, consider this table, where `w` is the widgets width, `h` is the widgets height, in pixels:
+ 
+| Conceptual Position | GL Coordinate | Widget Space Coordinate |
+|---------------------|---------------|-------------------------|
+| top left            | `(-1, +1)`    | `(0, 0)` |
+| top                 | `( 0, +1)`    | `(w / 2, 0)`
+| top right           | `(+1, +1)`    | `(w, 0)`
+| left                | `(-1,  0)`    | `(0, y / 2)`
+| center              | `( 0,  0)`    | `(w / 2, y / 2)`
+| right               | `(+1,  0)`    | `(w, y / 2)`
+| bottom left         | `(-1, -1)`    | `(0, y)`
+| bottom              | `( 0, -1)`    | `(w / 2, y)`
+| bottom right        | `(+1, -1)`    | `(w, y)`
+
+We see that the OpenGL coordiante system is **normalized**, meaning the values of each coordinate are inside `[-1, 1]`, while the widget-space coordinate system is **absolute**, meaning the values of each coordinate take the allocate size of the widget into account, being inside `[0, w]` and `[0, h]` for the x- and y- coordinate, respectively.
+
+At any point, we can convert between the coordinate system using [`from_gl_coordinates`](@ref) and [`to_gl_coordinates`](@ref), which convert gl-to-widget-space and widget-space-to-gl coordinates, respectively. Of course, the widget space coordinates depend on the current size of the `RenderArea`. When it is resized, the old coordinates may be out of date, which is why using the *normalized* gl system is preferred. 
+
+## Creating Shapes
+
+
 
 ## Anti Aliasing
 
@@ -137,77 +208,81 @@ In this section, we'll go through each render task component. When creating a `R
 
 [`GLTransform`](@ref) is an object represents spatial transforms. It is called **GL**Transform, because it **uses the GL coordinate system**. Applying a `GLTransform` to a vector in widget- or texture-space will produce incorrect results. They should only be applied to the `vertex_position` attribute of a `Shape`s vertices.
 
-Internally, a `GLTransform` is a 4x4 matrix of 32-bit floats. At any time, we can directly access this matrix using `getindex` or `setindex!`:
+Internally, a `GLTransform` is a 4x4 matrix of 32-bit floats. It is this size because it is intended to be applied to OpenGL positional vectors, which are vectors in 3D space. In mousetrap, the last coordinate is usually assumed to be `0`, though this is not enforced.
 
+At any time, we can directly access this matrix using `getindex` or `setindex!`:
 
-When constructed, the matrix will be the identity transform:
+```julia
+transform = GLTransform()
+for i in 1:4
+    for j in 1:4
+        print(transform[i, j], " ")
+    end
+    print("\n")
+end
+```
 ```
 1 0 0 0
 0 1 0 0
 0 0 1 0
 0 0 0 1
 ```
-No matter the current state of the transform, we can reset it back to the identity matrix by calling `GLTransform::reset`.
 
-`GLTransform` has basic spatial transform already programmed in, so we usually do not need to modify the internal matrix ourself. It provides the following transforms:
+We see that after construction, `GLTransform` is initialized as the identity transform. No matter the current state of the transform, we can reset it back to the identity matrix by calling `GLTransform::reset`.
 
-+ `GLTransform::translate` for translation in 3d space
-+ `GLTransform::scale` for scaling
-+ `GLTransform::rotate` for rotation around a point
+`GLTransform` has many common spatial transform already available, meaning we rarely have to modify its values manually. It provides the following transforms:
 
-We can combine two transforms using `GLTransform::combine`. If we wish to apply the transfrom CPU-side to a `Vector2f` or `Vector3f`, we can use `GLTransform::apply_to`. We can check the \link mousetrap::GLTransform corresponding documentation page\endlink for more information about the signature of these funcions.
++ [`translate!`](@ref) for translation in 3d space
++ [`scale!`](@ref) for scaling
++ [`rotate!`](@ref) for rotation around a point
 
-While we could apply the transform to each vertex of a `Shape` manually, then render the shape, it is much more performant to do this kind of math GPU-side. By register the transform with a `RenderTask`, the transform will be forwarded to the vertex shaders `_transform` uniform, which is then applied to the shapes vertices automatically:
+We can combine two transforms using [`combine_with`](@ref). If we wish to apply the transfrom CPU-side to a `Vector2f` or `Vector3f`, we can use [`apply_to`](@ref). 
 
-```cpp
-auto shape = // ...
-auto transform = GLTransform();
-transform.translate({-0.5, 0.1});
-transform.rotate(degrees(180), {0,0);
+While we could apply the transform to each vertex of a `Shape` manually, then render the shape, it is much more performant to do this kind of math GPU-side. By registering the transform with a `RenderTask`, the transform will be forwarded to the vertex shaders, which is then applied to the shapes vertices automatically:
 
-auto task = RenderTask(
-   shape,     // shape
-   nullptr,   // set null to use the default shader
-   transform  // use our transform instead of identity
-);
+```julia
+shape = Shape() 
+transform = Transform()
+translate!(transform, Vector2f(-0.5, 0.1))
+rotate!(transform, degrees(180))
+
+task = RenderTask(shape; transform = transform)
 ```
 
-This, of course, only works if the vertex shader is implemented to apply this uniform, which the [default vertex shader](#default-vertex-shader) does.
+Where we used the `transform` keyword argument to specify the transform, while leaving the other render tasks component unspecified.
 
 ---
 
 ## Blend Mode
 
-As the last component of a render task, we have **blend mode**. This governs how two colors behave when rendered on top of each other. We call the color currently in the frame buffer `destination`, while the newly added color is called `origin`. 
-Mousetrap offers the following blend modes, which are part of the enum \a{BlendMode}:
+As the third component of a render task, we have the **blend mode**. This governs how two colors behave when rendered on top of each other. 
+
+ Let color currently in the frame buffer be `destination`, while the newly added color will be called `origin`. then mousetraps blend modes, which are values of enum [`BlendMode`](@ref), behave as follows:
 
 | `BlendMode`        | Resulting Color                     |
 |--------------------|-------------------------------------|
-| `NONE`             | `origin.rgb + 0 * destination.rgb`  | 
-| `NORMAL`           | traditional alpha-blending          |
- | `ADD`              | `origin.rgba + destination.rgba`    |
-| `SUBTRACT`         | `origin.rgba - destination.rgba`    |
-| `REVERSE_SUBTRACT` | `destination.rgba - origin.rgba`    | 
-| `MULTIPLY`         | `origin.rgba * destination.rgba`    |
-| `MIN`              | `min(origin.rgba, destination.rgba)` |
- | `MAX`              | `max(origin.rgba, destination.rgba)` | 
+| `BLEND_MODE_NONE`             | `origin.rgb + 0 * destination.rgb`  | 
+| `BLEND_MODE_NORMAL`           | [traditional alpha-blending](https://en.wikipedia.org/wiki/Alpha_compositing)          |
+| `BLEND_MODE_ADD`              | `origin.rgba + destination.rgba`    |
+| `BLEND_MODE_SUBTRACT`         | `origin.rgba - destination.rgba`    |
+| `BLEND_MODE_REVERSE_SUBTRACT` | `destination.rgba - origin.rgba`    | 
+| `BLEND_MODE_MULTIPLY`         | `origin.rgba * destination.rgba`    |
+| `BLEND_MODE_MIN`              | `min(origin.rgba, destination.rgba)` |
+| `BLEND_MODE_MAX`              | `max(origin.rgba, destination.rgba)` | 
 
-These are the familiar blend modes from graphics editors such as GIMP or Photoshop.
+We may be familiar with these blend modes from graphics editors such as GIMP or Photoshop.
 
-If left unspecified, `RenderTask` will use `BlendMode::NORMAL`, which represents traditional alpha blending. Using this blend mode, the opacity of `destination` and `origin` is treated as their emission, and then the weighted mean is calculated, producing the final result we expect. This mimics how mixing colored light behaves in the real world.
+If left unspecified, `RenderTask` will use `BLEND_MODE_NORMAL`.
 
 ---
 
-
 ## Shaders
 
-Mousetrap offers two types of shaders, **fragment** and **vertex** shaders. These shaders are written in [GLSL](https://learnopengl.com/Advanced-OpenGL/Advanced-GLSL), which will not be taught in this manual. 
+As the last component of a `RenderTask`, we have [`Shader`](@ref), which represents an OpenGL shader program, with already compiled **fragment** and **vertex** shaders. These shaders are written in [GLSL](https://learnopengl.com/Advanced-OpenGL/Advanced-GLSL), which will not be taught in this manual. 
 
 ### Compiling Shaders
 
-To create a shader, we first instantiate [`Shader`](@ref}, which is a class representing a **shader program** (a compiled vertex- and fragment shader, bound to a shader program on the graphics card). 
-
-After instantiating `Shader`, we compile one or both of the vertex- and fragment-shaders using [`create_from_file!`](@ref) or [`create_from_string!`](@ref).
+To create a shader, we first instantiate [`Shader`](@ref}, then use [`create_from_file!`](@ref) or [`create_from_string!`](@ref) to override the current fragment- or vertex-shader. We use `SHADER_TYPE_FRAGMENT` or `SHADER_TYPE_VERTEX` to specify which of these we are targeting.
 
 ```julia
 shader = Shader()
@@ -271,9 +346,7 @@ add_render_task!(render_area, task)
     end
     ```
 
-We see that the first argument to [`create_from_string!`](@ref) is the **shader type**, which is either `SHADER_TYPE_FRAGMENT` or `SHADER_TYPE_VERTEX`. If we do not call `create_from_string!` for either or both of these, the **default shader program will be used**. 
-
-It may be instructive to see what te default shaders behavior actually is, in detail, as any user-defined shader should build on these.
+If we do not initialize the vertex- or fragment-shader, the **default shader program will be used**. It may be instructive to see how the default shaders are defined, as any user-defined shader should build upon them
 
 ### Default Vertex Shader
 
@@ -361,30 +434,30 @@ void main()
 }
 ```
 
-To set the value of `_color_rgba`, we use `RenderTask::set_uniform_rgba`. This is one of the many `set_uniform_*` functions, which allow us to bind C++ values to OpenGL Shader Uniforms:
+To set the value of `_color_rgba`, we use [`set_uniform_rgba!`](@ref), which is called on the **render task**, not the shader itself. This will make the render task store the value we give it, then automatically set it during rendering.
+
+`set_uniform_rgba!` is of many `set_uniform_*!` functions, which allow us to bind Julia-side values to OpenGL Shader Uniforms:
 
 The following types can be assigned this way:
 
-| C++ Type      | `RenderTask` function   | GLSL Uniform Type |
+| Julia Type      | `RenderTask` function   | GLSL Uniform Type |
 |---------------|-------------------------|-------------------|
-| `float`       | `set_uniform_float`     | `float`           |
-| `int32_t`     | `set_uniform_int`       | `int`             |
- | `uint32_t`    | `set_uniform_uint`      | `uint`            |
- | `Vector2f`    | `set_uniform_vec2`      | `vec2`            |
+| `Cfloat`       | `set_uniform_float`     | `float`           |
+| `Cint`     | `set_uniform_int`       | `int`             |
+| `Cuint`    | `set_uniform_uint`      | `uint`            |
+| `Vector2f`    | `set_uniform_vec2`      | `vec2`            |
 | `Vector3f`    | `set_uniform_vec3`      | `vec3`            |
 | `Vector4f`    | `set_uniform_vec4`      | `vec4`            |
 | `GLTransform` | `set_uniform_transform` | `mat4x4`          |
 | `RGBA`        | `set_uniform_rgba`      | `vec4`            |
 | `HSVA`        | `set_uniform_hsva`      | `vec4`            |
 
-\todo Add `set_uniform_texture` so users do not have to use texture locations
+Using this knowledge, we set the `_color_rgba` uniform value like so:
 
-With this, we can set our custom `_color_rgba` uniform value like this:
-
-```cpp
-// create shader
-auto shader = Shader();
-shader.create_from_string(ShaderType::FRAGMENT, R"(
+```julia
+# create shader
+shader = Shader()
+create_from_string!(shader, SHADER_TYPE_FRAGMENT, """
     #version 330
 
     in vec4 _vertex_color;
@@ -399,121 +472,60 @@ shader.create_from_string(ShaderType::FRAGMENT, R"(
     {
         _fragment_color = _color_rgba;
     }
-)");
+""")
 
-// create shape
-auto shape = Shape::Rectangle({-1, -1}, {2, 2});
+# create shape and task
+shape = Shape()
+task = RenderTask(shape; shader = shader) # shader bound to `shader` keyword argument
 
-// create task
-auto task = RenderTask(shape, &shader);
-
-// register uniform with task, this deep-copies the color
-task.set_uniform_rgba("_color_rgba", RGBA(1, 0, 1, 1));
-
-// register task with render area
-render_area.add_render_task(task);
+# set uniform
+set_uniform_rgba!(task, "_color_rgba", RGBA(1, 0, 1, 1))
 ```
 
-\image html shader_rbga_uniform.png
+![](../assets/shader_rgba_uniform.png)
 
-\how_to_generate_this_image_begin
-```cpp
-auto render_area = RenderArea();
+!!! details "How to generate this Image"
+    ```julia
+    using mousetrap
+    main() do app::Application
 
-static auto shader = Shader();
-shader.create_from_string(ShaderType::FRAGMENT, R"(
-    #version 330
+        window = Window(app)
+        set_title!(window, "mousetrap.jl")
+        render_area = RenderArea()
+        shape = Rectangle(Vector2f(-1, 1), Vector2f(2, 2))
 
-    in vec4 _vertex_color;
-    in vec2 _texture_coordinates;
-    in vec3 _vertex_position;
+        shader = Shader()
+        create_from_string!(shader, SHADER_TYPE_FRAGMENT, """
+            #version 330
+                
+            in vec4 _vertex_color;
+            in vec2 _texture_coordinates;
+            in vec3 _vertex_position;
+        
+            out vec4 _fragment_color;
 
-    out vec4 _fragment_color;
+            uniform vec4 _color_rgba;
+        
+            void main()
+            {
+                _fragment_color = _color_rgba;
+            }
+        """)
+        
+        task = RenderTask(shape; shader = shader)
+        set_uniform_rgba!(task, "_color_rgba", RGBA(1, 0, 1, 1))
 
-    uniform vec4 _color_rgba;
+        add_render_task!(render_area, task)
 
-    void main()
-    {
-        _fragment_color = _color_rgba;
-    }
-)");
+        frame = AspectFrame(1.0, Frame(render_area))
+        set_size_request!(frame, Vector2f(150, 150))
+        set_margin!(frame, 10)
+        set_child!(window, frame)
+        present!(window)
+    end
+    ```
 
-static auto shape = Shape::Rectangle({-1, -1}, {2, 2});
-static auto task = RenderTask(shape, &shader);
-task.set_uniform_rgba("_color_rgba", RGBA(1, 0, 1, 1));
-render_area.add_render_task(task);
-
-auto aspect_frame = AspectFrame(1);
-aspect_frame.set_child(render_area);
-window.set_child(aspect_frame);
-```
-\how_to_generate_this_image_end
-
-In summary, while we do not have control over the `in` and `out` variables of either shader type, we have full control over uniforms, giving us all the flexibility we need to accomplish complex shader-aided tasks.
-
----
-
-## Transforms
-
-As mentioned before, \a{GLTransform} is the C++-side object that represents spatial transforms. It is called **GL**Transform, because it **uses the GL coordinate system**. Applying a `GLTransform` to a vector in widget- or texture-space will produce incorrect results. They should only be applied to the `vertex_position` attribute of a `Shape`s vertices.
-
-Internally, a `GLTransform` is a 4x4 matrix of 32-bit floats. At any time, we can directly access this matrix as the public member `GLTransform::transform`. 
-
-When constructed, the matrix will be the identity transform:
-```
-1 0 0 0
-0 1 0 0
-0 0 1 0
-0 0 0 1
-```
-No matter the current state of the transform, we can reset it back to the identity matrix by calling `GLTransform::reset`.
-
-`GLTransform` has basic spatial transform already programmed in, so we usually do not need to modify the internal matrix ourself. It provides the following transforms:
-
-+ `GLTransform::translate` for translation in 3d space
-+ `GLTransform::scale` for scaling
-+ `GLTransform::rotate` for rotation around a point
-
-We can combine two transforms using `GLTransform::combine`. If we wish to apply the transfrom CPU-side to a `Vector2f` or `Vector3f`, we can use `GLTransform::apply_to`. We can check the \link mousetrap::GLTransform corresponding documentation page\endlink for more information about the signature of these funcions.
-
-While we could apply the transform to each vertex of a `Shape` manually, then render the shape, it is much more performant to do this kind of math GPU-side. By register the transform with a `RenderTask`, the transform will be forwarded to the vertex shaders `_transform` uniform, which is then applied to the shapes vertices automatically:
-
-```cpp
-auto shape = // ...
-auto transform = GLTransform();
-transform.translate({-0.5, 0.1});
-transform.rotate(degrees(180), {0,0);
-
-auto task = RenderTask(
-   shape,     // shape
-   nullptr,   // set null to use the default shader
-   transform  // use our transform instead of identity
-);
-```
-
-This, of course, only works if the vertex shader is implemented to apply this uniform, which the [default vertex shader](#default-vertex-shader) does.
-
----
-
-## Blend Mode
-
-As the last component of a render task, we have **blend mode**. This governs how two colors behave when rendered on top of each other. We call the color currently in the frame buffer `destination`, while the newly added color is called `origin`. 
-Mousetrap offers the following blend modes, which are part of the enum \a{BlendMode}:
-
-| `BlendMode`        | Resulting Color                     |
-|--------------------|-------------------------------------|
-| `NONE`             | `origin.rgb + 0 * destination.rgb`  | 
-| `NORMAL`           | traditional alpha-blending          |
- | `ADD`              | `origin.rgba + destination.rgba`    |
-| `SUBTRACT`         | `origin.rgba - destination.rgba`    |
-| `REVERSE_SUBTRACT` | `destination.rgba - origin.rgba`    | 
-| `MULTIPLY`         | `origin.rgba * destination.rgba`    |
-| `MIN`              | `min(origin.rgba, destination.rgba)` |
- | `MAX`              | `max(origin.rgba, destination.rgba)` | 
-
-These are the familiar blend modes from graphics editors such as GIMP or Photoshop.
-
-If left unspecified, `RenderTask` will use `BlendMode::NORMAL`, which represents traditional alpha blending. Using this blend mode, the opacity of `destination` and `origin` is treated as their emission, and then the weighted mean is calculated, producing the final result we expect. This mimics how mixing colored light behaves in the real world.
+With this, we have a convenient way to specify shader uniforms, without having to manually update the shader each time it is bound for rendering, `RenderTask` does this for us.
 
 ---
 
