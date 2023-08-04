@@ -2611,6 +2611,10 @@ mousetrap.remove_secondary_icon!
 ```@docs
 mousetrap.remove_start_child!
 ```
+## `remove_texture!`
+```@docs
+mousetrap.remove_texture!
+```
 ## `remove_tick_callback!`
 ```@docs
 mousetrap.remove_tick_callback!
@@ -2779,9 +2783,9 @@ mousetrap.set_comment_above!
 ```@docs
 mousetrap.set_current_blend_mode
 ```
-## `set_current_theme`
+## `set_current_theme!`
 ```@docs
-mousetrap.set_current_theme
+mousetrap.set_current_theme!
 ```
 ## `set_cursor!`
 ```@docs

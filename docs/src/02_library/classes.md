@@ -111,7 +111,7 @@ Application
 + [`remove_action!`](@ref)
 + [`run!`](@ref)
 + [`set_application!`](@ref)
-+ [`set_current_theme`](@ref)
++ [`set_current_theme!`](@ref)
 + [`unmark_as_busy!`](@ref)
 
 
@@ -2344,6 +2344,7 @@ PopoverButton
 + [`set_always_show_arrow!`](@ref)
 + [`set_child!`](@ref)
 + [`set_has_frame!`](@ref)
++ [`set_icon!`](@ref)
 + [`set_is_circular!`](@ref)
 + [`set_popover!`](@ref)
 + [`set_popover_menu!`](@ref)
@@ -3029,6 +3030,7 @@ Shape
 + [`get_vertex_color`](@ref)
 + [`get_vertex_position`](@ref)
 + [`get_vertex_texture_coordinate`](@ref)
++ [`remove_texture!`](@ref)
 + [`render`](@ref)
 + [`rotate!`](@ref)
 + [`set_centroid!`](@ref)

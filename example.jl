@@ -1,100 +1,78 @@
 using mousetrap
-main() do app::Application
 
+struct TexturePage <: Widget
+    center_box::CenterBox
+    label::Label
+    render_area::RenderArea
+    texture::Texture
+    shape::Shape
+
+    function TexturePage(label::String, image::Image, wrap_mode::TextureWrapMode)
+        out = new(
+            CenterBox(ORIENTATION_VERTICAL),
+            Label("<tt>" * label * "</tt>"),
+            RenderArea(),
+            Texture(),
+            Rectangle(Vector2f(-1, 1), Vector2f(2, 2))
+        )
+
+        set_expand!(out.render_area, true)
+        set_size_request!(out.render_area, Vector2f(150, 150))    
+
+        set_start_child!(out.center_box, AspectFrame(1.0, Frame(out.render_area)))
+        set_end_child!(out.center_box, out.label)
+        set_margin!(out.label, 10)
+
+        create_from_image!(out.texture, image)
+        set_wrap_mode!(out.texture, wrap_mode)
+        
+        set_texture!(out.shape, out.texture)
+        set_vertex_texture_coordinate!(out.shape, 1, Vector2f(-1, -1))
+        set_vertex_texture_coordinate!(out.shape, 2, Vector2f(2, -1))
+        set_vertex_texture_coordinate!(out.shape, 3, Vector2f(2, 2))
+        set_vertex_texture_coordinate!(out.shape, 4, Vector2f(-1, 2))
+
+        add_render_task!(out.render_area, RenderTask(out.shape))
+        return out
+    end
+end
+mousetrap.get_top_level_widget(x::TexturePage) = x.center_box
+
+
+main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
+
     render_area = RenderArea()
-    shape = Rectangle(Vector2f(-1, 1), Vector2f(2, 2))
+   
+    image = Image()
+    create_from_file!(image, "docs/src/assets/logo.png")
 
-    shader = Shader()
-    create_from_string!(shader, SHADER_TYPE_FRAGMENT, """
-        #version 330
-            
-        in vec4 _vertex_color;
-        in vec2 _texture_coordinates;
-        in vec3 _vertex_position;
-    
-        out vec4 _fragment_color;
+    size = get_size(image)
+    hue_step = 1 / size.x
+    for i in 1:size.y
+        for j in 1:size.x
+            if get_pixel(image, i, j).a == 0
+                set_pixel!(image, i, j, HSVA(j * hue_step, 1, 1, 1))
+            end
+        end
+    end
 
-        uniform vec4 _color_rgba;
-    
-        void main()
-        {
-            _fragment_color = _color_rgba;
-        }
-    """)
-    
-    task = RenderTask(shape; shader = shader)
-    set_uniform_rgba!(task, "_color_rgba", RGBA(1, 0, 1, 1))
+    box = Box(ORIENTATION_HORIZONTAL)
+    set_spacing!(box, 10)
+    set_margin!(box, 10)
 
-    add_render_task!(render_area, task)
+    push_back!(box, TexturePage("ZERO", image, TEXTURE_WRAP_MODE_ZERO))
+    push_back!(box, TexturePage("ONE", image, TEXTURE_WRAP_MODE_ONE))
+    push_back!(box, TexturePage("STRETCH", image, TEXTURE_WRAP_MODE_STRETCH))
+    push_back!(box, TexturePage("REPEAT", image, TEXTURE_WRAP_MODE_REPEAT))
+    push_back!(box, TexturePage("MIRROR", image, TEXTURE_WRAP_MODE_MIRROR))
 
-    frame = AspectFrame(1.0, Frame(render_area))
-    set_size_request!(frame, Vector2f(150, 150))
-    set_margin!(frame, 10)
-    set_child!(window, frame)
+    set_child!(window, box)
     present!(window)
 end
 
-
-@static if false
-
-main() do app::Application
-
-    window = Window(app)
-    set_title!(window, "mousetrap.jl")
-
-    # create render areas with different MSAA modes
-    left_area = RenderArea(ANTI_ALIASING_QUALITY_OFF)
-    right_area = RenderArea(ANTI_ALIASING_QUALITY_BEST)
-
-    # paned that will hold both areas
-    paned = Paned(ORIENTATION_HORIZONTAL)
-
-    # create singular shape, which will be shared between areas
-    shape = Rectangle(Vector2f(-0.5, 0.5), Vector2f(1, 1))
-    add_render_task!(left_area, RenderTask(shape))
-    add_render_task!(right_area, RenderTask(shape))
-
-    # rotate shape 1° per frame
-    set_tick_callback!(paned) do clock::FrameClock
-
-        # rotate shape 
-        rotate!(shape, degrees(1), get_centroid(shape))
-
-        # force redraw for both areas
-        queue_render(left_area) 
-        queue_render(right_area)
-
-        # continue callback indefinitely
-        return TICK_CALLBACK_RESULT_CONTINUE
-    end
-
-    # setup window layout for viewing
-    for area in [left_area, right_area]
-        set_size_request!(area, Vector2f(150, 150))
-    end
-
-    # caption labels
-    left_label = Label("<tt>OFF</tt>")
-    right_label = Label("<tt>BEST</tt>")
-
-    for label in [left_label, right_label]
-        set_margin!(label, 10)
-    end
-
-    # format paned
-    set_start_child_shrinkable!(paned, false)
-    set_end_child_shrinkable!(paned, false)
-    set_start_child!(paned, vbox(AspectFrame(1.0, left_area), left_label))
-    set_end_child!(paned, vbox(AspectFrame(1.0, right_area), right_label))
-
-    # present
-    set_child!(window, paned)
-    present!(window)
-end
-
-using mousetrap
+exit(0)
 
 # compound widget that is an entire stack page, render area with the shape + a label below
 struct ShapePage <: Widget
@@ -179,7 +157,7 @@ main() do app::Application
         ),
         "Lines" =>Lines([
             Vector2f(-0.5, 0.5) => Vector2f(0.5, -0.5),
-            Vector2f(0.5, -0.5) => Vector2f(-0.5, 0.5)
+            Vector2f(-0.5, -0.5) => Vector2f(0.5, 0.5)
         ]),
         "LineStrip" =>  LineStrip([
             Vector2f(-0.5, +0.5),
@@ -272,6 +250,7 @@ main() do app::Application
         end
     end
     set_tooltip_text!(button, "Click to Swap UI Theme")
+    set_has_frame!(button, false)
     push_front!(get_header_bar(window), button)
 
     # add outline shapes for shapes that have a volume
@@ -326,11 +305,68 @@ main() do app::Application
             select!(stack_model, current + 1)
         end
     end
-    add_controller!(window, key_controller)
+    add_controller!(button, key_controller)
 
     # main layout
     box = hbox(stack, revealer)
     set_child!(window, box)
+    present!(window)
+end
+
+@static if false
+
+main() do app::Application
+
+    window = Window(app)
+    set_title!(window, "mousetrap.jl")
+
+    # create render areas with different MSAA modes
+    left_area = RenderArea(ANTI_ALIASING_QUALITY_OFF)
+    right_area = RenderArea(ANTI_ALIASING_QUALITY_BEST)
+
+    # paned that will hold both areas
+    paned = Paned(ORIENTATION_HORIZONTAL)
+
+    # create singular shape, which will be shared between areas
+    shape = Rectangle(Vector2f(-0.5, 0.5), Vector2f(1, 1))
+    add_render_task!(left_area, RenderTask(shape))
+    add_render_task!(right_area, RenderTask(shape))
+
+    # rotate shape 1° per frame
+    set_tick_callback!(paned) do clock::FrameClock
+
+        # rotate shape 
+        rotate!(shape, degrees(1), get_centroid(shape))
+
+        # force redraw for both areas
+        queue_render(left_area) 
+        queue_render(right_area)
+
+        # continue callback indefinitely
+        return TICK_CALLBACK_RESULT_CONTINUE
+    end
+
+    # setup window layout for viewing
+    for area in [left_area, right_area]
+        set_size_request!(area, Vector2f(150, 150))
+    end
+
+    # caption labels
+    left_label = Label("<tt>OFF</tt>")
+    right_label = Label("<tt>BEST</tt>")
+
+    for label in [left_label, right_label]
+        set_margin!(label, 10)
+    end
+
+    # format paned
+    set_start_child_shrinkable!(paned, false)
+    set_end_child_shrinkable!(paned, false)
+    set_start_child!(paned, vbox(AspectFrame(1.0, left_area), left_label))
+    set_end_child!(paned, vbox(AspectFrame(1.0, right_area), right_label))
+
+    # present
+    set_child!(window, paned)
     present!(window)
 end
 

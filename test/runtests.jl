@@ -2400,6 +2400,9 @@ function test_render_area(::Container)
                 set_vertex_position!(shape, i, Vector3f(0, 0, 0))
                 @test get_vertex_position(shape, i) == Vector3f(0, 0, 0)
 
+                set_vertex_texture_coordinate!(shape, i, Vector2f(-1, -1))
+                @test get_vertex_texture_coordinate!(shape, i) == Vector2f(-1, -1)
+
                 Base.show(devnull, shape)
             end
 

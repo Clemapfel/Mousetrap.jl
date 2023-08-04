@@ -6,4 +6,4 @@ In this chapter we will learn:
 + How to install our app on a users machine
 
 !!! danger
-    This feature is not yet implemented.
+    These feature is not yet implemented, this section is incomplete.

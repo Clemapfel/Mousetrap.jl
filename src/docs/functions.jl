@@ -3367,6 +3367,13 @@ remove_start_child!(::CenterBox)
 Remove the start child such that the widget is now empty at that position
 """
 
+@document remove_texture! """
+```
+remove_texture!(::Shape) 
+```
+Make it such that shape no long has a texture, meaning it will be rendered as a solid color.
+"""
+
 @document remove_tick_callback! """
 ```
 remove_tick_callback!(::Widget) 
