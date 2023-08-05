@@ -4106,7 +4106,7 @@ module mousetrap
     end
     export push_front_row!
 
-    function insert_row!(column_view::ColumnView, index::Integer, widgets::Widget...)
+    function insert_row_at!(column_view::ColumnView, index::Integer, widgets::Widget...)
 
         if length(widgets) > get_n_columns(column_view)
             @log_warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
@@ -4624,9 +4624,14 @@ module mousetrap
     end
     export set_listens_for_shortcut_action!
 
-    @export_widget_function add_css_class! Cvoid String class
-    @export_widget_function remove_css_class! Cvoid String class
-    @export_widget_function get_css_classes Vector{String}
+    add_css_class!(widget::Widget, class::String) = detail.add_css_class!(as_widget_pointer(widget), class)
+    # no export
+
+    remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
+    # no export
+
+    get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
+    # no export
 
 ####### clipboard.jl
 

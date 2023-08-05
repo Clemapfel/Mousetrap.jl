@@ -9,7 +9,7 @@ In this chapter, we will learn:
 
 Installation of the Julia component is only a few lines. After pressing `]` while in the REPL to enter Pkg mode, we execute
 
-```julia
+```
 add https://github.com/Clemapfel/mousetrap_windows_jll
 add https://github.com/Clemapfel/mousetrap_linux_jll
 add https://github.com/Clemapfel/mousetrap.jl
@@ -210,17 +210,7 @@ true
 
 All enum values are written in `SCREAMING_SNAKE_CASE`, while the enum type's name uses `UpperCamelCase`. 
 
-To check which enum has which values, we can again use the [mousetrap documentation](../02_library/enums.md):
-
-```@docs
-mousetrap.Orientation
-```
-
-Each enum value furthermore has their own documentation, describing what that value means:
-
-```@docs
-mousetrap.ORIENTATION_HORIZONTAL
-```
+To check which enum has which values, we can again use the [mousetrap documentation](../02_library/enums.md). Each enum value furthermore has their own documentation, describing what that value means:
 
 ---
 

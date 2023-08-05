@@ -133,7 +133,7 @@ return mousetrap.@signal_table(KeyEventController,
 
 We see that pressing and releasing a non-modifier key are handled in separate signals. These can be used to track whether a key is currently up or down. Lastly, pressing or releasing any modifier key (such as control, alt, shift, etc.) is handled by the `modifiers_changed` signal. Note that for `KeyEventController`, the left and right mouse button are also considered modifiers.
 
-The signal handler for any of the three signals is handed two arguments, a `KeyCode`, which is the key code constant of the keyboard key that triggered the signals, as well as `ModifierState`. This is an object that holds information about which modifiers are currently pressed. To query it, we use [`control_pressed`](@ref), [`shift_pressed](@ref), and [`alt_pressed`](@ref), [`mouse_button_01_pressed`](@ref), and [`mouse_button_02_pressed](@ref), which return `true` or `false` depending on whether the modifier is currently down.
+The signal handler for any of the three signals is handed two arguments, a `KeyCode`, which is the key code constant of the keyboard key that triggered the signals, as well as `ModifierState`. This is an object that holds information about which modifiers are currently pressed. To query it, we use [`control_pressed`](@ref), [`shift_pressed](@ref), and [`alt_pressed`](@ref), [`mouse_button_01_pressed`](@ref), and [`mouse_button_02_pressed`](@ref), which return `true` or `false` depending on whether the modifier is currently down.
 
 For example, to test whether the user pressed the space key while shift is held, we could do:
 

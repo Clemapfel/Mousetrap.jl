@@ -781,7 +781,7 @@ Serialize the axes identification.
 ```
 destroy!(::Window) -> Cvoid
 ```
-Free the internally held reference, causing the window to be deallocated. This is only necessary if [`set_hide_on_close`](@ref) was set to `true`.
+Free the internally held reference, causing the window to be deallocated. This is only necessary if [`set_hide_on_close!`](@ref) was set to `true`.
 """
 
 @document download """
@@ -2302,6 +2302,13 @@ get_uniform_float(::RenderTask, name::String) -> Cfloat
 Get a registered uniform `float`, or `0.0` if no such uniform was registered.
 """
 
+@document get_uniform_hsva """
+```
+get_uniform_hsva(task::RenderTask, name::String) -> HSVA
+```
+Get uniform `vec4`, or `HSVA(0, 0, 0, 0)` if no such uniform exists.
+"""
+
 @document get_uniform_int """
 ```
 get_uniform_int(::RenderTask, name::String) -> Cint
@@ -2690,6 +2697,14 @@ Insert widget into a grid such that it is now next to `already_in_grid`, where `
 insert_row_at!(grid::Grid, row_i::Signed) 
 ```
 Insert an empty row after the given index (may be negative).
+
+---
+
+```
+insert_row_at!(::ColumnView, index::Integer, widgets::Widget...)
+```
+Insert a number of widgets as a row, inserting them into the corresponding column. If the number of widgets is
+lower than the number of columns, the left-over columns will contain an empty cell in that row.
 """
 
 @document is_cancelled """
@@ -4107,9 +4122,9 @@ set_is_focusable!(::Widget, ::Bool)
 Set whether the widget can retrieve input focus. Most widgets that support interaction by default are already focusable.
 """
 
-@document set_is_horizontally_homogeneous """
+@document set_is_horizontally_homogeneous! """
 ```
-set_is_horizontally_homogeneous(::Stack, ::Bool) 
+set_is_horizontally_homogeneous!(::Stack, ::Bool) 
 ```
 Set whether the stack should allocate the same width for all of its pages.
 """
@@ -4152,9 +4167,9 @@ set_is_spinning!(::Spinner, ::Bool)
 Set whether the spinner is currently playing its animation.
 """
 
-@document set_is_vertically_homogeneous """
+@document set_is_vertically_homogeneous! """
 ```
-set_is_vertically_homogeneous(::Stack, ::Bool) 
+set_is_vertically_homogeneous!(::Stack, ::Bool) 
 ```
 Set whether all pages of the stack should allocate the same height.
 """
@@ -4355,6 +4370,13 @@ Attempt to maximize or unmaximize the window.
 set_message!(::AlertDialog, ::String)
 ```
 Set the main message of the dialog, this will be used as the dialogs title.
+"""
+
+@document set_minimized! """
+```
+set_minimized!(::Window, ::Bool)
+```
+Attempt to (un-)minimize the window.
 """
 
 @document set_min_n_columns! """
@@ -4596,9 +4618,9 @@ set_should_draw_value!(::Scale, ::Bool)
 Set whether the current value of the scales internal adjustment should be drawn next to the knob.
 """
 
-@document set_should_interpolate_size """
+@document set_should_interpolate_size! """
 ```
-set_should_interpolate_size(::Stack, ::Bool) 
+set_should_interpolate_size!(::Stack, ::Bool) 
 ```
 Set whether the stack should slowly transition its size when transitioning from one page to another.
 """

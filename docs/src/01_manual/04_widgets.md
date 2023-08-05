@@ -365,7 +365,7 @@ By default, the header bar will show the window title, a minimize-, maximize-, a
 
 When dealing with multiple windows, we can influence the way two windows interact with each other. Two of these interactions are determined by whether a window is **modal** and whether it is **transient** for another window.
 
-By setting [`set_modal!`](@ref) to true, if the window is revealed, **all other windows of the application will be deactivated**, preventing user interaction with them. This also freezes animations, it essentially pauses all other windows. The most common use-case for this is for dialogs, for example if the user requests to close the application, it is common to open a small dialog requesting the user to confirm exiting the application. While this dialog is shown, the main window should be disabled and all other processes should halt until a selection is made. This is possible by making the dialog window *modal*.
+By setting [`set_is_modal!`](@ref) to true, if the window is revealed, **all other windows of the application will be deactivated**, preventing user interaction with them. This also freezes animations, it essentially pauses all other windows. The most common use-case for this is for dialogs, for example if the user requests to close the application, it is common to open a small dialog requesting the user to confirm exiting the application. While this dialog is shown, the main window should be disabled and all other processes should halt until a selection is made. This is possible by making the dialog window *modal*.
 
 Using [`set_transient_for!`](@ref), we can make sure a window will always be shown in front of another. `set_transient_for!(A, B)` will make it so, while `A` overlaps `B` on the users desktop, `A` will be shown in front of `B`. 
 
@@ -1111,7 +1111,7 @@ Text entry is central to many application. Mousetrap offers two widgets that all
 
 The entries currently displayed text is stored in an internal text buffer. We can freely access or modify the buffers content with [`get_text`](@ref) and [`set_text!`](@ref).
 
-While we could control the size of an `Entry` using size-hinting, a better way is [`get_max_width_chars!`](@ref), which resizes the entry such that its width is enough to fit a certain number of characters into its area.
+While we could control the size of an `Entry` using size-hinting, a better way is [`get_max_width_chars`](@ref), which resizes the entry such that its width is enough to fit a certain number of characters into its area.
 
 `Entry` supports "password mode", in which each character typed is replaced with a dot. This is to prevent a third party looking at a user screen and seeing what they typed. 
 
@@ -1416,7 +1416,7 @@ While not technically necessary, animations can improve user experience drastica
 
 One of the most common applications for animations is the act of hiding or showing a widget. [`Revealer`](@ref) was made for this purpose.
 
-To trigger the `Revealer`s animation and change whether the child widget is currently visible, we call [`set_revealed!`](@ref) which takes a boolean as its argument. If the widget goes from hidden to shown or shown to hidden, the animation will play. Once the animation is done, signal `revealed` will be emittedd.
+To trigger the `Revealer`s animation and change whether the child widget is currently visible, we call [`set_is_revealed!`](@ref) which takes a boolean as its argument. If the widget goes from hidden to shown or shown to hidden, the animation will play. Once the animation is done, signal `revealed` will be emittedd.
 
 ### Transition Animation
 
@@ -1453,7 +1453,7 @@ Apart from the speed, we also have a choice of animation **type**, represented b
         # create a button that, when clicked, triggers the revealer animation
         button = Button()
         connect_signal_clicked!(button, revealer) do self::Button, revealer::Revealer
-            set_revealed!(revealer, !get_revealed(revealer))
+            set_is_revealed!(revealer, !get_revealed(revealer))
         end
     
         set_child!(window, vbox(button, revealer))
@@ -1852,7 +1852,7 @@ set_widget_at!(column_view, column_01, Label("03"))
 
 Any rows that do not yet have widgets will be backfilled and appear empty. If we loose track of the `ColumnViewColumn` instance returned when adding a new column, we can retrieve it using `get_column_at` or `get_column_with_title`, the latter of which takes the unique title we chose when adding the column.
 
-Since most of the time we will want all cells in a row to contain a widget, we can also use [`push_back_row!`](@ref), [`push_front_row`](@ref), or [`insert_row!`](@ref), which insert n widgets at once, where n is the number of columns:
+Since most of the time we will want all cells in a row to contain a widget, we can also use [`push_back_row!`](@ref), [`push_front_row!`](@ref), or [`insert_row_at!`](@ref), which insert n widgets at once, where n is the number of columns:
 
 ```julia
 # add 1st widget to 1st column, 2nd widget to 2nd column, etc.
@@ -1861,7 +1861,7 @@ push_back_row!(column_view, Label("Column 01 Child"), Label("Column 02 Child"), 
 
 This is a more convenient way to fill the column view, though if we later want to edit it, we will have to use `set_widget_at!` to override widgets in any rows.
 
-`ColumnViewColumn` has a number of other features. We can make it so the user can freely resize each column by setting [`set_resizable!`](@ref) to `true`, or we can force each column to have an exact width using [`set_fixed_width!`](@ref), which takes a number of pixels.
+`ColumnViewColumn` has a number of other features. We can make it so the user can freely resize each column by setting [`set_is_resizable!`](@ref) to `true`, or we can force each column to have an exact width using [`set_fixed_width!`](@ref), which takes a number of pixels.
 
 ---
 
@@ -1976,7 +1976,7 @@ When changing which of the stacks pages is currently shown, regardless of how th
 + `set_interpolate_size!`, if set to `true`, makes it, such that while the transition animation plays, the stack will change from the size of the previous child to the size of the current child gradually. If set to `false`, this size change happens instantly
 + `set_animation_type!` governs the type of animation, which is one of the enum values of [`StackTransitionType`](@ref).
 
-If we want all of the stacks children to allocate the same size, we can set [`set_is_vertically_homogeneous!`](@ref) and [`set_is_horizonally_homogeneous!`](@ref) to `true`, in which case 
+If we want all of the stacks children to allocate the same size, we can set [`set_is_vertically_homogeneous!`](@ref) and [`set_is_horizontally_homogeneous!!`](@ref) to `true`, in which case 
 the stack will assume the height or widget of its largest page, respectively.
 
 ---

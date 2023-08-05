@@ -181,8 +181,44 @@ To find out, we check the mousetrap documentation, either by visiting [`Button`]
 ```
 help?> mousetrap.Button
 ```
-```@docs
-mousetrap.Button
+```  
+  Button <: Widget
+  ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+
+  Button with a label. Connect to signal clicked or specify an action via set_action! in order to
+  react to the user clicking the button.
+
+  Constructors
+  ==============
+
+  Button()
+  Button(label::Widget)
+  Button(::Icon)
+
+  Signals
+  =========
+
+  │  clicked
+  │  ---------
+  │
+  │  │  (::Button, [::Data_t]) -> Nothing
+  │
+  │  Emitted when the user clicks a widget using a mouse or touchscreen.
+
+  Fields
+  ========
+
+  (no public fields)
+
+  Example
+  =========
+
+  button = Button()
+  set_child!(button, Label("Click Me"))
+  connect_signal_clicked!(button) do x::Button
+      println("clicked!")
+  end
+  set_child!(window, button)
 ```
 
 We see that button has a single signal, `clicked`. Along with this information, a description of when that signal is emitted is given, and that its signature is `(::Button, [::Data_t]) -> Nothing`, where `Data_t` is an optional argument of arbitrary type, which we can use to hand data to the signal handler.

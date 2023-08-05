@@ -115,10 +115,6 @@ mousetrap.add_child!
 ```@docs
 mousetrap.add_controller!
 ```
-## `add_css_class!`
-```@docs
-mousetrap.add_css_class!
-```
 ## `add_filter!`
 ```@docs
 mousetrap.add_filter!
@@ -1270,10 +1266,6 @@ mousetrap.get_comment_above
 ## `get_content_type`
 ```@docs
 mousetrap.get_content_type
-```
-## `get_css_classes`
-```@docs
-mousetrap.get_css_classes
 ```
 ## `get_current_button`
 ```@docs
@@ -2570,10 +2562,6 @@ mousetrap.remove_column_at!
 ## `remove_controller!`
 ```@docs
 mousetrap.remove_controller!
-```
-## `remove_css_class!`
-```@docs
-mousetrap.remove_css_class!
 ```
 ## `remove_end_child!`
 ```@docs

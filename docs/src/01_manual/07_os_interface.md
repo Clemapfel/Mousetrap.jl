@@ -211,7 +211,7 @@ Messages should not end with a `\n` (a newline), as one is automatically appende
 
 All interaction with the log is handled by only a few macros. To print a log message of a given log level, we use `@log_debug`, `@log_info`, `@log_warning`, `@log_critical` and `@log_fatal`. These macros take as their first argument the log domain and as their second argument the message as a string.
 
-As mentioned before, messages of level `DEBUG` and `INFO` are only printed if we specifically request them to do so. We enable these on a per-log-domain basis, using [`set_surpress_info!`](@ref) and [`set_surpress_debug`](@ref) respectively. 
+As mentioned before, messages of level `DEBUG` and `INFO` are only printed if we specifically request them to do so. We enable these on a per-log-domain basis, using [`set_surpress_info!`](@ref) and [`set_surpress_debug!`](@ref) respectively. 
 
 For example, if our log domain is `foo`:
 
@@ -336,7 +336,7 @@ end
 
 ### Moving / Copying File
 
-To move a file from one location to another, we use [`move!`](@ref). If we want to copy a file or directory instead of moving it, we use [`copy!`](@ref):
+To move a file from one location to another, we use [`move!`](@ref). If we want to copy a file or directory instead of moving it, we use [`mousetrap.copy!`](@ref):
 
 ```julia
 from = FileDescriptor("/path/from/file.txt")
@@ -657,9 +657,9 @@ We use [`set_value!`](@ref) to modify the value of a `KeyFile` entry. Thanks to 
 set_value!(file, "image_view.window", "default_color_rgba", RGBA(1, 0, 1, 1));
 ```
 
-To modify comments, we use [`add_comment_above!`](@ref), which, just like before, takes only a group ID to modify the comment above a group, or both a group ID and key to modify the comment above a key-value pair.
+To modify comments, we use [`set_comment_above!`](@ref), which, just like before, takes only a group ID to modify the comment above a group, or both a group ID and key to modify the comment above a key-value pair.
 
-When writing to an instance of `KeyFile`, only the file in memory is modified, **not the file on the disk**. To update the actual stored file, we need to call [`save_to_file!`](@ref). 
+When writing to an instance of `KeyFile`, only the file in memory is modified, **not the file on the disk**. To update the actual stored file, we need to call [`save_to_file`](@ref). 
 
 ---
 
