@@ -16,33 +16,13 @@ In this chapter we will learn:
     is because of Apples decision to deprecate OpenGL in a way where only physical owners of a Mac
     can compile libraries that have it as a dependency. See [here](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978341) for more information.
 
-    If we try to use a disabled object on MacOS, a **fatal error** will be thrown at runtime.
+    If a disabled object is attempted to be instantiated on MacOS, a **fatal error** will be thrown at runtime.
 
 ---
 
-
-!!! details "Running snippets from this Chapter"
-    To run any partial code snippet from this section, we can use the following `main.jl` file:
-    ```julia
-    using mousetrap
-    main() do app::Application
-        window = Window(app)
-
-        render_area = RenderArea()
-
-        # snippet code here
-
-        aspect_frame = AspectFrame(1)
-        set_child!(aspect_frame, render_area)
-        set_size_request!(aspect_frame, Vector2f(200, 200))
-        set_child!(window, aspect_frame)
-        present!(window)
-    end
-    ```
-
 In the [chapter on widgets](04_widgets.md), we learned that we can create new widgets by combining already pre-defined widgets as a *compound widget*. We can create a new widget that has a `Scale`, but we can't render our own scale with, for example, a square knob. In this chapter, this will change.
 
-By using the native rendering facilities mousetrap provides, we are free to create any shape we want, assembling displays and new widgets pixel-by-pixel, line-by-line.
+By using the native rendering facilities mousetrap provides, we are free to create any shape we want, assembling new widgets pixel-by-pixel, line-by-line, then adding interactivity using the event controller system.
 
 ## RenderArea
 
@@ -52,25 +32,25 @@ The central widget of this chapter is [`RenderArea`](@ref), which is a canvas us
 render_area = RenderAre()
 ```
 
-This will render as a transparent area, because `RenderArea` has no graphic properties of its own. Instead, we need to create separate **shapes**, then **bind them for rendering**, after which `RenderArea` will display the shapes for us.
+This widget will render as a transparent area, because `RenderArea` has no graphic properties of its own. Instead, we need to create separate **shapes**, then **bind them for rendering**, after which `RenderArea` will display the shapes for us. Still, `RenderArea` will follow the properties just like any other widget, for example, it will have an allocated size that follows size-hinting and the expansion property.
 
 ## Shapes
 
-In general, shapes are defined by a number of **vertices**. A vertex has a position in 2D space, a color, and a texture coordinate. In this chapter, we will learn how to user each of these, starting with the position.
+In general, shapes are defined by a number of **vertices**. A vertex has a position in 2D space, a color, and a texture coordinate. In this chapter, we will learn what each of these properties do, and how the coalesce to form a shape.
 
 ### Vertex Coordinate System
 
-A shape's vertices define where inside the `RenderArea` it will be rendered. The coordinate system for these is different from the one we used for widgets. OpenGL, and thus mousetraps `Shape`, use the **right hand coordinate system**, which is familiar from traditional math:
+A shape's vertices define where inside the `RenderArea` it will be drawn. The coordinate system shapes use is different from the one we used for widgets. OpenGL, on which the native rendering component of mousetrap is based, use the **right hand coordinate system**, which is familiar from traditional math:
 
 ![](https://learnopengl.com/img/getting-started/coordinate_systems_right_handed.png)
 
-(source: [learnopengl.com]())
+(source: [learnopengl.com](https://learnopengl.com/img/getting-started))
 
 Where for now, we assume the z-coordinate for any vertex is set to 0, reducing the coordinate system to a 2D plane. 
 
-We will refer to this coordinate system as **gl coordinates**, while the widget coordinate system used for `ClickEventController` and the like as **widget space coordinates**.
+We will refer to this coordinate system as **GL coordinates**, while the widget coordinate system used for `ClickEventController` and the like as **widget space coordinates**.
 
-To further illustrate the difference between gl and widget space coordinates, consider this table, where `w` is the widgets width, `h` is the widgets height, in pixels:
+To further illustrate the difference between GL and widget space coordinates, consider this table, where `w` is the widgets width, `h` is the widgets height, in pixels:
  
 | Conceptual Position | GL Coordinate | Widget Space Coordinate |
 |---------------------|---------------|-------------------------|
@@ -84,9 +64,11 @@ To further illustrate the difference between gl and widget space coordinates, co
 | bottom              | `( 0, -1)`    | `(w / 2, y)`|
 | bottom right        | `(+1, -1)`    | `(w, y)`|
 
-We see that the OpenGL coordiante system is **normalized**, meaning the values of each coordinate are inside `[-1, 1]`, while the widget-space coordinate system is **absolute**, meaning the values of each coordinate take the allocate size of the widget into account, being inside `[0, w]` and `[0, h]` for the x- and y- coordinate, respectively.
+We see that the OpenGL coordinate system is **normalized**, meaning the values of each coordinate are inside `[-1, 1]`, while the widget-space coordinate system is **absolute**, meaning the values of each coordinate take the allocate size of the widget into account, being inside `[0, w]` and `[0, h]` for the x- and y- coordinate, respectively, in pixels.
 
-At any point, we can convert between the coordinate system using [`from_gl_coordinates`](@ref) and [`to_gl_coordinates`](@ref), which convert gl-to-widget-space and widget-space-to-gl coordinates, respectively. Of course, the widget space coordinates depend on the current size of the `RenderArea`. When it is resized, the old coordinates may be out of date, which is why using the *normalized* gl system is preferred. 
+The gl coordinate system is anchored at the center of the render area, unlike widget space which is anchored at the top left of a widgets allocated area.
+
+At any point, we can convert between the coordinate system using [`from_gl_coordinates`](@ref) and [`to_gl_coordinates`](@ref), which take the `RenderArea` as their first argument. These functions convert gl-to-widget-space and widget-space-to-gl coordinates, respectively. Of course, the widget space coordinates depend on the current size of the `RenderArea`. When it is resized, the old coordinates may be out of date, which is why using the *normalized* GL system is preferred in an application where the canvas can change size frequently.
 
 ### Rendering Shapes
 
@@ -97,7 +79,7 @@ shape = Shape()
 as_point!(shape, Vector2f(0, 0))
 ```
 
-Where we use `Vector2f(0, 0)` as the points position, meaning it will appear at the origin of the render area, its center.
+Where we use `Vector2f(0, 0)` as the points position, meaning it will appear at the origin of the `RenderArea`, its center.
 
 The above is directly equivalent to the following:
 
@@ -109,9 +91,9 @@ typeof(shape)
 mousetrap.Shape
 ```
 
-Note that here, `shape` is still of type `Shape`. [`Point`](@ref) is simply a convenience function for initializing a shape, then calling [`as_point!`](@ref).
+Note that here, `shape` is still of type `Shape`. [`Point`](@ref) is simply a convenience function for initializing a shape, then calling [`as_point!`](@ref) on that instance.
 
-We can bind this shape for rendering. To do this, we create a [`RenderTask`](@ref) with the shape, then use [`add_render_task!`](@ref) to add the task to the schedule tasks of our `RenderArea`. From this point onwards, anytime the `RenderArea` goes through a render cycle, it will draw all its task, including our point:
+For this shape to show up on screen, we need to **bind it for rendering**. To do this, we create a [`RenderTask`](@ref) with the shape, then use [`add_render_task!`](@ref) to add it to the scheduled tasks of our `RenderArea`. From this point onwards, anytime the `RenderArea` goes through a render cycle, it will also draw all its task, including our point:
 
 ```julia
 shape = Point(Vector2f(0, 0))
@@ -144,11 +126,11 @@ If we want to remove a task from our render area, we need to call [`clear_render
 
 ### Shape Types
 
-Mousetrap offers a wide variety of pre-defined shape types. This makes it so we don't have to manually set each vertices position. 
+Mousetrap offers a wide variety of pre-defined shape types. Thanks to this, we don't have to manually each vertex position.
 
 #### Point
 
-A [`Point`](@ref) is always exactly one pixel in size. Its constructor takes a single `Vector2f`:
+As we've seen, [`Point`](@ref) is always exactly one pixel in size. Its constructor takes a single `Vector2f`:
 
 ```julia
 point = Point(Vector2f(0, 0))
@@ -170,6 +152,8 @@ points = Points([
 
 ![](../assets/shape_points.png)
 
+This shape is a convenience function, it is much more performant to render a `Points` with four vertices, than rendering four `Point` with one vertex each.
+
 #### Line 
 
 A [`Line`](@ref) is defined by two points, between which a 1-pixel thick line will be drawn:
@@ -185,7 +169,7 @@ line = Line(
 
 #### Lines
 
-[`Lines`](@ref) takes a vector of point pairs. For each of these, a 1-pixel thick line will be drawn:
+[`Lines`](@ref) will draw a number of unconnected lines. It takes a vector of point pairs. For each of these, a 1-pixel thick line will be drawn:
 
 ```julia
 lines = Lines([
@@ -198,9 +182,9 @@ lines = Lines([
 
 #### LineStrip
 
-`LineStrip` should not be confused with `Lines`. `LineStrip` is a *connected* series of lines. It takes `Vector{Vector2f}`. A line will be drawn between each successive pair of coordinates, meaning the last vertex of the previous line will be used as the first vertex of the current line.
+[`LineStrip`](@ref), not be confused with `Lines`, is a *connected* series of lines. Thus, it takes a vector of points, as opposed to a vector of point pairs. 
 
-In general, if the supplied vector of points is `{a1, a2, a3, ..., a(n)}` then `LineStrip` will render as a series of lines with coordinate pairs `{a1, a2}, {a2, a3}, ..., {a(n-1), a(n)}`
+A line will be drawn between each successive pair of coordinates, meaning the last vertex of the previous line will be used as the first vertex of the current line. If the supplied vector of points is `{a1, a2, a3, ..., a(n)}` then `LineStrip` will render as a series of lines with coordinate pairs `{a1, a2}, {a2, a3}, ..., {a(n-1), a(n)}`
 
 ```julia
 line_strip = LineStrip([
@@ -215,7 +199,7 @@ line_strip = LineStrip([
 
 #### Wireframe
 
-`Wireframe` is similar to a `LineStrip`, except that it also connects the last and first vertex. So for a supplied vector `{a1, a2, a3, ..., an}`, the series of lines will be `{a1, a2}, {a2, a3}, ..., {a(n-1), a(n)}, {a(n), a1}`, the last vertex-coordinate pair is what distinguishes it from a `LineStrip`. As such, `Wireframe` is sometimes also called a **line loop**.
+[`Wireframe`](@ref) is similar to a `LineStrip`, except that it also connects the last and first vertex. For a supplied vector of points `{a1, a2, a3, ..., an}`, the series of lines will be `{a1, a2}, {a2, a3}, ..., {a(n-1), a(n)}, {a(n), a1}`, the last vertex-coordinate pair is what distinguishes it from a `LineStrip`. As such, `Wireframe` is sometimes also called a **line loop**.
 
 ```julia
 wireframe = Wireframe([
@@ -232,7 +216,7 @@ Note how this shape takes the exact same coordinates as `LineStrip`, but draws o
 
 #### Triangle
 
-A `Triangle` is constructed using three `Vector2f`, one for each of its vertices:
+A [`Triangle`](@ref) is constructed as one would expect, using three `Vector2f`, one for each of its vertices:
 
 ```julia
 triangle = Triangle(
@@ -246,12 +230,12 @@ triangle = Triangle(
 
 #### Rectangle
 
-A `Rectangle` has four vertices, but it is defined by its top-left point and size. As such, it is always axis-aligned, though we can call [`rotate!`](@ref) after initialization to change this.
+A [`Rectangle`](@ref) has four vertices. It is defined by its top-left point and its width and height. As such, it is always axis-aligned, though we can call [`rotate!`](@ref) after initialization to change this.
 
 ```julia
 rectangle = Rectangle(
-    Vector2f(-0.5, 0.5),
-    Vector2f(1, 1)
+    Vector2f(-0.5, 0.5), # top left
+    Vector2f(1, 1)       # width, height
 )
 ```
 
@@ -259,12 +243,12 @@ rectangle = Rectangle(
 
 #### Circle
 
-A `Circle` is constructed from a center point and radius. We also need to specify the number of outer vertices used for the circle. This number will determine how "smooth" the outline is. For example, a circle with 3 outer vertices is a equilaterla triangle, a circle with 4 outer vertices is a square, a circle with 5 is a pentagon, etc. 
+A [`Circle`](@ref) is constructed from a center point and radius. We also need to specify the number of outer vertices used for the circle. This number will determine how "smooth" the outline is. For example, a circle with 3 outer vertices is a equilateral triangle, a circle with 4 outer vertices is a square, a circle with 5 is a pentagon, etc. 
 
-As the number of outer vertices increase, the shape approaches a mathematical circle, but will also require more processing power. Furthermore, a 3-vertex circle is an equilateral triangle, while a 4-vertex circle is a square, a 5-vertex circle a pentagon, etc.
+As the number of outer vertices increases, the shape approaches a mathematical circle, but will also require more processing power.
 
 ```julia
-shape = Circle(
+circle = Circle(
     Vector2f(0, 0), # center
     0.5,            # radius
     32              # n outer vertices
@@ -275,7 +259,7 @@ shape = Circle(
 
 #### Ellipse
 
-A `Ellipse` is a more generalized from of a `Circle`. It's x- and y-radius determine the shape of the ellipse
+An [`Ellipse`](@ref) is a more generalized from of a `Circle`. It has two radii, the x- and y-radius:
 
 ```julia
 ellipse = Ellipse(
@@ -290,7 +274,7 @@ ellipse = Ellipse(
 
 #### Polygon
 
-The most general form of convex shapes, `Polygon` is constructed using a vector of vertices, which will be sorted clockwise, then their [outer hull](https://en.wikipedia.org/wiki/Convex_hull) will be calculated, which results in the final convex polygon:
+The most general form of convex shapes, [`Polygon`](@ref) is constructed using a vector of vertices, which will be sorted clockwise, then their [outer hull](https://en.wikipedia.org/wiki/Convex_hull) will be calculated, which results in the final convex polygon:
 
 ```julia
 polygon = Polygon([
@@ -306,7 +290,7 @@ polygon = Polygon([
 
 #### Rectangular Frame
 
-A `RectangularFrame` takes the top-left vertex, the outer size, and the x- and y-width, which will be the thickness of the frame horizontally and vertically:
+A [`RectangularFrame`](@ref) takes a top-left vertex, a width, height, and the x- and y-width, the latter of which be the thickness of the frame along the x- and y-axis:
 
 ```julia
 rectangular_frame = RectangularFrame(
@@ -318,9 +302,11 @@ rectangular_frame = RectangularFrame(
 ```
 ![](../assets/shape_rectangular_frame.png)
 
+Note how the top left and size govern the position and size of the outer perimeter of the rectangular frame.
+
 #### Circular Ring
 
-The round form of a rectangular frame, we have `CircularRing`, which takes a center, the radius of the outer perimeter, as well as the thickness. Like `Circle` and `Ellipse`, we have to specify the number of outer vertices, which decides the smoothness of the ring:
+For the round of a rectangular frame, we have [`CircularRing`](@ref), which takes a center, the radius of the outer perimeter, as well as the thickness. Like `Circle` and `Ellipse`, we have to specify the number of outer vertices, which decides the smoothness of the ring:
 
 ```julia
 circular_ring = CircularRing(
@@ -333,9 +319,11 @@ circular_ring = CircularRing(
 
 ![](../assets/shape_circular_ring.png)
 
+As before, the center and radius determine the position and size of the outer perimeter.
+
 #### Elliptical Ring
 
-A generalization of `CircularRing`, `EllipticalRing` has an ellipse as its outer shape. Its thickness along the horizontal and vertical dimension are supplied separately, making it far more flexible than `CircularRing`.
+A generalization of `CircularRing`, [`EllipticalRing`](@ref) has an ellipse as its outer shape. Its thickness along the horizontal and vertical dimension are supplied separately, making it more flexible than `CircularRing`.
 
 ```julia
 elliptcal_ring = EllipticalRing(
@@ -352,7 +340,7 @@ elliptcal_ring = EllipticalRing(
 
 #### Outline
 
-Lastly, we have a special shape. [`Outline`](@ref) does not take any vertex positions for its constructor. Instead, we construct an `Outline` shape from another shape. It will then generate a wireframe for the outer perimeters of the original shape.
+Lastly, we have a special shape. [`Outline`](@ref) does not take any vertex positions for its constructor. Instead, we construct an `Outline` shape from **another shape**. It will then generate a wireframe for the outer perimeters of the original shape.
 
 As the name suggest, this is useful for generating outlines of another shape. By rendering the `Outline` on top of the original shape, we can achieve a similar effect to how `Frame` is used for widgets.
 
@@ -396,29 +384,27 @@ outline = Outline(elliptical_ring)
 ```
 ![](../assets/shape_elliptical_ring_outline.png)
 
-Rendering these white outline on top of a white shape would make them invisible, of course. To achieve the desired effect, we need to make the outline another color, which brings us to the additional properties of all `Shape`s.
+While possible, it doesn't make much sense to create an `Outline` from a shape that does not have a volume, such as `Point` or `Wireframe`.
+
+Rendering the white outlines above on top of a white shape would make little sense, of course. To achieve the desired effect, we need to make the outline another color, which brings us to the additional properties of all `Shape`s.
 
 ### Shape Properties
 
 #### Vertex Properties
 
-Shapes are made up of vertices whose properties we have discussed before. 
+Shapes are made up of vertices whose properties we can manually edit. To se the property of a single vertex of a shape, we use [`set_vertex_color!`](@ref), [`set_vertex_position!`](@ref), and [`set_vertex_texture_coordinate!`](@ref). Each of these take an index, which is the index of the vertex in clockwise order. To know how many vertices a shape actually has, we use [`get_n_vertices`](@ref).
 
-We can set the property of a single vertex of a shape using [`set_vertex_color!`](@ref), [`set_vertex_position!`](@ref), and [`set_vertex_texture_coordinate!`](@ref).
-
-Each of these take an index, which is the index of the vertex in clockwise order. To know how many vertices a shape actually has, we use [`get_n_vertices`](@ref).
-
-We rarely will modify individual vertices, as working on the `Shape` as a whole is much more convenient.
+We rarely will need to modify individual vertices, as working on the `Shape` as a whole is much more convenient.
 
 ##### Centroid
 
 The **centroid** of a shape is the intuitive "center of mass". In mathematical terms, it is the component-wise mean of all vertex coordinates. In practice, for many rotationally symmetrical shapes such as rectangles, triangle, circle, and ellipses, the centroid will be the "center" of the shape, as it is defined in common language. 
 
-We can access the centroid using [`get_centroid`](@ref). To move a shape a certain distance, we move its centroid by that distance by calling [`set_centroid`](@ref), which will automatically move all other vertices of the shape such that its new component wise mean is identical to the coordinate we specified.
+We can access the centroid using [`get_centroid`](@ref). To move a shape a certain distance, we move its centroid by that distance by calling [`set_centroid`](@ref), which will automatically move all other vertices of the shape such that its new centroid is identical to the coordinates we specified.
 
 #### Rotation
 
-We can rotate all of a `Shape`s vertices around a point in gl coordinates by calling [`rotate`](@ref), which takes an `Angle` as its first argument:
+We can rotate all of a `Shape`s vertices around a point in GL coordinates by calling [`rotate!`](@ref), which takes an `Angle` as its first argument:
 
 ```julia
 # rotate shape around its center
@@ -427,15 +413,19 @@ rotate!(shape, degrees(90), get_centroid(shape))
 
 #### Color
 
-To change the color of a shape as a whole, we use [`set_color!`](@ref). This simply calls `set_vertex_color!` on all of a shapes vertices. By default, a shapes color will be `RBGA(1, 1, 1, 1)`, white.
+To change the color of a shape as a whole, we use [`set_color!`](@ref). This simply calls `set_vertex_color!` on all of a shapes vertices. By default, a shapes color will be `RBGA(1, 1, 1, 1)`, pure white.
 
 #### Visibility
 
-We can prevent a shape from being rendered by calling `set_is_visible!(false)`. This is different from making all vertices of a shape have an opacity of `0`. `is_visible` directly hooks into the shapes render function and prevents it from being called, as opposed to it completing rendering and not being visible on screen. Settings a shapes visibility to `false` is useful when [culling](https://en.wikipedia.org/wiki/Hidden-surface_determination) shapes to improve performance.
+We can prevent a shape from being rendered by setting [`set_is_visible!`](@ref) to `false`. This is different from making all vertices of a shape have an opacity of `0`. `is_visible` directly hooks into the shapes render function and **prevents it from being called**, as opposed to it completing rendering and not being visible on screen. This means making a shape invisible completely removes any performance penalty that would have be incurred during the render step.
+
+Settings a shapes visibility to `false` is useful when [culling](https://en.wikipedia.org/wiki/Hidden-surface_determination) shapes to improve performance.
 
 #### Bounding Box
 
-We can access the [axis aligned bounding box](https://en.wikipedia.org/wiki/Bounding_volume) of a shape with [`get_bounding_box`](@ref), which returns an [`AxisAlignedRectangle`](@ref). Using this, we can query the top-left coordinate and size of the bounding box.
+We can access the [axis-aligned bounding box](https://en.wikipedia.org/wiki/Bounding_volume) of a shape with [`get_bounding_box`](@ref), which returns an [`AxisAlignedRectangle`](@ref). This is the smallest axis-aligned rectangle that still contains all of a shapes vertices.
+
+Using this, we can query the top-left coordinate and size of the bounding box.
 
 ---
 
@@ -445,8 +435,8 @@ Lastly, each shape has an optional **texture**, which is what the texture coordi
 
 In the chapter on widgets, we learned that we can use the `ImageDisplay` widget to display static images. This works, but has a number of disadvantages:
 
-+ image data is not updated every frame that it is rendered
-+ uploading data is costly, downloading data is impossible
++ image data is costly to update
++ downloading image data is impossible
 + scaling the image will always trigger linear interpolation
 + the image is always shown in full, as a rectangle
 
@@ -462,7 +452,7 @@ texture = Texture()
 create_from_image!(texture, image)
 ```
 
-Once `create_from_image` is called, the image data is uploaded to the graphics cards' RAM, so we can safely discard the `Image` instance, unless we want to update the texture later on.
+Once `create_from_image!` is called, the image data is uploaded to the graphics cards' RAM, so we can safely discard the `Image` instance, unless we want to update the texture later on.
 
 To display the texture on screen, we need to bind it to a shape, then render that shape:
 
@@ -473,7 +463,7 @@ set_texture!(texture_shape, texture)
 add_render_tasK!(render_area, RenderTask(texture_shape))
 ```
 
-How and where the texture is displayed depends on the shapes vertices **texture coordinate**. These coordinates are in `([0, 1], [0, 1])`, which will be called **texture space**. 
+How and where the texture is displayed depends on the shapes vertices **texture coordinate**. These coordinates are in `([0, 1], [0, 1])`, which we will call **texture space**. 
 
 | Conceptual Position | Texture Coordinate |
 |---------------------|---------------|
@@ -487,22 +477,24 @@ How and where the texture is displayed depends on the shapes vertices **texture 
 | bottom              | `(0.5, 1)`    |
 | bottom right        | `(1, 1)`    |
 
-We see that the texture coordinate does not use pixel coordinates. We cannot reference a specific pixels, instead we use a floating-point coordinate, for which the graphics card will return a interpolated fragment color.
+We see that, due to the normalized nature of this coordinate system, a texture coordinate is unable to reference a specific pixels. Instead, we use a floating-point coordinate for which the graphics card will return an **interpolated color**. This is the color any specific pixel on the monitor should assume when the shape is displayed.
 
 #### Scale Mode
 
-Similar to `Image`s [`as_scaled`](@ref), we have options with how we want the texture to behave when scaled to a size other than its native resolution. Mousetrap offers the following texture scale modes, which are represented by the enum [`TextureScaleMode`](@ref):
+Similar to `Image`s [`as_scaled`](@ref), we have options as to how we want the texture to behave when scaled to a size other than its native resolution. Mousetrap offers the following texture scale modes, which are represented by the enum [`TextureScaleMode`](@ref):
 
-+ `NEAREST`: nearest-neighbor scaling
-+ `LINEAR`: linear scaling
+| `TextureScaleMode` | Meaning | Equivalent `InterpolationType` |
+|--------------------|---------|-----|
+| `TEXTURE_SCALE_MODE_NEAREST` | Nearest Neighbor Scaling | `INTERPOLATION_TYPE_NEAREST` |
+| `TEXTURE_SCALE_MODE_LINEAR` | Linear Interpolation | `INTERPOLATION_TYPE_BILINEAR` |
 
-Which are roughly equivalent to `Image`s `INTERPOLATION_TYPE_NEAREST` and `INTERPOLATION_TYPE_BILINEAR`, except much, much more performant. Rescaling a texture is essentially free when done by the graphics card, which is in stark contrast to the capabilities of a CPU.
+While the resulting image behaves similarly to how `InterpolationType` will result in the final image, operating on a texture is much, much more performant. Rescaling a texture is essentially free when done by the graphics card, which is in stark contrast to the capabilities of a CPU as would be needed for `Image`s `as_scaled`.
 
 #### Wrap Mode
 
-Wrap mode governs how the texture behaves when a vertices texture coordinates are outside of `[0, 1]`. Mousetrap offers the following wrap modes, which are all part of the enum [`TextureWrapMode`](@ref):
+Wrap mode governs how the texture behaves when a vertices texture coordinate components are outside of `[0, 1]`. Mousetrap offers the following wrap modes, which are all part of the enum [`TextureWrapMode`](@ref):
 
-| `TextureWrapMode` | New Pixels will be filled with |
+| `TextureWrapMode` | Pixel will be filled with |
 |-------------------|--------|
 | `TEXTURE_WRAP_MODE_ZERO` | `RGBA(0, 0, 0, 0)` | 
 | `TEXTURE_WRAP_MODE_ONE`| `RGBA(1, 1, 1, 1)` |
@@ -595,7 +587,7 @@ Wrap mode governs how the texture behaves when a vertices texture coordinates ar
 
 Where the default wrap mode is `TEXTURE_WRAP_MODE_REPEAT`.
 
-With this, by being able to modify the vertex coordinates for every shapes vertices, we have much more control over how image data is displayed on screen. Only the part of the texture that conceptually overlaps a shape will be displayed.
+By being able to modify the vertex coordinates for every shapes vertices, we have much more control over how image data is displayed on screen. Only the part of the texture that conceptually overlaps a shape will be displayed, which is governed by that shapes vertices texture coordinates.
 
 ---
 
@@ -618,9 +610,9 @@ set_child!(window, render_area)
 
 Where an ellipse with identical x- and y-radius is a circle.
 
-Despite defining the shape as a circle, on screen, it appears stretched. This is because shapes use the gl coordinate system, which is **normalized**. Thus, how long the x- and y-radius of a circle are depends on the width and height of its render area. By widening the window, the render area expands, thus increasing the its width.
+Despite defining the shape as a circle, on screen, it appears stretched. This is because shapes use the GL coordinate system, which is **normalized**. Thus, how long the x- and y-radius of a circle are depends on the width and height of its render area. By widening the window, the render area expands, increasing its width and thus stretching our circle.
 
-We have two ways to correct this. Firtly, we can force the render area inside an `AspectFrame`, that makes sure the aspect ratio of the `RenderArea` is always square:
+We have two ways to correct this. The easiest of which is putting the render area inside an `AspectFrame`, which forces it to always maintain the correct aspect ratio, square in this case:
 
 ```julia
 render_area = RenderArea()
@@ -631,17 +623,17 @@ add_render_task!(render_area, RenderTask(shape))
 set_child!(window, AspectFrame(1.0, render_area)) # force 1:1 aspect ratio
 ```
 
-While this corrects our circle, the entire `RenderArea` is now restrained in size, making this solution unviable for applications where we need a `RenderArea` to fill its entire area.
+While this corrects our circle, the entire `RenderArea` is now restrained in size, making this solution unviable for applications where we need a `RenderArea` to fill its entire area regardless of its aspect ratio.
 
-The other way to correct this is to modify our shape when `RenderArea` changes shape. This is made possible by the `resize` signal of `RenderArea`, which is emitted whenever the widget changes size:.
+The other way to correct the issue to modify our circle when `RenderArea` changes shape. This is made possible by the `resize` signal of `RenderArea`, which is emitted whenever ts allocated area changes:
 
-It has the following signature:
+`resize` requries a signal handler with the following signature:
 ```julia
 (::RenderArea, width::Integer, height::Integer, [::Data_t]) -> void
 ```
 Where `width` and `height` are the new size of the `RenderArea` widget, in pixels.
 
-Using this information and some simple geometry, we can change the x- and y-radius of our shape whenever `RenderArea` changes aspect ratio, to make sure it stays perfectly circular:
+Using this information and some simple geometry, we can change the x- and y-radius dynamically, whenever the `RenderArea` changes aspect ratio:
 
 ```julia
 # define resize callback
@@ -676,19 +668,19 @@ end
 
 ![](../assets/render_area_destretched.png)
 
-Here, the `RenderArea` has a non-square aspect ratio, yet the shape is still displayed as a proper circle. Using signal `resize` like this, we can protect ourself against side-effects from gl coordinates being relative to the widgets allocated area.
+Here, the `RenderArea` has a non-square aspect ratio, yet the shape is still displayed as a proper circle. Using signal `resize` like this, we can protect ourself against side-effects from normalized nature of GL coordinates.
 
 ---
 
 ## Anti Aliasing
 
-When shapes are drawn to the screen, they are *rasterized*, which is when the graphics card takes the mathematical shape in memory and transforms it such that it can be displayed using pixels. This process is imperfect, no number of pixels will be able to draw a perfect circle. One artifact that can appear during this process is **aliasing**, which is when lines appear "jagged":
+When shapes are drawn to the screen, they are *rasterized*, which is when the graphics card takes the mathematical shape in memory and transforms it, such that it can be displayed using a limited number of pixels. This process is imperfect, no number of pixels will be able to draw a perfect circle. One artifact that can appear during this process is **aliasing**, which, in non-technical terms, is when lines appear "jagged":
 
 ![](https://learnopengl.com/img/advanced/anti_aliasing_zoomed.png)
 
 (Source: [learnopengl.com](https://learnopengl.com/Advanced-OpenGL/Anti-Aliasing))
 
-For this, a number of remedies are available, the most appropriate of which is called [multi-sampled anti aliasing (MSAA)](https://www.khronos.org/opengl/wiki/Multisampling). User of mousetrap are not required to understand this process, only that it causes jagged edges to appear smoother. 
+To address the unsightly nature of this issue, a number of remedies are available, the most appropriate of which is called [multi-sampled anti aliasing (MSAA)](https://www.khronos.org/opengl/wiki/Multisampling). User of mousetrap are not required to understand the algorithm behind it, only that it causes jagged edges to appear smoother. 
 
 To enable MSAA, we provide an enum value of type [`AntiAliasingQuality`](@ref) to `RenderArea`s constructor:
 
@@ -705,11 +697,11 @@ msaa_off = RenderArea(ANTI_ALIASING_QUALITY_OFF)
 | `ANTI_ALIASING_QUALITY_BETTER` | 8 | 
 | `ANTI_ALIASING_QUALITY_BEST` | 16 | 
 
+Where `ANTI_ALIASING_QUALITY_OFF` will be used when calling the `RenderArea` constructor with no arguments.
+
 The higher the number of samples, the better smoothing will be performed. MSAA comes at a cost, any quality other than `OFF` will induces the `RenderArea` to take about twice as much space in the graphic cards memory. Furthermore, the higher the number of samples, the more time each render step will take.
 
-MSAA should only be enabled when necessary, and we should avoid having many different `RenderArea`s with MSAA enabled.
-
-We to show off this feature using images on this web page, as image compression would ruin the result. Instead, we can use the following `main.jl`, which shows off the effect of MSAA on the readers screen:
+It's difficult to convey the result of MSAA using just pictures on a web page. Instead, readers are encouranged to run the following `main.jl`, which will show off the anti-aliasing in high resolution:
 
 ![](../assets/msaa_comparison.png)
 
@@ -777,31 +769,33 @@ We to show off this feature using images on this web page, as image compression 
 !!! info 
     The rest of this chapter will assume that readers are familiar with the basics of OpenGL, how to write GLSL shaders, what a shader uniform is, how blending works, and how a linear transform allows use to move a point in 3D space.
 
-    With what we have learned so far in this chapter, we are already well equipped to be able to accomplish most tasks that require a native rendering component, such as displaying static images or rendering shapes.
+    With what we have learned so far in this chapter, we are already well equipped to be able to accomplish most tasks that require the native rendering component, such as displaying static images or rendering shapes. Any information after this point should be considered optional to learn.
 
-So far, we registered render tasks using `add_render_task!(render_area, RenderTask(shape))`. We can can also use `RenderTask` on its own, using its constructor:
+So far, we registered render tasks using `add_render_task!(render_area, RenderTask(shape))`. Sometimes, we will have to deal with [`RenderTask`](@ref) on its own. Its constructor has the following signature:
 
 ```julia
 RenderTask(::Shape ; [shader::Shader, transform::GLTransform, blend_mode::BlendMode])
 ```
 
-A `RenderTask` bundles the following objects:
+Where any name after the `;` are [keyword arguments](https://docs.julialang.org/en/v1/devdocs/functions/#Keyword-arguments).
+
+We see that a `RenderTask` actually bundles the following objects:
 + a `Shape`, which is the shape being rendered
 + a `Shader`, which is a shader program containing a vertex- and fragment- shader
-+ a `GLTransform`, which is a spatial transform supplied to the vertex shader
-+ a `BlendMode`, which governs which type of blending will take place during the blit step
++ a `GLTransform`, which is a spatial transform that will be applied to the shape using the vertex shader
++ a `BlendMode`, which governs which type of blending will take place during the [blit step](https://en.wikipedia.org/wiki/Bit_blit)
 
-Using these four components, `RenderTask` gathers all objects necessary to render a shape to the screen. All components except for the `Shape` are *optional*. If not specified, a default value will be used instead. This is what allows less experienced users to fully ignore shaders, transforms and blend modes, simply calling `RenderTask(shape)` instead of providing custom values for the keyword arguments.
+Using these four components, `RenderTask` gathers all objects necessary to render a shape to the screen. All components except for the `Shape` are *optional*. If not specified, a default value will be used instead. This is what allows less experienced users to fully ignore shaders, transforms and blend modes, simply calling `RenderTask(shape)` will take care of everything for them.
 
 ---
 
 ## Transforms
 
-[`GLTransform`](@ref) is an object representing spatial transforms. It is called **GL**Transform, because it **uses the GL coordinate system**. Applying a `GLTransform` to a vector in widget- or texture-space will produce incorrect results. They should only be applied to the `vertex_position` attribute of a `Shape`s vertices.
+[`GLTransform`](@ref) is an object representing a spatial transform. It is called **GL**Transform, because it **uses the GL coordinate system**. Applying a `GLTransform` to a vector in widget- or texture-space will produce incorrect results. They should only be applied to the position attribute of a `Shape`s vertices.
 
-Internally, a `GLTransform` is a 4x4 matrix of 32-bit floats. It is of size 4x4 because it is intended to be applied to OpenGL positional vectors, which are vectors in 3D space. In mousetrap, the last coordinate of a spatial position is assumed to be `0`, but it is still part of each vectors data.
+Internally, a `GLTransform` is a 4x4 matrix of 32-bit floats. It is of size 4x4 because it is intended to be applied to OpenGL positions, which are vectors in 3D space. In mousetrap, the last coordinate of a spatial position is assumed to be `0`, but it is still part of each vectors data.
 
-At any time, we can directly access this matrix underlying a `GLtransform` using `getindex` or `setindex!`:
+At any time, we can directly access underlying matrix of a `GLtransform` using `getindex` or `setindex!`:
 
 ```julia
 transform = GLTransform()
@@ -819,13 +813,15 @@ end
 0 0 0 1
 ```
 
-We see that after construction, `GLTransform` is initialized as the identity transform. No matter the current state of the transform, we can reset it back to this identity matrix by calling [`reset`](@ref).
+We see that after construction, `GLTransform` is initialized as the identity transform. No matter the current state of the transform, we can reset it back to this identity matrix by calling [`reset!`](@ref).
 
-`GLTransform` has many common spatial transform already available, meaning we rarely have to modify its values manually. It provides the following transforms:
+`GLTransform` has many common spatial transform already available as convenient functions, which means we rarely have to modify its values manually. 
 
-+ [`translate!`](@ref) for translation in 3d space
-+ [`scale!`](@ref) for scaling
-+ [`rotate!`](@ref) for rotation around a point
+It provides the following transformations, which behave identical to those familiar from linear algebra:
+
++ [`translate!`](@ref), translates in 3D space
++ [`scale!`](@ref), scales along the x- and y-axis
++ [`rotate!`](@ref), rotates around a point in 3D space
 
 We can combine two transforms using [`combine_with`](@ref). If we wish to apply the transfrom CPU-side to a `Vector2f` or `Vector3f`, we can use [`apply_to`](@ref). 
 
@@ -833,6 +829,7 @@ While we could apply the transform to each vertex of a `Shape` manually, then re
 
 ```julia
 shape = Shape() 
+
 transform = Transform()
 translate!(transform, Vector2f(-0.5, 0.1))
 rotate!(transform, degrees(180))
@@ -840,7 +837,7 @@ rotate!(transform, degrees(180))
 task = RenderTask(shape; transform = transform)
 ```
 
-Where we used the `transform` keyword argument to specify the transform, while leaving the other render tasks component unspecified.
+Where we used the `transform` keyword argument to specify the transform, while leaving the other render tasks component unspecified. This means the transform is applied automatically during rendering, allowing us to take advantage of the increased performance gained from the GPU architecture.
 
 ---
 
@@ -848,7 +845,7 @@ Where we used the `transform` keyword argument to specify the transform, while l
 
 As the third component of a render task, we have the **blend mode**. This governs how two colors behave when rendered on top of each other. 
 
- Let color currently in the frame buffer be `destination`, while the newly added color will be called `origin`. then mousetraps blend modes, which are values of enum [`BlendMode`](@ref), behave as follows:
+Let the color currently in the frame buffer be `destination`, while the newly added color will be `origin`.  Each [`BlendMode`](@ref), then, behaves as follows:
 
 | `BlendMode`        | Resulting Color                     |
 |--------------------|-------------------------------------|
@@ -861,7 +858,9 @@ As the third component of a render task, we have the **blend mode**. This govern
 | `BLEND_MODE_MIN`              | `min(origin.rgba, destination.rgba)` |
 | `BLEND_MODE_MAX`              | `max(origin.rgba, destination.rgba)` | 
 
-We may be familiar with these blend modes from graphics editors such as GIMP or Photoshop.
+Where `+`, `*`, and `-` are component-wise operations.
+
+Users may be familiar with the names of the blend modes from traditional image editors such as GIMP or Photoshop.
 
 If left unspecified, `RenderTask` will use `BLEND_MODE_NORMAL`.
 
@@ -869,14 +868,18 @@ If left unspecified, `RenderTask` will use `BLEND_MODE_NORMAL`.
 
 ## Shaders
 
-As the last component of a `RenderTask`, we have [`Shader`](@ref), which represents an OpenGL shader program, with already compiled **fragment** and **vertex** shaders. These shaders are written in [GLSL](https://learnopengl.com/Advanced-OpenGL/Advanced-GLSL), which will not be taught in this manual. 
+As the last component of a `RenderTask`, we have [`Shader`](@ref), which represents an OpenGL shader program, which contains already compiled **fragment** and **vertex** shaders. These shaders are written in [GLSL](https://learnopengl.com/Advanced-OpenGL/Advanced-GLSL), which will not be taught in this manual. 
 
 ### Compiling Shaders
 
-To create a shader, we first instantiate [`Shader`](@ref), then use [`create_from_file!`](@ref) or [`create_from_string!`](@ref) to override the current fragment- or vertex-shader. We use `SHADER_TYPE_FRAGMENT` or `SHADER_TYPE_VERTEX` to specify which of these we are targeting.
+To create a shader, we first instantiate [`Shader`](@ref), then use [`create_from_file!`](@ref) or [`create_from_string!`](@ref) to compile the shader, then bind it to the shader program, overriding whatever shader was bound before. 
+
+We use `SHADER_TYPE_FRAGMENT` or `SHADER_TYPE_VERTEX` to specify which of the two shader types we are targeting.
 
 ```julia
 shader = Shader()
+
+# compile fragment shader
 create_from_string!(shader, SHADER_TYPE_FRAGMENT, """
     #version 330
         
@@ -893,7 +896,8 @@ create_from_string!(shader, SHADER_TYPE_FRAGMENT, """
     }
 """)
 
-task = RenderTask(shape, shader)
+# bind with render tas, which will automatically apply it to each fragment of `shape`
+task = RenderTask(shape; shader = shader)
 add_render_task!(render_area, task)
 ```
 
@@ -937,11 +941,11 @@ add_render_task!(render_area, task)
     end
     ```
 
-If we do not initialize the vertex- or fragment-shader, the **default shader program will be used**. It may be instructive to see how the default shaders are defined, as any user-defined shader should build upon them
+If we do not initialize the vertex- or fragment shader, the **default shader component will be used**. It may be instructive to see how the default shaders are defined, as any user-defined shader should build upon them.
 
 ### Default Vertex Shader
 
-This is the default vertex shader used whenever we do not supply a custom vertex shader for `Shader`:
+This is the default vertex shader, used whenever we do not supply a custom vertex shader for a `Shader` instance:
 
 ```glsl
 #version 330
@@ -965,11 +969,11 @@ void main()
 }
 ```
 
-We see that it requires OpenGL 3.3, which is the reason that mousetrap also requires that version as a dependency. This shader simply forwards the corresponding shapes attributes to the fragment shader.
+We see that it requires OpenGL 3.3 due to the `location` syntax. In terms of behavior, this shader simply forwards the interpolated vertex attributes to the fragment shader.
 
-The current vertices position is supplied via `_vertex_position_in`, the vertices texture coordinates as `_vertex_color_in` and the vertices texture coordinates are `_vertex_texture_coordinates`.
+The current vertices position is supplied via `_vertex_position_in`, the vertices texture coordinates as `_vertex_color_in` and the vertices texture coordinates are `_vertex_texture_coordinates`. These values will contain the data from the Julia-side `Shape`. We should take care that the `location` attribute exactly matches this order, `0` for vertex position, `1` for vertex color, `2` for texture coordinate.
 
-The output variables are `_vertex_color`, `_texture_coordinates` and `_vertex_position`, which should be assigned with results gained from within the vertex shader. The shader has furthermore access to the uniform `_transform`, which holds the `GLTransform` the current `RenderTask` associates with the current `Shape`. 
+The output variables of the vertex shader are `_vertex_color`, `_texture_coordinates` and `_vertex_position`, which need to be assigned with results gained from within the vertex shader. The shader has furthermore access to the uniform `_transform`, which holds the `GLTransform` the current `RenderTask` associates with the current `Shape`. 
 
 ### Default Fragment Shader
 
@@ -996,17 +1000,15 @@ void main()
 
 The fragment shader is handed `_vertex_color`, `_texture_coordinate` and `_vertex_position`, which we recognize as the output of the vertex shader. The output of the fragment shader is `_fragment_color`.
 
-The default fragment shader respects two uniforms, `_texture`, which is the texture of the shape we are currently rendering and `_texture_set`, which is `1` if `Shape::set_texture` was called before, `0` otherwise.
+The default fragment shader respects two uniforms, `_texture`, which is the texture of the shape we are currently rendering and `_texture_set`, which is `1` if we called `set_texture!` on the current `Shape` instance, `0` otherwise.
 
-Users aiming to experiment with shaders should take care to not modify the name or `location` of any of the `in` or `out` variables of either shader. These names along with the required shader version should not be altered.
+Users aiming to experiment with shaders should take care to not modify the name or `location` of any of the `in` or `out` variables of either shader. These names, along with the required shader version, should not be altered.
 
 ### Binding Uniforms
 
-Both the vertex and fragment shader make use of uniforms. We've seen that `_transform`, `_texture` and `_texture_set` are assigned automatically. 
+Both the vertex and fragment shader make use of uniforms. We've seen that `_transform`, `_texture` and `_texture_set` are assigned automatically. Mousetrap user can furthermore freely add new uniforms, assigning them in a convenient manner using `RenderTask`.
 
-Mousetrap offers a convenient way to add additional uniforms:
-
-To bind a uniform, we first need a CPU-side value that should be uploaded to the graphics card. Let's say we want our fragment shader to color the shape a certain color, which is specified by a CPU-side program. This fragment shader would look something like this:
+To bind a uniform, we first need a CPU-side value that should be uploaded to the graphics card. Let's say we want to use a certain color in our fragment shader, replacing the shapes fragment color with that color. We would write the fragment shader as follows:
 
 ```glsl
 #version 330
@@ -1025,9 +1027,9 @@ void main()
 }
 ```
 
-To set the value of `_color_rgba`, we use [`set_uniform_rgba!`](@ref), which is called on the **render task**, not the shader itself. This will make the render task store the value we give it, then automatically set it during rendering.
+To set the value of `_color_rgba`, we use [`set_uniform_rgba!`](@ref), which is called on the **render task**, not the shader itself. This will make the render task store the CPU-side value as long as it is needed, automatically seting it during rendering.
 
-`set_uniform_rgba!` is of many `set_uniform_*!` functions, which allow us to bind Julia-side values to OpenGL Shader Uniforms:
+`set_uniform_rgba!` is one of many `set_uniform_*!` functions, which allow us to bind Julia-side values to OpenGL shader Uniforms:
 
 The following types can be assigned this way:
 
@@ -1116,4 +1118,12 @@ set_uniform_rgba!(task, "_color_rgba", RGBA(1, 0, 1, 1))
     end
     ```
 
-With this, we have a convenient way to specify shader uniforms, without having to manually update the shader each time it is bound for rendering, `RenderTask` does this for us.
+With this, we have a convenient way to specify shader uniforms, without having to manually update the shader each time it is bound for rendering. `RenderTask` does this for us.
+
+---
+
+## Rendering to a Texture
+
+!!! warning
+    This features are not yet implemented, this section is incomplete.
+
