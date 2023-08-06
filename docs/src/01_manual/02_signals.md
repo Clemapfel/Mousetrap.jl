@@ -10,7 +10,7 @@ In this chapter, we will learn:
 
 ## Signal Architecture
 
-Central to mousetrap, as well as other GUI libraries like [GTK4](https://docs.gtk.org/gtk4/) and Qt, is **signal architecture**, or [**signal programming**](https://en.wikipedia.org/wiki/Signal_programming), which is a software architecture that triggers behavior using signals.
+Central to mousetrap, as well as other GUI libraries like [GTK4](https://docs.gtk.org/gtk4/) and Qt, is **signal architecture**, or [**signal programming**](https://en.wikipedia.org/wiki/Signal_programming), which is a type of software architecture that triggers behavior using signals.
 
 A **signal**, in this context, has three components:
 + an **ID**, which uniquely identifies it. IDs may not be shared between signals
@@ -24,7 +24,6 @@ One of the simpler interactions with a GUI is clicking a button. In mousetrap, t
 In this case, the signals' **ID** is `clicked`, while the signal **emitter** is an instance of `Button`. When a user clicks the button, the in-memory object emits signal `clicked`. 
 
 If we want to tie program behavior to the user clicking the button, we **connect a callback** (a function) to this signal. Once connected, when the button is clicked, `clicked` is emitted, which in turn will trigger invocation of the connected function:
-
 
 ```julia
 # create `Button` instance
@@ -62,24 +61,26 @@ end
     end
     ```
 
-    For example, running the just mentioned button example, we would create the following `main.jl` file:
+    For example, to execute the example snippet above, we would create the following `main.jl` file:
 
     ```julia
     using mousetrap
     main() do app::App
         window = Window(app)
 
+        # snippet start
         button = Button()
         connect_signal_clicked!(button) do self::Button
             println("clicked")
         end
+        # snippet end
 
         set_child!(window, button) # add the button to the window
         present!(window)
     end
     ```
 
-    Then execute it from the console using `julia main.jl`
+    Then execute it from the console by calling `julia main.jl`
 
 When we execute this code, we see that a small window opens that contains our button. By clicking it, we get:
 
@@ -140,8 +141,8 @@ What may not have been obvious is that the signal handler, the anonymous functio
     A functions' **signature** describes a functions' return- and argument types. For example, the function
 
     ```julia
-    function foo(i::Int32, string::String) ::String
-        return string(i) * string
+    function foo(i::Int32, s::String) ::String
+        return string(i) * s
     end
     ```
     
@@ -158,18 +159,22 @@ What may not have been obvious is that the signal handler, the anonymous functio
     has the signature `(::Button) -> Nothing`. It takes an instance of type `Button` and returns `nothing`.
 
     For a function with an optional argument like this:
+
     ```julia
     function foo_optional(i::Int32, string::String, optional::Bool = true) ::String
         return string(i) * string * string(optional)
     end
     ```
 
-    We signal that the last argument is optional be enclosing it in `[]`: `(::Int32, ::String, [::Bool]) -> String`
+    We convey that the last argument is optional be enclosing it in `[]`: `(::Int32, ::String, [::Bool]) -> String`
 
     In general, a function with argument types `Arg1_t, Arg2_t, ...`, return type `Return_t`, and optional arguments `Optional1_t, Optional2_t` has the signature 
     ```
     (Arg1_t, Arg2_t, ..., [Optional1_t, Optional2_t, ...]) -> Return_t`.
     ```
+
+    If and only if the `Return_t` of a function is `Nothing`, we can omit the return types along with the trailing `->`.
+
 
 Each signal requires it's a callback to conform to a specific signature. This signature is different for each signals. If we attempt to connect a handler that has the wrong signature, an `AssertionError` will be thrown at compile time. This makes it important to know how to check which signal requires which signature. 
 
@@ -225,12 +230,11 @@ We see that button has a single signal, `clicked`. Along with this information, 
 
 ## Handing Data to Signal Handlers
 
-While we do get passed the signal emitter instance as the first argument to the signal handler, `::Button` in this case, we will often need to reference other objects. This may necessitate 
-accessing global variables, which [is discouraged in Julia](https://docs.julialang.org/en/v1/manual/performance-tips/#Avoid-untyped-global-variables).
+While we do get passed the signal emitter instance as the first argument to the signal handler, `::Button` in this case, we will often need to reference other objects. This may necessitate accessing global variables, which [is discouraged in Julia](https://docs.julialang.org/en/v1/manual/performance-tips/#Avoid-untyped-global-variables).
 
 Instead, mousetrap allows adding an optional, arbitrarily typed, *single* argument to the end of any signal handler signature. This object is often referred to as `data`, its type will therefore be called `Data_t`.
 
-Expanding on our previous example, if we want to send a customized message when the user clicks our button, we can change the snippet as follows:
+Expanding on our previous example, if we want to send a customized message when the user clicks our button, we can change the signal handler as follows:
 
 ```julia
 button = Button()
@@ -315,14 +319,15 @@ Using `disconnect_signal_<id>`, we can **disconnect** the signal, which will per
 
 A much more performant and convenient method to **temporarily** prevent signal emission is  **blocking** the signal.
 
-Blocking a signal will prevent the invocation (calling) of the signal handler. This means, for our `Button` example, once we call:
+Blocking a signal will prevent the invocation of the signal handler. This means, for our `Button` example, once we call:
 
 ```julia
 set_signal_clicked_blocked(button, true)
 ```
+
 The user can still click the button, but the connected handler is not called.
 
-To block a signal, we use `set_signal_<id>_blocked!`, which takes a boolean as its second argument. We can check whether a signal is currently blocked using `get_signal_<id>_blocked`, which returns a boolean. If no signal handler is connected, this function will return `true`.
+To block a signal, we use `set_signal_<id>_blocked!`, which takes a boolean as its second argument. We can check whether a signal is currently blocked using `get_signal_<id>_blocked`. If no signal handler is connected, this function will return `true`.
 
 ### Signal Blocking: An Example
 
@@ -335,12 +340,14 @@ button_02 = Button()
 
 # when button 01 is clicked, 02 is triggered programmatically
 connect_signal_clicked!(button_01, button_02) do button_01::Button, button_02::Button
+    # button_01 is self, button_02 is data
     println("01 clicked")
     activate!(button_02)
 end
 
 # when button 02 is clicked, 01 is triggered programmatically
-connect_signal_clicked!(button_02, button_02) do button_02::Button, button_01::Button
+connect_signal_clicked!(button_02, button_01) do button_02::Button, button_01::Button
+    # button_02 is self, button_01 is data
     println("02 clicked")
     activate!(button_01)
 end
@@ -349,7 +356,9 @@ end
 set_child!(window, hbox(button_01, button_02))
 ```
 
-In which we use [`activate!`](@ref), which triggers the exact same behavior as if a user has clicked the button on screen, including  emission of signal `clicked`, along with [`hbox`](@ref), so that we can display both buttons in the window.
+In which we use [`activate!`](@ref), which triggers the exact same behavior as if a user has clicked the button on screen, including emission of signal `clicked`.  
+
+[`hbox`](@ref) in the last line makes it so that we can display both buttons in the window.
 
 The intended behavior is that if the user clicks either one of the buttons, both buttons emit their signal. Clicking one button should always trigger both, regardless of which button is clicked first.
 
@@ -426,6 +435,7 @@ Let's talk through what happens when the user clicks one of the two buttons now,
 + `button_02` unblocks itself
 + `button_01` unblocks itself
 + both signal handlers return normally 
+
 ```
 01 clicked
 02 clicked
@@ -451,7 +461,7 @@ main() do app::Application
         set_signal_clicked_blocked!(button_01, false)
     end
 
-    connect_signal_clicked!(button_02) do button_02::Button, button_01::Button
+    connect_signal_clicked!(button_02, button_01) do button_02::Button, button_01::Button
         println("02 clicked")
 
         set_signal_clicked_blocked!(button_02, true)

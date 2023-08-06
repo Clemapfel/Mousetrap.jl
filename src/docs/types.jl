@@ -1,8 +1,9 @@
 #
 # Author: C. Cords (mail@clemens-cords.com)
-# https://github.com/clemapfel/mousetrap.jl
+# GitHub: https://github.com/clemapfel/mousetrap.jl
+# Documentation: https://clemens-cords.com/mousetrap
 #
-# Copyright © 2023, Licensed under lGPL3-0
+# Copyright © 2023, Licensed under lGPL-3.0
 #
 
 @document Action """

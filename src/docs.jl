@@ -1,8 +1,9 @@
 #
 # Author: C. Cords (mail@clemens-cords.com)
-# https://github.com/clemapfel/mousetrap.jl
+# GitHub: https://github.com/clemapfel/mousetrap.jl
+# Documentation: https://clemens-cords.com/mousetrap
 #
-# Copyright © 2023, Licensed under lGPL3-0
+# Copyright © 2023, Licensed under lGPL-3.0
 #
 
 ## Classification
@@ -43,7 +44,7 @@ for n in names(mousetrap)
             end
         #end
     elseif occursin("KEY_", string(n))
-        push!(key_codes, n)
+        push!(key_codes, Symbol(string(n)[5:end])) # omit `KEY_`
     elseif typeof(binding) <: Int64
         push!(enum_values, n)
     else

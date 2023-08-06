@@ -33,11 +33,11 @@ connect_signal_clicked!(button) do self::Button
 end
 ```
 
-In this section, we will learn how to reproduce this behavior using the command pattern and why we should prefer this over connecting a signal handler.
+In this section, we will learn how to reproduce this behavior using the command pattern and why we should prefer this over connecting a signal handler for signal `clicked`.
 
 ### Action IDs
 
-When creating an action, we first need to choose the action's **ID**. An ID is any identifier that uniquely identifies the action. The ID can only contain the character `[a-zA-Z0-9_-.]`, that is, all roman letters, numbers 0 to 9, `_`, `-` and `.`. The dot is usually reserved to simulate scoping. 
+When creating an action, we first need to choose the action's **ID**. An ID is an identifier that uniquely identifies the action. The ID can only contain the character `[a-zA-Z0-9_-.]`, that is, all roman letters, numbers `0` to `9`, `_`, `-` and `.`. The dot is usually reserved to simulate scoping. 
 
 For example, one action could be called `image_file.save`, while another is called `text_file.save`. Both actions say what they do, `save` a file, but the prefix makes it clear which part of the application they act on.
 
@@ -55,6 +55,17 @@ Where `app` is the application instance from our `main`.
 The second part of an action is its function, also called its callback. We assign an actions function using [`set_function!`](@ref):
 
 ```julia
+function on_example_print_clicked(x::Action) ::Nothing
+    println("clicked")
+end
+
+action = Action("example.print_clicked", app)
+set_function!(on_example_print_clicked, action)
+```
+
+or, using do-syntax:
+
+```julia
 action = Action("example.print_clicked", app)
 set_function!(action) do x::Action
     println("clicked")
@@ -67,9 +78,9 @@ The function registered using `set_function!` is required to have the following 
 (::Action, [::Data_t]) -> Nothing
 ```
 
-We see that, much like with signal handlers, the callback is provided by our `Action` instance, along with an optional `data` argument.
+We see that, much like with signal handlers, the callback is provided the `Action` instance, along with an optional `data` argument.
 
-`Action` also provides a constructor that directly takes the function as its first argument. Using this, we can write the above more succinctly:
+`Action` also provides a constructor that directly takes the function as its first argument. Using this, we can write the above even more succinctly:
 
 ```julia
 action = Action("example.print_clicked", app) do x::Action
@@ -79,7 +90,7 @@ end
 
 ### Triggering Actions
 
-At any point, we can call [`activate!`](@ref), which will trigger the actions' callback. This is not the only way to trigger an action, however. 
+At any point, we can call [`activate!`](@ref) to trigger the actions' callback. This is not the only way to trigger an action, however. 
 
 `Button` provides [`set_action!`](@ref), which makes it such that when the button is clicked, the action is triggered:
 
@@ -133,9 +144,11 @@ This way, we do not have to keep track of actions ourselves; by simply rememberi
 
 ## Shortcuts
 
-Any action can have a number of optional **shortcut triggers**, also commonly called **keybindings**. 
+An action can have a number of optional **shortcut triggers**, which are aslo called **keybindings**. 
 
-A keybinding is a combination of keyboard keys that, when pressed, trigger an action exactly once. Common keyboard shortcuts familiar to most users of modern operating systems are `Control + A` to "select all", or `Control + Z` to "undo". These will not usually be defined for our applications, instead, we will have to implement behavior like this manually, using actions.
+A keybinding is a combination of keyboard keys that, when pressed, trigger an action exactly once. Common keyboard shortcuts familiar to most users of modern operating systems are `Control + C` to copy,`Control + A` to "select all", etc. 
+
+Most of the time, we will have to implement behavior like this and associate a shortcut with it manually, using actions.
 
 ### Shortcut Trigger Syntax
 
@@ -178,18 +191,19 @@ That last one requires explanation. On most keyboard layouts, to type `!`, the u
 
     If we make an error and use the wrong identifier, a soft warning will be printed at runtime, informing us of this. 
 
-    To access a list of key codes from within the REPL, we can search `mousetrap.key_codes`, which contains the symbols of all key codes recognized by mousetrap:
+    To access a list of key codes from within the REPL, we can search the vector `mousetrap.key_codes`, which contains the symbols of all key codes recognized by mousetrap, with the `KEY_` prefix already removed:
     ```julia
     julia> mousetrap.key_codes
         2278-element Vector{Symbol}:
-        :KEY_0
-        :KEY_1
-        :KEY_2
-        :KEY_3
+        :0
+        :1
+        :2
+        :3
         ...
     ```
 
 ### Assigning Shortcuts to Actions
+
 Now that we know how to write a shortcut as a shortcut trigger string, we can assign it to our actions. For this, we use [`add_shortcut!`](@ref):
 
 ```julia

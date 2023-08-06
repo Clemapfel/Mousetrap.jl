@@ -4,6 +4,7 @@ In this chapter, we will learn:
 + How to use colors in mousetrap
 + How to present the user with a color chooser dialog
 + How to load, store, modify, and display 2D images
+
 ---
 
 ## Introduction
@@ -28,7 +29,7 @@ Mousetrap offers two color representations, [`RGBA`](@ref) and [`HSVA`](@ref), w
 
 For more information on these color systems, see [here for RGBA](https://en.wikipedia.org/wiki/RGBA_color_model) and [here for HSVA](https://en.wikipedia.org/wiki/HSL_and_HSV).
 
-For both representations, all components are 32-bit floats in `[0, 1]`. The **alpha** component is also called **opacity**, which the inverse of *transparency*. An alpha value of 1 means the color is fully opaque, a value of 0 means it is fully transparent, making it invisible when displayed on screen.
+For both representations, all components are 32-bit floats in `[0, 1]`. The **alpha** component is also called **opacity**, which is the inverse of *transparency*. An alpha value of 1 means the color is fully opaque, a value of 0 means it is fully transparent, making it invisible when displayed on screen.
 
 ### Converting Colors
 
@@ -62,11 +63,13 @@ end
 
 If parsing was successful, `is_valid_html_code` will return `true`, at which point we can be sure that `html_code_to_rgba` will return a valid color.
 
+---
+
 ## Color Chooser
 
 While manual entry like this works, it is hardly very user-friendly. For a more intuitive way to have our users select a color, mousetrap offers a purpose-built dialog: [`ColorChooser`](@ref). 
 
-`ColorChooser`s constructor takes the title of the window as its only argument. After initialization, we can show the dialog to the user by calling `present!`, just like with a `WIndow`:
+`ColorChooser`s constructor takes the title of the window as its only argument. After initialization, we can show the dialog to the user by calling `present!`, just like with a `Window`:
 
 ```julia
 color_chooser = ColorChooser("Choose Color")
@@ -79,12 +82,13 @@ If the user clicks on the `+` in the bottom left corner, they are taken to a new
 
 ![](../assets/color_chooser_custom_color.png)
 
-To actually trigger behavior once the user selects a color, we need to register a *callback*. `ColorChooser` has two callbacks, one invoked when the user makes the selection and clicks "select", and another when the user dismisses the dialog, for example by closing its window.
+To actually trigger behavior once the user selects a color, we need to register a *callback*. `ColorChooser` has two callbacks, one invoked when the user makes the selection by clicking "select", and another when the user dismisses the dialog, for example by closing its window.
 
 We register the former using `on_accept!`, which requires a function with the signature:
 ```
 (::ColorChooser, color::RGBA, [::Data_t]) -> Nothing
 ```
+
 Where `color` will be the color the user selected.
 
 The function called when the dialog is dismissed is registered using `on_cancel!`, which requires a callback with the signature:
@@ -116,7 +120,7 @@ At any point, we can also access the last selected color by calling [`get_color`
 
 ## Images
 
-Now that we know how to handle colors, we continue onto images. In general, an image is a two-dimensional matrix of colors. Each element in the matrix is called a **pixel**. An image of size 400x300 will have  400 * 300 = 120000 pixes. Each pixel is a color in `RGBA` format.
+Now that we know how to handle colors, we continue onto images. In general, an image is a two-dimensional matrix of colors. Each element in the matrix is called a **pixel**. An image of size 400x300 will have 400 * 300 = 120000 pixels. Each pixel is a color in `RGBA` format.
 
 Images are represented by the [`Image`](@ref) class. This class is not a widget or signal emitter; it is simply a way to manage memory (in the form of a pixel matrix) in RAM. If we want to show an image on screen, we need the help of other widgets.
 
@@ -199,7 +203,7 @@ Only `scaled` will be of size `800x600`, `image` has not changed.
 
 #### Interpolation 
 
-When scaling, we have a choice of scaling algorithm, that fills in newly generated pixels through **interpolation**. Mousetrap offers four interpolation types, supplied by the enum [`InterpolationType`](@ref). Below, we see how each type affects the final image, where the image labeled with `1x` is the original image with a resolution of 10x10 pixels.
+When scaling, we have a choice of scaling algorithm that fills in newly generated pixels through **interpolation**. Mousetrap offers four interpolation types, supplied by the enum [`InterpolationType`](@ref). Below, we see how each type affects the final image, where the image labeled with `1x` is the original image with a resolution of 10x10 pixels.
 
 ![](../assets/interpolation_nearest.png) 
 `INTERPOLATION_TYPE_NEAREST`
@@ -213,7 +217,7 @@ When scaling, we have a choice of scaling algorithm, that fills in newly generat
 ![](../assets/interpolation_tiles.png) 
 `INTERPOLATION_TYPE_TILES`
 
-The main difference between `INTERPOLATION_TYPE_BILINEAR` and `INTERPOLATION_TYPE_HYPERBOLIC` is that of performance. Hyperbolic interpolation offers superior smoothing but does so at about 1.5 times the speed when compared to bi-linear interpolation, meaning hyperbolic is about 50% slower. For an image this small, this will hardly matter, but when working with very large images, this can be a difference of seconds.
+The main difference between `INTERPOLATION_TYPE_BILINEAR` and `INTERPOLATION_TYPE_HYPERBOLIC` is that of performance. Hyperbolic interpolation offers superior smoothing but does so at about 1.5 times the speed when compared to bilinear interpolation, meaning hyperbolic is about 50% slower. For an image this small, this will hardly matter, but when working with very large images, this can be a difference of seconds.
 
 If no interpolation type is specified when calling `as_scaled`, `INTERPOLATION_TYPE_TILES` will be chosen as the default.
 
@@ -221,7 +225,7 @@ If no interpolation type is specified when calling `as_scaled`, `INTERPOLATION_T
 
 To crop an image, we use [`as_cropped`](@ref). Similar to `as_scaled`, this functions returns a newly allocated image, it does not modify the original image.
 
-`as_cropped` takes 4 arguments, the new width and height, and the x- and y-**offset**. The offset specifies which pixel is used as the new top-left coordinate of the cropped image. This offset can be negative. We can also specify a new resolution greater than that of the current image.  Any newly allocated space that is not part of the original image will be filled with `RGBA(0, 0, 0, 0)`:
+`as_cropped` takes 4 arguments, the new width and height, and the x- and y-**offset**. The offset specifies which pixel is used as the new top-left coordinate of the cropped image. This offset can be negative. We can also specify a new resolution greater than that of the current image. Any newly allocated space that is not part of the original image will be filled with `RGBA(0, 0, 0, 0)`:
 
 ```julia
 image = # ...
@@ -244,7 +248,7 @@ vertically_flipped = as_flipped(image, false, true)
 
 ### Saving an Image to Disk
 
-Having edited our image, we can store that image on the users' disk with [`save_to_file`](@ref). This function takes the resulting image path as a string, and returns a boolean indicating whether the operation was succesfull. The resulting image format will be deduced based on the file extension. For example, to save an image as a `.png` to the location `/assets/export`, we would do:
+Having edited our image, we can store it on the users' disk using [`save_to_file`](@ref). This function takes a path as a string, and returns a boolean indicating whether the operation was succesfull. The resulting image format will be deduced based on the file extension. For example, to save an image as a `.png` to the location `/assets/export`, we would do:
 
 ```julia
 image = # ...
@@ -283,6 +287,6 @@ Because expansion is disabled, `ImageDisplay` will always be exactly the size of
 
 ## Updating Images on Screen
 
-`create_from_image!` is an extremely costly operation and would be insufficient to, for example, fluently display an animation at 60fps. We would have to call `create_from_image!` every frame, which is not feasible on most machines.
+`create_from_image!` is a costly operation and would be insufficient to, for example, fluently display an animation at 60fps. We would have to call `create_from_image!` every frame, which is not feasible on most machines.
 
-In situations like this, we should instead use a custom render widget to display the image as an **OpenGL texture**, which has no problems rendering large, frequently updated images in a performant manner. We will learn more about textures in the [chapter on native rendering](./09_native_rendering.md).
+In situations like this, we should instead use a custom render widget to displays the image as an **OpenGL texture**, which has no problems rendering large, frequently updated images in a performant manner. We will learn more about textures in the [chapter on native rendering](./09_native_rendering.md).

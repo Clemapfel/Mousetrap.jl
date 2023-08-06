@@ -2,8 +2,10 @@
 
 In this chapter, we will learn:
 + How to install mousetrap.jl
-+ How to create our first mousetrap program
++ How to create our first mousetrap application
 + Basic Julia skills that are needed to understand the rest of this manual
+
+---
 
 ## Installation
 
@@ -12,6 +14,7 @@ Installation of the Julia component is only a few lines. After pressing `]` whil
 ```
 add https://github.com/Clemapfel/mousetrap_windows_jll
 add https://github.com/Clemapfel/mousetrap_linux_jll
+add https://github.com/Clemapfel/mousetrap_apple_jll
 add https://github.com/Clemapfel/mousetrap.jl
 ```
 
@@ -63,18 +66,18 @@ The rest of this manual will assume that readers are familiar with the basics of
 
 ### Glossary
 
-#### Invokation
+#### Invocation
 
 To "invoke" a function means to execute it using a command, potentially using arguments. For example, the second line in the following snippet *invokes function `foo`*:
 
 ```julia
-foo(x) = println(x)
-foo(1234) # invokation
+foo(x) = println(x) # definition
+foo(1234) # invocation
 ```
 
 #### Instantiation, Construction
 
-In Julia, if we have a type `T`, to create an actual object of this type, we need to call its *constructor*. This is a function that returns an object of that type:
+In Julia, for a type `T`, to create an actual object of this type, we need to call its *constructor*. This is a function that returns an object of that type:
 
 ```julia
 # define object type
@@ -127,17 +130,18 @@ This is because all Julia code is scoped in module `Main`. In the above, `a`s sc
 
 #### Front-End, Back-End, Engine
 
-Regarding GUI apps, developers will often refer to "front-end" vs. "back-end" code. The exact meaning of these can vary depending on the field; in this manual, * front-end*  refers to any code that produces an object the user can see on screen, meaning the actual GUI. *back-end*, then, is anything that is not *front-end*. 
+Regarding GUI apps, developers will often refer to "front-end" vs. "back-end" code. The exact meaning of these can vary depending on the field; in this manual, *front-end*  refers to any code that produces an object the user can see on screen, meaning the actual GUI. *back-end*, then, is anything that is not *front-end*. 
 
-An *engine* is a programming library that allows developers to create the *front-end*. For this package, mousetrap is an *engine* for your (the readers) code.
+An *engine* is a programming library that allows developers to create the *front-end*. For this package, mousetrap is an *engine* for your (the readers) app.
 
 #### Rendering, Frames
 
-In our `main.jl` above, mousetrap created a window and showed it to us on our physical screen. This process of drawing graphics to the screen is also called *rendering*.
+In our `main.jl` above, mousetrap created a window and presented it on the physical screen. This process of drawing graphics to the screen is also called *rendering*.
 
-Each screen updates at a set frequency, for example 60hz, which means a new image is drawn to the screen every 1/60th of a second. Each of these drawing steps is called a *frame*. This is why we often refer to the speed at which an app updates as *frames-per-second* (fps), the number of times a new frame is drawn to the screen - per second.
+Each screen updates at a set frequency, for example 60hz, which means a new image is drawn to the screen every 1/60th of a second. Each of these drawing steps is called a *frame*. This is why we often refer to the speed at which a graphical app updates as *frames-per-second* (fps), the number of times a new frame is drawn to the screen - per second.
 
-In mousetrap, fps is tied to  the monitors refresh rate. If the user's monitor updates at 120Hz, mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why mousetrap features a "lazy" rendering process. An area on screen will only be updated if it needs to be. For example, in the `main.jl` above, the label `"Hello World!"` will only be drawn once. Because it is static (it stays the same) there is no need to redraw it every frame, because nothing has changed.
+In mousetrap, fps is tied to  the monitors refresh rate. If the user's monitor updates at 120Hz, mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why mousetrap features a "lazy" rendering process. An area on screen will only be updated if it needs to be. 
+For example, in the `main.jl` above, the label `"Hello World!"` will only be drawn once. Because it is static (it stays the same and does not move) there is no need to redraw it every frame.
 
 This is in opposition to how many video games work. Usually, in video game engines, each frame will make it such that the entire screen is re-drawn every time. This difference is important to realize.
 
@@ -145,7 +149,7 @@ This is in opposition to how many video games work. Usually, in video game engin
 
 ### Object Oriented Design
 
-While Julia is technically object-oriented, it lacks many of the features of "proper" OOP languages such as C++ or Java. Examples include [member functions](https://en.cppreference.com/w/cpp/language/member_functions) and [inheritance from concrete types](https://learn.microsoft.com/en-us/cpp/cpp/inheritance-cpp?view=msvc-170). Additionally, in mousetrap, most objects will have **no public properties**.
+While Julia is technically object-oriented, it lacks many of the features of "proper" OOP languages such as C++ or Java. Examples of missing features include [member functions](https://en.cppreference.com/w/cpp/language/member_functions) and [inheritance from concrete types](https://learn.microsoft.com/en-us/cpp/cpp/inheritance-cpp?view=msvc-170). Additionally, in mousetrap specifically, most objects will have **no public properties**.
 
 To interact with an object, we use *outer methods*, which are functions defined in global scope that operate on one of their arguments by modifying its hidden properties.
 
@@ -156,7 +160,7 @@ function get_foo(instance::T) ::Foo
     # ...
 end
 
-function set_foo!(instance::T) ::Nothing
+function set_foo!(instance::T, new_value::Foo) ::Nothing
     # ...
 end
 ```
@@ -210,7 +214,7 @@ true
 
 All enum values are written in `SCREAMING_SNAKE_CASE`, while the enum type's name uses `UpperCamelCase`. 
 
-To check which enum has which values, we can again use the [mousetrap documentation](../02_library/enums.md). Each enum value furthermore has their own documentation, describing what that value means:
+To check which enum has which values, we can again use the [mousetrap documentation](../02_library/enums.md).
 
 ---
 
@@ -227,7 +231,7 @@ end
 ```
 It applies its first argument, a function, to its second argument.
 
-Invoking `example_f` regularly, we could do:
+Invoking `example_f`, we could do:
 
 ```julia
 to_invoke(x::Integer) = println(x)
@@ -237,7 +241,7 @@ example_f(to_invoke, 1234)
 1234
 ```
 
-Where `to_invoke` is used as the **fisrt** argument. Because it is the first, we can also write the above using do-syntax:
+Where `to_invoke` is used as the **first** argument. Because it is the first, we can also write the above using do-syntax:
 
 ```julia
 example_f(1234) do x::Integer

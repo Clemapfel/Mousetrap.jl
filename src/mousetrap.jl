@@ -1,6 +1,7 @@
 #
 # Author: C. Cords (mail@clemens-cords.com)
-# https://github.com/clemapfel/mousetrap.jl
+# GitHub: https://github.com/clemapfel/mousetrap.jl
+# Documentation: https://clemens-cords.com/mousetrap
 #
 # Copyright © 2023, Licensed under lGPL-3.0
 #
@@ -4052,10 +4053,10 @@ module mousetrap
     end
     export push_front_column!
 
-    function insert_column!(column_view::ColumnView, index::Integer, title::String) ::ColumnViewColumn 
+    function insert_column_at!(column_view::ColumnView, index::Integer, title::String) ::ColumnViewColumn 
         return ColumnViewColumn(detail.insert_column!(column_view._internal, from_julia_index(index), title))
     end
-    export insert_column!
+    export insert_column_at!
 
     remove_column!(column_view::ColumnView, column::ColumnViewColumn) = detail.remove_column!(column_view._internal, column._internal)
     export remove_column!

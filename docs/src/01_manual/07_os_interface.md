@@ -17,7 +17,7 @@ In this chapter, we will learn:
 
 ## Application
 
-We have already used it many times so far, but [`Application`](@ref) offers a number of additional functionalities. It is not a widget, but it is a signal emitter which provides the following signals:
+We have already used it many times so far, but [`Application`](@ref), which is a signal emitter, offers a number of additional functionalities. It provides the following signals:
 
 ```@eval
 using mousetrap
@@ -27,14 +27,14 @@ mousetrap.@signal_table(Application,
 )
 ```
 
-We should do all initialization of our app inside the `activate` signal, while `shutdown` can be used to safely free assets. [`main`](@ref), which we have used so far, is actually just a convenience function that wraps the following behavior:
+We should do all initialization of our app inside the `activate` signal, while `shutdown` can be used to safely free assets. [`main`](@ref), which we have used so far instead of connecting to signals, is actually just a convenience function that wraps the following behavior:
 
 ```julia
 main("example.app") do app::Application
     # behavior here
 end
 
-# is equivalent to
+# is mostly equivalent to
 app = Application("example.app")
 connect_signal_activate!(app) do app::Application
     # behavior here
@@ -49,13 +49,11 @@ In the previous code snippet, `"example.app"` is the **application ID**. This ID
 The application ID has to contain at least one `.` and should be a human-readable identifier. For example, if our app is called "Foo Image Manipulation Program", a good-practice ID would be `org.foo_image_manipulation_program` or `foo_image_manipulation_program.app`.
 
 !!! warning "Running two apps with the same ID"
-    If two applications with the same ID are active at the same time,
-    **they will share assets**.
+    If two applications with the same ID are active at the same time, **they will share assets**.
 
     This may introduce side effects, if both instances modify the same internal variable or widget, it may create a [race-condition](https://en.wikipedia.org/wiki/Race_condition#In_software).
 
-    To avoid this, consider designing your application with this in mind,
-    or give each `Application` instance a new ID.
+    To avoid this, we should consider designing your application with this in mind, or give each `Application` instance a new ID.
 
 ### Starting / Ending Runtime
 
@@ -70,15 +68,17 @@ julia> label = Label()
     You have most likely attempted to construct a widget outside of `main` while using mousetrap interactively.
 ```
 
-At any point, we can attempt to end runtime by calling `quit!`. This will usually cause the application to emit its signal `shutdown`. We should always `quit!` before calling Julias `exit()`, otherwise the apps process will be immediately killed, which can lead to undefined behavior.
+We can force initialization using `mousetrap.detail.initialize()`, though this is usually not recommended.
+
+At any point, we can attempt to end runtime by calling [`quit!`](@ref). This will usually cause the application to emit its signal `shutdown`. We should always `quit!` before calling Julias `exit()`, otherwise the apps process will be immediately killed, which can lead to undefined behavior.
 
 ### Holding & Busy
 
 Each app on a user's system has two boolean flags: whether it is currently **holding** and whether it is currently **busy**.
 
-Holding means that the application attempts to prevent exiting in any way. We set this flag by calling [`hold!`](@ref). This should be used to prevent the user from accidentally ending runtime while an important process is running. We have to make sure to call [`release!`](@ref), which will set the holding flag to `false`, after which the app can normally exit again.
+Holding means that the application attempts to prevent exiting in any way. We set this flag by calling [`hold!`](@ref). This should be used to prevent the user from accidentally ending runtime while an important process is running. We have to make sure to call [`release!`](@ref), which will undo a previous `hold!`, after which the app can normally exit again.
 
-Being **busy** marks the app so that the OS recognizes that it is currently busy. This will prevent the "<app> is not responding" dialog many OS will trigger automatically when an app freezes. Sometimes, freezing is unavoidable because a costly operation is taking place. During times like this, we should call [`mark_as_busy!`](@ref), which notifies the OS that everything is still working as intended, it will just take a while. Once the expensive task is complete, [`unmark_as_busy!`](@ref) reverts the flag.
+Being **busy** marks the app so that the OS recognizes that it is currently busy. This will prevent the "`app` is not responding" dialog many OS will trigger automatically when an app freezes. Sometimes, freezing is unavoidable because a costly operation is taking place. During times like this, we should call [`mark_as_busy!`](@ref), which notifies the OS that everything is still working as intended, it will just take a while. Once the expensive task is complete, [`unmark_as_busy!`](@ref) reverts the flag.
 
 ### Theme 
 
@@ -86,19 +86,12 @@ Each pre-made widget in mousetrap has their exact look specified in what is call
 
 Mousetrap supports four default themes, which are an value of enum [`Theme`](@ref):
 
-[Image: default light widget gallery]
-`THEME_DEFAULT_LIGHT`
++ `THEME_DEFAULT_LIGHT`
++ `THEME_DEFAULT_DARK`
++ `THEME_HIGH_CONTRAST_LIGHT`
++ `THEME_HIGH_CONTRAST_DARK`
 
-[Image: default dark widget gallery]
-`THEME_DEFAULT_DARK`
-
-[Image: high contrast light widget gallery]
-`THEME_HIGH_CONTRAST_LIGHT`
-
-[Image: high contrast dark widget gallery]
-`THEME_HIGH_CONTRAST_DARK`
-
-At any point after the back-end has been initialized, we can swap the global theme using [`set_current_theme!`](@ref). This will immediately change all widgets looks, allowing apps to change the entire GUI with just one function call at run-time.
+At any point after the back-end has been initialized, we can swap the global theme using [`set_current_theme!`](@ref). This will immediately change all widgets looks, allowing apps to change the entire GUI with just one function call at runtime.
 
 For example, to create a window that has button to switch between light and dark themes, we could do the following:
 
@@ -215,17 +208,17 @@ As mentioned before, messages of level `DEBUG` and `INFO` are only printed if we
 
 For example, if our log domain is `foo`:
 
-```cpp
-// define custom domain
+```julia
+# define custom domain
 const FOO_DOMAIN = "foo";
 
-// print `DEBUG` level message but nothing will happen because it is surpressed by default
+# print `DEBUG` level message but nothing will happen because it is surpressed by default
 @log_debug FOO_DOMAIN "Surpressed message"
 
-// enable `INFO` level messages
+# enable `INFO` level messages
 set_surpress_debug!(FOO_DOMAIN, false)
 
-// message will be printed
+# message will be printed
 @log_debug FOO_DOMAIN "No longer surpressed message"
 ```
 

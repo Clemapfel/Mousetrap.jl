@@ -1,9 +1,9 @@
-
 #
 # Author: C. Cords (mail@clemens-cords.com)
-# https://github.com/clemapfel/mousetrap.jl
+# GitHub: https://github.com/clemapfel/mousetrap.jl
+# Documentation: https://clemens-cords.com/mousetrap
 #
-# Copyright © 2023, Licensed under lGPL3-0
+# Copyright © 2023, Licensed under lGPL-3.0
 #
 
 @document Circle """
@@ -2671,18 +2671,19 @@ insert_after!(::Box, to_append::Widget, after::Widget)
 Insert `to_append` such that it comes right after `after`.
 """
 
-@document insert_column! """
-```
-insert_column!(column_view::ColumnView, index::Integer, title::String) 
-```
-Insert a column at the given index.
-"""
 
 @document insert_column_at! """
 ```
 insert_column_at!(grid::Grid, column_i::Signed) 
 ```
 Insert an empty column after the given index (may be negative).
+
+---
+
+```
+insert_column:at!(column_view::ColumnView, index::Integer, title::String) 
+```
+Insert a column at the given index. Each row of the column will be empty.
 """
 
 @document insert_next_to! """
