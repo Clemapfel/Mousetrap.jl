@@ -1473,6 +1473,14 @@ Apart from the speed, we also have a choice of animation **type**, represented b
     ```
 ---
 
+## ActionBar
+
+One common application for using a `Revealer` is to show or hide a *toolbar*, which is a horizontal box with any number of buttons for contextual actions. For this purpose, [`ActionBar`](@ref) is well suited, because it can be shown/hidden using [`set_is_revealed!`](@ref) all by itself, making it so we don't need to use a separate `Revealer` instance.
+
+`ActionBar` is always horizontal, it cannot be oriented. It has space for any number of widgets on either side, along with having a singular centered widget. We pack widgets at to both sides using `push_start!` and `push_end!`, while the centered widget is set using `set_center_widget!`. 
+
+---
+
 ## Expander
 
 [`Expander`](@ref) is similar to `Revealer`, in that it also has exactly one child widget, and it shows / hides the widget. Unlike `Revealer`, there is no animation attached to `Expander`. Instead, it hides the widget behind a collapsible label.

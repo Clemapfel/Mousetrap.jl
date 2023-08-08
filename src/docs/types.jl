@@ -99,6 +99,23 @@ present!(alert_dialog)
 ```
 """
 
+
+@document ActionBar """
+# ActionBar <: Widget
+
+Horizontal bar, has an area for widgets at the start and end, along with a singular centered widget, set via `set_center_widget!`.
+`ActionBar` can be hidden / shown using `set_is_revealed!`.
+
+$(@type_constructors(
+    ActionBar()
+))
+
+$(@type_signals(ActionBar, 
+))
+
+$(@type_fields())
+"""
+
 @document Angle """
 # Angle
 
@@ -2163,6 +2180,13 @@ $(@type_signals(StackSwitcher,
 
 $(@type_fields())
 """
+
+@document StyleClass abstract_type_docs(StyleClass, Any, """
+# StyleClass
+
+Superclass of a `StyleType` singletons. Use `add_style_type!` to modify 
+a widgets style, changing its look.
+""")
 
 @document StylusEventController """
 # StylusEventController <: SingleClickGesture <: EventController

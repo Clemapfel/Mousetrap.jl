@@ -22,7 +22,7 @@ In this chapter we will learn:
 
 In the [chapter on widgets](04_widgets.md), we learned that we can create new widgets by combining already predefined widgets as a *compound widget*. We can create a new widget that has a `Scale`, but we can't render our own scale with, for example, a square knob. In this chapter, this will change.
 
-By using the native rendering facilities mousetrap provides, we are free to create any shape we want, assembling new widgets pixel-by-pixel, line-by-line, then adding interactivity using the event controller system.
+By using the native rendering facilities mousetrap provides, we are free to create any shape we want, assembling new widgets pixel-by-pixel, line-by-line, then adding interactivity using the [event controller system](./05_event_handling.md).
 
 ## RenderArea
 

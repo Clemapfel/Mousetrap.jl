@@ -1741,6 +1741,28 @@ function test_revealer(::Container)
     end
 end
 
+### ACTION BAR
+
+function test_action_bar(::Container)
+    @testset "ActionBar" begin
+        bar = ActionBar()
+        Base.show(devnull, bar)
+        @test mousetrap.is_native_widget(bar)
+
+        widget = Label("")
+        push_front!(bar, widget)
+        push_back!(bar, Label(""))
+        remove!(bar, widget)
+
+        set_center_child!(bar, Label(""))
+        remove_center_child!(bar)
+
+        @test get_is_revealed(bar) == true
+        set_is_revealed!(bar, false)
+        @test get_is_revealed(bar) == false
+    end
+end
+
 ### SCALE
 
 function test_scale(::Container)

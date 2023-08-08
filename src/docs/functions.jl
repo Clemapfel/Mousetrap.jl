@@ -297,6 +297,13 @@ add_shortcut!(::Action, shortcut::ShortcutTrigger)
 Add a shortcut trigger to the list of shortcuts. To make a widget listen for action shortcuts, use [`set_listens_for_shortcut_action!`](@ref), or use a [`ShortcutEventController`](@ref).
 """
 
+@document add_style_class! """
+```
+add_style_class(::T, ::Type{<:StyleClass}) -> Nothing
+```
+Modify a widget by applying a CSS style class to it. Only certain widgets support certain styles.
+"""
+
 @document add_submenu! """
 ```
 add_submenu!(model::MenuModel, label::String, to_add::MenuModel) 
@@ -1154,14 +1161,14 @@ Get the file chooser action type.
 ```
 get_file_extension(::FileDescriptor) -> String
 ```
-Get the file extension of the file. This will be the any characters after the last dot.
+Get the file extension of the file. This will be any characters after the last `.`.
 """
 
 @document get_fixed_width """
 ```
 get_fixed_width(::ColumnViewColumn) -> Float32
 ```
-Get the target width of the column, in pixels, or `-1` if unlimited.
+Get the target width of the column, in pixels.
 """
 
 @document get_focus_on_click """
@@ -1189,7 +1196,7 @@ Get the currently displayed fraction of the progress bar, in `[0, 1]`.
 ```
 get_fragment_shader_id(::Shader) -> Cuint
 ```
-Get the native OpenGL handle of the shader program.
+Get the native OpenGL handle of the shader programs fragment shader component.
 """
 
 @document get_groups """
@@ -1856,8 +1863,9 @@ Get the position of the popover relative to the widget it is attached to.
 @document get_is_revealed """
 ```
 get_is_revealed(::Revealer) -> Bool
+get_is_revealed(::ActionBar) -> Bool
 ```
-Get whether the revealers child is currently visible.
+Get whether the widgets child is currently visible.
 """
 
 @document get_right_margin """
@@ -3085,6 +3093,7 @@ push_back!(::Box, ::Widget) -> Cvoid
 push_back!(::ListView, ::Widget, [::ListViewIterator]) -> ListViewIterator 
 push_back!(::GridView, ::Widget) -> Cvoid
 push_back!(::HeaderBar, ::Widget) -> Cvoid
+push_back!(::ActionBar, ::Widget) -> Cvoid
 ```
 Add a widget to the end of the container.
 
@@ -3137,14 +3146,15 @@ push_front!(::Box, ::Widget) -> Cvoid
 push_front!(::ListView, ::Widget, [::ListViewIterator]) -> ListViewIterator 
 push_front!(::GridView, ::Widget) -> Cvoid
 push_front!(::HeaderBar, ::Widget) -> Cvoid
+push_front!(::ActionBar, ::Widget) -> Cvoid
 ```
 Add a widget to the start of the container.
 
 ---
 
 ```
-push_back!(::DropDown, label_for_both::String) -> DropDownItemID
-push_back!(::DropDown, list_widget::Widget, label_widget::Widget) -> DropDownItemID
+push_front!(::DropDown, label_for_both::String) -> DropDownItemID
+push_front!(::DropDown, list_widget::Widget, label_widget::Widget) -> DropDownItemID
 push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
 push_front!(f, drop_down::DropDown, label_for_both::String, [::Data_t]) -> DropDownItemID
 ```
@@ -3237,6 +3247,7 @@ Release an application that is currently being prevented from exiting because [`
 @document remove! """
 ```
 remove!(::Box, ::Widget) -> Cvoid
+remove!(::ActionBar, ::Widget) -> Cvoid
 remove!(::ListView, index::Integer, [::ListViewIterator]) -> Cvoid 
 remove!(::GridView, ::Widget) -> Cvoid
 remove!(::Grid, ::Widget) -> Cvoid
@@ -3272,6 +3283,7 @@ Remove the button at given position (1-based, left-to-right), this means all but
 @document remove_center_child! """
 ```
 remove_center_child!(::CenterBox) 
+remove_center_child!(::ActionBar) 
 ```
 Remove the middle child of the center box.
 """
@@ -3383,6 +3395,13 @@ remove_start_child!(::CenterBox)
 Remove the start child such that the widget is now empty at that position
 """
 
+@document remove_style_class! """
+```
+remove_style_class!(::Widget)
+```
+Remove all applied style classes, reverting the widget to its default look.
+"""
+
 @document remove_texture! """
 ```
 remove_texture!(::Shape) 
@@ -3438,6 +3457,13 @@ signal `render`.
 reset!(::GLTransform) 
 ```
 Override the transform such that it is now the identity transform.
+"""
+
+@document reset_style! """
+```
+reset_style!(::Widget)
+```
+Remove all style classes from a widget.
 """
 
 @document reset_text_to_value_function! """
@@ -3656,6 +3682,7 @@ Set whether the widget can receive input events. If set to `false`, the widget m
 @document set_center_child! """
 ```
 set_center_child!(::CenterBox, ::Widget) 
+set_center_child!(::ActionBar, ::Widget) 
 ```
 Set the middle child of the center box.
 """
@@ -4538,8 +4565,9 @@ Override all resource paths with the given path. The pointed-to folder has to ad
 @document set_is_revealed! """
 ```
 set_is_revealed!(::Revealer, child_visible::Bool) 
+set_is_revealed!(::ActionBar, widget_visible::Bool) 
 ```
-Set whether the revealers child should be visible. If the visibility changes, an animation is played.
+Set whether widget or its children should be visible. If the visibility changes, an animation is played.
 """
 
 @document set_right_margin! """

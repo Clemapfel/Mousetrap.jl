@@ -4,6 +4,7 @@ In this chapter, we will learn:
 + How to create complex, nested menus
 + How to display menus using `PopoverMenu` and `MenuBar`
 + Best-practice style guides for menus
+
 ---
 
 In the [chapter on actions](./03_actions.md) we learned that we can trigger an action using [`Button`](@ref), by assigning an action to it using [`set_action!`](@ref).
@@ -12,7 +13,7 @@ This works if we want to have a GUI element that has a one or maybe a few action
 ## MenuModel Architecture
 
 In mousetrap, menus follow the [model-view architectural pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). To create a menu, we need
-the menus model, which holds information about how the menu is structured, along with a view, which takes the models and transforms them into an interactable
+the menu model, which holds information about how the menu is structured, along with a view, which takes the models and transforms them into an interactable
 widget users can manipulate. Changing the model changes the view.
 
 !!! details "Running Snippets from this Section"
@@ -64,7 +65,7 @@ add_action!(model, "Action item #3", action)
 
 Secondly, we have perhaps the most powerful type of item: A custom widget. We add an item of this type using [`add_widget!`](@ref), which only takes a single argument, the widget itself. This widget can be arbitrarily complex, though it is usually not advisable to insert an entire `ColumnView` into a tiny menu. Good-practice examples include `Button`, `Entry`, `CheckButton`, `ToggleButton`, `Switch` and `SpinButton`, all of which are interactable.
 
-We do not supply an `Action` instance with this item, if we want the user interacting with the menu item to trigger behavior, we will have to connect that behavior to the signals of the widget we inserted into the menu.
+We do not supply an `Action` instance with this item, if we want the user interacting with the menu item to trigger behavior, we will have to connect that behavior to the signals of the widget we inserted into the menu, or any of its event controllers.
 
 ```cpp
 add_widget!(model, hbox(Label("Choose Value:  "), SpinButton(0, 1, 0.01)))
@@ -78,7 +79,7 @@ Widgets are the most flexible type of menu items. They should be used with cauti
 
 ### Item Type #3: Submenu
 
-`MenuModel` can be **nested**, which means we can insert a `MenuModel` into another `MenuModel`. This is similar to `ListView` or file-system tree: a folder can contain regular files (menu items), or it can contain other folders (menu models), which in turn can also contain another file or folder, etc. `MenuModel` can similarly be infinitely nested, though it is usually not recommended to go deeper than 2 or 3 levels.
+`MenuModel` can be **nested**, which means we can insert a `MenuModel` into another `MenuModel`. This is similar to `ListView` or file-system tree: a folder can contain regular files (menu items), or it can contain other folders (menu models), which in turn can also contain another file or folder, etc. `MenuModel` can similarly be infinitely nested, though it is usually not recommended to go deeper than two or three levels.
 
 We call a `MenuModel` that is nested within another model a **submenu**. It will show up as a button with a label, along with an indicator that it is a submenu, usually a `>` shape. Clicking this item will reveal the submenu.
 
@@ -168,7 +169,7 @@ add_icon_section("Circular Buttons", SECTION_FORMAT_CIRCULAR_BUTTONS)
 ```
 ![](../assets/menu_model_section_formats.png)
 
-Using `SectionFormat` and mixing a number of menu item types, we can construct arbitrarily complex menus. We should realize that the highest priority when constructing menu items is the **user experience**. Presenting users with a giant, deeply nested mess of buttons may be very functional, but it may not make for a good user experience.
+Using `SectionFormat` and mixing a number of menu item types, we can construct arbitrarily complex menus. We should realize that the highest priority when constructing menu items is the **user experience**. Presenting users with a giant, deeply nested mess of buttons may be very functional, but it may not very usable to anyone but the developers themself.
 
 ---
 
@@ -263,7 +264,7 @@ No direct child of `root` is an "action"-, "widget"-, "icon"- or "section"-type 
     Due to a bug in the backend, as of version 0.1.0, a menu model used for a `MenuBar` **may not have a "widget"-type item in a submenu of a submenu**.
 
     This means we *can* add a widget to any submenu of `root`, but we may not add 
-    a widget to any submenu that is nested any deeper than this.
+    a widget to any submenu that is nested any deeper than a direct child of `root`.
 
     This bug does not affect `PopoverMenu`, for whom we can put a widget at any 
     depth. `PopoverMenu` has no requirement as to the structure of its menu model, while `MenuBar` requires that all top-level items are submenus, and that no submenu of a submenu may have a "widget"-type item.
@@ -281,7 +282,7 @@ Some may be curious as to why some menu items have `...` added at the end of the
 
 ### Maximum Menu Depth
 
-Regarding menu depth, the best practice is to never go deeper than three levels. The above example with `File > Recent... > Project 01` shows a good situation in which a 3-level-deep menu may be justified. Going any deeper is rarely good advice. Adding a section should always be considered *before* deciding to add a submenu.
+Regarding menu depth, the best practice is to never go deeper than three levels. The above example with `File > Recent... > Project 01` shows a good situation in which a 3-level-deep menu may be justified. Going any deeper is rarely a good course of action. Adding a section should always be considered *before* deciding to add a submenu.
 
 ### Section Grouping
 

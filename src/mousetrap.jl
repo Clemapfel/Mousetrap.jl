@@ -1581,7 +1581,7 @@ module mousetrap
     @add_signal_activate Application
     @add_signal_shutdown Application
 
-    function main(f, application_id::String = "mousetrap.jl") 
+    function main(f, application_id::String = "com.julia.mousetrap") 
         
         task = Threads.Task() do 
             app = Application(application_id)
@@ -4296,6 +4296,39 @@ module mousetrap
 
     Base.show(io::IO, x::Revealer) = show_aux(io, x, :is_revealed, :transition_type)
 
+###### action_bar.jl
+
+    @export_type ActionBar Widget
+    @declare_native_widget ActionBar
+
+    function push_back!(action_bar::ActionBar, widget::Widget)
+        detail.push_back!(action_bar._internal, as_widget_pointer(widget))
+    end
+    export push_back!
+
+    function push_front!(action_bar::ActionBar, widget::Widget)
+        detail.push_front!(action_bar._internal, as_widget_pointer(widget))
+    end
+    export push_front!
+
+    function set_center_widget(action_bar::ActionBar, widget::Widget)
+        detail.set_center_widget!(action_bar._internal, as_widget_pointer(widget))
+    end
+    export insert_after!
+
+    function remove!(action_bar::ActionBar, widget::Widget)
+        detail.remove!(action_bar._internal, as_widget_pointer(widget))
+    end
+    export remove!
+
+    @export_function ActionBar remove_center_widget! Cvoid
+    @export_function ActionBar set_is_is_revealed! Cvoid Bool b
+    @export_function ActionBar get_is_revealed Bool
+
+    @add_widget_signals ActionBar
+
+    Base.show(io::IO, x::ActionBar) = show_aux(io, x, :is_revealed)
+    
 ###### scale.jl
 
     @export_type Scale Widget
@@ -4624,15 +4657,6 @@ module mousetrap
         detail.set_listens_for_shortcut_action!(as_widget_pointer(widget), action._internal)
     end
     export set_listens_for_shortcut_action!
-
-    add_css_class!(widget::Widget, class::String) = detail.add_css_class!(as_widget_pointer(widget), class)
-    # no export
-
-    remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
-    # no export
-
-    get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
-    # no export
 
 ####### clipboard.jl
 
@@ -5283,6 +5307,145 @@ else # if MOUSETRAP_ENABLE_OPENGL_COMPONENT
     export RenderArea
 
 end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
+
+###### style.jl
+
+    add_css_class!(widget::Widget, class::String) = detail.add_css_class!(as_widget_pointer(widget), class)
+    # no export
+
+    remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
+    # no export
+
+    get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
+    # no export
+
+    abstract type StyleClass end
+
+    macro define_style_class(name, css_value, class_names...)
+
+        out = Expr(:toplevel)
+
+        push!(out.args, :(struct $name <: StyleClass end))
+        push!(out.args, :(export $name))
+    
+        for n in class_names
+            if !(n isa Symbol)
+                continue
+            end
+            push!(out.args, esc(:(add_style_class!(x::$n, class::Type{$name}) = add_css_class!(x, $css_value))))
+        end
+        push!(out.args, :(export add_style_class!))
+        return out
+    end
+    export add_style_class!
+
+    @define_style_class(SUGGESTED_ACTION, "suggested-action",
+        Button,
+        ToggleButton
+    )
+
+    @define_style_class(DESTRUCTIVE_ACTION, "destructive-action",
+        Button,
+        ToggleButton,
+        PopoverButton
+    )
+
+    @define_style_class(FLAT, "flat",
+        Button,
+        ToggleButton,
+        PopoverButton,
+        HeaderBar
+    )
+
+    @define_style_class(UNSTABLE, "devel",
+        Window,
+        HeaderBar
+    )
+
+    @define_style_class(RAISED, "raised",
+        Button,
+        ToggleButton,
+        PopoverButton
+    )
+
+    @define_style_class(CIRCULAR, "circular",
+        Button,
+        ToggleButton,
+        PopoverButton
+    )
+
+    @define_style_class(PILL, "pill",
+        Button,
+        ToggleButton,
+        PopoverButton
+    )
+
+    @define_style_class(LINKED, "linked",
+        Box
+    )
+
+    @define_style_class(TOOLBAR, "toolbar",
+        Box,
+        HeaderBar,
+        ActionBar
+    )
+
+    @define_style_class(SPACER, "spacer",
+        Separator
+    )
+
+    @define_style_class(DIMMED, "dim-label", Widget)
+
+    @define_style_class(FONT_TITLE_1, "title-1", Widget)
+    @define_style_class(FONT_TITLE_2, "title-2", Widget)
+    @define_style_class(FONT_TITLE_3, "title-3", Widget)
+    @define_style_class(FONT_TITLE_4, "title-4", Widget)
+    @define_style_class(FONT_LARGER, "heading", Widget)
+    @define_style_class(FONT_REGULAR, "body", Widget)
+    @define_style_class(FONT_CAPTION_HEADING, "caption-heading", Widget)
+    @define_style_class(FONT_CAPTION, "caption", Widget)
+
+    @define_style_class(FONT_MONOSPACE, "monospace", Widget)
+    @define_style_class(FONT_NUMERIC, "numeric", Widget)
+
+    @define_style_class(COLOR_ACCENT, "accent", Widget)
+    @define_style_class(COLOR_SUCCESS, "success", Widget)
+    @define_style_class(COLOR_WARNING, "warning", Widget)
+    @define_style_class(COLOR_ERROR, "error", Widget)
+
+    @define_style_class(ACTIVATABLE, "activatable", Widget)
+    @define_style_class(CARD, "card", Widget)
+
+    @define_style_class(SIDEBAR, "navigation-sidebar", 
+        ListView
+    )
+
+    @define_style_class(MENUBAR, "menu", 
+        ListView
+    )
+
+    @define_style_class(ICON_DROPSHADOW, "icon-dropshadow",
+        ImageDisplay
+    )
+    @define_style_class(ICON_SMALL, "lowres-icon",
+        ImageDisplay
+    )
+
+    @define_style_class(ROUND_CHECK_BUTTON, "selection-mode",
+        CheckButton
+    )
+    
+    @define_style_class(ON_SCREEN_DISPLAY, "osd", Widget)
+    @define_style_class(BACKGROUND, "background", Widget)
+    @define_style_class(VIEW, "view", Widget)
+    @define_style_class(FRAME, "view", Widget)
+
+    function reset_style!(x::Widget) 
+        for class in get_css_classes(x)
+            remove_css_class!(x, class)
+        end
+    end
+    export reset_style!
 
 ###### key_codes.jl
 
