@@ -2351,28 +2351,34 @@ module mousetrap
 ####### alert_dialog.jl
 
     @export_type AlertDialog SignalEmitter
-    AlertDialog(buttons::Vector{String}, message::String, detailed_message::String = "") = AlertDialog(detail._AlertDialog(buttons, message, detailed_message))
-    
-    function add_button!(dialog::AlertDialog, index::Integer, label::String)
-        detail.add_button!(dialog._internal, from_julia_index(index), label)
+    AlertDialog(message::String, detailed_message::String = "") = AlertDialog(detail._AlertDialog(message, detailed_message))
+
+    function add_button!(alert_dialog::AlertDialog, label::String) ::Integer
+        return to_julia_index(detail.add_button!(alert_dialog._internal, label))
     end
     export add_button!
 
-    function remove_button!(dialog::AlertDialog, index::Integer)
-        detail.remove_button!(dialog._internal, from_julia_index(index))
+    function set_default_button!(alert_dialog::AlertDialog, id::Integer)
+        detail.set_default_button!(alert_dialog.AlertDialog, from_julia_index(id))
     end
-    export remove_button!
+    export set_default_button!
 
-    function set_button_label!(dialog::AlertDialog, index::Integer, label::String)
-        detail.set_button_label(dialog, from_julia_index(index), label)
+    function set_button_label!(alert_dialog::AlertDialog, id::Integer, label::String)
+        detail.set_button_label!(alert_dialog._internal, from_julia_index(id), label)
     end
     export set_button_label!
 
-    function get_button_label(dialog::AlertDialog, index::Integer) ::String
-        detail.get_button_label(dialog._internal, from_julia_index(index))
+    function get_button_label(alert_dialog::AlertDialog, id::Integer) ::String
+        return detail.get_button_label(alert_dialog._internal, from_julia_index(id))
     end
     export get_button_label
 
+    function set_extra_widget!(alert_dialog::AlertDialog, widget::Widget)
+        detail.set_extra_widget!(alert_dialog._internal, as_widget_pointer(widget))
+    end
+    export set_extra_widget!
+
+    @export_function AlertDialog remove_extra_widget! Cvoid
     @export_function AlertDialog get_n_buttons Integer
     @export_function AlertDialog get_message String
     @export_function AlertDialog set_message! Cvoid String message
@@ -2381,6 +2387,7 @@ module mousetrap
     @export_function AlertDialog set_is_modal! Cvoid Bool b
     @export_function AlertDialog get_is_modal Bool
     @export_function AlertDialog present! Cvoid
+    @export_function AlertDialog close! Cvoid
 
     function on_selection!(f, dialog::AlertDialog, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (AlertDialog, Integer, Data_t))
@@ -5320,10 +5327,12 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     # no export
 
     abstract type StyleClass end
+    export StyleClass
 
     macro define_style_class(name, css_value, class_names...)
 
         out = Expr(:toplevel)
+        name = Symbol("STYLE_CLASS_" * string(name))
 
         push!(out.args, :(struct $name <: StyleClass end))
         push!(out.args, :(export $name))
