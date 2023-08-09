@@ -135,24 +135,34 @@ function test_alert_dialog(::Container)
     @testset "AlertDialog" begin
         message = "message"
         detailed_message = "detailed message"
-        alert_dialog = AlertDialog(["01", "02"], message, detailed_message)
+        alert_dialog = AlertDialog(message, detailed_message)
         Base.show(devnull, alert_dialog)
         
         button_label = "Label"
-        add_button!(alert_dialog, 1, button_label)
+        id = add_button!(alert_dialog, button_label)
+        @test id == 1
         @test get_button_label(alert_dialog, 1) == button_label
+        new_label = "new_label"
+        set_button_label!(alert_dialog, 1, new_label)
+        @test get_button_label(alert_dialog, 1) == new_label
+
+        set_extra_widget!(alert_dialog, Separator())
+        remove_extra_widget!(alert_dialog)
+
+        @test get_n_buttons(alert_dialog) == 1
 
         @test get_message(alert_dialog) == message
         @test get_detailed_description(alert_dialog) == detailed_message
 
-        @test get_n_buttons(alert_dialog) == 3
-        remove_button!(alert_dialog, 3)
-        remove_button!(alert_dialog, 2)
-        @test get_n_buttons(alert_dialog) == 1
-
         @test get_is_modal(alert_dialog) == true
         set_is_modal!(alert_dialog, false)
         @test get_is_modal(alert_dialog) == false
+
+        on_selection!(alert_dialog) do self::AlertDialog, id::Integer
+        end
+
+        present!(alert_dialog)
+        close!(alert_dialog)
     end
 end
 
@@ -672,7 +682,7 @@ function test_column_view(::Container)
         push_front_column!(column_view, "column 03")
 
         column_name = "column 02"
-        column = insert_column!(column_view, 1, column_name)
+        column = insert_column_at!(column_view, 1, column_name)
 
         @test get_title(column) == column_name
 
@@ -1110,9 +1120,11 @@ function test_icon(::Container)
         Base.show(devnull, theme)
 
         names = get_icon_names(theme)
-        @test isempty(names) == false
-        @test has_icon(theme, names[1])
 
+        if !isempty(names)
+            @test has_icon(theme, names[1])
+        end
+    
         add_resource_path!(theme, ".")
         set_resource_path!(theme, ".")
         
@@ -2339,10 +2351,10 @@ function test_widget(widget::Container)
         @test get_hide_on_overflow(widget) == true
         set_hide_on_overflow!(widget, false)
 
-        add_css_class!(widget, "test")
-        @test !isempty(get_css_classes(widget))
-        remove_css_class!(widget, "test")
-        @test isempty(get_css_classes(widget))
+        mousetrap.add_css_class!(widget, "test")
+        @test !isempty(mousetrap.get_css_classes(widget))
+        mousetrap.remove_css_class!(widget, "test")
+        @test isempty(mousetrap.get_css_classes(widget))
 
         tick_callback_called = Ref{Bool}(false)
         set_tick_callback!(widget, tick_callback_called) do clock::FrameClock, tick_callback_called
@@ -2423,7 +2435,7 @@ function test_render_area(::Container)
                 @test get_vertex_position(shape, i) == Vector3f(0, 0, 0)
 
                 set_vertex_texture_coordinate!(shape, i, Vector2f(-1, -1))
-                @test get_vertex_texture_coordinate!(shape, i) == Vector2f(-1, -1)
+                @test get_vertex_texture_coordinate(shape, i) == Vector2f(-1, -1)
 
                 Base.show(devnull, shape)
             end

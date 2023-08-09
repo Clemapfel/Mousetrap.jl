@@ -509,14 +509,20 @@ A very common task for an application that manipulates files is to make sure the
 
 While we could construct a custom widget for this purpose, put that widget in a `Window`, then present that window to the user, a task as common as this should be possible in only a few lines. For this purpose, mousetrap offers [`AlertDialog`](@ref), which is a dialog that shows a message to the user, along with one or more buttons they can click.
 
-Each `AlertDialog` has a **message**, a **detailed description**, as well as one or more **button labels**. We can choose all of these in the `AlertDialog`s constructor. For example, if we want to show a dialog that informs the user that a file is being overwritten, we could do:
+Each `AlertDialog` has a **message**, a **detailed description**, which we during `AlertDialogs`constructor:
 
 ```julia
 overwrite_file_warning_dialog = AlertDialog(
-    ["Continue", "Cancel"],  # buttons
     "A file with this name already exists, continue?", # message
     "The original file will be overwritten, this cannot be undone." # detail description
 )
+```
+
+With just this, the only way for the user to interact with the dialog is to press escape, which closes it. We will most like want to add buttons, which we accomplish using [`add_button!`](@ref)
+
+```julia
+add_button!(overwrite_file_warning_dialog, "Continue")
+add_button!(overwrite_file_warning_dialog, "Cancel")
 ```
 
 While we could `present!` this dialog to the user now:
@@ -536,10 +542,12 @@ Continuing our example of warning the user when they're about to overwrite a fil
 ```julia
 # create the dialog
 overwrite_file_warning_dialog = AlertDialog(
-    ["Continue", "Cancel"],  # buttons
     "A file with this name already exists, continue?", # message
     "The original file will be overridden, this cannot be undone." # detailed description
 )
+
+add_button!(overwrite_file_warning_dialog, "Continue")
+add_button!(overwrite_file_warning_dialog, "Cancel")
 
 # add a callback
 on_selection!(overwrite_file_warning_dialog) do self::AlertDialog, button_index::Integer
@@ -558,7 +566,9 @@ present!(overwrite_file_warning_dialog)
 
 Note that we do not need to close the dialog from within the `on_selection!` callback, it is closed automatically.
 
-With this, we have a vastly simplified mechanism for showing short, message-style dialogs to the user. Each of these dialogs will be *modal*  by default, meaning all other windows and actions will be paused until the dialog is dismissed.
+On top of buttons, `AlertDialog` furthermore has a spot for a custom widget, which will be displayed underneath the detail message. We choose this widget with [`set_extra_widget!`](@ref), which gives us some additional flexibility for when we want a dialog that has more than just text.
+
+With `AlertDialog`, we have a vastly simplified mechanism for showing short, message-style dialogs to the user. Each of these dialogs will be *modal*  by default, meaning all other windows and actions will be paused until the dialog is dismissed.
 
 ---
 

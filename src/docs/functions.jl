@@ -200,9 +200,9 @@ add_allowed_suffix!(filter, "jl") # "jl", not ".jl"
 
 @document add_button! """
 ```
-add_button!(::AlertDialog, index::Signed, label::String) -> Cvoid
+add_button!(::AlertDialog, label::String) -> Integer
 ```
-Insert a button with given label after the given index (1-based), or 0 to insert it at the beginning.
+Add a new button to the dialog. If the button is clicked, the dialog closes automatically. The return value of this function is the buttons ID, which should be stored to later reference the button.
 """
 
 @document add_child! """
@@ -302,6 +302,12 @@ Add a shortcut trigger to the list of shortcuts. To make a widget listen for act
 add_style_class(::T, ::Type{<:StyleClass}) -> Nothing
 ```
 Modify a widget by applying a CSS style class to it. Only certain widgets support certain styles.
+
+## Example
+```julia
+button = Button()
+set_child!(button, Label("Styled Label"))
+add_style_class!(button, )
 """
 
 @document add_submenu! """
@@ -904,7 +910,7 @@ Get value for the devices axis, or 0 if no such axis is present. This value will
 ```
 get_button_label!(::AlertDialog, index::Integer) -> String
 ```
-Get label of the button at given index (1-based), from left to right.
+Get label of the button at given ID, obtained when calling `add_button!`.
 """
 
 @document get_bottom_margin """
@@ -3337,6 +3343,13 @@ remove_end_child!(::Paned)
 Remove the latter child of the widget.
 """
 
+@document remove_extra_widget! """
+```
+remove_extra_widget!(::AlertDialog)
+```
+Remove the widget set using `set_extra_widget!`.
+"""
+
 @document remove_label_widget! """
 ```
 remove_label_widget!(::Expander) 
@@ -3660,9 +3673,9 @@ Set whether the popover should hide itself when the attached widget looses focus
 
 @document set_button_label! """
 ```
-set_button_label!(::AlertDialog, index::Integer, label::String)
+set_button_label!(::AlertDialog, id::Integer, label::String)
 ```
-Replace the label of the button at given position (1-based, left-to-right).
+Replace the label of the button with given ID, obtained when calling `add_button!`.
 """
 
 @document set_bottom_margin! """
@@ -3800,6 +3813,13 @@ set_cursor_visible!(::TextView, ::Bool)
 Set whether the caret is visible.
 """
 
+@document set_default_button! """
+```
+set_default_button!(::AlertDialog, id::Integer)
+```
+Mark a button as the default response using the id obtained when calling `add_button!`. This will change the buttons look and make it such that that button becomes the default widget of the dialogs window.
+"""
+
 @document set_default_widget! """
 ```
 set_default_widget!(window::Window, ::Widget) 
@@ -3909,6 +3929,13 @@ Set whether the widget should expand along the x-axis.
 set_expand_vertically!(::Widget, ::Bool) 
 ```
 Set whether the widget should expand along the y-axis.
+"""
+
+@document set_extra_widget! """
+```
+set_extra_widget!(::AlertDialog, ::Widget)
+```
+Insert a widget into the dialogs content area, it will be displayed underneath the detailed message.
 """
 
 @document set_file! """

@@ -4,7 +4,7 @@ In this chapter we will learn:
 + How to use `RenderArea`
 + How to draw any shape
 + How to efficiently show an image as a texture
-+ How to influence blending
++ How to choose t
 + How to apply a 3D transform to a shape
 + How to compile a GLSL Shader and set its uniforms
 

@@ -66,7 +66,7 @@ $(@type_fields())
 @document AlertDialog """
 # AlertDialog <: SignalEmitter
 
-Simple dialog with a message, detailed description, and one or more labeled buttons. 
+Simple dialog with a message, detailed description, space for a single widget, and one or more labeled buttons. 
 
 Using `on_selection!`, you can register a function with the signature
 ```
@@ -75,7 +75,7 @@ Using `on_selection!`, you can register a function with the signature
 which is called when the user makes a selection or closes the dialog.
 
 $(@type_constructors(
-    AlertDialog(button_labels::Vector{String}, message::String, [detailed_message::String])
+    AlertDialog(message::String, [detailed_message::String])
 ))
 
 $(@type_signals(AlertDialog, 
@@ -85,7 +85,9 @@ $(@type_fields())
 
 ## Example
 ```julia
-alert_dialog = AlertDialog(["Yes", "No"], "Is this is a dialog?")
+alert_dialog = AlertDialog("Is this is a dialog?")
+add_button!(alert_dialog, "yes")
+add_button!(alert_dialog, "no")
 on_selection!(alert_dialog) do self::AlertDialog, button_index::Signed
     if button_index == 1
         println("User chose `Yes`")
@@ -2184,7 +2186,7 @@ $(@type_fields())
 @document StyleClass abstract_type_docs(StyleClass, Any, """
 # StyleClass
 
-Superclass of a `StyleType` singletons. Use `add_style_type!` to modify 
+Superclass of all `StyleType` singletons. Use `add_style_type!` to modify 
 a widgets style, changing its look.
 """)
 
