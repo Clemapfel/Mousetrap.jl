@@ -180,7 +180,7 @@ Shortcuts are represented as strings, which have a specific syntax. As seen abov
 
 That last one requires explanation. On most keyboard layouts, to type `!`, the user has to press the shift modifier key, then press the `1` key. When "Shift + 1" is pressed,  mousetrap does not receive this keyboard key event as-is, instead, it receives a single key event for the `!` key with no modifiers. The identifier of `!` is `exclam`, hence why "Shift + 1" is written as `exclam`.
 
-!!! note "Looking up Key Identifiers"
+!!! tip "Looking up Key Identifiers"
 
     An example of how to look up the identifier of any key will be performed here.
 

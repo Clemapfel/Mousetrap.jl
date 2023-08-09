@@ -1,4 +1,4 @@
-# Chapter 10: Customization & App Distribution
+# Chapter 10: App Distribution
 
 In this chapter we will learn:
 + How to load and store assets

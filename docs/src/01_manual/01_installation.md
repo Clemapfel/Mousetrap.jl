@@ -9,7 +9,7 @@ In this chapter, we will learn:
 
 ## Installation
 
-Installation of the Julia component is only a few lines. After pressing `]` while in the REPL to enter Pkg mode, we execute
+Installation of the Julia component is only a few lines. After pressing `]` while in the REPL to enter Pkg mode, we enter:
 
 ```
 add https://github.com/Clemapfel/mousetrap_windows_jll
@@ -44,19 +44,7 @@ julia main.jl
 !!! danger "Using mousetrap from within the REPL"
     As of version `v0.1.0`, **interactive use of mousetrap is discouraged**. 
     
-    `main` will stall, meaning as long as the application from our `main.jl` is running, the REPL will "hang". When the application exits, `main` will exit, 
-    restoring the interactivity of the REPL.
-
-    One compromise that will keep startup-time to a minimum is to open the REPL in the same directory as our `main.jl`, then execute:
-
-    ```julia
-    using mousetrap
-    include("main.jl")
-    ```
-
-    This way, `include` will stall because it called `main` inside `main.jl`. Once the app exits, the `include` call will exit. We can then call `include` again to restart our app. With this technique, the mousetrap back-end will stay initialized and the mousetrap Julia module will stay in memory between runs, making startup time very fast.
-
-    This technique should only be used during development, when distributing the app to users, we should always prefer starting the `main.jl` using a script that executes `julia main.jl`.
+    `main` will stall, meaning as long as the application from our `main.jl` is running, the REPL will "hang". When the application exits, `main` will exit, restoring the interactivity of the REPL.
 
 ---
 
@@ -66,9 +54,11 @@ The rest of this manual will assume that readers are familiar with the basics of
 
 ### Glossary
 
+The following terms may be unfamiliar to some.
+
 #### Invocation
 
-To "invoke" a function means to execute it using a command, potentially using arguments. For example, the second line in the following snippet *invokes function `foo`*:
+To "invoke" a function means to execute it using a command, possibly  arguments. For example, the second line in the following snippet *invokes function `foo`*:
 
 ```julia
 foo(x) = println(x) # definition
@@ -147,7 +137,7 @@ This is in opposition to how many video games work. Usually, in video game engin
 
 ---
 
-### Object Oriented Design
+## Object Oriented Design
 
 While Julia is technically object-oriented, it lacks many of the features of "proper" OOP languages such as C++ or Java. Examples of missing features include [member functions](https://en.cppreference.com/w/cpp/language/member_functions) and [inheritance from concrete types](https://learn.microsoft.com/en-us/cpp/cpp/inheritance-cpp?view=msvc-170). Additionally, in mousetrap specifically, most objects will have **no public properties**.
 
@@ -180,7 +170,7 @@ Which will print a list of all functions that have at least one argument of type
 
 ---
 
-### C Enums   
+## C Enums   
 
 Mousetraps back-end is written in C++, whose enums differ from Julia enums in a number of ways. To assure compatibility, mousetrap uses its own enum definitions, it does not use Julias `@enum`.
 
@@ -218,7 +208,7 @@ To check which enum has which values, we can again use the [mousetrap documentat
 
 ---
 
-### Do Syntax
+## Do Syntax
 
 In Julia, any function whose **first argument is another function** can use **do-syntax**.
 
@@ -251,7 +241,7 @@ end
 
 Here, the first argument of `example_f` was ommitted, while the second argument, `1234` remained. Instead of the first argument, we append the line `do x::Integer`, where `x` is the name of the anonymous functions argument. After this line, we define the functions body, then `end`.
 
-### Anonymous Functions in Stacktraces
+## Anonymous Functions in Stacktraces
 
 In the REPL, we can print any objects name to inspect it. Creating a new function, which prints its argument's name:
 

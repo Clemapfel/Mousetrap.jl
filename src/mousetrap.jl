@@ -4328,8 +4328,8 @@ module mousetrap
     end
     export remove!
 
-    @export_function ActionBar remove_center_widget! Cvoid
-    @export_function ActionBar set_is_is_revealed! Cvoid Bool b
+    @export_function ActionBar remove_center_child! Cvoid
+    @export_function ActionBar set_is_revealed! Cvoid Bool b
     @export_function ActionBar get_is_revealed Bool
 
     @add_widget_signals ActionBar
@@ -5333,7 +5333,7 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
         push!(out.args, :(export $name))
     
         docstring = """
-        Use `add_style_class!` to apply this style class to one of the following types:
+        Use `add_style_class!` to apply this style class to instances of the following type(s):
         """
 
         for n in class_names

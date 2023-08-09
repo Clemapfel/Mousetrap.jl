@@ -286,7 +286,7 @@ button = Button()
 set_cursor!(button, CURSOR_TYPE_POINTER)
 ```
 
-The exact look of each cursor type depends on the users operating system and UI configuration. To choose a fully custom cursor, we use [`set_cursor_from_image!`](@ref), which takes an `Image`. We will learn more about `Image` in the [chapter dedicated to it](./06_image_and_sound.md). Until then, this is how we set a cursor from a `.png` file on disk:
+The exact look of each cursor type depends on the users operating system and UI configuration. To choose a fully custom cursor, we use [`set_cursor_from_image!`](@ref), which takes an `Image`. We will learn more about `Image` in the [chapter dedicated to it](./06_image.md). Until then, this is how we set a cursor from a `.png` file on disk:
 
 ```julia
 widget = # ...
@@ -532,7 +532,7 @@ set_child!(window, box)
 
 [`CenterBox`](@ref) is an orientable container that has exactly three children. `CenterBox` prioritizes keeping the designated center child centered at all costs, making it a good choice when symmetry is desired.
 
-We use [`<set_start_child!`](@ref), [`set_center_child!`](@ref), and [`set_end_child!`](@ref) to insert a child widget in the corresponding position:
+We use [`set_start_child!`](@ref), [`set_center_child!`](@ref), and [`set_end_child!`](@ref) to insert a child widget in the corresponding position:
 
 ```julia
 center_box = CenterBox(ORIENTATION_HORIZONTAL)
@@ -1679,7 +1679,7 @@ All selectable widgets have on thing in common: their multiple children are mana
 
 ![](../assets/list_view_selected.png)
 
-Modifying the model will modify the selectable widget, and modifying the selectable widget will modify the model. In this way, the two are linked, similar to how `Adjustment` works. We use [`select!`](@ref) and [`unselect!`](@ref) to change the selection manually, while [`get_selection!`](@ref) returns a vector with one or more of the selected items indices.
+Modifying the model will modify the selectable widget, and modifying the selectable widget will modify the model. In this way, the two are linked, similar to how `Adjustment` works. We use [`select!`](@ref) and [`unselect!`](@ref) to change the selection manually, while [`get_selection`](@ref) returns a vector with one or more of the selected items indices.
 
 `SelectionModel` has signal `selection_changed`, which is emitted anytime an item is selected or unselected in any way. This signal requires the signature
 ```
@@ -1999,10 +1999,10 @@ Other than this visual component, its purpose is identical to that of `StackSwit
 When changing which of the stacks pages is currently shown, regardless of how that selection was triggered, an animation transitioning from one page to the other plays. Similar to `Revealer`, we can influence the type and speed of animation in multiple ways:
 
 + [`set_transition_duration!`](@ref) chooses how long the animation will take to complete
-+ [`set_interpolate_size!`](@ref), if set to `true`, makes it, such that while the transition animation plays, the stack will change from the size of the previous child to the size of the current child gradually. If set to `false`, this size change happens instantly
-+ [`set_animation_type!`](@ref) governs the type of animation, which is one of the enum values of [`StackTransitionType`](@ref).
++ [`set_should_interpolate_size!`](@ref), if set to `true`, makes it, such that while the transition animation plays, the stack will change from the size of the previous child to the size of the current child gradually. If set to `false`, this size change happens instantly
++ [`set_transition_type!`](@ref) governs the type of animation, which is one of the enum values of [`StackTransitionType`](@ref).
 
-If we want all of the stacks children to allocate the same size, we can set [`set_is_vertically_homogeneous!`](@ref) and [`set_is_horizontally_homogeneous!!`](@ref) to `true`, in which case the stack will assume the height or widget of its largest page, respectively.
+If we want all of the stacks children to allocate the same size, we can set [`set_is_vertically_homogeneous!`](@ref) and [`set_is_horizontally_homogeneous!`](@ref) to `true`, in which case the stack will assume the height or widget of its largest page, respectively.
 
 ---
 

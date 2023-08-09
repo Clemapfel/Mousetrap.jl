@@ -2354,7 +2354,7 @@ function test_widget(widget::Container)
         mousetrap.add_css_class!(widget, "test")
         @test !isempty(mousetrap.get_css_classes(widget))
         mousetrap.remove_css_class!(widget, "test")
-        @test isempty(mousetrap.get_css_classes(widget))
+        @test isempty(get_css_classes(widget))
 
         tick_callback_called = Ref{Bool}(false)
         set_tick_callback!(widget, tick_callback_called) do clock::FrameClock, tick_callback_called

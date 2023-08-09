@@ -163,6 +163,11 @@ add_style_class!(box, STYLE_CLASS_LINKED)
 
 ![](../assets/style_classes_button.png)
 
+### Custom Style Classes
+
+!!! compat
+    This feature is not yet implemented, this section is incomplete.
+
 ---
 
 ## Logging
@@ -511,7 +516,7 @@ We now have to specify which files should pass the filter. `FileFilter` offers m
 | [`add_allowed_mime_type!`](@ref)                 | `text/plain`   | files classified as plain text, for example `.txt`        |
 | [`add_allowed_pattern!`](@ref)                    | `*.jl`         | files whose name match the given regular expression  |
 
-Where a table with the allowed image formats is available in [the chapter on images](06_image_and_sound.md#supported-image-formats).
+Where a table with the allowed image formats is available in [the chapter on images](06_image.md#supported-image-formats).
 
 After having set up our filter, we simply add it to the `FileChooser` instance using [`add_filter!`](@ref):
 
@@ -724,9 +729,5 @@ Other than with `ImageDisplay`, we have other ways to use icons in graphical wid
 
 ## Icon Themes
 
-!!! note 
+!!! compat 
     This section is not yet complete, see the documentation for [`IconTheme`](@ref), and the [Freedesktop Icon Theme Specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html) instead.
-
----
-
-`Icon` has a number of uses where it cannot be replaced by an `ImageDisplay`. One such purpose is as a **menu icon**, which we will make great use of in the next section. 

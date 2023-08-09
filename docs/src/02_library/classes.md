@@ -2941,11 +2941,6 @@ STYLE_CLASS_ROUND_CHECK_BUTTON
 STYLE_CLASS_SIDEBAR
 ```
 ---
-## STYLE_CLASS_SPACER
-```@docs
-STYLE_CLASS_SPACER
-```
----
 ## STYLE_CLASS_SUGGESTED_ACTION
 ```@docs
 STYLE_CLASS_SUGGESTED_ACTION
@@ -3173,7 +3168,6 @@ SelectionModel
 Separator
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`get_orientation`](@ref)
 + [`set_orientation!`](@ref)
 
