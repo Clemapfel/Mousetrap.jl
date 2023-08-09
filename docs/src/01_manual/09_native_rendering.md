@@ -16,7 +16,7 @@ In this chapter we will learn:
     is because of Apples decision to deprecate OpenGL in a way where only physical owners of a Mac
     can compile libraries that have it as a dependency. See [here](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978341) for more information.
 
-    If a disabled object is attempted to be instantiated on MacOS, a **fatal error** will be thrown at runtime.
+    If we attempt to instantiate a disabled object on MacOS, a **fatal error** will be thrown at runtime.
 
 ---
 
@@ -1123,5 +1123,5 @@ With this, we have a convenient way to specify shader uniforms, without having t
 
 ## Rendering to a Texture
 
-!!! warning
-    This feature are not yet implemented, this section is incomplete.
+!!! compat
+    This feature is not yet implemented, this section is incomplete.

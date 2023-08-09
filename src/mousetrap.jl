@@ -4485,7 +4485,7 @@ module mousetrap
     @export_type Separator Widget
     @declare_native_widget Separator
 
-    Separator(orientation::Orientation = ORIENTATION_HORIZONTAL; opacity::AbstractFloat = 1.0) = Separator(detail._Separator(convert(Cfloat, opacity), orientation))
+    Separator(orientation::Orientation = ORIENTATION_HORIZONTAL) = Separator(detail._Separator(orientation))
 
     @export_function Separator set_orientation! Cvoid Orientation orientation
     @export_function Separator get_orientation Orientation
@@ -5318,13 +5318,8 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 ###### style.jl
 
     add_css_class!(widget::Widget, class::String) = detail.add_css_class!(as_widget_pointer(widget), class)
-    # no export
-
     remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
-    # no export
-
     get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
-    # no export
 
     abstract type StyleClass end
     export StyleClass
@@ -5337,13 +5332,19 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
         push!(out.args, :(struct $name <: StyleClass end))
         push!(out.args, :(export $name))
     
+        docstring = """
+        Use `add_style_class!` to apply this style class to one of the following types:
+        """
+
         for n in class_names
             if !(n isa Symbol)
                 continue
             end
+            docstring = docstring * "+ `$n`\n"
             push!(out.args, esc(:(add_style_class!(x::$n, class::Type{$name}) = add_css_class!(x, $css_value))))
         end
-        push!(out.args, :(export add_style_class!))
+
+        push!(out.args, :(@doc $docstring $name))
         return out
     end
     export add_style_class!
@@ -5363,11 +5364,6 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
         Button,
         ToggleButton,
         PopoverButton,
-        HeaderBar
-    )
-
-    @define_style_class(UNSTABLE, "devel",
-        Window,
         HeaderBar
     )
 
@@ -5397,10 +5393,6 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
         Box,
         HeaderBar,
         ActionBar
-    )
-
-    @define_style_class(SPACER, "spacer",
-        Separator
     )
 
     @define_style_class(DIMMED, "dim-label", Widget)

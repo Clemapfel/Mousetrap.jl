@@ -133,7 +133,8 @@ function abstract_type_docs(type_in, super_type, brief)
     aux(type_in, subtypes)
 
     for type in sort(subtypes)
-        out *= "+ [`$type`](@ref)\n"
+        to_append = "+ [`$type`](@ref)\n"
+        out *= replace(to_append, "mousetrap." => "")
     end
     return out
 end

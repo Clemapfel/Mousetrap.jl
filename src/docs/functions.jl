@@ -299,15 +299,17 @@ Add a shortcut trigger to the list of shortcuts. To make a widget listen for act
 
 @document add_style_class! """
 ```
-add_style_class(::T, ::Type{<:StyleClass}) -> Nothing
+add_style_class(::T, ::Type{<: StyleClass}) -> Nothing
 ```
-Modify a widget by applying a CSS style class to it. Only certain widgets support certain styles.
+Modify a widget by applying a CSS style class to it, this will change the widgets look. Only certain widgets support certain styles.
 
 ## Example
+
 ```julia
 button = Button()
 set_child!(button, Label("Styled Label"))
-add_style_class!(button, )
+add_style_class!(button, STYLE_CLASS_SUGGESTED_ACTION)
+```
 """
 
 @document add_submenu! """

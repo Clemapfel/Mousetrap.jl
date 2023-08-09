@@ -26,6 +26,70 @@ Action
 
 
 ---
+## ActionBar
+```@docs
+ActionBar
+```
+#### Functions that operate on this type:
++ [`add_style_class!`](@ref)
++ [`get_is_revealed`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`remove_center_widget!`](@ref)
++ [`set_is_is_revealed!`](@ref)
+
+
++ [`connect_signal_destroy!`](@ref)
++ [`disconnect_signal_destroy!`](@ref)
++ [`emit_signal_destroy`](@ref)
++ [`get_signal_destroy_blocked`](@ref)
++ [`set_signal_destroy_blocked!`](@ref)
+
+
++ [`connect_signal_hide!`](@ref)
++ [`disconnect_signal_hide!`](@ref)
++ [`emit_signal_hide`](@ref)
++ [`get_signal_hide_blocked`](@ref)
++ [`set_signal_hide_blocked!`](@ref)
+
+
++ [`connect_signal_map!`](@ref)
++ [`disconnect_signal_map!`](@ref)
++ [`emit_signal_map`](@ref)
++ [`get_signal_map_blocked`](@ref)
++ [`set_signal_map_blocked!`](@ref)
+
+
++ [`connect_signal_realize!`](@ref)
++ [`disconnect_signal_realize!`](@ref)
++ [`emit_signal_realize`](@ref)
++ [`get_signal_realize_blocked`](@ref)
++ [`set_signal_realize_blocked!`](@ref)
+
+
++ [`connect_signal_show!`](@ref)
++ [`disconnect_signal_show!`](@ref)
++ [`emit_signal_show`](@ref)
++ [`get_signal_show_blocked`](@ref)
++ [`set_signal_show_blocked!`](@ref)
+
+
++ [`connect_signal_unmap!`](@ref)
++ [`disconnect_signal_unmap!`](@ref)
++ [`emit_signal_unmap`](@ref)
++ [`get_signal_unmap_blocked`](@ref)
++ [`set_signal_unmap_blocked!`](@ref)
+
+
++ [`connect_signal_unrealize!`](@ref)
++ [`disconnect_signal_unrealize!`](@ref)
++ [`emit_signal_unrealize`](@ref)
++ [`get_signal_unrealize_blocked`](@ref)
++ [`set_signal_unrealize_blocked!`](@ref)
+
+
+---
 ## Adjustment
 ```@docs
 Adjustment
@@ -66,6 +130,7 @@ AlertDialog
 ```
 #### Functions that operate on this type:
 + [`add_button!`](@ref)
++ [`close!`](@ref)
 + [`get_button_label`](@ref)
 + [`get_detailed_description`](@ref)
 + [`get_is_modal`](@ref)
@@ -73,9 +138,11 @@ AlertDialog
 + [`get_n_buttons`](@ref)
 + [`on_selection!`](@ref)
 + [`present!`](@ref)
-+ [`remove_button!`](@ref)
++ [`remove_extra_widget!`](@ref)
 + [`set_button_label!`](@ref)
++ [`set_default_button!`](@ref)
 + [`set_detailed_description!`](@ref)
++ [`set_extra_widget!`](@ref)
 + [`set_is_modal!`](@ref)
 + [`set_message!`](@ref)
 
@@ -164,6 +231,7 @@ AxisAlignedRectangle
 Box
 ```
 #### Functions that operate on this type:
++ [`add_style_class!`](@ref)
 + [`clear!`](@ref)
 + [`get_homogeneous`](@ref)
 + [`get_n_items`](@ref)
@@ -233,6 +301,7 @@ Box
 Button
 ```
 #### Functions that operate on this type:
++ [`add_style_class!`](@ref)
 + [`get_has_frame`](@ref)
 + [`get_is_circular`](@ref)
 + [`remove_child!`](@ref)
@@ -370,6 +439,7 @@ CenterBox
 CheckButton
 ```
 #### Functions that operate on this type:
++ [`add_style_class!`](@ref)
 + [`get_is_active`](@ref)
 + [`get_state`](@ref)
 + [`remove_child!`](@ref)
@@ -536,7 +606,7 @@ ColumnView
 + [`get_show_row_separators`](@ref)
 + [`get_single_click_activate`](@ref)
 + [`has_column_with_title`](@ref)
-+ [`insert_column!`](@ref)
++ [`insert_column_at!`](@ref)
 + [`insert_row_at!`](@ref)
 + [`push_back_column!`](@ref)
 + [`push_back_row!`](@ref)
@@ -1360,6 +1430,7 @@ HSVA
 HeaderBar
 ```
 #### Functions that operate on this type:
++ [`add_style_class!`](@ref)
 + [`get_layout`](@ref)
 + [`get_show_title_buttons`](@ref)
 + [`push_back!`](@ref)
@@ -1486,6 +1557,7 @@ Image
 ImageDisplay
 ```
 #### Functions that operate on this type:
++ [`add_style_class!`](@ref)
 + [`clear!`](@ref)
 + [`create_as_file_preview!`](@ref)
 + [`create_from_file!`](@ref)
@@ -1771,6 +1843,7 @@ LevelBar
 ListView
 ```
 #### Functions that operate on this type:
++ [`add_style_class!`](@ref)
 + [`clear!`](@ref)
 + [`find`](@ref)
 + [`get_enable_rubberband_selection`](@ref)
@@ -2334,6 +2407,7 @@ Popover
 PopoverButton
 ```
 #### Functions that operate on this type:
++ [`add_style_class!`](@ref)
 + [`get_always_show_arrow`](@ref)
 + [`get_has_frame`](@ref)
 + [`get_is_circular`](@ref)
@@ -2712,6 +2786,181 @@ RotateEventController
 
 
 ---
+## STYLE_CLASS_ACTIVATABLE
+```@docs
+STYLE_CLASS_ACTIVATABLE
+```
+---
+## STYLE_CLASS_BACKGROUND
+```@docs
+STYLE_CLASS_BACKGROUND
+```
+---
+## STYLE_CLASS_CARD
+```@docs
+STYLE_CLASS_CARD
+```
+---
+## STYLE_CLASS_CIRCULAR
+```@docs
+STYLE_CLASS_CIRCULAR
+```
+---
+## STYLE_CLASS_COLOR_ACCENT
+```@docs
+STYLE_CLASS_COLOR_ACCENT
+```
+---
+## STYLE_CLASS_COLOR_ERROR
+```@docs
+STYLE_CLASS_COLOR_ERROR
+```
+---
+## STYLE_CLASS_COLOR_SUCCESS
+```@docs
+STYLE_CLASS_COLOR_SUCCESS
+```
+---
+## STYLE_CLASS_COLOR_WARNING
+```@docs
+STYLE_CLASS_COLOR_WARNING
+```
+---
+## STYLE_CLASS_DESTRUCTIVE_ACTION
+```@docs
+STYLE_CLASS_DESTRUCTIVE_ACTION
+```
+---
+## STYLE_CLASS_DIMMED
+```@docs
+STYLE_CLASS_DIMMED
+```
+---
+## STYLE_CLASS_FLAT
+```@docs
+STYLE_CLASS_FLAT
+```
+---
+## STYLE_CLASS_FONT_CAPTION
+```@docs
+STYLE_CLASS_FONT_CAPTION
+```
+---
+## STYLE_CLASS_FONT_CAPTION_HEADING
+```@docs
+STYLE_CLASS_FONT_CAPTION_HEADING
+```
+---
+## STYLE_CLASS_FONT_LARGER
+```@docs
+STYLE_CLASS_FONT_LARGER
+```
+---
+## STYLE_CLASS_FONT_MONOSPACE
+```@docs
+STYLE_CLASS_FONT_MONOSPACE
+```
+---
+## STYLE_CLASS_FONT_NUMERIC
+```@docs
+STYLE_CLASS_FONT_NUMERIC
+```
+---
+## STYLE_CLASS_FONT_REGULAR
+```@docs
+STYLE_CLASS_FONT_REGULAR
+```
+---
+## STYLE_CLASS_FONT_TITLE_1
+```@docs
+STYLE_CLASS_FONT_TITLE_1
+```
+---
+## STYLE_CLASS_FONT_TITLE_2
+```@docs
+STYLE_CLASS_FONT_TITLE_2
+```
+---
+## STYLE_CLASS_FONT_TITLE_3
+```@docs
+STYLE_CLASS_FONT_TITLE_3
+```
+---
+## STYLE_CLASS_FONT_TITLE_4
+```@docs
+STYLE_CLASS_FONT_TITLE_4
+```
+---
+## STYLE_CLASS_FRAME
+```@docs
+STYLE_CLASS_FRAME
+```
+---
+## STYLE_CLASS_ICON_DROPSHADOW
+```@docs
+STYLE_CLASS_ICON_DROPSHADOW
+```
+---
+## STYLE_CLASS_ICON_SMALL
+```@docs
+STYLE_CLASS_ICON_SMALL
+```
+---
+## STYLE_CLASS_LINKED
+```@docs
+STYLE_CLASS_LINKED
+```
+---
+## STYLE_CLASS_MENUBAR
+```@docs
+STYLE_CLASS_MENUBAR
+```
+---
+## STYLE_CLASS_ON_SCREEN_DISPLAY
+```@docs
+STYLE_CLASS_ON_SCREEN_DISPLAY
+```
+---
+## STYLE_CLASS_PILL
+```@docs
+STYLE_CLASS_PILL
+```
+---
+## STYLE_CLASS_RAISED
+```@docs
+STYLE_CLASS_RAISED
+```
+---
+## STYLE_CLASS_ROUND_CHECK_BUTTON
+```@docs
+STYLE_CLASS_ROUND_CHECK_BUTTON
+```
+---
+## STYLE_CLASS_SIDEBAR
+```@docs
+STYLE_CLASS_SIDEBAR
+```
+---
+## STYLE_CLASS_SPACER
+```@docs
+STYLE_CLASS_SPACER
+```
+---
+## STYLE_CLASS_SUGGESTED_ACTION
+```@docs
+STYLE_CLASS_SUGGESTED_ACTION
+```
+---
+## STYLE_CLASS_TOOLBAR
+```@docs
+STYLE_CLASS_TOOLBAR
+```
+---
+## STYLE_CLASS_VIEW
+```@docs
+STYLE_CLASS_VIEW
+```
+---
 ## Scale
 ```@docs
 Scale
@@ -2924,6 +3173,7 @@ SelectionModel
 Separator
 ```
 #### Functions that operate on this type:
++ [`add_style_class!`](@ref)
 + [`get_orientation`](@ref)
 + [`set_orientation!`](@ref)
 
@@ -3388,6 +3638,11 @@ StackSwitcher
 
 
 ---
+## StyleClass
+```@docs
+StyleClass
+```
+---
 ## StylusEventController
 ```@docs
 StylusEventController
@@ -3642,6 +3897,7 @@ Time
 ToggleButton
 ```
 #### Functions that operate on this type:
++ [`add_style_class!`](@ref)
 + [`get_is_active`](@ref)
 + [`get_is_circular`](@ref)
 + [`remove_child!`](@ref)
@@ -3828,6 +4084,7 @@ Widget
 + [`add_child!`](@ref)
 + [`add_controller!`](@ref)
 + [`add_overlay!`](@ref)
++ [`add_style_class!`](@ref)
 + [`add_widget!`](@ref)
 + [`find`](@ref)
 + [`get_allocated_size`](@ref)
@@ -3867,6 +4124,7 @@ Widget
 + [`remove_overlay!`](@ref)
 + [`remove_tick_callback!`](@ref)
 + [`remove_tooltip_widget!`](@ref)
++ [`reset_style!`](@ref)
 + [`set_alignment!`](@ref)
 + [`set_can_respond_to_input!`](@ref)
 + [`set_center_child!`](@ref)
@@ -3879,6 +4137,7 @@ Widget
 + [`set_expand!`](@ref)
 + [`set_expand_horizontally!`](@ref)
 + [`set_expand_vertically!`](@ref)
++ [`set_extra_widget!`](@ref)
 + [`set_focus_on_click!`](@ref)
 + [`set_hide_on_overflow!`](@ref)
 + [`set_horizontal_alignment!`](@ref)

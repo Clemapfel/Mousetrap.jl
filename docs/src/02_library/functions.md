@@ -151,6 +151,10 @@ mousetrap.add_section!
 ```@docs
 mousetrap.add_shortcut!
 ```
+## `add_style_class!`
+```@docs
+mousetrap.add_style_class!
+```
 ## `add_submenu!`
 ```@docs
 mousetrap.add_submenu!
@@ -2323,10 +2327,6 @@ mousetrap.insert_after!
 ```@docs
 mousetrap.insert_at!
 ```
-## `insert_column!`
-```@docs
-mousetrap.insert_column!
-```
 ## `insert_column_at!`
 ```@docs
 mousetrap.insert_column_at!
@@ -2539,13 +2539,13 @@ mousetrap.remove!
 ```@docs
 mousetrap.remove_action!
 ```
-## `remove_button!`
-```@docs
-mousetrap.remove_button!
-```
 ## `remove_center_child!`
 ```@docs
 mousetrap.remove_center_child!
+```
+## `remove_center_widget!`
+```@docs
+mousetrap.remove_center_widget!
 ```
 ## `remove_child!`
 ```@docs
@@ -2566,6 +2566,10 @@ mousetrap.remove_controller!
 ## `remove_end_child!`
 ```@docs
 mousetrap.remove_end_child!
+```
+## `remove_extra_widget!`
+```@docs
+mousetrap.remove_extra_widget!
 ```
 ## `remove_label_widget!`
 ```@docs
@@ -2626,6 +2630,10 @@ mousetrap.render_render_tasks
 ## `reset!`
 ```@docs
 mousetrap.reset!
+```
+## `reset_style!`
+```@docs
+mousetrap.reset_style!
 ```
 ## `reset_text_to_value_function!`
 ```@docs
@@ -2787,6 +2795,10 @@ mousetrap.set_cursor_from_image!
 ```@docs
 mousetrap.set_cursor_visible!
 ```
+## `set_default_button!`
+```@docs
+mousetrap.set_default_button!
+```
 ## `set_default_widget!`
 ```@docs
 mousetrap.set_default_widget!
@@ -2842,6 +2854,10 @@ mousetrap.set_expand_horizontally!
 ## `set_expand_vertically!`
 ```@docs
 mousetrap.set_expand_vertically!
+```
+## `set_extra_widget!`
+```@docs
+mousetrap.set_extra_widget!
 ```
 ## `set_file!`
 ```@docs
@@ -2978,6 +2994,10 @@ mousetrap.set_is_horizontally_homogeneous!
 ## `set_is_inverted!`
 ```@docs
 mousetrap.set_is_inverted!
+```
+## `set_is_is_revealed!`
+```@docs
+mousetrap.set_is_is_revealed!
 ```
 ## `set_is_modal!`
 ```@docs

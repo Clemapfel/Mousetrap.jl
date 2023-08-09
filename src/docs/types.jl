@@ -2186,8 +2186,9 @@ $(@type_fields())
 @document StyleClass abstract_type_docs(StyleClass, Any, """
 # StyleClass
 
-Superclass of all `StyleType` singletons. Use `add_style_type!` to modify 
-a widgets style, changing its look.
+Superclass of all `STYLE_CLASS_*` singletons. Use `add_style_class!` to modify 
+a widgets style, changing its look. A widget can have more than one style class;
+each style style class can only be applied to certain widgets.
 """)
 
 @document StylusEventController """

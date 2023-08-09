@@ -17,7 +17,9 @@ In this chapter, we will learn:
 
 ## Application
 
-We have already used it many times so far, but [`Application`](@ref), which is a signal emitter, offers a number of additional functionalities. It provides the following signals:
+We have already used it many times so far, but [`Application`](@ref), which is a signal emitter, offers a number of additional functionalities other than just storing our actions for us and keeping track of windows.
+
+It provides the following signals:
 
 ```@eval
 using mousetrap
@@ -82,20 +84,22 @@ We have to make sure to call [`release!`](@ref) to undo a previous `hold!`, afte
 
 Being **busy** marks the app so that the OS recognizes that it is currently busy. This will prevent the "`app` is not responding" dialog many OS will trigger automatically when an app freezes. Sometimes, freezing is unavoidable because a costly operation is taking place. During times like this, we should call [`mark_as_busy!`](@ref), which notifies the OS that everything is still working as intended, it will just take a while. Once the expensive task is complete, [`unmark_as_busy!`](@ref) reverts the flag.
 
-### Theme 
+## UI Theme 
 
-Each pre-made widget in mousetrap has their exact look specified in what is called a **theme**. This theme is a collection of css classes, which determine how a widget will look. These themes are applied globally, we cannot choose a theme for just one widget, it applies to all of them.
+### Global Theme
 
-Mousetrap supports four default themes, which are a values of enum [`Theme`](@ref):
+Each pre-made widget in mousetrap has their exact look specified in what is called a **theme**.  These themes are applied globally, meaning they affect every widget associated with our app.
+
+Mousetrap supports four default application-wide themes, which are a values of enum [`Theme`](@ref):
 
 + `THEME_DEFAULT_LIGHT`
 + `THEME_DEFAULT_DARK`
 + `THEME_HIGH_CONTRAST_LIGHT`
 + `THEME_HIGH_CONTRAST_DARK`
 
-At any point after the back-end has been initialized, we can swap the global theme using [`set_current_theme!`](@ref). This will immediately change the look  of allwidgets, allowing apps to change the entire GUI with just one function call at runtime.
+At any point after the back-end has been initialized, we can swap the global theme using [`set_current_theme!`](@ref). This will immediately change the look  of all widgets and windows, allowing apps to change the entire GUI with just one function call at runtime.
 
-For example, to create a window that has button to switch between light and dark themes in its header bar, we could do the following:
+For example, to create a window that has a button to switch between light and dark themes in its header bar, we could do the following:
 
 ```julia
 main() do app::Application
@@ -103,9 +107,9 @@ main() do app::Application
     window = Window(app)
 
     # add theme swap button to windows header bar
-    header_bar = HeaderBar()
+    header_bar = get_header_bar(window)
     swap_button = Button()
-    set_tooltip_tex(swap_button, "Click to Swap Themes")
+    set_tooltip_text!(swap_button, "Click to Swap Themes")
     connect_signal_clicked!(swap_button, app) do self::Button, app::Application
 
         # get currently used theme
@@ -126,15 +130,38 @@ main() do app::Application
         set_current_theme!(app, next)
     end
     push_front!(header_bar, swap_button)
-    set_titlebar_widget!(window, header_bar)
-
     present!(window)
 end
 ```
 
----
+### Style Classes
 
-For most purposes, simply using [`main`](@ref) as we have so far is a safer and easier way to start runtime. Nonetheless, it is important to understand how application lifetime works under the hood, as in some situations, more fine-control is required.
+!!! warning 
+    Style classes are experimental, they may be removed in future versions without notice, or may not work as intended.
+
+Along with the app-wide theme, some widgets also support a local, per-widget theme called a **style class**, which only affects a single widget instance. 
+
+When applied, the widgets look will change in some way. Examples include changing color, opacity, or appearing circular instead of square. A widget can have more than one style class at the same time.
+
+While some style classes are available for all widgets, some are only available for certain types of widgets.
+
+We apply style classes using [`add_style_class!`](@ref), which, along with the widget instance, takes one of the [singleton subtypes](https://docs.julialang.org/en/v1/manual/types/#man-singleton-types) of `StyleClass`. If we want to reset the widgets look, we can remove all style classes from a widget using [`reset_style!`](@ref). 
+
+For a list of style classes, see [here](@ref StyleClass). To know which style class can be applied to which widget, we can check each style classes documentation using the REPLs "help" mode. If we try to apply a style class to a widget that does not support it, a compiler error will be thrown.
+
+```julia
+suggested_button = Button(Label("Suggested Action"))
+neutral_button = Button(Label("Neutral Action"))
+destructive_button = Button(Label("Destructive Action"))
+
+add_style_class!(suggested_button, STYLE_CLASS_SUGGESTED_ACTION)
+add_style_class!(destructive_button, STYLE_CLASS_DESTRUCTIVE_ACTION)
+
+box = hbox(suggested_button, neutral_button, destructive_button)
+add_style_class!(box, STYLE_CLASS_LINKED)
+```
+
+![](../assets/style_classes_button.png)
 
 ---
 
