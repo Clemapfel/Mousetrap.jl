@@ -26,6 +26,10 @@ let file = open("docs/src/02_library/classes.md", "w+")
         ]
             continue
         end
+
+        if occursin("STYLE_CLASS", string(name))
+            continue
+        end
         
         out = "## $name\n"
         out *= "```@docs\n"

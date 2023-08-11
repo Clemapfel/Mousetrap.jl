@@ -8,7 +8,7 @@ To download and install mousetrap, follow the directions on the [official GitHub
 
 Mousetrap was created and designed by [C. Cords](https://clemens-cords.com).
 
-Mousetrap.jl, the non-Julia components of mousetrap, this documentation, as well as all original assets, are licensed under [lGPL3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text), meaning they can be used in both free, open-source, as well as proprietary, for-profit projects.
+Mousetrap.jl, the non-Julia components of mousetrap, this documentation and all its original assets, are licensed under [lGPL3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text), meaning they can be used in both free, open-source, as well as for-profit, proprietary projects.
 
 For frequently asked questions, see [here](#FAQ).
 

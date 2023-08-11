@@ -92,7 +92,7 @@ module mousetrap
     const LogDomain = String;
     export LogDomain
 
-    const MOUSETRAP_DOMAIN::String = detail.MOUSETRAP_DOMAIN * ".jl"
+    const MOUSETRAP_DOMAIN::LogDomain = detail.MOUSETRAP_DOMAIN * ".jl"
     # no export   
 
     """

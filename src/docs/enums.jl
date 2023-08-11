@@ -17,7 +17,7 @@
 @document ALIGNMENT_END "Aligned right if horizontal, bottom if vertical."
 
 @document AntiAliasingQuality enum_docs(:AntiAliasingQuality,
-    "Number of samples when performing multi-sampled anti aliasing (MSAA)", [
+    "Number of samples when performing multi-sampled anti aliasing (MSAA).", [
     :ANTI_ALIASING_QUALITY_OFF,
     :ANTI_ALIASING_QUALITY_MINIMAL,
     :ANTI_ALIASING_QUALITY_GOOD,
@@ -86,7 +86,7 @@
 @document CHECK_BUTTON_STATE_INCONSISTENT "Neither active nor inactive, usually displayed with a tilde `~`"
 
 @document CornerPlacement enum_docs(:CornerPlacement,
-    "Placement of both scrollbars relative to the center of a `Viewport`", [
+    "Placement of both scrollbars relative to the center of a `Viewport`.", [
     :CORNER_PLACEMENT_BOTTOM_LEFT,
     :CORNER_PLACEMENT_BOTTOM_RIGHT,
     :CORNER_PLACEMENT_TOP_LEFT,
@@ -98,7 +98,7 @@
 @document CORNER_PLACEMENT_TOP_RIGHT "Horizontal scrollbar top, vertical scrollbar right"
 
 @document CursorType enum_docs(:CursorType,
-    "Determines what the users cursor will look like while it is inside the allocated area of the widget", [
+    "Determines what the users cursor will look like while it is inside the allocated area of the widget.", [
     :CURSOR_TYPE_ALL_SCROLL,
     :CURSOR_TYPE_CELL,
     :CURSOR_TYPE_COLUMN_RESIZE,
@@ -182,7 +182,7 @@
 @document DEVICE_AXIS_Y_TILT "Tilt along the vertical axis"
 
 @document EllipsizeMode enum_docs(:EllipsizeMode,
-    "Determines how ellipses are inserted when a `Label`s allocated area exceeds the space it is allowed to allocated", [
+    "Determines how ellipses are inserted when a `Label`s allocated area exceeds the space it is allowed to allocated.", [
     :ELLIPSIZE_MODE_END,
     :ELLIPSIZE_MODE_MIDDLE,
     :ELLIPSIZE_MODE_NONE,
@@ -194,7 +194,7 @@
 @document ELLIPSIZE_MODE_START "Insert at the start: `...text`"
 
 @document FileChooserAction enum_docs(:FileChooserAction,
-    "Determines layout, which, and how many files/folders a user can select when using [`FileChooser`](@ref)", [
+    "Determines layout, which, and how many files/folders a user can select when using [`FileChooser`](@ref).", [
     :FILE_CHOOSER_ACTION_OPEN_FILE,
     :FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FILES,
     :FILE_CHOOSER_ACTION_SAVE,
@@ -208,7 +208,7 @@
 @document FILE_CHOOSER_ACTION_SELECT_MULTIPLE_FOLDERS "Select one or more folders"
 
 @document FileMonitorEvent enum_docs(:FileMonitorEvent,
-    "Classifies user behavior that triggered the callback of [`FileMonitor`](@ref)", [
+    "Classifies user behavior that triggered the callback of [`FileMonitor`](@ref).", [
     :FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED,
     :FILE_MONITOR_EVENT_CHANGED,
     :FILE_MONITOR_EVENT_CHANGES_DONE_HINT,
@@ -228,7 +228,7 @@
 @document FILE_MONITOR_EVENT_RENAMED "File or folder was renamed"
 
 @document InterpolationType enum_docs(:InterpolationType,
-    "Determines interpolation algorithm used when scaling [`Image`](@ref)", [
+    "Determines interpolation algorithm used when scaling [`Image`](@ref).", [
     :INTERPOLATION_TYPE_BILINEAR,
     :INTERPOLATION_TYPE_HYPERBOLIC,
     :INTERPOLATION_TYPE_NEAREST,
@@ -240,7 +240,7 @@
 @document INTERPOLATION_TYPE_TILES "Linear when scaling down, nearest neighbor when scaling up."
 
 @document JustifyMode enum_docs(:JustifyMode,
-    "Determines how words are arranged along the horizontal axis of a [`Label`](@ref) or [`TextView`](@ref)", [
+    "Determines how words are arranged along the horizontal axis of a [`Label`](@ref) or [`TextView`](@ref).", [
     :JUSTIFY_MODE_CENTER,
     :JUSTIFY_MODE_FILL,
     :JUSTIFY_MODE_LEFT,
@@ -252,7 +252,7 @@
 @document JUSTIFY_MODE_RIGHT "Push towards right"
 
 @document LabelWrapMode enum_docs(:LabelWrapMode,
-    "Determines at which point in a `Label`s contents a linebreak will be inserted", [
+    "Determines at which point in a `Label`s contents a linebreak will be inserted.", [
     :LABEL_WRAP_MODE_NONE,
     :LABEL_WRAP_MODE_ONLY_ON_CHAR,
     :LABEL_WRAP_MODE_ONLY_ON_WORD,
@@ -264,7 +264,7 @@
 @document LABEL_WRAP_MODE_WORD_OR_CHAR "Insert linebreak after a character or before the space between two words"
 
 @document LevelBarMode enum_docs(:LevelBarMode,
-    "Determines how a [`LevelBar`](@ref) displays its fraction", [
+    "Determines how a [`LevelBar`](@ref) displays its fraction.", [
     :LEVEL_BAR_MODE_CONTINUOUS,
     :LEVEL_BAR_MODE_DISCRETE
 ])
@@ -272,7 +272,7 @@
 @document LEVEL_BAR_MODE_DISCRETE "Segmented bar, displays integer value"
 
 @document Orientation enum_docs(:Orientation,
-    "Determines orientation of a widget", [
+    "Determines orientation of a widget.", [
     :ORIENTATION_HORIZONTAL,
     :ORIENTATION_VERTICAL
 ])
@@ -280,7 +280,7 @@
 @document ORIENTATION_VERTICAL "Align top-to-bottom along the y-axis"
 
 @document PanDirection enum_docs(:PanDirection,
-    "Direction of a pan gesture recognized by [`PanEventController`](@ref)", [
+    "Direction of a pan gesture recognized by [`PanEventController`](@ref).", [
     :PAN_DIRECTION_DOWN,
     :PAN_DIRECTION_LEFT,
     :PAN_DIRECTION_RIGHT,
@@ -304,7 +304,7 @@
 @document PROPAGATION_PHASE_TARGET "Consume events when the widget targets its event controllers with events"
 
 @document RelativePosition enum_docs(:RelativePosition,
-    "Relative position of one object to another", [
+    "Relative position of one object to another.", [
     :RELATIVE_POSITION_ABOVE,
     :RELATIVE_POSITION_BELOW,
     :RELATIVE_POSITION_LEFT_OF,
@@ -316,7 +316,7 @@
 @document RELATIVE_POSITION_RIGHT_OF "Object is right of another"
 
 @document RevealerTransitionType enum_docs(:RevealerTransitionType,
-    "Determines animation type when of [`Revealer`] showing or hiding its child", [
+    "Determines animation type when of [`Revealer`] showing or hiding its child.", [
     :REVEALER_TRANSITION_TYPE_CROSSFADE,
     :REVEALER_TRANSITION_TYPE_NONE,
     :REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
@@ -340,7 +340,7 @@
 @document REVEALER_TRANSITION_TYPE_SWING_UP "Swing from bottom to top"
 
 @document ScrollType enum_docs(:ScrollType,
-    "Classification of keyboard event that triggered the `scroll_child` event of a [`Viewport`](@ref)", [
+    "Classification of keyboard event that triggered the `scroll_child` event of a [`Viewport`](@ref).", [
     :SCROLL_TYPE_JUMP,
     :SCROLL_TYPE_NONE,
     :SCROLL_TYPE_PAGE_BACKWARD,
@@ -376,7 +376,7 @@
 @document SCROLL_TYPE_STEP_UP "Move on scroll step vertically up"
 
 @document ScrollbarVisibilityPolicy enum_docs(:ScrollbarVisibilityPolicy,
-    "Determines when / if a scrollbar of a [`Viewport`](@ref) reveals itself", [
+    "Determines when / if a scrollbar of a [`Viewport`](@ref) reveals itself.", [
     :SCROLLBAR_VISIBILITY_POLICY_ALWAYS,
     :SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC,
     :SCROLLBAR_VISIBILITY_POLICY_NEVER
@@ -386,7 +386,7 @@
 @document SCROLLBAR_VISIBILITY_POLICY_NEVER "Stay hidden at all times"
 
 @document SectionFormat enum_docs(:SectionFormat,
-    "Visual layout of a [`MenuModel`](@ref) \"section\"-type item", [
+    "Visual layout of a [`MenuModel`](@ref) \"section\"-type item.", [
     :SECTION_FORMAT_CIRCULAR_BUTTONS,
     :SECTION_FORMAT_HORIZONTAL_BUTTONS,
     :SECTION_FORMAT_HORIZONTAL_BUTTONS_LEFT_TO_RIGHT,
@@ -402,7 +402,7 @@
 @document SECTION_FORMAT_NORMAL "Default layout"
 
 @document SelectionMode enum_docs(:SelectionMode,
-    "Governs if and how many elements can be selected", [
+    "Governs if and how many elements can be selected.", [
     :SELECTION_MODE_MULTIPLE,
     :SELECTION_MODE_NONE,
     :SELECTION_MODE_SINGLE
@@ -412,7 +412,7 @@
 @document SELECTION_MODE_SINGLE "Exactly one widget can be selected"
 
 @document ShaderType enum_docs(:ShaderType,
-    "Type of OpenGL shader", [
+    "Type of OpenGL shaderprogram component.", [
     :SHADER_TYPE_FRAGMENT,
     :SHADER_TYPE_VERTEX
 ])
@@ -420,7 +420,7 @@
 @document SHADER_TYPE_VERTEX "Vertex shader"
 
 @document ShortcutScope enum_docs(:ShortcutScope,
-    "Determines at which scope a shortcut will be captured", [
+    "Determines at which scope a shortcut will be captured.", [
     :SHORTCUT_SCOPE_GLOBAL,
     :SHORTCUT_SCOPE_LOCAL
     #:SHORTCUT_SCOPE_MANAGED
@@ -430,7 +430,7 @@
 # @document SHORTCUT_SCOPE_MANAGED ""
 
 @document StackTransitionType enum_docs(:StackTransitionType,
-    "Determines animation that plays when a [`Stack`](@ref) switches from one of its pages to another", [
+    "Determines animation that plays when a [`Stack`](@ref) switches from one of its pages to another.", [
     :STACK_TRANSITION_TYPE_CROSSFADE,
     :STACK_TRANSITION_TYPE_NONE,
     :STACK_TRANSITION_TYPE_OVER_DOWN,
@@ -476,7 +476,7 @@
 @document STACK_TRANSITION_TYPE_UNDER_UP "Slide next page under current, from bottom to top"
 
 @document TextureScaleMode enum_docs(:TextureScaleMode,
-    "Determines how [`Texture`](@ref) filters when scaled", [
+    "Determines how [`Texture`](@ref) filters when scaled.", [
     :TEXTURE_SCALE_MODE_LINEAR,
     :TEXTURE_SCALE_MODE_NEAREST
 ])
@@ -484,7 +484,7 @@
 @document TEXTURE_SCALE_MODE_NEAREST "Nearest-neighbor interploation"
 
 @document TextureWrapMode enum_docs(:TextureWrapMode,
-    "Determines content of fragments with a texture coordinate outside of `[0, 1]`", [
+    "Determines content of fragments with a texture coordinate outside of `[0, 1]`.", [
     :TEXTURE_WRAP_MODE_MIRROR,
     :TEXTURE_WRAP_MODE_ONE,
     :TEXTURE_WRAP_MODE_REPEAT,
