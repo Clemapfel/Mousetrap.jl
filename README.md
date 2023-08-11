@@ -132,17 +132,16 @@ Click registered at (367.5, 289.0)
 
 ## Supported Platforms
 
-| Platform         | Basic GUI Component | Native Rendering Component |
+| Platform         | Basic GUI Component | Native Rendering Component (OpenGL) |
 |------------------|---------------------|-----------------------------|
 | Linux (64-bit)   | `✓`                | `✓`                        |
-| Linux (32-bit)   | `✓`                | `✓`                        |
+| Linux (32-bit)   | `✓`                | `✕`                        |
 | Windows (64-bit) | `✓`                | `✓`                        |
 | Windows (32-bit) | `✕`                | `✕`                        |
 | MacOS            | `✓`                | `✕`                        |
-| FreeBSD          | `✓`                | `✓`                       | 
+| FreeBSD          | `✓`                | `✓`                        | 
 
 ---
-
 
 ## Installation
 
@@ -162,7 +161,7 @@ Where all four packages need to be installed, regardless of the operating system
 
 ## Documentation
 
-Documentation is available [here](https://clemens-cords.com/mousetrap). This includes a tutorial on how to install mousetrap, a user manual introducing users to mousetrap and GUI programming in general, as well as an index of all classes, enums, and functions.
+Documentation is available [here](https://clemens-cords.com/mousetrap). This includes a tutorial on how to get started using mousetrap, a user manual introducing users to mousetrap and GUI programming in general, as well as an index of all classes, enums, and functions.
 
 --- 
 
@@ -170,7 +169,7 @@ Documentation is available [here](https://clemens-cords.com/mousetrap). This inc
 
 The Julia and C++ component of mousetrap were designed and implemented by [C.Cords](https://clemens-cords.com).
 
-Consider donating to support the continued development of this library [here](TODO).
+Consider donating to support the continued development of this library [here](https://github.com/sponsors/Clemapfel).
 
 The goal is for mousetrap to be 100% stable and flawless when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of [fully featured, easy-to-use](https://github.com/JuliaGraphics/Gtk.jl/issues) GUI libraries are currently the largest factors as to why Julia is ill-suited for front-end development. Mousetrap aims to address the latter.
 

@@ -141,10 +141,10 @@ end
 
 ## include
 
-include("docs/signals.jl")
-include("docs/functions.jl")
-include("docs/types.jl")
-include("docs/enums.jl")
+include("docgen/signals.jl")
+include("docgen/functions.jl")
+include("docgen/types.jl")
+include("docgen/enums.jl")
 
 macro generate_signal_function_docs(snake_case)
 
