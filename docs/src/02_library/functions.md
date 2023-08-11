@@ -2543,10 +2543,6 @@ mousetrap.remove_action!
 ```@docs
 mousetrap.remove_center_child!
 ```
-## `remove_center_widget!`
-```@docs
-mousetrap.remove_center_widget!
-```
 ## `remove_child!`
 ```@docs
 mousetrap.remove_child!
@@ -2994,10 +2990,6 @@ mousetrap.set_is_horizontally_homogeneous!
 ## `set_is_inverted!`
 ```@docs
 mousetrap.set_is_inverted!
-```
-## `set_is_is_revealed!`
-```@docs
-mousetrap.set_is_is_revealed!
 ```
 ## `set_is_modal!`
 ```@docs

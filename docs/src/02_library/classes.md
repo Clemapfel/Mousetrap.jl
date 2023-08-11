@@ -36,8 +36,8 @@ ActionBar
 + [`push_back!`](@ref)
 + [`push_front!`](@ref)
 + [`remove!`](@ref)
-+ [`remove_center_widget!`](@ref)
-+ [`set_is_is_revealed!`](@ref)
++ [`remove_center_child!`](@ref)
++ [`set_is_revealed!`](@ref)
 
 
 + [`connect_signal_destroy!`](@ref)

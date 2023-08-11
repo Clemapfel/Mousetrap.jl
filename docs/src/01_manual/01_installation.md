@@ -44,13 +44,13 @@ julia main.jl
 !!! danger "Using mousetrap from within the REPL"
     As of version `v0.1.0`, **interactive use of mousetrap is discouraged**. 
     
-    `main` will stall, meaning as long as the application from our `main.jl` is running, the REPL will "hang". When the application exits, `main` will exit, restoring the interactivity of the REPL.
+    `main` will stall, meaning as long as the application from our `main.jl` is running, the REPL will "hang". When the application exits, `main` will exit, restoring the interactivity of the REPL. Because of this, the application state cannot be modified interactively while it is running.
 
 ---
 
 ## Julia Crash Course
 
-The rest of this manual will assume that readers are familiar with the basics of Julia and graphics programming in general. To bring anyone who considers themselves not in this group up to speed, this section contains a crash course on programming basics needed to understand the rest of this manual.
+The rest of this manual will assume that readers are familiar with the basics of Julia and some fundamentals of graphics programming. To bring anyone who considers themselves not in this group up to speed, this section contains a crash course on programming basics needed to understand the rest of this manual.
 
 ### Glossary
 
@@ -58,7 +58,7 @@ The following terms may be unfamiliar to some.
 
 #### Invocation
 
-To "invoke" a function means to execute it using a command, possibly  arguments. For example, the second line in the following snippet *invokes function `foo`*:
+To "invoke" a function means to execute it using a command, possibly providing arguments. For example, the second line in the following snippet *invokes function `foo`*:
 
 ```julia
 foo(x) = println(x) # definition
