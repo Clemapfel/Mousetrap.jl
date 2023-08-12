@@ -1,5 +1,3 @@
- ## **NOTE**: This repo is under active development and should not be interacted with by the public. I will make an announcement in all the relevant channels when it is ready to be used by third parties
-
 # Mousetrap
 
 ![](docs/src/assets/banner.png)
