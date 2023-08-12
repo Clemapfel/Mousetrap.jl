@@ -3528,6 +3528,7 @@ Rotate around a point, in OpenGL coordinates.
 ```
 run!(app::Application) -> Cint
 ```
+
 Start the main loop, initializing the internal state and triggering `Application`s signal `activate`. Note that 
 no part of mousetrap should be used or initialized before this function is called.
 

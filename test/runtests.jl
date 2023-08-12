@@ -168,6 +168,8 @@ end
 
 function test_angle(::Container)
     @testset "Angle" begin
+        angle = degrees(90)
+        Base.show(devnull, angle)
         @test isapprox(as_degrees(radians(as_radians(degrees(90)))), 90.0)
     end
 end

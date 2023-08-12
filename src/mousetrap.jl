@@ -16,17 +16,15 @@ module mousetrap
         using CxxWrap
         function __init__() @initcxx end
 
-        #=
         using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
 
-        if Sys.isapple()
-            lib = mousetrap_apple_jll.mousetrap_julia_binding_apple
+        @static if Sys.isapple()
+            lib = mousetrap_apple_jll.mousetrap_julia_binding
         elseif Sys.iswindows()
-            lib = mousetrap_windows_jll.mousetrap_julia_binding_windows
+            lib = mousetrap_windows_jll.mousetrap_julia_binding
         else
-            lib = mousetrap_linux_jll.mousetrap_julia_binding_linux
+            lib = mousetrap_linux_jll.mousetrap_julia_binding
         end
-        =#
 
         lib = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
         @wrapmodule(lib)
@@ -158,6 +156,20 @@ module mousetrap
 ####### common.jl
 
     macro do_not_compile(args...) return :() end
+
+    import Base: *
+    *(x::Symbol, y::Symbol) = Symbol(string(x) * string(y))
+
+    function from_julia_index(x::Integer) ::UInt64
+        if x <= 0
+            throw(AssertionError("Index $x < 1; Indices in Julia are 1-based."))
+        end
+        return x - 1
+    end
+
+    function to_julia_index(x::Integer) ::Int64
+        return x + 1
+    end
 
     function safe_call(scope::String, f, args...)
         try
@@ -422,7 +434,6 @@ module mousetrap
         return out
     end
 
-
     function show_aux(io::IO, x::T, fields::Symbol...) where T
 
         out = string(typeof(x)) * "("
@@ -446,23 +457,6 @@ module mousetrap
 
         out *= ")"
         print(io, out)
-    end
-
-    import Base: *
-    *(x::Symbol, y::Symbol) = Symbol(string(x) * string(y))
-
-    import Base: clamp
-    clamp(x::AbstractFloat, lower::AbstractFloat, upper::AbstractFloat) = if x < lower return lower elseif x > upper return upper else return x end
-
-    function from_julia_index(x::Integer) ::UInt64
-        if x <= 0
-            throw(AssertionError("Index $x < 1; Indices in Julia are 1-based."))
-        end
-        return x - 1
-    end
-
-    function to_julia_index(x::Integer) ::Int64
-        return x + 1
     end
 
 ###### vector.jl
@@ -510,7 +504,7 @@ module mousetrap
     const Vector3i = Vector3{Cint}
     const Vector3ui = Vector3{Csize_t}
 
-    export Vector3, Vector3f, Vector3i, Vector3ui
+    export Vector3f, Vector3i, Vector3ui
 
     mutable struct Vector4{T <: Number}
         x::T
@@ -534,7 +528,7 @@ module mousetrap
     const Vector4i = Vector4{Cint}
     const Vector4ui = Vector4{Csize_t}
 
-    export Vector4, Vector4f, Vector4i, Vector4ui
+    export Vector4f, Vector4i, Vector4ui
 
     Base.show(io::IO, x::Vector2{T}) where T = print(io, "Vector2{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ")")
     Base.show(io::IO, x::Vector3{T}) where T = print(io, "Vector3{" * string(T) * "}(" * string(x.x) * ", " * string(x.y) * ", " * string(x.z) * ")")
@@ -623,7 +617,7 @@ module mousetrap
     Base.:(==)(a::Angle, b::Angle) = a._rads == b._rads
     Base.:(!=)(a::Angle, b::Angle) = !(a._rads == b._rads)
 
-    Base.show(io::IO, x::Angle) = print(io, "Angle($(as_degrees(angle))°)")
+    Base.show(io::IO, angle::Angle) = print(io, "Angle($(as_degrees(angle))°)")
 
 ####### signal_components.jl
 
@@ -1601,10 +1595,7 @@ module mousetrap
             return run!(app)
         end 
 
-        if Sys.isapple() 
-            @warn "In mousetrap::main: You are running mousetrap on MacOS, which is not currently supported. See `https://github.com/Clemapfel/mousetrap.jl` for more information."
-            # use Julia warning because even log_warning might not work on mac
-        end
+        task.sticky = true
 
         if isinteractive() && Threads.nthreads() > 1
             @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. Interactive use of mousetrap is an experimental feature, side-effects may occurr."
@@ -1612,7 +1603,6 @@ module mousetrap
             return schedule(task)
         end
             
-        task.sticky = true
         return wait(schedule(task))
     end
     export main
@@ -1919,7 +1909,7 @@ module mousetrap
     ==(a::Icon, b::Icon) = detail.compare_icons(a._internal, b_internal)
 
     import Base.!=
-    !=(a::Icon, b::Icon) = !Base.==(a, b)
+    !=(a::Icon, b::Icon) = !(a == b)
 
     @export_function Icon get_size Vector2i
 
@@ -2328,22 +2318,22 @@ module mousetrap
     @export_function FileChooser set_file_chooser_action! Cvoid FileChooserAction action
     @export_function FileChooser get_file_chooser_action FileChooserAction
 
-    add_filter!(chooser::FileChooser, filter::FileFilter) ::Cvoid = detail.add_filter!(chooser._internal, filter._internal)
+    add_filter!(chooser::FileChooser, filter::FileFilter) = detail.add_filter!(chooser._internal, filter._internal)
     export add_filter!
 
-    clear_filters!(chooser::FileChooser) ::Cvoid = detail.clear_filters!(chooser._internal)
+    clear_filters!(chooser::FileChooser) = detail.clear_filters!(chooser._internal)
     export clear_filters!
 
-    set_initial_filter!(chooser::FileChooser, filter::FileFilter) ::Cvoid = detail.set_initial_filter!(chooser._internal, filter._internal)
+    set_initial_filter!(chooser::FileChooser, filter::FileFilter) = detail.set_initial_filter!(chooser._internal, filter._internal)
     export set_initial_filter!
 
-    set_initial_file!(chooser::FileChooser, file::FileDescriptor) ::Cvoid = detail.set_initial_file!(chooser._internal, file._internal)
+    set_initial_file!(chooser::FileChooser, file::FileDescriptor) = detail.set_initial_file!(chooser._internal, file._internal)
     export set_initial_file!
 
-    set_initial_folder!(chooser::FileChooser, folder::FileDescriptor) ::Cvoid = detail.set_initial_file!(chooser._internal, folder._internal)
+    set_initial_folder!(chooser::FileChooser, folder::FileDescriptor) = detail.set_initial_file!(chooser._internal, folder._internal)
     export set_initial_folder!
 
-    set_initial_name!(chooser::FileChooser, name::String) ::Cvoid = detail.set_initial_name!(chooser._internal, name)
+    set_initial_name!(chooser::FileChooser, name::String) = detail.set_initial_name!(chooser._internal, name)
     export set_initial_name!
 
     Base.show(io::IO, x::FileChooser) = show_aux(io, x)
@@ -2582,7 +2572,7 @@ module mousetrap
     @export_function Box set_homogeneous! Cvoid Bool b
     @export_function Box get_homogeneous Bool
 
-    function set_spacing!(box::Box, spacing::Number) ::Cvoid
+    function set_spacing!(box::Box, spacing::Number)
         detail.set_spacing!(box._internal, convert(Cfloat, spacing))
     end
     export set_spacing!
@@ -2730,7 +2720,6 @@ module mousetrap
     @add_signal_switched Switch
 
     Base.show(io::IO, x::Switch) = show_aux(io, x, :is_active)
-
 
 ####### toggle_button.jl
 
@@ -3066,14 +3055,9 @@ module mousetrap
     @export_function TextView get_bottom_margin Cfloat
 
     @add_widget_signals TextView
-    # @add_signal_undo TextView
-    # @add_signal_redo TextView
     @add_signal_text_changed TextView
 
-    Base.show(io::IO, x::TextView) = show_aux(io, x, 
-        :text, 
-        :was_modified
-    )
+    Base.show(io::IO, x::TextView) = show_aux(io, x, :text, :was_modified)
 
 ####### frame.jl
 
