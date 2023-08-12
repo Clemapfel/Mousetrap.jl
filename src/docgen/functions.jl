@@ -950,14 +950,6 @@ get_child_at(::Stack, index::Integer) -> StackID
 Retrieve the ID of the stack page at given position, or `""` if the index is out of bounds.
 """
 
-@document get_child_position """
-```
-get_child_position(fixed::Fixed, child::Widget) -> Vector2f
-```
-Get the fixed location of a child, in absolute widget-space coordinates. If the `Fixed` is not
-yet realized, `(0, 0)` will be returned.
-"""
-
 @document get_child_x_alignment """
 ```
 get_child_x_alignment(::AspectFrame) -> Float32
@@ -2237,6 +2229,8 @@ Get the actual duration of the last rendered frame.
 @document get_title """
 ```
 get_title(::Window) -> String
+get_title(::FileChooser) -> String
+get_title(::ColorChooser) -> String
 ```
 Get the window title.
 
@@ -4924,6 +4918,8 @@ end
 @document set_title! """
 ```
 set_title!(::Window, title::String) 
+set_title!(::FileChooser, title::String)
+set_title!(::ColorChooser, title::String)
 ```
 Set the windows title, which will be shown in its titlebar.
 

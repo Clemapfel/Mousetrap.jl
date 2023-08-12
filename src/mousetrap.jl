@@ -16,6 +16,7 @@ module mousetrap
         using CxxWrap
         function __init__() @initcxx end
 
+        #=
         using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
 
         @static if Sys.isapple()
@@ -25,8 +26,9 @@ module mousetrap
         else
             lib = mousetrap_linux_jll.mousetrap_julia_binding
         end
+        =#
 
-        #lib = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
+        lib = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
         @wrapmodule(lib)
     end
 
@@ -2284,6 +2286,8 @@ module mousetrap
     @export_function FileChooser cancel! Cvoid
     @export_function FileChooser set_is_modal! Cvoid Bool modal
     @export_function FileChooser get_is_modal Bool
+    @export_function FileChooser set_title! Cvoid String title
+    @export_function FileChooser get_title String
 
     function on_accept!(f, chooser::FileChooser, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (FileChooser, Vector{FileDescriptor}, Data_t))
@@ -2408,6 +2412,8 @@ module mousetrap
 
     @export_function ColorChooser set_is_modal! Cvoid Bool b
     @export_function ColorChooser get_is_modal Bool
+    @export_function ColorChooser set_title! Cvoid String title
+    @export_function ColorChooser get_title String
 
     function on_accept!(f, chooser::ColorChooser, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (ColorChooser, RGBA, Data_t))
@@ -2926,13 +2932,6 @@ module mousetrap
 
     set_child_position!(fixed::Fixed, child::Widget, position::Vector2f) = detail.set_child_position!(fixed._internal, as_widget_pointer(child), position)
     export set_child_position!
-
-    function get_child_position(fixed::Fixed, child::Widget) ::Vector2f 
-        # this is a bug in GTK4
-        log_warning(MOUSETRAP_DOMAIN, "In get_child_position: Unable to retrieve child position, returning (0, 0)")
-        detail.get_child_position(fixed._internal, as_widget_pointer(child))
-    end
-    export get_child_position
 
     @add_widget_signals Fixed
 

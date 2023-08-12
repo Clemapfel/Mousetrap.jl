@@ -671,6 +671,10 @@ function test_color_chooser(::Container)
         @test get_is_modal(color_chooser) == true
         set_is_modal!(color_chooser, false)
         @test get_is_modal(color_chooser) == false
+
+        @test get_title(color_chooser) == ""
+        set_title!(color_chooser, "TEST")
+        @test get_title(color_chooser) == "TEST"
     end
 end
 
@@ -846,6 +850,10 @@ function test_file_chooser(::Container)
         set_is_modal!(file_chooser, false)
         @test get_is_modal(file_chooser) == false
 
+        @test get_title(file_chooser) == ""
+        set_title!(file_chooser, "TEST")
+        @test get_title(file_chooser) == "TEST"
+
         on_accept!(file_chooser) do x::FileChooser, files::Vector{FileDescriptor}
         end
 
@@ -915,12 +923,8 @@ function test_fixed(::Container)
         child = Label("(32, 32)")
 
         add_child!(fixed, child, Vector2f(32, 32))
-        #@test get_child_position(fixed, child) == Vector2f(32, 32)
         set_child_position!(fixed, child, Vector2f(64, 64))
-        #@test get_child_position(fixed, child) == Vector2f(64, 64)
-
-        # position is (0, 0) until fixed is realized
-
+       
         remove_child!(fixed, child)
     end
 end
