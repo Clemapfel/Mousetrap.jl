@@ -155,7 +155,9 @@ Pkg.add(url="https://github.com/Clemapfel/mousetrap.jl")
 Pkg.test("mousetrap")
 ```
 
-Where all four packages need to be installed, regardless of the operating system.
+Where all four packages need to be installed, regardless of the operating system. 
+
+Note that installation may take a long time. Once mousetrap precompilation is done, it can be loaded in only a few seconds.
 
 ---
 
