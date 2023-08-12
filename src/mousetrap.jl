@@ -8,7 +8,7 @@
 
 module mousetrap
 
-    const VERSION = v"0.1.0"
+const VERSION = v"0.1.0"
 
 ####### detail.jl
 
@@ -16,7 +16,6 @@ module mousetrap
         using CxxWrap
         function __init__() @initcxx end
 
-        #=
         using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
         @static if Sys.isapple()
             lib = mousetrap_apple_jll.mousetrap_julia_binding
@@ -25,10 +24,7 @@ module mousetrap
         else
             lib = mousetrap_linux_jll.mousetrap_julia_binding
         end
-        =#
-
-        using mousetrap_linux_jll
-        lib = mousetrap_linux_jll.mousetrap_julia_binding
+      
         #lib = "/home/clem/Workspace/mousetrap_julia_binding/cmake-build-debug/libmousetrap_julia_binding.so"
         @wrapmodule(lib)
     end
