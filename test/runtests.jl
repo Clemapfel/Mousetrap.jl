@@ -1108,20 +1108,23 @@ end
 function test_icon(::Container)
 
     theme = IconTheme(Main.window[])
+    names = get_icon_names(theme)
 
     @testset "Icon" begin
-        icon_name = get_icon_names(theme)[1]
-        icon = Icon(theme, icon_name, 64)
-        Base.show(devnull, icon)
+        if !isempty(names)
+            icon_name = size(names)
+            icon = Icon(theme, icon_name, 64)
+            @test get_size(icon).x == 64 && get_size(icon).y == 64
+        else
+            icon = Icon()
+        end
 
-        @test get_size(icon).x == 64 && get_size(icon).y == 64
+        Base.show(devnull, icon)
     end 
 
     @testset "IconTheme" begin
 
         Base.show(devnull, theme)
-
-        names = get_icon_names(theme)
 
         if !isempty(names)
             @test has_icon(theme, names[1])
@@ -1869,7 +1872,7 @@ end
 
 function test_separator(::Container)
     @testset "Separator" begin
-        separator = Separator(ORIENTATION_HORIZONTAL; opacity = 0.5)
+        separator = Separator(ORIENTATION_HORIZONTAL)
         Base.show(devnull, separator)
         @test mousetrap.is_native_widget(separator)
 
@@ -2356,7 +2359,7 @@ function test_widget(widget::Container)
         mousetrap.add_css_class!(widget, "test")
         @test !isempty(mousetrap.get_css_classes(widget))
         mousetrap.remove_css_class!(widget, "test")
-        @test isempty(get_css_classes(widget))
+        @test isempty(mousetrap.get_css_classes(widget))
 
         tick_callback_called = Ref{Bool}(false)
         set_tick_callback!(widget, tick_callback_called) do clock::FrameClock, tick_callback_called
