@@ -1109,10 +1109,11 @@ function test_icon(::Container)
 
     theme = IconTheme(Main.window[])
     names = get_icon_names(theme)
+        # names will contain linux default theme, but is empty on windows
 
     @testset "Icon" begin
         if !isempty(names)
-            icon_name = size(names)
+            icon_name = names[1]
             icon = Icon(theme, icon_name, 64)
             @test get_size(icon).x == 64 && get_size(icon).y == 64
         else
