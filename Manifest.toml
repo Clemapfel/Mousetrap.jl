@@ -995,7 +995,7 @@ git-tree-sha1 = "0a51af2951a2fa5729450d695591b7f1dfabb39c"
 repo-rev = "main"
 repo-url = "https://github.com/Clemapfel/mousetrap_linux_jll"
 uuid = "b6bb2801-a71f-530d-97b4-a6ed24b69d40"
-version = "0.1.1+0"
+version = "0.1.0+0"
 
 [[deps.mousetrap_windows_jll]]
 deps = ["Artifacts", "GLEW_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "X11_jll", "libcxxwrap_julia_jll", "libjulia_jll"]
@@ -1003,7 +1003,7 @@ git-tree-sha1 = "42ccdb0e9b5e48e3f913b0000b0a99b49474b963"
 repo-rev = "main"
 repo-url = "https://github.com/Clemapfel/mousetrap_windows_jll"
 uuid = "1923bf96-b834-50bb-8499-88d15429481f"
-version = "0.1.1+0"
+version = "0.1.0+0"
 
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]
