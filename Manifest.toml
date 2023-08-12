@@ -2,7 +2,7 @@
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "a44f0b5f716d2971aeda3deaa2e039fc924e96ea"
+project_hash = "955cd1f285a3f53137a5e98bb3b12509e6e3e540"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -203,9 +203,9 @@ version = "9.0.1+0"
 
 [[deps.GTK4_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "FriBidi_jll", "Glib_jll", "Graphene_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Libepoxy_jll", "Pango_jll", "Wayland_jll", "Wayland_protocols_jll", "Xorg_libX11_jll", "Xorg_libXcursor_jll", "Xorg_libXdamage_jll", "Xorg_libXext_jll", "Xorg_libXfixes_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "Xorg_libXrender_jll", "gdk_pixbuf_jll", "iso_codes_jll", "xkbcommon_jll"]
-git-tree-sha1 = "5cc820185f369fb64e3d02914366dc1f66fcf235"
+git-tree-sha1 = "e4f9ed37b104967acb37989984d34ad07f3a2d26"
 uuid = "6ebb71f1-8434-552f-b6b1-dc18babcca63"
-version = "4.10.4+0"
+version = "4.10.5+0"
 
 [[deps.Gettext_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "XML2_jll"]
@@ -983,23 +983,23 @@ version = "1.0.20+0"
 
 [[deps.mousetrap_apple_jll]]
 deps = ["Artifacts", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "libadwaita_jll", "libcxxwrap_julia_jll", "libjulia_jll"]
-git-tree-sha1 = "a4b2d97bc4012e625dd9031f0cc2163b79990f90"
+git-tree-sha1 = "16b18ea87ee5f9ddddae3e23baefc4fb3d2bb2f8"
 repo-rev = "main"
 repo-url = "https://github.com/Clemapfel/mousetrap_apple_jll"
 uuid = "7f2654e2-337a-59f5-9aed-6445982bfb16"
 version = "0.1.0+0"
 
 [[deps.mousetrap_linux_jll]]
-deps = ["Artifacts", "GLEW_jll", "GLU_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "libcxxwrap_julia_jll", "libjulia_jll"]
-git-tree-sha1 = "0a51af2951a2fa5729450d695591b7f1dfabb39c"
+deps = ["Artifacts", "GLEW_jll", "GLU_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "libadwaita_jll", "libcxxwrap_julia_jll", "libjulia_jll"]
+git-tree-sha1 = "85003dc497bb15e8e319847fdff7746c0d4cc425"
 repo-rev = "main"
 repo-url = "https://github.com/Clemapfel/mousetrap_linux_jll"
 uuid = "b6bb2801-a71f-530d-97b4-a6ed24b69d40"
 version = "0.1.0+0"
 
 [[deps.mousetrap_windows_jll]]
-deps = ["Artifacts", "GLEW_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "X11_jll", "libcxxwrap_julia_jll", "libjulia_jll"]
-git-tree-sha1 = "42ccdb0e9b5e48e3f913b0000b0a99b49474b963"
+deps = ["Artifacts", "GLEW_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "X11_jll", "libadwaita_jll", "libcxxwrap_julia_jll", "libjulia_jll"]
+git-tree-sha1 = "74cf370ee6563635b654b7ea461aa3c6f943b680"
 repo-rev = "main"
 repo-url = "https://github.com/Clemapfel/mousetrap_windows_jll"
 uuid = "1923bf96-b834-50bb-8499-88d15429481f"
