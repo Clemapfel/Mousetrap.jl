@@ -584,10 +584,12 @@ ColorChooser
 #### Functions that operate on this type:
 + [`get_color`](@ref)
 + [`get_is_modal`](@ref)
++ [`get_title`](@ref)
 + [`on_accept!`](@ref)
 + [`on_cancel!`](@ref)
 + [`present!`](@ref)
 + [`set_is_modal!`](@ref)
++ [`set_title!`](@ref)
 
 
 ---
@@ -981,6 +983,7 @@ FileChooser
 + [`get_accept_label`](@ref)
 + [`get_file_chooser_action`](@ref)
 + [`get_is_modal`](@ref)
++ [`get_title`](@ref)
 + [`on_accept!`](@ref)
 + [`on_cancel!`](@ref)
 + [`present!`](@ref)
@@ -991,6 +994,7 @@ FileChooser
 + [`set_initial_folder!`](@ref)
 + [`set_initial_name!`](@ref)
 + [`set_is_modal!`](@ref)
++ [`set_title!`](@ref)
 
 
 ---
@@ -1065,7 +1069,6 @@ Fixed
 ```
 #### Functions that operate on this type:
 + [`add_child!`](@ref)
-+ [`get_child_position`](@ref)
 + [`remove_child!`](@ref)
 + [`set_child_position!`](@ref)
 
@@ -3913,7 +3916,6 @@ Widget
 + [`find`](@ref)
 + [`get_allocated_size`](@ref)
 + [`get_can_respond_to_input`](@ref)
-+ [`get_child_position`](@ref)
 + [`get_clipboard`](@ref)
 + [`get_expand_horizontally`](@ref)
 + [`get_expand_vertically`](@ref)

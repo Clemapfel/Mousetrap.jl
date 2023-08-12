@@ -181,12 +181,13 @@ The goal is for mousetrap to be 100% stable and flawless when Julia [static comp
 
 Consider contributing by taking on one of these bounty projects:
 
-+ [Cross-Platform App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
++ [App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
 + [Native Rendering on MacOS](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978341)
++ [Cross-Platform Continuous Integration](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=35737729#)
 
-I am unable to offer any monetary reward, but I'd be happy to credit you as a co-author of mousetrap on [GitHub](https://github.com/Clemapfel/mousetrap.jl#credits) and [as a Julia package author](https://github.com/Clemapfel/mousetrap.jl/blob/main/Project.toml#L3) if your work contributes significantly to the implementation of one of these two bounty projects.
+I am unable to offer any monetary reward, but I'd be happy to credit you as a co-author of mousetrap on [GitHub](https://github.com/Clemapfel/mousetrap.jl#credits) and [as a Julia package author](https://github.com/Clemapfel/mousetrap.jl/blob/main/Project.toml#L3) if your work contributes significantly to the implementation of one of these three bounty projects.
 
-Other than this, consider participating in development by [opening an issue](https://github.com/Clemapfel/mousetrap.jl/issues) if you encounter [a bug](https://github.com/clemapfel/mousetrap.jl) or [missing feature](https://github.com/users/Clemapfel/projects/2).
+Other than this, consider participating in development by [opening an issue](https://github.com/Clemapfel/mousetrap.jl/issues) if you encounter a bug, crash, or [missing feature](https://github.com/users/Clemapfel/projects/2).
 
 Thank you for your consideration.<br>
 C.

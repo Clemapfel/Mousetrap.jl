@@ -1223,10 +1223,6 @@ mousetrap.get_centroid
 ```@docs
 mousetrap.get_child_at
 ```
-## `get_child_position`
-```@docs
-mousetrap.get_child_position
-```
 ## `get_child_x_alignment`
 ```@docs
 mousetrap.get_child_x_alignment
