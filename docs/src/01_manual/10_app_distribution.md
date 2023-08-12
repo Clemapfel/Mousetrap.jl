@@ -8,4 +8,4 @@ In this chapter we will learn:
 ---
 
 !!! compat
-    These features are not yet implemented, this section is incomplete. As of version 0.1.0, there is no unified way to bundle and distribute a mousetrap app.
+    These features are not yet implemented, this section is incomplete. As of version 0.1.0, there is no unified way to bundle and distribute a mousetrap app. See [here](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204#) for more information.

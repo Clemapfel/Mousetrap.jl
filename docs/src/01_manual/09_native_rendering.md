@@ -113,6 +113,8 @@ add_render_task!(render_area, RenderTask(shape))
     using mousetrap
     main() do app::Application
 
+        set_current_theme!(app, THEME_DEFAULT_DARK)
+
         window = Window(app)
         set_title!(window, "mousetrap.jl")
         render_area = RenderArea()
@@ -556,6 +558,7 @@ Wrap mode governs how the texture behaves when a vertices texture coordinates co
     mousetrap.get_top_level_widget(x::TexturePage) = x.center_box
 
     main() do app::Application
+
         window = Window(app)
         set_title!(window, "mousetrap.jl")
 

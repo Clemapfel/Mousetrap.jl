@@ -2329,3 +2329,9 @@ Using this technique, we can build an application piece by piece. A compound wid
 
 Our users are only able to interact with the compound widget by interacting with each of its components, which works but is fairly limiting. In the next chapter, this will change. By learning about **event handling**, we will be able to react to any kind of user-interaction, giving us the last tool needed to create an application that isn't just a collection of pre-made widgets, but something we have built ourselves.
 
+## Custom Signals
+
+!!! compat
+    This feature is not yet implemented, this section is incomplete. See [here](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=35716010#) for more information.
+
+

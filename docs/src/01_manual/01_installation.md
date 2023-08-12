@@ -135,6 +135,10 @@ For example, in the `main.jl` above, the label `"Hello World!"` will only be dra
 
 This is in opposition to how many video games work. Usually, in video game engines, each frame will make it such that the entire screen is re-drawn every time. This difference is important to realize.
 
+#### Native Rendering
+
+Native rendering, in mousetrap, is the process of updating the currently displayed frame using the graphics card, making it a hardware accelerated, GPU-side operation. This is in opposition to CPU-side rendering, which is generally slower. Native rendering in mousetrap is performed using [OpenGL](https://www.khronos.org/opengl/wiki/), with an entire chapter of this manual dedicated to this technique.
+
 ---
 
 ## Object Oriented Design
