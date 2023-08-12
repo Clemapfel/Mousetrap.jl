@@ -18,7 +18,6 @@ module mousetrap
 
         #=
         using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
-
         @static if Sys.isapple()
             lib = mousetrap_apple_jll.mousetrap_julia_binding
         elseif Sys.iswindows()
@@ -28,7 +27,9 @@ module mousetrap
         end
         =#
 
-        lib = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
+        using mousetrap_linux_jll
+        lib = mousetrap_linux_jll.mousetrap_julia_binding
+        #lib = "/home/clem/Workspace/mousetrap_julia_binding/cmake-build-debug/libmousetrap_julia_binding.so"
         @wrapmodule(lib)
     end
 

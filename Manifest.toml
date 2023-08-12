@@ -2,7 +2,7 @@
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "955cd1f285a3f53137a5e98bb3b12509e6e3e540"
+project_hash = "2418115c846197cb54eef0fbfd325b53081d2bd4"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -981,25 +981,17 @@ git-tree-sha1 = "848ab3d00fe39d6fbc2a8641048f8f272af1c51e"
 uuid = "a9144af2-ca23-56d9-984f-0d03f7b5ccf8"
 version = "1.0.20+0"
 
-[[deps.mousetrap_apple_jll]]
-deps = ["Artifacts", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "libadwaita_jll", "libcxxwrap_julia_jll", "libjulia_jll"]
-git-tree-sha1 = "16b18ea87ee5f9ddddae3e23baefc4fb3d2bb2f8"
-repo-rev = "main"
-repo-url = "https://github.com/Clemapfel/mousetrap_apple_jll"
-uuid = "7f2654e2-337a-59f5-9aed-6445982bfb16"
-version = "0.1.0+0"
-
 [[deps.mousetrap_linux_jll]]
 deps = ["Artifacts", "GLEW_jll", "GLU_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "libadwaita_jll", "libcxxwrap_julia_jll", "libjulia_jll"]
-git-tree-sha1 = "85003dc497bb15e8e319847fdff7746c0d4cc425"
+git-tree-sha1 = "035dc6c750076decac54734ebb5b9730c6180d6a"
 repo-rev = "main"
-repo-url = "https://github.com/Clemapfel/mousetrap_linux_jll"
+repo-url = "https://github.com/clemapfel/mousetrap_linux_jll"
 uuid = "b6bb2801-a71f-530d-97b4-a6ed24b69d40"
 version = "0.1.0+0"
 
 [[deps.mousetrap_windows_jll]]
 deps = ["Artifacts", "GLEW_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "X11_jll", "libadwaita_jll", "libcxxwrap_julia_jll", "libjulia_jll"]
-git-tree-sha1 = "74cf370ee6563635b654b7ea461aa3c6f943b680"
+git-tree-sha1 = "eb4e87898b3fb214abe4db5d5839e088279ec7c8"
 repo-rev = "main"
 repo-url = "https://github.com/Clemapfel/mousetrap_windows_jll"
 uuid = "1923bf96-b834-50bb-8499-88d15429481f"
