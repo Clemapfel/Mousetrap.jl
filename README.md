@@ -21,8 +21,8 @@ Consider participating in the development by [opening an issue](https://github.c
 3.1 [Hello World](#hello-world)<br>
 3.2 [Swapping between Light- and Dark Themes](#swapping-between-light--and-dark-themes)<br>
 3.3 [Opening a File Explorer Dialog](#opening-a-file-explorer-dialog)<br>
-3.4 [Reacting to Mouse / Touchscreen Events](#reacting-to-mouse--touchscreen-presses)<br>
-3.5 [Rendering a Rectangle using OpenGL](#rendering-a-rectangle-with-opengl)<br>
+3.4 [Rendering a Rectangle using OpenGL](#rendering-a-rectangle-with-opengl)<br>
+3.5 [Reacting to Mouse / Touchscreen Events](#reacting-to-mouse--touchscreen-presses)<br>
 4. [Supported Platforms](#supported-platforms)<br>
 5. [Installation](#installation)<br>
 6. [Documentation](#documentation)<br>
@@ -144,14 +144,15 @@ Click registered at (367.5, 289.0)
 
 ## Installation
 
-In the Julia REPL, press the `]` key to enter `Pkg` mode, then:
+In the Julia REPL, execute:
 
-```
-add https://github.com/Clemapfel/mousetrap_windows_jll
-add https://github.com/Clemapfel/mousetrap_linux_jll
-add https://github.com/Clemapfel/mousetrap_apple_jll
-add https://github.com/Clemapfel/mousetrap.jl
-test mousetrap
+```julia
+import Pkg
+Pkg.add(url="https://github.com/Clemapfel/mousetrap_windows_jll")
+Pkg.add(url="https://github.com/Clemapfel/mousetrap_linux_jll")
+Pkg.add(url="https://github.com/Clemapfel/mousetrap_apple_jll")
+Pkg.add(url="https://github.com/Clemapfel/mousetrap.jl")
+Pkg.test("mousetrap")
 ```
 
 Where all four packages need to be installed, regardless of the operating system.

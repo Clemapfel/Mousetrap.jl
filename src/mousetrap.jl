@@ -26,7 +26,7 @@ module mousetrap
             lib = mousetrap_linux_jll.mousetrap_julia_binding
         end
 
-        lib = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
+        #lib = "/home/clem/Workspace/mousetrap_julia_binding/libmousetrap_julia_binding.so"
         @wrapmodule(lib)
     end
 
