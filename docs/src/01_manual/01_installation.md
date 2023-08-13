@@ -9,16 +9,18 @@ In this chapter, we will learn:
 
 ## Installation
 
-Installation of the Julia component is only a few lines. After pressing `]` while in the REPL to enter Pkg mode, we enter:
+Installation of the Julia component is only a few lines. In the REPL, we enter:
 
 ```
-add https://github.com/Clemapfel/mousetrap_windows_jll
-add https://github.com/Clemapfel/mousetrap_linux_jll
-add https://github.com/Clemapfel/mousetrap_apple_jll
-add https://github.com/Clemapfel/mousetrap.jl
+import Pkg
+Pkg.add(url="https://github.com/Clemapfel/mousetrap_windows_jll")
+Pkg.add(url="https://github.com/Clemapfel/mousetrap_linux_jll")
+Pkg.add(url="https://github.com/Clemapfel/mousetrap_apple_jll")
+Pkg.add(url="https://github.com/Clemapfel/mousetrap.jl")
+Pkg.test("mousetrap")
 ```
 
-We can make sure everything works by calling `test mousetrap`, while still in Pkg mode.
+This may take a long time. If installation was succesfull, `mousetrap tests passed` will be printed.
 
 ## Hello World
 

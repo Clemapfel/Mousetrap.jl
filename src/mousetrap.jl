@@ -1605,7 +1605,7 @@ const VERSION = v"0.1.0"
         return wait(schedule(task))
     end
     export main
-
+    
     Base.show(io::IO, x::Application) = show_aux(io, x, :is_holding, :is_marked_as_busy)
 
 ####### window.jl

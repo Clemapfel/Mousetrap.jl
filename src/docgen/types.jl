@@ -514,7 +514,7 @@ set_widget!(column, 4, Label("4"))
 @document DragEventController """
 # DragEventController <: SingleClickGesture <: EventController
 
-Event controller that recogizes drag-gestures by both a mouse or touch-device.
+Event controller that recogizes drag-gestures by both a mouse or touch device.
 
 $(@type_constructors(
     DragEventController()
@@ -1234,7 +1234,7 @@ $(@type_fields(
 @document LongPressEventController """
 # LongPressEventController <: SingleClickGesture <: EventController
 
-Event controller that recognizes long-press-gestures from a mouse or touch-device.
+Event controller that recognizes long-press-gestures from a mouse or touch device.
 
 $(@type_constructors(
     LongPressEventController()
@@ -1873,7 +1873,7 @@ end
 @document ScrollEventController """
 # ScrollEventController <: EventController
 
-Controller recognizing scrolling gestures, such as a mouse scrollwheel or 2-finger touch-screen scrolling.
+Controller recognizing scrolling gestures by a mouse scrollwheel or touch device.
 
 $(@type_constructors(
     ScrollEventController([kinetic_scrolling_enabled::Bool = false])
