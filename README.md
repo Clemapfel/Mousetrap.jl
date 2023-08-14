@@ -135,8 +135,10 @@ Click registered at (367.5, 289.0)
 | Linux (32-bit)   | `✓`                | `✕`                        |
 | Windows (64-bit) | `✓`                | `✓`                        |
 | Windows (32-bit) | `✕`                | `✕`                        |
-| MacOS            | `✓`                | `✕`                        |
+| MacOS            | `✓*`                | `✕`                        |
 | FreeBSD          | `✓`                | `✓`                        | 
+
+* MacOS support remains untested and may be unstable
 
 ---
 
@@ -150,7 +152,6 @@ Pkg.add(url="https://github.com/Clemapfel/mousetrap_windows_jll")
 Pkg.add(url="https://github.com/Clemapfel/mousetrap_linux_jll")
 Pkg.add(url="https://github.com/Clemapfel/mousetrap_apple_jll")
 Pkg.add(url="https://github.com/Clemapfel/mousetrap.jl")
-Pkg.test("mousetrap")
 ```
 
 Where all four packages need to be installed, regardless of the operating system. 
