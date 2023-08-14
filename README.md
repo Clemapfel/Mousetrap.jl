@@ -157,7 +157,7 @@ Where all four packages need to be installed, regardless of the operating system
 
 Installation may take a long time. Once mousetrap is installed and precompilation is done, it can be loaded in only a few seconds during regular usage.
 
-> **Note**: On Windows, some `GLib` log messages regarding dbus connections and  may appear during testing. These do not indicate a problem, as long as at the end of the testing suite it says `mousetrap tests passed`.
+> **Note**: On Windows and Mac, some `GLib` log messages regarding dbus connections may appear during testing. These do not indicate a problem, as long as at the end of the testing suite it says `mousetrap tests passed`.
 
 ---
 
