@@ -14,3 +14,9 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 mousetrap_apple_jll = "7f2654e2-337a-59f5-9aed-6445982bfb16"
 mousetrap_linux_jll = "b6bb2801-a71f-530d-97b4-a6ed24b69d40"
 mousetrap_windows_jll = "1923bf96-b834-50bb-8499-88d15429481f"
+
+[compat]
+CxxWrap = "0.13.4"
+mousetrap_apple_jll = "0.1.0"
+mousetrap_linux_jll = "0.1.0"
+mousetrap_windows_jll = "0.1.0"
