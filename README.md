@@ -158,6 +158,14 @@ Where all four packages need to be installed, regardless of the operating system
 
 Installation may take a long time. Once mousetrap is installed and precompilation is done, it can be loaded in only a few seconds during regular usage.
 
+We can confirm everything works by pressing `]` while in the REPL to enter `Pkg` mode, then:
+
+```
+test mousetrap
+```
+
+At the end it should say `mousetrap tests passed`.
+
 > **Note**: On Windows, some `GLib` log messages regarding dbus connections and  may appear during testing. These do not indicate a problem, as long as at the end of the testing suite it says `mousetrap tests passed`.
 
 ---

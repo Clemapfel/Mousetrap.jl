@@ -65,7 +65,7 @@ end
 
     ```julia
     using mousetrap
-    main() do app::Application
+    main() do app::App
         window = Window(app)
 
         # snippet start

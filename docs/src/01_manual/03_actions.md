@@ -202,6 +202,9 @@ That last one requires explanation. On most keyboard layouts, to type `!`, the u
         ...
     ```
 
+!!! warning "Operating System Priority"
+    Depending on the operating system, some shortcuts will already be assigned. If this is the case, we should take care not to use them in our application. For example, the above mentioned `<Control>space` shortcut [is reserved for changing input sources on macOS](https://discussions.apple.com/thread/8507324), while on Windows `<Control><Alt>Delete` will always open the task manager.
+
 ### Assigning Shortcuts to Actions
 
 Now that we know how to write a shortcut as a shortcut trigger string, we can assign it to our actions. For this, we use [`add_shortcut!`](@ref):
@@ -210,7 +213,7 @@ Now that we know how to write a shortcut as a shortcut trigger string, we can as
 shortcut_action = Action("example.shortcut_action", app) do self::Action
     println("shortcut action called")
 end
-add_shortcut!(shortcut_action, "<Control>space")
+add_shortcut!(shortcut_action, "<Control>M")
 ```
 
 An action can have multiple shortcuts, and one shortcut can be associated with two or more actions, though the latter is usually not recommended.
@@ -231,8 +234,8 @@ main() do app::Application
         println("shortcut action called")
     end
 
-    # add the shortcut `Control + Space`
-    add_shortcut!(action, "<Control>space")
+    # add the shortcut `Control + M`
+    add_shortcut!(action, "<Control>M")
     
     # make `window` listen for all shortcuts of `action`
     set_listens_for_shortcut_action!(window, action)
@@ -242,7 +245,7 @@ main() do app::Application
 end
 ```
 
-Pressing "Control + Space", we get:
+Pressing "Control + M", we get:
 
 ```
 shortcut action called
