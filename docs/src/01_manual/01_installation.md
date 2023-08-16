@@ -43,6 +43,17 @@ julia main.jl
 ```
 ![](../assets/readme_hello_world.png)
 
+!!! compat "GIO Warnings on non-Linux"
+    On Windows and macOS, running `main` may be produce warnings of the type:
+
+    ```
+    (julia:10512): GLib-GIO-WARNING **: 15:29:40.047: dbus binary failed to launch bus, maybe incompatible version
+
+    (julia:10512): GLib-GIO-CRITICAL **: 15:29:41.923: g_settings_schema_source_lookup: assertion 'source != NULL' failed  
+    ```
+
+    This is due to a non-critical bug in one of mousetraps dependencies, and does not indicate a problem. **These warnings can be safely ignored** and will be fixed in future versions of mousetrap. See [here](https://github.com/Clemapfel/mousetrap.jl/issues/5) for more information.
+
 !!! danger "Using mousetrap from within the REPL"
     As of version `v0.1.0`, **interactive use of mousetrap is discouraged**. 
     
