@@ -31,7 +31,6 @@ Action
 ActionBar
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`get_is_revealed`](@ref)
 + [`push_back!`](@ref)
 + [`push_front!`](@ref)
@@ -231,7 +230,6 @@ AxisAlignedRectangle
 Box
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`clear!`](@ref)
 + [`get_homogeneous`](@ref)
 + [`get_n_items`](@ref)
@@ -301,7 +299,6 @@ Box
 Button
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`get_has_frame`](@ref)
 + [`get_is_circular`](@ref)
 + [`remove_child!`](@ref)
@@ -439,7 +436,6 @@ CenterBox
 CheckButton
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`get_is_active`](@ref)
 + [`get_state`](@ref)
 + [`remove_child!`](@ref)
@@ -1433,7 +1429,6 @@ HSVA
 HeaderBar
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`get_layout`](@ref)
 + [`get_show_title_buttons`](@ref)
 + [`push_back!`](@ref)
@@ -1560,7 +1555,6 @@ Image
 ImageDisplay
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`clear!`](@ref)
 + [`create_as_file_preview!`](@ref)
 + [`create_from_file!`](@ref)
@@ -1846,7 +1840,6 @@ LevelBar
 ListView
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`clear!`](@ref)
 + [`find`](@ref)
 + [`get_enable_rubberband_selection`](@ref)
@@ -2410,7 +2403,6 @@ Popover
 PopoverButton
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`get_always_show_arrow`](@ref)
 + [`get_has_frame`](@ref)
 + [`get_is_circular`](@ref)
@@ -3465,11 +3457,6 @@ StackSwitcher
 
 
 ---
-## StyleClass
-```@docs
-StyleClass
-```
----
 ## StylusEventController
 ```@docs
 StylusEventController
@@ -3724,7 +3711,6 @@ Time
 ToggleButton
 ```
 #### Functions that operate on this type:
-+ [`add_style_class!`](@ref)
 + [`get_is_active`](@ref)
 + [`get_is_circular`](@ref)
 + [`remove_child!`](@ref)
@@ -3911,7 +3897,6 @@ Widget
 + [`add_child!`](@ref)
 + [`add_controller!`](@ref)
 + [`add_overlay!`](@ref)
-+ [`add_style_class!`](@ref)
 + [`add_widget!`](@ref)
 + [`find`](@ref)
 + [`get_allocated_size`](@ref)
@@ -3950,7 +3935,6 @@ Widget
 + [`remove_overlay!`](@ref)
 + [`remove_tick_callback!`](@ref)
 + [`remove_tooltip_widget!`](@ref)
-+ [`reset_style!`](@ref)
 + [`set_alignment!`](@ref)
 + [`set_can_respond_to_input!`](@ref)
 + [`set_center_child!`](@ref)

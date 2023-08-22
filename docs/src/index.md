@@ -27,7 +27,8 @@ Pages = [
     "01_manual/07_os_interface.md"
     "01_manual/08_menus.md"
     "01_manual/09_native_rendering.md"
-    "01_manual/10_app_distribution.md"
+    "01_manual/10_theme_customization.md
+    "01_manual/11_app_distribution.md"
 ]
 
 Depth = 5
@@ -47,7 +48,7 @@ Depth = 5
 
 ### Is it stable / fast / done yet?
 
-As of version 0.1.0, the Linux- and Windows- version of mousetrap are in beta, while the version targeting MacOS is in alpha. For the beta components, stability should mostly be fine, performance remains untested, and there are [multiple features planned for the future](https://github.com/Clemapfel/mousetrap.jl#planned-features).
+As of version 0.2.0, the Linux- and Windows- version of mousetrap are in beta, while the version targeting MacOS is in alpha. For the beta components, stability should mostly be fine, performance remains untested, and there are [multiple features planned for the future](https://github.com/Clemapfel/mousetrap.jl#planned-features).
 
 Only certain parts of mousetrap are available for MacOS and their stability remains untested. See [here](./01_manual/09_native_rendering.md) for more information.
 

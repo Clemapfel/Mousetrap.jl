@@ -2181,6 +2181,37 @@ $(@type_signals(StackSwitcher,
 $(@type_fields())
 """
 
+@document StylusEventController """
+# StylusEventController <: SingleClickGesture <: EventController
+
+Controller handling events from a stylus devices, such as drawing tablets.
+
+Has access to many manufacturer specific sensors, see the section on `StylusEventController`
+in the manual chapter on event handling for more information.
+
+$(@type_constructors(
+    StylusEventController()
+))
+
+$(@type_signals(StylusEventController, 
+    stylus_up,
+    stylus_down,
+    proximity,
+    motion
+))
+
+$(@type_fields())
+
+## Example
+```julia
+stylus_controller = StylusEventController()
+connect_signal_motion!(stylus_controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
+    println("stylus position detected at (\$x, \$y)")
+end
+add_controller!(window, stylus_controller)
+```
+"""
+
 @document SwipeEventController """
 # SwipeEventController <: SingleClickGesture <: EventController
 

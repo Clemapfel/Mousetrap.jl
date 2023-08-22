@@ -12,7 +12,7 @@ This works if we want to have a GUI element that has a one or maybe a few action
 
 ## MenuModel Architecture
 
-In mousetrap, menus follow the [model-view architectural pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). To create a menu, we need
+In Mousetrap, menus follow the [model-view architectural pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). To create a menu, we need
 the menu model, which holds information about how the menu is structured, along with a view, which takes the models and transforms them into an interactable
 widget users can manipulate. Changing the model changes the view.
 
@@ -20,7 +20,7 @@ widget users can manipulate. Changing the model changes the view.
 
     To follow along with code snippets from this section, we can use the following `main.jl` file:
     ```julia
-    using mousetrap 
+    using Mousetrap 
     main() do app::Application
 
         window = Window(app)
@@ -45,7 +45,7 @@ widget users can manipulate. Changing the model changes the view.
 
 ## Menu Items
 
-[`MenuModel`](@ref), the model component of mousetrap menus, is a list of **menu items** in a specific order. If item `A` is added before item `B` at runtime, then `A` will appear above item `B`. There are multiple different types of menu items, all with their own purpose. The function we choose to add an item to the model determines the item's type. There are four types of menu items, which we will go over in this section.
+[`MenuModel`](@ref), the model component of Mousetrap menus, is a list of **menu items** in a specific order. If item `A` is added before item `B` at runtime, then `A` will appear above item `B`. There are multiple different types of menu items, all with their own purpose. The function we choose to add an item to the model determines the item's type. There are four types of menu items, which we will go over in this section.
 
 ### Item Type #1: Action
 

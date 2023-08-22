@@ -18,7 +18,7 @@ A **command**, henceforth called **action**, is an object that has the following
 + An **ID** that uniquely identifies the action
 + An optional **shortcut trigger**, also often called a keybinding
 
-In mousetrap, a command is represented by the type [`Action`](@ref).
+In Mousetrap, a command is represented by the type [`Action`](@ref).
 
 ## Action
 
@@ -152,7 +152,7 @@ Most of the time, we will have to implement behavior like this and associate a s
 
 ### Shortcut Trigger Syntax
 
-Before we can learn about keybindings, we need to talk about keys. In mousetrap, keyboard keys
+Before we can learn about keybindings, we need to talk about keys. In Mousetrap, keyboard keys
 are split into two groups: **modifiers**  and **non-modifiers**.
 
 A modifier is one of the following:
@@ -178,22 +178,22 @@ Shortcuts are represented as strings, which have a specific syntax. As seen abov
 + "Alt + LeftArrow" is written as `<Alt>Left` (sic, `L` is capitalized)
 + "Shift + 1" is written as `exclam`
 
-That last one requires explanation. On most keyboard layouts, to type `!`, the user has to press the shift modifier key, then press the `1` key. When "Shift + 1" is pressed,  mousetrap does not receive this keyboard key event as-is, instead, it receives a single key event for the `!` key with no modifiers. The identifier of `!` is `exclam`, hence why "Shift + 1" is written as `exclam`.
+That last one requires explanation. On most keyboard layouts, to type `!`, the user has to press the shift modifier key, then press the `1` key. When "Shift + 1" is pressed,  Mousetrap does not receive this keyboard key event as-is, instead, it receives a single key event for the `!` key with no modifiers. The identifier of `!` is `exclam`, hence why "Shift + 1" is written as `exclam`.
 
 !!! tip "Looking up Key Identifiers"
 
     An example of how to look up the identifier of any key will be performed here.
 
     Let's say we want to write the shortcut "Control + Space". We know that we can write "Control" as `<Control>`. Next, we navigate to [https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl), 
-    which has a list of all keys recognized by mousetrap. In [line 1039](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L1039), we find that the constant for the space key is called `KEY_space`. The identifier of a key used for shortcuts is this name, without the `KEY_` prefix. For the space bar key, the enum value is `KEY_space`, the identifier is therefore `space`.
+    which has a list of all keys recognized by Mousetrap. In [line 1039](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L1039), we find that the constant for the space key is called `KEY_space`. The identifier of a key used for shortcuts is this name, without the `KEY_` prefix. For the space bar key, the enum value is `KEY_space`, the identifier is therefore `space`.
 
     One more obscure example: to write "Alt + Beta", that is, the `β` key on the somewhat rare greek keyboard layout, we find the constant named `KEY_Greek_BETA` in [line 3034](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L3034). Erasing `KEY_` again, the keys' identifier is `Greek_BETA`. "Alt + Beta" is therefore written as `<Alt>Greek_BETA`
 
     If we make an error and use the wrong identifier, a soft warning will be printed at runtime, informing us of this. 
 
-    To access a list of key codes from within the REPL, we can search the vector `mousetrap.key_codes`, which contains the symbols of all key codes recognized by mousetrap, with the `KEY_` prefix already removed:
+    To access a list of key codes from within the REPL, we can search the vector `Mousetrap.key_codes`, which contains the symbols of all key codes recognized by Mousetrap, with the `KEY_` prefix already removed:
     ```julia
-    julia> mousetrap.key_codes
+    julia> Mousetrap.key_codes
         2278-element Vector{Symbol}:
         :0
         :1
@@ -223,7 +223,7 @@ We need one more thing before we can trigger our action: an object that can rece
 A complete `main.jl` file showing how to trigger an action using a shortcut is given here:
 
 ```julia
-using mousetrap
+using Mousetrap
 main() do app::Application
 
     # create a window

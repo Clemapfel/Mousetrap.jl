@@ -10,7 +10,7 @@ In this chapter, we will learn:
 
 ## Signal Architecture
 
-Central to mousetrap, as well as other GUI libraries like [GTK4](https://docs.gtk.org/gtk4/) and Qt, is **signal architecture**, or [**signal programming**](https://en.wikipedia.org/wiki/Signal_programming), which is a type of software architecture that triggers behavior using signals.
+Central to Mousetrap, as well as other GUI libraries like [GTK4](https://docs.gtk.org/gtk4/) and Qt, is **signal architecture**, or [**signal programming**](https://en.wikipedia.org/wiki/Signal_programming), which is a type of software architecture that triggers behavior using signals.
 
 A **signal**, in this context, has three components:
 + an **ID**, which uniquely identifies it. IDs may not be shared between signals
@@ -19,7 +19,7 @@ A **signal**, in this context, has three components:
 
 It may be easiest to consider an example:
 
-One of the simpler interactions with a GUI is clicking a button. In mousetrap, the [`Button`](@ref) class is made for this purpose. `Button` has the signal `clicked`, which is emitted when a user presses the left mouse button while the cursor hovers over the graphical element of the button.
+One of the simpler interactions with a GUI is clicking a button. In Mousetrap, the [`Button`](@ref) class is made for this purpose. `Button` has the signal `clicked`, which is emitted when a user presses the left mouse button while the cursor hovers over the graphical element of the button.
 
 In this case, the signals' **ID** is `clicked`, while the signal **emitter** is an instance of `Button`. When a user clicks the button, the in-memory object emits signal `clicked`. 
 
@@ -50,7 +50,7 @@ end
     In this section, code snippets will only show the relevant lines. To actually compile and run the code stated here, we need to create a Julia script with the following content:
 
     ```julia
-    using mousetrap
+    using Mousetrap
     main() do app::Application
         window = Window(app)
 
@@ -64,7 +64,7 @@ end
     For example, to execute the example snippet above, we would create the following `main.jl` file:
 
     ```julia
-    using mousetrap
+    using Mousetrap
     main() do app::App
         window = Window(app)
 
@@ -105,9 +105,9 @@ end
 
 ## SignalEmitters
 
-`Button`, as most classes in mousetrap, is a subtype of an abstract type called [`SignalEmitter`](@ref). 
+`Button`, as most classes in Mousetrap, is a subtype of an abstract type called [`SignalEmitter`](@ref). 
 
-Subtyping `SignalEmitter` is equivalent to saying "this object can emit signals". Not all objects in mousetrap are signal emitters, but most are. 
+Subtyping `SignalEmitter` is equivalent to saying "this object can emit signals". Not all objects in Mousetrap are signal emitters, but most are. 
 
 When we say "an object can emit signal `<id>`", what that means is that the following functions are defined for that object:
 
@@ -181,10 +181,10 @@ Each signal requires it's a callback to conform to a specific signature. This si
 ## Checking Signal Signature
 
 Working with our example, signal `clicked` of class `Button`, let's say we do not know what function is able to connect to this signal.
-To find out, we check the mousetrap documentation, either by visiting [`Button`](@ref)s documentation online, or from within the REPL by pressing `?` and entering the name of the class we want to look up:
+To find out, we check the Mousetrap documentation, either by visiting [`Button`](@ref)s documentation online, or from within the REPL by pressing `?` and entering the name of the class we want to look up:
 
 ```
-help?> mousetrap.Button
+help?> Mousetrap.Button
 ```
 ```  
   Button <: Widget
@@ -232,7 +232,7 @@ We see that button has a single signal, `clicked`. Along with this information, 
 
 While we do get passed the signal emitter instance as the first argument to the signal handler, `::Button` in this case, we will often need to reference other objects. This may necessitate accessing global variables, which [is discouraged in Julia](https://docs.julialang.org/en/v1/manual/performance-tips/#Avoid-untyped-global-variables).
 
-Instead, mousetrap allows adding an optional, arbitrarily typed, *single* argument to the end of any signal handler signature. This object is often referred to as `data`, its type will therefore be called `Data_t`.
+Instead, Mousetrap allows adding an optional, arbitrarily typed, *single* argument to the end of any signal handler signature. This object is often referred to as `data`, its type will therefore be called `Data_t`.
 
 Expanding on our previous example, if we want to send a customized message when the user clicks our button, we can change the signal handler as follows:
 
@@ -446,7 +446,7 @@ By blocking signals, we get the correct behavior of both buttons being triggered
 To verify this is indeed the resulting behavior, we can use the following `main.jl`:
 
 ```julia
-using mousetrap
+using Mousetrap
 main() do app::Application
     window = Window(app)
     

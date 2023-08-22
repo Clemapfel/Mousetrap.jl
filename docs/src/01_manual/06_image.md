@@ -1,7 +1,7 @@
 # Chapter 6: Images
 
 In this chapter, we will learn:
-+ How to use colors in mousetrap
++ How to use colors in Mousetrap
 + How to present the user with a color chooser dialog
 + How to load, store, modify, and display 2D images
 
@@ -67,7 +67,7 @@ If parsing was successful, `is_valid_html_code` will return `true`, at which poi
 
 ## Color Chooser
 
-While manual entry like this works, it is hardly very user-friendly. For a more intuitive way to have our users select a color, mousetrap offers a purpose-built dialog: [`ColorChooser`](@ref). 
+While manual entry like this works, it is hardly very user-friendly. For a more intuitive way to have our users select a color, Mousetrap offers a purpose-built dialog: [`ColorChooser`](@ref). 
 
 `ColorChooser`s constructor takes the title of the window as its only argument. After initialization, we can show the dialog to the user by calling `present!`, just like with a `Window`:
 
@@ -159,7 +159,7 @@ The following image formats are supported:
 | XBM                     | `.xbm`  |
 | XPM                     | `.xpm`  |
 
-It is recommended to use `Image` only for raster-based file types. While possible, for vector-graphics-based types like `.ico` and `.svg`, mousetrap offers another more specialized class, [`Icon`](@ref), which we will learn about in the [next chapter](./07_os_interface.md). 
+It is recommended to use `Image` only for raster-based file types. While possible, for vector-graphics-based types like `.ico` and `.svg`, Mousetrap offers another more specialized class, [`Icon`](@ref), which we will learn about in the [next chapter](./07_os_interface.md). 
 
 #### Creating an Image from Scratch
 
