@@ -1,12 +1,15 @@
 using Mousetrap
 
-main() do app::Application
-    window = Window(app)
-
-    Mousetrap.add_css_class!(get_header_bar(window), "flat")
-    present!(window)
+app = Application("test.app")
+window = Ref{Union{Window, Nothing}}(nothing)
+connect_signal_activate!(app) do app::Application
+    Main.window[] = Window(app)
+    present!(Main.window[])
 end
 
+Threads.@spawn run!(app)
+
+#=
 @static if false
 
 struct TexturePage <: Widget
@@ -380,3 +383,5 @@ main() do app::Application
 end
 
 end # @static if
+
+    =#

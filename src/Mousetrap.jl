@@ -1577,34 +1577,21 @@ const VERSION = v"0.1.0"
     @add_signal_shutdown Application
 
     function main(f, application_id::String = "com.julia.mousetrap") 
-        
-        task = Threads.Task() do 
-            app = Application(application_id)
-            typed_f = TypedFunction(f, Any, (Application,))
-            connect_signal_activate!(app)  do app::Application
-                try
-                    typed_f(app)
-                catch(exception)
-                    printstyled(stderr, "[ERROR] "; bold = true, color = :red)
-                    printstyled(stderr, "In Mousetrap.main: "; bold = true)
-                    Base.showerror(stderr, exception, catch_backtrace())
-                    print(stderr, "\n")
-                    quit!(app)
-                end
-                return nothing
+        app = Application(application_id)
+        typed_f = TypedFunction(f, Any, (Application,))
+        connect_signal_activate!(app)  do app::Application
+            try
+                typed_f(app)
+            catch(exception)
+                printstyled(stderr, "[ERROR] "; bold = true, color = :red)
+                printstyled(stderr, "In Mousetrap.main: "; bold = true)
+                Base.showerror(stderr, exception, catch_backtrace())
+                print(stderr, "\n")
+                quit!(app)
             end
-            return run!(app)
-        end 
-
-        task.sticky = true
-
-        if isinteractive() && Threads.nthreads() > 1
-            @log_warning MOUSETRAP_DOMAIN "In Mousetrap.main: You are running Mousetrap from within the REPL. Interactive use of Mousetrap is an experimental feature, side-effects may occurr."
-            task.sticky = false
-            return schedule(task)
+            return nothing
         end
-            
-        return wait(schedule(task))
+        return run!(app)
     end
     export main
     
