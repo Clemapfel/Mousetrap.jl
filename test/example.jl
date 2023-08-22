@@ -1,9 +1,9 @@
-using mousetrap
+using Mousetrap
 
 main() do app::Application
     window = Window(app)
 
-    mousetrap.add_css_class!(get_header_bar(window), "flat")
+    Mousetrap.add_css_class!(get_header_bar(window), "flat")
     present!(window)
 end
 
@@ -45,12 +45,12 @@ struct TexturePage <: Widget
         return out
     end
 end
-mousetrap.get_top_level_widget(x::TexturePage) = x.center_box
+Mousetrap.get_top_level_widget(x::TexturePage) = x.center_box
 
 
 main() do app::Application
     window = Window(app)
-    set_title!(window, "mousetrap.jl")
+    set_title!(window, "Mousetrap.jl")
 
     render_area = RenderArea()
    
@@ -144,12 +144,12 @@ struct ShapePage <: Widget
         return out
     end
 end
-mousetrap.get_top_level_widget(x::ShapePage) = x.center_box
+Mousetrap.get_top_level_widget(x::ShapePage) = x.center_box
 
 main() do app::Application
 
     window = Window(app)
-    set_title!(window, "mousetrap.jl")
+    set_title!(window, "Mousetrap.jl")
 
     shapes = [
         "Point" => Point(
@@ -327,7 +327,7 @@ end
 main() do app::Application
 
     window = Window(app)
-    set_title!(window, "mousetrap.jl")
+    set_title!(window, "Mousetrap.jl")
 
     # create render areas with different MSAA modes
     left_area = RenderArea(ANTI_ALIASING_QUALITY_OFF)

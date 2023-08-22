@@ -1731,7 +1731,7 @@ $(@type_fields())
 ```julia
 # TODO THIS DOES NOT CURRENTLY WORK
 
-using mousetrap
+using Mousetrap
 main() do app::Application
 
     window = Window(app)
@@ -2181,45 +2181,6 @@ $(@type_signals(StackSwitcher,
 $(@type_fields())
 """
 
-@document StyleClass abstract_type_docs(StyleClass, Any, """
-# StyleClass
-
-Superclass of all `STYLE_CLASS_*` singletons. Use `add_style_class!` to modify 
-a widgets style, changing its look. A widget can have more than one style class;
-each style style class can only be applied to certain widgets.
-""")
-
-@document StylusEventController """
-# StylusEventController <: SingleClickGesture <: EventController
-
-Controller handling events from a stylus devices, such as drawing tablets.
-
-Has access to many manufacturer specific sensors, see the section on `StylusEventController`
-in the manual chapter on event handling for more information.
-
-$(@type_constructors(
-    StylusEventController()
-))
-
-$(@type_signals(StylusEventController, 
-    stylus_up,
-    stylus_down,
-    proximity,
-    motion
-))
-
-$(@type_fields())
-
-## Example
-```julia
-stylus_controller = StylusEventController()
-connect_signal_motion!(stylus_controller) do self::StylusEventController, x::AbstractFloat, y::AbstractFloat
-    println("stylus position detected at (\$x, \$y)")
-end
-add_controller!(window, stylus_controller)
-```
-"""
-
 @document SwipeEventController """
 # SwipeEventController <: SingleClickGesture <: EventController
 
@@ -2489,7 +2450,7 @@ $(@type_fields())
 @document Widget abstract_type_docs(Widget, Any, """
 # Widget <: SignalEmitter
 
-Superclass of all renderable entities in mousetrap. Like all
+Superclass of all renderable entities in Mousetrap. Like all
 [`SignalEmitter`](@ref)s, a widgets lifetime is managed automatically.
 
 Widgets have a large number of properties that influence their 
@@ -2497,7 +2458,7 @@ size and position on screen. See the manual chapter on widgets
 for more information.
 
 In order for an object to be treated as a widget, it needs to subtype 
-this abstract type and define [`mousetrap.get_top_level_widget`](@ref). See the 
+this abstract type and define [`Mousetrap.get_top_level_widget`](@ref). See the 
 manual section on compound widgets in the chapter on widgets for more information.
 
 All widgets share the following signals, where `T` is the subclass 

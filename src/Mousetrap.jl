@@ -6,7 +6,7 @@
 # Copyright © 2023, Licensed under lGPL-3.0
 #
 
-module mousetrap
+module Mousetrap
 
 const VERSION = v"0.1.0"
 
@@ -16,6 +16,7 @@ const VERSION = v"0.1.0"
         using CxxWrap
         function __init__() @initcxx end
 
+        #=
         using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
         @static if Sys.isapple()
             lib = mousetrap_apple_jll.mousetrap_julia_binding
@@ -24,8 +25,9 @@ const VERSION = v"0.1.0"
         else
             lib = mousetrap_linux_jll.mousetrap_julia_binding
         end
+        =#
       
-        #lib = "/home/clem/Workspace/mousetrap_julia_binding/cmake-build-debug/libmousetrap_julia_binding.so"
+        lib = "/home/clem/Workspace/mousetrap_julia_binding/build/libmousetrap_julia_binding.so"
         @wrapmodule(lib)
     end
 
@@ -96,7 +98,7 @@ const VERSION = v"0.1.0"
     See [`log_debug`](@ref).
     """
     macro log_debug(domain, message)
-        return :(mousetrap.detail.log_debug($message, $domain))
+        return :(Mousetrap.detail.log_debug($message, $domain))
     end
     log_debug(domain::LogDomain, message::String) = detail.log_debug(message, domain)
     export @log_debug, log_debug
@@ -105,7 +107,7 @@ const VERSION = v"0.1.0"
     See [`log_info`](@ref).
     """
     macro log_info(domain, message)
-        return :(mousetrap.detail.log_info($message, $domain))
+        return :(Mousetrap.detail.log_info($message, $domain))
     end
     log_info(domain::LogDomain, message::String) = detail.log_info(message, domain)
     export @log_info, log_info
@@ -114,7 +116,7 @@ const VERSION = v"0.1.0"
     See [`log_warning`](@ref).
     """
     macro log_warning(domain, message)
-        return :(mousetrap.detail.log_warning($message, $domain))
+        return :(Mousetrap.detail.log_warning($message, $domain))
     end
     log_warning(domain::LogDomain, message::String) = detail.log_warning(message, domain)
     export @log_warning, log_warning
@@ -123,7 +125,7 @@ const VERSION = v"0.1.0"
     See [`log_critical`](@ref).
     """
     macro log_critical(domain, message)
-        return :(mousetrap.detail.log_critical($message, $domain))
+        return :(Mousetrap.detail.log_critical($message, $domain))
     end
     log_critical(domain::LogDomain, message::String) = detail.log_critical(message, domain)
     export @log_critical, log_critical
@@ -132,7 +134,7 @@ const VERSION = v"0.1.0"
     See [`log_fatal`](@ref).
     """
     macro log_fatal(domain, message)
-        return :(mousetrap.detail.log_fatal($message, $domain))
+        return :(Mousetrap.detail.log_fatal($message, $domain))
     end
     log_fatal(domain::LogDomain, message::String) = detail.log_fatal(message, domain)
     export @log_fatal, log_fatal
@@ -186,7 +188,7 @@ const VERSION = v"0.1.0"
 
         return_t = esc(return_t)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(x::$type) = Base.convert($return_t, detail.$name(x._internal)))
     end
 
@@ -203,7 +205,7 @@ const VERSION = v"0.1.0"
         end
         arg1_name = esc(arg1_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
                 $arg1_name::$arg1_origin_type
@@ -234,7 +236,7 @@ const VERSION = v"0.1.0"
         end
         arg2_name = esc(arg2_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
                 $arg1_name::$arg1_origin_type,
@@ -276,7 +278,7 @@ const VERSION = v"0.1.0"
         end
         arg3_name = esc(arg3_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
                 $arg1_name::$arg1_origin_type,
@@ -329,7 +331,7 @@ const VERSION = v"0.1.0"
         end
         arg4_name = esc(arg4_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
                 $arg1_name::$arg1_origin_type,
@@ -346,7 +348,7 @@ const VERSION = v"0.1.0"
     
     @generated function get_top_level_widget(x) ::Widget
         return :(
-            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
+            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `Mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `Mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
         )
     end
     export get_top_level_widget
@@ -366,11 +368,11 @@ const VERSION = v"0.1.0"
         internal_name = Symbol("_" * "$name")
 
         if !isdefined(detail, :($internal_name))
-            throw(AssertionError("In mousetrap.@export_type: detail.$internal_name undefined"))
+            throw(AssertionError("In Mousetrap.@export_type: detail.$internal_name undefined"))
         end
 
         out = Expr(:toplevel)
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         push!(out.args, :(
             mutable struct $name <: $super
                 _internal::detail.$internal_name
@@ -384,11 +386,11 @@ const VERSION = v"0.1.0"
         internal_name = Symbol("_" * "$name")
 
         if !isdefined(detail, :($internal_name))
-            throw(AssertionError("In mousetrap.@export_type: detail.$internal_name undefined"))
+            throw(AssertionError("In Mousetrap.@export_type: detail.$internal_name undefined"))
         end
 
         out = Expr(:toplevel)
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         push!(out.args, :(
             struct $name
                 _internal::detail.$internal_name
@@ -409,7 +411,7 @@ const VERSION = v"0.1.0"
         @assert isdefined(detail, detail_enum_name)
 
         names = Symbol[]
-        push!(out.args, :(const $(esc(enum)) = mousetrap.detail.$detail_enum_name))
+        push!(out.args, :(const $(esc(enum)) = Mousetrap.detail.$detail_enum_name))
         for name in block.args
             if !(name isa Symbol)
                 continue
@@ -425,10 +427,10 @@ const VERSION = v"0.1.0"
         enum_sym = QuoteNode(enum)
         to_int_name = Symbol(enum) * :_to_int
 
-        push!(out.args, :(Base.string(x::$enum) = string(mousetrap.detail.$to_int_name(x))))
-        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(mousetrap.detail.to_int_name(x))))
+        push!(out.args, :(Base.string(x::$enum) = string(Mousetrap.detail.$to_int_name(x))))
+        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(Mousetrap.detail.to_int_name(x))))
         push!(out.args, :(Base.instances(x::Type{$enum}) = [$(names...)]))
-        push!(out.args, :(Base.show(io::IO, x::Type{$enum}) = print(io, (isdefined(Main, $enum_sym) ? "" : "mousetrap.") * $enum_str)))
+        push!(out.args, :(Base.show(io::IO, x::Type{$enum}) = print(io, (isdefined(Main, $enum_sym) ? "" : "Mousetrap.") * $enum_str)))
         push!(out.args, :(Base.show(io::IO, x::$enum) = print(io, string($enum) * "(" * string(convert(Int64, x)) * ")")))
         return out
     end
@@ -1548,7 +1550,7 @@ const VERSION = v"0.1.0"
 
     Application(id::String; allow_multiple_instances = false) = Application(detail._Application(id, allow_multiple_instances))
 
-    run!(app::Application) ::Cint = mousetrap.detail.run!(app._internal)
+    run!(app::Application) ::Cint = Mousetrap.detail.run!(app._internal)
     export run!
 
     @export_function Application quit! Cvoid
@@ -1584,7 +1586,7 @@ const VERSION = v"0.1.0"
                     typed_f(app)
                 catch(exception)
                     printstyled(stderr, "[ERROR] "; bold = true, color = :red)
-                    printstyled(stderr, "In mousetrap.main: "; bold = true)
+                    printstyled(stderr, "In Mousetrap.main: "; bold = true)
                     Base.showerror(stderr, exception, catch_backtrace())
                     print(stderr, "\n")
                     quit!(app)
@@ -1597,7 +1599,7 @@ const VERSION = v"0.1.0"
         task.sticky = true
 
         if isinteractive() && Threads.nthreads() > 1
-            @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. Interactive use of mousetrap is an experimental feature, side-effects may occurr."
+            @log_warning MOUSETRAP_DOMAIN "In Mousetrap.main: You are running Mousetrap from within the REPL. Interactive use of Mousetrap is an experimental feature, side-effects may occurr."
             task.sticky = false
             return schedule(task)
         end
@@ -4511,7 +4513,7 @@ const VERSION = v"0.1.0"
 
         return_t = esc(return_t)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :(function $name(widget::Widget)            
             return Base.convert($return_t, detail.$name(as_widget_pointer(widget)))
         end)
@@ -4531,7 +4533,7 @@ const VERSION = v"0.1.0"
         end
         arg1_name = esc(arg1_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         out = Expr(:toplevel)
         return :(function $name(widget::Widget, $arg1_name::$arg1_origin_type) 
             return Base.convert($return_t, detail.$name(as_widget_pointer(widget), convert($arg1_destination_type, $arg1_name)))
@@ -4705,10 +4707,10 @@ const VERSION = v"0.1.0"
 ### opengl_common.jl
 
     macro define_opengl_error_type(name)
-        message =  "In mousetrap::$name(): `$name` cannot be instantiated, because the mousetrap OpenGL component is disabled for MacOS. It and any function operating on it cannot be used in any way.\n\nSee the manual chapter on native rendering for more information."
+        message =  "In Mousetrap::$name(): `$name` cannot be instantiated, because the Mousetrap OpenGL component is disabled for MacOS. It and any function operating on it cannot be used in any way.\n\nSee the manual chapter on native rendering for more information."
         return :(struct $name
             function $name()
-                mousetrap.log_fatal(mousetrap.MOUSETRAP_DOMAIN, $message)
+                Mousetrap.log_fatal(Mousetrap.MOUSETRAP_DOMAIN, $message)
                 return new()
             end
         end)
@@ -5301,133 +5303,6 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
     get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
 
-    abstract type StyleClass end
-    export StyleClass
-
-    macro define_style_class(name, css_value, class_names...)
-
-        out = Expr(:toplevel)
-        name = Symbol("STYLE_CLASS_" * string(name))
-
-        push!(out.args, :(struct $name <: StyleClass end))
-        push!(out.args, :(export $name))
-    
-        docstring = """
-        Use `add_style_class!` to apply this style class to instances of the following type(s):
-        """
-
-        for n in class_names
-            if !(n isa Symbol)
-                continue
-            end
-            docstring = docstring * "+ `$n`\n"
-            push!(out.args, esc(:(add_style_class!(x::$n, class::Type{$name}) = add_css_class!(x, $css_value))))
-        end
-
-        push!(out.args, :(@doc $docstring $name))
-        return out
-    end
-    export add_style_class!
-
-    @define_style_class(SUGGESTED_ACTION, "suggested-action",
-        Button,
-        ToggleButton
-    )
-
-    @define_style_class(DESTRUCTIVE_ACTION, "destructive-action",
-        Button,
-        ToggleButton,
-        PopoverButton
-    )
-
-    @define_style_class(FLAT, "flat",
-        Button,
-        ToggleButton,
-        PopoverButton,
-        HeaderBar
-    )
-
-    @define_style_class(RAISED, "raised",
-        Button,
-        ToggleButton,
-        PopoverButton
-    )
-
-    @define_style_class(CIRCULAR, "circular",
-        Button,
-        ToggleButton,
-        PopoverButton
-    )
-
-    @define_style_class(PILL, "pill",
-        Button,
-        ToggleButton,
-        PopoverButton
-    )
-
-    @define_style_class(LINKED, "linked",
-        Box
-    )
-
-    @define_style_class(TOOLBAR, "toolbar",
-        Box,
-        HeaderBar,
-        ActionBar
-    )
-
-    @define_style_class(DIMMED, "dim-label", Widget)
-
-    @define_style_class(FONT_TITLE_1, "title-1", Widget)
-    @define_style_class(FONT_TITLE_2, "title-2", Widget)
-    @define_style_class(FONT_TITLE_3, "title-3", Widget)
-    @define_style_class(FONT_TITLE_4, "title-4", Widget)
-    @define_style_class(FONT_LARGER, "heading", Widget)
-    @define_style_class(FONT_REGULAR, "body", Widget)
-    @define_style_class(FONT_CAPTION_HEADING, "caption-heading", Widget)
-    @define_style_class(FONT_CAPTION, "caption", Widget)
-
-    @define_style_class(FONT_MONOSPACE, "monospace", Widget)
-    @define_style_class(FONT_NUMERIC, "numeric", Widget)
-
-    @define_style_class(COLOR_ACCENT, "accent", Widget)
-    @define_style_class(COLOR_SUCCESS, "success", Widget)
-    @define_style_class(COLOR_WARNING, "warning", Widget)
-    @define_style_class(COLOR_ERROR, "error", Widget)
-
-    @define_style_class(ACTIVATABLE, "activatable", Widget)
-    @define_style_class(CARD, "card", Widget)
-
-    @define_style_class(SIDEBAR, "navigation-sidebar", 
-        ListView
-    )
-
-    @define_style_class(MENUBAR, "menu", 
-        ListView
-    )
-
-    @define_style_class(ICON_DROPSHADOW, "icon-dropshadow",
-        ImageDisplay
-    )
-    @define_style_class(ICON_SMALL, "lowres-icon",
-        ImageDisplay
-    )
-
-    @define_style_class(ROUND_CHECK_BUTTON, "selection-mode",
-        CheckButton
-    )
-    
-    @define_style_class(ON_SCREEN_DISPLAY, "osd", Widget)
-    @define_style_class(BACKGROUND, "background", Widget)
-    @define_style_class(VIEW, "view", Widget)
-    @define_style_class(FRAME, "view", Widget)
-
-    function reset_style!(x::Widget) 
-        for class in get_css_classes(x)
-            remove_css_class!(x, class)
-        end
-    end
-    export reset_style!
-
 ###### key_codes.jl
 
     include("./key_codes.jl")
@@ -5436,4 +5311,4 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
         
     include("./docs.jl")
 
-end # module mousetrap
+end # module Mousetrap

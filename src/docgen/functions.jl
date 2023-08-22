@@ -2285,8 +2285,8 @@ struct CompoundWidget <: Widget
     CompoundWidget() = new(hbox(Label("this is a compound widget")))
 end
 
-mousetrap.get_top_level_widget(x::CompoundWidget) = x.box
-# after this definition, `CompoundWidget` can be used like any native mousetrap widget
+Mousetrap.get_top_level_widget(x::CompoundWidget) = x.box
+# after this definition, `CompoundWidget` can be used like any native Mousetrap widget
 """
 
 @document get_transition_duration """
@@ -2743,7 +2743,7 @@ Check whether the location on disk contains points to a valid folder (not file).
 ```
 get_is_local(::Clipboard) -> Bool
 ```
-Check whether the content of the cliboard was set from within the currently active mousetrap application.
+Check whether the content of the cliboard was set from within the currently active Mousetrap application.
 """
 
 @document is_symlink """
@@ -2774,7 +2774,7 @@ during `f`, the application safely exits.
 
 ## Example
 ```julia
-using mousetrap
+using Mousetrap
 main() do app::Application
     window = Window(app)
     present!(window)
@@ -3524,7 +3524,7 @@ run!(app::Application) -> Cint
 ```
 
 Start the main loop, initializing the internal state and triggering `Application`s signal `activate`. Note that 
-no part of mousetrap should be used or initialized before this function is called.
+no part of Mousetrap should be used or initialized before this function is called.
 
 Usually, users are encouraged to use [`main`](@ref) instead, which does this automatically.
 
