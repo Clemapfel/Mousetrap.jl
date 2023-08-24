@@ -6,7 +6,7 @@
 # Copyright © 2023, Licensed under lGPL-3.0
 #
 
-const VERSION = v"0.1.0"
+const VERSION = v"0.2.0"
 
 ####### detail.jl
 
