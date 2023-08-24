@@ -12,7 +12,7 @@ In this chapter we will learn:
 ---
 
 !!! compat
-    Some of these features are not yet implemented, this section is incomplete. All features in this section are planned to release with mousetrap version 0.2.*.
+    Some of these features are not yet implemented, this section is incomplete. Features relating to this section are planned to release with mousetrap version 0.2.*.
 
 ### Global Theme
 
@@ -61,6 +61,7 @@ main() do app::Application
     present!(window)
 end
 ```
+
 
 
 
