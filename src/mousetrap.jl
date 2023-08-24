@@ -1576,34 +1576,22 @@ const VERSION = v"0.1.0"
 
     function main(f, application_id::String = "com.julia.mousetrap") 
         
-        task = Threads.Task() do 
-            app = Application(application_id)
-            typed_f = TypedFunction(f, Any, (Application,))
-            connect_signal_activate!(app)  do app::Application
-                try
-                    typed_f(app)
-                catch(exception)
-                    printstyled(stderr, "[ERROR] "; bold = true, color = :red)
-                    printstyled(stderr, "In mousetrap.main: "; bold = true)
-                    Base.showerror(stderr, exception, catch_backtrace())
-                    print(stderr, "\n")
-                    quit!(app)
-                end
-                return nothing
+        app = Application(application_id)
+        typed_f = TypedFunction(f, Any, (Application,))
+        connect_signal_activate!(app) do app::Application
+            try
+                typed_f(app)
+            catch(exception)
+                printstyled(stderr, "[ERROR] "; bold = true, color = :red)
+                printstyled(stderr, "In mousetrap.main: "; bold = true)
+                Base.showerror(stderr, exception, catch_backtrace())
+                print(stderr, "\n")
+                quit!(app)
             end
-            return run!(app)
-        end 
-
-        task.sticky = true
-
-        if isinteractive() && Threads.nthreads() > 1
-            @log_warning MOUSETRAP_DOMAIN "In mousetrap.main: You are running mousetrap from within the REPL. Interactive use of mousetrap is an experimental feature, side-effects may occurr."
-            task.sticky = false
-            return schedule(task)
+            return nothing
         end
-            
-        return wait(schedule(task))
-    end
+        return run!(app)
+    end 
     export main
     
     Base.show(io::IO, x::Application) = show_aux(io, x, :is_holding, :is_marked_as_busy)
@@ -5300,133 +5288,6 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     add_css_class!(widget::Widget, class::String) = detail.add_css_class!(as_widget_pointer(widget), class)
     remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
     get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
-
-    abstract type StyleClass end
-    export StyleClass
-
-    macro define_style_class(name, css_value, class_names...)
-
-        out = Expr(:toplevel)
-        name = Symbol("STYLE_CLASS_" * string(name))
-
-        push!(out.args, :(struct $name <: StyleClass end))
-        push!(out.args, :(export $name))
-    
-        docstring = """
-        Use `add_style_class!` to apply this style class to instances of the following type(s):
-        """
-
-        for n in class_names
-            if !(n isa Symbol)
-                continue
-            end
-            docstring = docstring * "+ `$n`\n"
-            push!(out.args, esc(:(add_style_class!(x::$n, class::Type{$name}) = add_css_class!(x, $css_value))))
-        end
-
-        push!(out.args, :(@doc $docstring $name))
-        return out
-    end
-    export add_style_class!
-
-    @define_style_class(SUGGESTED_ACTION, "suggested-action",
-        Button,
-        ToggleButton
-    )
-
-    @define_style_class(DESTRUCTIVE_ACTION, "destructive-action",
-        Button,
-        ToggleButton,
-        PopoverButton
-    )
-
-    @define_style_class(FLAT, "flat",
-        Button,
-        ToggleButton,
-        PopoverButton,
-        HeaderBar
-    )
-
-    @define_style_class(RAISED, "raised",
-        Button,
-        ToggleButton,
-        PopoverButton
-    )
-
-    @define_style_class(CIRCULAR, "circular",
-        Button,
-        ToggleButton,
-        PopoverButton
-    )
-
-    @define_style_class(PILL, "pill",
-        Button,
-        ToggleButton,
-        PopoverButton
-    )
-
-    @define_style_class(LINKED, "linked",
-        Box
-    )
-
-    @define_style_class(TOOLBAR, "toolbar",
-        Box,
-        HeaderBar,
-        ActionBar
-    )
-
-    @define_style_class(DIMMED, "dim-label", Widget)
-
-    @define_style_class(FONT_TITLE_1, "title-1", Widget)
-    @define_style_class(FONT_TITLE_2, "title-2", Widget)
-    @define_style_class(FONT_TITLE_3, "title-3", Widget)
-    @define_style_class(FONT_TITLE_4, "title-4", Widget)
-    @define_style_class(FONT_LARGER, "heading", Widget)
-    @define_style_class(FONT_REGULAR, "body", Widget)
-    @define_style_class(FONT_CAPTION_HEADING, "caption-heading", Widget)
-    @define_style_class(FONT_CAPTION, "caption", Widget)
-
-    @define_style_class(FONT_MONOSPACE, "monospace", Widget)
-    @define_style_class(FONT_NUMERIC, "numeric", Widget)
-
-    @define_style_class(COLOR_ACCENT, "accent", Widget)
-    @define_style_class(COLOR_SUCCESS, "success", Widget)
-    @define_style_class(COLOR_WARNING, "warning", Widget)
-    @define_style_class(COLOR_ERROR, "error", Widget)
-
-    @define_style_class(ACTIVATABLE, "activatable", Widget)
-    @define_style_class(CARD, "card", Widget)
-
-    @define_style_class(SIDEBAR, "navigation-sidebar", 
-        ListView
-    )
-
-    @define_style_class(MENUBAR, "menu", 
-        ListView
-    )
-
-    @define_style_class(ICON_DROPSHADOW, "icon-dropshadow",
-        ImageDisplay
-    )
-    @define_style_class(ICON_SMALL, "lowres-icon",
-        ImageDisplay
-    )
-
-    @define_style_class(ROUND_CHECK_BUTTON, "selection-mode",
-        CheckButton
-    )
-    
-    @define_style_class(ON_SCREEN_DISPLAY, "osd", Widget)
-    @define_style_class(BACKGROUND, "background", Widget)
-    @define_style_class(VIEW, "view", Widget)
-    @define_style_class(FRAME, "view", Widget)
-
-    function reset_style!(x::Widget) 
-        for class in get_css_classes(x)
-            remove_css_class!(x, class)
-        end
-    end
-    export reset_style!
 
 ###### key_codes.jl
 
