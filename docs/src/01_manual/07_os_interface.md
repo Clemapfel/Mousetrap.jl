@@ -134,40 +134,6 @@ main() do app::Application
 end
 ```
 
-### Style Classes
-
-!!! warning 
-    Style classes are experimental, they may be removed in future versions without notice, or may not work as intended.
-
-Along with the app-wide theme, some widgets also support a local, per-widget theme called a **style class**, which only affects a single widget instance. 
-
-When applied, the widgets look will change in some way. Examples include changing color, opacity, or appearing circular instead of square. A widget can have more than one style class at the same time.
-
-While some style classes are available for all widgets, some are only available for certain types of widgets.
-
-We apply style classes using [`add_style_class!`](@ref), which, along with the widget instance, takes one of the [singleton subtypes](https://docs.julialang.org/en/v1/manual/types/#man-singleton-types) of `StyleClass`. If we want to reset the widgets look, we can remove all style classes from a widget using [`reset_style!`](@ref). 
-
-For a list of style classes, see [here](@ref StyleClass). To know which style class can be applied to which widget, we can check each style classes documentation using the REPLs "help" mode. If we try to apply a style class to a widget that does not support it, a compiler error will be thrown.
-
-```julia
-suggested_button = Button(Label("Suggested Action"))
-neutral_button = Button(Label("Neutral Action"))
-destructive_button = Button(Label("Destructive Action"))
-
-add_style_class!(suggested_button, STYLE_CLASS_SUGGESTED_ACTION)
-add_style_class!(destructive_button, STYLE_CLASS_DESTRUCTIVE_ACTION)
-
-box = hbox(suggested_button, neutral_button, destructive_button)
-add_style_class!(box, STYLE_CLASS_LINKED)
-```
-
-![](../assets/style_classes_button.png)
-
-### Custom Style Classes
-
-!!! compat
-    This feature is not yet implemented, this section is incomplete.
-
 ---
 
 ## Logging
