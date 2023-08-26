@@ -2576,6 +2576,57 @@ const VERSION = v"0.2.0"
 
     Base.show(io::IO, x::Box) = show_aux(io, x, :n_items)
 
+####### flow_box.jl
+
+    @export_type FlowBox Widget
+    @declare_native_widget FlowBox
+
+    FlowBox(orientation::Orientation) = FlowBox(detail._FlowBox(orientation))
+
+    function push_back!(box::FlowBox, widget::Widget)
+        detail.push_back!(box._internal, as_widget_pointer(widget))
+    end
+    export push_back!
+
+    function push_front!(box::FlowBox, widget::Widget)
+        detail.push_front!(box._internal, as_widget_pointer(widget))
+    end
+    export push_front!
+
+    insert_at!(box::FlowBox, index::Integer, widget::Widget) = detail.insert!(grid_view._internal, from_julia_index(index), as_widget_pointer(widget))
+    export insert_at!
+
+    function remove!(box::FlowBox, widget::Widget)
+        detail.remove!(box._internal, as_widget_pointer(widget))
+    end
+    export remove!
+
+    @export_function FlowBox clear! Cvoid
+    @export_function FlowBox set_homogeneous! Cvoid Bool b
+    @export_function FlowBox get_homogeneous Bool
+
+    function set_row_spacing!(box::FlowBox, spacing::Number)
+        detail.set_row_spacing!(box._internal, convert(Cfloat, spacing))
+    end
+    export set_row_spacing!
+    
+    @export_function FlowBox get_row_spacing Cfloat
+
+    function set_column_spacing!(box::FlowBox, spacing::Number)
+        detail.set_column_spacing!(box._internal, convert(Cfloat, spacing))
+    end
+    export set_column_spacing!
+    
+    @export_function FlowBox get_column_spacing Cfloat
+
+    @export_function FlowBox get_n_items Cint
+    @export_function FlowBox get_orientation Orientation
+    @export_function FlowBox set_orientation! Cvoid Orientation orientation
+
+    @add_widget_signals FlowBox
+
+    Base.show(io::IO, x::FlowBox) = show_aux(io, x, :n_items)
+
 ####### button.jl
 
     @export_type Button Widget

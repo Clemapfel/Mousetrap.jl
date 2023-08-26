@@ -220,8 +220,7 @@ $(@type_fields(
 @document Box """
 # Box <: Widget
 
-Widget that aligns its children in a row (or column), depending 
-on orientation.
+Widget that aligns its children in a row (or column), depending on orientation.
 
 $(@type_constructors(
     Box(::Orientation)
@@ -771,6 +770,21 @@ Use of this widget is usually discouraged, it does not allow for automatic expan
 
 $(@type_constructors(
     Fixed()
+))
+
+$(@type_signals(Fixed, 
+))
+
+$(@type_fields())
+"""
+
+@document FlowBox """
+# FlowBox <: Widget
+
+`Box`-like widget that dynamically rearranges its children into multiple rows (or columns), as the widgets width (or height) changes.
+
+$(@type_constructors(
+    FlowBox(Orientation)
 ))
 
 $(@type_signals(Fixed, 

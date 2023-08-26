@@ -588,6 +588,7 @@ Clear the current framebuffer, this will reset `GL_COLOR_BUFFER_BIT` and replace
 @document clear! """
 ```
 clear!(::Box) 
+clear!(::FlowBox)
 clear!(::ImageDisplay) 
 clear!(::ListView) 
 clear!(::ListView, [iterator::ListViewIterator]) 
@@ -994,6 +995,7 @@ Get column at specified position, 1-based.
 
 @document get_column_spacing """
 ```
+get_column_spacing!(::FlowBox) -> Float32
 get_column_spacing(::Grid) -> Float32
 ```
 Get spacing between columns, in pixels.
@@ -1662,6 +1664,7 @@ Get the number of digits the spin button should display.
 @document get_n_items """
 ```
 get_n_items(::Box) -> Unsigned
+get_n_items(::FlowBox) -> Unsigned
 get_n_items(::ListView) -> Unsigned
 get_n_items(::GridView) -> Unsigned
 ```
@@ -1737,6 +1740,7 @@ Get the widgets current opacity, in `[0, 1]`.
 @document get_orientation """
 ```
 get_orientation(::Box) -> Orientation
+get_orientation(::FlowBox) -> Orientation
 get_orientation(::CenterBox) -> Orientation 
 get_orientation(::ClampFrame) -> Orientation
 get_orientation(::LevelBar) -> Orientation 
@@ -1878,6 +1882,7 @@ Get distance between the right end of the text and the text views frame.
 @document get_row_spacing """
 ```
 get_row_spacing(::Grid) -> Float32
+get_row_spacing(::FlowBox) -> Float32
 ```
 Get the margin between two rows, in pixels.
 """
@@ -2640,6 +2645,16 @@ Read an html color code of the form `#RRGGBB` or `#RRGGBBAA`, in hexadecimal.
 
 @document insert_at! """
 ```
+insert_at!(::FlowBox, ::Widget, index::Integer) -> Cvoid
+insert_at!(::ListView, ::Widget, index::Integer, [::ListViewIterator]) -> ListViewIterator
+insert_at!(::GridView, inde::Integer, ::Widget) -> Cvoid
+insert_at!(::Grid, ::Widget, row_i::Signed, column_i::Signed, [n_horizontal_cells:Unsigned = 1, n_vertical_cells::Unsigned = 1]) -> Cvoid
+```
+Insert a widget at the given position.
+
+---
+
+```
 insert_at!(::DropDown, index::Integer, label_for_both::String) -> DropDownItemID
 insert_at!(::DropDown, index::Integer, list_widget::Widget, label_widget::Widget) -> DropDownItemID
 insert_at!(f, ::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
@@ -2659,19 +2674,10 @@ See the manual section on `DropDown` in the chapter on widgets for more informat
 ---
 
 ```
-insert_at!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget)
+insert_at!(::Notebook, index::Integer, child_widget::Widget, label_widget::Widget)
 ```
 Insert a page at the given position, where `child_widget` is the widget used as the page, and `label_widget` is the 
 widget displayed in the tab bar.
-
----
-
-```
-insert_at!(::ListView, ::Widget, index::Integer, [::ListViewIterator]) -> ListViewIterator
-insert_at!(::GridView, inde::Integer, ::Widget) -> Cvoid
-insert_at!(::Grid, ::Widget, row_i::Signed, column_i::Signed, [n_horizontal_cells:Unsigned = 1, n_vertical_cells::Unsigned = 1]) -> Cvoid
-```
-Insert a widget at the given position.
 """
 
 @document insert_after! """
@@ -3092,6 +3098,7 @@ the displayed ratio of the progress bar.
 @document push_back! """
 ```
 push_back!(::Box, ::Widget) -> Cvoid
+push_back!(::FlowBox, ::Widget) -> Cvoid
 push_back!(::ListView, ::Widget, [::ListViewIterator]) -> ListViewIterator 
 push_back!(::GridView, ::Widget) -> Cvoid
 push_back!(::HeaderBar, ::Widget) -> Cvoid
@@ -3145,6 +3152,7 @@ lower than the number of columns, the left-over columns will contain an empty ce
 @document push_front! """
 ```
 push_front!(::Box, ::Widget) -> Cvoid
+push_front!(::FlowBox, ::Widget) -> Cvoid
 push_front!(::ListView, ::Widget, [::ListViewIterator]) -> ListViewIterator 
 push_front!(::GridView, ::Widget) -> Cvoid
 push_front!(::HeaderBar, ::Widget) -> Cvoid
@@ -3249,6 +3257,7 @@ Release an application that is currently being prevented from exiting because [`
 @document remove! """
 ```
 remove!(::Box, ::Widget) -> Cvoid
+remove!(::FlowBox, ::WIdget) -> Cvoid
 remove!(::ActionBar, ::Widget) -> Cvoid
 remove!(::ListView, index::Integer, [::ListViewIterator]) -> Cvoid 
 remove!(::GridView, ::Widget) -> Cvoid
@@ -3753,6 +3762,7 @@ Set the color of all vertices of the shape.
 
 @document set_column_spacing! """
 ```
+set_column_spacing!(::FlowBox, spacing::AbstractFloat)
 set_column_spacing!(::Grid, spacing::AbstractFloat) 
 ```
 Set spacing between two columns of the grid, in pixels.
@@ -4477,6 +4487,7 @@ Set the opacity of the widget, in `[0, 1]`.
 @document set_orientation! """
 ```
 set_orientation!(::Box, ::Orientation) 
+set_orientation!(::FlowBox, ::Orientation)
 set_orientation!(::CenterBox, ::Orientation) 
 set_orientation!(::ClampFrame, ::Orientation)
 set_orientation!(::LevelBar, ::Orientation) 
@@ -4603,7 +4614,8 @@ Set margin between the right end of the text and the text views frame.
 
 @document set_row_spacing! """
 ```
-set_row_spacing!(::Grid, spacing::AbstractFloat) 
+set_row_spacing!(::Grid, spacing::Number) 
+set_row_spacing!(::FLowBox, spacing::Number)
 ```
 Set spacing between rows of the grid, in pixels.
 """
