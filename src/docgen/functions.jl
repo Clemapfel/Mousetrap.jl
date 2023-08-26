@@ -1421,6 +1421,13 @@ get_is_focusable(::Widget) -> Bool
 Get whether the widget can grab input focus.
 """
 
+@document get_is_high_priority """
+```
+get_is_high_priority(::PopupMessage) -> Bool
+```
+Get whether this message has a high priority. High priority messages will be shown before non-high-priority if queued with `PopupMessageOverlay`.
+"""
+
 @document get_is_holding """
 ```
 get_is_holding(::Application) -> Bool
@@ -2258,6 +2265,13 @@ Get text currently displayed by the progress bar, or `""` if the percentage is d
 get_text_visible(::Entry) -> Bool
 ```
 Get whether the text entry is in "password mode".
+"""
+
+@document get_timeout """
+```
+get_timeout(::PopupMessage) -> Time 
+```
+Get the duration after which the message should hide itself, or `0` for it to never hide on its own. Microsecond precision.
 """
 
 @document get_time_since_last_frame """
@@ -4330,6 +4344,13 @@ set_is_focusable!(::Widget, ::Bool)
 Set whether the widget can retrieve input focus. Most widgets that support interaction by default are already focusable.
 """
 
+@document set_is_high_priority! """
+```
+set_is_high_priority!(::PopupMessage, high_priority::Bool)
+```
+Set whether this message should be shown before any other non-high-priority messages already queue with the `PopupMessageOverlay`. `false` by default.
+"""
+
 @document set_is_horizontally_homogeneous! """
 ```
 set_is_horizontally_homogeneous!(::Stack, ::Bool) 
@@ -5079,6 +5100,15 @@ set_tick_callback!(widget) do clock::FrameClock
     return TICK_CALLBACK_RESULT_CONTINUE
 end
 ```
+"""
+
+@document set_timeout! """
+```
+set_timeout!(::PopupMessage, duration::Time)
+```
+Set the duration after which the message should hide itself, or `0` for it to never hide on its own, forcing the user to close it. Microsecond precision, `0` by default.
+
+`PopupMessage` will not hide if it is clicked or currently holds input focus.
 """
 
 @document set_timing_function! """

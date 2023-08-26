@@ -1816,6 +1816,14 @@ function test_popup_message(::Container)
     set_button_action!(message, action)
     @test get_button_action_id(message) == id
 
+    @test get_is_high_priority(message) == false
+    set_is_high_priority!(message, true)
+    @test get_is_high_priority(message) == true
+
+    @test get_timeout(message) == seconds(0)
+    set_timeout!(message, seconds(1))
+    @test get_timeout(message) == seconds(1)
+
     connect_signal_dismissed!(message) do self::PopupMessage end
     connect_signal_button_clicked!(message) do self::PopupMessage end
     

@@ -2400,11 +2400,19 @@ const VERSION = v"0.2.0"
     export set_button_action!
 
     @export_function PopupMessage get_button_action_id String
+    @export_function PopupMessage set_is_high_priority! Cvoid Bool b
+    @export_function PopupMessage get_is_high_priority Bool
+    
+    set_timeout!(popup_message::PopupMessage, duration::Time) = detail.set_timeout!(popup_message._internal, as_microseconds(duration))
+    export set_timeout!
+
+    get_timeout(popup_message::PopupMessage) ::Time = microseconds(detail.get_timeout(popup_message._internal))
+    export get_timeout
 
     @add_signal_dismissed PopupMessage
     @add_signal_button_clicked PopupMessage
 
-    Base.show(io::IO, x::PopupMessage) = show_aux(io, x, :title, :button_label)
+    Base.show(io::IO, x::PopupMessage) = show_aux(io, x, :title, :button_label, :is_high_priority, :timeout)
 
 ####### popup_message_overlay.jl
 
