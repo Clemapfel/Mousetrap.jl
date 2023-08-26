@@ -929,6 +929,38 @@ function test_fixed(::Container)
     end
 end
 
+function test_flowbox(::Container)
+    @testset "FlowBox" begin
+        box = FlowBox(ORIENTATION_HORIZONTAL)
+        Base.show(devnull, box)
+        @test Mousetrap.is_native_widget(box)
+
+        @test get_homogeneous(box) == false
+        set_homogeneous!(box, true)
+        @test get_homogeneous(box) == true
+
+        @test get_orientation(box) == ORIENTATION_HORIZONTAL
+        set_orientation!(box, ORIENTATION_VERTICAL)
+        @test get_orientation(box) == ORIENTATION_VERTICAL
+
+        start = Separator()
+        push_front!(box, start)
+        push_back!(box, Separator())
+        insert_at!(box, Separator(), 1)
+        remove!(box, start)
+
+        @test get_n_items(box) == 2
+
+        @test get_row_spacing(box) == 0
+        set_row_spacing!(box, 10)
+        @test get_row_spacing(box) == 10
+
+        @test get_column_spacing(box) == 0
+        set_column_spacing!(box, 10)
+        @test get_column_spacing(box) == 10
+    end
+end
+
 function test_frame(::Container)
     @testset "Frame" begin
 
