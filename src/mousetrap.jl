@@ -5381,6 +5381,98 @@ else # if MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
 end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
+###### animation.jl
+
+    @export_enum AnimationState begin
+        ANIMATION_STATE_IDLE
+        ANIMATION_STATE_PAUSED
+        ANIMATION_STATE_PLAYING
+        ANIMATION_STATE_DONE
+    end
+
+    @export_enum AnimationTimingFunction begin
+        ANIMATION_TIMING_FUNCTION_LINEAR
+        ANIMATION_TIMING_FUNCTION_EXPONENTIAL
+        ANIMATION_TIMING_FUNCTION_EXPONENTIAL_REVERSE
+        ANIMATION_TIMING_FUNCTION_EXPONENTIAL_SIGMOID
+        ANIMATION_TIMING_FUNCTION_SINE
+        ANIMATION_TIMING_FUNCTION_SINE_REVERSE
+        ANIMATION_TIMING_FUNCTION_SINE_SIGMOID
+        ANIMATION_TIMING_FUNCTION_CIRCULAR
+        ANIMATION_TIMING_FUNCTION_CIRCULAR_REVERSE
+        ANIMATION_TIMING_FUNCTION_CIRCULAR_SIGMOID
+        ANIMATION_TIMING_FUNCTION_OVERSHOOT
+        ANIMATION_TIMING_FUNCTION_OVERSHOOT_REVERSE
+        ANIMATION_TIMING_FUNCTION_OVERSHOOT_SIGMOID
+        ANIMATION_TIMING_FUNCTION_ELASTIC
+        ANIMATION_TIMING_FUNCTION_ELASTIC_REVERSE
+        ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID
+        ANIMATION_TIMING_FUNCTION_BOUNCE
+        ANIMATION_TIMING_FUNCTION_BOUNCE_REVERSE
+        ANIMATION_TIMING_FUNCTION_BOUNCE_SIGMOID
+    end
+
+    @export_type Animation SignalEmitter
+    function Animation(target::Widget, duration::Time) 
+        return Animation(detail._Animation(as_widget_pointer(target), as_microseconds(duration)))
+    end
+
+    @export_function Animation get_state AnimationState
+    @export_function Animation play! Cvoid
+    @export_function Animation pause! Cvoid
+    @export_function Animation reset! Cvoid
+
+    set_duration!(animation::Animation, duration::Time) = detail.set_duration(animation._internal, as_microseconds(duration))
+    export set_duration!
+
+    get_duration(animation::Animation) ::Time = microseconds(detail.get_duration(animation._internal))
+    export get_duration
+
+    @export_function Animation set_lower! Cvoid Number => Cdouble lower
+    @export_function Animation get_lower Cdouble
+    @export_function Animation set_upper! Cvoid Number => Cdouble upper
+    @export_function Animation get_upper Cdouble
+    @export_function Animation get_value Cdouble
+
+    @export_function Animation get_repeat_count Csize_t
+    @export_function Animation set_repeat_count! Cvoid Integer => Csize_t n
+
+    @export_function Animation get_is_reversed Bool
+    @export_function Animation set_is_reversed! Cvoid Bool is_reversed
+
+    @export_function Animation set_timing_function! Cvoid AnimationTimingFunction tweening_mode
+    @export_function Animation get_timing_function AnimationTimingFunction
+
+    function on_tick!(f, animation::Animation, data::Data_t) where Data_t
+        typed_f = TypedFunction(f, Cvoid, (Animation, AbstractFloat, Data_t))
+        detail.on_tick!(animation._internal, function(animation_ref, Cdouble value)
+            typed_f(Animation(animation_ref[], value, data))
+        end)
+    end
+    function on_tick!(f, animation::Animation)
+        typed_f = TypedFunction(f, Cvoid, (Animation, AbstractFloat))
+        detail.on_tick!(animation._internal, function(animation_ref, Cdouble value)
+            typed_f(Animation(animation_ref[], value))
+        end)
+    end
+    export on_tick!
+
+    function on_done!(f, animation::Animation, data::Data_t) where Data_t
+        typed_f = TypedFunction(f, Cvoid, (Animation, Data_t))
+        detail.on_tick!(animation._internal, function(animation_ref)
+            typed_f(Animation(animation_ref[], value, data))
+        end)
+    end
+    function on_done!(f, animation::Animation)
+        typed_f = TypedFunction(f, Cvoid, (Animation,))
+        detail.on_tick!(animation._internal, function(animation_ref)
+            typed_f(Animation(animation_ref[], value))
+        end)
+    end
+    export on_done!
+
+    Base.show(io::IO, x::Animation) = show_aux(io, x, :value, :lower, :upper, :state, :timing_function)
+
 ###### style.jl
 
     add_css_class!(widget::Widget, class::String) = detail.add_css_class!(as_widget_pointer(widget), class)

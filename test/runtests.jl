@@ -58,6 +58,49 @@ function test_action(::Container)
     end
 end
 
+### ANIMATION
+
+function test_animation(widget::Container)
+    @testset "Animation" begin
+        animation = Animation(widget, seconds(1))
+        Base.show(devnull, animation)
+
+        @test get_state(animation) == ANIMATION_STATE_IDLE
+        
+        @test get_duration(animation) == seconds(1)
+        set_duration!(animation, seconds(2))
+        @test get_duration(animation) = seconds(2)
+
+        @test get_value(animation) == 0
+        @test get_lower!(animation) == 0
+        @test get_upper!(animation) == 1
+
+        set_lower!(animation, -1)
+        set_upper!(animation, 2)
+
+        @test get_lower!(animation) == -1
+        @test get_upper!(animation) == 2
+
+        @test get_repeat_count(animation) == 1
+        set_repeat_count!(animation, 0)
+        @test get_repeat_count(animation) == 0
+
+        @test get_is_reversed(animation) == false
+        set_is_reversed!(animation, true)
+        @test get_is_reversed(animation) == true
+
+        set_timing_function!(animation, ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID)
+        @test get_timing_function(animation) == ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID
+
+        on_tick!(animation) do self::Animation, value::AbstractFloat end
+        on_done!(animation) do self::Animation end
+
+        play!(animation)
+        pause!(animation)
+        reset!(animation)
+    end
+end
+
 ### ADJUSTMENT
 
 function test_adjustment(::Container)

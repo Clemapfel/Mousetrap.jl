@@ -184,6 +184,44 @@ run!(app)
 ```
 """
 
+@document Animation """
+# Animation <: SignalEmitter
+
+Object that provides a timing function which is synched to a widgets render cycle. It can be used as the basis of implementing animations.
+
+By default, the animations `value` will be in [0, 1], though this can be changed with `set_lower!` and `set_upper!`. The shape of the function 
+interpolating the value over time can be set using `set_timing_function!`.
+
+$(@type_constructors(
+    Animation(target::Widget, duration::Time)
+))
+
+$(@type_signals(Application, 
+))
+
+$(@type_fields())
+
+## Example
+```julia
+# animate a gradual fade-out
+to_animate = Button()
+
+animation = Animation(to_animate, seconds(1))
+on_tick!(animation, to_animate) do self::Animation, value::AbstractFloat, target::Widget
+    # value will be in [0, 1]
+    set_opacity!(target, 1 - value)
+end
+on_done!(animation, to_animate) do self::Animation, target::Widget
+    set_is_visible!(target, false)
+end
+
+# start animation when button is clicked
+connect_signal_clicked!(to_animate, animation) do self::Button, animation::Animation
+    play!(animation)
+end
+```
+"""
+
 @document AspectFrame """
 # AspectFrame <: Widget
 

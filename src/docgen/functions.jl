@@ -1100,6 +1100,13 @@ get_detailed_description(::AlertDIalog) -> String
 Get detailed message, this is the text shown below the dialogs title.
 """
 
+@document get_duration """
+```
+get_duration(::Animation) -> Time
+```
+Get the target duration of the animation.
+"""
+
 @document get_editable """
 ```
 get_editable(::TextView) -> Bool
@@ -1466,6 +1473,13 @@ get_is_resizable(::ColumnViewColumn) -> Bool
 Get whether the user can choose the width of this column by click-dragging.
 """
 
+@document get_is_reversed """
+```
+get_is_reversed(::Animation) -> Bool
+```
+If `false`, the animation will interpolate its value from the lower to upper bound, or the other way around if `true`.
+"""
+
 @document get_is_scrollable """
 ```
 get_is_scrollable(::Notebook) -> Bool
@@ -1558,8 +1572,9 @@ Get distance between the left side of the text and the `TextView`s frame.
 get_lower(::Adjustment) -> Float32
 get_lower(::Scale) -> Float32
 get_lower(::SpinButton) -> Float32
+get_lower(::Animation) -> Float64
 ```
-Get the lower bound of the (underlying) adjustment.
+Get the lower bound of the underlying range.
 """
 
 @document get_margin_bottom """
@@ -1878,6 +1893,13 @@ get_relative_position(::PopoverButton) -> RelativePosition
 Get the position of the popover relative to the widget it is attached to.
 """
 
+@document get_repeat_count """
+```
+get_repeat_count(::Animation) -> Unsigned
+```
+Get the number of cycles the animation will perform, or `0` if the animation loops endlessly.
+"""
+
 @document get_is_revealed """
 ```
 get_is_revealed(::Revealer) -> Bool
@@ -2128,16 +2150,16 @@ Get position at which the drag gesture was first recognized, in absolute widget-
 
 @document get_state """
 ```
-get_state(::Action) -> Bool
+get_state(::CheckButton) -> CheckButtonState
 ```
-If the action is stateful, get the underlying state, otherwise returns `false`.
+Get current state of the check button.
 
 ---
 
 ```
-get_state(::CheckButton) -> CheckButtonState
+get_state(::Animation) -> AnimationState
 ```
-Get current state of the check button.
+Get current state of the animation.
 """
 
 @document get_step_increment """
@@ -2243,6 +2265,13 @@ Get whether the text entry is in "password mode".
 get_time_since_last_frame(::FrameClock) -> Time
 ```
 Get the actual duration of the last rendered frame.
+"""
+
+@document get_animation_timing_function """
+```
+get_timing_function(::Animation) -> AnimationTimingFunction
+```
+Get the shape of the function used to interpolate the animations underlying value over time.
 """
 
 @document get_title """
@@ -2406,8 +2435,9 @@ Get uniform `vec4`, or `Vector4f(0, 0, 0, 0)` if no such uniform exists.
 get_upper(::Adjustment) -> Float32
 get_upper(::Scale) -> Float32
 get_upper(::SpinButton) -> Float32
+get_upper(::Animation) -> Float64
 ```
-Get upper bound of the underlying adjustment.
+Get upper bound of the underlying range.
 """
 
 @document get_uri """
@@ -2426,17 +2456,18 @@ Set whether the label should respect [pango markup syntax](https://docs.gtk.org/
 
 @document get_value """
 ```
-get_value(::Adjustment) 
-get_value(::SpinButton) 
-get_value(::Scale) 
-get_value(::LevelBar) 
+get_value(::Adjustment) -> Float32
+get_value(::SpinButton) -> Float32
+get_value(::Scale) -> Float32
+get_value(::LevelBar) -> Float32
+get_value(::Animation) -> Float64
 ```
 Get current value of the underlying adjustment.
 
 ---
 
 ```
-get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:AbstractFloat}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:AbstractFloat})
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T <: AbstractFloat 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:Signed}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T <: Signed 
@@ -2450,7 +2481,7 @@ get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{RGBA})
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{HSVA}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Image}) 
 ```
-Deserialize a value from the keyfile. Returns a default value if the key-value pair or group does not exist.
+Deserialize a value from the keyfile, then return it as a the specfied type. Returns a default value if the key-value pair or group does not exist, or it cannot be converted to the given type.
 """
 
 @document get_velocity """
@@ -3012,6 +3043,26 @@ end
 ````
 """
 
+@document on_done! """
+```
+on_done!(f, ::Animation, [::Data_t])
+```
+Register a callback called when the animations state changes from `ANIMATION_STATE_PLAYING` to `ANIMATION_STATE_DONE`.
+
+`f` is required to be invocable as a function with signature 
+```
+(::Animation, [::Data_t]) -> Cvoid
+```
+
+## Example
+```julia
+animation = Animation(widget, seconds(1))
+on_done!(animation) do self::Animation
+    println("animation stopped playing")
+end
+```
+"""
+
 @document on_file_changed! """
 ```
 on_file_changed!(f, monitor::FileMonitor, [::Data_t]) 
@@ -3047,7 +3098,7 @@ Register a callback to be called when the user clicks one of the dialogs buttons
 Where `button_index` is the index of the current button (1-based), or `0` if the dialog was dismissed.
 
 ## Example
-```
+```julia
 alert_dialog = AlertDialog(["Yes", "No"], "Is this is a dialog?")
 on_selection!(alert_dialog) do self::AlertDialog, button_index::Signed
     if button_index == 0
@@ -3057,6 +3108,25 @@ on_selection!(alert_dialog) do self::AlertDialog, button_index::Signed
     end
 end
 present!(alert_dialog)
+```
+"""
+
+@document on_tick! """
+```
+on_tick!(f, ::Animation, [::Data_t])
+```
+Register a callback called every frame while the animmation is active. `f` is required to be invocable as a function with signature
+```
+(::Animation, value::AbstractFloat, [::Data_t]) -> Cvoid
+```
+Where `value` is the currently interpolated value.
+
+## Example
+```julia
+animation = Animation(widget, seconds(1))
+on_tick!(animation) do self::Animation, value::AbstractFloat
+    # use `value` here
+end
 ```
 """
 
@@ -3072,6 +3142,20 @@ Asynchronously launch the default application to open the file or folder. May pr
 open_url(uri::String) -> Cvoid
 ```
 Asynchronously launch the default application to open the uri. This will usually be the users web browser
+"""
+
+@document pause! """
+```
+pause!(::Animation)
+```
+If the animation is playing, pause it, otherwise does nothing.
+"""
+
+@document play! """
+```
+play!(::Animation)
+```
+If the animation is currently paused, resume playing, otherwise restart the animation from the beginning.
 """
 
 @document popdown! """
@@ -3494,6 +3578,13 @@ signal `render`.
 
 @document reset! """
 ```
+reset!(::Animation)
+```
+Return the animations state to idle.
+
+---
+
+```
 reset!(::GLTransform) 
 ```
 Override the transform such that it is now the identity transform.
@@ -3893,6 +3984,13 @@ set_detailed_description(::AlertDialog, message::String)
 Set the detailed message, this is the text shown below the dialogs title.
 """
 
+@document set_duration! """
+```
+set_duration!(::Animation, ::Time)
+```
+Set the duration of the animation, microseconds precision.
+"""
+
 @document set_editable! """
 ```
 set_editable!(::TextView, ::Bool) 
@@ -4252,6 +4350,13 @@ set_is_resizable!(::ColumnViewColumn, ::Bool)
 Set whether the column can be resized. If set to `false`, the size set via [`set_fixed_width!`](@ref) will be used.
 """
 
+@document set_is_reversed! """
+```
+set_is_reversed!(::Animation, is_reversed::Bool)
+```
+If set to `false`, the animation will interpolate its value from the lower to upper bound, or the other way around if `true`. `false` by default.
+"""
+
 @document set_is_scrollable! """
 ```
 set_is_scrollable!(::Notebook, ::Bool) 
@@ -4367,8 +4472,9 @@ Returns `true` if the file was succesfully opened.
 set_lower!(::Adjustment, ::Number) 
 set_lower!(::Scale, ::Number) 
 set_lower!(::SpinButton, ::Number) 
+set_lower!(::Animation, ::Number)
 ```
-Set lower bound of the underlying adjustment.
+Set lower bound of the underlying range.
 """
 
 @document set_listens_for_shortcut_action! """
@@ -4627,6 +4733,13 @@ set_relative_position!(::PopoverButton, position::RelativePosition)
 Set position of the popover relative to the widget it is attached to.
 """
 
+@document set_repeat_count! """
+```
+set_repeat_count!(::Animation, ::Unsigned)
+```
+Set the number of cycles the animation should perform, or `0` if the animation loops endlessly. `1` by default.
+"""
+
 @document set_resource_path! """
 ```
 set_resource_path!(::IconTheme, path::String) 
@@ -4832,13 +4945,6 @@ There is no guarantee that the users operating system supports this feature.
 
 @document set_state! """
 ```
-set_state!(::Action, ::Bool) 
-```
-If the action is stateful, override its internal state.
-
----
-
-```
 set_state!(::CheckButton, state::CheckButtonState) 
 ```
 Set the state of the check button, this will change its visual element and emit the `toggled` signal.
@@ -4962,6 +5068,13 @@ set_tick_callback!(widget) do clock::FrameClock
     return TICK_CALLBACK_RESULT_CONTINUE
 end
 ```
+"""
+
+@document set_timing_function! """
+```
+set_timing_function!(::Animation, ::AnimationTimingFunction)
+```
+Sets the shape of the function used to interpolate the animations underlying value over time.
 """
 
 @document set_title! """
@@ -5147,8 +5260,9 @@ This value will be a `vec4` in GLSL.
 set_upper!(::Adjustment, ::Number) 
 set_upper!(::Scale, ::Number) 
 set_upper!(::SpinButton, ::Number) 
+set_upper!(::Animation, ::Number)
 ```
-Set upper bound of the underlying adjustment.
+Set upper bound of the underlying range.
 """
 
 @document set_use_markup! """
