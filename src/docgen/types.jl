@@ -1535,6 +1535,74 @@ add_controller!(window, pinch_zoom_controller)
 ```
 """
 
+@document PopupMessage """
+# PopupMessage <: SignalEmitter
+
+Popup message, always has a title and a close button. Additionally, a singular optional button can be placed next to the title. 
+When clicked, the `PopupMessage` emits signal `button_clicked`, or calls the `Action` connected to the button using `set_button_action!`.
+
+Use `PopupMessageOverlay` to display the message above a widget.
+
+$(@type_constructors(
+    PopupMessage(title::String),
+    PopupMessage(title::String, button_label::String)
+))
+
+$(@type_signals(PopupMessage, 
+    dismissed,
+    button_clicked
+))
+
+$(@type_fields())
+
+## Example
+```julia
+overlay = PopupMessageOverlay()
+set_child!(overlay, widget)
+
+message = PopupMessage("This example works!", "ok")
+connect_signal_button_clicked!(message) do self::PopupMessage
+    println("button clicked")
+end
+connect_signal_dismissed!(message) do self::PopupMessage
+    println("message closed")
+end
+
+show_message!(overlay, message)
+```
+"""
+
+@document PopupMessageOverlay """
+# PopupMessageOverlay <: SignalEmitter
+
+Widget that can display a `PopupMessage` above the `PopupMessageOverlay`s singular child. Only one message can be shown at a time.
+
+$(@type_constructors(
+    PopupMessageOverlay()
+))
+
+$(@type_signals(PopupMessageOverlay, 
+))
+
+$(@type_fields())
+
+## Example
+```julia
+overlay = PopupMessageOverlay()
+set_child!(overlay, widget)
+
+message = PopupMessage("This example works!", "ok")
+connect_signal_button_clicked!(message) do self::PopupMessage
+    println("button clicked")
+end
+connect_signal_dismissed!(message) do self::PopupMessage
+    println("message closed")
+end
+
+show_message!(overlay, message)
+```
+"""
+
 @document Popover """
 # Popover <: Widget
 

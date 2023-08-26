@@ -256,6 +256,14 @@ const signal_descriptors = Dict([
     :items_changed => (
         "(::T, position::Integer, n_removed::Integer, n_added::Integer, [::Data_t]) -> Cvoid", 
         "Emitted when the number of menu items, or any of their properties, changes."
+    ),
+    :dismissed => (
+        "(::T, [::Data_t]) -> Cvoid", 
+        "Emitted when the user clicks the close button of the `PopupMessage`"
+    ),
+    :button_clicked => (
+        "(::T, [::Data_t]) -> Cvoid", 
+        "Emitted when the user clicks the button of a `PopupMessage`. Note that the button is only visible if `set_button_label!` was set to anything but `\"\"`"
     )
 ])
 

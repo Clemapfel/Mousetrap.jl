@@ -1662,7 +1662,6 @@ function test_popover(container::Container)
 
     popover = Popover()
 
-    #=
     @testset "Popover" begin
         Base.show(devnull, popover)
         @test Mousetrap.is_native_widget(popover)
@@ -1692,7 +1691,6 @@ function test_popover(container::Container)
 
         remove_child!(container, id)
     end
-    =#
 
     @testset "PopoverButton" begin
         popover_button = PopoverButton(popover)
@@ -1733,6 +1731,36 @@ function test_popover(container::Container)
         activate!(popover_button)
         @test activate_called[] == true
     end
+end
+
+### POPUP_MESSAGE
+
+function test_popup_message(::Container)
+
+    overlay = PopupMessageOverlay()
+    Base.show(devnull, overlay)
+    set_child!(Separator())
+
+    message = PopupMessage("title", "button")
+
+    @test get_title(message) == "title"
+    set_title!(message, "not title")
+    @test get_title(message) == "not title"
+
+    @test get_button_label(message) == "button"
+    set_button_label!(message, "not button")
+    @test get_button_label(message) == "not button"
+
+    id = "test_popup_message.action"
+    action = Action(id, Main.app[]) do self end
+    set_button_action!(message, action)
+    @test get_button_action_id(message) == id
+
+    connect_signal_dismissed!(message) do self::PopupMessage end
+    connect_signal_button_clicked!(message) do self::PopupMessage end
+    
+    show_message!(overlay, message)
+    remove_child!(overlay)
 end
 
 ### PROGRESS_BAR
@@ -2698,6 +2726,7 @@ main(Main.app_id) do app::Application
         test_file_descriptor(container)
         test_fixed(container)
         test_frame(container)
+        test_flowbox(container)
         test_gl_transform(container)
         test_grid(container)
         test_grid_view(container)

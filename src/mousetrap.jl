@@ -922,6 +922,8 @@ const VERSION = v"0.2.0"
     macro add_signal_shutdown(x) return :(@add_signal $x shutdown Cvoid) end
     macro add_signal_clicked(x) return :(@add_signal $x clicked Cvoid) end
     macro add_signal_toggled(x) return :(@add_signal $x toggled Cvoid) end
+    macro add_signal_dismissed(x) return :(@add_signal $x dismissed Cvoid) end
+    macro add_signal_button_clicked(x) return :(@add_signal $x button_clicked Cvoid) end
     macro add_signal_activate_default_widget(x) return :(@add_signal $x activate_default_widget Cvoid) end
     macro add_signal_activate_focused_widget(x) return :(@add_signal $x activate_focused_widget Cvoid) end
     macro add_signal_close_request(x) return :(@add_signal $x close_request WindowCloseRequestResult) end
@@ -2380,6 +2382,52 @@ const VERSION = v"0.2.0"
         end)
     end
     export on_selection!
+
+    Base.show(io::IO, x::AlertDialog) = show_aux(io, x)
+
+####### popup_message.jl
+
+    @export_type PopupMessage SignalEmitter
+    PopupMessage(title::String) = PopupMessage(detail._PopupMessage(title, ""))
+    PopupMessage(title::String, button_label::String) = PopupMessage(detail._PopupMessage(title, button_label))
+
+    @export_function PopupMessage set_title! Cvoid String title
+    @export_function PopupMessage get_title String
+    @export_function PopupMessage set_button_label! Cvoid String title
+    @export_function PopupMessage get_button_label String
+
+    set_button_action!(popup_message::PopupMessage, action::Action) = detail.set_button_action!(popup_message._internal, action._internal)
+    export set_button_action!
+
+    @export_function PopupMessage get_button_action_id String
+
+    @add_signal_dismissed PopupMessage
+    @add_signal_button_clicked PopupMessage
+
+    Base.show(io::IO, x::PopupMessage) = show_aux(io, x, :title, :button_label)
+
+####### popup_message_overlay.jl
+
+    @export_type PopupMessageOverlay Widget
+    @declare_native_widget PopupMessageOverlay
+
+    PopupMessageOverlay() = PopupMessageOverlay(detail._PopupMessageOverlay())
+
+    function set_child!(overlay::PopupMessageOverlay, child::Widget)
+        detail.set_child!(window._internal, as_widget_pointer(child))
+    end
+    export set_child!
+
+    @export_function PopupMessageOverlay remove_child! Cvoid
+
+    function show_message!(overlay::PopupMessageOverlay, popup_message::PopupMessage)
+        detail.show_message!(overlay._internal, popup_message._internal)
+    end
+    export show_message!
+
+    @add_widget_signals PopupMessageOverlay
+
+    Base.show(io::IO, x::PopupMessageOverlay) = show_aux(io, x)
 
 ####### color_chooser.jl
 

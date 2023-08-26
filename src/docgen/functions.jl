@@ -909,11 +909,25 @@ get_axis_value(::StylusEventController, ::DeviceAxis) -> Float32
 Get value for the devices axis, or 0 if no such axis is present. This value will usually be in `[0, 1]`.
 """
 
+@document get_button_action_id """
+```
+get_button_action_id(::PopupMessage) -> ActionID
+```
+Get the ID of the messages button, or `""` if no button is present.
+"""
+
 @document get_button_label """
 ```
 get_button_label!(::AlertDialog, index::Integer) -> String
 ```
 Get label of the button at given ID, obtained when calling `add_button!`.
+
+--
+
+```
+get_button_label!(::PopupMessage) -> String
+```
+Get label of the singular button, or `""` if no button is present.
 """
 
 @document get_bottom_margin """
@@ -2245,6 +2259,13 @@ Get the window title.
 get_title(::ColumnViewColumn) -> String 
 ```
 Get the title for this column, which uniquely identifies it.
+
+---
+
+```
+get_title!(::PopupMessage) -> String
+````
+Get the `PopupMessage`s text.
 """
 
 @document get_tool_type """
@@ -3310,6 +3331,7 @@ remove_child!(::ToggleButton)
 remove_child!(::Expander) 
 remove_child!(::Frame) 
 remove_child!(::Overlay) 
+remove_child!(::PopupMessageOverlay)
 remove_child!(::Popover) 
 remove_child!(::PopoverButton) 
 remove_child!(::Stack, id::String) 
@@ -3677,11 +3699,25 @@ set_autohide!(::Popover, ::Bool)
 Set whether the popover should hide itself when the attached widget looses focus.
 """
 
+@document set_button_action! """
+```
+set_button_action!(::PopupMessage, ::Action)
+```
+Connect an action to the singular button of the message. Note that the messages button label has to be set to anything other than `""` for the button to be visible.
+"""
+
 @document set_button_label! """
 ```
 set_button_label!(::AlertDialog, id::Integer, label::String)
 ```
 Replace the label of the button with given ID, obtained when calling `add_button!`.
+
+---
+
+```
+set_button_label!(::PopupMessage, label::String)
+```
+If `label` is not empty, add a singular button to the message with the given label. When that button is clicked, the `PopupMessage` will emit signal `button_clicked`.
 """
 
 @document set_bottom_margin! """
@@ -3724,6 +3760,7 @@ set_child!(::Viewport, child::Widget)
 set_child!(::Expander, child::Widget) 
 set_child!(::Frame, child::Widget) 
 set_child!(::Overlay, child::Widget) 
+set_child!(::PopupMessageOverlay, child::Widget)
 set_child!(::Popover, child::Widget) 
 set_child!(::PopoverButton, child::Widget) 
 set_child!(::Revealer, child::Widget) 
@@ -4941,6 +4978,13 @@ Set the windows title, which will be shown in its titlebar.
 set_title!(::ColumnViewColumn, title::String) 
 ```
 Set the columns title, which will uniquely identify that column.
+
+---
+
+```
+set_title!(::PopupMessage, title::String)
+```
+Set the `PopupMessage`s text, does not support pango markup.
 """
 
 @document set_title_widget! """
@@ -5271,6 +5315,13 @@ This is usually not necessary, use `ShortcutEventController` to listen for short
 show!(::Widget) 
 ```
 Reveal the widget if it is currently hidden. This will emit signal `show`.
+"""
+
+@document show_message! """
+```
+show_message!(::PopupMessageOverlay, ::PopupMessage)
+```
+Queue a message to be shwon above the `PopupMessageOverlay`s child. Note that only one message can be shown at a time.
 """
 
 @document show_in_file_explorer """
