@@ -5473,6 +5473,36 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
     Base.show(io::IO, x::Animation) = show_aux(io, x, :value, :lower, :upper, :state, :timing_function)
 
+###### transform_bin.jl
+
+    @export_type TransformBin Widget
+    @declare_native_widget TransformBin
+
+    TransformBin() = TransformBin(detail._TransformBin())
+    function TransformBin(child::Widget)
+        out = TransformBin()
+        set_child!(out, child)
+        return out
+    end
+
+    set_child!(transform_bin::TransformBin, child::Widget) = detail.set_child!(transform_bin._internal, as_widget_pointer(child))
+    export set_child!
+
+    @export_function TransformBin remove_child! Cvoid
+    @export_function TransformBin reset! Cvoid
+    
+    rotate!(bin::TransformBin, angle::Angle) = detail.rotate!(bin._internal, as_degrees(angle))
+    export rotate!
+
+    translate!(bin::TransformBin, offset::Vector2f) = detail.translate!(bin._internal, offset.x, offset.y)
+    export translate!
+
+    @export_function TransformBin scale Cvoid Number => Cfloat x Number => Cfloat y
+    @export_function TransformBin skew Cvoid Number => Cfloat x Number => Cfloat y
+    
+    @add_widget_signals TransformBin
+    Base.show(io::IO, x::TransformBin) = show_aux(io, x)
+
 ###### style.jl
 
     add_css_class!(widget::Widget, class::String) = detail.add_css_class!(as_widget_pointer(widget), class)

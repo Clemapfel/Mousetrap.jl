@@ -3421,6 +3421,7 @@ remove_child!(::PopoverButton)
 remove_child!(::Stack, id::String) 
 remove_child!(::Revealer) 
 remove_child!(::Viewport) 
+remove_child!(::TransformBin)
 ```
 Remove the widgets singular child, such that it is now empty.
 """
@@ -3586,6 +3587,7 @@ Return the animations state to idle.
 
 ```
 reset!(::GLTransform) 
+reset!(::TransformBin)
 ```
 Override the transform such that it is now the identity transform.
 """
@@ -3634,6 +3636,13 @@ Convert the color to an html-style hexadecimal string of the form `#RRGGBB`. The
 
 @document rotate! """
 ```
+rotate!(::TransformBin, angle::Angle)
+```
+Rotate child widget around its center.
+
+---
+
+```
 rotate!(::GLTransform, angle::Angle, [origin::Vector2f]) 
 rotate!(::Shape, angle::Angle, [origin::Vector2f]) 
 ```
@@ -3680,12 +3689,13 @@ Returns `true` if the operation was successfull
 
 @document scale! """
 ```
+scale!(::TransformBin, x_scale::Number, y_scale::Number)
 scale!(::GLTransform, x_scale::AbstractFloat, y_scale::AbstractFloat) 
 ```
 Combine the transform with a scale transform. To scale around a point, first `translate!` the transform to that point, 
 then apply `scale!`, then `translate!` the transform back to origin.
 
-Uses the OpenGL coordinate system.
+Uses relative scale, where `2` is twice as big, `0.5` is half as big, `1` is no change compared to the original size.
 """
 
 @document seconds """
@@ -3855,6 +3865,7 @@ set_child!(::PopupMessageOverlay, child::Widget)
 set_child!(::Popover, child::Widget) 
 set_child!(::PopoverButton, child::Widget) 
 set_child!(::Revealer, child::Widget) 
+set_child!(::TransformBin, child::Widget)
 ```
 Set the widgets singular child.
 """
@@ -5445,6 +5456,13 @@ show_in_file_explorer(::FileDescriptor) -> Cvoid
 Asynchronously open the users file explorer application to show the folder containing the given file.
 """
 
+@document skew! """
+```
+skew!(::TransformBin, x::Number, y::Number)
+```
+Apply a skew transform to the child widget, where `x` skews along the horizontal, `y` along the vertical axis.
+"""
+
 @document start! """
 ```
 start!(::Spinner) 
@@ -5467,6 +5485,11 @@ Convert absolute widget-space coordinates to OpenGL coordinates. This will take 
 """
 
 @document translate! """
+```
+translate!(::TransformBin, offset::Vector2f)
+```
+Move the child widget by given offset, widget space coordinates, in pixels.
+
 ```
 translate!(transform::GLTransform, offset::Vector2f) 
 ```

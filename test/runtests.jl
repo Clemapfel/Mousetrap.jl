@@ -296,6 +296,23 @@ function test_box(::Container)
     end
 end
 
+function test_transform_bin(::Container)
+    @testset "TransformBin" begin
+        bin = TransformBin()
+        @test Mouestrap.is_native_widget(bin)
+        Base.show(devnull, bin)
+
+        set_child!(bin, Separator())
+
+        rotate!(bin, degrees(10))
+        translate!(bin, Vector2f(10, 10))
+        scale!(bin, 1.1, 0.9)
+        skew!(bin, 1.1, 0.9)
+        
+        remove_child!(bin)
+    end
+end
+
 function test_center_box(::Container)
     @testset "CenterBox" begin
         center_box = CenterBox(ORIENTATION_HORIZONTAL)

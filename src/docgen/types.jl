@@ -2489,6 +2489,40 @@ set_child!(window, toggle_button)
 ```
 """
 
+@document TransformBin """
+# TransformBin <: Widget
+
+Container with a singular child, allows applying spatial transform operations to its child widget.
+
+$(@type_constructors(
+    TransformBin(),
+    TransformBin(child::Widget)
+))
+
+$(@type_signals(TransformBin, 
+))
+
+$(@type_fields())
+
+## Example
+```julia
+# continuously rotate a widget
+
+widget = Button()
+bin = TransformBin()
+set_child!(widget)
+
+animation = Animation(bin, seconds(1))
+set_repeat_count!(animation, 0) # infinite repeats
+on_tick!(animation, bin) do self::Animation, bin::TransformBin
+    rotate!(bin, degrees(1))
+end
+play!(animation)
+
+set_child!(window, button)
+```
+"""
+
 @document TypedFunction """
 # TypedFunction
 
