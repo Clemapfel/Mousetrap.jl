@@ -2301,6 +2301,46 @@ $(@type_signals(StackSwitcher,
 $(@type_fields())
 """
 
+@document StyleClass """
+# StyleClass <: SignalEmitter
+
+Class that collects css properties that can be applied to any widget using `apply_style_class!`. See the manual chapter on theme customization for more information.
+
+$(@type_constructors(
+    StyleClass(name::String)
+))
+
+$(@type_signals(StyleClass, 
+))
+
+$(@type_fields())
+
+## Example
+```julia
+# create a window with rounded corners
+widget = Window()
+style_class = StyleClass("example")
+set_property!(style_class, STYLE_PROPERTY_BORDER_RADIUS, "20%")
+apply_style_class!(widget)
+```
+"""
+
+@document StyleClassTarget """
+# StyleClassTarget (alias for `String`)
+
+Name of a widgets CSS node, or `STYLE_CLASS_TARGET_SELF` to target the entire widget.
+
+$(@TODO)
+"""
+
+@document StyleClassProperty """
+# StyleClassProperty (alias for `String`)
+
+Name of a CSS property supported by Mousetrap.
+
+$(@TODO)
+"""
+
 @document StylusEventController """
 # StylusEventController <: SingleClickGesture <: EventController
 

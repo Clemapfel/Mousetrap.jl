@@ -341,6 +341,13 @@ apply_to(::GLTransform, ::Vector3f) -> Vector3f
 Apply transform to a vector, both operate in OpenGL coordinates.
 """
 
+@document apply_style_class! """
+```
+apply_style_class!(::Widget, class::StyleClass)
+```
+Apply the `StyleClass` to the widget, such that any CSS nodes of the widget targeted by the `StyleClass` will assume the set CSS properties.
+"""
+
 @document as_circle! """
 ```
 as_circle!(::Shape, center::Vector2f, radius::Number, n_outer_vertices::Integer) 
@@ -1740,6 +1747,7 @@ Get the number of OpenGL vertices.
 get_name(::Icon) -> String
 get_name(::FileDescriptor) -> String 
 get_name(::FileFilter) -> String
+get_name(::StyleClass) -> String
 ```
 Get a cleartext identifier for the object.
 """
@@ -3536,9 +3544,9 @@ Remove the start child such that the widget is now empty at that position
 
 @document remove_style_class! """
 ```
-remove_style_class!(::Widget)
+remove_style_class!(::Widget, class::StyleClass)
 ```
-Remove all applied style classes, reverting the widget to its default look.
+Remove the applied style classes, reverting any CSS nodes of the widget the `StyleClass` targets to their default look.
 """
 
 @document remove_texture! """
@@ -3745,6 +3753,15 @@ Check if the widget the controller was added to currently holds focus.
 self_or_child_is_focused(::FocusEventController) -> Bool
 ```
 Check if the widget the controller was added to, or any of the widgets children currently hold focus.
+"""
+
+@document serialize """
+```
+serialize(::RGBA) -> String
+serialize(::HSVA) -> String
+serialize(::StyleClass) -> String
+```
+Convert the object to its CSS representation.
 """
 
 @document set_acceleration_rate! """
@@ -4741,6 +4758,14 @@ Set whether the viewport should assume the height of its child. This will usuall
 set_propagation_phase!(controller::EventController, ::PropagationPhase) 
 ```
 Set the phase at which the event controller will capture events, see [here](https://developer-old.gnome.org/gtk4/stable/event-propagation.html) for more information.
+"""
+
+@document set_property! """
+```
+set_property!(::StyleClass, property::StyleClassProperty, css_value::String)
+set_property!(::StyleClass, target::StyleClassTarget, property::StyleClassProperty, css_value::String)
+```
+Set a CSS property, such that when the `StyleClass` is applied to a widget, all CSS nodes that match `target` will assume the given CSS property.
 """
 
 @document set_quick_change_menu_enabled! """
