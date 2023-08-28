@@ -5679,6 +5679,11 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     @define_style_target POPOVER_BUTTON_INDICATOR
     @define_style_target POPOVER_MENU
     @define_style_target POPOVER_MENU_ARROW
+    @define_style_target POPUP_MESSAGE_OVERLAY
+    @define_style_target POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE
+    @define_style_target POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE_CONTENT
+    @define_style_target POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE_ACTION_BUTTON
+    @define_style_target POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE_CLOSE_BUTTON
     @define_style_target PROGRESS_BAR
     @define_style_target PROGRESS_BAR_EMPTY
     @define_style_target PROGRESS_BAR_FULL
@@ -5695,10 +5700,10 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     @define_style_target SCROLLBAR_TROUGH
     @define_style_target SCOLLBAR_SLIDER
     @define_style_target SEPARATOR
-    @define_style_target SPINBUTTON
-    @define_style_target SPINBUTTON_TEXT
-    @define_style_target SPINBUTTON_BUTTON_INCREASE
-    @define_style_target SPINBUTTON_BUTTON_DECREASE
+    @define_style_target SPIN_BUTTON
+    @define_style_target SPIN_BUTTON_TEXT
+    @define_style_target SPIN_BUTTON_BUTTON_INCREASE
+    @define_style_target SPIN_BUTTON_BUTTON_DECREASE
     @define_style_target SPINNER
     @define_style_target STACK
     @define_style_target STACK_SWITCHER
@@ -5707,8 +5712,8 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     @define_style_target SWITCH_SLIDER
     @define_style_target SWITCH_NOT_ACTIVE
     @define_style_target SWITCH_ACTIVE
-    @define_style_target TEXTVIEW
-    @define_style_target TEXTVIEW_TEXT
+    @define_style_target TEXT_VIEW
+    @define_style_target TEXT_VIEW_TEXT
     @define_style_target TRANSFORM_BIN
     @define_style_target TOGGLE_BUTTON
     @define_style_target TOGGLE_BUTTON_ACTIVE

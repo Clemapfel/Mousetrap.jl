@@ -1,11 +1,11 @@
 const style_target_descriptors = Dict([
-    :STYLE_TARGET_ACTION_BAR => "`ActionBar` widget",
-    :STYLE_TARGET_ACTION_BAR_BOX_END => "`ActionBar` start area, populated with `push_back!`",
-    :STYLE_TARGET_ACTION_BAR_BOX_START => "`ActionBar` front area, populated with `push_front`",
-    :STYLE_TARGET_ASPECT_FRAME => "`AspectFrame` widget",
-    :STYLE_TARGET_BOX => "`Box` widget",
-    :STYLE_TARGET_BUTTON => "`Button` widget",
-    :STYLE_TARGET_BUTTON_PRESSED => "`Button` while depressed",
+:STYLE_TARGET_ACTION_BAR => "`ActionBar` widget",
+:STYLE_TARGET_ACTION_BAR_BOX_END => "`ActionBar` start area, populated with `push_back!`",
+:STYLE_TARGET_ACTION_BAR_BOX_START => "`ActionBar` front area, populated with `push_front`",
+:STYLE_TARGET_ASPECT_FRAME => "`AspectFrame` widget",
+:STYLE_TARGET_BOX => "`Box` widget",
+:STYLE_TARGET_BUTTON => "`Button` widget",
+:STYLE_TARGET_BUTTON_PRESSED => "`Button` while depressed",
     :STYLE_TARGET_CENTER_BOX => "`CenterBox` widget",
     :STYLE_TARGET_CHECK_BUTTON => "`CheckButton` widget",
     :STYLE_TARGET_CHECK_BUTTON_CHECK_MARK_ACTIVE => "`CheckButton` icon while state is `CHECK_BUTTON_STATE_ACTIVE`",
@@ -31,9 +31,9 @@ const style_target_descriptors = Dict([
     :STYLE_TARGET_IMAGE_DISPLAY => "`ImageDisplay` widget",
     :STYLE_TARGET_LABEL => "`Label` widget",
     :STYLE_TARGET_LEVEL_BAR => "`LevelBar` widget",
-    :STYLE_TARGET_LEVEL_BAR_BLOCK_FULL => "Colored area of a `LevelBar` while below 25%",
+    :STYLE_TARGET_LEVEL_BAR_BLOCK_LOW => "Colored area of a `LevelBar` while below 25%",
     :STYLE_TARGET_LEVEL_BAR_BLOCK_HIGH => "Colored area of a `LevelBar` while between 25% and 75%",
-    :STYLE_TARGET_LEVEL_BAR_BLOCK_LOW => "Colored area of a `LevelBar` while above 75%",
+    :STYLE_TARGET_LEVEL_BAR_BLOCK_FULL => "Colored area of a `LevelBar` while above 75%",
     :STYLE_TARGET_LEVEL_BAR_TROUGH => "Shape behind the colored area of a `LevelBar`",
     :STYLE_TARGET_LIST_VIEW => "`ListView` widget",
     :STYLE_TARGET_LIST_VIEW_CHILDREN => "Any child of a `ListView`",
@@ -57,6 +57,11 @@ const style_target_descriptors = Dict([
     :STYLE_TARGET_POPOVER_BUTTON_INDICATOR => "Indicator arrow next to a `PopoverButton`s label widget",
     :STYLE_TARGET_POPOVER_MENU => "`PopoverMenu` widget",
     :STYLE_TARGET_POPOVER_MENU_ARROW => "The triangular arrow pointing to a `PopoverMenu`s anchor widget",
+    :POPUP_MESSAGE_OVERLAY => "`PopupMessageOverlay` widget",
+    :POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE => "Widget of a `PopupMessage` shown via `PopupMessageOverlay`",
+    :POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE_CONTENT => "Main label area of of a `PopupMessage` shown via `PopupMessageOverlay`",
+    :POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE_ACTION_BUTTON => "Optional button of a `PopupMessage` shown via `PopupMessageOverlay`",
+    :POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE_CLOSE_BUTTON => "Non-optional \"close\" button of a `PopupMessage` shown via `PopupMessageOverlay`",
     :STYLE_TARGET_PROGRESS_BAR => "`ProgressBar` widget",
     :STYLE_TARGET_PROGRESS_BAR_DURING_PULSE => "`ProgressBar` colored area while the `pulse` animation is active",
     :STYLE_TARGET_PROGRESS_BAR_EMPTY => "`ProgressBar` colored area while at 0%",
@@ -74,10 +79,10 @@ const style_target_descriptors = Dict([
     :STYLE_TARGET_SCROLLBAR_TROUGH => "Background \"rail\" along which the moving element of a `Scrollbar` slides",
     :STYLE_TARGET_SELF => "Wildcard, matches all nodes of the style class",
     :STYLE_TARGET_SEPARATOR => "`Separator` widget",
-    :STYLE_TARGET_SPINBUTTON => "`SpinButton` widget",
-    :STYLE_TARGET_SPINBUTTON_BUTTON_DECREASE => "`+` button of a `SpinButton`",
-    :STYLE_TARGET_SPINBUTTON_BUTTON_INCREASE => "`-` button of a `SpinButton`",
-    :STYLE_TARGET_SPINBUTTON_TEXT => "Text in the text-entry area of a `SpinButton`",
+    :STYLE_TARGET_SPIN_BUTTON => "`SpinButton` widget",
+    :STYLE_TARGET_SPIN_BUTTON_BUTTON_DECREASE => "`+` button of a `SpinButton`",
+    :STYLE_TARGET_SPIN_BUTTON_BUTTON_INCREASE => "`-` button of a `SpinButton`",
+    :STYLE_TARGET_SPIN_BUTTON_TEXT => "Text in the text-entry area of a `SpinButton`",
     :STYLE_TARGET_SPINNER => "`Spinner` widget",
     :STYLE_TARGET_STACK => "`Stack` widget",
     :STYLE_TARGET_STACK_SIDEBAR => "`StackSidebar` widget",
@@ -86,8 +91,8 @@ const style_target_descriptors = Dict([
     :STYLE_TARGET_SWITCH_ACTIVE => "`Switch` while `get_is_active` is `true`",
     :STYLE_TARGET_SWITCH_NOT_ACTIVE => "`Switch` while `get_is_active` is `false`",
     :STYLE_TARGET_SWITCH_SLIDER => "Moving element of a `Switch`",
-    :STYLE_TARGET_TEXTVIEW => "`TextView` widget",
-    :STYLE_TARGET_TEXTVIEW_TEXT => "`TextView` text entry area",
+    :STYLE_TARGET_TEXT_VIEW => "`TextView` widget",
+    :STYLE_TARGET_TEXT_VIEW_TEXT => "`TextView` text entry area",
     :STYLE_TARGET_TEXT_ENTRY => "Any text entry area of a widget",
     :STYLE_TARGET_TEXT_SELECTION => "Indicator that the user selects part of the text, for example that of an `Entry` or a `Label` for whom `set_is_selectable!` was set to `true`",
     :STYLE_TARGET_TOGGLE_BUTTON => "`ToggleButton` widget",
@@ -135,12 +140,18 @@ function style_target_list()
 end
 
 macro type_style_targets(nodes...)
-    out = "## StyleClassTargets\n"
+    out = "## CSS Nodes\n"
     if !isempty(nodes)
-        for nodes in nodes
-            assert(node in Mousetrap.style_targets)
-            out *= "+ `$nodes`\n"
+
+        ids = ["StyleClassTarget"]
+        values = ["Meaning"]
+    
+        for node in nodes 
+            push!(ids, "`" * string(node) * "`")
+            push!(values, style_target_descriptors[node])
         end
+
+        out *= "$(Latexify.mdtable(ids, values; latex=false))"
     else
         out *= "(no public targets)\n"
     end
