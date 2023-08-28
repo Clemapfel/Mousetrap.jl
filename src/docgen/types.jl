@@ -1833,10 +1833,7 @@ task = RenderTask(shape;
 @document RenderTexture """
 # RenderTexture <: TextureObject <: SignalEmitter
 
-Texture that can be bound as a render target. 
-
-See the manual chapter on native rendering for more
-information.
+Texture that can be bound as a render target. This object should not be used.
 
 $(@type_constructors(
     RenderTexture()
@@ -1846,59 +1843,6 @@ $(@type_signals(RenderTexture,
 ))
 
 $(@type_fields())
-
-## Example
-```julia
-# TODO THIS DOES NOT CURRENTLY WORK
-
-using Mousetrap
-main() do app::Application
-
-    window = Window(app)
-
-    render_area = RenderArea()
-    set_size_request!(render_area, Vector2f(150, 150))
-
-    # stuff we want to render to the texture
-
-    shape = Circle(Vector2f(0, 0), 1.0, 16)
-    shape_task = RenderTask(shape)
-
-    # all objects necessary to render the render texture itself, so we can see its contents
-
-    render_texture = RenderTexture()
-    render_texture_shape = Rectangle(Vector2f(-1, -1), Vector2f(2, 2))
-    set_texture!(render_texture_shape, render_texture)
-    render_texture_task = RenderTask(render_texture_shape)
-
-    connect_signal_resize!(render_area, render_texture) do self::RenderArea, width::Integer, height::Integer, texture
-        create!(texture, width, height)
-        queue_render(self)
-    end
-
-    connect_signal_render!(render_area) do self::RenderArea
-
-        # render to exture
-
-        #bind_as_render_target(render_texture)
-
-        clear(self)
-        render(shape_task)
-        flush(self)
-
-        #unbind_as_render_target(render_texture)
-
-        # now render entire texture to screen
-
-        #clear(self)
-        #render(render_texture_task)
-        #flush(self)
-    end
-
-    set_child!(window, render_area)
-    present!(window)
-end
-```
 """
 
 @document Revealer """
@@ -2330,7 +2274,7 @@ apply_style_class!(widget)
 
 Name of a widgets CSS node, or `STYLE_CLASS_TARGET_SELF` to target the entire widget.
 
-$(@TODO)
+$(Mousetrap.style_target_list())
 """
 
 @document StyleClassProperty """
@@ -2338,7 +2282,7 @@ $(@TODO)
 
 Name of a CSS property supported by Mousetrap.
 
-$(@TODO)
+$(Mousetrap.style_property_table())
 """
 
 @document StylusEventController """

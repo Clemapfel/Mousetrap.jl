@@ -18,6 +18,9 @@ const enums = Symbol[]
 const enum_values = Symbol[]
 const key_codes = Symbol[]
 const other = Symbol[]
+const style_properties = Symbol[]
+const style_targets = Symbol[]
+const style_classes = Symbol[]
 
 for n in names(Mousetrap)
 
@@ -43,6 +46,12 @@ for n in names(Mousetrap)
                 push!(functions, n)
             end
         #end
+    elseif occursin("STYLE_PROPERTY_", string(n))
+        push!(style_properties, n)
+    elseif occursin("STYLE_TARGET_", string(n))
+        push!(style_targets, n)
+    elseif occursin("STYLE_CLASS_", string(n))
+        push!(style_classes, n)    
     elseif occursin("KEY_", string(n))
         push!(key_codes, Symbol(string(n)[5:end])) # omit `KEY_`
     elseif typeof(binding) <: Int64
@@ -142,6 +151,7 @@ end
 ## include
 
 include("docgen/signals.jl")
+include("docgen/styles.jl")
 include("docgen/functions.jl")
 include("docgen/types.jl")
 include("docgen/enums.jl")

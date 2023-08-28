@@ -5453,13 +5453,13 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
     function on_tick!(f, animation::Animation, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (Animation, AbstractFloat, Data_t))
-        detail.on_tick!(animation._internal, function(animation_ref, Cdouble value)
+        detail.on_tick!(animation._internal, function(animation_ref, value::Cdouble )
             typed_f(Animation(animation_ref[], value, data))
         end)
     end
     function on_tick!(f, animation::Animation)
         typed_f = TypedFunction(f, Cvoid, (Animation, AbstractFloat))
-        detail.on_tick!(animation._internal, function(animation_ref, Cdouble value)
+        detail.on_tick!(animation._internal, function(animation_ref, value::Cdouble)
             typed_f(Animation(animation_ref[], value))
         end)
     end
@@ -5555,7 +5555,10 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     
     macro define_style_property(NAME)
         var_name = :STYLE_PROPERTY_ * NAME
-        :(const $var_name = detail.$var_name)
+        out = Expr(:toplevel) 
+        push!(out.args, :(const $(esc(var_name)) = detail.$var_name))
+        push!(out.args, :(export $(esc(var_name))))
+        return out
     end
 
     @define_style_property FOREGROUND_COLOR
@@ -5611,7 +5614,10 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
     macro define_style_target(NAME)
         var_name = :STYLE_TARGET_ * NAME
-        :(const $var_name = detail.$var_name)
+        out = Expr(:toplevel) 
+        push!(out.args, :(const $(esc(var_name)) = detail.$var_name))
+        push!(out.args, :(export $(esc(var_name))))
+        return out
     end
 
     @define_style_target SELF
@@ -5720,8 +5726,11 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     @define_style_target TEXT_SELECTION
 
     macro define_pre_made_style_class(NAME)
-        var_name = :STYLE_CLASS * NAME
-        :(const $var_name = StyleClass(detail.$var_name))
+        var_name = :STYLE_CLASS_ * NAME
+        out = Expr(:toplevel) 
+        push!(out.args, :(const $(esc(var_name)) = detail.$var_name))
+        push!(out.args, :(export $(esc(var_name))))
+        return out
     end
 
     @define_pre_made_style_class SUGGESTED_ACTION
