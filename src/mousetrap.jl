@@ -8,7 +8,7 @@
 
 module mousetrap
 
-const VERSION = v"0.1.0"
+const VERSION = v"0.1.1"
 
 ####### detail.jl
 
