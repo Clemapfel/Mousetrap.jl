@@ -5514,8 +5514,16 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 ###### style.jl
 
     add_css_class!(widget::Widget, class::String) = detail.add_css_class!(as_widget_pointer(widget), class)
+    export add_css_class!
+
     remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
+    export remove_css_class!
+
     get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
+    export get_css_classes!
+
+    add_css!(code::String) = detail.style_manager_add_css(code)
+    export add_css!
 
     @export_type StyleClass SignalEmitter
     StyleClass(name::String) = StyleClass(detail._StyleClass(name))
@@ -5540,6 +5548,14 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
         detail.set_property!(style_class._internal, STYLE_TARGET_SELF, property, value)
     end
     export set_property!
+
+    function get_property(style_class::StyleClass, target::StyleClassTarget, property::StyleClassProperty) ::String
+        return detail.get_property!(style_class._internal, target, property, value)
+    end
+    function set_property(style_class::StyleClass, property::StyleClassProperty) ::String
+        return detail.get_property!(style_class._internal, STYLE_TARGET_SELF, property, value)
+    end
+    export get_property
 
     Base.show(io::IO, x::StyleClass) = show_aux(io, x)
 
@@ -5721,10 +5737,10 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     @define_style_target VIEWPORT
     @define_style_target VIEWPORT_HORIZONTAL_SCROLLBAR
     @define_style_target VIEWPORT_HORIZONTAL_SCROLLBAR_TROUGH
-    @define_style_target VIEWPORT_HORIZONTAL_SCOLLBAR_SLIDER
+    @define_style_target VIEWPORT_HORIZONTAL_SCROLLBAR_SLIDER
     @define_style_target VIEWPORT_VERTICAL_SCROLLBAR
     @define_style_target VIEWPORT_VERTICAL_SCROLLBAR_TROUGH
-    @define_style_target VIEWPORT_VERTICAL_SCOLLBAR_SLIDER
+    @define_style_target VIEWPORT_VERTICAL_SCROLLBAR_SLIDER
     @define_style_target WINDOW
     @define_style_target WIDGET
     @define_style_target TEXT_ENTRY

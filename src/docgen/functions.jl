@@ -219,6 +219,44 @@ add_child!(fixed::Fixed, ::Widget, position::Vector2f)
 Add a widget at given position, in absolute widget-space coordinates.
 """
 
+@document add_css! """
+```
+add_css!(code::String) -> Cvoid
+```
+Execute CSS code and add it to the global style manager. If compied succesfully, 
+any class defined will be available to be applied to a widget using `add_css_class!`.
+
+## Example
+```julia
+mousetrap.add_css!(\"\"\"
+.custom {
+    color: green;
+    border-radius: 10%;
+}
+\"\"\")
+add_css_class!(window, ".custom")
+```
+"""
+
+@document add_css_class! """
+```
+add_css_class!(::Widget, class::String)
+```
+Apply a custom style class to the widget. Use `add_css!` to define a CSS
+class.
+
+## Example
+```julia
+mousetrap.add_css!(\"\"\"
+.custom {
+    color: green;
+    border-radius: 10%;
+}
+\"\"\")
+add_css_class!(window, ".custom")
+```
+"""
+
 @document add_controller! """
 ```
 add_controller!(::Widget, controller::EventController) 
@@ -1049,6 +1087,13 @@ Get the singular comment above a group or key declaration.
 get_content_type(::FileDescriptor) -> String
 ```
 Get the file type as a MIME identification string.
+"""
+
+@document get_css_classes """
+```
+get_css_classes(::Widget) -> Vector{String}
+```
+Get all CSS classes currently applied to that widget.
 """
 
 @document get_current_button """
@@ -1884,6 +1929,13 @@ Get whether the viewport should assume the natural width of its child.
 get_propagation_phase(::EventController) -> PropagationPhase
 ```
 Get the phase at which the event controller will capture events, see [here](https://developer-old.gnome.org/gtk4/stable/event-propagation.html) for more information.
+"""
+
+@document get_property """
+```
+get_property(::StyleClass, ::StyleClassTarget) -> String
+```
+Get the CSS properties value as a string, or "" if the property was not set.
 """
 
 @document get_quick_change_menu_enabled """
@@ -3446,6 +3498,13 @@ remove_child!(::Viewport)
 remove_child!(::TransformBin)
 ```
 Remove the widgets singular child, such that it is now empty.
+"""
+
+@document remove_css_class! """
+```
+remove_css_class!(::Widget, class::String)
+```
+Undo the effects of `add_css_class!`.
 """
 
 @document remove_column! """
