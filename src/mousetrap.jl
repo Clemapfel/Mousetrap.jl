@@ -5505,8 +5505,8 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     translate!(bin::TransformBin, offset::Vector2f) = detail.translate!(bin._internal, offset.x, offset.y)
     export translate!
 
-    @export_function TransformBin scale Cvoid Number => Cfloat x Number => Cfloat y
-    @export_function TransformBin skew Cvoid Number => Cfloat x Number => Cfloat y
+    @export_function TransformBin scale! Cvoid Number => Cfloat x Number => Cfloat y
+    @export_function TransformBin skew! Cvoid Number => Cfloat x Number => Cfloat y
     
     @add_widget_signals TransformBin
     Base.show(io::IO, x::TransformBin) = show_aux(io, x)
@@ -5519,8 +5519,8 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
     export remove_css_class!
 
-    get_css_classes!(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
-    export get_css_classes!
+    get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
+    export get_css_classes
 
     add_css!(code::String) = detail.style_manager_add_css(code)
     export add_css!

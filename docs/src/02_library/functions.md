@@ -115,6 +115,14 @@ Mousetrap.add_child!
 ```@docs
 Mousetrap.add_controller!
 ```
+## `add_css!`
+```@docs
+Mousetrap.add_css!
+```
+## `add_css_class!`
+```@docs
+Mousetrap.add_css_class!
+```
 ## `add_filter!`
 ```@docs
 Mousetrap.add_filter!
@@ -162,6 +170,10 @@ Mousetrap.add_widget!
 ## `alt_pressed`
 ```@docs
 Mousetrap.alt_pressed
+```
+## `apply_style_class!`
+```@docs
+Mousetrap.apply_style_class!
 ```
 ## `apply_to`
 ```@docs
@@ -335,6 +347,10 @@ Mousetrap.connect_signal_activate_item!
 ```@docs
 Mousetrap.connect_signal_activated!
 ```
+## `connect_signal_button_clicked!`
+```@docs
+Mousetrap.connect_signal_button_clicked!
+```
 ## `connect_signal_click_pressed!`
 ```@docs
 Mousetrap.connect_signal_click_pressed!
@@ -362,6 +378,10 @@ Mousetrap.connect_signal_closed!
 ## `connect_signal_destroy!`
 ```@docs
 Mousetrap.connect_signal_destroy!
+```
+## `connect_signal_dismissed!`
+```@docs
+Mousetrap.connect_signal_dismissed!
 ```
 ## `connect_signal_drag!`
 ```@docs
@@ -663,6 +683,10 @@ Mousetrap.disconnect_signal_activate_item!
 ```@docs
 Mousetrap.disconnect_signal_activated!
 ```
+## `disconnect_signal_button_clicked!`
+```@docs
+Mousetrap.disconnect_signal_button_clicked!
+```
 ## `disconnect_signal_click_pressed!`
 ```@docs
 Mousetrap.disconnect_signal_click_pressed!
@@ -690,6 +714,10 @@ Mousetrap.disconnect_signal_closed!
 ## `disconnect_signal_destroy!`
 ```@docs
 Mousetrap.disconnect_signal_destroy!
+```
+## `disconnect_signal_dismissed!`
+```@docs
+Mousetrap.disconnect_signal_dismissed!
 ```
 ## `disconnect_signal_drag!`
 ```@docs
@@ -915,6 +943,10 @@ Mousetrap.emit_signal_activate_item
 ```@docs
 Mousetrap.emit_signal_activated
 ```
+## `emit_signal_button_clicked`
+```@docs
+Mousetrap.emit_signal_button_clicked
+```
 ## `emit_signal_click_pressed`
 ```@docs
 Mousetrap.emit_signal_click_pressed
@@ -942,6 +974,10 @@ Mousetrap.emit_signal_closed
 ## `emit_signal_destroy`
 ```@docs
 Mousetrap.emit_signal_destroy
+```
+## `emit_signal_dismissed`
+```@docs
+Mousetrap.emit_signal_dismissed
 ```
 ## `emit_signal_drag`
 ```@docs
@@ -1203,6 +1239,10 @@ Mousetrap.get_bottom_margin
 ```@docs
 Mousetrap.get_bounding_box
 ```
+## `get_button_action_id`
+```@docs
+Mousetrap.get_button_action_id
+```
 ## `get_button_label`
 ```@docs
 Mousetrap.get_button_label
@@ -1263,6 +1303,10 @@ Mousetrap.get_comment_above
 ```@docs
 Mousetrap.get_content_type
 ```
+## `get_css_classes`
+```@docs
+Mousetrap.get_css_classes
+```
 ## `get_current_button`
 ```@docs
 Mousetrap.get_current_button
@@ -1294,6 +1338,10 @@ Mousetrap.get_destroy_with_parent
 ## `get_detailed_description`
 ```@docs
 Mousetrap.get_detailed_description
+```
+## `get_duration`
+```@docs
+Mousetrap.get_duration
 ```
 ## `get_editable`
 ```@docs
@@ -1455,6 +1503,10 @@ Mousetrap.get_is_expanded
 ```@docs
 Mousetrap.get_is_focusable
 ```
+## `get_is_high_priority`
+```@docs
+Mousetrap.get_is_high_priority
+```
 ## `get_is_holding`
 ```@docs
 Mousetrap.get_is_holding
@@ -1490,6 +1542,10 @@ Mousetrap.get_is_resizable
 ## `get_is_revealed`
 ```@docs
 Mousetrap.get_is_revealed
+```
+## `get_is_reversed`
+```@docs
+Mousetrap.get_is_reversed
 ```
 ## `get_is_scrollable`
 ```@docs
@@ -1687,6 +1743,10 @@ Mousetrap.get_propagate_natural_width
 ```@docs
 Mousetrap.get_propagation_phase
 ```
+## `get_property`
+```@docs
+Mousetrap.get_property
+```
 ## `get_quick_change_menu_enabled`
 ```@docs
 Mousetrap.get_quick_change_menu_enabled
@@ -1698,6 +1758,10 @@ Mousetrap.get_ratio
 ## `get_relative_position`
 ```@docs
 Mousetrap.get_relative_position
+```
+## `get_repeat_count`
+```@docs
+Mousetrap.get_repeat_count
 ```
 ## `get_right_margin`
 ```@docs
@@ -1807,6 +1871,10 @@ Mousetrap.get_signal_activate_item_blocked
 ```@docs
 Mousetrap.get_signal_activated_blocked
 ```
+## `get_signal_button_clicked_blocked`
+```@docs
+Mousetrap.get_signal_button_clicked_blocked
+```
 ## `get_signal_click_pressed_blocked`
 ```@docs
 Mousetrap.get_signal_click_pressed_blocked
@@ -1834,6 +1902,10 @@ Mousetrap.get_signal_closed_blocked
 ## `get_signal_destroy_blocked`
 ```@docs
 Mousetrap.get_signal_destroy_blocked
+```
+## `get_signal_dismissed_blocked`
+```@docs
+Mousetrap.get_signal_dismissed_blocked
 ```
 ## `get_signal_drag_begin_blocked`
 ```@docs
@@ -2106,6 +2178,14 @@ Mousetrap.get_text_visible
 ## `get_time_since_last_frame`
 ```@docs
 Mousetrap.get_time_since_last_frame
+```
+## `get_timeout`
+```@docs
+Mousetrap.get_timeout
+```
+## `get_timing_function`
+```@docs
+Mousetrap.get_timing_function
 ```
 ## `get_title`
 ```@docs
@@ -2435,6 +2515,10 @@ Mousetrap.on_accept!
 ```@docs
 Mousetrap.on_cancel!
 ```
+## `on_done!`
+```@docs
+Mousetrap.on_done!
+```
 ## `on_file_changed!`
 ```@docs
 Mousetrap.on_file_changed!
@@ -2443,6 +2527,10 @@ Mousetrap.on_file_changed!
 ```@docs
 Mousetrap.on_selection!
 ```
+## `on_tick!`
+```@docs
+Mousetrap.on_tick!
+```
 ## `open_file`
 ```@docs
 Mousetrap.open_file
@@ -2450,6 +2538,14 @@ Mousetrap.open_file
 ## `open_url`
 ```@docs
 Mousetrap.open_url
+```
+## `pause!`
+```@docs
+Mousetrap.pause!
+```
+## `play!`
+```@docs
+Mousetrap.play!
 ```
 ## `popdown!`
 ```@docs
@@ -2551,6 +2647,10 @@ Mousetrap.remove_column_at!
 ```@docs
 Mousetrap.remove_controller!
 ```
+## `remove_css_class!`
+```@docs
+Mousetrap.remove_css_class!
+```
 ## `remove_end_child!`
 ```@docs
 Mousetrap.remove_end_child!
@@ -2590,6 +2690,10 @@ Mousetrap.remove_secondary_icon!
 ## `remove_start_child!`
 ```@docs
 Mousetrap.remove_start_child!
+```
+## `remove_style_class!`
+```@docs
+Mousetrap.remove_style_class!
 ```
 ## `remove_texture!`
 ```@docs
@@ -2675,6 +2779,10 @@ Mousetrap.self_is_focused
 ```@docs
 Mousetrap.self_or_child_is_focused
 ```
+## `serialize`
+```@docs
+Mousetrap.serialize
+```
 ## `set_acceleration_rate!`
 ```@docs
 Mousetrap.set_acceleration_rate!
@@ -2710,6 +2818,10 @@ Mousetrap.set_autohide!
 ## `set_bottom_margin!`
 ```@docs
 Mousetrap.set_bottom_margin!
+```
+## `set_button_action!`
+```@docs
+Mousetrap.set_button_action!
 ```
 ## `set_button_label!`
 ```@docs
@@ -2798,6 +2910,10 @@ Mousetrap.set_destroy_with_parent!
 ## `set_detailed_description!`
 ```@docs
 Mousetrap.set_detailed_description!
+```
+## `set_duration!`
+```@docs
+Mousetrap.set_duration!
 ```
 ## `set_editable!`
 ```@docs
@@ -2971,6 +3087,10 @@ Mousetrap.set_is_expanded!
 ```@docs
 Mousetrap.set_is_focusable!
 ```
+## `set_is_high_priority!`
+```@docs
+Mousetrap.set_is_high_priority!
+```
 ## `set_is_horizontally_homogeneous!`
 ```@docs
 Mousetrap.set_is_horizontally_homogeneous!
@@ -2990,6 +3110,10 @@ Mousetrap.set_is_resizable!
 ## `set_is_revealed!`
 ```@docs
 Mousetrap.set_is_revealed!
+```
+## `set_is_reversed!`
+```@docs
+Mousetrap.set_is_reversed!
 ```
 ## `set_is_scrollable!`
 ```@docs
@@ -3163,6 +3287,10 @@ Mousetrap.set_propagate_natural_width!
 ```@docs
 Mousetrap.set_propagation_phase!
 ```
+## `set_property!`
+```@docs
+Mousetrap.set_property!
+```
 ## `set_quick_change_menu_enabled!`
 ```@docs
 Mousetrap.set_quick_change_menu_enabled!
@@ -3174,6 +3302,10 @@ Mousetrap.set_ratio!
 ## `set_relative_position!`
 ```@docs
 Mousetrap.set_relative_position!
+```
+## `set_repeat_count!`
+```@docs
+Mousetrap.set_repeat_count!
 ```
 ## `set_resource_path!`
 ```@docs
@@ -3271,6 +3403,10 @@ Mousetrap.set_signal_activate_item_blocked!
 ```@docs
 Mousetrap.set_signal_activated_blocked!
 ```
+## `set_signal_button_clicked_blocked!`
+```@docs
+Mousetrap.set_signal_button_clicked_blocked!
+```
 ## `set_signal_click_pressed_blocked!`
 ```@docs
 Mousetrap.set_signal_click_pressed_blocked!
@@ -3298,6 +3434,10 @@ Mousetrap.set_signal_closed_blocked!
 ## `set_signal_destroy_blocked!`
 ```@docs
 Mousetrap.set_signal_destroy_blocked!
+```
+## `set_signal_dismissed_blocked!`
+```@docs
+Mousetrap.set_signal_dismissed_blocked!
 ```
 ## `set_signal_drag_begin_blocked!`
 ```@docs
@@ -3575,6 +3715,14 @@ Mousetrap.set_texture!
 ```@docs
 Mousetrap.set_tick_callback!
 ```
+## `set_timeout!`
+```@docs
+Mousetrap.set_timeout!
+```
+## `set_timing_function!`
+```@docs
+Mousetrap.set_timing_function!
+```
 ## `set_title!`
 ```@docs
 Mousetrap.set_title!
@@ -3726,6 +3874,14 @@ Mousetrap.show!
 ## `show_in_file_explorer`
 ```@docs
 Mousetrap.show_in_file_explorer
+```
+## `show_message!`
+```@docs
+Mousetrap.show_message!
+```
+## `skew!`
+```@docs
+Mousetrap.skew!
 ```
 ## `start!`
 ```@docs

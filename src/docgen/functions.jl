@@ -2341,7 +2341,7 @@ get_time_since_last_frame(::FrameClock) -> Time
 Get the actual duration of the last rendered frame.
 """
 
-@document get_animation_timing_function """
+@document get_timing_function """
 ```
 get_timing_function(::Animation) -> AnimationTimingFunction
 ```

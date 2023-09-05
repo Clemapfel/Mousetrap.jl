@@ -13,6 +13,7 @@ Action
 + [`get_shortcuts`](@ref)
 + [`remove_action!`](@ref)
 + [`set_action!`](@ref)
++ [`set_button_action!`](@ref)
 + [`set_enabled!`](@ref)
 + [`set_function!`](@ref)
 + [`set_listens_for_shortcut_action!`](@ref)
@@ -155,6 +156,33 @@ Angle
 + [`as_degrees`](@ref)
 + [`as_radians`](@ref)
 + [`rotate!`](@ref)
+
+
+---
+## Animation
+```@docs
+Animation
+```
+#### Functions that operate on this type:
++ [`get_duration`](@ref)
++ [`get_is_reversed`](@ref)
++ [`get_lower`](@ref)
++ [`get_repeat_count`](@ref)
++ [`get_state`](@ref)
++ [`get_timing_function`](@ref)
++ [`get_upper`](@ref)
++ [`get_value`](@ref)
++ [`on_done!`](@ref)
++ [`on_tick!`](@ref)
++ [`pause!`](@ref)
++ [`play!`](@ref)
++ [`reset!`](@ref)
++ [`set_duration!`](@ref)
++ [`set_is_reversed!`](@ref)
++ [`set_lower!`](@ref)
++ [`set_repeat_count!`](@ref)
++ [`set_timing_function!`](@ref)
++ [`set_upper!`](@ref)
 
 
 ---
@@ -1119,6 +1147,77 @@ Fixed
 
 
 ---
+## FlowBox
+```@docs
+FlowBox
+```
+#### Functions that operate on this type:
++ [`clear!`](@ref)
++ [`get_column_spacing`](@ref)
++ [`get_homogeneous`](@ref)
++ [`get_n_items`](@ref)
++ [`get_orientation`](@ref)
++ [`get_row_spacing`](@ref)
++ [`insert_at!`](@ref)
++ [`push_back!`](@ref)
++ [`push_front!`](@ref)
++ [`remove!`](@ref)
++ [`set_column_spacing!`](@ref)
++ [`set_homogeneous!`](@ref)
++ [`set_orientation!`](@ref)
++ [`set_row_spacing!`](@ref)
+
+
++ [`connect_signal_destroy!`](@ref)
++ [`disconnect_signal_destroy!`](@ref)
++ [`emit_signal_destroy`](@ref)
++ [`get_signal_destroy_blocked`](@ref)
++ [`set_signal_destroy_blocked!`](@ref)
+
+
++ [`connect_signal_hide!`](@ref)
++ [`disconnect_signal_hide!`](@ref)
++ [`emit_signal_hide`](@ref)
++ [`get_signal_hide_blocked`](@ref)
++ [`set_signal_hide_blocked!`](@ref)
+
+
++ [`connect_signal_map!`](@ref)
++ [`disconnect_signal_map!`](@ref)
++ [`emit_signal_map`](@ref)
++ [`get_signal_map_blocked`](@ref)
++ [`set_signal_map_blocked!`](@ref)
+
+
++ [`connect_signal_realize!`](@ref)
++ [`disconnect_signal_realize!`](@ref)
++ [`emit_signal_realize`](@ref)
++ [`get_signal_realize_blocked`](@ref)
++ [`set_signal_realize_blocked!`](@ref)
+
+
++ [`connect_signal_show!`](@ref)
++ [`disconnect_signal_show!`](@ref)
++ [`emit_signal_show`](@ref)
++ [`get_signal_show_blocked`](@ref)
++ [`set_signal_show_blocked!`](@ref)
+
+
++ [`connect_signal_unmap!`](@ref)
++ [`disconnect_signal_unmap!`](@ref)
++ [`emit_signal_unmap`](@ref)
++ [`get_signal_unmap_blocked`](@ref)
++ [`set_signal_unmap_blocked!`](@ref)
+
+
++ [`connect_signal_unrealize!`](@ref)
++ [`disconnect_signal_unrealize!`](@ref)
++ [`emit_signal_unrealize`](@ref)
++ [`get_signal_unrealize_blocked`](@ref)
++ [`set_signal_unrealize_blocked!`](@ref)
+
+
+---
 ## FocusEventController
 ```@docs
 FocusEventController
@@ -1420,6 +1519,7 @@ HSVA
 ```
 #### Functions that operate on this type:
 + [`hsva_to_rgba`](@ref)
++ [`serialize`](@ref)
 + [`set_color!`](@ref)
 
 
@@ -2543,6 +2643,101 @@ PopoverMenu
 
 
 ---
+## PopupMessage
+```@docs
+PopupMessage
+```
+#### Functions that operate on this type:
++ [`get_button_action_id`](@ref)
++ [`get_button_label`](@ref)
++ [`get_is_high_priority`](@ref)
++ [`get_timeout`](@ref)
++ [`get_title`](@ref)
++ [`set_button_action!`](@ref)
++ [`set_button_label!`](@ref)
++ [`set_is_high_priority!`](@ref)
++ [`set_timeout!`](@ref)
++ [`set_title!`](@ref)
++ [`show_message!`](@ref)
+
+
++ [`connect_signal_button_clicked!`](@ref)
++ [`disconnect_signal_button_clicked!`](@ref)
++ [`emit_signal_button_clicked`](@ref)
++ [`get_signal_button_clicked_blocked`](@ref)
++ [`set_signal_button_clicked_blocked!`](@ref)
+
+
+
+
++ [`connect_signal_dismissed!`](@ref)
++ [`disconnect_signal_dismissed!`](@ref)
++ [`emit_signal_dismissed`](@ref)
++ [`get_signal_dismissed_blocked`](@ref)
++ [`set_signal_dismissed_blocked!`](@ref)
+
+
+---
+## PopupMessageOverlay
+```@docs
+PopupMessageOverlay
+```
+#### Functions that operate on this type:
++ [`remove_child!`](@ref)
++ [`set_child!`](@ref)
++ [`show_message!`](@ref)
+
+
++ [`connect_signal_destroy!`](@ref)
++ [`disconnect_signal_destroy!`](@ref)
++ [`emit_signal_destroy`](@ref)
++ [`get_signal_destroy_blocked`](@ref)
++ [`set_signal_destroy_blocked!`](@ref)
+
+
++ [`connect_signal_hide!`](@ref)
++ [`disconnect_signal_hide!`](@ref)
++ [`emit_signal_hide`](@ref)
++ [`get_signal_hide_blocked`](@ref)
++ [`set_signal_hide_blocked!`](@ref)
+
+
++ [`connect_signal_map!`](@ref)
++ [`disconnect_signal_map!`](@ref)
++ [`emit_signal_map`](@ref)
++ [`get_signal_map_blocked`](@ref)
++ [`set_signal_map_blocked!`](@ref)
+
+
++ [`connect_signal_realize!`](@ref)
++ [`disconnect_signal_realize!`](@ref)
++ [`emit_signal_realize`](@ref)
++ [`get_signal_realize_blocked`](@ref)
++ [`set_signal_realize_blocked!`](@ref)
+
+
++ [`connect_signal_show!`](@ref)
++ [`disconnect_signal_show!`](@ref)
++ [`emit_signal_show`](@ref)
++ [`get_signal_show_blocked`](@ref)
++ [`set_signal_show_blocked!`](@ref)
+
+
++ [`connect_signal_unmap!`](@ref)
++ [`disconnect_signal_unmap!`](@ref)
++ [`emit_signal_unmap`](@ref)
++ [`get_signal_unmap_blocked`](@ref)
++ [`set_signal_unmap_blocked!`](@ref)
+
+
++ [`connect_signal_unrealize!`](@ref)
++ [`disconnect_signal_unrealize!`](@ref)
++ [`emit_signal_unrealize`](@ref)
++ [`get_signal_unrealize_blocked`](@ref)
++ [`set_signal_unrealize_blocked!`](@ref)
+
+
+---
 ## ProgressBar
 ```@docs
 ProgressBar
@@ -2569,6 +2764,7 @@ RGBA
 #### Functions that operate on this type:
 + [`rgba_to_hsva`](@ref)
 + [`rgba_to_html_code`](@ref)
++ [`serialize`](@ref)
 + [`set_color!`](@ref)
 
 
@@ -3457,6 +3653,36 @@ StackSwitcher
 
 
 ---
+## StyleClass
+```@docs
+StyleClass
+```
+#### Functions that operate on this type:
++ [`apply_style_class!`](@ref)
++ [`get_name`](@ref)
++ [`get_property`](@ref)
++ [`remove_style_class!`](@ref)
++ [`serialize`](@ref)
++ [`set_property!`](@ref)
+
+
+---
+## StyleClassProperty
+```@docs
+StyleClassProperty
+```
+#### Functions that operate on this type:
+
+
+---
+## StyleClassTarget
+```@docs
+StyleClassTarget
+```
+#### Functions that operate on this type:
+
+
+---
 ## StylusEventController
 ```@docs
 StylusEventController
@@ -3702,6 +3928,8 @@ Time
 + [`as_minutes`](@ref)
 + [`as_nanoseconds`](@ref)
 + [`as_seconds`](@ref)
++ [`set_duration!`](@ref)
++ [`set_timeout!`](@ref)
 + [`set_transition_duration!`](@ref)
 
 
@@ -3767,6 +3995,70 @@ ToggleButton
 + [`emit_signal_toggled`](@ref)
 + [`get_signal_toggled_blocked`](@ref)
 + [`set_signal_toggled_blocked!`](@ref)
+
+
++ [`connect_signal_unmap!`](@ref)
++ [`disconnect_signal_unmap!`](@ref)
++ [`emit_signal_unmap`](@ref)
++ [`get_signal_unmap_blocked`](@ref)
++ [`set_signal_unmap_blocked!`](@ref)
+
+
++ [`connect_signal_unrealize!`](@ref)
++ [`disconnect_signal_unrealize!`](@ref)
++ [`emit_signal_unrealize`](@ref)
++ [`get_signal_unrealize_blocked`](@ref)
++ [`set_signal_unrealize_blocked!`](@ref)
+
+
+---
+## TransformBin
+```@docs
+TransformBin
+```
+#### Functions that operate on this type:
++ [`remove_child!`](@ref)
++ [`reset!`](@ref)
++ [`rotate!`](@ref)
++ [`scale!`](@ref)
++ [`set_child!`](@ref)
++ [`skew!`](@ref)
++ [`translate!`](@ref)
+
+
++ [`connect_signal_destroy!`](@ref)
++ [`disconnect_signal_destroy!`](@ref)
++ [`emit_signal_destroy`](@ref)
++ [`get_signal_destroy_blocked`](@ref)
++ [`set_signal_destroy_blocked!`](@ref)
+
+
++ [`connect_signal_hide!`](@ref)
++ [`disconnect_signal_hide!`](@ref)
++ [`emit_signal_hide`](@ref)
++ [`get_signal_hide_blocked`](@ref)
++ [`set_signal_hide_blocked!`](@ref)
+
+
++ [`connect_signal_map!`](@ref)
++ [`disconnect_signal_map!`](@ref)
++ [`emit_signal_map`](@ref)
++ [`get_signal_map_blocked`](@ref)
++ [`set_signal_map_blocked!`](@ref)
+
+
++ [`connect_signal_realize!`](@ref)
++ [`disconnect_signal_realize!`](@ref)
++ [`emit_signal_realize`](@ref)
++ [`get_signal_realize_blocked`](@ref)
++ [`set_signal_realize_blocked!`](@ref)
+
+
++ [`connect_signal_show!`](@ref)
++ [`disconnect_signal_show!`](@ref)
++ [`emit_signal_show`](@ref)
++ [`get_signal_show_blocked`](@ref)
++ [`set_signal_show_blocked!`](@ref)
 
 
 + [`connect_signal_unmap!`](@ref)
@@ -3896,12 +4188,15 @@ Widget
 + [`activate!`](@ref)
 + [`add_child!`](@ref)
 + [`add_controller!`](@ref)
++ [`add_css_class!`](@ref)
 + [`add_overlay!`](@ref)
 + [`add_widget!`](@ref)
++ [`apply_style_class!`](@ref)
 + [`find`](@ref)
 + [`get_allocated_size`](@ref)
 + [`get_can_respond_to_input`](@ref)
 + [`get_clipboard`](@ref)
++ [`get_css_classes`](@ref)
 + [`get_expand_horizontally`](@ref)
 + [`get_expand_vertically`](@ref)
 + [`get_focus_on_click`](@ref)
@@ -3932,7 +4227,9 @@ Widget
 + [`remove!`](@ref)
 + [`remove_child!`](@ref)
 + [`remove_controller!`](@ref)
++ [`remove_css_class!`](@ref)
 + [`remove_overlay!`](@ref)
++ [`remove_style_class!`](@ref)
 + [`remove_tick_callback!`](@ref)
 + [`remove_tooltip_widget!`](@ref)
 + [`set_alignment!`](@ref)

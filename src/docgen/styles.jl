@@ -134,7 +134,7 @@ end
 function style_target_list()
     out = "Available targets:"
     for target in Mousetrap.style_targets
-        out = out * "+ [`$target`](@ref)\n"
+        out = out * "+ `$target`\n"
     end
     return out
 end
