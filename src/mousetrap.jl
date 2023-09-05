@@ -25,7 +25,7 @@ const VERSION = v"0.2.0"
         end
         =#
       
-        lib = "/home/clem/Workspace/mousetrap_julia_binding/build/libmousetrap_julia_binding.so"
+        lib() = "/home/clem/Workspace/mousetrap_julia_binding/build/libmousetrap_julia_binding.so"
         @wrapmodule(lib)
     end
 
@@ -5519,7 +5519,7 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
     export remove_css_class!
 
-    get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
+    get_css_classes!(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
     export get_css_classes!
 
     add_css!(code::String) = detail.style_manager_add_css(code)
@@ -5584,7 +5584,6 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     @define_style_property FILTER
     @define_style_property FONT
     @define_style_property FONT_FAMILY
-    @define_style_property FONT_VARIANT
     @define_style_property FONT_SIZE
     @define_style_property FONT_STYLE
     @define_style_property FONT_WEIGHT
