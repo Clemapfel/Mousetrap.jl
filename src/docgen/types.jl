@@ -802,7 +802,7 @@ select between them using a dropdown that is automatically
 added to the `FileChooser` dialog.
 
 $(@type_constructors(
-    FileFilter()
+    FileFilter(name::String)
 ))
 
 $(@type_signals(FileFilter, 
