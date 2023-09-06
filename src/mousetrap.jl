@@ -14,19 +14,22 @@ const VERSION = v"0.2.0"
         using CxxWrap
         function __init__() @initcxx end
 
-        #=
-        using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
-        @static if Sys.isapple()
-            lib = mousetrap_apple_jll.mousetrap_julia_binding
-        elseif Sys.iswindows()
-            lib = mousetrap_windows_jll.mousetrap_julia_binding
-        else
-            lib = mousetrap_linux_jll.mousetrap_julia_binding
+
+        function get_mousetrap_julia_binding()
+            #=
+            using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
+            @static if Sys.isapple()
+                lib = mousetrap_apple_jll.mousetrap_julia_binding
+            elseif Sys.iswindows()
+                lib = mousetrap_windows_jll.mousetrap_julia_binding
+            else
+                lib = mousetrap_linux_jll.mousetrap_julia_binding
+            end
+            =#
+            return "/home/clem/Workspace/mousetrap_julia_binding/build/libmousetrap_julia_binding.so"
         end
-        =#
       
-        lib() = "/home/clem/Workspace/mousetrap_julia_binding/build/libmousetrap_julia_binding.so"
-        @wrapmodule(lib)
+        @wrapmodule(get_mousetrap_julia_binding)
     end
 
     const MOUSETRAP_ENABLE_OPENGL_COMPONENT = convert(Bool, detail.MOUSETRAP_ENABLE_OPENGL_COMPONENT)
@@ -2649,7 +2652,7 @@ const VERSION = v"0.2.0"
     end
     export push_front!
 
-    insert_at!(box::FlowBox, index::Integer, widget::Widget) = detail.insert!(grid_view._internal, from_julia_index(index), as_widget_pointer(widget))
+    insert_at!(box::FlowBox, index::Integer, widget::Widget) = detail.insert!(box._internal, from_julia_index(index), as_widget_pointer(widget))
     export insert_at!
 
     function remove!(box::FlowBox, widget::Widget)
@@ -5422,7 +5425,7 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
     @export_type Animation SignalEmitter
     function Animation(target::Widget, duration::Time) 
-        return Animation(detail._Animation(as_widget_pointer(target), as_microseconds(duration)))
+        return Animation(detail._Animation(as_widget_pointer(target), convert(Float32, as_microseconds(duration))))
     end
 
     @export_function Animation get_state AnimationState
@@ -5454,13 +5457,13 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     function on_tick!(f, animation::Animation, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (Animation, AbstractFloat, Data_t))
         detail.on_tick!(animation._internal, function(animation_ref, value::Cdouble )
-            typed_f(Animation(animation_ref[], value, data))
+            typed_f(Animation(animation_ref[]), value, data)
         end)
     end
     function on_tick!(f, animation::Animation)
         typed_f = TypedFunction(f, Cvoid, (Animation, AbstractFloat))
         detail.on_tick!(animation._internal, function(animation_ref, value::Cdouble)
-            typed_f(Animation(animation_ref[], value))
+            typed_f(Animation(animation_ref[]), value)
         end)
     end
     export on_tick!
@@ -5468,13 +5471,13 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     function on_done!(f, animation::Animation, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (Animation, Data_t))
         detail.on_tick!(animation._internal, function(animation_ref)
-            typed_f(Animation(animation_ref[], value, data))
+            typed_f(Animation(animation_ref[]), value, data)
         end)
     end
     function on_done!(f, animation::Animation)
         typed_f = TypedFunction(f, Cvoid, (Animation,))
         detail.on_tick!(animation._internal, function(animation_ref)
-            typed_f(Animation(animation_ref[], value))
+            typed_f(Animation(animation_ref[]), value)
         end)
     end
     export on_done!
@@ -5499,10 +5502,10 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     @export_function TransformBin remove_child! Cvoid
     @export_function TransformBin reset! Cvoid
     
-    rotate!(bin::TransformBin, angle::Angle) = detail.rotate!(bin._internal, as_degrees(angle))
+    rotate!(bin::TransformBin, angle::Angle) = detail.rotate!(bin._internal, convert(Float32, as_degrees(angle)))
     export rotate!
 
-    translate!(bin::TransformBin, offset::Vector2f) = detail.translate!(bin._internal, offset.x, offset.y)
+    translate!(bin::TransformBin, offset::Vector2f) = detail.translate!(bin._internal, convert(Float32, offset.x), convert(Float32, offset.y))
     export translate!
 
     @export_function TransformBin scale! Cvoid Number => Cfloat x Number => Cfloat y
@@ -5522,7 +5525,7 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
     export get_css_classes
 
-    add_css!(code::String) = detail.style_manager_add_css(code)
+    add_css!(code::String) = detail.style_manager_add_css!(code)
     export add_css!
 
     @export_type StyleClass SignalEmitter
@@ -5542,18 +5545,18 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     export StyleClassProperty
 
     function set_property!(style_class::StyleClass, target::StyleClassTarget, property::StyleClassProperty, css_value::String)
-        detail.set_property!(style_class._internal, target, property, value)
+        detail.set_property!(style_class._internal, target, property, css_value)
     end
     function set_property!(style_class::StyleClass, property::StyleClassProperty, css_value::String)
-        detail.set_property!(style_class._internal, STYLE_TARGET_SELF, property, value)
+        detail.set_property!(style_class._internal, STYLE_TARGET_SELF, property, css_value)
     end
     export set_property!
 
     function get_property(style_class::StyleClass, target::StyleClassTarget, property::StyleClassProperty) ::String
-        return detail.get_property!(style_class._internal, target, property, value)
+        return detail.get_property(style_class._internal, target, property)
     end
     function set_property(style_class::StyleClass, property::StyleClassProperty) ::String
-        return detail.get_property!(style_class._internal, STYLE_TARGET_SELF, property, value)
+        return detail.get_property(style_class._internal, STYLE_TARGET_SELF, property)
     end
     export get_property
 

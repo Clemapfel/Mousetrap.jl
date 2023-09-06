@@ -1,13 +1,12 @@
 using Mousetrap
 
-app = Application("test.app")
-window = Ref{Union{Window, Nothing}}(nothing)
-connect_signal_activate!(app) do app::Application
-    Main.window[] = Window(app)
-    present!(Main.window[])
+main() do app::Application
+    window = Window(app)
+    style = StyleClass("custom")
+    set_property!(style, STYLE_TARGET_SELF, STYLE_PROPERTY_BORDER_RADIUS, "100%")
+    apply_style_class!(window, style)
+    present!(window)
 end
-
-Threads.@spawn run!(app)
 
 #=
 @static if false
