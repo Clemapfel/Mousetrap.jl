@@ -2,9 +2,27 @@ using Mousetrap
 
 main() do app::Application
     window = Window(app)
-    style = StyleClass("custom")
-    set_property!(style, STYLE_TARGET_SELF, STYLE_PROPERTY_BORDER_RADIUS, "100%")
-    apply_style_class!(window, style)
+    set_title!(window, "mousetrap.jl")
+
+    child = Separator()
+    set_expand!(child, true)
+    message_overlay = PopupMessageOverlay()
+    set_child!(message_overlay, child)
+
+    show_message_action = Action("example.show_message", app)
+    set_function!(show_message_action, message_overlay) do self::Action, message_overlay::PopupMessageOverlay
+        message = PopupMessage("This is a message")
+        set_button_label!(message, "OK")
+        set_button_action!(message, self)
+        show_message!(message_overlay, message)
+    end
+
+    button = Button()
+    set_opacity!(button, 0)
+    set_action!(button, show_message_action)
+    push_front!(get_header_bar(window), button)
+   
+    set_child!(window, message_overlay)
     present!(window)
 end
 

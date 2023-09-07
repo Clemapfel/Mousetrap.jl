@@ -2847,6 +2847,7 @@ main(Main.app_id) do app::Application
         test_notebook(container)
         test_overlay(container)
         test_paned(container)
+        test_popup_message(container)
         test_popover(container)
         test_progress_bar(container)
         test_revealer(container)

@@ -551,6 +551,21 @@ center_box = CenterBox(ORIENTATION_HORIZONTAL, Label("start"), Button(), Label("
 
 ---
 
+## FlowBox
+
+Third of the `Box` relatives, we have [`FlowBox`](@ref), which, unlike `Box`, **redistributes** its children along more than one row (or column, if vertical) depending on the available width (or height) of the `FlowBox`. This is useful for situations where we want to group a number of widgets in a way that does not impact resizability.
+
+```julia
+flow_box = FlowBox(ORIENTATION_VERTICAL)
+for i in 1:7 
+    push_back!(flow_box, Label(string(i)))
+end
+```
+
+![](../assets/flow_box.png)
+
+---
+
 ## HeaderBar
 
 The visual element on top of a window, which usually contains the windows title along with the title buttons, is actually its own separate widget called [`HeaderBar`](@ref). All `Window` instances come with their own `HeaderBar`, which we can access using [`get_header_bar`](@ref). It's rarely necessary to create a `HeaderBar` on our own.

@@ -2425,7 +2425,7 @@ const VERSION = v"0.2.0"
     PopupMessageOverlay() = PopupMessageOverlay(detail._PopupMessageOverlay())
 
     function set_child!(overlay::PopupMessageOverlay, child::Widget)
-        detail.set_child!(window._internal, as_widget_pointer(child))
+        detail.set_child!(overlay._internal, as_widget_pointer(child))
     end
     export set_child!
 
@@ -4669,7 +4669,7 @@ const VERSION = v"0.2.0"
     @export_widget_function get_vertical_alignment Alignment
     @export_widget_function set_alignment! Cvoid Alignment both
 
-    @export_widget_function set_opacity! Cvoid AbstractFloat => Cfloat opacity
+    @export_widget_function set_opacity! Cvoid Number => Cfloat opacity
     @export_widget_function get_opacity Cfloat
     @export_widget_function set_is_visible! Cvoid Bool b
     @export_widget_function get_is_visible Bool
