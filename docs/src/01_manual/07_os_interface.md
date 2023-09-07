@@ -517,6 +517,147 @@ On top of buttons, `AlertDialog` furthermore has a spot for a custom widget, whi
 
 With `AlertDialog`, we have a vastly simplified mechanism for showing short, message-style dialogs to the user. Each of these dialogs will be *modal*  by default, meaning all other windows and actions will be paused until the dialog is dismissed.
 
+## Popup Messages
+
+Mousetrap offers a less intrusive way of showing a message to a user, facilitated by [`PopupMessageOverlay`](@ref). This widget is a container which has a single child. It adds no graphical element to its child, instead, we can show a small popup message which will be shown above the chosen child:
+
+![](../assets/popup_message.png)
+
+!!! details "How to generate this image"
+    ```julia
+    using Mousetrap
+    main() do app::Application
+        window = Window(app)
+
+        child = Separator()
+        message_overlay = PopupMessageOverlay()
+        set_child!(message_overlay, child)
+
+        show_message_action = Action("example.show_message", app)
+        set_function!(show_message_action, message_overlay) do self::Action, message_overlay::PopupMessageOverlay
+            message = PopupMessage("This is a message")
+            set_button_label!(message, "OK")
+            set_button_action!(message, self)
+            show_message!(message_overlay, message)
+        end
+
+        button = Button()
+        set_opacity!(button, 0)
+        set_action!(button, show_message_action)
+        push_front!(get_header_bar(window), button)
+    
+        set_child!(window, message_overlay)
+        present!(window)
+    end
+    ```
+
+To send a message, we first need to instance an object of type [`PopupMessage`](@ref), which, unlike `PopupMessageOverlay`, is **not** a widget, though it is a `SignalEmitter`.
+
+A popup message always has a title, which we supply to its constructor. It will furthermore always have a close button the user can use to hide the message. 
+
+After instancing the `PopupMessage`, we present it to the user using [`show_message!`](@ref):
+
+```julia
+message_overlay = PopupMessageOverlay()
+set_child!(message_overlay, widget)
+
+popup_message = PopupMessage("Message Text")
+show_message!(message_overlay, popup_message)
+```
+We can set the message to hide itself automatically by setting [`set_timeout!`](@ref) to anything other than `0`. Only one message can be shown at a time. We can make sure an important message is jumped to the front of the queue by setting its priority using [`
+set_is_high_priority!`](@ref).
+
+This is enough for a simple notification, but `PopupMessage` also supports interactivity beyond just the close button.
+
+A `PopupMessage` has one optional button. To show this button, we need to choose a title using [`set_button_label!`](@ref). To react to the user pressing this button, we can either assign it an action using [`set_button_action!`](@ref), or we can connect to `PopupMessages` signals, `button_clicked` and `dismissed`, which are emitted when the optional button and close button are pressed, respectively. Both signals expect a signal handler with signature `(::PopupMessage, [::Data_t]) -> Nothing`.
+
+For example, to trigger a function when the user clicks the "OK" button of our `PopupMessage`, we could do:
+
+```julia
+popup_message = PopupMessage("Message Text")
+
+# connect to button press
+set_button_label!(popup_message, "OK")
+connect_signal_button_clicked!(popup_message) do self::PopupMessage
+    println("OK clicked")
+end
+
+show_message!(message_overlay, popup_message)
+```
+
+## Popup Messages
+
+Mousetrap offers a less intrusive way of showing a message to a user, facilitated by [`PopupMessageOverlay`](@ref). This widget is a container which has a single child. It adds no graphical element to its child, instead, we can present a small popup message to the user, which will be shown above the chosen child:
+
+![](../assets/popup_message.png)
+
+!!! details "How to generate this image"
+    ```julia
+    using Mousetrap
+    main() do app::Application
+        window = Window(app)
+
+        child = Separator()
+        message_overlay = PopupMessageOverlay()
+        set_child!(message_overlay, child)
+
+        show_message_action = Action("example.show_message", app)
+        set_function!(show_message_action, message_overlay) do self::Action, message_overlay::PopupMessageOverlay
+            message = PopupMessage("This is a message")
+            set_button_label!(message, "OK")
+            set_button_action!(message, self)
+            show_message!(message_overlay, message)
+        end
+
+        button = Button()
+        set_opacity!(button, 0)
+        set_action!(button, show_message_action)
+        push_front!(get_header_bar(window), button)
+    
+        set_child!(window, message_overlay)
+        present!(window)
+    end
+    ```
+
+To send a message, we first need to instance an object of type [`PopupMessage`](@ref), which, unlike `PopupMessageOverlay`, is **not** a widget, though it is a `SignalEmitter`.
+
+A popup message always has a title, which is supplied to its constructor. It will furthermore always have a close button the user can use to hide the message. 
+
+After instancing the `PopupMessage`, we push it to the overlay using [`show_message!`](@ref):
+
+```julia
+message_overlay = PopupMessageOverlay()
+set_child!(message_overlay, widget)
+
+popup_message = PopupMessage("Message Text")
+show_message!(message_overlay, popup_message)
+```
+We can set the message to hide itself automatically by setting [`set_timeout!`](@ref) to anything other than `0`. 
+
+Only one message can be shown at a time. We can make sure an important message is put to the front of the queue by setting marking it as high priority using [`set_is_high_priority!`](@ref).
+
+This is enough for a simple notification, but `PopupMessage` also supports interactivity beyond just the close button.
+
+A `PopupMessage` can have one optional button. To show this button, we need to choose the buttons label using [`set_button_label!`](@ref). 
+
+To react to the user pressing this button, we can either assign it an action using [`set_button_action!`](@ref), or we can connect to one of `PopupMessages` signals, `button_clicked` and `dismissed`, which are emitted when the optional button and close button are pressed, respectively. Both signals expect a signal handler with signature `(::PopupMessage, [::Data_t]) -> Nothing`.
+
+For example, to trigger a function when the user clicks the "OK" button of a `PopupMessage`, we could do:
+
+```julia
+popup_message = PopupMessage("Message Text")
+
+# connect to button press
+set_button_label!(popup_message, "OK")
+connect_signal_button_clicked!(popup_message) do self::PopupMessage
+    println("OK clicked")
+end
+
+show_message!(message_overlay, popup_message)
+```
+
+`PopupMessage` should be used for relatively insignificant messages that do not require immediate user action. Otherwise, we should `AlertDialog`, which is modal by default and will only go away once the user chose to dismiss the dialog.
+
 ---
 
 ## GLib Keyfiles
