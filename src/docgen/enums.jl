@@ -31,43 +31,43 @@
 @document AnimationTimingFunction enum_docs(:AnimationTimingFunction, 
     "Shape of the mathematical function that will be used to generate the `Animation`s value over its duration.", [
     :ANIMATION_TIMING_FUNCTION_LINEAR,
-    :ANIMATION_TIMING_FUNCTION_EXPONENTIAL,
-    :ANIMATION_TIMING_FUNCTION_EXPONENTIAL_REVERSE,
+    :ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_OUT,
     :ANIMATION_TIMING_FUNCTION_EXPONENTIAL_SIGMOID,
-    :ANIMATION_TIMING_FUNCTION_SINE,
-    :ANIMATION_TIMING_FUNCTION_SINE_REVERSE,
+    :ANIMATION_TIMING_FUNCTION_SINE_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_SINE_EASE_OUT,
     :ANIMATION_TIMING_FUNCTION_SINE_SIGMOID,
-    :ANIMATION_TIMING_FUNCTION_CIRCULAR,
-    :ANIMATION_TIMING_FUNCTION_CIRCULAR_REVERSE,
+    :ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_OUT,
     :ANIMATION_TIMING_FUNCTION_CIRCULAR_SIGMOID,
-    :ANIMATION_TIMING_FUNCTION_OVERSHOOT,
-    :ANIMATION_TIMING_FUNCTION_OVERSHOOT_REVERSE,
+    :ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_OUT,
     :ANIMATION_TIMING_FUNCTION_OVERSHOOT_SIGMOID,
-    :ANIMATION_TIMING_FUNCTION_ELASTIC,
-    :ANIMATION_TIMING_FUNCTION_ELASTIC_REVERSE,
+    :ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_OUT,
     :ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID,
-    :ANIMATION_TIMING_FUNCTION_BOUNCE,
-    :ANIMATION_TIMING_FUNCTION_BOUNCE_REVERSE,
+    :ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_OUT,
     :ANIMATION_TIMING_FUNCTION_BOUNCE_SIGMOID
 ])
 @document ANIMATION_TIMING_FUNCTION_LINEAR "strictly increasing, linear shape"
-@document ANIMATION_TIMING_FUNCTION_EXPONENTIAL "strictly increasing, exponential ease in"
-@document ANIMATION_TIMING_FUNCTION_EXPONENTIAL_REVERSE "strictly decreasing, exponential ease out"
+@document ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_IN "strictly increasing, exponential ease in"
+@document ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_OUT "strictly decreasing, exponential ease out"
 @document ANIMATION_TIMING_FUNCTION_EXPONENTIAL_SIGMOID "strictly increasing, exponential east in and ease out"
-@document ANIMATION_TIMING_FUNCTION_SINE "strictly increasing, sinusoid ease in"
-@document ANIMATION_TIMING_FUNCTION_SINE_REVERSE "strictly decreasing, sinusoid ease out"
+@document ANIMATION_TIMING_FUNCTION_SINE_EASE_IN "strictly increasing, sinusoid ease in"
+@document ANIMATION_TIMING_FUNCTION_SINE_EASE_OUT "strictly decreasing, sinusoid ease out"
 @document ANIMATION_TIMING_FUNCTION_SINE_SIGMOID "strictly increasing, sinusoid ease in and ease out"
-@document ANIMATION_TIMING_FUNCTION_CIRCULAR "strictly increasing, circular ease in"
-@document ANIMATION_TIMING_FUNCTION_CIRCULAR_REVERSE "strictly decreasing, circular ease out"
+@document ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_IN "strictly increasing, circular ease in"
+@document ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_OUT "strictly decreasing, circular ease out"
 @document ANIMATION_TIMING_FUNCTION_CIRCULAR_SIGMOID "strictly increasing, circular east in and ease out"
-@document ANIMATION_TIMING_FUNCTION_OVERSHOOT "undershoots `lower`, then increases, ease in"
-@document ANIMATION_TIMING_FUNCTION_OVERSHOOT_REVERSE "increases, then overshoots above `higher`, ease out"
+@document ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_IN "undershoots `lower`, then increases, ease in"
+@document ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_OUT "increases, then overshoots above `higher`, ease out"
 @document ANIMATION_TIMING_FUNCTION_OVERSHOOT_SIGMOID "undershoots `lower`, increases, then overshoots `higher`, ease in and ease out"
-@document ANIMATION_TIMING_FUNCTION_ELASTIC "simulates stretching of a spring, ease in"
-@document ANIMATION_TIMING_FUNCTION_ELASTIC_REVERSE "simulates stretching of a spring, ease out"
+@document ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_IN "simulates stretching of a spring, ease in"
+@document ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_OUT "simulates stretching of a spring, ease out"
 @document ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID "simulates stretching of a spring, ease in and ease out"
-@document ANIMATION_TIMING_FUNCTION_BOUNCE "simulates bouncing of a ball under gravity, ease in"
-@document ANIMATION_TIMING_FUNCTION_BOUNCE_REVERSE "simulates bouncing of a ball under gravtiy, ease out"
+@document ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_IN "simulates bouncing of a ball under gravity, ease in"
+@document ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_OUT "simulates bouncing of a ball under gravtiy, ease out"
 @document ANIMATION_TIMING_FUNCTION_BOUNCE_SIGMOID "simulates bouncing of a ball under gravity, ease in and ease out"
 
 @document AntiAliasingQuality enum_docs(:AntiAliasingQuality,

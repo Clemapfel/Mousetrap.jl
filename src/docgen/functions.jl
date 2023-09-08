@@ -3132,8 +3132,9 @@ Register a callback called when the animations state changes from `ANIMATION_STA
 ```julia
 animation = Animation(widget, seconds(1))
 on_done!(animation) do self::Animation
-    println("animation stopped playing")
+    println("done")
 end
+play!(animation)
 ```
 """
 
@@ -3201,6 +3202,7 @@ animation = Animation(widget, seconds(1))
 on_tick!(animation) do self::Animation, value::AbstractFloat
     # use `value` here
 end
+play!(animation)
 ```
 """
 

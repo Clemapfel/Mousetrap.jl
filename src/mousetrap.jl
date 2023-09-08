@@ -5403,23 +5403,23 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
     @export_enum AnimationTimingFunction begin
         ANIMATION_TIMING_FUNCTION_LINEAR
-        ANIMATION_TIMING_FUNCTION_EXPONENTIAL
-        ANIMATION_TIMING_FUNCTION_EXPONENTIAL_REVERSE
+        ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_IN
+        ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_OUT
         ANIMATION_TIMING_FUNCTION_EXPONENTIAL_SIGMOID
-        ANIMATION_TIMING_FUNCTION_SINE
-        ANIMATION_TIMING_FUNCTION_SINE_REVERSE
+        ANIMATION_TIMING_FUNCTION_SINE_EASE_IN
+        ANIMATION_TIMING_FUNCTION_SINE_EASE_OUT
         ANIMATION_TIMING_FUNCTION_SINE_SIGMOID
-        ANIMATION_TIMING_FUNCTION_CIRCULAR
-        ANIMATION_TIMING_FUNCTION_CIRCULAR_REVERSE
+        ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_IN
+        ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_OUT
         ANIMATION_TIMING_FUNCTION_CIRCULAR_SIGMOID
-        ANIMATION_TIMING_FUNCTION_OVERSHOOT
-        ANIMATION_TIMING_FUNCTION_OVERSHOOT_REVERSE
+        ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_IN
+        ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_OUT
         ANIMATION_TIMING_FUNCTION_OVERSHOOT_SIGMOID
-        ANIMATION_TIMING_FUNCTION_ELASTIC
-        ANIMATION_TIMING_FUNCTION_ELASTIC_REVERSE
+        ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_IN
+        ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_OUT
         ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID
-        ANIMATION_TIMING_FUNCTION_BOUNCE
-        ANIMATION_TIMING_FUNCTION_BOUNCE_REVERSE
+        ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_IN
+        ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_OUT
         ANIMATION_TIMING_FUNCTION_BOUNCE_SIGMOID
     end
 
@@ -5470,14 +5470,14 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
     function on_done!(f, animation::Animation, data::Data_t) where Data_t
         typed_f = TypedFunction(f, Cvoid, (Animation, Data_t))
-        detail.on_tick!(animation._internal, function(animation_ref)
-            typed_f(Animation(animation_ref[]), value, data)
+        detail.on_done!(animation._internal, function(animation_ref)
+            typed_f(Animation(animation_ref[]), data)
         end)
     end
     function on_done!(f, animation::Animation)
         typed_f = TypedFunction(f, Cvoid, (Animation,))
-        detail.on_tick!(animation._internal, function(animation_ref)
-            typed_f(Animation(animation_ref[]), value)
+        detail.on_done!(animation._internal, function(animation_ref)
+            typed_f(Animation(animation_ref[]))
         end)
     end
     export on_done!
@@ -5509,6 +5509,8 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     export translate!
 
     @export_function TransformBin scale! Cvoid Number => Cfloat x Number => Cfloat y
+    scale!(bin::TransformBin, both::Number) = scale!(bin, both, both)
+    
     @export_function TransformBin skew! Cvoid Number => Cfloat x Number => Cfloat y
     
     @add_widget_signals TransformBin

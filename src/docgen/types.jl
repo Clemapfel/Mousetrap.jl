@@ -207,13 +207,15 @@ $(@type_fields())
 ## Example
 ```julia
 # animate a gradual fade-out
-to_animate = Button()
+to_animate = Button(Label("Click Me"))
 
 animation = Animation(to_animate, seconds(1))
+
 on_tick!(animation, to_animate) do self::Animation, value::AbstractFloat, target::Widget
     # value will be in [0, 1]
     set_opacity!(target, 1 - value)
 end
+
 on_done!(animation, to_animate) do self::Animation, target::Widget
     set_is_visible!(target, false)
 end
@@ -222,6 +224,8 @@ end
 connect_signal_clicked!(to_animate, animation) do self::Button, animation::Animation
     play!(animation)
 end
+
+set_child!(window, to_animate)
 ```
 """
 
@@ -1714,10 +1718,10 @@ $(@type_fields())
 
 ## Example
 ```julia
-overlay = PopupMessageOverlay()
-set_child!(overlay, widget)
+message_overlay = PopupMessageOverlay()
+set_child!(message_overlay, Separator())
 
-message = PopupMessage("This example works!", "ok")
+message = PopupMessage("Is this a message?", "Yes")
 connect_signal_button_clicked!(message) do self::PopupMessage
     println("button clicked")
 end
@@ -1725,7 +1729,7 @@ connect_signal_dismissed!(message) do self::PopupMessage
     println("message closed")
 end
 
-show_message!(overlay, message)
+show_message!(message_overlay, message)
 ```
 """
 

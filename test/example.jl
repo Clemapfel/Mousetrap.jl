@@ -1,30 +1,99 @@
 using Mousetrap
+main() do app::Application
+    window = Window(app)
+    set_title!(window, "mousetrip.jl")
+
+    Mousetrap.add_css!("""
+    @keyframes glow {
+        0% {
+            $STYLE_PROPERTY_BOX_SHADOW: 0px 0px 0px 0px #00ABFF00;
+        }
+
+        50% {
+            $STYLE_PROPERTY_BOX_SHADOW: 0px 0px 30px 30px #00ABFFFF;
+        }
+
+        100% {
+            $STYLE_PROPERTY_BOX_SHADOW: 0px 0px 0px 0px #00ABFF00;
+        }
+    }
+
+    @keyframes rotate {
+        from {
+            $STYLE_PROPERTY_TRANSFORM: rotate(0deg);
+        }
+
+        to {
+            $STYLE_PROPERTY_TRANSFORM: rotate(360deg);
+        }
+    }
+    """)
+
+    class = StyleClass("hot-pink")
+
+    # HeaderBar
+    set_property!(class, STYLE_TARGET_HEADER_BAR, STYLE_PROPERTY_COLOR, "#55002A")
+    set_property!(class, STYLE_TARGET_HEADER_BAR, STYLE_PROPERTY_BACKGROUND_COLOR, "hotpink")
+    set_property!(class, STYLE_TARGET_HEADER_BAR, STYLE_PROPERTY_BORDER_COLOR, "#55002A")
+
+    # Separator
+    set_property!(class, STYLE_TARGET_SEPARATOR, STYLE_PROPERTY_BACKGROUND_COLOR, "hotpink")
+    
+    # Window
+    set_property!(class, STYLE_TARGET_SELF, STYLE_PROPERTY_ANIMATION_NAME, "glow")
+    set_property!(class, STYLE_TARGET_SELF, STYLE_PROPERTY_ANIMATION_DURATION, "5s")
+    set_property!(class, STYLE_TARGET_SELF, STYLE_PROPERTY_ANIMATION_ITERATION_COUNT, "infinite")
+    set_property!(class, STYLE_TARGET_SELF, STYLE_PROPERTY_BORDER_RADIUS, "1%")
+    
+    # HeaderBar Buttons
+    set_property!(class, STYLE_TARGET_BUTTON, STYLE_PROPERTY_ANIMATION_NAME, "rotate")
+    set_property!(class, STYLE_TARGET_BUTTON, STYLE_PROPERTY_ANIMATION_DURATION, "3s")
+    set_property!(class, STYLE_TARGET_BUTTON, STYLE_PROPERTY_ANIMATION_TIMING_FUNCTION, "linear")
+    set_property!(class, STYLE_TARGET_BUTTON, STYLE_PROPERTY_ANIMATION_ITERATION_COUNT, "infinite")
+
+    # HeaderBar Title
+    set_property!(class, STYLE_TARGET_LABEL, "font-family", "monospace")
+
+    apply_style_class!(window, class)
+
+    set_child!(window, Separator())
+    present!(window)
+end
+
+#=
 
 main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    child = Separator()
-    set_expand!(child, true)
-    message_overlay = PopupMessageOverlay()
-    set_child!(message_overlay, child)
+    # animate a gradual fade-out
+    button = Button(Label("SPIN"))
+    aspect_frame = AspectFrame(1.0, button)
+    set_margin!(aspect_frame, 10)
 
-    show_message_action = Action("example.show_message", app)
-    set_function!(show_message_action, message_overlay) do self::Action, message_overlay::PopupMessageOverlay
-        message = PopupMessage("This is a message")
-        set_button_label!(message, "OK")
-        set_button_action!(message, self)
-        show_message!(message_overlay, message)
+    transform_bin = TransformBin()
+    set_child!(transform_bin, aspect_frame)
+
+    animation = Animation(transform_bin, seconds(1))
+    on_tick!(animation, transform_bin) do self::Animation, value::AbstractFloat, transform_bin::TransformBin
+        reset!(transform_bin)
+        rotate!(transform_bin, degrees(value * 360))
+        scale!(transform_bin, 1 + value, 1 + value)
     end
 
-    button = Button()
-    set_opacity!(button, 0)
-    set_action!(button, show_message_action)
-    push_front!(get_header_bar(window), button)
+    on_done!(animation, transform_bin) do self::Animation, transform_bin::TransformBin
+        reset!(transform_bin)
+    end
+
+    # start animation when button is clicked
+    connect_signal_clicked!(button, animation) do self::Button, animation::Animation
+        play!(animation)
+    end
    
-    set_child!(window, message_overlay)
+    set_child!(window, transform_bin)
     present!(window)
 end
+=#
 
 #=
 @static if false
