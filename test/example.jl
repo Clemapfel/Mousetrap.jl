@@ -1,20 +1,38 @@
 using Mousetrap
 
-add_css!("""
-@define-color accent_bg_color rgba(255, 0, 255, 255);
-""")
+colors = ["accent", "destructive", "success", "warning", "error", "view"]
+
+for name in colors
+    add_css!("""
+        .$name {
+            background-color: @$(name)_bg_color;
+            color: @$(name)_fg_color;
+        }
+    """)
+end
 
 main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
 
-    button = Button()
-    #apply_style_class!(button, STYLE_CLASS_SUGGESTED_ACTION)
+    # buttons
+    box = Box(ORIENTATION_HORIZONTAL)
+    for color in colors
+        
+        local both = Box(ORIENTATION_VERTICAL)
+        local button = Button(Label("default"))
+        add_css_class!(button, color)
+        push_back!(both, button)
+    
+        button = Button(Label("opaque"))
+        add_css_class!(button, color)
+        add_css_class!(button, "opaque")
+        push_back!(both, button)
 
-    frame = AspectFrame(1.0, button)
-    set_margin!(frame, 10)
+        push_back!(box, both)
+    end
 
-    set_child!(window, frame)
+    set_child!(window, box)
     present!(window)
 end
 

@@ -4,9 +4,7 @@ In this chapter we will learn:
 + How to swap between light- and dark- mode
 + How to create custom animations
 + How to apply a spatial transform to any widget
-+ How to change the look of individual widgets using style classes
-+ Which pre-made style classes are available
-+ How to create our own style class
++
 
 ---
 
