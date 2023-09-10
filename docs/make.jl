@@ -49,7 +49,10 @@ let file = open("docs/src/02_library/classes.md", "w+")
                 # first or second argument is type, this is the equivalent of a member function in Julia
                 try
                     if hasproperty(method.sig, :parameters) && (method.sig.parameters[2] == binding || method.sig.parameters[3] == binding)
-                        push!(non_signal_methods, method.name)
+                        if method.name in ["copy!", "flush", "bind", "download"]
+                            method.name = "Mousetrap." * method.name 
+                        end
+                        push!(non_signal_methods, "Mousetrap." * method.name)
                     end
                 catch end
             else

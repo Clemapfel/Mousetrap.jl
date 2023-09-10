@@ -27,7 +27,7 @@ Pages = [
     "01_manual/07_os_interface.md"
     "01_manual/08_menus.md"
     "01_manual/09_native_rendering.md"
-    "01_manual/10_theme_customization.md
+    "01_manual/10_theme_customization.md"
     "01_manual/11_app_distribution.md"
 ]
 

@@ -140,6 +140,7 @@ function style_target_list()
 end
 
 macro type_style_targets(nodes...)
+    #=
     out = "## CSS Nodes\n"
     if !isempty(nodes)
 
@@ -156,6 +157,8 @@ macro type_style_targets(nodes...)
         out *= "(no public targets)\n"
     end
     return out
+    =#
+    return :()
 end
 
 function css_property_table()
