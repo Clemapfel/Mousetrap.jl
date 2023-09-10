@@ -1,4 +1,26 @@
 using Mousetrap
+
+add_css!("""
+@define-color accent_bg_color rgba(255, 0, 255, 255);
+""")
+
+main() do app::Application
+    window = Window(app)
+    set_title!(window, "mousetrap.jl")
+
+    button = Button()
+    #apply_style_class!(button, STYLE_CLASS_SUGGESTED_ACTION)
+
+    frame = AspectFrame(1.0, button)
+    set_margin!(frame, 10)
+
+    set_child!(window, frame)
+    present!(window)
+end
+
+exit(0)
+
+using Mousetrap
 main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrip.jl")

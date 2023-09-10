@@ -5552,6 +5552,20 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     function set_property!(style_class::StyleClass, property::StyleClassProperty, css_value::String)
         detail.set_property!(style_class._internal, STYLE_TARGET_SELF, property, css_value)
     end
+
+    function set_property!(style_class::StyleClass, target::StyleClassTarget, property::StyleClassProperty, color::RGBA)
+        detail.set_property!(style_class._internal, target, property, serialize(color))
+    end
+    function set_property!(style_class::StyleClass, property::StyleClassProperty, color::RGBA)
+        detail.set_property!(style_class._internal, STYLE_TARGET_SELF, property, serialize(color))
+    end
+
+    function set_property!(style_class::StyleClass, target::StyleClassTarget, property::StyleClassProperty, color::HSVA)
+        detail.set_property!(style_class._internal, target, property, serialize(color))
+    end
+    function set_property!(style_class::StyleClass, property::StyleClassProperty, color::HSVA)
+        detail.set_property!(style_class._internal, STYLE_TARGET_SELF, property, serialize(color))
+    end
     export set_property!
 
     function get_property(style_class::StyleClass, target::StyleClassTarget, property::StyleClassProperty) ::String
@@ -5566,6 +5580,9 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
     function apply_style_class!(widget::Widget, class::StyleClass)
         detail.apply_style_class!(as_widget_pointer(widget), class._internal)
+    end
+    function apply_style_class!(widget::Widget, string::String)
+        add_css_class!(widget, string)
     end
     export apply_style_class!
 
