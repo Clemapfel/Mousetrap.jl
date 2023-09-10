@@ -1,10 +1,9 @@
 using Mousetrap
 
-colors = ["accent", "destructive", "success", "warning", "error", "view"]
-
+colors = ["default", "accent", "destructive", "success", "warning", "error", "view", "window"]
 for name in colors
     add_css!("""
-        .$name {
+        .$name.opaque {
             background-color: @$(name)_bg_color;
             color: @$(name)_fg_color;
         }
@@ -17,22 +16,41 @@ main() do app::Application
 
     # buttons
     box = Box(ORIENTATION_HORIZONTAL)
+
     for color in colors
-        
+    
+
         local both = Box(ORIENTATION_VERTICAL)
-        local button = Button(Label("default"))
+        local button = Switch()#Button(Label("&#9632;"))
         add_css_class!(button, color)
         push_back!(both, button)
     
-        button = Button(Label("opaque"))
-        add_css_class!(button, color)
+        button = Switch()#Button(Label("&#9632;"))
+        add_css_class!(button,  color)
         add_css_class!(button, "opaque")
         push_back!(both, button)
+
+        connect_signal_switched!(button) do self
+            add_css!("""
+            @define-color accent_bg_color @blue_3;
+            @define-color accent_fg_color white;
+            @define-color accent_color #{if(variant == 'dark', #78aeed, "@blue_4")};
+            """)
+        end
 
         push_back!(box, both)
     end
 
-    set_child!(window, box)
+    add_css!("""
+    @define-color accent_bg_color rgba(255, 0, 255, 255);
+    @define-color accent_fg_color white;
+    @define-color accent_color #78aeed;
+    """)    
+
+    notebook = Notebook()
+    push_back!(notebook, box, Label("01"))
+
+    set_child!(window, notebook)
     present!(window)
 end
 
