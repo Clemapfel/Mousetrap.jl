@@ -188,5 +188,24 @@ By default, the function used to map the elapsed duration of the `Animation` to 
 
 # Widget Themes & Style Classes
 
-!!! Note
-    This section is not yet complete.
+!!! Warning
+    This section is incomplete and will only show basic examples on how to accomplish certain tasks with no futher explanation given. GTK4 uses CSS to style widgets,
+    while mousetrap exposes this functionality with [`add_css!`](@ref) nad [`add_css_class!`](@ref), future versions of mousetrap will have a much more streamlined way of modifying widgets that doesn't require users to learn CSS.
+
+## Changing a Widgets Color
+
+```julia
+for name in ["accent", "success", "warning", "error"]
+    add_css!("""
+    $name:not(.opaque) {
+        color: @$(name)_fg_color;
+    }
+    .$name.opaque {
+        background-color: @$(name)_bg_color;
+        color: @$(name)_fg_color;
+    }
+    """)
+end
+
+
+```

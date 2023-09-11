@@ -115,10 +115,6 @@ $(@type_signals(ActionBar,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_ACTION_BAR
-))
 """
 
 @document Angle """
@@ -261,9 +257,6 @@ $(@type_fields(
     size::Vector2f
 ))
 
-$(@type_style_targets(
-    STYLE_TARGET_ASPECT_FRAME
-))
 """
 
 @document Box """
@@ -279,10 +272,6 @@ $(@type_signals(Box,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_BOX
-))
 
 ## Example
 ```julia
@@ -314,11 +303,6 @@ $(@type_signals(Button,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_BUTTON,
-    STYLE_TARGET_BUTTON_PRESSED
-))
-
 ## Example
 ```julia
 button = Button()
@@ -347,10 +331,6 @@ $(@type_signals(CenterBox,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_CENTER_BOX
-))
-
 ## Example
 ```julia
 center_box = CenterBox(ORIENTATION_HORIZONTAL)
@@ -374,13 +354,6 @@ $(@type_signals(CheckButton,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_CHECK_BUTTON,
-    STYLE_TARGET_CHECK_BUTTON_CHECK_MARK_ACTIVE,
-    STYLE_TARGET_CHECK_BUTTON_CHECK_MARK_INACTIVE,
-    STYLE_TARGET_CHECK_BUTTON_CHECK_MARK_INCONSISTENT
-))
 
 ## Example
 ```julia
@@ -415,9 +388,7 @@ $(@type_signals(ClampFrame))
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_CLAMP_FRAME
-))
+
 """
 
 @document ClickEventController """
@@ -542,9 +513,7 @@ $(@type_signals(ColumnView,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_COLUMN_VIEW
-))
+
 
 ## Example
 ```julia
@@ -630,9 +599,7 @@ $(@type_signals(DropDown,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_DROP_DOWN
-))
+
 
 ## Example
 ```julia
@@ -676,12 +643,6 @@ $(@type_signals(Entry,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_ENTRY,
-    STYLE_TARGET_ENTRY_TEXT,
-    STYLE_TARGET_TEXT_SELECTION
-))
-
 
 ## Example
 ```julia
@@ -721,12 +682,6 @@ $(@type_signals(Expander,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_EXPANDER,
-    STYLE_TARGET_EXPANDER_TITLE,
-    STYLE_TARGET_EXPANDER_TITLE_ARROW
-))
 """
 
 @document FileChooser """
@@ -869,8 +824,6 @@ $(@type_signals(Fixed,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets())
 """
 
 @document FlowBox """
@@ -887,9 +840,7 @@ $(@type_signals(Fixed,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_FLOW_BOX
-))
+
 """
 
 @document FocusEventController """
@@ -934,9 +885,7 @@ $(@type_signals(Frame,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_FRAME
-))
+
 """
 
 @document FrameClock """
@@ -995,9 +944,7 @@ $(@type_signals(Grid,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_GRID
-))
+
 
 ## Example
 ```julia
@@ -1023,13 +970,6 @@ $(@type_signals(GridView,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_GRID_VIEW,
-    STYLE_TARGET_GRID_VIEW_CHILDREN,
-    STYLE_TARGET_GRID_VIEW_NOT_SELECTED,
-    STYLE_TARGET_GRID_VIEW_SELECTED
-))
 """
 
 @document GroupID """
@@ -1081,9 +1021,7 @@ $(@type_signals(HeaderBar,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_HEADER_BAR
-))
+
 
 ## Example
 ```julia
@@ -1288,11 +1226,6 @@ $(@type_signals(Label,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_LABEL,
-    STYLE_TARGET_TEXT_SELECTION
-))
 """
 
 @document LevelBar """
@@ -1308,13 +1241,6 @@ $(@type_signals(LevelBar,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_LEVEL_BAR,
-    STYLE_TARGET_LEVEL_BAR_BLOCK_LOW,
-    STYLE_TARGET_LEVEL_BAR_BLOCK_HIGH,
-    STYLE_TARGET_LEVEL_BAR_BLOCK_FULL
-))
 """
 
 @document ListView """
@@ -1331,13 +1257,6 @@ $(@type_signals(ListView,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_LIST_VIEW,
-    STYLE_TARGET_LIST_VIEW_CHILDREN,
-    STYLE_TARGET_LIST_VIEW_SELECTED,
-    STYLE_TARGET_LIST_VIEW_NOT_SELECTED
-))
 
 ## Example
 ```julia
@@ -1425,13 +1344,6 @@ $(@type_signals(MenuBar,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_MENU_BAR,
-    STYLE_TARGET_MENU_BAR_ITEM,
-    STYLE_TARGET_MENU_BAR_SELECTED_ITEM,
-    STYLE_TARGET_MENU_BAR_DISABLED_ITEM
-))
 
 ## Example
 ```julia
@@ -1562,12 +1474,6 @@ $(@type_signals(Notebook,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_NOTEBOOK,
-    STYLE_TARGET_NOTEBOOK_TABS,
-    STYLE_TARGET_NOTEBOOK_SELECTED_TAB
-))
-
 ## Example
 ```julia
 notebook = Notebook()
@@ -1598,9 +1504,7 @@ $(@type_signals(Overlay,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_OVERLAY
-))
+
 
 ## Example
 ```julia
@@ -1655,13 +1559,6 @@ $(@type_signals(Paned,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_PANED,
-    STYLE_TARGET_PANED_START_CHILD,
-    STYLE_TARGET_PANED_HANDLE,
-    STYLE_TARGET_PANED_END_CHILD
-))
 
 ## Example
 ```julia
@@ -1747,14 +1644,6 @@ $(@type_signals(PopupMessageOverlay,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    POPUP_MESSAGE_OVERLAY,
-    POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE,
-    POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE_CONTENT,
-    POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE_ACTION_BUTTON,
-    POPUP_MESSAGE_OVERLAY_POPUP_MESSAGE_CLOSE_BUTTON
-))
-
 ## Example
 ```julia
 overlay = PopupMessageOverlay()
@@ -1788,9 +1677,7 @@ $(@type_signals(Popover,
 
 $(@type_fields())
 
-$(@type_style_targets(
-   STYLE_TARGET_POPOVER,
-))
+
 
 ## Example
 ```julia
@@ -1820,11 +1707,6 @@ $(@type_signals(PopoverButton,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_POPOVER_BUTTON,
-    STYLE_TARGET_POPOVER_BUTTON_INDICATOR
-))
-
 ## Example
 ```julia
 popover = Popover()
@@ -1853,9 +1735,7 @@ $(@type_signals(PopoverMenu,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_POPOVER_MENU
-))
+
 
 ## Example
 ```julia
@@ -1888,15 +1768,6 @@ $(@type_signals(ProgressBar,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_PROGRESS_BAR,
-    STYLE_TARGET_PROGRESS_BAR_DURING_PULSE,
-    STYLE_TARGET_PROGRESS_BAR_TROUGH,
-    STYLE_TARGET_PROGRESS_BAR_EMPTY,
-    STYLE_TARGET_PROGRESS_BAR_FULL,
-    STYLE_TARGET_PROGRESS_BAR_TEXT
-))
 """
 
 @document RGBA """
@@ -1935,9 +1806,6 @@ $(@type_signals(RenderArea,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets())
-
 
 ## Example
 ```julia
@@ -2017,9 +1885,7 @@ $(@type_signals(Revealer,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_REVEALER
-))
+
 """
 
 @document RotateEventController """
@@ -2062,14 +1928,6 @@ $(@type_signals(Scale,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_SCALE,
-    STYLE_TARGET_SCALE_SLIDER,
-    STYLE_TARGET_SCALE_TROUGH,
-    STYLE_TARGET_SCALE_TROUGH_FILL,
-    STYLE_TARGET_SCALE_VALUE_TEXT
-))
-
 ## Example
 ```julia
 scale = Scale(0, 1, 0.01)
@@ -2093,12 +1951,6 @@ $(@type_signals(Scrollbar,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_SCROLLBAR,
-    STYLE_TARGET_SCROLLBAR_TROUGH,
-    STYLE_TARGET_SCOLLBAR_SLIDER
-))
 
 ## Example
 ```julia
@@ -2186,9 +2038,7 @@ $(@type_signals(Separator,
 $(@type_fields())
 
 
-$(@type_style_targets(
-    STYLE_TARGET_SEPARATOR
-))
+
 """
 
 @document Shader """
@@ -2328,15 +2178,6 @@ $(@type_signals(SpinButton,
 ))
 
 $(@type_fields())
-
-
-$(@type_style_targets(
-    STYLE_TARGET_SPIN_BUTTON,
-    STYLE_TARGET_SPIN_BUTTON_BUTTON_DECREASE,
-    STYLE_TARGET_SPIN_BUTTON_BUTTON_INCREASE,
-    STYLE_TARGET_SPIN_BUTTON_TEXT,
-    STYLE_TARGET_TEXT_SELECTION
-))
 """
 
 @document Spinner """
@@ -2355,9 +2196,7 @@ $(@type_signals(Spinner,
 $(@type_fields())
 
 
-$(@type_style_targets(
-    STYLE_TARGET_SPINNER
-))
+
 """
 
 @document Stack """
@@ -2379,9 +2218,7 @@ $(@type_signals(Stack,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_STACK
-))
+
 
 ## Example
 ```julia
@@ -2426,9 +2263,7 @@ $(@type_signals(StackSidebar,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_STACK_SIDEBAR
-))
+
 """
 
 @document StackSwitcher """
@@ -2444,50 +2279,6 @@ $(@type_signals(StackSwitcher,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_STACK_SWITCHER
-))
-"""
-
-@document StyleClass """
-# StyleClass <: SignalEmitter
-
-Class that collects css properties that can be applied to any widget using `apply_style_class!`. See the manual chapter on theme customization for more information.
-
-$(@type_constructors(
-    StyleClass(name::String)
-))
-
-$(@type_signals(StyleClass, 
-))
-
-$(@type_fields())
-
-## Example
-```julia
-# create a window with rounded corners
-widget = Window()
-style_class = StyleClass("example")
-set_property!(style_class, STYLE_PROPERTY_BORDER_RADIUS, "20%")
-apply_style_class!(widget)
-```
-"""
-
-@document StyleClassTarget """
-# StyleClassTarget (alias for `String`)
-
-Name of a widgets CSS node, or `STYLE_CLASS_TARGET_SELF` to target the entire widget.
-
-$(Mousetrap.style_target_list())
-"""
-
-@document StyleClassProperty """
-# StyleClassProperty (alias for `String`)
-
-Name of a CSS property supported by Mousetrap.
-
-$(Mousetrap.style_property_table())
 """
 
 @document StylusEventController """
@@ -2572,13 +2363,6 @@ $(@type_signals(Switch,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_SWITCH,
-    STYLE_TARGET_SWITCH_SLIDER,
-    STYLE_TARGET_SWITCH_ACTIVE,
-    STYLE_TARGET_SWITCH_NOT_ACTIVE
-))
 """
 
 @document TextView """
@@ -2595,12 +2379,6 @@ $(@type_signals(TextView,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_TEXT_VIEW,
-    STYLE_TARGET_TEXT_VIEW_TEXT,
-    STYLE_TARGET_TEXT_SELECTION
-))
 
 ## Example
 ```julia
@@ -2681,12 +2459,6 @@ $(@type_signals(ToggleButton,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_TOGGLE_BUTTON,
-    STYLE_TARGET_TOGGLE_BUTTON_ACTIVE,
-    STYLE_TARGET_TOGGLE_BUTTON_NOT_ACTIVE
-))
-
 ## Example
 ```julia
 toggle_button = ToggleButton()
@@ -2712,9 +2484,7 @@ $(@type_signals(TransformBin,
 
 $(@type_fields())
 
-$(@type_style_targets(
-    STYLE_TARGET_TRANSFORM_BIN
-))
+
 
 ## Example
 ```julia
@@ -2842,16 +2612,6 @@ $(@type_signals(Viewport,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_VIEWPORT,
-    STYLE_TARGET_VIEWPORT_HORIZONTAL_SCROLLBAR,
-    STYLE_TARGET_VIEWPORT_HORIZONTAL_SCROLLBAR_SLIDER,
-    STYLE_TARGET_VIEWPORT_HORIZONTAL_SCROLLBAR_TROUGH,
-    STYLE_TARGET_VIEWPORT_VERTICAL_SCROLLBAR,
-    STYLE_TARGET_VIEWPORT_VERTICAL_SCROLLBAR_TROUGH,
-    STYLE_TARGET_VIEWPORT_VERTICAL_SCROLLBAR_SLIDER
-))
 """
 
 @document Widget abstract_type_docs(Widget, Any, """
@@ -2883,10 +2643,6 @@ $(@type_signals(T,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_WIDGET
-))
 """)
 
 @document Window """
@@ -2910,10 +2666,6 @@ $(@type_signals(Window,
 ))
 
 $(@type_fields())
-
-$(@type_style_targets(
-    STYLE_TARGET_WINDOW
-))
 
 ## Example
 ```julia

@@ -1,3 +1,95 @@
+
+using Mousetrap
+main() do app::Application
+    window = Window(app)
+    widget = Button()
+
+    box = Box(ORIENTATION_HORIZONTAL)
+    for name in ["accent", "success", "warning", "error"]
+        add_css!("""
+        $name:not(.opaque) {
+            background-color: @$(name)_fg_color;
+        }
+        .$name.opaque {
+            background-color: @$(name)_bg_color;
+            color: @$(name)_fg_color;
+        }
+        """)
+    end
+
+    names = ["default", "accent", "success", "warning", "error"]
+
+
+    column_view = ColumnView()
+    
+    first_column = push_back_column!(column_view, " ")
+    
+
+    for name in names
+        push_back_column!(column_view, name)
+    end
+
+    #, Switch, CheckButton, ProgressBar, Spinner, Scale, SpinButton, Entry, Separator
+
+    j = 1
+    for create_widget in [
+        () -> Button(Label("TEST")), 
+        () -> Switch(),
+        () -> ProgressBar(),
+        () -> Spinner(),
+        () -> LevelBar(0, 1),
+        () -> Scale(0, 1, 1),
+        () -> Entry(),
+        () -> Separator()
+    ]
+        local default_label = Label("default")
+        local opaque_label = Label("opaque")
+
+        for label in [default_label, opaque_label]
+            add_css_class!(label, "dimmed")
+            add_css_class!(label, "caption")
+        end
+
+        set_widget_at!(column_view, first_column, j, default_label)
+        set_widget_at!(column_view, first_column, j + 1, opaque_label)
+
+        for name in names
+            i = j 
+            column = get_column_with_title(column_view, name)
+
+            local non_opaque = create_widget()
+            add_css_class!(non_opaque, name)
+            set_widget_at!(column_view, column, i, non_opaque)
+
+            try
+                set_child!(non_opaque, Label("TEST"))
+            catch end
+
+            i = i + 1
+
+            local opaque = create_widget()
+            add_css_class!(opaque, name)
+            add_css_class!(opaque, "opaque")
+            set_widget_at!(column_view, column, i, opaque)
+
+            try
+                set_child!(opaque, Label("TEST"))
+            catch end
+
+            for widget in [non_opaque, opaque]
+                #set_alignment!(widget, ALIGNMENT_CENTER)
+                #set_expand!(widget, false)
+            end
+        end
+        j = j + 2
+    end
+
+    set_child!(window, Viewport(column_view))
+    present!(window)
+end
+
+exit(0)
+
 main() do app::Application
     window = Window(app)
     set_title!(window, "mousetrap.jl")
@@ -29,6 +121,7 @@ main() do app::Application
     set_child!(window, transform_bin)
     present!(window)
 end
+
 
 #=
 @static if false

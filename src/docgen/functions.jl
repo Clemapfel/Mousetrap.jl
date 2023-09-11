@@ -335,21 +335,6 @@ add_shortcut!(::Action, shortcut::ShortcutTrigger)
 Add a shortcut trigger to the list of shortcuts. To make a widget listen for action shortcuts, use [`set_listens_for_shortcut_action!`](@ref), or use a [`ShortcutEventController`](@ref).
 """
 
-@document add_style_class! """
-```
-add_style_class(::T, ::Type{<: StyleClass}) -> Nothing
-```
-Modify a widget by applying a CSS style class to it, this will change the widgets look. Only certain widgets support certain styles.
-
-## Example
-
-```julia
-button = Button()
-set_child!(button, Label("Styled Label"))
-add_style_class!(button, STYLE_CLASS_SUGGESTED_ACTION)
-```
-"""
-
 @document add_submenu! """
 ```
 add_submenu!(model::MenuModel, label::String, to_add::MenuModel) 
@@ -377,13 +362,6 @@ apply_to(::GLTransform, ::Vector2f) -> Vector2f
 apply_to(::GLTransform, ::Vector3f) -> Vector3f
 ```
 Apply transform to a vector, both operate in OpenGL coordinates.
-"""
-
-@document apply_style_class! """
-```
-apply_style_class!(::Widget, class::StyleClass)
-```
-Apply the `StyleClass` to the widget, such that any CSS nodes of the widget targeted by the `StyleClass` will assume the set CSS properties.
 """
 
 @document as_circle! """
@@ -1792,7 +1770,6 @@ Get the number of OpenGL vertices.
 get_name(::Icon) -> String
 get_name(::FileDescriptor) -> String 
 get_name(::FileFilter) -> String
-get_name(::StyleClass) -> String
 ```
 Get a cleartext identifier for the object.
 """
@@ -1929,13 +1906,6 @@ Get whether the viewport should assume the natural width of its child.
 get_propagation_phase(::EventController) -> PropagationPhase
 ```
 Get the phase at which the event controller will capture events, see [here](https://developer-old.gnome.org/gtk4/stable/event-propagation.html) for more information.
-"""
-
-@document get_property """
-```
-get_property(::StyleClass, ::StyleClassTarget) -> String
-```
-Get the CSS properties value as a string, or "" if the property was not set.
 """
 
 @document get_quick_change_menu_enabled """
@@ -3603,13 +3573,6 @@ remove_start_child!(::CenterBox)
 Remove the start child such that the widget is now empty at that position
 """
 
-@document remove_style_class! """
-```
-remove_style_class!(::Widget, class::StyleClass)
-```
-Remove the applied style classes, reverting any CSS nodes of the widget the `StyleClass` targets to their default look.
-"""
-
 @document remove_texture! """
 ```
 remove_texture!(::Shape) 
@@ -3820,7 +3783,6 @@ Check if the widget the controller was added to, or any of the widgets children 
 ```
 serialize(::RGBA) -> String
 serialize(::HSVA) -> String
-serialize(::StyleClass) -> String
 ```
 Convert the object to its CSS representation.
 """
@@ -4819,14 +4781,6 @@ Set whether the viewport should assume the height of its child. This will usuall
 set_propagation_phase!(controller::EventController, ::PropagationPhase) 
 ```
 Set the phase at which the event controller will capture events, see [here](https://developer-old.gnome.org/gtk4/stable/event-propagation.html) for more information.
-"""
-
-@document set_property! """
-```
-set_property!(::StyleClass, property::StyleClassProperty, css_value::String)
-set_property!(::StyleClass, target::StyleClassTarget, property::StyleClassProperty, css_value::String)
-```
-Set a CSS property, such that when the `StyleClass` is applied to a widget, all CSS nodes that match `target` will assume the given CSS property.
 """
 
 @document set_quick_change_menu_enabled! """

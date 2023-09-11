@@ -151,7 +151,6 @@ end
 ## include
 
 include("docgen/signals.jl")
-include("docgen/styles.jl")
 include("docgen/functions.jl")
 include("docgen/types.jl")
 include("docgen/enums.jl")
