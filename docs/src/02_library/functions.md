@@ -171,10 +171,6 @@ Mousetrap.add_widget!
 ```@docs
 Mousetrap.alt_pressed
 ```
-## `apply_style_class!`
-```@docs
-Mousetrap.apply_style_class!
-```
 ## `apply_to`
 ```@docs
 Mousetrap.apply_to
@@ -1743,10 +1739,6 @@ Mousetrap.get_propagate_natural_width
 ```@docs
 Mousetrap.get_propagation_phase
 ```
-## `get_property`
-```@docs
-Mousetrap.get_property
-```
 ## `get_quick_change_menu_enabled`
 ```@docs
 Mousetrap.get_quick_change_menu_enabled
@@ -2691,10 +2683,6 @@ Mousetrap.remove_secondary_icon!
 ```@docs
 Mousetrap.remove_start_child!
 ```
-## `remove_style_class!`
-```@docs
-Mousetrap.remove_style_class!
-```
 ## `remove_texture!`
 ```@docs
 Mousetrap.remove_texture!
@@ -3286,10 +3274,6 @@ Mousetrap.set_propagate_natural_width!
 ## `set_propagation_phase!`
 ```@docs
 Mousetrap.set_propagation_phase!
-```
-## `set_property!`
-```@docs
-Mousetrap.set_property!
 ```
 ## `set_quick_change_menu_enabled!`
 ```@docs

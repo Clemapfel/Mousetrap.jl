@@ -2787,21 +2787,6 @@ StackSwitcher
 
 
 ---
-## StyleClass
-```@docs
-StyleClass
-```
----
-## StyleClassProperty
-```@docs
-StyleClassProperty
-```
----
-## StyleClassTarget
-```@docs
-StyleClassTarget
-```
----
 ## StylusEventController
 ```@docs
 StylusEventController

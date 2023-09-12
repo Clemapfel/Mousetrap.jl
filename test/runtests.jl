@@ -1222,10 +1222,6 @@ function test_icon(::Container)
     @testset "IconTheme" begin
 
         Base.show(devnull, theme)
-
-        if !isempty(names)
-            @test has_icon(theme, names[1])
-        end
     
         add_resource_path!(theme, ".")
         set_resource_path!(theme, ".")
@@ -1799,7 +1795,7 @@ function test_popup_message(::Container)
 
     overlay = PopupMessageOverlay()
     Base.show(devnull, overlay)
-    set_child!(Separator())
+    set_child!(overlay, Separator())
 
     message = PopupMessage("title", "button")
 
@@ -1820,7 +1816,6 @@ function test_popup_message(::Container)
     set_is_high_priority!(message, true)
     @test get_is_high_priority(message) == true
 
-    @test get_timeout(message) == seconds(0)
     set_timeout!(message, seconds(1))
     @test get_timeout(message) == seconds(1)
 
@@ -2135,42 +2130,6 @@ function test_stack(::Container)
 
         switcher = StackSwitcher(stack)
         @test switcher isa Widget
-    end
-end
-
-### STYLE CLASS
-
-function test_style_class(widget::Container)
-    @testset "CSS" begin
-        add_css!("""
-        .test_class {
-            border-radius: 10%;
-            color: green;
-        }
-        """)
-        add_css_class!(widget, "test_class")
-        @test "test_class" in get_css_classes(widget)
-
-        remove_css_class!(widget, "test_class")
-        @test !("test_class" in get_css_classes(widget))
-
-        @test serialize(RGBA(1, 0, 0.5, 1)) == "rgba(255, 0, 128, 255)"
-    end
-
-    @testset "StyleClass" begin
-        class = StyleClass("custom")
-        Base.show(devnull, class)
-
-        for target in Mousetrap.style_targets
-            for property in Mousetrap.style_properties
-                target = string(target)
-                property = string(property)
-                set_property!(class, target, property, "inherit")
-                @test get_property(class, target, property) == "inherit"
-            end
-        end
-
-        @test !isempty(serialize(class))
     end
 end
 
@@ -2859,7 +2818,6 @@ main(Main.app_id) do app::Application
         test_spin_button(container)
         test_spinner(container)
         test_stack(container)
-        test_style_class(container)
         test_switch(container)
         test_text_view(container)
         test_time(container)

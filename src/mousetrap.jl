@@ -2406,7 +2406,7 @@ const VERSION = v"0.2.0"
     @export_function PopupMessage set_is_high_priority! Cvoid Bool b
     @export_function PopupMessage get_is_high_priority Bool
     
-    set_timeout!(popup_message::PopupMessage, duration::Time) = detail.set_timeout!(popup_message._internal, as_microseconds(duration))
+    set_timeout!(popup_message::PopupMessage, duration::Time) = detail.set_timeout!(popup_message._internal, convert(Cfloat, as_microseconds(duration)))
     export set_timeout!
 
     get_timeout(popup_message::PopupMessage) ::Time = microseconds(detail.get_timeout(popup_message._internal))
