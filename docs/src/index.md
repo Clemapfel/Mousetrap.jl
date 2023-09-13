@@ -1,6 +1,6 @@
 # Mousetrap
 
-Welcome to the documentation of mousetrap.jl, a GUI engine for Julia.
+Welcome to the documentation of Mousetrap.jl, a GUI engine for Julia.
 
 This page contains a [manual and tutorial](#manual), as well as an [index](#index) of all [functions](./02_library/functions.md), [classes](./02_library/classes.md), and [enums](./02_library/enums.md).
 

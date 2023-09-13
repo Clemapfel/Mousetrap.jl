@@ -45,7 +45,6 @@ Consider participating in the development by [opening an issue](https://github.c
 Inn order of priority, highest first:
 
 + Simplify installation process to `] add mousetrap`
-+ Add support for global and per-widget custom themes by exposing the CSS interface
 + Implement installation of .desktop files on end-user computers
 + Implement drag-and-drop for files, images, and widgets
 + Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side
@@ -54,7 +53,6 @@ Inn order of priority, highest first:
 + Allow bundling of mousetrap apps, their resources, and all their dependencies into a portable C-executable
 + Fully polish interactive use from within the REPL
 + Make all functions that modify the global state thread-safe
-+ Add an event controller to capture video game controller / joystick events
 + Expose the full `GtkTextView` and `GtkSourceView` interface, making `TextView` a fully feature text editor
 + Allow binding textures to fragment shader uniforms at texture unit 1 or higher, currently, only texture unit 0 is supported
 + Add 3D shapes and geometry shaders
@@ -66,7 +64,7 @@ Inn order of priority, highest first:
 ### Hello World
 
 ```julia
-using mousetrap
+using Mousetrap
 main() do app::Application
     window = Window(app)
     set_child!(window, Label("Hello World!"))
@@ -135,10 +133,8 @@ Click registered at (367.5, 289.0)
 | Linux (32-bit)   | `✓`                | `✕`                        |
 | Windows (64-bit) | `✓`                | `✓`                        |
 | Windows (32-bit) | `✕`                | `✕`                        |
-| MacOS            | `✓*`                | `✕`                        |
+| MacOS            | `✓`                | `✕`                        |
 | FreeBSD          | `✓`                | `✓`                        | 
-
-* MacOS support remains untested and may be unstable
 
 ---
 
@@ -148,23 +144,24 @@ In the Julia REPL, execute:
 
 ```julia
 import Pkg
-Pkg.add(url="https://github.com/Clemapfel/mousetrap_windows_jll")
-Pkg.add(url="https://github.com/Clemapfel/mousetrap_linux_jll")
-Pkg.add(url="https://github.com/Clemapfel/mousetrap_apple_jll")
-Pkg.add(url="https://github.com/Clemapfel/mousetrap.jl")
+begin
+    try Pkg.remove("mousetrap") catch end
+    Pkg.add(url="https://github.com/Clemapfel/mousetrap_windows_jll")
+    Pkg.add(url="https://github.com/Clemapfel/mousetrap_linux_jll")
+    Pkg.add(url="https://github.com/Clemapfel/mousetrap_apple_jll")
+    Pkg.add(url="https://github.com/Clemapfel/mousetrap.jl")
+end
 ```
 
-Where all four packages need to be installed, regardless of the operating system. 
-
-Installation may take a long time. Once mousetrap is installed and precompilation is done, it can be loaded in only a few seconds during regular usage.
+Mousetrap was renamed from `mousetrap.jl` to `Mousetrap.jl` in version 0.2.0, which is why we have to remove the old package to assure compatibility.
 
 We can confirm everything works by pressing `]` while in the REPL to enter `Pkg` mode, then:
 
 ```
-test mousetrap
+test Mousetrap
 ```
 
-At the end it should say `mousetrap tests passed`.
+At the end it should say `Mousetrap tests passed`.
 
 > **Note**: On Windows, some `GLib` log messages regarding dbus connections and  may appear during testing. These do not indicate a problem, as long as at the end of the testing suite it says `mousetrap tests passed`.
 
@@ -180,7 +177,7 @@ Documentation is available [here](https://clemens-cords.com/mousetrap). This inc
 
 The Julia and C++ component of mousetrap were designed and implemented by [C.Cords](https://clemens-cords.com).
 
-Consider **donating** to support the continued development of this library:
+Mousetrap was created with no expectation of compensation and made available for free. Consider **donating** to reward past work and support the continued development of this library:
 + [GitHub Sponsors](https://github.com/sponsors/Clemapfel)
 + [PayPal](https://www.paypal.com/donate/?hosted_button_id=8KWF3JTDF8XL2)
 

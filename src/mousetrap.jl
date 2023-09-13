@@ -14,19 +14,15 @@ const VERSION = v"0.2.0"
         using CxxWrap
         function __init__() @initcxx end
 
-
+        using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
         function get_mousetrap_julia_binding()
-            #=
-            using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
             @static if Sys.isapple()
-                lib = mousetrap_apple_jll.mousetrap_julia_binding
+                return mousetrap_apple_jll.mousetrap_julia_binding
             elseif Sys.iswindows()
-                lib = mousetrap_windows_jll.mousetrap_julia_binding
+                return mousetrap_windows_jll.mousetrap_julia_binding
             else
-                lib = mousetrap_linux_jll.mousetrap_julia_binding
+                return mousetrap_linux_jll.mousetrap_julia_binding
             end
-            =#
-            return "/home/clem/Workspace/mousetrap_julia_binding/build/libmousetrap_julia_binding.so"
         end
       
         @wrapmodule(get_mousetrap_julia_binding)
