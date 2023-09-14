@@ -12,7 +12,7 @@
 Memory-managed object that wraps a function. Each action has a unique ID and is registered with 
 the [`Application`](@ref). It can furthermore have any number of shortcut triggers.
 
-Using `set_function!`, we can register a callback to bec alled when the action is activated in any way.
+Use `set_function!` to register a callback to be called when the action is activated in any way.
 This function is required to have the signature:
 ```
 (::Action, [::Data_t]) -> Nothing
@@ -47,9 +47,9 @@ activate!(action)
 # Adjustment <: SignalEmitter
 
 Object that represents a range of discrete values. Modifying the underlying adjustment 
-of a widget, will modify the widget, and vice-versa. 
+of a widget will modify the widget, and vice-versa. 
 
-cf. [`get_adjustment`](@ref) to see which widgets are available to be controlled this way.
+See [`get_adjustment`](@ref) to see which widgets are available to be controlled this way.
 
 $(@type_constructors(
     Adjustment(value::Number, lower::Number, upper::Number, increment::Number)
@@ -68,7 +68,7 @@ $(@type_fields())
 
 Simple dialog with a message, detailed description, space for a single widget, and one or more labeled buttons. 
 
-Using `on_selection!`, you can register a function with the signature
+Use `on_selection!` to register a function with the signature
 ```
 (::AlertDialog, button_index::Integer, [::Data_t]) -> Nothing
 ```
@@ -105,7 +105,7 @@ present!(alert_dialog)
 # ActionBar <: Widget
 
 Horizontal bar, has an area for widgets at the start and end, along with a singular centered widget, set via `set_center_widget!`.
-`ActionBar` can be hidden / shown using `set_is_revealed!`.
+`ActionBar` can be hidden / shown using `set_is_revealed!`. It is always horizontal.
 
 $(@type_constructors(
     ActionBar()
@@ -140,13 +140,6 @@ Used to register an application with the users OS.
 
 The applications ID is required to contain at least one `.`, and it should be unique, meaning no
 other application on the users operating system shares this ID.
-
-Calling [`run!`](@ref) initializes the GTK4 and OpenGL back-end, after which 
-signal `activate` wil be emitted. All widgets should only be created
-**after** this point. In practice, this means that the entirety of
-initializing for the entire app should happen inside the
-signal handler of the `activate` signal. See [`main`](@ref) for an automated 
-way of doing this, or the example below.
 
 When all windows of an application are closed, or [`quit!`](@ref) is called,
 the application exits. This can be prevented with [`hold!`](@ref), 
@@ -183,12 +176,24 @@ run!(app)
 ```
 """
 
+@document ApplicationID """
+# ApplicationID
+
+Application name as a string, in reverse domain name syntax. For example, if the apps homepage is `Foo.julia.org`, an appropriate application ID would be `"org.julia.foo"`
+"""
+
 @document Animation """
 # Animation <: SignalEmitter
 
-Object that provides a timing function which is synched to a widgets render cycle. It can be used as the basis of implementing animations.
+Object that provides a steady  timing function which is synched to a widgets render cycle. It can be used as the basis of implementing animations.
 
-By default, the animations `value` will be in [0, 1], though this can be changed with `set_lower!` and `set_upper!`. The shape of the function 
+Use `on_tick!` to register a callback with the signature
+```
+(::Animation, value::Float64, [::Data_t]) -> Nothing
+```
+Which will be called once per frame while the widget is visible.
+
+By default, the animations `value` will be in [0, 1], this can be changed with `set_lower!` and `set_upper!`. The shape of the function 
 interpolating the value over time can be set using `set_timing_function!`.
 
 $(@type_constructors(
@@ -262,7 +267,7 @@ $(@type_fields(
 @document Box """
 # Box <: Widget
 
-Widget that aligns its children in a row (or column), depending on orientation.
+Widget that aligns its children in a row or column, depending on orientation.
 
 $(@type_constructors(
     Box(::Orientation)
@@ -501,7 +506,7 @@ present!(color_chooser)
 @document ColumnView """
 # ColumnView <: Widget
 
-Selectable widget that arranges its children as a table with rows and columns.
+Selectable widget that arranges its children as a table with rows and named columns.
 
 $(@type_constructors(
     ColumnView([::SelectionMode])
@@ -512,8 +517,6 @@ $(@type_signals(ColumnView,
 ))
 
 $(@type_fields())
-
-
 
 ## Example
 ```julia
@@ -599,8 +602,6 @@ $(@type_signals(DropDown,
 
 $(@type_fields())
 
-
-
 ## Example
 ```julia
 drop_down = DropDown()
@@ -630,7 +631,7 @@ $(@type_fields(
 @document Entry """
 # Entry <: Widget
 
-Single-line text entry, supports "password mode", as well as inserted an icon to the left and/or right of the text area.
+Single-line text entry, supports "password mode", as well as inserting an icon to the left and/or right of the text area.
 
 $(@type_constructors(
     Entry()
@@ -779,9 +780,9 @@ add_allowed_suffix!(filter, "jl") # without the `.`
 @document FileMonitor """
 # FileMonitor <: SignalEmitter
 
-Object that monitors a location on disk. If 
-anything about the object at that location changes, it will call the function registered using [`on_file_changed!`](@ref),
-which requires a function with signature
+Object that monitors a location on disk. If anything about the object at that location changes, 
+it invoke the callback registered using [`on_file_changed!`](@ref), which requires a function with signature
+
 ```
 (::FileMonitor, event::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor, [::Data_t]) -> Nothing
 ```
@@ -1694,8 +1695,7 @@ set_child!(window, popover_button)
 @document PopoverButton """
 # PopoverButton <: Widget
 
-Button that has automatically shows or hides its associated [`Popover`](@ref) or [`PopoverMenu`](@ref)
-when clicked.
+Button that automatically shows or hides its associated [`Popover`](@ref) or [`PopoverMenu`](@ref) when clicked.
 
 $(@type_constructors(
     PopoverButton(::Popover),
@@ -1735,8 +1735,6 @@ $(@type_signals(PopoverMenu,
 
 $(@type_fields())
 
-
-
 ## Example
 ```julia
 action = Action("example.action", app)
@@ -1774,7 +1772,7 @@ $(@type_fields())
 # RGBA
 
 Color representation in rgba. All components 
-are `Float32` in [0, 1].
+are `Float32` in `[0, 1]`.
 
 $(@type_constructors(
     RGBA(r::AbstractFloat, g::AbstractFloat, b::AbstractFloat, a::AbstractFloat)
@@ -1857,7 +1855,7 @@ task = RenderTask(shape;
 @document RenderTexture """
 # RenderTexture <: TextureObject <: SignalEmitter
 
-Texture that can be bound as a render target. This object should not be used.
+Texture that can be bound as a render target. This object is for internal use only.
 
 $(@type_constructors(
     RenderTexture()
@@ -1884,8 +1882,6 @@ $(@type_signals(Revealer,
 ))
 
 $(@type_fields())
-
-
 """
 
 @document RotateEventController """
@@ -2036,9 +2032,6 @@ $(@type_signals(Separator,
 ))
 
 $(@type_fields())
-
-
-
 """
 
 @document Shader """
@@ -2194,9 +2187,6 @@ $(@type_signals(Spinner,
 ))
 
 $(@type_fields())
-
-
-
 """
 
 @document Stack """
@@ -2217,8 +2207,6 @@ $(@type_signals(Stack,
 ))
 
 $(@type_fields())
-
-
 
 ## Example
 ```julia
@@ -2262,8 +2250,6 @@ $(@type_signals(StackSidebar,
 ))
 
 $(@type_fields())
-
-
 """
 
 @document StackSwitcher """
@@ -2352,7 +2338,7 @@ add_controller!(window, swipe_controller)
 @document Switch """
 # Switch <: Widget
 
-Widget with a binary state, emits signal `active` when triggered.
+Widget with a binary state, emits signal `switched` when triggered.
 
 $(@type_constructors(
     Switch()
@@ -2421,7 +2407,7 @@ information.
 @document Time """
 # Time
 
-Object representing a duration, nanoseconds precision, may be negative.
+Object representing a duration of time, nanoseconds precision, may be negative.
 
 $(@type_constructors(
     nanoseconds(::Int64),
@@ -2484,8 +2470,6 @@ $(@type_signals(TransformBin,
 
 $(@type_fields())
 
-
-
 ## Example
 ```julia
 # continuously rotate a widget
@@ -2533,7 +2517,7 @@ as_typed(12) # returns 12, because "12" will be converted to given return type, 
 @document Vector2 """
 # Vector2{T}
 
-Vector with 2 components, all operations are component-wise, which mimicks GLSL.
+Vector with two components, all operations are component-wise, just like in GLSL.
 
 $(@type_constructors(
     Vector2{T}(::T, ::T),
@@ -2549,7 +2533,7 @@ $(@type_fields(
 @document Vector3 """
 # Vector3{T}
 
-Vector with 4 components, all operations are component-wise, which mimicks GLSL.
+Vector with 4 components, all operations are component-wise, just like in GLSL.
 
 $(@type_constructors(
     Vector3{T}(::T, ::T, ::T),
@@ -2566,7 +2550,7 @@ $(@type_fields(
 @document Vector4 """
 # Vector4{T}
 
-Vector with 4 components, all operations are component-wise, which mimicks GLSL.
+Vector with 4 components, all operations are component-wise, just like in GLSL.
 
 $(@type_constructors(
     Vector4{T}(::T, ::T, ::T, ::T),
@@ -2595,7 +2579,7 @@ This behavior can be influenced by setting the
 [`ScrollbarVisibilityPolicy`](@ref) for one or both of the scrollbars.
 
 `Viewport` can be forced to obey the width and/or height 
-of its child by setting [`set_propagate_natural_width!`](@ref) and / or
+of its child by setting [`set_propagate_natural_width!`](@ref) or
 [`set_propagate_natural_height!`](@ref) to `true`.
 
 The placement of both scrollbars at the same time can be set with [`set_scrollbar_placement!`](@ref).
@@ -2626,7 +2610,7 @@ for more information.
 
 In order for an object to be treated as a widget, it needs to subtype 
 this abstract type and define [`Mousetrap.get_top_level_widget`](@ref). See the 
-manual section on compound widgets in the chapter on widgets for more information.
+manual section on compound widgets in the chapter on widgets.
 
 All widgets share the following signals, where `T` is the subclass 
 of `Widget`. For example, signal `realize` of class `Label` has the 

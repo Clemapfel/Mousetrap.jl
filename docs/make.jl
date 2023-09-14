@@ -9,7 +9,7 @@ using Documenter, Pkg, InteractiveUtils
 using Mousetrap
 
 let file = open("docs/src/02_library/classes.md", "w+")
-    @info "Exporting..."
+    @info "Mousetrap: Exporting Index..."
     write(file, "# Index: Classes\n")
 
     for name in sort(union(
@@ -144,7 +144,12 @@ let file = open("docs/src/02_library/classes.md", "w+")
         write(file, "```\n")
     end
     close(file)
-    @info "Done."
 end 
 
-makedocs(sitename="Mousetrap")
+makedocs(
+    sitename="Mousetrap", 
+    format = Documenter.HTML(
+        size_threshold_warn = nothing,
+        size_threshold = Integer(2e+6)
+    )
+)

@@ -35,31 +35,31 @@ const signal_descriptors = Dict([
     ),
     :realize => (
         void_signature, 
-        "Emitted when a widget is shown for the first time after being initialized."
+        "Emitted when the widget is shown for the first time after being initialized."
     ),
     :unrealize => (
         void_signature, 
-        "Emitted when a widget was hidden and no longer has an allocated area on screen."
+        "Emitted when the widget was hidden and no longer has an allocated area on screen."
     ),
     :destroy => (
         void_signature, 
-        "Emitted when a widgets reference count reaches 0, it will be finalized and deleted permanently."
+        "Emitted when the widgets reference count reaches 0, it will be finalized and deleted permanently."
     ),
     :hide => (
         void_signature, 
-        "Emitted when a widget is hidden, for example by calling `hide!`, being removed from its parent, or its parent being hidden."
+        "Emitted when the widget is hidden, for example by calling `hide!`, being removed from its parent, or its parent being hidden."
     ),
     :show => (
         void_signature, 
-        "Emitted when a widget is shown, for example by calling `show!` or its parent being shown."
+        "Emitted when the widget is shown, for example by calling `show!` or its parent being shown."
     ),
     :map => (
         void_signature, 
-        "Emitted when a widget has chosen its final size allocation and is assuming its size and position on screen."
+        "Emitted when the widget has chosen its final size allocation and is assuming its size and position on screen."
     ),
     :unmap => (
         void_signature, 
-        "Emitted when a widget looses its current size allocation, usually in the process of being hidden or destroyed."
+        "Emitted when the widget looses its current size allocation, usually in the process of being hidden or destroyed."
     ),
     :close_request => (
         "(::T, [::Data_t]) -> WindowCloseRequestResult", 
@@ -79,7 +79,7 @@ const signal_descriptors = Dict([
     ),
     :clicked => (
         void_signature, 
-        "Emitted when the user clicks a widget using a mouse or touchscreen."
+        "Emitted when the user clicks the widget using a mouse or touchscreen."
     ),
     :toggled => (
         void_signature, 
@@ -131,11 +131,11 @@ const signal_descriptors = Dict([
     ),
     :focus_gained => (
         void_signature, 
-        "Emitted when a widget that is currently not focused becomes focus."
+        "Emitted when the widget that is currently not focused becomes focus."
     ),
     :focus_lost => (
         void_signature, 
-        "Emitted when a widget that is currently focused looses focus."
+        "Emitted when the widget that is currently focused looses focus."
     ),
     :pressed => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 

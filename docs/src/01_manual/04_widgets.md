@@ -22,7 +22,7 @@ In this chapter, we will learn:
     ```
 
 !!! note "Images in this Chapter"
-    Images for this chapter were captured on a Fedora Linux machine running Gnome 44.2. The exact look of each window and widget may be slightly different, depending on the users operating system and application theme. We will learn how to manually change the global theme in the [section on app customization](./07_os_interface.md#theme).
+    Images for this chapter were captured on a Fedora Linux machine running Gnome 44.2. The exact look of each window and widget may be slightly different, depending on the users operating system and application theme. We will learn how to manually change the look of widgets by creating our own theme in the [section on app customization](./10_theme_customization.md).
 
 ---
 
@@ -553,7 +553,7 @@ center_box = CenterBox(ORIENTATION_HORIZONTAL, Label("start"), Button(), Label("
 
 ## FlowBox
 
-Third of the `Box` relatives, we have [`FlowBox`](@ref), which, unlike `Box`, **redistributes** its children along more than one row (or column, if vertical) depending on the available width (or height) of the `FlowBox`. This is useful for situations where we want to group a number of widgets in a way that does not impact resizability.
+Third of the `Box` relatives, we have [`FlowBox`](@ref). This widget is similiar to `Box`, except that it will **redistribute** its children along more than one row (or column, if vertical) depending on the available width (or height) of the `FlowBox`. This is useful for situations where we want to group a number of widgets in a way that does not impact resizability.
 
 ```julia
 flow_box = FlowBox(ORIENTATION_VERTICAL)
@@ -766,8 +766,7 @@ set_child!(window, toggle_button)
 ```@eval
 using Mousetrap
 Mousetrap.@signal_table(ToggleButton,
-    toggled,
-    clicked
+    toggled
 )
 ```
 
