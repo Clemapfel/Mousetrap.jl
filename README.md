@@ -7,7 +7,7 @@ Mousetrap is a GUI library for Julia. It, and its [stand-alone C++-component of 
 It aims to give developers of all skill levels the tools to start creating complex GUI applications with little time and effort.
 
 > **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability, portability, and quality of the documentation may be affected. <br>
-Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen).
+Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug.
 
 ---
 
@@ -51,11 +51,8 @@ Inn order of priority, highest first:
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
 + Allow adding custom signals that use the GLib marshalling system
 + Allow bundling of mousetrap apps, their resources, and all their dependencies into a portable C-executable
-+ Fully polish interactive use from within the REPL
 + Make all functions that modify the global state thread-safe
 + Expose the full `GtkTextView` and `GtkSourceView` interface, making `TextView` a fully feature text editor
-+ Allow binding textures to fragment shader uniforms at texture unit 1 or higher, currently, only texture unit 0 is supported
-+ Add 3D shapes and geometry shaders
 
 ---
 
