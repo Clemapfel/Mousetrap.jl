@@ -145,7 +145,7 @@ In the Julia REPL, execute:
 ```julia
 import Pkg
 begin
-    try Pkg.remove("mousetrap") catch end
+    try Pkg.rm("mousetrap") catch end
     Pkg.add(url="https://github.com/Clemapfel/mousetrap_windows_jll")
     Pkg.add(url="https://github.com/Clemapfel/mousetrap_linux_jll")
     Pkg.add(url="https://github.com/Clemapfel/mousetrap_apple_jll")
