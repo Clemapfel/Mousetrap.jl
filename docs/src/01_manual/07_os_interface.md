@@ -83,8 +83,6 @@ We have to make sure to call [`release!`](@ref) to undo a previous `hold!`, afte
 
 Being **busy** marks the app so that the OS recognizes that it is currently busy. This will prevent the "`app` is not responding" dialog many OS will trigger automatically when an app freezes. Sometimes, freezing is unavoidable because a costly operation is taking place. During times like this, we should call [`mark_as_busy!`](@ref), which notifies the OS that everything is still working as intended, it will just take a while. Once the expensive task is complete, [`unmark_as_busy!`](@ref) reverts the flag.
 
----
-
 ## Logging
 
 ### Introduction
