@@ -16,7 +16,7 @@ const VERSION = v"0.2.0"
 
         using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
         function get_mousetrap_julia_binding()
-            @static if Sys.isapple()
+                        @static if Sys.isapple()
                 return mousetrap_apple_jll.mousetrap_julia_binding
             elseif Sys.iswindows()
                 return mousetrap_windows_jll.mousetrap_julia_binding

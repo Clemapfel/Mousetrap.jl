@@ -2524,7 +2524,7 @@ end
 
 function test_render_area(::Container)
 
-    if !Mousetrap.MOUSETRAP_ENABLE_OPENGL_COMPONENT
+    if !Mousetrap.MOUSETRAP_ENABLE_OPENGL_COMPONENT || Mousetrap.detail.is_opengl_disabled()
         return
     end
     
