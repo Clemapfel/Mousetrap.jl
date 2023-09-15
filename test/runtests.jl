@@ -6,7 +6,7 @@
 #
 
 using Test
-using mousetrap
+using Mousetrap
 
 ### GLOBALS
 
@@ -55,6 +55,49 @@ function test_action(::Container)
 
         clear_shortcuts!(action)
         @test isempty(get_shortcuts(action))
+    end
+end
+
+### ANIMATION
+
+function test_animation(widget::Container)
+    @testset "Animation" begin
+        animation = Animation(widget, seconds(1))
+        Base.show(devnull, animation)
+
+        @test get_state(animation) == ANIMATION_STATE_IDLE
+        
+        @test get_duration(animation) == seconds(1)
+        set_duration!(animation, seconds(2))
+        @test get_duration(animation) = seconds(2)
+
+        @test get_value(animation) == 0
+        @test get_lower!(animation) == 0
+        @test get_upper!(animation) == 1
+
+        set_lower!(animation, -1)
+        set_upper!(animation, 2)
+
+        @test get_lower!(animation) == -1
+        @test get_upper!(animation) == 2
+
+        @test get_repeat_count(animation) == 1
+        set_repeat_count!(animation, 0)
+        @test get_repeat_count(animation) == 0
+
+        @test get_is_reversed(animation) == false
+        set_is_reversed!(animation, true)
+        @test get_is_reversed(animation) == true
+
+        set_timing_function!(animation, ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID)
+        @test get_timing_function(animation) == ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID
+
+        on_tick!(animation) do self::Animation, value::AbstractFloat end
+        on_done!(animation) do self::Animation end
+
+        play!(animation)
+        pause!(animation)
+        reset!(animation)
     end
 end
 
@@ -179,7 +222,7 @@ function test_aspect_frame(::Container)
 
         aspect_frame = AspectFrame(1.0)
         Base.show(devnull, aspect_frame)
-        @test mousetrap.is_native_widget(aspect_frame)
+        @test Mousetrap.is_native_widget(aspect_frame)
 
         @test get_child_x_alignment(aspect_frame) == 0.5
         @test get_child_y_alignment(aspect_frame) == 0.5
@@ -201,7 +244,7 @@ function test_button(::Container)
             
         button = Button()
         Base.show(devnull, button)
-        @test mousetrap.is_native_widget(button)
+        @test Mousetrap.is_native_widget(button)
         
         set_child!(button, Label("Button"))
         
@@ -229,7 +272,7 @@ function test_box(::Container)
     @testset "Box" begin
         box = Box(ORIENTATION_HORIZONTAL)
         Base.show(devnull, box)
-        @test mousetrap.is_native_widget(box)
+        @test Mousetrap.is_native_widget(box)
 
         @test get_homogeneous(box) == false
         set_homogeneous!(box, true)
@@ -253,11 +296,28 @@ function test_box(::Container)
     end
 end
 
+function test_transform_bin(::Container)
+    @testset "TransformBin" begin
+        bin = TransformBin()
+        @test Mouestrap.is_native_widget(bin)
+        Base.show(devnull, bin)
+
+        set_child!(bin, Separator())
+
+        rotate!(bin, degrees(10))
+        translate!(bin, Vector2f(10, 10))
+        scale!(bin, 1.1, 0.9)
+        skew!(bin, 1.1, 0.9)
+        
+        remove_child!(bin)
+    end
+end
+
 function test_center_box(::Container)
     @testset "CenterBox" begin
         center_box = CenterBox(ORIENTATION_HORIZONTAL)
         Base.show(devnull, center_box)
-        @test mousetrap.is_native_widget(center_box)
+        @test Mousetrap.is_native_widget(center_box)
 
         @test get_orientation(center_box) == ORIENTATION_HORIZONTAL
         set_orientation!(center_box, ORIENTATION_VERTICAL)
@@ -278,7 +338,7 @@ function test_check_button(::Container)
     @testset "CheckButton" begin
         check_button = CheckButton()
         Base.show(devnull, check_button)
-        @test mousetrap.is_native_widget(check_button)
+        @test Mousetrap.is_native_widget(check_button)
 
         toggled_called = Ref{Bool}(false)
         connect_signal_toggled!(check_button, toggled_called) do _, toggled_called
@@ -682,7 +742,7 @@ function test_column_view(::Container)
     @testset "ColumnViewTest" begin
         column_view = ColumnView()
         Base.show(devnull, column_view)
-        @test mousetrap.is_native_widget(column_view)
+        @test Mousetrap.is_native_widget(column_view)
 
         push_back_column!(column_view, "column 01")
         push_front_column!(column_view, "column 03")
@@ -722,7 +782,7 @@ function test_drop_down(::Container)
     @testset "DropDown" begin
         drop_down = DropDown()
         Base.show(devnull, drop_down)
-        @test mousetrap.is_native_widget(drop_down)
+        @test Mousetrap.is_native_widget(drop_down)
 
         label = "Label";
         id_02 = push_back!(drop_down, label, label) do self::DropDown
@@ -751,7 +811,7 @@ function test_entry(::Container)
     @testset "Entry" begin
         entry = Entry()
         Base.show(devnull, entry)
-        @test mousetrap.is_native_widget(entry)
+        @test Mousetrap.is_native_widget(entry)
 
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(entry, activate_called) do entry::Entry, activate_called
@@ -798,7 +858,7 @@ function test_expander(::Container)
     @testset "Expander" begin
         expander = Expander()
         Base.show(devnull, expander)
-        @test mousetrap.is_native_widget(expander)
+        @test Mousetrap.is_native_widget(expander)
 
         activate_called = Ref{Bool}(false)
         connect_signal_activate!(expander, activate_called) do self::Expander, activate_called
@@ -918,7 +978,7 @@ function test_fixed(::Container)
     @testset "Fixed" begin
         fixed = Fixed()
         Base.show(devnull, fixed)
-        @test mousetrap.is_native_widget(fixed)
+        @test Mousetrap.is_native_widget(fixed)
 
         child = Label("(32, 32)")
 
@@ -929,12 +989,44 @@ function test_fixed(::Container)
     end
 end
 
+function test_flow_box(::Container)
+    @testset "FlowBox" begin
+        box = FlowBox(ORIENTATION_HORIZONTAL)
+        Base.show(devnull, box)
+        @test Mousetrap.is_native_widget(box)
+
+        @test get_homogeneous(box) == false
+        set_homogeneous!(box, true)
+        @test get_homogeneous(box) == true
+
+        @test get_orientation(box) == ORIENTATION_HORIZONTAL
+        set_orientation!(box, ORIENTATION_VERTICAL)
+        @test get_orientation(box) == ORIENTATION_VERTICAL
+
+        start = Separator()
+        push_front!(box, start)
+        push_back!(box, Separator())
+        insert_at!(box, 1, Separator())
+        remove!(box, start)
+
+        @test get_n_items(box) == 2
+
+        @test get_row_spacing(box) == 0
+        set_row_spacing!(box, 10)
+        @test get_row_spacing(box) == 10
+
+        @test get_column_spacing(box) == 0
+        set_column_spacing!(box, 10)
+        @test get_column_spacing(box) == 10
+    end
+end
+
 function test_frame(::Container)
     @testset "Frame" begin
 
         frame = Frame()
         Base.show(devnull, frame)
-        @test mousetrap.is_native_widget(frame)
+        @test Mousetrap.is_native_widget(frame)
 
         set_child!(frame, Separator())
         @test get_label_x_alignment(frame) == 0.0
@@ -951,7 +1043,7 @@ end
 function test_gl_transform(::Container)
     @testset "GLTransform" begin
 
-        if !mousetrap.MOUSETRAP_ENABLE_OPENGL_COMPONENT
+        if !Mousetrap.MOUSETRAP_ENABLE_OPENGL_COMPONENT
             return 
         end    
 
@@ -977,7 +1069,7 @@ function test_grid(::Container)
     @testset "Grid" begin
         grid = Grid()
         Base.show(devnull, grid)
-        @test mousetrap.is_native_widget(grid)
+        @test Mousetrap.is_native_widget(grid)
 
         @test get_column_spacing(grid) == 0.0
         set_column_spacing!(grid, 2.0)
@@ -1023,7 +1115,7 @@ function test_grid_view(::Container)
     @testset "GridView" begin
         grid_view = GridView(ORIENTATION_HORIZONTAL,SELECTION_MODE_MULTIPLE)
         Base.show(devnull, grid_view)
-        @test mousetrap.is_native_widget(grid_view)
+        @test Mousetrap.is_native_widget(grid_view)
 
         @test get_orientation(grid_view) == ORIENTATION_HORIZONTAL
         set_orientation!(grid_view, ORIENTATION_VERTICAL)
@@ -1087,7 +1179,7 @@ function test_header_bar(::Container)
 
         layout = "close:minimize,maximize"
         header_bar = HeaderBar(layout)
-        @test mousetrap.is_native_widget(header_bar)
+        @test Mousetrap.is_native_widget(header_bar)
 
         Base.show(devnull, header_bar)
 
@@ -1130,10 +1222,6 @@ function test_icon(::Container)
     @testset "IconTheme" begin
 
         Base.show(devnull, theme)
-
-        if !isempty(names)
-            @test has_icon(theme, names[1])
-        end
     
         add_resource_path!(theme, ".")
         set_resource_path!(theme, ".")
@@ -1171,7 +1259,7 @@ function test_image_display(::Container)
     @testset "ImageDisplay" begin
         image_display = ImageDisplay()
         Base.show(devnull, image_display)
-        @test mousetrap.is_native_widget(image_display)
+        @test Mousetrap.is_native_widget(image_display)
 
         image = Image(1, 1, RGBA(1, 0, 1, 1))
         create_from_image!(image_display, image)
@@ -1278,7 +1366,7 @@ function test_label(::Container)
         label_string = "label"
         label = Label(label_string)
         Base.show(devnull, label)
-        @test mousetrap.is_native_widget(label)
+        @test Mousetrap.is_native_widget(label)
 
         @test get_ellipsize_mode(label) == ELLIPSIZE_MODE_NONE
         set_ellipsize_mode!(label, ELLIPSIZE_MODE_MIDDLE)
@@ -1324,7 +1412,7 @@ function test_level_bar(::Container)
     @testset "LevelBar" begin    
         level_bar = LevelBar(0, 1)
         Base.show(devnull, level_bar)
-        @test mousetrap.is_native_widget(level_bar)
+        @test Mousetrap.is_native_widget(level_bar)
 
         @test get_max_value(level_bar) == 1
         set_max_value!(level_bar, 2)
@@ -1357,7 +1445,7 @@ function test_list_view(::Container)
     @testset "ListView" begin
         list_view = ListView(ORIENTATION_HORIZONTAL, SELECTION_MODE_MULTIPLE)
         Base.show(devnull, list_view)
-        @test mousetrap.is_native_widget(list_view)
+        @test Mousetrap.is_native_widget(list_view)
 
         @test get_orientation(list_view) == ORIENTATION_HORIZONTAL
         set_orientation!(list_view, ORIENTATION_VERTICAL)
@@ -1405,28 +1493,28 @@ function test_log(::Container)
         name = tempname()
         @test set_log_file!(name) == true
 
-        set_surpress_debug!(mousetrap.MOUSETRAP_DOMAIN, false)
-        set_surpress_info!(mousetrap.MOUSETRAP_DOMAIN, false)
+        set_surpress_debug!(Mousetrap.MOUSETRAP_DOMAIN, false)
+        set_surpress_info!(Mousetrap.MOUSETRAP_DOMAIN, false)
 
         message = "LOG TEST"
-        log_info(mousetrap.MOUSETRAP_DOMAIN, message)
-        log_debug(mousetrap.MOUSETRAP_DOMAIN, message)
-        log_warning(mousetrap.MOUSETRAP_DOMAIN, message)
-        log_critical(mousetrap.MOUSETRAP_DOMAIN, message)
-        # log_fatal(mousetrap.MOUSETRAP_DOMAIN, message) # this would quit runtime 
+        log_info(Mousetrap.MOUSETRAP_DOMAIN, message)
+        log_debug(Mousetrap.MOUSETRAP_DOMAIN, message)
+        log_warning(Mousetrap.MOUSETRAP_DOMAIN, message)
+        log_critical(Mousetrap.MOUSETRAP_DOMAIN, message)
+        # log_fatal(Mousetrap.MOUSETRAP_DOMAIN, message) # this would quit runtime 
 
         file = open(name)
         lines = readlines(file)
         @test isempty(lines) == false
         close(file)
 
-        @test get_surpress_debug(mousetrap.MOUSETRAP_DOMAIN) == false
-        set_surpress_debug!(mousetrap.MOUSETRAP_DOMAIN, true)
-        @test get_surpress_debug(mousetrap.MOUSETRAP_DOMAIN) == true
+        @test get_surpress_debug(Mousetrap.MOUSETRAP_DOMAIN) == false
+        set_surpress_debug!(Mousetrap.MOUSETRAP_DOMAIN, true)
+        @test get_surpress_debug(Mousetrap.MOUSETRAP_DOMAIN) == true
         
-        @test get_surpress_info(mousetrap.MOUSETRAP_DOMAIN) == false
-        set_surpress_info!(mousetrap.MOUSETRAP_DOMAIN, true)
-        @test get_surpress_info(mousetrap.MOUSETRAP_DOMAIN) == true
+        @test get_surpress_info(Mousetrap.MOUSETRAP_DOMAIN) == false
+        set_surpress_info!(Mousetrap.MOUSETRAP_DOMAIN, true)
+        @test get_surpress_info(Mousetrap.MOUSETRAP_DOMAIN) == true
     end
 end
 
@@ -1463,13 +1551,13 @@ function test_menus(::Container)
    
     @testset "MenuBar" begin
         bar = MenuBar(root)
-        @test mousetrap.is_native_widget(bar)
+        @test Mousetrap.is_native_widget(bar)
         Base.show(devnull, bar)
     end
 
     @testset "PopoverMenu" begin
         popover = PopoverMenu(root)
-        @test mousetrap.is_native_widget(popover)
+        @test Mousetrap.is_native_widget(popover)
         Base.show(devnull, popover)
     end
 end
@@ -1482,7 +1570,7 @@ function test_notebook(::Container)
         notebook = Notebook()
 
         Base.show(devnull, notebook)
-        @test mousetrap.is_native_widget(notebook)
+        @test Mousetrap.is_native_widget(notebook)
 
         page_added_called = Ref{Bool}(false)
         connect_signal_page_added!(notebook, page_added_called) do self::Notebook, page_index::Integer, page_added_called
@@ -1567,7 +1655,7 @@ function test_overlay(::Container)
     @testset "Overlay" begin
         overlay = Overlay()
         Base.show(devnull, overlay)
-        @test mousetrap.is_native_widget(overlay)
+        @test Mousetrap.is_native_widget(overlay)
 
         overlay_child = Separator()
 
@@ -1587,7 +1675,7 @@ function test_paned(::Container)
     @testset "Paned" begin
         paned = Paned(ORIENTATION_HORIZONTAL)
         Base.show(devnull, paned)
-        @test mousetrap.is_native_widget(paned)
+        @test Mousetrap.is_native_widget(paned)
 
         set_start_child!(paned, Separator())
         set_end_child!(paned, Separator())
@@ -1630,10 +1718,9 @@ function test_popover(container::Container)
 
     popover = Popover()
 
-    #=
     @testset "Popover" begin
         Base.show(devnull, popover)
-        @test mousetrap.is_native_widget(popover)
+        @test Mousetrap.is_native_widget(popover)
 
         set_child!(popover, Separator())
         id = add_child!(container, popover, "Popover")
@@ -1660,13 +1747,12 @@ function test_popover(container::Container)
 
         remove_child!(container, id)
     end
-    =#
 
     @testset "PopoverButton" begin
         popover_button = PopoverButton(popover)
 
         Base.show(devnull, popover_button)
-        @test mousetrap.is_native_widget(popover_button)
+        @test Mousetrap.is_native_widget(popover_button)
 
         @test get_always_show_arrow(popover_button) == true
         set_always_show_arrow!(popover_button, false)
@@ -1703,13 +1789,50 @@ function test_popover(container::Container)
     end
 end
 
+### POPUP_MESSAGE
+
+function test_popup_message(::Container)
+
+    overlay = PopupMessageOverlay()
+    Base.show(devnull, overlay)
+    set_child!(overlay, Separator())
+
+    message = PopupMessage("title", "button")
+
+    @test get_title(message) == "title"
+    set_title!(message, "not title")
+    @test get_title(message) == "not title"
+
+    @test get_button_label(message) == "button"
+    set_button_label!(message, "not button")
+    @test get_button_label(message) == "not button"
+
+    id = "test_popup_message.action"
+    action = Action(id, Main.app[]) do self end
+    set_button_action!(message, action)
+    @test get_button_action_id(message) == id
+
+    @test get_is_high_priority(message) == false
+    set_is_high_priority!(message, true)
+    @test get_is_high_priority(message) == true
+
+    set_timeout!(message, seconds(1))
+    @test get_timeout(message) == seconds(1)
+
+    connect_signal_dismissed!(message) do self::PopupMessage end
+    connect_signal_button_clicked!(message) do self::PopupMessage end
+    
+    show_message!(overlay, message)
+    remove_child!(overlay)
+end
+
 ### PROGRESS_BAR
 
 function test_progress_bar(::Container)
     @testset "ProgressBar" begin
         progress_bar = ProgressBar()
         Base.show(devnull, progress_bar)
-        @test mousetrap.is_native_widget(progress_bar)
+        @test Mousetrap.is_native_widget(progress_bar)
 
         @test get_fraction(progress_bar) == 0.0
         set_fraction!(progress_bar, 0.5)
@@ -1739,7 +1862,7 @@ function test_revealer(::Container)
     @testset "Revealer" begin
         revealer = Revealer()
         Base.show(devnull, revealer)
-        @test mousetrap.is_native_widget(revealer)
+        @test Mousetrap.is_native_widget(revealer)
 
         revealed_called = Ref{Bool}(false)
         connect_signal_revealed!(revealer, revealed_called) do self::Revealer, revealed_called
@@ -1769,7 +1892,7 @@ function test_action_bar(::Container)
     @testset "ActionBar" begin
         bar = ActionBar()
         Base.show(devnull, bar)
-        @test mousetrap.is_native_widget(bar)
+        @test Mousetrap.is_native_widget(bar)
 
         widget = Label("")
         push_front!(bar, widget)
@@ -1791,7 +1914,7 @@ function test_scale(::Container)
     @testset "Scale" begin
         scale = Scale(0, 1, 0.01)
         Base.show(devnull, scale)
-        @test mousetrap.is_native_widget(scale)
+        @test Mousetrap.is_native_widget(scale)
 
         value_changed_called = Ref{Bool}(false)
         connect_signal_value_changed!(scale, value_changed_called) do self::Scale, value_changed_called
@@ -1841,7 +1964,7 @@ function test_scrollbar(::Container)
     @testset "Scrollbar" begin
         scrollbar = Scrollbar(ORIENTATION_HORIZONTAL, Adjustment(0, 0, 1, 0.01))
         Base.show(devnull, scrollbar)
-        @test mousetrap.is_native_widget(scrollbar)
+        @test Mousetrap.is_native_widget(scrollbar)
         
         @test get_value(get_adjustment(scrollbar)) == 0.0
         
@@ -1862,7 +1985,7 @@ function test_selection_model(::Container)
 
         selection_model = get_selection_model(list_view)
         Base.show(devnull, selection_model)
-        @test mousetrap.is_native_widget(list_view)
+        @test Mousetrap.is_native_widget(list_view)
 
         @test get_n_items(selection_model) == 3
         select!(selection_model, 1)
@@ -1879,7 +2002,7 @@ function test_separator(::Container)
     @testset "Separator" begin
         separator = Separator(ORIENTATION_HORIZONTAL)
         Base.show(devnull, separator)
-        @test mousetrap.is_native_widget(separator)
+        @test Mousetrap.is_native_widget(separator)
 
         @test get_orientation(separator) == ORIENTATION_HORIZONTAL
         set_orientation!(separator, ORIENTATION_VERTICAL)
@@ -1894,7 +2017,7 @@ function test_spin_button(::Container)
 
         scale = SpinButton(0, 1, 0.01)
         Base.show(devnull, scale)
-        @test mousetrap.is_native_widget(scale)
+        @test Mousetrap.is_native_widget(scale)
 
         value_changed_called = Ref{Bool}(false)
         connect_signal_value_changed!(scale, value_changed_called) do self::SpinButton, value_changed_called
@@ -1956,11 +2079,11 @@ function test_spinner(::Container)
     @testset "Spinner" begin
         spinner = Spinner()
         Base.show(devnull, spinner)
-        @test mousetrap.is_native_widget(spinner)
+        @test Mousetrap.is_native_widget(spinner)
 
-        @test get_is_spinning(spinner) == false
-        set_is_spinning!(spinner, true)
         @test get_is_spinning(spinner) == true
+        set_is_spinning!(spinner, false)
+        @test get_is_spinning(spinner) == false
         stop!(spinner)
         @test get_is_spinning(spinner) == false
         start!(spinner)
@@ -1974,7 +2097,7 @@ function test_stack(::Container)
     @testset "Stack" begin
         stack = Stack()
         Base.show(devnull, stack)
-        @test mousetrap.is_native_widget(stack)
+        @test Mousetrap.is_native_widget(stack)
 
         id_01 = add_child!(stack, Separator(), "01")
         id_02 = add_child!(stack, Separator(), "02")
@@ -2016,7 +2139,7 @@ function test_switch(::Container)
     @testset "Switch" begin
         switch = Switch()
         Base.show(devnull, switch)
-        @test mousetrap.is_native_widget(switch)
+        @test Mousetrap.is_native_widget(switch)
 
         switched_called = Ref{Bool}(false)
         connect_signal_switched!(switch, switched_called) do self::Switch, switched_called
@@ -2039,7 +2162,7 @@ function test_text_view(::Container)
     @testset "TextView" begin
         text_view = TextView()
         Base.show(devnull, text_view)
-        @test mousetrap.is_native_widget(text_view)
+        @test Mousetrap.is_native_widget(text_view)
 
         text_changed_called = Ref{Bool}(false)
         connect_signal_text_changed!(text_view, text_changed_called) do self::TextView, text_changed_called
@@ -2086,7 +2209,7 @@ function test_toggle_button(::Container)
         
         button = ToggleButton()
         Base.show(devnull, button)
-        @test mousetrap.is_native_widget(button)
+        @test Mousetrap.is_native_widget(button)
 
         toggled_called = Ref{Bool}(false)
         connect_signal_toggled!(button, toggled_called) do self::ToggleButton, toggled_called
@@ -2132,7 +2255,7 @@ function test_viewport(::Container)
     @testset "Viewport" begin
         viewport = Viewport()
         Base.show(devnull, viewport)
-        @test mousetrap.is_native_widget(viewport)
+        @test Mousetrap.is_native_widget(viewport)
 
         connect_signal_scroll_child!(viewport) do self::Viewport, scroll_type::ScrollType, is_horizontal::Bool
         end
@@ -2174,7 +2297,7 @@ function test_window(::Container)
         
         window = Window(Main.app[])
         Base.show(devnull, window)
-        @test mousetrap.is_native_widget(window)
+        @test Mousetrap.is_native_widget(window)
 
         close_request_called = Ref{Bool}(false)
         connect_signal_close_request!(window, close_request_called) do self::Window, close_request_called
@@ -2361,10 +2484,10 @@ function test_widget(widget::Container)
         @test get_hide_on_overflow(widget) == true
         set_hide_on_overflow!(widget, false)
 
-        mousetrap.add_css_class!(widget, "test")
-        @test !isempty(mousetrap.get_css_classes(widget))
-        mousetrap.remove_css_class!(widget, "test")
-        @test isempty(mousetrap.get_css_classes(widget))
+        Mousetrap.add_css_class!(widget, "test")
+        @test !isempty(Mousetrap.get_css_classes(widget))
+        Mousetrap.remove_css_class!(widget, "test")
+        @test isempty(Mousetrap.get_css_classes(widget))
 
         tick_callback_called = Ref{Bool}(false)
         set_tick_callback!(widget, tick_callback_called) do clock::FrameClock, tick_callback_called
@@ -2401,7 +2524,7 @@ end
 
 function test_render_area(::Container)
 
-    if !mousetrap.MOUSETRAP_ENABLE_OPENGL_COMPONENT
+    if !Mousetrap.MOUSETRAP_ENABLE_OPENGL_COMPONENT || Mousetrap.detail.is_opengl_disabled()
         return
     end
     
@@ -2600,9 +2723,9 @@ function test_render_area(::Container)
             create!(t, 100, 100)
             create_from_image!(t, image)
 
-            mousetrap.download(texture) == image
-            mousetrap.bind(t)
-            mousetrap.unbind(t)
+            Mousetrap.download(texture) == image
+            Mousetrap.bind(t)
+            Mousetrap.unbind(t)
 
             @test get_wrap_mode(t) == TEXTURE_WRAP_MODE_REPEAT
             set_wrap_mode!(t, TEXTURE_WRAP_MODE_STRETCH)
@@ -2666,6 +2789,7 @@ main(Main.app_id) do app::Application
         test_file_descriptor(container)
         test_fixed(container)
         test_frame(container)
+        test_flow_box(container)
         test_gl_transform(container)
         test_grid(container)
         test_grid_view(container)
@@ -2682,6 +2806,7 @@ main(Main.app_id) do app::Application
         test_notebook(container)
         test_overlay(container)
         test_paned(container)
+        test_popup_message(container)
         test_popover(container)
         test_progress_bar(container)
         test_revealer(container)
@@ -2701,7 +2826,7 @@ main(Main.app_id) do app::Application
         test_viewport(container)
         test_widget(container)
         test_window(container)
-        
+
         return nothing
     end
 

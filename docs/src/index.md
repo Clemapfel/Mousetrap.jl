@@ -1,6 +1,6 @@
 # Mousetrap
 
-Welcome to the documentation of mousetrap.jl, a GUI engine for Julia.
+Welcome to the documentation of Mousetrap.jl, a GUI engine for Julia.
 
 This page contains a [manual and tutorial](#manual), as well as an [index](#index) of all [functions](./02_library/functions.md), [classes](./02_library/classes.md), and [enums](./02_library/enums.md).
 
@@ -27,7 +27,8 @@ Pages = [
     "01_manual/07_os_interface.md"
     "01_manual/08_menus.md"
     "01_manual/09_native_rendering.md"
-    "01_manual/10_app_distribution.md"
+    "01_manual/10_theme_customization.md"
+    "01_manual/11_app_distribution.md"
 ]
 
 Depth = 5
@@ -47,7 +48,7 @@ Depth = 5
 
 ### Is it stable / fast / done yet?
 
-As of version 0.1.0, the Linux- and Windows- version of mousetrap are in beta, while the version targeting MacOS is in alpha. For the beta components, stability should mostly be fine, performance remains untested, and there are [multiple features planned for the future](https://github.com/Clemapfel/mousetrap.jl#planned-features).
+As of version 0.2.0, the Linux- and Windows- version of mousetrap are in beta, while the version targeting MacOS is in alpha. For the beta components, stability should mostly be fine, performance remains untested, and there are [multiple features planned for the future](https://github.com/Clemapfel/mousetrap.jl#planned-features).
 
 Only certain parts of mousetrap are available for MacOS and their stability remains untested. See [here](./01_manual/09_native_rendering.md) for more information.
 
@@ -80,6 +81,3 @@ Julia does not use a [build system such as meson](https://mesonbuild.com/) and i
 JuliaComputing and many more contributors are currently working on [`PackageCompiler`](https://github.com/JuliaLang/PackageCompiler.jl), which is supposed to compile a Julia package into a stand-alone binary. Compatibility of mousetrap with `PackageCompiler` remains untested and may be impossible until further work has been put into either `PackageCompiler`, or mousetrap itself. [There is evidence](https://www.reddit.com/r/Julia/comments/14kfyx7/comment/jpuofyg/) that static compilation is one of Julias next big goals. Ideally, when static compilation is working 100% of the time, mousetrap will be polished enough to be considered fully stable and easily distributable, therefore making it usable in production.
 
 Until then, the only way to ship a stand-alone Julia app is to bundle the entire Julia runtime along with the app-specific Julia code and resources, which will usually be a folder with a size of 2 GB or more. Alternatively, developers have to force end users to [install Julia on their machine globally](https://github.com/JuliaLang/juliaup), after which launching the app is as simple as calling (`julia main.jl`) from a shell script.
-
-For more information, see the [~~chapter on app distribution~~](./01_manual/10_app_distribution.md). 
-

@@ -2,7 +2,7 @@
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "d38cb246c287c24def30cb1bf501e7a636185eea"
+project_hash = "a173db013694b3899efa53157d36bb8bea82b354"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -194,12 +194,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXi_jll"]
 git-tree-sha1 = "0333b4790daf4e20cdd61b79cae9b86e2b98f359"
 uuid = "bde7f898-03f7-559e-8810-194d950ce600"
 version = "2.2.0+0"
-
-[[deps.GLU_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pkg"]
-git-tree-sha1 = "65af046f4221e27fb79b28b6ca89dd1d12bc5ec7"
-uuid = "bd17208b-e95e-5925-bf81-e2f59b3e5c61"
-version = "9.0.1+0"
 
 [[deps.GTK4_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "FriBidi_jll", "Glib_jll", "Graphene_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Libepoxy_jll", "Pango_jll", "Wayland_jll", "Wayland_protocols_jll", "Xorg_libX11_jll", "Xorg_libXcursor_jll", "Xorg_libXdamage_jll", "Xorg_libXext_jll", "Xorg_libXfixes_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "Xorg_libXrender_jll", "gdk_pixbuf_jll", "iso_codes_jll", "xkbcommon_jll"]
@@ -987,14 +981,6 @@ git-tree-sha1 = "0c9fc8b986feceffd005c1ab56035a6d26a57bf7"
 repo-rev = "main"
 repo-url = "https://github.com/Clemapfel/mousetrap_apple_jll"
 uuid = "7f2654e2-337a-59f5-9aed-6445982bfb16"
-version = "0.1.0+0"
-
-[[deps.mousetrap_linux_jll]]
-deps = ["Artifacts", "GLEW_jll", "GLU_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "Pkg", "libadwaita_jll", "libcxxwrap_julia_jll", "libjulia_jll"]
-git-tree-sha1 = "035dc6c750076decac54734ebb5b9730c6180d6a"
-repo-rev = "main"
-repo-url = "https://github.com/clemapfel/mousetrap_linux_jll"
-uuid = "b6bb2801-a71f-530d-97b4-a6ed24b69d40"
 version = "0.1.0+0"
 
 [[deps.mousetrap_windows_jll]]

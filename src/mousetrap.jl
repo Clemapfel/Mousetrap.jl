@@ -6,9 +6,7 @@
 # Copyright © 2023, Licensed under lGPL-3.0
 #
 
-module mousetrap
-
-const VERSION = v"0.1.1"
+const VERSION = v"0.2.0"
 
 ####### detail.jl
 
@@ -17,16 +15,17 @@ const VERSION = v"0.1.1"
         function __init__() @initcxx end
 
         using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
-        @static if Sys.isapple()
-            lib = mousetrap_apple_jll.mousetrap_julia_binding
-        elseif Sys.iswindows()
-            lib = mousetrap_windows_jll.mousetrap_julia_binding
-        else
-            lib = mousetrap_linux_jll.mousetrap_julia_binding
+        function get_mousetrap_julia_binding()
+                        @static if Sys.isapple()
+                return mousetrap_apple_jll.mousetrap_julia_binding
+            elseif Sys.iswindows()
+                return mousetrap_windows_jll.mousetrap_julia_binding
+            else
+                return mousetrap_linux_jll.mousetrap_julia_binding
+            end
         end
       
-        #lib = "/home/clem/Workspace/mousetrap_julia_binding/cmake-build-debug/libmousetrap_julia_binding.so"
-        @wrapmodule(lib)
+        @wrapmodule(get_mousetrap_julia_binding)
     end
 
     const MOUSETRAP_ENABLE_OPENGL_COMPONENT = convert(Bool, detail.MOUSETRAP_ENABLE_OPENGL_COMPONENT)
@@ -96,7 +95,7 @@ const VERSION = v"0.1.1"
     See [`log_debug`](@ref).
     """
     macro log_debug(domain, message)
-        return :(mousetrap.detail.log_debug($message, $domain))
+        return :(Mousetrap.detail.log_debug($message, $domain))
     end
     log_debug(domain::LogDomain, message::String) = detail.log_debug(message, domain)
     export @log_debug, log_debug
@@ -105,7 +104,7 @@ const VERSION = v"0.1.1"
     See [`log_info`](@ref).
     """
     macro log_info(domain, message)
-        return :(mousetrap.detail.log_info($message, $domain))
+        return :(Mousetrap.detail.log_info($message, $domain))
     end
     log_info(domain::LogDomain, message::String) = detail.log_info(message, domain)
     export @log_info, log_info
@@ -114,7 +113,7 @@ const VERSION = v"0.1.1"
     See [`log_warning`](@ref).
     """
     macro log_warning(domain, message)
-        return :(mousetrap.detail.log_warning($message, $domain))
+        return :(Mousetrap.detail.log_warning($message, $domain))
     end
     log_warning(domain::LogDomain, message::String) = detail.log_warning(message, domain)
     export @log_warning, log_warning
@@ -123,7 +122,7 @@ const VERSION = v"0.1.1"
     See [`log_critical`](@ref).
     """
     macro log_critical(domain, message)
-        return :(mousetrap.detail.log_critical($message, $domain))
+        return :(Mousetrap.detail.log_critical($message, $domain))
     end
     log_critical(domain::LogDomain, message::String) = detail.log_critical(message, domain)
     export @log_critical, log_critical
@@ -132,7 +131,7 @@ const VERSION = v"0.1.1"
     See [`log_fatal`](@ref).
     """
     macro log_fatal(domain, message)
-        return :(mousetrap.detail.log_fatal($message, $domain))
+        return :(Mousetrap.detail.log_fatal($message, $domain))
     end
     log_fatal(domain::LogDomain, message::String) = detail.log_fatal(message, domain)
     export @log_fatal, log_fatal
@@ -186,7 +185,7 @@ const VERSION = v"0.1.1"
 
         return_t = esc(return_t)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(x::$type) = Base.convert($return_t, detail.$name(x._internal)))
     end
 
@@ -203,7 +202,7 @@ const VERSION = v"0.1.1"
         end
         arg1_name = esc(arg1_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
                 $arg1_name::$arg1_origin_type
@@ -234,7 +233,7 @@ const VERSION = v"0.1.1"
         end
         arg2_name = esc(arg2_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
                 $arg1_name::$arg1_origin_type,
@@ -276,7 +275,7 @@ const VERSION = v"0.1.1"
         end
         arg3_name = esc(arg3_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
                 $arg1_name::$arg1_origin_type,
@@ -329,7 +328,7 @@ const VERSION = v"0.1.1"
         end
         arg4_name = esc(arg4_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :($name(
                 x::$type,
                 $arg1_name::$arg1_origin_type,
@@ -346,7 +345,7 @@ const VERSION = v"0.1.1"
     
     @generated function get_top_level_widget(x) ::Widget
         return :(
-            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
+            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `Mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `Mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
         )
     end
     export get_top_level_widget
@@ -366,11 +365,11 @@ const VERSION = v"0.1.1"
         internal_name = Symbol("_" * "$name")
 
         if !isdefined(detail, :($internal_name))
-            throw(AssertionError("In mousetrap.@export_type: detail.$internal_name undefined"))
+            throw(AssertionError("In Mousetrap.@export_type: detail.$internal_name undefined"))
         end
 
         out = Expr(:toplevel)
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         push!(out.args, :(
             mutable struct $name <: $super
                 _internal::detail.$internal_name
@@ -384,11 +383,11 @@ const VERSION = v"0.1.1"
         internal_name = Symbol("_" * "$name")
 
         if !isdefined(detail, :($internal_name))
-            throw(AssertionError("In mousetrap.@export_type: detail.$internal_name undefined"))
+            throw(AssertionError("In Mousetrap.@export_type: detail.$internal_name undefined"))
         end
 
         out = Expr(:toplevel)
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         push!(out.args, :(
             struct $name
                 _internal::detail.$internal_name
@@ -409,7 +408,7 @@ const VERSION = v"0.1.1"
         @assert isdefined(detail, detail_enum_name)
 
         names = Symbol[]
-        push!(out.args, :(const $(esc(enum)) = mousetrap.detail.$detail_enum_name))
+        push!(out.args, :(const $(esc(enum)) = Mousetrap.detail.$detail_enum_name))
         for name in block.args
             if !(name isa Symbol)
                 continue
@@ -425,10 +424,10 @@ const VERSION = v"0.1.1"
         enum_sym = QuoteNode(enum)
         to_int_name = Symbol(enum) * :_to_int
 
-        push!(out.args, :(Base.string(x::$enum) = string(mousetrap.detail.$to_int_name(x))))
-        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(mousetrap.detail.to_int_name(x))))
+        push!(out.args, :(Base.string(x::$enum) = string(Mousetrap.detail.$to_int_name(x))))
+        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(Mousetrap.detail.to_int_name(x))))
         push!(out.args, :(Base.instances(x::Type{$enum}) = [$(names...)]))
-        push!(out.args, :(Base.show(io::IO, x::Type{$enum}) = print(io, (isdefined(Main, $enum_sym) ? "" : "mousetrap.") * $enum_str)))
+        push!(out.args, :(Base.show(io::IO, x::Type{$enum}) = print(io, (isdefined(Main, $enum_sym) ? "" : "Mousetrap.") * $enum_str)))
         push!(out.args, :(Base.show(io::IO, x::$enum) = print(io, string($enum) * "(" * string(convert(Int64, x)) * ")")))
         return out
     end
@@ -922,6 +921,8 @@ const VERSION = v"0.1.1"
     macro add_signal_shutdown(x) return :(@add_signal $x shutdown Cvoid) end
     macro add_signal_clicked(x) return :(@add_signal $x clicked Cvoid) end
     macro add_signal_toggled(x) return :(@add_signal $x toggled Cvoid) end
+    macro add_signal_dismissed(x) return :(@add_signal $x dismissed Cvoid) end
+    macro add_signal_button_clicked(x) return :(@add_signal $x button_clicked Cvoid) end
     macro add_signal_activate_default_widget(x) return :(@add_signal $x activate_default_widget Cvoid) end
     macro add_signal_activate_focused_widget(x) return :(@add_signal $x activate_focused_widget Cvoid) end
     macro add_signal_close_request(x) return :(@add_signal $x close_request WindowCloseRequestResult) end
@@ -1548,7 +1549,7 @@ const VERSION = v"0.1.1"
 
     Application(id::String; allow_multiple_instances = false) = Application(detail._Application(id, allow_multiple_instances))
 
-    run!(app::Application) ::Cint = mousetrap.detail.run!(app._internal)
+    run!(app::Application) ::Cint = Mousetrap.detail.run!(app._internal)
     export run!
 
     @export_function Application quit! Cvoid
@@ -1575,15 +1576,14 @@ const VERSION = v"0.1.1"
     @add_signal_shutdown Application
 
     function main(f, application_id::String = "com.julia.mousetrap") 
-        
         app = Application(application_id)
         typed_f = TypedFunction(f, Any, (Application,))
-        connect_signal_activate!(app) do app::Application
+        connect_signal_activate!(app)  do app::Application
             try
                 typed_f(app)
             catch(exception)
                 printstyled(stderr, "[ERROR] "; bold = true, color = :red)
-                printstyled(stderr, "In mousetrap.main: "; bold = true)
+                printstyled(stderr, "In Mousetrap.main: "; bold = true)
                 Base.showerror(stderr, exception, catch_backtrace())
                 print(stderr, "\n")
                 quit!(app)
@@ -1591,7 +1591,7 @@ const VERSION = v"0.1.1"
             return nothing
         end
         return run!(app)
-    end 
+    end
     export main
     
     Base.show(io::IO, x::Application) = show_aux(io, x, :is_holding, :is_marked_as_busy)
@@ -2382,6 +2382,60 @@ const VERSION = v"0.1.1"
     end
     export on_selection!
 
+    Base.show(io::IO, x::AlertDialog) = show_aux(io, x)
+
+####### popup_message.jl
+
+    @export_type PopupMessage SignalEmitter
+    PopupMessage(title::String) = PopupMessage(detail._PopupMessage(title, ""))
+    PopupMessage(title::String, button_label::String) = PopupMessage(detail._PopupMessage(title, button_label))
+
+    @export_function PopupMessage set_title! Cvoid String title
+    @export_function PopupMessage get_title String
+    @export_function PopupMessage set_button_label! Cvoid String title
+    @export_function PopupMessage get_button_label String
+
+    set_button_action!(popup_message::PopupMessage, action::Action) = detail.set_button_action!(popup_message._internal, action._internal)
+    export set_button_action!
+
+    @export_function PopupMessage get_button_action_id String
+    @export_function PopupMessage set_is_high_priority! Cvoid Bool b
+    @export_function PopupMessage get_is_high_priority Bool
+    
+    set_timeout!(popup_message::PopupMessage, duration::Time) = detail.set_timeout!(popup_message._internal, convert(Cfloat, as_microseconds(duration)))
+    export set_timeout!
+
+    get_timeout(popup_message::PopupMessage) ::Time = microseconds(detail.get_timeout(popup_message._internal))
+    export get_timeout
+
+    @add_signal_dismissed PopupMessage
+    @add_signal_button_clicked PopupMessage
+
+    Base.show(io::IO, x::PopupMessage) = show_aux(io, x, :title, :button_label, :is_high_priority, :timeout)
+
+####### popup_message_overlay.jl
+
+    @export_type PopupMessageOverlay Widget
+    @declare_native_widget PopupMessageOverlay
+
+    PopupMessageOverlay() = PopupMessageOverlay(detail._PopupMessageOverlay())
+
+    function set_child!(overlay::PopupMessageOverlay, child::Widget)
+        detail.set_child!(overlay._internal, as_widget_pointer(child))
+    end
+    export set_child!
+
+    @export_function PopupMessageOverlay remove_child! Cvoid
+
+    function show_message!(overlay::PopupMessageOverlay, popup_message::PopupMessage)
+        detail.show_message!(overlay._internal, popup_message._internal)
+    end
+    export show_message!
+
+    @add_widget_signals PopupMessageOverlay
+
+    Base.show(io::IO, x::PopupMessageOverlay) = show_aux(io, x)
+
 ####### color_chooser.jl
 
     if detail.GTK_MINOR_VERSION >= 10
@@ -2576,6 +2630,57 @@ const VERSION = v"0.1.1"
     @add_widget_signals Box
 
     Base.show(io::IO, x::Box) = show_aux(io, x, :n_items)
+
+####### flow_box.jl
+
+    @export_type FlowBox Widget
+    @declare_native_widget FlowBox
+
+    FlowBox(orientation::Orientation) = FlowBox(detail._FlowBox(orientation))
+
+    function push_back!(box::FlowBox, widget::Widget)
+        detail.push_back!(box._internal, as_widget_pointer(widget))
+    end
+    export push_back!
+
+    function push_front!(box::FlowBox, widget::Widget)
+        detail.push_front!(box._internal, as_widget_pointer(widget))
+    end
+    export push_front!
+
+    insert_at!(box::FlowBox, index::Integer, widget::Widget) = detail.insert!(box._internal, from_julia_index(index), as_widget_pointer(widget))
+    export insert_at!
+
+    function remove!(box::FlowBox, widget::Widget)
+        detail.remove!(box._internal, as_widget_pointer(widget))
+    end
+    export remove!
+
+    @export_function FlowBox clear! Cvoid
+    @export_function FlowBox set_homogeneous! Cvoid Bool b
+    @export_function FlowBox get_homogeneous Bool
+
+    function set_row_spacing!(box::FlowBox, spacing::Number)
+        detail.set_row_spacing!(box._internal, convert(Cfloat, spacing))
+    end
+    export set_row_spacing!
+    
+    @export_function FlowBox get_row_spacing Cfloat
+
+    function set_column_spacing!(box::FlowBox, spacing::Number)
+        detail.set_column_spacing!(box._internal, convert(Cfloat, spacing))
+    end
+    export set_column_spacing!
+    
+    @export_function FlowBox get_column_spacing Cfloat
+
+    @export_function FlowBox get_n_items Cint
+    @export_function FlowBox get_orientation Orientation
+    @export_function FlowBox set_orientation! Cvoid Orientation orientation
+
+    @add_widget_signals FlowBox
+
+    Base.show(io::IO, x::FlowBox) = show_aux(io, x, :n_items)
 
 ####### button.jl
 
@@ -4063,7 +4168,7 @@ const VERSION = v"0.1.1"
         row_i = get_n_rows(column_view)
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
-            set_widget!(column_view, column, row_i, widgets[i])
+            set_widget_at!(column_view, column, row_i, widgets[i])
         end
     end
     export push_back_row!
@@ -4077,7 +4182,7 @@ const VERSION = v"0.1.1"
         row_i = 1
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
-            set_widget!(column_view, column, row_i, widgets[i])
+            set_widget_at!(column_view, column, from_julia_index(row_i), widgets[i])
         end
     end
     export push_front_row!
@@ -4499,7 +4604,7 @@ const VERSION = v"0.1.1"
 
         return_t = esc(return_t)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         return :(function $name(widget::Widget)            
             return Base.convert($return_t, detail.$name(as_widget_pointer(widget)))
         end)
@@ -4519,7 +4624,7 @@ const VERSION = v"0.1.1"
         end
         arg1_name = esc(arg1_name)
 
-        mousetrap.eval(:(export $name))
+        Mousetrap.eval(:(export $name))
         out = Expr(:toplevel)
         return :(function $name(widget::Widget, $arg1_name::$arg1_origin_type) 
             return Base.convert($return_t, detail.$name(as_widget_pointer(widget), convert($arg1_destination_type, $arg1_name)))
@@ -4560,7 +4665,7 @@ const VERSION = v"0.1.1"
     @export_widget_function get_vertical_alignment Alignment
     @export_widget_function set_alignment! Cvoid Alignment both
 
-    @export_widget_function set_opacity! Cvoid AbstractFloat => Cfloat opacity
+    @export_widget_function set_opacity! Cvoid Number => Cfloat opacity
     @export_widget_function get_opacity Cfloat
     @export_widget_function set_is_visible! Cvoid Bool b
     @export_widget_function get_is_visible Bool
@@ -4693,10 +4798,10 @@ const VERSION = v"0.1.1"
 ### opengl_common.jl
 
     macro define_opengl_error_type(name)
-        message =  "In mousetrap::$name(): `$name` cannot be instantiated, because the mousetrap OpenGL component is disabled for MacOS. It and any function operating on it cannot be used in any way.\n\nSee the manual chapter on native rendering for more information."
+        message =  "In Mousetrap::$name(): `$name` cannot be instantiated, because the Mousetrap OpenGL component is disabled for MacOS. It and any function operating on it cannot be used in any way.\n\nSee the manual chapter on native rendering for more information."
         return :(struct $name
             function $name()
-                mousetrap.log_fatal(mousetrap.MOUSETRAP_DOMAIN, $message)
+                Mousetrap.log_fatal(Mousetrap.MOUSETRAP_DOMAIN, $message)
                 return new()
             end
         end)
@@ -5283,11 +5388,147 @@ else # if MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
 end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
+###### animation.jl
+
+    @export_enum AnimationState begin
+        ANIMATION_STATE_IDLE
+        ANIMATION_STATE_PAUSED
+        ANIMATION_STATE_PLAYING
+        ANIMATION_STATE_DONE
+    end
+
+    @export_enum AnimationTimingFunction begin
+        ANIMATION_TIMING_FUNCTION_LINEAR
+        ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_IN
+        ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_OUT
+        ANIMATION_TIMING_FUNCTION_EXPONENTIAL_SIGMOID
+        ANIMATION_TIMING_FUNCTION_SINE_EASE_IN
+        ANIMATION_TIMING_FUNCTION_SINE_EASE_OUT
+        ANIMATION_TIMING_FUNCTION_SINE_SIGMOID
+        ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_IN
+        ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_OUT
+        ANIMATION_TIMING_FUNCTION_CIRCULAR_SIGMOID
+        ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_IN
+        ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_OUT
+        ANIMATION_TIMING_FUNCTION_OVERSHOOT_SIGMOID
+        ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_IN
+        ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_OUT
+        ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID
+        ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_IN
+        ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_OUT
+        ANIMATION_TIMING_FUNCTION_BOUNCE_SIGMOID
+    end
+
+    @export_type Animation SignalEmitter
+    function Animation(target::Widget, duration::Time) 
+        return Animation(detail._Animation(as_widget_pointer(target), convert(Float32, as_microseconds(duration))))
+    end
+
+    @export_function Animation get_state AnimationState
+    @export_function Animation play! Cvoid
+    @export_function Animation pause! Cvoid
+    @export_function Animation reset! Cvoid
+
+    set_duration!(animation::Animation, duration::Time) = detail.set_duration(animation._internal, as_microseconds(duration))
+    export set_duration!
+
+    get_duration(animation::Animation) ::Time = microseconds(detail.get_duration(animation._internal))
+    export get_duration
+
+    @export_function Animation set_lower! Cvoid Number => Cdouble lower
+    @export_function Animation get_lower Cdouble
+    @export_function Animation set_upper! Cvoid Number => Cdouble upper
+    @export_function Animation get_upper Cdouble
+    @export_function Animation get_value Cdouble
+
+    @export_function Animation get_repeat_count Csize_t
+    @export_function Animation set_repeat_count! Cvoid Integer => Csize_t n
+
+    @export_function Animation get_is_reversed Bool
+    @export_function Animation set_is_reversed! Cvoid Bool is_reversed
+
+    @export_function Animation set_timing_function! Cvoid AnimationTimingFunction tweening_mode
+    @export_function Animation get_timing_function AnimationTimingFunction
+
+    function on_tick!(f, animation::Animation, data::Data_t) where Data_t
+        typed_f = TypedFunction(f, Cvoid, (Animation, AbstractFloat, Data_t))
+        detail.on_tick!(animation._internal, function(animation_ref, value::Cdouble )
+            typed_f(Animation(animation_ref[]), value, data)
+        end)
+    end
+    function on_tick!(f, animation::Animation)
+        typed_f = TypedFunction(f, Cvoid, (Animation, AbstractFloat))
+        detail.on_tick!(animation._internal, function(animation_ref, value::Cdouble)
+            typed_f(Animation(animation_ref[]), value)
+        end)
+    end
+    export on_tick!
+
+    function on_done!(f, animation::Animation, data::Data_t) where Data_t
+        typed_f = TypedFunction(f, Cvoid, (Animation, Data_t))
+        detail.on_done!(animation._internal, function(animation_ref)
+            typed_f(Animation(animation_ref[]), data)
+        end)
+    end
+    function on_done!(f, animation::Animation)
+        typed_f = TypedFunction(f, Cvoid, (Animation,))
+        detail.on_done!(animation._internal, function(animation_ref)
+            typed_f(Animation(animation_ref[]))
+        end)
+    end
+    export on_done!
+
+    Base.show(io::IO, x::Animation) = show_aux(io, x, :value, :lower, :upper, :state, :timing_function)
+
+###### transform_bin.jl
+
+    @export_type TransformBin Widget
+    @declare_native_widget TransformBin
+
+    TransformBin() = TransformBin(detail._TransformBin())
+    function TransformBin(child::Widget)
+        out = TransformBin()
+        set_child!(out, child)
+        return out
+    end
+
+    set_child!(transform_bin::TransformBin, child::Widget) = detail.set_child!(transform_bin._internal, as_widget_pointer(child))
+    export set_child!
+
+    @export_function TransformBin remove_child! Cvoid
+    @export_function TransformBin reset! Cvoid
+    
+    rotate!(bin::TransformBin, angle::Angle) = detail.rotate!(bin._internal, convert(Float32, as_degrees(angle)))
+    export rotate!
+
+    translate!(bin::TransformBin, offset::Vector2f) = detail.translate!(bin._internal, convert(Float32, offset.x), convert(Float32, offset.y))
+    export translate!
+
+    @export_function TransformBin scale! Cvoid Number => Cfloat x Number => Cfloat y
+    scale!(bin::TransformBin, both::Number) = scale!(bin, both, both)
+    
+    @export_function TransformBin skew! Cvoid Number => Cfloat x Number => Cfloat y
+    
+    @add_widget_signals TransformBin
+    Base.show(io::IO, x::TransformBin) = show_aux(io, x)
+
 ###### style.jl
 
     add_css_class!(widget::Widget, class::String) = detail.add_css_class!(as_widget_pointer(widget), class)
+    export add_css_class!
+
     remove_css_class!(widget::Widget, class::String) = detail.remove_css_class!(as_widget_pointer(widget), class)
+    export remove_css_class!
+
     get_css_classes(widget::Widget) ::Vector{String} = detail.get_css_classes(as_widget_pointer(widget))
+    export get_css_classes
+
+    add_css!(code::String) = detail.style_manager_add_css!(code)
+    export add_css!
+
+    serialize(color::RGBA) ::String = detail.style_manager_color_to_css_rgba(color.r, color.g, color.b, color.a)
+    serialize(color::HSVA) ::String = detail.style_manager_color_to_css_hsva(color.h, color.s, color.v, color.a)
+    export serialize
 
 ###### key_codes.jl
 
@@ -5296,5 +5537,3 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 ###### documentation
         
     include("./docs.jl")
-
-end # module mousetrap

@@ -6,18 +6,18 @@
 #
 
 using Documenter, Pkg, InteractiveUtils
-using mousetrap
+using Mousetrap
 
 let file = open("docs/src/02_library/classes.md", "w+")
-    @info "Exporting..."
+    @info "Mousetrap: Exporting Index..."
     write(file, "# Index: Classes\n")
 
     for name in sort(union(
-        mousetrap.types, 
-        mousetrap.signal_emitters, 
-        mousetrap.widgets, 
-        mousetrap.event_controllers, 
-        mousetrap.abstract_types,
+        Mousetrap.types, 
+        Mousetrap.signal_emitters, 
+        Mousetrap.widgets, 
+        Mousetrap.event_controllers, 
+        Mousetrap.abstract_types,
     ))
         if name in [
             :Vector2f, :Vector3f, :Vector4f,
@@ -36,7 +36,7 @@ let file = open("docs/src/02_library/classes.md", "w+")
         out *= "$name\n"
         out *= "```\n"
         
-        binding = getproperty(mousetrap, name)
+        binding = getproperty(Mousetrap, name)
         already_seen = Set{Symbol}()
 
         once = true
@@ -44,12 +44,15 @@ let file = open("docs/src/02_library/classes.md", "w+")
         signal_methods = []
         non_signal_methods = []
 
-        for method in methodswith(binding, mousetrap) 
+        for method in methodswith(binding, Mousetrap) 
             if isnothing(match(r".*_signal_.*", string(method.name)))
                 # first or second argument is type, this is the equivalent of a member function in Julia
                 try
                     if hasproperty(method.sig, :parameters) && (method.sig.parameters[2] == binding || method.sig.parameters[3] == binding)
-                        push!(non_signal_methods, method.name)
+                        if method.name in ["copy!", "flush", "bind", "download"]
+                            method.name = "Mousetrap." * method.name 
+                        end
+                        push!(non_signal_methods, "Mousetrap." * method.name)
                     end
                 catch end
             else
@@ -97,7 +100,7 @@ let file = open("docs/src/02_library/classes.md", "w+")
                     continue
                 elseif binding === String # skip ID typedefs
                     continue
-                elseif getproperty(mousetrap, m) isa Type # omit ctors
+                elseif getproperty(Mousetrap, m) isa Type # omit ctors
                     continue
                 end
 
@@ -113,14 +116,14 @@ let file = open("docs/src/02_library/classes.md", "w+")
 
     file = open("docs/src/02_library/enums.md", "w+")
     write(file, "# Index: Enums\n")
-    for enum_name in mousetrap.enums
+    for enum_name in Mousetrap.enums
         write(file, "## $enum_name\n")
         write(file, "```@docs\n")
         write(file, "$enum_name\n")
-        enum = getproperty(mousetrap, enum_name)
+        enum = getproperty(Mousetrap, enum_name)
         values = []
-        for value_name in mousetrap.enum_values
-            if typeof(getproperty(mousetrap, value_name)) <: enum
+        for value_name in Mousetrap.enum_values
+            if typeof(getproperty(Mousetrap, value_name)) <: enum
                 write(file, "$value_name\n")
             end
         end
@@ -134,14 +137,19 @@ let file = open("docs/src/02_library/classes.md", "w+")
 
     write(file, "# Index: Functions\n")
     
-    for f in mousetrap.functions
+    for f in Mousetrap.functions
         write(file, "## `$f`\n")
         write(file, "```@docs\n")
-        write(file, "mousetrap.$f\n")
+        write(file, "Mousetrap.$f\n")
         write(file, "```\n")
     end
     close(file)
-    @info "Done."
 end 
 
-makedocs(sitename="mousetrap")
+makedocs(
+    sitename="Mousetrap", 
+    format = Documenter.HTML(
+        size_threshold_warn = nothing,
+        size_threshold = Integer(2e+6)
+    )
+)

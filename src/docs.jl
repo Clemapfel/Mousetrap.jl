@@ -18,10 +18,13 @@ const enums = Symbol[]
 const enum_values = Symbol[]
 const key_codes = Symbol[]
 const other = Symbol[]
+const style_properties = Symbol[]
+const style_targets = Symbol[]
+const style_classes = Symbol[]
 
-for n in names(mousetrap)
+for n in names(Mousetrap)
 
-    binding = getproperty(mousetrap, n)
+    binding = getproperty(Mousetrap, n)
 
     if binding isa Type
         if isabstracttype(binding)
@@ -43,6 +46,12 @@ for n in names(mousetrap)
                 push!(functions, n)
             end
         #end
+    elseif occursin("STYLE_PROPERTY_", string(n))
+        push!(style_properties, n)
+    elseif occursin("STYLE_TARGET_", string(n))
+        push!(style_targets, n)
+    elseif occursin("STYLE_CLASS_", string(n))
+        push!(style_classes, n)    
     elseif occursin("KEY_", string(n))
         push!(key_codes, Symbol(string(n)[5:end])) # omit `KEY_`
     elseif typeof(binding) <: Int64
@@ -134,7 +143,7 @@ function abstract_type_docs(type_in, super_type, brief)
 
     for type in sort(subtypes)
         to_append = "+ [`$type`](@ref)\n"
-        out *= replace(to_append, "mousetrap." => "")
+        out *= replace(to_append, "Mousetrap." => "")
     end
     return out
 end
@@ -240,10 +249,10 @@ end
 
 @do_not_compile const _generate_function_docs = quote
 
-    for name in mousetrap.functions
+    for name in Mousetrap.functions
 
         method_list = ""
-        method_table = methods(getproperty(mousetrap, name))
+        method_table = methods(getproperty(Mousetrap, name))
         for i in eachindex(method_table)
             as_string = string(method_table[i])
             method_list *= as_string[1:match(r" \@.*", as_string).offset]
@@ -266,14 +275,14 @@ end
 @do_not_compile const _generate_type_docs = quote
     
     for name in sort(union(
-        mousetrap.types, 
-        mousetrap.signal_emitters, 
-        mousetrap.widgets, 
-        mousetrap.event_controllers, 
-        mousetrap.abstract_types    
+        Mousetrap.types, 
+        Mousetrap.signal_emitters, 
+        Mousetrap.widgets, 
+        Mousetrap.event_controllers, 
+        Mousetrap.abstract_types    
     ))
 
-        if name in mousetrap.types
+        if name in Mousetrap.types
             println("""
             @document $name \"\"\"
                 ## $name
@@ -287,7 +296,7 @@ end
                 ))
             \"\"\"
             """)
-        elseif name in mousetrap.abstract_types
+        elseif name in Mousetrap.abstract_types
             println("""
             @document $name abstract_type_docs($name, Any, \"\"\"
                 TODO
@@ -296,11 +305,11 @@ end
         else
             super = ""
 
-            if name in mousetrap.event_controllers
+            if name in Mousetrap.event_controllers
                 super = "EventController"
-            elseif name in mousetrap.widgets
+            elseif name in Mousetrap.widgets
                 super = "Widget"
-            elseif name in mousetrap.signal_emitters
+            elseif name in Mousetrap.signal_emitters
                 super = "SignalEmitter"
             else
                 continue
@@ -326,11 +335,11 @@ end
 end
 
 @do_not_compile const _generate_enum_docs = quote
-    for enum_name in mousetrap.enums
-        enum = getproperty(mousetrap, enum_name)
+    for enum_name in Mousetrap.enums
+        enum = getproperty(Mousetrap, enum_name)
         values = []
-        for value_name in mousetrap.enum_values
-            if typeof(getproperty(mousetrap, value_name)) <: enum
+        for value_name in Mousetrap.enum_values
+            if typeof(getproperty(Mousetrap, value_name)) <: enum
                 push!(values, value_name)
             end
         end

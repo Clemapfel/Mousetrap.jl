@@ -24,7 +24,7 @@ To receive events, we need an [`EventController`](@ref). The `EventController` t
 
 ## Input Focus
 
-The concept of [**input focus**](https://en.wikipedia.org/wiki/Focus_(computing)) is important to understand. In mousetrap (and GUIs in general), each widget has a hidden property that indicates whether the widget currently **holds focus**. If a widget holds focus, all its children hold focus as well. For example, if the focused widget is a `Box`, all widgets inside that box also hold focus.
+The concept of [**input focus**](https://en.wikipedia.org/wiki/Focus_(computing)) is important to understand. In Mousetrap (and GUIs in general), each widget has a hidden property that indicates whether the widget currently **holds focus**. If a widget holds focus, all its children hold focus as well. For example, if the focused widget is a `Box`, all widgets inside that box also hold focus.
 
 **Only a widget holding focus can receive input events**. Which widget acquires focus is controlled by a somewhat complex heuristic, usually using things like which window is on top and where the user last interacted with the GUI. For most situations, this mechanism works very well and we don't have to worry about it much, in the rare cases we do, we can control the focus directly.
 
@@ -68,8 +68,8 @@ While the controller will now receive events, nothing else will happen. We need 
 `FocusEventController` has two signals:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(FocusEventController,
+using Mousetrap
+return Mousetrap.@signal_table(FocusEventController,
     focus_gained,
     focus_lost
 )
@@ -104,12 +104,12 @@ Monitoring focus is rarely necessary, for something much more commonly used, we 
 
 From the [chapter on actions](./03_actions.md) we recall that keyboard keys are split into two groups, **modifiers** and **non-modifiers**. Like with shortcut triggers, these are handled separately.
 
-Each non-modifier key has a key-code, which will be a constant defined by `mousetrap`. A full list of constants is available [here](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl), or as the global `mousetrap.key_codes`, which provides a human-readable way to identify keys. 
+Each non-modifier key has a key-code, which will be a constant defined by `Mousetrap`. A full list of constants is available [here](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl), or as the global `Mousetrap.key_codes`, which provides a human-readable way to identify keys. 
 
-For example, to refer to the space key, mousetrap uses a hard-coded integer internally. We as developers do not need to remember this value, instead, we use the `KEY_space` constant:
+For example, to refer to the space key, Mousetrap uses a hard-coded integer internally. We as developers do not need to remember this value, instead, we use the `KEY_space` constant:
 
 ```@repl
-using mousetrap
+using Mousetrap
 KEY_space
 ```
 
@@ -118,8 +118,8 @@ KEY_space
 Now that we know how to identify keys, we can instance `KeyEventController`, which has 3 signals:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(KeyEventController,
+using Mousetrap
+return Mousetrap.@signal_table(KeyEventController,
     key_pressed,
     key_released,
     modifiers_changed
@@ -203,8 +203,8 @@ of events a mouse can emit, **cursor motion**  and **mouse button presses**. The
 For cursor motion, the event controller is called [`MotionEventController`](@ref), which has 3 signals:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(MotionEventController,
+using Mousetrap
+return Mousetrap.@signal_table(MotionEventController,
     motion_enter,
     motion,
     motion_leave
@@ -258,8 +258,8 @@ A mouse button is... any button on a mouse, which is less intuitive than it soun
 We track mouse button presses with [`ClickEventController`](@ref) which has 3 signals:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(ClickEventController,
+using Mousetrap
+return Mousetrap.@signal_table(ClickEventController,
     click_pressed,
     click_released,
     click_stopped
@@ -280,7 +280,7 @@ Let's say the user clicks the left mouse button two times total, then stops clic
 | 4 | `click_released` | 2 |
 | 5 | `click_stopped`| (none) |
 
-Thanks to the `n_pressed` argument, we can easily handle double-clicks without any external function keeping track of how often the user has clicked so far. The delay after which a click sequence stops is system-dependent and usually decided by the user's operating system, not mousetrap.
+Thanks to the `n_pressed` argument, we can easily handle double-clicks without any external function keeping track of how often the user has clicked so far. The delay after which a click sequence stops is system-dependent and usually decided by the user's operating system, not Mousetrap.
 
 ### Differentiating Mouse Buttons
 
@@ -335,8 +335,8 @@ controller for a similar, but slightly different gesture: *long presses*.
 [`LongPressEventController`](@ref) reacts to a specific sequence of events, called a **long press** gesture. This gesture is recognized when the user presses a mouse button, then keeps that button depressed without moving the cursor. After enough time has passed, `LongPressEventController` will emit its signals:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(LongPressEventController,
+using Mousetrap
+return Mousetrap.@signal_table(LongPressEventController,
     pressed,
     press_cancelled
 )
@@ -372,8 +372,8 @@ A long press is a gesture in which a user clicks a mouse button, does not move t
 Click-dragging gestures are automatically recognized by [`DragEventController`](@ref), which has three signals:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(DragEventController,
+using Mousetrap
+return Mousetrap.@signal_table(DragEventController,
     drag_begin,
     drag,
     drag_end
@@ -426,8 +426,8 @@ A pan controller cannot listen to both axes at once, though we can connect two c
 `PanEventController` only has one signal:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(PanEventController,
+using Mousetrap
+return Mousetrap.@signal_table(PanEventController,
     pan
 )
 ```
@@ -459,8 +459,8 @@ add_controller!(window, pan_controller)
 Other than clicking and cursor movement, many mice have a third function: scrolling. This is usually done with a designated wheel, though some operating systems also recognize scroll gestures using a trackpad or touchscreen. Either way, scroll events are registered by [`ScrollEventController`](@ref), which has four signals:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(ScrollEventController,
+using Mousetrap
+return Mousetrap.@signal_table(ScrollEventController,
     scroll_begin,
     scroll,
     scroll_end,
@@ -531,13 +531,13 @@ connect_signal_kinetic_scroll_decelerate!(on_kinetic_scroll_decelerate, scroll_c
 
 ## Pinch-Zoom: PinchZoomEventController
 
-While `MotionEventController`, `ClickEventController`, etc. recognize both events from a mouse and touchscreen, mousetrap offers some touch-only gestures, though many trackpads also support them. These are usually gestures performed using two fingers, the first of which is **pinch-zoom**. Pinch-zoom is when the user places two fingers on the touchscreen, then moves either, such that the distance between the fingers changes. This gesture is commonly used to zoom a view in or out. 
+While `MotionEventController`, `ClickEventController`, etc. recognize both events from a mouse and touchscreen, Mousetrap offers some touch-only gestures, though many trackpads also support them. These are usually gestures performed using two fingers, the first of which is **pinch-zoom**. Pinch-zoom is when the user places two fingers on the touchscreen, then moves either, such that the distance between the fingers changes. This gesture is commonly used to zoom a view in or out. 
 
 It is recognized by [`PinchZoomEventController`](@ref), which only has one signal:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(PinchZoomEventController,
+using Mousetrap
+return Mousetrap.@signal_table(PinchZoomEventController,
     scale_changed
 )
 ```
@@ -571,18 +571,18 @@ Another touch-only gesture is the **two-finger-rotate**. With this gesture, the 
 This gesture is handled by [`RotateEventController`](@ref), which has one signal:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(RotateEventController,
+using Mousetrap
+return Mousetrap.@signal_table(RotateEventController,
     rotation_changed
 )
 ```
 
-It takes two arguments: `angle_absolute` and `angle_delta`. `angle_absolute` provides the current angle between the two fingers. `angle_delta` is the difference between the current angle and the angle at the start of the gesture.  Both `angle_absolute` and `angle_delta` are provided in radians, to convert them we can use [`mousetrap.Angle`](@ref):
+It takes two arguments: `angle_absolute` and `angle_delta`. `angle_absolute` provides the current angle between the two fingers. `angle_delta` is the difference between the current angle and the angle at the start of the gesture.  Both `angle_absolute` and `angle_delta` are provided in radians, to convert them we can use [`Mousetrap.Angle`](@ref):
 
 ```julia
 function on_rotation_changed(self::RotateEventController, angle_delta, angle_absolute)
 
-    # convert to unit-agnostic mousetrap.Angle
+    # convert to unit-agnostic Mousetrap.Angle
     absolute = radians(angle_absolute)
     delta = radians(angle_delta)
 
@@ -603,8 +603,8 @@ The last touch-only gesture is **swiping**, which is very similar to click-dragg
 Swiping is recognized by [`SwipeEventController`](@ref), which also only has one signal:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(SwipeEventController,
+using Mousetrap
+return Mousetrap.@signal_table(SwipeEventController,
     swipe
 )
 ```
@@ -649,8 +649,8 @@ Additional features such as pressure or angle detection are manufacturer-specifi
 `StylusEventController` has four signals:
 
 ```@eval
-using mousetrap
-return mousetrap.@signal_table(StylusEventController,
+using Mousetrap
+return Mousetrap.@signal_table(StylusEventController,
     stylus_up,
     stylus_down,
     proximity,
@@ -690,7 +690,7 @@ add_controller!(window, stylus_controller)
 
 ### Stylus Axis
 
-None of the above-mentioned signals provide information about additional stylus sensors. Because not all devices share these features, the mechanism for querying these are different. Each sensor provides a floating point value within a given range. This range is called a **device axis**. Axes are described by the enum [`DeviceAxis`](@ref), whose values identify all types of axes recognized by mousetrap.
+None of the above-mentioned signals provide information about additional stylus sensors. Because not all devices share these features, the mechanism for querying these are different. Each sensor provides a floating point value within a given range. This range is called a **device axis**. Axes are described by the enum [`DeviceAxis`](@ref), whose values identify all types of axes recognized by Mousetrap.
 
 We can query the value of each axis using [`get_axis_value`](@ref). This function will return 0 if the axis is not present. If it is, it will return the device-supplied axis-specific value. 
 

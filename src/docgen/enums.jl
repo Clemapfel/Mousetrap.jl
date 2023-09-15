@@ -14,7 +14,61 @@
 ])
 @document ALIGNMENT_START "Aligned left if horizontal, top if vertical"
 @document ALIGNMENT_CENTER "Aligned centered, regardless of orientation"
-@document ALIGNMENT_END "Aligned right if horizontal, bottom if vertical."
+@document ALIGNMENT_END "Aligned right if horizontal, bottom if vertical"
+
+@document AnimationState enum_docs(:AnimationState, 
+    "Current state of the animation.", [
+    :ANIMATION_STATE_IDLE,
+    :ANIMATION_STATE_PAUSED,
+    :ANIMATION_STATE_PLAYING,
+    :ANIMATION_STATE_DONE,
+])
+@document ANIMATION_STATE_IDLE "Initial state of the animation"
+@document ANIMATION_STATE_PAUSED "Playing was started but `pause!` was called"
+@document ANIMATION_STATE_PLAYING "Playing was started using `play!`"
+@document ANIMATION_STATE_DONE "Animation went through all of its cycles and is now done"
+
+@document AnimationTimingFunction enum_docs(:AnimationTimingFunction, 
+    "Shape of the mathematical function that will be used to generate the `Animation`s value over its duration.", [
+    :ANIMATION_TIMING_FUNCTION_LINEAR,
+    :ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_OUT,
+    :ANIMATION_TIMING_FUNCTION_EXPONENTIAL_SIGMOID,
+    :ANIMATION_TIMING_FUNCTION_SINE_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_SINE_EASE_OUT,
+    :ANIMATION_TIMING_FUNCTION_SINE_SIGMOID,
+    :ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_OUT,
+    :ANIMATION_TIMING_FUNCTION_CIRCULAR_SIGMOID,
+    :ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_OUT,
+    :ANIMATION_TIMING_FUNCTION_OVERSHOOT_SIGMOID,
+    :ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_OUT,
+    :ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID,
+    :ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_IN,
+    :ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_OUT,
+    :ANIMATION_TIMING_FUNCTION_BOUNCE_SIGMOID
+])
+@document ANIMATION_TIMING_FUNCTION_LINEAR "strictly increasing, linear shape"
+@document ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_IN "strictly increasing, exponential ease in"
+@document ANIMATION_TIMING_FUNCTION_EXPONENTIAL_EASE_OUT "strictly decreasing, exponential ease out"
+@document ANIMATION_TIMING_FUNCTION_EXPONENTIAL_SIGMOID "strictly increasing, exponential east in and ease out"
+@document ANIMATION_TIMING_FUNCTION_SINE_EASE_IN "strictly increasing, sinusoid ease in"
+@document ANIMATION_TIMING_FUNCTION_SINE_EASE_OUT "strictly decreasing, sinusoid ease out"
+@document ANIMATION_TIMING_FUNCTION_SINE_SIGMOID "strictly increasing, sinusoid ease in and ease out"
+@document ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_IN "strictly increasing, circular ease in"
+@document ANIMATION_TIMING_FUNCTION_CIRCULAR_EASE_OUT "strictly decreasing, circular ease out"
+@document ANIMATION_TIMING_FUNCTION_CIRCULAR_SIGMOID "strictly increasing, circular east in and ease out"
+@document ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_IN "undershoots `lower`, then increases, ease in"
+@document ANIMATION_TIMING_FUNCTION_OVERSHOOT_EASE_OUT "increases, then overshoots above `higher`, ease out"
+@document ANIMATION_TIMING_FUNCTION_OVERSHOOT_SIGMOID "undershoots `lower`, increases, then overshoots `higher`, ease in and ease out"
+@document ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_IN "simulates stretching of a spring, ease in"
+@document ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_OUT "simulates stretching of a spring, ease out"
+@document ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID "simulates stretching of a spring, ease in and ease out"
+@document ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_IN "simulates bouncing of a ball under gravity, ease in"
+@document ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_OUT "simulates bouncing of a ball under gravtiy, ease out"
+@document ANIMATION_TIMING_FUNCTION_BOUNCE_SIGMOID "simulates bouncing of a ball under gravity, ease in and ease out"
 
 @document AntiAliasingQuality enum_docs(:AntiAliasingQuality,
     "Number of samples when performing multi-sampled anti aliasing (MSAA).", [

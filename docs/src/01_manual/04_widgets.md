@@ -3,7 +3,7 @@
 In this chapter, we will learn:
 + What a widget is
 + Properties that all widgets share
-+ What widgets are available in mousetrap and how to use each of them
++ What widgets are available in Mousetrap and how to use each of them
 + How to create compound widgets
 
 ---
@@ -11,7 +11,7 @@ In this chapter, we will learn:
 !!! note "Running snippets from this Chapter"
     To run any partial code snippet from this section, we can use the following `main.jl` file:
     ```julia
-    using mousetrap
+    using Mousetrap
     main() do app::Application
         window = Window(app)
 
@@ -22,7 +22,7 @@ In this chapter, we will learn:
     ```
 
 !!! note "Images in this Chapter"
-    Images for this chapter were captured on a Fedora Linux machine running Gnome 44.2. The exact look of each window and widget may be slightly different, depending on the users operating system and application theme. We will learn how to manually change the global theme in the [section on app customization](./07_os_interface.md#theme).
+    Images for this chapter were captured on a Fedora Linux machine running Gnome 44.2. The exact look of each window and widget may be slightly different, depending on the users operating system and application theme. We will learn how to manually change the look of widgets by creating our own theme in the [section on app customization](./10_theme_customization.md).
 
 ---
 
@@ -36,7 +36,7 @@ Having used computers for many years, most of us never think about how things wo
 
 ## Widget Signals
 
-In mousetrap, [`Widget`](@ref) is an abstract type that all widgets subtype. `Widget` is a subtype of `SignalEmitter`, meaning
+In Mousetrap, [`Widget`](@ref) is an abstract type that all widgets subtype. `Widget` is a subtype of `SignalEmitter`, meaning
 all widgets are signal emitters, but not all signal emitters are widgets. 
 
 All widgets **share a number of signals**. These signals are accessible for every subtype of `Widget`:
@@ -85,7 +85,7 @@ push_back!(box_b, button)
 This latter call will print a warning
 
 ```
-(julia:445703): mousetrap-CRITICAL **: 18:13:31.132: In Box::push_back: Attemping to insert widget into a container, but that widget already has a parent.
+(julia:445703): Mousetrap-CRITICAL **: 18:13:31.132: In Box::push_back: Attemping to insert widget into a container, but that widget already has a parent.
 ```
 
 because `button`s parent is already `box_a`. Instead, we should create two buttons:
@@ -120,13 +120,13 @@ This size may or may not be equal to what we size-hinted the widget to, as size-
 
 Lastly, [`get_natural_size`](@ref) will access the size preferred by the layout manager. This size will always be equal to or larger than the size request. When trying to predict the size a widget has, `get_natural_size` will give us the best estimate. Once the widget and all its children are realized, `get_allocated_size` and `get_position`  will gives us the exact value.
 
-Layout management is complex and the algorithm behind managing the size of the totality of all widgets is sophisiticated. Users of mousetrap are not required to understand this exact mechanism, only how to influence it.
+Layout management is complex and the algorithm behind managing the size of the totality of all widgets is sophisiticated. Users of Mousetrap are not required to understand this exact mechanism, only how to influence it.
 
 On top of a widgets size request, a widgets final allocated size depends on a number of other variables.
 
 ### Margin
 
-Any widget has four margins: `start`, `end`, `top` and `bottom`. Usually, these correspond to empty space left, right, above, and below the widget, respectively. Margins are rendered as empty space added to the corresponding side of the widget. In this way, they work similar to the [css properties of the same name](https://www.w3schools.com/css/css_margin.asp), though in mousetrap, margins may not be negative.
+Any widget has four margins: `start`, `end`, `top` and `bottom`. Usually, these correspond to empty space left, right, above, and below the widget, respectively. Margins are rendered as empty space added to the corresponding side of the widget. In this way, they work similar to the [css properties of the same name](https://www.w3schools.com/css/css_margin.asp), though in Mousetrap, margins may not be negative.
 
 We use [`set_margin_start!`](@ref), [`set_margin_end!`](@ref), [`set_margin_top!`](@ref) and [`set_margin_bottom!`](@ref) to control each individual margin:
 
@@ -343,8 +343,8 @@ At any point we can call `close!`, which hides the window. This does not destroy
 `Window` has three signals, only the latter of which is relevant to us for now.
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(Window,
+using Mousetrap
+Mousetrap.@signal_table(Window,
     activate_default_widget,
     activate_focused_widget,
     close_request
@@ -443,7 +443,7 @@ If a line is too long for the available space and wrapping is disabled, **ellips
 
 ### Markup
 
-Labels support **markup**, which allows users to change properties about individual words or characters in a way similar to text formatting in HTML. Markup in mousetrap uses [Pango attributes](https://docs.gtk.org/Pango/pango_markup.html), which allows for styles including the following:
+Labels support **markup**, which allows users to change properties about individual words or characters in a way similar to text formatting in HTML. Markup in Mousetrap uses [Pango attributes](https://docs.gtk.org/Pango/pango_markup.html), which allows for styles including the following:
 
 | Tag          | Example                  | Result                  |
 |--------------|--------------------------|-------------------------|
@@ -458,10 +458,10 @@ Labels support **markup**, which allows users to change properties about individ
 | `sup`        | `x<sup>superscript</sup>` | x<sup>superscript</sup> |
 | `&#` and `;` | `&#129700;`              | 🪤                      | 
 
-Where in the last row, we used the [decimal html code](https://www.compart.com/en/unicode/U+1FAA4) for the mousetrap emoji provided by unicode.
+Where in the last row, we used the [decimal html code](https://www.compart.com/en/unicode/U+1FAA4) for the Mousetrap emoji provided by unicode.
 
 !!! warning
-    Pango only accepts the **decimal** code, not *hexadecimal*. For example, the mousetrap emoji has the decimal code `129700`, while its hexadecimal code is `x1FAA4`. 
+    Pango only accepts the **decimal** code, not *hexadecimal*. For example, the Mousetrap emoji has the decimal code `129700`, while its hexadecimal code is `x1FAA4`. 
     To use this emote in text, we choose `&#129700;`, **not** `&#x1FAA4;`. The latter will not work.
 
 !!! note 
@@ -548,6 +548,21 @@ Using `CenterBox`s constructor, we can also write the above as a one-liner:
 ```julia
 center_box = CenterBox(ORIENTATION_HORIZONTAL, Label("start"), Button(), Label("end"))
 ```
+
+---
+
+## FlowBox
+
+Third of the `Box` relatives, we have [`FlowBox`](@ref). This widget is similiar to `Box`, except that it will **redistribute** its children along more than one row (or column, if vertical) depending on the available width (or height) of the `FlowBox`. This is useful for situations where we want to group a number of widgets in a way that does not impact resizability.
+
+```julia
+flow_box = FlowBox(ORIENTATION_VERTICAL)
+for i in 1:7 
+    push_back!(flow_box, Label(string(i)))
+end
+```
+
+![](../assets/flow_box.png)
 
 ---
 
@@ -671,8 +686,8 @@ Familiar from previous chapters, [`Button`](@ref) is commonly used to trigger be
 It has one signal, which is emitted when the button is activated:
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(Button,
+using Mousetrap
+Mousetrap.@signal_table(Button,
     clicked
 )
 ```
@@ -685,7 +700,7 @@ We can manually emit this signal using `emit_signal_clicked`, or by calling `act
 
 !!! details "How to generate this image"
     ```julia
-    using mousetrap
+    using Mousetrap
     main() do app::Application
         window = Window(app)
     
@@ -725,8 +740,8 @@ Where the above shown buttons have the following properties:
 Unique to `ToggleButton` is that, if clicked, the button will **remain pressed**. When clicked again, it returns to being unpressed. Anytime the state of the `ToggleButton` changes, signal `toggled` will be emitted. In this way, `ToggleButton` can be used to track a boolean state.
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(ToggleButton,
+using Mousetrap
+Mousetrap.@signal_table(ToggleButton,
     toggled,
     clicked
 )
@@ -749,10 +764,9 @@ set_child!(window, toggle_button)
 [`CheckButton`](@ref) is very similar to `ToggleButton` in function - but not appearance. `CheckButton` is an empty box in which a checkmark appears when it is toggled. Just like before, we query whether it is pressed by calling `get_is_active`. 
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(ToggleButton,
-    toggled,
-    clicked
+using Mousetrap
+Mousetrap.@signal_table(ToggleButton,
+    toggled
 )
 ```
 
@@ -762,7 +776,7 @@ mousetrap.@signal_table(ToggleButton,
 
 !!! details "How to generate this image"
     ```julia
-    using mousetrap
+    using Mousetrap
     main() do app::Application
     
         window = Window(app)
@@ -800,8 +814,8 @@ Note that `get_is_active` will only return `true` if the current state is specif
 As the last widget intended to convey a boolean state to the user, we have [`Switch`](@ref), which has an appearance similar to a light switch. `Switch` does not emit `toggled`, instead, we connect to the `switched` signal, which is emitted anytime the switch's internal state changes:
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(Switch,
+using Mousetrap
+Mousetrap.@signal_table(Switch,
     switched
 )
 ```
@@ -842,7 +856,7 @@ mousetrap.@signal_table(Switch,
 
 ## Adjustment
 
-From widgets conveying a boolean state, we'll now move on to widgets conveying a discrete number. These let the user choose a value from a **range**, which, in mousetrap, is represented by a signal emitter called [`Adjustment`](@ref).
+From widgets conveying a boolean state, we'll now move on to widgets conveying a discrete number. These let the user choose a value from a **range**, which, in Mousetrap, is represented by a signal emitter called [`Adjustment`](@ref).
 
 `Adjustment` has four properties:
 
@@ -868,8 +882,8 @@ We usually do not need to create our own `Adjustment`, rather, it is provided by
 `Adjustment` has two signals:
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(Adjustment,
+using Mousetrap
+Mousetrap.@signal_table(Adjustment,
     value_changed,
     properties_changed
 )
@@ -1158,8 +1172,8 @@ To enter password mode, we set [`set_text_visible!`](@ref) to `false`. Note that
 Lastly, `Entry` is **activatable**, when the user presses the enter key while the cursor is inside the entries text area, it will emit signal `activate`. Its other signal, `text_changed`, is emitted whenever the internal text buffer changes: 
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(Entry,
+using Mousetrap
+Mousetrap.@signal_table(Entry,
     activate,
     text_changed
 )
@@ -1186,8 +1200,8 @@ Much like `Label`, we can set how the text aligns horizontally using `set_justif
 `TextView` does **not** have the `activate` signal, pressing enter while the cursor is inside the widget will simply create a new line. Instead, it only has signal `text_changed`, which behaves identical to that of `Entry`:
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(TextView,
+using Mousetrap
+Mousetrap.@signal_table(TextView,
     text_changed
 )
 ```
@@ -1439,7 +1453,7 @@ set_child!(revealer, #= widget =#)
 set_transition_duration!(revealer, seconds(1));
 ```
 
-Where `seconds` returns a [`mousetrap.Time`](@ref).
+Where `seconds` returns a [`Mousetrap.Time`](@ref).
 
 Apart from the speed, we also have a choice of animation **type**, represented by the enum [`RevealerTransitionType`](@ref). Animations include a simple cross-fade, sliding, swinging, or no animation at all, which instantly shows or hides the widget.
 
@@ -1621,7 +1635,7 @@ Showing the popover is called **popup**, closing the popover is called **popdown
 
 !!! details "How to generate this image"
     ```julia
-    using mousetrap
+    using Mousetrap
 
     main() do app::Application
         window = Window(app)
@@ -1645,15 +1659,15 @@ Showing the popover is called **popup**, closing the popover is called **popdown
     end
     ```
 
-Manually calling `popup!` or `popdown!` to show / hide the `Popover` can be bothersome. To address this, mousetrap offers a widget that automatically manages the popover for us: [`PopoverButton`](@ref)
+Manually calling `popup!` or `popdown!` to show / hide the `Popover` can be bothersome. To address this, Mousetrap offers a widget that automatically manages the popover for us: [`PopoverButton`](@ref)
 
 ## PopoverButton
 
 `PopoverButton` has a single child and one signal: `activate`:
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(PopoverButton,
+using Mousetrap
+Mousetrap.@signal_table(PopoverButton,
     activate
 )
 ```
@@ -1673,7 +1687,7 @@ Additionally, an arrow is shown next to the label of the `PopoverButton`, indica
 
 ## SelectionModel
 
-We will now move on to **selectable widgets**, which tend to be the most complex and powerful widgets in mousetrap.
+We will now move on to **selectable widgets**, which tend to be the most complex and powerful widgets in Mousetrap.
 
 All selectable widgets have on thing in common: their multiple children are managed by a **selection model**. This model is a list of widgets. For each widget, the model will keep track of whether that widget is currently selected. If it is, a graphical element will be added to the selectable widget that indicates to the user which item(s) are currently selected:
 
@@ -1852,7 +1866,7 @@ set_widget_at!(column_view, column_01, Label("03"))
         println("called")
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
+        set_title!(window, "Mousetrap.jl")
 
         column_view = ColumnView()
 
@@ -2028,13 +2042,13 @@ Not to be confused with `GridView`, [`Grid`](@ref) arranges its children in a **
         
         grid = Grid()
 
-        mousetrap.insert_at!(grid, generate_child("01"), 1, 1, 2, 1)
-        mousetrap.insert_at!(grid, generate_child("02"), 3, 1, 1, 2)
-        mousetrap.insert_at!(grid, generate_child("03"), 4, 1, 1, 1)
-        mousetrap.insert_at!(grid, generate_child("04"), 1, 2, 1, 2)
-        mousetrap.insert_at!(grid, generate_child("05"), 2, 2, 1, 1)
-        mousetrap.insert_at!(grid, generate_child("06"), 4, 2, 1, 1)
-        mousetrap.insert_at!(grid, generate_child("07"), 2, 3, 3, 1)
+        Mousetrap.insert_at!(grid, generate_child("01"), 1, 1, 2, 1)
+        Mousetrap.insert_at!(grid, generate_child("02"), 3, 1, 1, 2)
+        Mousetrap.insert_at!(grid, generate_child("03"), 4, 1, 1, 1)
+        Mousetrap.insert_at!(grid, generate_child("04"), 1, 2, 1, 2)
+        Mousetrap.insert_at!(grid, generate_child("05"), 2, 2, 1, 1)
+        Mousetrap.insert_at!(grid, generate_child("06"), 4, 2, 1, 1)
+        Mousetrap.insert_at!(grid, generate_child("07"), 2, 3, 3, 1)
     
         set_margin!(grid, 10)
         set_child!(window, grid)
@@ -2047,7 +2061,7 @@ Each widget in the grid has a x- and y-position, along with a widget and height,
 For example, in the image above, the widget labeled `05` has the x-position of 2, y-position of 2, a width of 1 cell and a height of 1 cell. 
 
 ```julia
-mousetrap.insert_at!(
+Mousetrap.insert_at!(
     grid, 
     widget_05,
     2,  # x-position
@@ -2060,7 +2074,7 @@ mousetrap.insert_at!(
 Meanwhile, the widget labeled `07` has an x-position of 2, y-position of 3, width of 3 cells and height of 1 cell.
 
 ```julia
-mousetrap.insert_at!(
+Mousetrap.insert_at!(
     grid, 
     widget_07, 
     2,  # x-position
@@ -2142,8 +2156,8 @@ If we want to change the currently selected page, we use `next_page!`, `previous
 To react to the user changing the currently selected page, we have to connect to one of `Notebook`s unique signals, all of which require a signal handler with the same signature: 
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(Notebook,
+using Mousetrap
+Mousetrap.@signal_table(Notebook,
     page_added,
     page_removed,
     page_reordered,
@@ -2169,7 +2183,7 @@ Now that we have many new widgets in our arsenal, a natural question is "how do 
 A compound widget is a widget that groups many other, pre-made widgets together. Compound widgets give an easy mechanism to 
 logically group a collection of widgets and treat them as a whole, instead of having to operate on each of its parts individually.
 
-In order for a Julia object to be considered a `Widget`, that is, all functions that take a `mousetrap.Widget` also work 
+In order for a Julia object to be considered a `Widget`, that is, all functions that take a `Mousetrap.Widget` also work 
 on this new object, it has to implement the **widget interface**. An object is considered a `Widget` if...
 
 + it is a direct or indirect subtype of `Widget`
@@ -2237,13 +2251,13 @@ main() do app::Application
 end 
 ```
 ```
-[ERROR] In mousetrap.main: MethodError: no method matching set_child!(::Window, ::Placeholder)
+[ERROR] In Mousetrap.main: MethodError: no method matching set_child!(::Window, ::Placeholder)
 
 Closest candidates are:
   set_child!(::Window, ::Widget)
 ```
 
-We can't, because `Placeholder`, the new Julia struct, is not yet considered a `mousetrap.Widget`. 
+We can't, because `Placeholder`, the new Julia struct, is not yet considered a `Mousetrap.Widget`. 
 
 ### Widget Interface
 
@@ -2280,10 +2294,10 @@ Where a widget with `\` is a widget container. The only widget without a direct 
 Given this, we implement `get_top_level_widget` like so:
 
 ```julia
-mousetrap.get_top_level_widget(x::Placeholder) = x.aspect_frame
+Mousetrap.get_top_level_widget(x::Placeholder) = x.aspect_frame
 ```
 
-Where the `mousetrap.` prefix is necessary to tell the compiler that we are overloading that method, not creating a new method in our current module.
+Where the `Mousetrap.` prefix is necessary to tell the compiler that we are overloading that method, not creating a new method in our current module.
 
 With `Widget` subtyped and `get_top_level_widget` implemented, our `main.jl` now looks like this:
 
@@ -2312,7 +2326,7 @@ function Placeholder(text::String)
     return out
 end
 
-mousetrap.get_top_level_widget(x::Placeholder) = x.aspect_frame
+Mousetrap.get_top_level_widget(x::Placeholder) = x.aspect_frame
 
 main() do app::Application
     window = Window(app)
@@ -2323,7 +2337,7 @@ end
 
 ![](../assets/compound_widget_complete.png)
 
-Now that `Placeholder` is a proper widget, all of mousetraps functions, including all widget signals, have become avaialable to use. We need to keep in mind that these functions will modify the top-level widget, so only signals of the top-level widget are available to compound widgets.
+Now that `Placeholder` is a proper widget, all of Mousetraps functions, including all widget signals, have become avaialable to use. We need to keep in mind that these functions will modify the top-level widget, so only signals of the top-level widget are available to compound widgets.
 
 Using this technique, we can build an application piece by piece. A compound widget itself can be made up of multiple other compound widgets. In some way, the entire application itself is just one giant compound widget, with a `Window` as the top-level widget.
 

@@ -1,3785 +1,3917 @@
 # Index: Functions
 ## `@log_critical`
 ```@docs
-mousetrap.@log_critical
+Mousetrap.@log_critical
 ```
 ## `@log_debug`
 ```@docs
-mousetrap.@log_debug
+Mousetrap.@log_debug
 ```
 ## `@log_fatal`
 ```@docs
-mousetrap.@log_fatal
+Mousetrap.@log_fatal
 ```
 ## `@log_info`
 ```@docs
-mousetrap.@log_info
+Mousetrap.@log_info
 ```
 ## `@log_warning`
 ```@docs
-mousetrap.@log_warning
+Mousetrap.@log_warning
 ```
 ## `Circle`
 ```@docs
-mousetrap.Circle
+Mousetrap.Circle
 ```
 ## `CircularRing`
 ```@docs
-mousetrap.CircularRing
+Mousetrap.CircularRing
 ```
 ## `Ellipse`
 ```@docs
-mousetrap.Ellipse
+Mousetrap.Ellipse
 ```
 ## `EllipticalRing`
 ```@docs
-mousetrap.EllipticalRing
+Mousetrap.EllipticalRing
 ```
 ## `Line`
 ```@docs
-mousetrap.Line
+Mousetrap.Line
 ```
 ## `LineStrip`
 ```@docs
-mousetrap.LineStrip
+Mousetrap.LineStrip
 ```
 ## `Lines`
 ```@docs
-mousetrap.Lines
+Mousetrap.Lines
 ```
 ## `Outline`
 ```@docs
-mousetrap.Outline
+Mousetrap.Outline
 ```
 ## `Point`
 ```@docs
-mousetrap.Point
+Mousetrap.Point
 ```
 ## `Points`
 ```@docs
-mousetrap.Points
+Mousetrap.Points
 ```
 ## `Polygon`
 ```@docs
-mousetrap.Polygon
+Mousetrap.Polygon
 ```
 ## `Rectangle`
 ```@docs
-mousetrap.Rectangle
+Mousetrap.Rectangle
 ```
 ## `RectangularFrame`
 ```@docs
-mousetrap.RectangularFrame
+Mousetrap.RectangularFrame
 ```
 ## `Triangle`
 ```@docs
-mousetrap.Triangle
+Mousetrap.Triangle
 ```
 ## `Wireframe`
 ```@docs
-mousetrap.Wireframe
+Mousetrap.Wireframe
 ```
 ## `activate!`
 ```@docs
-mousetrap.activate!
+Mousetrap.activate!
 ```
 ## `add_action!`
 ```@docs
-mousetrap.add_action!
+Mousetrap.add_action!
 ```
 ## `add_allow_all_supported_image_formats!`
 ```@docs
-mousetrap.add_allow_all_supported_image_formats!
+Mousetrap.add_allow_all_supported_image_formats!
 ```
 ## `add_allowed_mime_type!`
 ```@docs
-mousetrap.add_allowed_mime_type!
+Mousetrap.add_allowed_mime_type!
 ```
 ## `add_allowed_pattern!`
 ```@docs
-mousetrap.add_allowed_pattern!
+Mousetrap.add_allowed_pattern!
 ```
 ## `add_allowed_suffix!`
 ```@docs
-mousetrap.add_allowed_suffix!
+Mousetrap.add_allowed_suffix!
 ```
 ## `add_button!`
 ```@docs
-mousetrap.add_button!
+Mousetrap.add_button!
 ```
 ## `add_child!`
 ```@docs
-mousetrap.add_child!
+Mousetrap.add_child!
 ```
 ## `add_controller!`
 ```@docs
-mousetrap.add_controller!
+Mousetrap.add_controller!
+```
+## `add_css!`
+```@docs
+Mousetrap.add_css!
+```
+## `add_css_class!`
+```@docs
+Mousetrap.add_css_class!
 ```
 ## `add_filter!`
 ```@docs
-mousetrap.add_filter!
+Mousetrap.add_filter!
 ```
 ## `add_icon!`
 ```@docs
-mousetrap.add_icon!
+Mousetrap.add_icon!
 ```
 ## `add_mark!`
 ```@docs
-mousetrap.add_mark!
+Mousetrap.add_mark!
 ```
 ## `add_marker!`
 ```@docs
-mousetrap.add_marker!
+Mousetrap.add_marker!
 ```
 ## `add_overlay!`
 ```@docs
-mousetrap.add_overlay!
+Mousetrap.add_overlay!
 ```
 ## `add_render_task!`
 ```@docs
-mousetrap.add_render_task!
+Mousetrap.add_render_task!
 ```
 ## `add_resource_path!`
 ```@docs
-mousetrap.add_resource_path!
+Mousetrap.add_resource_path!
 ```
 ## `add_section!`
 ```@docs
-mousetrap.add_section!
+Mousetrap.add_section!
 ```
 ## `add_shortcut!`
 ```@docs
-mousetrap.add_shortcut!
-```
-## `add_style_class!`
-```@docs
-mousetrap.add_style_class!
+Mousetrap.add_shortcut!
 ```
 ## `add_submenu!`
 ```@docs
-mousetrap.add_submenu!
+Mousetrap.add_submenu!
 ```
 ## `add_widget!`
 ```@docs
-mousetrap.add_widget!
+Mousetrap.add_widget!
 ```
 ## `alt_pressed`
 ```@docs
-mousetrap.alt_pressed
+Mousetrap.alt_pressed
 ```
 ## `apply_to`
 ```@docs
-mousetrap.apply_to
+Mousetrap.apply_to
 ```
 ## `as_circle!`
 ```@docs
-mousetrap.as_circle!
+Mousetrap.as_circle!
 ```
 ## `as_circular_ring!`
 ```@docs
-mousetrap.as_circular_ring!
+Mousetrap.as_circular_ring!
 ```
 ## `as_cropped`
 ```@docs
-mousetrap.as_cropped
+Mousetrap.as_cropped
 ```
 ## `as_degrees`
 ```@docs
-mousetrap.as_degrees
+Mousetrap.as_degrees
 ```
 ## `as_ellipse!`
 ```@docs
-mousetrap.as_ellipse!
+Mousetrap.as_ellipse!
 ```
 ## `as_elliptical_ring!`
 ```@docs
-mousetrap.as_elliptical_ring!
+Mousetrap.as_elliptical_ring!
 ```
 ## `as_flipped`
 ```@docs
-mousetrap.as_flipped
+Mousetrap.as_flipped
 ```
 ## `as_line!`
 ```@docs
-mousetrap.as_line!
+Mousetrap.as_line!
 ```
 ## `as_line_strip!`
 ```@docs
-mousetrap.as_line_strip!
+Mousetrap.as_line_strip!
 ```
 ## `as_lines!`
 ```@docs
-mousetrap.as_lines!
+Mousetrap.as_lines!
 ```
 ## `as_microseconds`
 ```@docs
-mousetrap.as_microseconds
+Mousetrap.as_microseconds
 ```
 ## `as_milliseconds`
 ```@docs
-mousetrap.as_milliseconds
+Mousetrap.as_milliseconds
 ```
 ## `as_minutes`
 ```@docs
-mousetrap.as_minutes
+Mousetrap.as_minutes
 ```
 ## `as_nanoseconds`
 ```@docs
-mousetrap.as_nanoseconds
+Mousetrap.as_nanoseconds
 ```
 ## `as_outline!`
 ```@docs
-mousetrap.as_outline!
+Mousetrap.as_outline!
 ```
 ## `as_point!`
 ```@docs
-mousetrap.as_point!
+Mousetrap.as_point!
 ```
 ## `as_points!`
 ```@docs
-mousetrap.as_points!
+Mousetrap.as_points!
 ```
 ## `as_polygon!`
 ```@docs
-mousetrap.as_polygon!
+Mousetrap.as_polygon!
 ```
 ## `as_radians`
 ```@docs
-mousetrap.as_radians
+Mousetrap.as_radians
 ```
 ## `as_rectangle!`
 ```@docs
-mousetrap.as_rectangle!
+Mousetrap.as_rectangle!
 ```
 ## `as_rectangular_frame!`
 ```@docs
-mousetrap.as_rectangular_frame!
+Mousetrap.as_rectangular_frame!
 ```
 ## `as_scaled`
 ```@docs
-mousetrap.as_scaled
+Mousetrap.as_scaled
 ```
 ## `as_seconds`
 ```@docs
-mousetrap.as_seconds
+Mousetrap.as_seconds
 ```
 ## `as_string`
 ```@docs
-mousetrap.as_string
+Mousetrap.as_string
 ```
 ## `as_triangle!`
 ```@docs
-mousetrap.as_triangle!
+Mousetrap.as_triangle!
 ```
 ## `as_wireframe!`
 ```@docs
-mousetrap.as_wireframe!
+Mousetrap.as_wireframe!
 ```
 ## `bind`
 ```@docs
-mousetrap.bind
+Mousetrap.bind
 ```
 ## `bind_as_render_target`
 ```@docs
-mousetrap.bind_as_render_target
+Mousetrap.bind_as_render_target
 ```
 ## `cancel!`
 ```@docs
-mousetrap.cancel!
+Mousetrap.cancel!
 ```
 ## `clear`
 ```@docs
-mousetrap.clear
+Mousetrap.clear
 ```
 ## `clear!`
 ```@docs
-mousetrap.clear!
+Mousetrap.clear!
 ```
 ## `clear_filters!`
 ```@docs
-mousetrap.clear_filters!
+Mousetrap.clear_filters!
 ```
 ## `clear_marks!`
 ```@docs
-mousetrap.clear_marks!
+Mousetrap.clear_marks!
 ```
 ## `clear_render_tasks!`
 ```@docs
-mousetrap.clear_render_tasks!
+Mousetrap.clear_render_tasks!
 ```
 ## `clear_shortcuts!`
 ```@docs
-mousetrap.clear_shortcuts!
+Mousetrap.clear_shortcuts!
 ```
 ## `close!`
 ```@docs
-mousetrap.close!
+Mousetrap.close!
 ```
 ## `combine_with`
 ```@docs
-mousetrap.combine_with
+Mousetrap.combine_with
 ```
 ## `connect_signal_activate!`
 ```@docs
-mousetrap.connect_signal_activate!
+Mousetrap.connect_signal_activate!
 ```
 ## `connect_signal_activate_default_widget!`
 ```@docs
-mousetrap.connect_signal_activate_default_widget!
+Mousetrap.connect_signal_activate_default_widget!
 ```
 ## `connect_signal_activate_focused_widget!`
 ```@docs
-mousetrap.connect_signal_activate_focused_widget!
+Mousetrap.connect_signal_activate_focused_widget!
 ```
 ## `connect_signal_activate_item!`
 ```@docs
-mousetrap.connect_signal_activate_item!
+Mousetrap.connect_signal_activate_item!
 ```
 ## `connect_signal_activated!`
 ```@docs
-mousetrap.connect_signal_activated!
+Mousetrap.connect_signal_activated!
+```
+## `connect_signal_button_clicked!`
+```@docs
+Mousetrap.connect_signal_button_clicked!
 ```
 ## `connect_signal_click_pressed!`
 ```@docs
-mousetrap.connect_signal_click_pressed!
+Mousetrap.connect_signal_click_pressed!
 ```
 ## `connect_signal_click_released!`
 ```@docs
-mousetrap.connect_signal_click_released!
+Mousetrap.connect_signal_click_released!
 ```
 ## `connect_signal_click_stopped!`
 ```@docs
-mousetrap.connect_signal_click_stopped!
+Mousetrap.connect_signal_click_stopped!
 ```
 ## `connect_signal_clicked!`
 ```@docs
-mousetrap.connect_signal_clicked!
+Mousetrap.connect_signal_clicked!
 ```
 ## `connect_signal_close_request!`
 ```@docs
-mousetrap.connect_signal_close_request!
+Mousetrap.connect_signal_close_request!
 ```
 ## `connect_signal_closed!`
 ```@docs
-mousetrap.connect_signal_closed!
+Mousetrap.connect_signal_closed!
 ```
 ## `connect_signal_destroy!`
 ```@docs
-mousetrap.connect_signal_destroy!
+Mousetrap.connect_signal_destroy!
+```
+## `connect_signal_dismissed!`
+```@docs
+Mousetrap.connect_signal_dismissed!
 ```
 ## `connect_signal_drag!`
 ```@docs
-mousetrap.connect_signal_drag!
+Mousetrap.connect_signal_drag!
 ```
 ## `connect_signal_drag_begin!`
 ```@docs
-mousetrap.connect_signal_drag_begin!
+Mousetrap.connect_signal_drag_begin!
 ```
 ## `connect_signal_drag_end!`
 ```@docs
-mousetrap.connect_signal_drag_end!
+Mousetrap.connect_signal_drag_end!
 ```
 ## `connect_signal_focus_gained!`
 ```@docs
-mousetrap.connect_signal_focus_gained!
+Mousetrap.connect_signal_focus_gained!
 ```
 ## `connect_signal_focus_lost!`
 ```@docs
-mousetrap.connect_signal_focus_lost!
+Mousetrap.connect_signal_focus_lost!
 ```
 ## `connect_signal_hide!`
 ```@docs
-mousetrap.connect_signal_hide!
+Mousetrap.connect_signal_hide!
 ```
 ## `connect_signal_items_changed!`
 ```@docs
-mousetrap.connect_signal_items_changed!
+Mousetrap.connect_signal_items_changed!
 ```
 ## `connect_signal_key_pressed!`
 ```@docs
-mousetrap.connect_signal_key_pressed!
+Mousetrap.connect_signal_key_pressed!
 ```
 ## `connect_signal_key_released!`
 ```@docs
-mousetrap.connect_signal_key_released!
+Mousetrap.connect_signal_key_released!
 ```
 ## `connect_signal_kinetic_scroll_decelerate!`
 ```@docs
-mousetrap.connect_signal_kinetic_scroll_decelerate!
+Mousetrap.connect_signal_kinetic_scroll_decelerate!
 ```
 ## `connect_signal_map!`
 ```@docs
-mousetrap.connect_signal_map!
+Mousetrap.connect_signal_map!
 ```
 ## `connect_signal_modifiers_changed!`
 ```@docs
-mousetrap.connect_signal_modifiers_changed!
+Mousetrap.connect_signal_modifiers_changed!
 ```
 ## `connect_signal_motion!`
 ```@docs
-mousetrap.connect_signal_motion!
+Mousetrap.connect_signal_motion!
 ```
 ## `connect_signal_motion_enter!`
 ```@docs
-mousetrap.connect_signal_motion_enter!
+Mousetrap.connect_signal_motion_enter!
 ```
 ## `connect_signal_motion_leave!`
 ```@docs
-mousetrap.connect_signal_motion_leave!
+Mousetrap.connect_signal_motion_leave!
 ```
 ## `connect_signal_page_added!`
 ```@docs
-mousetrap.connect_signal_page_added!
+Mousetrap.connect_signal_page_added!
 ```
 ## `connect_signal_page_removed!`
 ```@docs
-mousetrap.connect_signal_page_removed!
+Mousetrap.connect_signal_page_removed!
 ```
 ## `connect_signal_page_reordered!`
 ```@docs
-mousetrap.connect_signal_page_reordered!
+Mousetrap.connect_signal_page_reordered!
 ```
 ## `connect_signal_page_selection_changed!`
 ```@docs
-mousetrap.connect_signal_page_selection_changed!
+Mousetrap.connect_signal_page_selection_changed!
 ```
 ## `connect_signal_paint!`
 ```@docs
-mousetrap.connect_signal_paint!
+Mousetrap.connect_signal_paint!
 ```
 ## `connect_signal_pan!`
 ```@docs
-mousetrap.connect_signal_pan!
+Mousetrap.connect_signal_pan!
 ```
 ## `connect_signal_press_cancelled!`
 ```@docs
-mousetrap.connect_signal_press_cancelled!
+Mousetrap.connect_signal_press_cancelled!
 ```
 ## `connect_signal_pressed!`
 ```@docs
-mousetrap.connect_signal_pressed!
+Mousetrap.connect_signal_pressed!
 ```
 ## `connect_signal_properties_changed!`
 ```@docs
-mousetrap.connect_signal_properties_changed!
+Mousetrap.connect_signal_properties_changed!
 ```
 ## `connect_signal_proximity!`
 ```@docs
-mousetrap.connect_signal_proximity!
+Mousetrap.connect_signal_proximity!
 ```
 ## `connect_signal_realize!`
 ```@docs
-mousetrap.connect_signal_realize!
+Mousetrap.connect_signal_realize!
 ```
 ## `connect_signal_render!`
 ```@docs
-mousetrap.connect_signal_render!
+Mousetrap.connect_signal_render!
 ```
 ## `connect_signal_resize!`
 ```@docs
-mousetrap.connect_signal_resize!
+Mousetrap.connect_signal_resize!
 ```
 ## `connect_signal_revealed!`
 ```@docs
-mousetrap.connect_signal_revealed!
+Mousetrap.connect_signal_revealed!
 ```
 ## `connect_signal_rotation_changed!`
 ```@docs
-mousetrap.connect_signal_rotation_changed!
+Mousetrap.connect_signal_rotation_changed!
 ```
 ## `connect_signal_scale_changed!`
 ```@docs
-mousetrap.connect_signal_scale_changed!
+Mousetrap.connect_signal_scale_changed!
 ```
 ## `connect_signal_scroll!`
 ```@docs
-mousetrap.connect_signal_scroll!
+Mousetrap.connect_signal_scroll!
 ```
 ## `connect_signal_scroll_begin!`
 ```@docs
-mousetrap.connect_signal_scroll_begin!
+Mousetrap.connect_signal_scroll_begin!
 ```
 ## `connect_signal_scroll_child!`
 ```@docs
-mousetrap.connect_signal_scroll_child!
+Mousetrap.connect_signal_scroll_child!
 ```
 ## `connect_signal_scroll_end!`
 ```@docs
-mousetrap.connect_signal_scroll_end!
+Mousetrap.connect_signal_scroll_end!
 ```
 ## `connect_signal_selection_changed!`
 ```@docs
-mousetrap.connect_signal_selection_changed!
+Mousetrap.connect_signal_selection_changed!
 ```
 ## `connect_signal_show!`
 ```@docs
-mousetrap.connect_signal_show!
+Mousetrap.connect_signal_show!
 ```
 ## `connect_signal_shutdown!`
 ```@docs
-mousetrap.connect_signal_shutdown!
+Mousetrap.connect_signal_shutdown!
 ```
 ## `connect_signal_stylus_down!`
 ```@docs
-mousetrap.connect_signal_stylus_down!
+Mousetrap.connect_signal_stylus_down!
 ```
 ## `connect_signal_stylus_up!`
 ```@docs
-mousetrap.connect_signal_stylus_up!
+Mousetrap.connect_signal_stylus_up!
 ```
 ## `connect_signal_swipe!`
 ```@docs
-mousetrap.connect_signal_swipe!
+Mousetrap.connect_signal_swipe!
 ```
 ## `connect_signal_switched!`
 ```@docs
-mousetrap.connect_signal_switched!
+Mousetrap.connect_signal_switched!
 ```
 ## `connect_signal_text_changed!`
 ```@docs
-mousetrap.connect_signal_text_changed!
+Mousetrap.connect_signal_text_changed!
 ```
 ## `connect_signal_toggled!`
 ```@docs
-mousetrap.connect_signal_toggled!
+Mousetrap.connect_signal_toggled!
 ```
 ## `connect_signal_unmap!`
 ```@docs
-mousetrap.connect_signal_unmap!
+Mousetrap.connect_signal_unmap!
 ```
 ## `connect_signal_unrealize!`
 ```@docs
-mousetrap.connect_signal_unrealize!
+Mousetrap.connect_signal_unrealize!
 ```
 ## `connect_signal_update!`
 ```@docs
-mousetrap.connect_signal_update!
+Mousetrap.connect_signal_update!
 ```
 ## `connect_signal_value_changed!`
 ```@docs
-mousetrap.connect_signal_value_changed!
+Mousetrap.connect_signal_value_changed!
 ```
 ## `connect_signal_wrapped!`
 ```@docs
-mousetrap.connect_signal_wrapped!
+Mousetrap.connect_signal_wrapped!
 ```
 ## `contains_file`
 ```@docs
-mousetrap.contains_file
+Mousetrap.contains_file
 ```
 ## `contains_image`
 ```@docs
-mousetrap.contains_image
+Mousetrap.contains_image
 ```
 ## `contains_string`
 ```@docs
-mousetrap.contains_string
+Mousetrap.contains_string
 ```
 ## `control_pressed`
 ```@docs
-mousetrap.control_pressed
+Mousetrap.control_pressed
 ```
 ## `copy!`
 ```@docs
-mousetrap.copy!
+Mousetrap.copy!
 ```
 ## `create!`
 ```@docs
-mousetrap.create!
+Mousetrap.create!
 ```
 ## `create_as_file_preview!`
 ```@docs
-mousetrap.create_as_file_preview!
+Mousetrap.create_as_file_preview!
 ```
 ## `create_directory_at!`
 ```@docs
-mousetrap.create_directory_at!
+Mousetrap.create_directory_at!
 ```
 ## `create_file_at!`
 ```@docs
-mousetrap.create_file_at!
+Mousetrap.create_file_at!
 ```
 ## `create_from_file!`
 ```@docs
-mousetrap.create_from_file!
+Mousetrap.create_from_file!
 ```
 ## `create_from_icon!`
 ```@docs
-mousetrap.create_from_icon!
+Mousetrap.create_from_icon!
 ```
 ## `create_from_image!`
 ```@docs
-mousetrap.create_from_image!
+Mousetrap.create_from_image!
 ```
 ## `create_from_path!`
 ```@docs
-mousetrap.create_from_path!
+Mousetrap.create_from_path!
 ```
 ## `create_from_string!`
 ```@docs
-mousetrap.create_from_string!
+Mousetrap.create_from_string!
 ```
 ## `create_from_theme!`
 ```@docs
-mousetrap.create_from_theme!
+Mousetrap.create_from_theme!
 ```
 ## `create_from_uri!`
 ```@docs
-mousetrap.create_from_uri!
+Mousetrap.create_from_uri!
 ```
 ## `create_monitor`
 ```@docs
-mousetrap.create_monitor
+Mousetrap.create_monitor
 ```
 ## `degrees`
 ```@docs
-mousetrap.degrees
+Mousetrap.degrees
 ```
 ## `delete_at!`
 ```@docs
-mousetrap.delete_at!
+Mousetrap.delete_at!
 ```
 ## `destroy!`
 ```@docs
-mousetrap.destroy!
+Mousetrap.destroy!
 ```
 ## `device_axis_to_string`
 ```@docs
-mousetrap.device_axis_to_string
+Mousetrap.device_axis_to_string
 ```
 ## `disconnect_signal_activate!`
 ```@docs
-mousetrap.disconnect_signal_activate!
+Mousetrap.disconnect_signal_activate!
 ```
 ## `disconnect_signal_activate_default_widget!`
 ```@docs
-mousetrap.disconnect_signal_activate_default_widget!
+Mousetrap.disconnect_signal_activate_default_widget!
 ```
 ## `disconnect_signal_activate_focused_widget!`
 ```@docs
-mousetrap.disconnect_signal_activate_focused_widget!
+Mousetrap.disconnect_signal_activate_focused_widget!
 ```
 ## `disconnect_signal_activate_item!`
 ```@docs
-mousetrap.disconnect_signal_activate_item!
+Mousetrap.disconnect_signal_activate_item!
 ```
 ## `disconnect_signal_activated!`
 ```@docs
-mousetrap.disconnect_signal_activated!
+Mousetrap.disconnect_signal_activated!
+```
+## `disconnect_signal_button_clicked!`
+```@docs
+Mousetrap.disconnect_signal_button_clicked!
 ```
 ## `disconnect_signal_click_pressed!`
 ```@docs
-mousetrap.disconnect_signal_click_pressed!
+Mousetrap.disconnect_signal_click_pressed!
 ```
 ## `disconnect_signal_click_released!`
 ```@docs
-mousetrap.disconnect_signal_click_released!
+Mousetrap.disconnect_signal_click_released!
 ```
 ## `disconnect_signal_click_stopped!`
 ```@docs
-mousetrap.disconnect_signal_click_stopped!
+Mousetrap.disconnect_signal_click_stopped!
 ```
 ## `disconnect_signal_clicked!`
 ```@docs
-mousetrap.disconnect_signal_clicked!
+Mousetrap.disconnect_signal_clicked!
 ```
 ## `disconnect_signal_close_request!`
 ```@docs
-mousetrap.disconnect_signal_close_request!
+Mousetrap.disconnect_signal_close_request!
 ```
 ## `disconnect_signal_closed!`
 ```@docs
-mousetrap.disconnect_signal_closed!
+Mousetrap.disconnect_signal_closed!
 ```
 ## `disconnect_signal_destroy!`
 ```@docs
-mousetrap.disconnect_signal_destroy!
+Mousetrap.disconnect_signal_destroy!
+```
+## `disconnect_signal_dismissed!`
+```@docs
+Mousetrap.disconnect_signal_dismissed!
 ```
 ## `disconnect_signal_drag!`
 ```@docs
-mousetrap.disconnect_signal_drag!
+Mousetrap.disconnect_signal_drag!
 ```
 ## `disconnect_signal_drag_begin!`
 ```@docs
-mousetrap.disconnect_signal_drag_begin!
+Mousetrap.disconnect_signal_drag_begin!
 ```
 ## `disconnect_signal_drag_end!`
 ```@docs
-mousetrap.disconnect_signal_drag_end!
+Mousetrap.disconnect_signal_drag_end!
 ```
 ## `disconnect_signal_focus_gained!`
 ```@docs
-mousetrap.disconnect_signal_focus_gained!
+Mousetrap.disconnect_signal_focus_gained!
 ```
 ## `disconnect_signal_focus_lost!`
 ```@docs
-mousetrap.disconnect_signal_focus_lost!
+Mousetrap.disconnect_signal_focus_lost!
 ```
 ## `disconnect_signal_hide!`
 ```@docs
-mousetrap.disconnect_signal_hide!
+Mousetrap.disconnect_signal_hide!
 ```
 ## `disconnect_signal_items_changed!`
 ```@docs
-mousetrap.disconnect_signal_items_changed!
+Mousetrap.disconnect_signal_items_changed!
 ```
 ## `disconnect_signal_key_pressed!`
 ```@docs
-mousetrap.disconnect_signal_key_pressed!
+Mousetrap.disconnect_signal_key_pressed!
 ```
 ## `disconnect_signal_key_released!`
 ```@docs
-mousetrap.disconnect_signal_key_released!
+Mousetrap.disconnect_signal_key_released!
 ```
 ## `disconnect_signal_kinetic_scroll_decelerate!`
 ```@docs
-mousetrap.disconnect_signal_kinetic_scroll_decelerate!
+Mousetrap.disconnect_signal_kinetic_scroll_decelerate!
 ```
 ## `disconnect_signal_map!`
 ```@docs
-mousetrap.disconnect_signal_map!
+Mousetrap.disconnect_signal_map!
 ```
 ## `disconnect_signal_modifiers_changed!`
 ```@docs
-mousetrap.disconnect_signal_modifiers_changed!
+Mousetrap.disconnect_signal_modifiers_changed!
 ```
 ## `disconnect_signal_motion!`
 ```@docs
-mousetrap.disconnect_signal_motion!
+Mousetrap.disconnect_signal_motion!
 ```
 ## `disconnect_signal_motion_enter!`
 ```@docs
-mousetrap.disconnect_signal_motion_enter!
+Mousetrap.disconnect_signal_motion_enter!
 ```
 ## `disconnect_signal_motion_leave!`
 ```@docs
-mousetrap.disconnect_signal_motion_leave!
+Mousetrap.disconnect_signal_motion_leave!
 ```
 ## `disconnect_signal_page_added!`
 ```@docs
-mousetrap.disconnect_signal_page_added!
+Mousetrap.disconnect_signal_page_added!
 ```
 ## `disconnect_signal_page_removed!`
 ```@docs
-mousetrap.disconnect_signal_page_removed!
+Mousetrap.disconnect_signal_page_removed!
 ```
 ## `disconnect_signal_page_reordered!`
 ```@docs
-mousetrap.disconnect_signal_page_reordered!
+Mousetrap.disconnect_signal_page_reordered!
 ```
 ## `disconnect_signal_page_selection_changed!`
 ```@docs
-mousetrap.disconnect_signal_page_selection_changed!
+Mousetrap.disconnect_signal_page_selection_changed!
 ```
 ## `disconnect_signal_paint!`
 ```@docs
-mousetrap.disconnect_signal_paint!
+Mousetrap.disconnect_signal_paint!
 ```
 ## `disconnect_signal_pan!`
 ```@docs
-mousetrap.disconnect_signal_pan!
+Mousetrap.disconnect_signal_pan!
 ```
 ## `disconnect_signal_press_cancelled!`
 ```@docs
-mousetrap.disconnect_signal_press_cancelled!
+Mousetrap.disconnect_signal_press_cancelled!
 ```
 ## `disconnect_signal_pressed!`
 ```@docs
-mousetrap.disconnect_signal_pressed!
+Mousetrap.disconnect_signal_pressed!
 ```
 ## `disconnect_signal_properties_changed!`
 ```@docs
-mousetrap.disconnect_signal_properties_changed!
+Mousetrap.disconnect_signal_properties_changed!
 ```
 ## `disconnect_signal_proximity!`
 ```@docs
-mousetrap.disconnect_signal_proximity!
+Mousetrap.disconnect_signal_proximity!
 ```
 ## `disconnect_signal_realize!`
 ```@docs
-mousetrap.disconnect_signal_realize!
+Mousetrap.disconnect_signal_realize!
 ```
 ## `disconnect_signal_render!`
 ```@docs
-mousetrap.disconnect_signal_render!
+Mousetrap.disconnect_signal_render!
 ```
 ## `disconnect_signal_resize!`
 ```@docs
-mousetrap.disconnect_signal_resize!
+Mousetrap.disconnect_signal_resize!
 ```
 ## `disconnect_signal_revealed!`
 ```@docs
-mousetrap.disconnect_signal_revealed!
+Mousetrap.disconnect_signal_revealed!
 ```
 ## `disconnect_signal_rotation_changed!`
 ```@docs
-mousetrap.disconnect_signal_rotation_changed!
+Mousetrap.disconnect_signal_rotation_changed!
 ```
 ## `disconnect_signal_scale_changed!`
 ```@docs
-mousetrap.disconnect_signal_scale_changed!
+Mousetrap.disconnect_signal_scale_changed!
 ```
 ## `disconnect_signal_scroll!`
 ```@docs
-mousetrap.disconnect_signal_scroll!
+Mousetrap.disconnect_signal_scroll!
 ```
 ## `disconnect_signal_scroll_begin!`
 ```@docs
-mousetrap.disconnect_signal_scroll_begin!
+Mousetrap.disconnect_signal_scroll_begin!
 ```
 ## `disconnect_signal_scroll_child!`
 ```@docs
-mousetrap.disconnect_signal_scroll_child!
+Mousetrap.disconnect_signal_scroll_child!
 ```
 ## `disconnect_signal_scroll_end!`
 ```@docs
-mousetrap.disconnect_signal_scroll_end!
+Mousetrap.disconnect_signal_scroll_end!
 ```
 ## `disconnect_signal_selection_changed!`
 ```@docs
-mousetrap.disconnect_signal_selection_changed!
+Mousetrap.disconnect_signal_selection_changed!
 ```
 ## `disconnect_signal_show!`
 ```@docs
-mousetrap.disconnect_signal_show!
+Mousetrap.disconnect_signal_show!
 ```
 ## `disconnect_signal_shutdown!`
 ```@docs
-mousetrap.disconnect_signal_shutdown!
+Mousetrap.disconnect_signal_shutdown!
 ```
 ## `disconnect_signal_stylus_down!`
 ```@docs
-mousetrap.disconnect_signal_stylus_down!
+Mousetrap.disconnect_signal_stylus_down!
 ```
 ## `disconnect_signal_stylus_up!`
 ```@docs
-mousetrap.disconnect_signal_stylus_up!
+Mousetrap.disconnect_signal_stylus_up!
 ```
 ## `disconnect_signal_swipe!`
 ```@docs
-mousetrap.disconnect_signal_swipe!
+Mousetrap.disconnect_signal_swipe!
 ```
 ## `disconnect_signal_switched!`
 ```@docs
-mousetrap.disconnect_signal_switched!
+Mousetrap.disconnect_signal_switched!
 ```
 ## `disconnect_signal_text_changed!`
 ```@docs
-mousetrap.disconnect_signal_text_changed!
+Mousetrap.disconnect_signal_text_changed!
 ```
 ## `disconnect_signal_toggled!`
 ```@docs
-mousetrap.disconnect_signal_toggled!
+Mousetrap.disconnect_signal_toggled!
 ```
 ## `disconnect_signal_unmap!`
 ```@docs
-mousetrap.disconnect_signal_unmap!
+Mousetrap.disconnect_signal_unmap!
 ```
 ## `disconnect_signal_unrealize!`
 ```@docs
-mousetrap.disconnect_signal_unrealize!
+Mousetrap.disconnect_signal_unrealize!
 ```
 ## `disconnect_signal_update!`
 ```@docs
-mousetrap.disconnect_signal_update!
+Mousetrap.disconnect_signal_update!
 ```
 ## `disconnect_signal_value_changed!`
 ```@docs
-mousetrap.disconnect_signal_value_changed!
+Mousetrap.disconnect_signal_value_changed!
 ```
 ## `disconnect_signal_wrapped!`
 ```@docs
-mousetrap.disconnect_signal_wrapped!
+Mousetrap.disconnect_signal_wrapped!
 ```
 ## `download`
 ```@docs
-mousetrap.download
+Mousetrap.download
 ```
 ## `elapsed`
 ```@docs
-mousetrap.elapsed
+Mousetrap.elapsed
 ```
 ## `emit_signal_activate`
 ```@docs
-mousetrap.emit_signal_activate
+Mousetrap.emit_signal_activate
 ```
 ## `emit_signal_activate_default_widget`
 ```@docs
-mousetrap.emit_signal_activate_default_widget
+Mousetrap.emit_signal_activate_default_widget
 ```
 ## `emit_signal_activate_focused_widget`
 ```@docs
-mousetrap.emit_signal_activate_focused_widget
+Mousetrap.emit_signal_activate_focused_widget
 ```
 ## `emit_signal_activate_item`
 ```@docs
-mousetrap.emit_signal_activate_item
+Mousetrap.emit_signal_activate_item
 ```
 ## `emit_signal_activated`
 ```@docs
-mousetrap.emit_signal_activated
+Mousetrap.emit_signal_activated
+```
+## `emit_signal_button_clicked`
+```@docs
+Mousetrap.emit_signal_button_clicked
 ```
 ## `emit_signal_click_pressed`
 ```@docs
-mousetrap.emit_signal_click_pressed
+Mousetrap.emit_signal_click_pressed
 ```
 ## `emit_signal_click_released`
 ```@docs
-mousetrap.emit_signal_click_released
+Mousetrap.emit_signal_click_released
 ```
 ## `emit_signal_click_stopped`
 ```@docs
-mousetrap.emit_signal_click_stopped
+Mousetrap.emit_signal_click_stopped
 ```
 ## `emit_signal_clicked`
 ```@docs
-mousetrap.emit_signal_clicked
+Mousetrap.emit_signal_clicked
 ```
 ## `emit_signal_close_request`
 ```@docs
-mousetrap.emit_signal_close_request
+Mousetrap.emit_signal_close_request
 ```
 ## `emit_signal_closed`
 ```@docs
-mousetrap.emit_signal_closed
+Mousetrap.emit_signal_closed
 ```
 ## `emit_signal_destroy`
 ```@docs
-mousetrap.emit_signal_destroy
+Mousetrap.emit_signal_destroy
+```
+## `emit_signal_dismissed`
+```@docs
+Mousetrap.emit_signal_dismissed
 ```
 ## `emit_signal_drag`
 ```@docs
-mousetrap.emit_signal_drag
+Mousetrap.emit_signal_drag
 ```
 ## `emit_signal_drag_begin`
 ```@docs
-mousetrap.emit_signal_drag_begin
+Mousetrap.emit_signal_drag_begin
 ```
 ## `emit_signal_drag_end`
 ```@docs
-mousetrap.emit_signal_drag_end
+Mousetrap.emit_signal_drag_end
 ```
 ## `emit_signal_focus_gained`
 ```@docs
-mousetrap.emit_signal_focus_gained
+Mousetrap.emit_signal_focus_gained
 ```
 ## `emit_signal_focus_lost`
 ```@docs
-mousetrap.emit_signal_focus_lost
+Mousetrap.emit_signal_focus_lost
 ```
 ## `emit_signal_hide`
 ```@docs
-mousetrap.emit_signal_hide
+Mousetrap.emit_signal_hide
 ```
 ## `emit_signal_items_changed`
 ```@docs
-mousetrap.emit_signal_items_changed
+Mousetrap.emit_signal_items_changed
 ```
 ## `emit_signal_key_pressed`
 ```@docs
-mousetrap.emit_signal_key_pressed
+Mousetrap.emit_signal_key_pressed
 ```
 ## `emit_signal_key_released`
 ```@docs
-mousetrap.emit_signal_key_released
+Mousetrap.emit_signal_key_released
 ```
 ## `emit_signal_kinetic_scroll_decelerate`
 ```@docs
-mousetrap.emit_signal_kinetic_scroll_decelerate
+Mousetrap.emit_signal_kinetic_scroll_decelerate
 ```
 ## `emit_signal_map`
 ```@docs
-mousetrap.emit_signal_map
+Mousetrap.emit_signal_map
 ```
 ## `emit_signal_modifiers_changed`
 ```@docs
-mousetrap.emit_signal_modifiers_changed
+Mousetrap.emit_signal_modifiers_changed
 ```
 ## `emit_signal_motion`
 ```@docs
-mousetrap.emit_signal_motion
+Mousetrap.emit_signal_motion
 ```
 ## `emit_signal_motion_enter`
 ```@docs
-mousetrap.emit_signal_motion_enter
+Mousetrap.emit_signal_motion_enter
 ```
 ## `emit_signal_motion_leave`
 ```@docs
-mousetrap.emit_signal_motion_leave
+Mousetrap.emit_signal_motion_leave
 ```
 ## `emit_signal_page_added`
 ```@docs
-mousetrap.emit_signal_page_added
+Mousetrap.emit_signal_page_added
 ```
 ## `emit_signal_page_removed`
 ```@docs
-mousetrap.emit_signal_page_removed
+Mousetrap.emit_signal_page_removed
 ```
 ## `emit_signal_page_reordered`
 ```@docs
-mousetrap.emit_signal_page_reordered
+Mousetrap.emit_signal_page_reordered
 ```
 ## `emit_signal_page_selection_changed`
 ```@docs
-mousetrap.emit_signal_page_selection_changed
+Mousetrap.emit_signal_page_selection_changed
 ```
 ## `emit_signal_paint`
 ```@docs
-mousetrap.emit_signal_paint
+Mousetrap.emit_signal_paint
 ```
 ## `emit_signal_pan`
 ```@docs
-mousetrap.emit_signal_pan
+Mousetrap.emit_signal_pan
 ```
 ## `emit_signal_press_cancelled`
 ```@docs
-mousetrap.emit_signal_press_cancelled
+Mousetrap.emit_signal_press_cancelled
 ```
 ## `emit_signal_pressed`
 ```@docs
-mousetrap.emit_signal_pressed
+Mousetrap.emit_signal_pressed
 ```
 ## `emit_signal_properties_changed`
 ```@docs
-mousetrap.emit_signal_properties_changed
+Mousetrap.emit_signal_properties_changed
 ```
 ## `emit_signal_proximity`
 ```@docs
-mousetrap.emit_signal_proximity
+Mousetrap.emit_signal_proximity
 ```
 ## `emit_signal_realize`
 ```@docs
-mousetrap.emit_signal_realize
+Mousetrap.emit_signal_realize
 ```
 ## `emit_signal_render`
 ```@docs
-mousetrap.emit_signal_render
+Mousetrap.emit_signal_render
 ```
 ## `emit_signal_resize`
 ```@docs
-mousetrap.emit_signal_resize
+Mousetrap.emit_signal_resize
 ```
 ## `emit_signal_revealed`
 ```@docs
-mousetrap.emit_signal_revealed
+Mousetrap.emit_signal_revealed
 ```
 ## `emit_signal_rotation_changed`
 ```@docs
-mousetrap.emit_signal_rotation_changed
+Mousetrap.emit_signal_rotation_changed
 ```
 ## `emit_signal_scale_changed`
 ```@docs
-mousetrap.emit_signal_scale_changed
+Mousetrap.emit_signal_scale_changed
 ```
 ## `emit_signal_scroll`
 ```@docs
-mousetrap.emit_signal_scroll
+Mousetrap.emit_signal_scroll
 ```
 ## `emit_signal_scroll_begin`
 ```@docs
-mousetrap.emit_signal_scroll_begin
+Mousetrap.emit_signal_scroll_begin
 ```
 ## `emit_signal_scroll_child`
 ```@docs
-mousetrap.emit_signal_scroll_child
+Mousetrap.emit_signal_scroll_child
 ```
 ## `emit_signal_scroll_end`
 ```@docs
-mousetrap.emit_signal_scroll_end
+Mousetrap.emit_signal_scroll_end
 ```
 ## `emit_signal_selection_changed`
 ```@docs
-mousetrap.emit_signal_selection_changed
+Mousetrap.emit_signal_selection_changed
 ```
 ## `emit_signal_show`
 ```@docs
-mousetrap.emit_signal_show
+Mousetrap.emit_signal_show
 ```
 ## `emit_signal_shutdown`
 ```@docs
-mousetrap.emit_signal_shutdown
+Mousetrap.emit_signal_shutdown
 ```
 ## `emit_signal_stylus_down`
 ```@docs
-mousetrap.emit_signal_stylus_down
+Mousetrap.emit_signal_stylus_down
 ```
 ## `emit_signal_stylus_up`
 ```@docs
-mousetrap.emit_signal_stylus_up
+Mousetrap.emit_signal_stylus_up
 ```
 ## `emit_signal_swipe`
 ```@docs
-mousetrap.emit_signal_swipe
+Mousetrap.emit_signal_swipe
 ```
 ## `emit_signal_switched`
 ```@docs
-mousetrap.emit_signal_switched
+Mousetrap.emit_signal_switched
 ```
 ## `emit_signal_text_changed`
 ```@docs
-mousetrap.emit_signal_text_changed
+Mousetrap.emit_signal_text_changed
 ```
 ## `emit_signal_toggled`
 ```@docs
-mousetrap.emit_signal_toggled
+Mousetrap.emit_signal_toggled
 ```
 ## `emit_signal_unmap`
 ```@docs
-mousetrap.emit_signal_unmap
+Mousetrap.emit_signal_unmap
 ```
 ## `emit_signal_unrealize`
 ```@docs
-mousetrap.emit_signal_unrealize
+Mousetrap.emit_signal_unrealize
 ```
 ## `emit_signal_update`
 ```@docs
-mousetrap.emit_signal_update
+Mousetrap.emit_signal_update
 ```
 ## `emit_signal_value_changed`
 ```@docs
-mousetrap.emit_signal_value_changed
+Mousetrap.emit_signal_value_changed
 ```
 ## `emit_signal_wrapped`
 ```@docs
-mousetrap.emit_signal_wrapped
+Mousetrap.emit_signal_wrapped
 ```
 ## `exists`
 ```@docs
-mousetrap.exists
+Mousetrap.exists
 ```
 ## `find`
 ```@docs
-mousetrap.find
+Mousetrap.find
 ```
 ## `flush`
 ```@docs
-mousetrap.flush
+Mousetrap.flush
 ```
 ## `from_gl_coordinates`
 ```@docs
-mousetrap.from_gl_coordinates
+Mousetrap.from_gl_coordinates
 ```
 ## `get_acceleration_rate`
 ```@docs
-mousetrap.get_acceleration_rate
+Mousetrap.get_acceleration_rate
 ```
 ## `get_accept_label`
 ```@docs
-mousetrap.get_accept_label
+Mousetrap.get_accept_label
 ```
 ## `get_action`
 ```@docs
-mousetrap.get_action
+Mousetrap.get_action
 ```
 ## `get_adjustment`
 ```@docs
-mousetrap.get_adjustment
+Mousetrap.get_adjustment
 ```
 ## `get_allocated_size`
 ```@docs
-mousetrap.get_allocated_size
+Mousetrap.get_allocated_size
 ```
 ## `get_allow_only_numeric`
 ```@docs
-mousetrap.get_allow_only_numeric
+Mousetrap.get_allow_only_numeric
 ```
 ## `get_always_show_arrow`
 ```@docs
-mousetrap.get_always_show_arrow
+Mousetrap.get_always_show_arrow
 ```
 ## `get_angle_delta`
 ```@docs
-mousetrap.get_angle_delta
+Mousetrap.get_angle_delta
 ```
 ## `get_autohide`
 ```@docs
-mousetrap.get_autohide
+Mousetrap.get_autohide
 ```
 ## `get_axis_value`
 ```@docs
-mousetrap.get_axis_value
+Mousetrap.get_axis_value
 ```
 ## `get_bottom_margin`
 ```@docs
-mousetrap.get_bottom_margin
+Mousetrap.get_bottom_margin
 ```
 ## `get_bounding_box`
 ```@docs
-mousetrap.get_bounding_box
+Mousetrap.get_bounding_box
+```
+## `get_button_action_id`
+```@docs
+Mousetrap.get_button_action_id
 ```
 ## `get_button_label`
 ```@docs
-mousetrap.get_button_label
+Mousetrap.get_button_label
 ```
 ## `get_can_respond_to_input`
 ```@docs
-mousetrap.get_can_respond_to_input
+Mousetrap.get_can_respond_to_input
 ```
 ## `get_centroid`
 ```@docs
-mousetrap.get_centroid
+Mousetrap.get_centroid
 ```
 ## `get_child_at`
 ```@docs
-mousetrap.get_child_at
+Mousetrap.get_child_at
 ```
 ## `get_child_x_alignment`
 ```@docs
-mousetrap.get_child_x_alignment
+Mousetrap.get_child_x_alignment
 ```
 ## `get_child_y_alignment`
 ```@docs
-mousetrap.get_child_y_alignment
+Mousetrap.get_child_y_alignment
 ```
 ## `get_children`
 ```@docs
-mousetrap.get_children
+Mousetrap.get_children
 ```
 ## `get_clipboard`
 ```@docs
-mousetrap.get_clipboard
+Mousetrap.get_clipboard
 ```
 ## `get_color`
 ```@docs
-mousetrap.get_color
+Mousetrap.get_color
 ```
 ## `get_column_at`
 ```@docs
-mousetrap.get_column_at
+Mousetrap.get_column_at
 ```
 ## `get_column_spacing`
 ```@docs
-mousetrap.get_column_spacing
+Mousetrap.get_column_spacing
 ```
 ## `get_column_with_title`
 ```@docs
-mousetrap.get_column_with_title
+Mousetrap.get_column_with_title
 ```
 ## `get_columns_homogeneous`
 ```@docs
-mousetrap.get_columns_homogeneous
+Mousetrap.get_columns_homogeneous
 ```
 ## `get_comment_above`
 ```@docs
-mousetrap.get_comment_above
+Mousetrap.get_comment_above
 ```
 ## `get_content_type`
 ```@docs
-mousetrap.get_content_type
+Mousetrap.get_content_type
+```
+## `get_css_classes`
+```@docs
+Mousetrap.get_css_classes
 ```
 ## `get_current_button`
 ```@docs
-mousetrap.get_current_button
+Mousetrap.get_current_button
 ```
 ## `get_current_offset`
 ```@docs
-mousetrap.get_current_offset
+Mousetrap.get_current_offset
 ```
 ## `get_current_page`
 ```@docs
-mousetrap.get_current_page
+Mousetrap.get_current_page
 ```
 ## `get_current_theme`
 ```@docs
-mousetrap.get_current_theme
+Mousetrap.get_current_theme
 ```
 ## `get_cursor_visible`
 ```@docs
-mousetrap.get_cursor_visible
+Mousetrap.get_cursor_visible
 ```
 ## `get_delay_factor`
 ```@docs
-mousetrap.get_delay_factor
+Mousetrap.get_delay_factor
 ```
 ## `get_destroy_with_parent`
 ```@docs
-mousetrap.get_destroy_with_parent
+Mousetrap.get_destroy_with_parent
 ```
 ## `get_detailed_description`
 ```@docs
-mousetrap.get_detailed_description
+Mousetrap.get_detailed_description
+```
+## `get_duration`
+```@docs
+Mousetrap.get_duration
 ```
 ## `get_editable`
 ```@docs
-mousetrap.get_editable
+Mousetrap.get_editable
 ```
 ## `get_ellipsize_mode`
 ```@docs
-mousetrap.get_ellipsize_mode
+Mousetrap.get_ellipsize_mode
 ```
 ## `get_enable_rubberband_selection`
 ```@docs
-mousetrap.get_enable_rubberband_selection
+Mousetrap.get_enable_rubberband_selection
 ```
 ## `get_enabled`
 ```@docs
-mousetrap.get_enabled
+Mousetrap.get_enabled
 ```
 ## `get_end_child_resizable`
 ```@docs
-mousetrap.get_end_child_resizable
+Mousetrap.get_end_child_resizable
 ```
 ## `get_end_child_shrinkable`
 ```@docs
-mousetrap.get_end_child_shrinkable
+Mousetrap.get_end_child_shrinkable
 ```
 ## `get_expand_horizontally`
 ```@docs
-mousetrap.get_expand_horizontally
+Mousetrap.get_expand_horizontally
 ```
 ## `get_expand_vertically`
 ```@docs
-mousetrap.get_expand_vertically
+Mousetrap.get_expand_vertically
 ```
 ## `get_file_chooser_action`
 ```@docs
-mousetrap.get_file_chooser_action
+Mousetrap.get_file_chooser_action
 ```
 ## `get_file_extension`
 ```@docs
-mousetrap.get_file_extension
+Mousetrap.get_file_extension
 ```
 ## `get_fixed_width`
 ```@docs
-mousetrap.get_fixed_width
+Mousetrap.get_fixed_width
 ```
 ## `get_focus_on_click`
 ```@docs
-mousetrap.get_focus_on_click
+Mousetrap.get_focus_on_click
 ```
 ## `get_focus_visible`
 ```@docs
-mousetrap.get_focus_visible
+Mousetrap.get_focus_visible
 ```
 ## `get_fraction`
 ```@docs
-mousetrap.get_fraction
+Mousetrap.get_fraction
 ```
 ## `get_fragment_shader_id`
 ```@docs
-mousetrap.get_fragment_shader_id
+Mousetrap.get_fragment_shader_id
 ```
 ## `get_groups`
 ```@docs
-mousetrap.get_groups
+Mousetrap.get_groups
 ```
 ## `get_hardware_id`
 ```@docs
-mousetrap.get_hardware_id
+Mousetrap.get_hardware_id
 ```
 ## `get_has_base_arrow`
 ```@docs
-mousetrap.get_has_base_arrow
+Mousetrap.get_has_base_arrow
 ```
 ## `get_has_border`
 ```@docs
-mousetrap.get_has_border
+Mousetrap.get_has_border
 ```
 ## `get_has_close_button`
 ```@docs
-mousetrap.get_has_close_button
+Mousetrap.get_has_close_button
 ```
 ## `get_has_focus`
 ```@docs
-mousetrap.get_has_focus
+Mousetrap.get_has_focus
 ```
 ## `get_has_frame`
 ```@docs
-mousetrap.get_has_frame
+Mousetrap.get_has_frame
 ```
 ## `get_has_origin`
 ```@docs
-mousetrap.get_has_origin
+Mousetrap.get_has_origin
 ```
 ## `get_has_wide_handle`
 ```@docs
-mousetrap.get_has_wide_handle
+Mousetrap.get_has_wide_handle
 ```
 ## `get_header_bar`
 ```@docs
-mousetrap.get_header_bar
+Mousetrap.get_header_bar
 ```
 ## `get_hide_on_close`
 ```@docs
-mousetrap.get_hide_on_close
+Mousetrap.get_hide_on_close
 ```
 ## `get_hide_on_overflow`
 ```@docs
-mousetrap.get_hide_on_overflow
+Mousetrap.get_hide_on_overflow
 ```
 ## `get_homogeneous`
 ```@docs
-mousetrap.get_homogeneous
+Mousetrap.get_homogeneous
 ```
 ## `get_horizontal_adjustment`
 ```@docs
-mousetrap.get_horizontal_adjustment
+Mousetrap.get_horizontal_adjustment
 ```
 ## `get_horizontal_alignment`
 ```@docs
-mousetrap.get_horizontal_alignment
+Mousetrap.get_horizontal_alignment
 ```
 ## `get_horizontal_scrollbar_policy`
 ```@docs
-mousetrap.get_horizontal_scrollbar_policy
+Mousetrap.get_horizontal_scrollbar_policy
 ```
 ## `get_icon_names`
 ```@docs
-mousetrap.get_icon_names
+Mousetrap.get_icon_names
 ```
 ## `get_id`
 ```@docs
-mousetrap.get_id
+Mousetrap.get_id
 ```
 ## `get_image`
 ```@docs
-mousetrap.get_image
+Mousetrap.get_image
 ```
 ## `get_inverted`
 ```@docs
-mousetrap.get_inverted
+Mousetrap.get_inverted
 ```
 ## `get_is_active`
 ```@docs
-mousetrap.get_is_active
+Mousetrap.get_is_active
 ```
 ## `get_is_circular`
 ```@docs
-mousetrap.get_is_circular
+Mousetrap.get_is_circular
 ```
 ## `get_is_decorated`
 ```@docs
-mousetrap.get_is_decorated
+Mousetrap.get_is_decorated
 ```
 ## `get_is_expanded`
 ```@docs
-mousetrap.get_is_expanded
+Mousetrap.get_is_expanded
 ```
 ## `get_is_focusable`
 ```@docs
-mousetrap.get_is_focusable
+Mousetrap.get_is_focusable
+```
+## `get_is_high_priority`
+```@docs
+Mousetrap.get_is_high_priority
 ```
 ## `get_is_holding`
 ```@docs
-mousetrap.get_is_holding
+Mousetrap.get_is_holding
 ```
 ## `get_is_horizontally_homogeneous`
 ```@docs
-mousetrap.get_is_horizontally_homogeneous
+Mousetrap.get_is_horizontally_homogeneous
 ```
 ## `get_is_inverted`
 ```@docs
-mousetrap.get_is_inverted
+Mousetrap.get_is_inverted
 ```
 ## `get_is_local`
 ```@docs
-mousetrap.get_is_local
+Mousetrap.get_is_local
 ```
 ## `get_is_marked_as_busy`
 ```@docs
-mousetrap.get_is_marked_as_busy
+Mousetrap.get_is_marked_as_busy
 ```
 ## `get_is_modal`
 ```@docs
-mousetrap.get_is_modal
+Mousetrap.get_is_modal
 ```
 ## `get_is_realized`
 ```@docs
-mousetrap.get_is_realized
+Mousetrap.get_is_realized
 ```
 ## `get_is_resizable`
 ```@docs
-mousetrap.get_is_resizable
+Mousetrap.get_is_resizable
 ```
 ## `get_is_revealed`
 ```@docs
-mousetrap.get_is_revealed
+Mousetrap.get_is_revealed
+```
+## `get_is_reversed`
+```@docs
+Mousetrap.get_is_reversed
 ```
 ## `get_is_scrollable`
 ```@docs
-mousetrap.get_is_scrollable
+Mousetrap.get_is_scrollable
 ```
 ## `get_is_selectable`
 ```@docs
-mousetrap.get_is_selectable
+Mousetrap.get_is_selectable
 ```
 ## `get_is_spinning`
 ```@docs
-mousetrap.get_is_spinning
+Mousetrap.get_is_spinning
 ```
 ## `get_is_vertically_homogeneous`
 ```@docs
-mousetrap.get_is_vertically_homogeneous
+Mousetrap.get_is_vertically_homogeneous
 ```
 ## `get_is_visible`
 ```@docs
-mousetrap.get_is_visible
+Mousetrap.get_is_visible
 ```
 ## `get_item_at`
 ```@docs
-mousetrap.get_item_at
+Mousetrap.get_item_at
 ```
 ## `get_justify_mode`
 ```@docs
-mousetrap.get_justify_mode
+Mousetrap.get_justify_mode
 ```
 ## `get_keys`
 ```@docs
-mousetrap.get_keys
+Mousetrap.get_keys
 ```
 ## `get_kinetic_scrolling_enabled`
 ```@docs
-mousetrap.get_kinetic_scrolling_enabled
+Mousetrap.get_kinetic_scrolling_enabled
 ```
 ## `get_label_x_alignment`
 ```@docs
-mousetrap.get_label_x_alignment
+Mousetrap.get_label_x_alignment
 ```
 ## `get_layout`
 ```@docs
-mousetrap.get_layout
+Mousetrap.get_layout
 ```
 ## `get_left_margin`
 ```@docs
-mousetrap.get_left_margin
+Mousetrap.get_left_margin
 ```
 ## `get_lower`
 ```@docs
-mousetrap.get_lower
+Mousetrap.get_lower
 ```
 ## `get_margin_bottom`
 ```@docs
-mousetrap.get_margin_bottom
+Mousetrap.get_margin_bottom
 ```
 ## `get_margin_end`
 ```@docs
-mousetrap.get_margin_end
+Mousetrap.get_margin_end
 ```
 ## `get_margin_start`
 ```@docs
-mousetrap.get_margin_start
+Mousetrap.get_margin_start
 ```
 ## `get_margin_top`
 ```@docs
-mousetrap.get_margin_top
+Mousetrap.get_margin_top
 ```
 ## `get_max_n_columns`
 ```@docs
-mousetrap.get_max_n_columns
+Mousetrap.get_max_n_columns
 ```
 ## `get_max_value`
 ```@docs
-mousetrap.get_max_value
+Mousetrap.get_max_value
 ```
 ## `get_max_width_chars`
 ```@docs
-mousetrap.get_max_width_chars
+Mousetrap.get_max_width_chars
 ```
 ## `get_maximum_size`
 ```@docs
-mousetrap.get_maximum_size
+Mousetrap.get_maximum_size
 ```
 ## `get_message`
 ```@docs
-mousetrap.get_message
+Mousetrap.get_message
 ```
 ## `get_min_n_columns`
 ```@docs
-mousetrap.get_min_n_columns
+Mousetrap.get_min_n_columns
 ```
 ## `get_min_value`
 ```@docs
-mousetrap.get_min_value
+Mousetrap.get_min_value
 ```
 ## `get_minimum_size`
 ```@docs
-mousetrap.get_minimum_size
+Mousetrap.get_minimum_size
 ```
 ## `get_mode`
 ```@docs
-mousetrap.get_mode
+Mousetrap.get_mode
 ```
 ## `get_n_buttons`
 ```@docs
-mousetrap.get_n_buttons
+Mousetrap.get_n_buttons
 ```
 ## `get_n_columns`
 ```@docs
-mousetrap.get_n_columns
+Mousetrap.get_n_columns
 ```
 ## `get_n_digits`
 ```@docs
-mousetrap.get_n_digits
+Mousetrap.get_n_digits
 ```
 ## `get_n_items`
 ```@docs
-mousetrap.get_n_items
+Mousetrap.get_n_items
 ```
 ## `get_n_pages`
 ```@docs
-mousetrap.get_n_pages
+Mousetrap.get_n_pages
 ```
 ## `get_n_pixels`
 ```@docs
-mousetrap.get_n_pixels
+Mousetrap.get_n_pixels
 ```
 ## `get_n_rows`
 ```@docs
-mousetrap.get_n_rows
+Mousetrap.get_n_rows
 ```
 ## `get_n_vertices`
 ```@docs
-mousetrap.get_n_vertices
+Mousetrap.get_n_vertices
 ```
 ## `get_name`
 ```@docs
-mousetrap.get_name
+Mousetrap.get_name
 ```
 ## `get_native_handle`
 ```@docs
-mousetrap.get_native_handle
+Mousetrap.get_native_handle
 ```
 ## `get_natural_size`
 ```@docs
-mousetrap.get_natural_size
+Mousetrap.get_natural_size
 ```
 ## `get_only_listens_to_button`
 ```@docs
-mousetrap.get_only_listens_to_button
+Mousetrap.get_only_listens_to_button
 ```
 ## `get_opacity`
 ```@docs
-mousetrap.get_opacity
+Mousetrap.get_opacity
 ```
 ## `get_orientation`
 ```@docs
-mousetrap.get_orientation
+Mousetrap.get_orientation
 ```
 ## `get_parent`
 ```@docs
-mousetrap.get_parent
+Mousetrap.get_parent
 ```
 ## `get_path`
 ```@docs
-mousetrap.get_path
+Mousetrap.get_path
 ```
 ## `get_path_relative_to`
 ```@docs
-mousetrap.get_path_relative_to
+Mousetrap.get_path_relative_to
 ```
 ## `get_pixel`
 ```@docs
-mousetrap.get_pixel
+Mousetrap.get_pixel
 ```
 ## `get_position`
 ```@docs
-mousetrap.get_position
+Mousetrap.get_position
 ```
 ## `get_program_id`
 ```@docs
-mousetrap.get_program_id
+Mousetrap.get_program_id
 ```
 ## `get_propagate_natural_height`
 ```@docs
-mousetrap.get_propagate_natural_height
+Mousetrap.get_propagate_natural_height
 ```
 ## `get_propagate_natural_width`
 ```@docs
-mousetrap.get_propagate_natural_width
+Mousetrap.get_propagate_natural_width
 ```
 ## `get_propagation_phase`
 ```@docs
-mousetrap.get_propagation_phase
+Mousetrap.get_propagation_phase
 ```
 ## `get_quick_change_menu_enabled`
 ```@docs
-mousetrap.get_quick_change_menu_enabled
+Mousetrap.get_quick_change_menu_enabled
 ```
 ## `get_ratio`
 ```@docs
-mousetrap.get_ratio
+Mousetrap.get_ratio
 ```
 ## `get_relative_position`
 ```@docs
-mousetrap.get_relative_position
+Mousetrap.get_relative_position
+```
+## `get_repeat_count`
+```@docs
+Mousetrap.get_repeat_count
 ```
 ## `get_right_margin`
 ```@docs
-mousetrap.get_right_margin
+Mousetrap.get_right_margin
 ```
 ## `get_row_spacing`
 ```@docs
-mousetrap.get_row_spacing
+Mousetrap.get_row_spacing
 ```
 ## `get_rows_homogeneous`
 ```@docs
-mousetrap.get_rows_homogeneous
+Mousetrap.get_rows_homogeneous
 ```
 ## `get_scale`
 ```@docs
-mousetrap.get_scale
+Mousetrap.get_scale
 ```
 ## `get_scale_delta`
 ```@docs
-mousetrap.get_scale_delta
+Mousetrap.get_scale_delta
 ```
 ## `get_scale_mode`
 ```@docs
-mousetrap.get_scale_mode
+Mousetrap.get_scale_mode
 ```
 ## `get_scope`
 ```@docs
-mousetrap.get_scope
+Mousetrap.get_scope
 ```
 ## `get_scrollbar_placement`
 ```@docs
-mousetrap.get_scrollbar_placement
+Mousetrap.get_scrollbar_placement
 ```
 ## `get_selected`
 ```@docs
-mousetrap.get_selected
+Mousetrap.get_selected
 ```
 ## `get_selection`
 ```@docs
-mousetrap.get_selection
+Mousetrap.get_selection
 ```
 ## `get_selection_mode`
 ```@docs
-mousetrap.get_selection_mode
+Mousetrap.get_selection_mode
 ```
 ## `get_selection_model`
 ```@docs
-mousetrap.get_selection_model
+Mousetrap.get_selection_model
 ```
 ## `get_shortcuts`
 ```@docs
-mousetrap.get_shortcuts
+Mousetrap.get_shortcuts
 ```
 ## `get_should_draw_value`
 ```@docs
-mousetrap.get_should_draw_value
+Mousetrap.get_should_draw_value
 ```
 ## `get_should_interpolate_size`
 ```@docs
-mousetrap.get_should_interpolate_size
+Mousetrap.get_should_interpolate_size
 ```
 ## `get_should_snap_to_ticks`
 ```@docs
-mousetrap.get_should_snap_to_ticks
+Mousetrap.get_should_snap_to_ticks
 ```
 ## `get_should_wrap`
 ```@docs
-mousetrap.get_should_wrap
+Mousetrap.get_should_wrap
 ```
 ## `get_show_column_separators`
 ```@docs
-mousetrap.get_show_column_separators
+Mousetrap.get_show_column_separators
 ```
 ## `get_show_row_separators`
 ```@docs
-mousetrap.get_show_row_separators
+Mousetrap.get_show_row_separators
 ```
 ## `get_show_separators`
 ```@docs
-mousetrap.get_show_separators
+Mousetrap.get_show_separators
 ```
 ## `get_show_text`
 ```@docs
-mousetrap.get_show_text
+Mousetrap.get_show_text
 ```
 ## `get_show_title_buttons`
 ```@docs
-mousetrap.get_show_title_buttons
+Mousetrap.get_show_title_buttons
 ```
 ## `get_signal_activate_blocked`
 ```@docs
-mousetrap.get_signal_activate_blocked
+Mousetrap.get_signal_activate_blocked
 ```
 ## `get_signal_activate_default_widget_blocked`
 ```@docs
-mousetrap.get_signal_activate_default_widget_blocked
+Mousetrap.get_signal_activate_default_widget_blocked
 ```
 ## `get_signal_activate_focused_widget_blocked`
 ```@docs
-mousetrap.get_signal_activate_focused_widget_blocked
+Mousetrap.get_signal_activate_focused_widget_blocked
 ```
 ## `get_signal_activate_item_blocked`
 ```@docs
-mousetrap.get_signal_activate_item_blocked
+Mousetrap.get_signal_activate_item_blocked
 ```
 ## `get_signal_activated_blocked`
 ```@docs
-mousetrap.get_signal_activated_blocked
+Mousetrap.get_signal_activated_blocked
+```
+## `get_signal_button_clicked_blocked`
+```@docs
+Mousetrap.get_signal_button_clicked_blocked
 ```
 ## `get_signal_click_pressed_blocked`
 ```@docs
-mousetrap.get_signal_click_pressed_blocked
+Mousetrap.get_signal_click_pressed_blocked
 ```
 ## `get_signal_click_released_blocked`
 ```@docs
-mousetrap.get_signal_click_released_blocked
+Mousetrap.get_signal_click_released_blocked
 ```
 ## `get_signal_click_stopped_blocked`
 ```@docs
-mousetrap.get_signal_click_stopped_blocked
+Mousetrap.get_signal_click_stopped_blocked
 ```
 ## `get_signal_clicked_blocked`
 ```@docs
-mousetrap.get_signal_clicked_blocked
+Mousetrap.get_signal_clicked_blocked
 ```
 ## `get_signal_close_request_blocked`
 ```@docs
-mousetrap.get_signal_close_request_blocked
+Mousetrap.get_signal_close_request_blocked
 ```
 ## `get_signal_closed_blocked`
 ```@docs
-mousetrap.get_signal_closed_blocked
+Mousetrap.get_signal_closed_blocked
 ```
 ## `get_signal_destroy_blocked`
 ```@docs
-mousetrap.get_signal_destroy_blocked
+Mousetrap.get_signal_destroy_blocked
+```
+## `get_signal_dismissed_blocked`
+```@docs
+Mousetrap.get_signal_dismissed_blocked
 ```
 ## `get_signal_drag_begin_blocked`
 ```@docs
-mousetrap.get_signal_drag_begin_blocked
+Mousetrap.get_signal_drag_begin_blocked
 ```
 ## `get_signal_drag_blocked`
 ```@docs
-mousetrap.get_signal_drag_blocked
+Mousetrap.get_signal_drag_blocked
 ```
 ## `get_signal_drag_end_blocked`
 ```@docs
-mousetrap.get_signal_drag_end_blocked
+Mousetrap.get_signal_drag_end_blocked
 ```
 ## `get_signal_focus_gained_blocked`
 ```@docs
-mousetrap.get_signal_focus_gained_blocked
+Mousetrap.get_signal_focus_gained_blocked
 ```
 ## `get_signal_focus_lost_blocked`
 ```@docs
-mousetrap.get_signal_focus_lost_blocked
+Mousetrap.get_signal_focus_lost_blocked
 ```
 ## `get_signal_hide_blocked`
 ```@docs
-mousetrap.get_signal_hide_blocked
+Mousetrap.get_signal_hide_blocked
 ```
 ## `get_signal_items_changed_blocked`
 ```@docs
-mousetrap.get_signal_items_changed_blocked
+Mousetrap.get_signal_items_changed_blocked
 ```
 ## `get_signal_key_pressed_blocked`
 ```@docs
-mousetrap.get_signal_key_pressed_blocked
+Mousetrap.get_signal_key_pressed_blocked
 ```
 ## `get_signal_key_released_blocked`
 ```@docs
-mousetrap.get_signal_key_released_blocked
+Mousetrap.get_signal_key_released_blocked
 ```
 ## `get_signal_kinetic_scroll_decelerate_blocked`
 ```@docs
-mousetrap.get_signal_kinetic_scroll_decelerate_blocked
+Mousetrap.get_signal_kinetic_scroll_decelerate_blocked
 ```
 ## `get_signal_map_blocked`
 ```@docs
-mousetrap.get_signal_map_blocked
+Mousetrap.get_signal_map_blocked
 ```
 ## `get_signal_modifiers_changed_blocked`
 ```@docs
-mousetrap.get_signal_modifiers_changed_blocked
+Mousetrap.get_signal_modifiers_changed_blocked
 ```
 ## `get_signal_motion_blocked`
 ```@docs
-mousetrap.get_signal_motion_blocked
+Mousetrap.get_signal_motion_blocked
 ```
 ## `get_signal_motion_enter_blocked`
 ```@docs
-mousetrap.get_signal_motion_enter_blocked
+Mousetrap.get_signal_motion_enter_blocked
 ```
 ## `get_signal_motion_leave_blocked`
 ```@docs
-mousetrap.get_signal_motion_leave_blocked
+Mousetrap.get_signal_motion_leave_blocked
 ```
 ## `get_signal_page_added_blocked`
 ```@docs
-mousetrap.get_signal_page_added_blocked
+Mousetrap.get_signal_page_added_blocked
 ```
 ## `get_signal_page_removed_blocked`
 ```@docs
-mousetrap.get_signal_page_removed_blocked
+Mousetrap.get_signal_page_removed_blocked
 ```
 ## `get_signal_page_reordered_blocked`
 ```@docs
-mousetrap.get_signal_page_reordered_blocked
+Mousetrap.get_signal_page_reordered_blocked
 ```
 ## `get_signal_page_selection_changed_blocked`
 ```@docs
-mousetrap.get_signal_page_selection_changed_blocked
+Mousetrap.get_signal_page_selection_changed_blocked
 ```
 ## `get_signal_paint_blocked`
 ```@docs
-mousetrap.get_signal_paint_blocked
+Mousetrap.get_signal_paint_blocked
 ```
 ## `get_signal_pan_blocked`
 ```@docs
-mousetrap.get_signal_pan_blocked
+Mousetrap.get_signal_pan_blocked
 ```
 ## `get_signal_press_cancelled_blocked`
 ```@docs
-mousetrap.get_signal_press_cancelled_blocked
+Mousetrap.get_signal_press_cancelled_blocked
 ```
 ## `get_signal_pressed_blocked`
 ```@docs
-mousetrap.get_signal_pressed_blocked
+Mousetrap.get_signal_pressed_blocked
 ```
 ## `get_signal_properties_changed_blocked`
 ```@docs
-mousetrap.get_signal_properties_changed_blocked
+Mousetrap.get_signal_properties_changed_blocked
 ```
 ## `get_signal_proximity_blocked`
 ```@docs
-mousetrap.get_signal_proximity_blocked
+Mousetrap.get_signal_proximity_blocked
 ```
 ## `get_signal_realize_blocked`
 ```@docs
-mousetrap.get_signal_realize_blocked
+Mousetrap.get_signal_realize_blocked
 ```
 ## `get_signal_render_blocked`
 ```@docs
-mousetrap.get_signal_render_blocked
+Mousetrap.get_signal_render_blocked
 ```
 ## `get_signal_resize_blocked`
 ```@docs
-mousetrap.get_signal_resize_blocked
+Mousetrap.get_signal_resize_blocked
 ```
 ## `get_signal_revealed_blocked`
 ```@docs
-mousetrap.get_signal_revealed_blocked
+Mousetrap.get_signal_revealed_blocked
 ```
 ## `get_signal_rotation_changed_blocked`
 ```@docs
-mousetrap.get_signal_rotation_changed_blocked
+Mousetrap.get_signal_rotation_changed_blocked
 ```
 ## `get_signal_scale_changed_blocked`
 ```@docs
-mousetrap.get_signal_scale_changed_blocked
+Mousetrap.get_signal_scale_changed_blocked
 ```
 ## `get_signal_scroll_begin_blocked`
 ```@docs
-mousetrap.get_signal_scroll_begin_blocked
+Mousetrap.get_signal_scroll_begin_blocked
 ```
 ## `get_signal_scroll_blocked`
 ```@docs
-mousetrap.get_signal_scroll_blocked
+Mousetrap.get_signal_scroll_blocked
 ```
 ## `get_signal_scroll_child_blocked`
 ```@docs
-mousetrap.get_signal_scroll_child_blocked
+Mousetrap.get_signal_scroll_child_blocked
 ```
 ## `get_signal_scroll_end_blocked`
 ```@docs
-mousetrap.get_signal_scroll_end_blocked
+Mousetrap.get_signal_scroll_end_blocked
 ```
 ## `get_signal_selection_changed_blocked`
 ```@docs
-mousetrap.get_signal_selection_changed_blocked
+Mousetrap.get_signal_selection_changed_blocked
 ```
 ## `get_signal_show_blocked`
 ```@docs
-mousetrap.get_signal_show_blocked
+Mousetrap.get_signal_show_blocked
 ```
 ## `get_signal_shutdown_blocked`
 ```@docs
-mousetrap.get_signal_shutdown_blocked
+Mousetrap.get_signal_shutdown_blocked
 ```
 ## `get_signal_stylus_down_blocked`
 ```@docs
-mousetrap.get_signal_stylus_down_blocked
+Mousetrap.get_signal_stylus_down_blocked
 ```
 ## `get_signal_stylus_up_blocked`
 ```@docs
-mousetrap.get_signal_stylus_up_blocked
+Mousetrap.get_signal_stylus_up_blocked
 ```
 ## `get_signal_swipe_blocked`
 ```@docs
-mousetrap.get_signal_swipe_blocked
+Mousetrap.get_signal_swipe_blocked
 ```
 ## `get_signal_switched_blocked`
 ```@docs
-mousetrap.get_signal_switched_blocked
+Mousetrap.get_signal_switched_blocked
 ```
 ## `get_signal_text_changed_blocked`
 ```@docs
-mousetrap.get_signal_text_changed_blocked
+Mousetrap.get_signal_text_changed_blocked
 ```
 ## `get_signal_toggled_blocked`
 ```@docs
-mousetrap.get_signal_toggled_blocked
+Mousetrap.get_signal_toggled_blocked
 ```
 ## `get_signal_unmap_blocked`
 ```@docs
-mousetrap.get_signal_unmap_blocked
+Mousetrap.get_signal_unmap_blocked
 ```
 ## `get_signal_unrealize_blocked`
 ```@docs
-mousetrap.get_signal_unrealize_blocked
+Mousetrap.get_signal_unrealize_blocked
 ```
 ## `get_signal_update_blocked`
 ```@docs
-mousetrap.get_signal_update_blocked
+Mousetrap.get_signal_update_blocked
 ```
 ## `get_signal_value_changed_blocked`
 ```@docs
-mousetrap.get_signal_value_changed_blocked
+Mousetrap.get_signal_value_changed_blocked
 ```
 ## `get_signal_wrapped_blocked`
 ```@docs
-mousetrap.get_signal_wrapped_blocked
+Mousetrap.get_signal_wrapped_blocked
 ```
 ## `get_single_click_activate`
 ```@docs
-mousetrap.get_single_click_activate
+Mousetrap.get_single_click_activate
 ```
 ## `get_size`
 ```@docs
-mousetrap.get_size
+Mousetrap.get_size
 ```
 ## `get_size_request`
 ```@docs
-mousetrap.get_size_request
+Mousetrap.get_size_request
 ```
 ## `get_spacing`
 ```@docs
-mousetrap.get_spacing
+Mousetrap.get_spacing
 ```
 ## `get_start_child_resizable`
 ```@docs
-mousetrap.get_start_child_resizable
+Mousetrap.get_start_child_resizable
 ```
 ## `get_start_child_shrinkable`
 ```@docs
-mousetrap.get_start_child_shrinkable
+Mousetrap.get_start_child_shrinkable
 ```
 ## `get_start_position`
 ```@docs
-mousetrap.get_start_position
+Mousetrap.get_start_position
 ```
 ## `get_state`
 ```@docs
-mousetrap.get_state
+Mousetrap.get_state
 ```
 ## `get_step_increment`
 ```@docs
-mousetrap.get_step_increment
+Mousetrap.get_step_increment
 ```
 ## `get_string`
 ```@docs
-mousetrap.get_string
+Mousetrap.get_string
 ```
 ## `get_surpress_debug`
 ```@docs
-mousetrap.get_surpress_debug
+Mousetrap.get_surpress_debug
 ```
 ## `get_surpress_info`
 ```@docs
-mousetrap.get_surpress_info
+Mousetrap.get_surpress_info
 ```
 ## `get_tab_position`
 ```@docs
-mousetrap.get_tab_position
+Mousetrap.get_tab_position
 ```
 ## `get_tabs_reorderable`
 ```@docs
-mousetrap.get_tabs_reorderable
+Mousetrap.get_tabs_reorderable
 ```
 ## `get_tabs_visible`
 ```@docs
-mousetrap.get_tabs_visible
+Mousetrap.get_tabs_visible
 ```
 ## `get_target_frame_duration`
 ```@docs
-mousetrap.get_target_frame_duration
+Mousetrap.get_target_frame_duration
 ```
 ## `get_text`
 ```@docs
-mousetrap.get_text
+Mousetrap.get_text
 ```
 ## `get_text_visible`
 ```@docs
-mousetrap.get_text_visible
+Mousetrap.get_text_visible
 ```
 ## `get_time_since_last_frame`
 ```@docs
-mousetrap.get_time_since_last_frame
+Mousetrap.get_time_since_last_frame
+```
+## `get_timeout`
+```@docs
+Mousetrap.get_timeout
+```
+## `get_timing_function`
+```@docs
+Mousetrap.get_timing_function
 ```
 ## `get_title`
 ```@docs
-mousetrap.get_title
+Mousetrap.get_title
 ```
 ## `get_tool_type`
 ```@docs
-mousetrap.get_tool_type
+Mousetrap.get_tool_type
 ```
 ## `get_top_left`
 ```@docs
-mousetrap.get_top_left
+Mousetrap.get_top_left
 ```
 ## `get_top_level_widget`
 ```@docs
-mousetrap.get_top_level_widget
+Mousetrap.get_top_level_widget
 ```
 ## `get_top_margin`
 ```@docs
-mousetrap.get_top_margin
+Mousetrap.get_top_margin
 ```
 ## `get_touch_only`
 ```@docs
-mousetrap.get_touch_only
+Mousetrap.get_touch_only
 ```
 ## `get_transition_duration`
 ```@docs
-mousetrap.get_transition_duration
+Mousetrap.get_transition_duration
 ```
 ## `get_transition_type`
 ```@docs
-mousetrap.get_transition_type
+Mousetrap.get_transition_type
 ```
 ## `get_uniform_float`
 ```@docs
-mousetrap.get_uniform_float
+Mousetrap.get_uniform_float
 ```
 ## `get_uniform_hsva`
 ```@docs
-mousetrap.get_uniform_hsva
+Mousetrap.get_uniform_hsva
 ```
 ## `get_uniform_int`
 ```@docs
-mousetrap.get_uniform_int
+Mousetrap.get_uniform_int
 ```
 ## `get_uniform_location`
 ```@docs
-mousetrap.get_uniform_location
+Mousetrap.get_uniform_location
 ```
 ## `get_uniform_rgba`
 ```@docs
-mousetrap.get_uniform_rgba
+Mousetrap.get_uniform_rgba
 ```
 ## `get_uniform_transform`
 ```@docs
-mousetrap.get_uniform_transform
+Mousetrap.get_uniform_transform
 ```
 ## `get_uniform_uint`
 ```@docs
-mousetrap.get_uniform_uint
+Mousetrap.get_uniform_uint
 ```
 ## `get_uniform_vec2`
 ```@docs
-mousetrap.get_uniform_vec2
+Mousetrap.get_uniform_vec2
 ```
 ## `get_uniform_vec3`
 ```@docs
-mousetrap.get_uniform_vec3
+Mousetrap.get_uniform_vec3
 ```
 ## `get_uniform_vec4`
 ```@docs
-mousetrap.get_uniform_vec4
+Mousetrap.get_uniform_vec4
 ```
 ## `get_upper`
 ```@docs
-mousetrap.get_upper
+Mousetrap.get_upper
 ```
 ## `get_uri`
 ```@docs
-mousetrap.get_uri
+Mousetrap.get_uri
 ```
 ## `get_use_markup`
 ```@docs
-mousetrap.get_use_markup
+Mousetrap.get_use_markup
 ```
 ## `get_value`
 ```@docs
-mousetrap.get_value
+Mousetrap.get_value
 ```
 ## `get_velocity`
 ```@docs
-mousetrap.get_velocity
+Mousetrap.get_velocity
 ```
 ## `get_vertex_color`
 ```@docs
-mousetrap.get_vertex_color
+Mousetrap.get_vertex_color
 ```
 ## `get_vertex_color_location`
 ```@docs
-mousetrap.get_vertex_color_location
+Mousetrap.get_vertex_color_location
 ```
 ## `get_vertex_position`
 ```@docs
-mousetrap.get_vertex_position
+Mousetrap.get_vertex_position
 ```
 ## `get_vertex_position_location`
 ```@docs
-mousetrap.get_vertex_position_location
+Mousetrap.get_vertex_position_location
 ```
 ## `get_vertex_shader_id`
 ```@docs
-mousetrap.get_vertex_shader_id
+Mousetrap.get_vertex_shader_id
 ```
 ## `get_vertex_texture_coordinate`
 ```@docs
-mousetrap.get_vertex_texture_coordinate
+Mousetrap.get_vertex_texture_coordinate
 ```
 ## `get_vertex_texture_coordinate_location`
 ```@docs
-mousetrap.get_vertex_texture_coordinate_location
+Mousetrap.get_vertex_texture_coordinate_location
 ```
 ## `get_vertical_adjustment`
 ```@docs
-mousetrap.get_vertical_adjustment
+Mousetrap.get_vertical_adjustment
 ```
 ## `get_vertical_alignment`
 ```@docs
-mousetrap.get_vertical_alignment
+Mousetrap.get_vertical_alignment
 ```
 ## `get_vertical_scrollbar_policy`
 ```@docs
-mousetrap.get_vertical_scrollbar_policy
+Mousetrap.get_vertical_scrollbar_policy
 ```
 ## `get_visible_child`
 ```@docs
-mousetrap.get_visible_child
+Mousetrap.get_visible_child
 ```
 ## `get_was_modified`
 ```@docs
-mousetrap.get_was_modified
+Mousetrap.get_was_modified
 ```
 ## `get_wrap_mode`
 ```@docs
-mousetrap.get_wrap_mode
+Mousetrap.get_wrap_mode
 ```
 ## `get_x_alignment`
 ```@docs
-mousetrap.get_x_alignment
+Mousetrap.get_x_alignment
 ```
 ## `get_y_alignment`
 ```@docs
-mousetrap.get_y_alignment
+Mousetrap.get_y_alignment
 ```
 ## `goto_page!`
 ```@docs
-mousetrap.goto_page!
+Mousetrap.goto_page!
 ```
 ## `grab_focus!`
 ```@docs
-mousetrap.grab_focus!
+Mousetrap.grab_focus!
 ```
 ## `has_action`
 ```@docs
-mousetrap.has_action
+Mousetrap.has_action
 ```
 ## `has_axis`
 ```@docs
-mousetrap.has_axis
+Mousetrap.has_axis
 ```
 ## `has_column_with_title`
 ```@docs
-mousetrap.has_column_with_title
+Mousetrap.has_column_with_title
 ```
 ## `has_group`
 ```@docs
-mousetrap.has_group
+Mousetrap.has_group
 ```
 ## `has_icon`
 ```@docs
-mousetrap.has_icon
+Mousetrap.has_icon
 ```
 ## `has_key`
 ```@docs
-mousetrap.has_key
+Mousetrap.has_key
 ```
 ## `hbox`
 ```@docs
-mousetrap.hbox
+Mousetrap.hbox
 ```
 ## `hide!`
 ```@docs
-mousetrap.hide!
+Mousetrap.hide!
 ```
 ## `hold!`
 ```@docs
-mousetrap.hold!
+Mousetrap.hold!
 ```
 ## `hsva_to_rgba`
 ```@docs
-mousetrap.hsva_to_rgba
+Mousetrap.hsva_to_rgba
 ```
 ## `html_code_to_rgba`
 ```@docs
-mousetrap.html_code_to_rgba
+Mousetrap.html_code_to_rgba
 ```
 ## `insert_after!`
 ```@docs
-mousetrap.insert_after!
+Mousetrap.insert_after!
 ```
 ## `insert_at!`
 ```@docs
-mousetrap.insert_at!
+Mousetrap.insert_at!
 ```
 ## `insert_column_at!`
 ```@docs
-mousetrap.insert_column_at!
+Mousetrap.insert_column_at!
 ```
 ## `insert_next_to!`
 ```@docs
-mousetrap.insert_next_to!
+Mousetrap.insert_next_to!
 ```
 ## `insert_row_at!`
 ```@docs
-mousetrap.insert_row_at!
+Mousetrap.insert_row_at!
 ```
 ## `is_cancelled`
 ```@docs
-mousetrap.is_cancelled
+Mousetrap.is_cancelled
 ```
 ## `is_executable`
 ```@docs
-mousetrap.is_executable
+Mousetrap.is_executable
 ```
 ## `is_file`
 ```@docs
-mousetrap.is_file
+Mousetrap.is_file
 ```
 ## `is_folder`
 ```@docs
-mousetrap.is_folder
+Mousetrap.is_folder
 ```
 ## `is_symlink`
 ```@docs
-mousetrap.is_symlink
+Mousetrap.is_symlink
 ```
 ## `is_valid_html_code`
 ```@docs
-mousetrap.is_valid_html_code
+Mousetrap.is_valid_html_code
 ```
 ## `log_critical`
 ```@docs
-mousetrap.log_critical
+Mousetrap.log_critical
 ```
 ## `log_debug`
 ```@docs
-mousetrap.log_debug
+Mousetrap.log_debug
 ```
 ## `log_fatal`
 ```@docs
-mousetrap.log_fatal
+Mousetrap.log_fatal
 ```
 ## `log_info`
 ```@docs
-mousetrap.log_info
+Mousetrap.log_info
 ```
 ## `log_warning`
 ```@docs
-mousetrap.log_warning
+Mousetrap.log_warning
 ```
 ## `main`
 ```@docs
-mousetrap.main
+Mousetrap.main
 ```
 ## `make_current`
 ```@docs
-mousetrap.make_current
+Mousetrap.make_current
 ```
 ## `mark_as_busy!`
 ```@docs
-mousetrap.mark_as_busy!
+Mousetrap.mark_as_busy!
 ```
 ## `microseconds`
 ```@docs
-mousetrap.microseconds
+Mousetrap.microseconds
 ```
 ## `milliseconds`
 ```@docs
-mousetrap.milliseconds
+Mousetrap.milliseconds
 ```
 ## `minutes`
 ```@docs
-mousetrap.minutes
+Mousetrap.minutes
 ```
 ## `mouse_button_01_pressed`
 ```@docs
-mousetrap.mouse_button_01_pressed
+Mousetrap.mouse_button_01_pressed
 ```
 ## `mouse_button_02_pressed`
 ```@docs
-mousetrap.mouse_button_02_pressed
+Mousetrap.mouse_button_02_pressed
 ```
 ## `move!`
 ```@docs
-mousetrap.move!
+Mousetrap.move!
 ```
 ## `move_page_to!`
 ```@docs
-mousetrap.move_page_to!
+Mousetrap.move_page_to!
 ```
 ## `move_to_trash!`
 ```@docs
-mousetrap.move_to_trash!
+Mousetrap.move_to_trash!
 ```
 ## `nanoseconds`
 ```@docs
-mousetrap.nanoseconds
+Mousetrap.nanoseconds
 ```
 ## `next_page!`
 ```@docs
-mousetrap.next_page!
+Mousetrap.next_page!
 ```
 ## `on_accept!`
 ```@docs
-mousetrap.on_accept!
+Mousetrap.on_accept!
 ```
 ## `on_cancel!`
 ```@docs
-mousetrap.on_cancel!
+Mousetrap.on_cancel!
+```
+## `on_done!`
+```@docs
+Mousetrap.on_done!
 ```
 ## `on_file_changed!`
 ```@docs
-mousetrap.on_file_changed!
+Mousetrap.on_file_changed!
 ```
 ## `on_selection!`
 ```@docs
-mousetrap.on_selection!
+Mousetrap.on_selection!
+```
+## `on_tick!`
+```@docs
+Mousetrap.on_tick!
 ```
 ## `open_file`
 ```@docs
-mousetrap.open_file
+Mousetrap.open_file
 ```
 ## `open_url`
 ```@docs
-mousetrap.open_url
+Mousetrap.open_url
+```
+## `pause!`
+```@docs
+Mousetrap.pause!
+```
+## `play!`
+```@docs
+Mousetrap.play!
 ```
 ## `popdown!`
 ```@docs
-mousetrap.popdown!
+Mousetrap.popdown!
 ```
 ## `popup!`
 ```@docs
-mousetrap.popup!
+Mousetrap.popup!
 ```
 ## `present!`
 ```@docs
-mousetrap.present!
+Mousetrap.present!
 ```
 ## `previous_page!`
 ```@docs
-mousetrap.previous_page!
+Mousetrap.previous_page!
 ```
 ## `pulse`
 ```@docs
-mousetrap.pulse
+Mousetrap.pulse
 ```
 ## `push_back!`
 ```@docs
-mousetrap.push_back!
+Mousetrap.push_back!
 ```
 ## `push_back_column!`
 ```@docs
-mousetrap.push_back_column!
+Mousetrap.push_back_column!
 ```
 ## `push_back_row!`
 ```@docs
-mousetrap.push_back_row!
+Mousetrap.push_back_row!
 ```
 ## `push_front!`
 ```@docs
-mousetrap.push_front!
+Mousetrap.push_front!
 ```
 ## `push_front_column!`
 ```@docs
-mousetrap.push_front_column!
+Mousetrap.push_front_column!
 ```
 ## `push_front_row!`
 ```@docs
-mousetrap.push_front_row!
+Mousetrap.push_front_row!
 ```
 ## `query_info`
 ```@docs
-mousetrap.query_info
+Mousetrap.query_info
 ```
 ## `queue_render`
 ```@docs
-mousetrap.queue_render
+Mousetrap.queue_render
 ```
 ## `quit!`
 ```@docs
-mousetrap.quit!
+Mousetrap.quit!
 ```
 ## `radians`
 ```@docs
-mousetrap.radians
+Mousetrap.radians
 ```
 ## `read_symlink`
 ```@docs
-mousetrap.read_symlink
+Mousetrap.read_symlink
 ```
 ## `redo!`
 ```@docs
-mousetrap.redo!
+Mousetrap.redo!
 ```
 ## `release!`
 ```@docs
-mousetrap.release!
+Mousetrap.release!
 ```
 ## `remove!`
 ```@docs
-mousetrap.remove!
+Mousetrap.remove!
 ```
 ## `remove_action!`
 ```@docs
-mousetrap.remove_action!
+Mousetrap.remove_action!
 ```
 ## `remove_center_child!`
 ```@docs
-mousetrap.remove_center_child!
+Mousetrap.remove_center_child!
 ```
 ## `remove_child!`
 ```@docs
-mousetrap.remove_child!
+Mousetrap.remove_child!
 ```
 ## `remove_column!`
 ```@docs
-mousetrap.remove_column!
+Mousetrap.remove_column!
 ```
 ## `remove_column_at!`
 ```@docs
-mousetrap.remove_column_at!
+Mousetrap.remove_column_at!
 ```
 ## `remove_controller!`
 ```@docs
-mousetrap.remove_controller!
+Mousetrap.remove_controller!
+```
+## `remove_css_class!`
+```@docs
+Mousetrap.remove_css_class!
 ```
 ## `remove_end_child!`
 ```@docs
-mousetrap.remove_end_child!
+Mousetrap.remove_end_child!
 ```
 ## `remove_extra_widget!`
 ```@docs
-mousetrap.remove_extra_widget!
+Mousetrap.remove_extra_widget!
 ```
 ## `remove_label_widget!`
 ```@docs
-mousetrap.remove_label_widget!
+Mousetrap.remove_label_widget!
 ```
 ## `remove_marker!`
 ```@docs
-mousetrap.remove_marker!
+Mousetrap.remove_marker!
 ```
 ## `remove_overlay!`
 ```@docs
-mousetrap.remove_overlay!
+Mousetrap.remove_overlay!
 ```
 ## `remove_popover!`
 ```@docs
-mousetrap.remove_popover!
+Mousetrap.remove_popover!
 ```
 ## `remove_primary_icon!`
 ```@docs
-mousetrap.remove_primary_icon!
+Mousetrap.remove_primary_icon!
 ```
 ## `remove_row_at!`
 ```@docs
-mousetrap.remove_row_at!
+Mousetrap.remove_row_at!
 ```
 ## `remove_secondary_icon!`
 ```@docs
-mousetrap.remove_secondary_icon!
+Mousetrap.remove_secondary_icon!
 ```
 ## `remove_start_child!`
 ```@docs
-mousetrap.remove_start_child!
+Mousetrap.remove_start_child!
 ```
 ## `remove_texture!`
 ```@docs
-mousetrap.remove_texture!
+Mousetrap.remove_texture!
 ```
 ## `remove_tick_callback!`
 ```@docs
-mousetrap.remove_tick_callback!
+Mousetrap.remove_tick_callback!
 ```
 ## `remove_title_widget!`
 ```@docs
-mousetrap.remove_title_widget!
+Mousetrap.remove_title_widget!
 ```
 ## `remove_tooltip_widget!`
 ```@docs
-mousetrap.remove_tooltip_widget!
+Mousetrap.remove_tooltip_widget!
 ```
 ## `render`
 ```@docs
-mousetrap.render
+Mousetrap.render
 ```
 ## `render_render_tasks`
 ```@docs
-mousetrap.render_render_tasks
+Mousetrap.render_render_tasks
 ```
 ## `reset!`
 ```@docs
-mousetrap.reset!
-```
-## `reset_style!`
-```@docs
-mousetrap.reset_style!
+Mousetrap.reset!
 ```
 ## `reset_text_to_value_function!`
 ```@docs
-mousetrap.reset_text_to_value_function!
+Mousetrap.reset_text_to_value_function!
 ```
 ## `reset_value_to_text_function!`
 ```@docs
-mousetrap.reset_value_to_text_function!
+Mousetrap.reset_value_to_text_function!
 ```
 ## `restart!`
 ```@docs
-mousetrap.restart!
+Mousetrap.restart!
 ```
 ## `rgba_to_hsva`
 ```@docs
-mousetrap.rgba_to_hsva
+Mousetrap.rgba_to_hsva
 ```
 ## `rgba_to_html_code`
 ```@docs
-mousetrap.rgba_to_html_code
+Mousetrap.rgba_to_html_code
 ```
 ## `rotate!`
 ```@docs
-mousetrap.rotate!
+Mousetrap.rotate!
 ```
 ## `run!`
 ```@docs
-mousetrap.run!
+Mousetrap.run!
 ```
 ## `save_to_file`
 ```@docs
-mousetrap.save_to_file
+Mousetrap.save_to_file
 ```
 ## `scale!`
 ```@docs
-mousetrap.scale!
+Mousetrap.scale!
 ```
 ## `seconds`
 ```@docs
-mousetrap.seconds
+Mousetrap.seconds
 ```
 ## `select!`
 ```@docs
-mousetrap.select!
+Mousetrap.select!
 ```
 ## `select_all!`
 ```@docs
-mousetrap.select_all!
+Mousetrap.select_all!
 ```
 ## `self_is_focused`
 ```@docs
-mousetrap.self_is_focused
+Mousetrap.self_is_focused
 ```
 ## `self_or_child_is_focused`
 ```@docs
-mousetrap.self_or_child_is_focused
+Mousetrap.self_or_child_is_focused
+```
+## `serialize`
+```@docs
+Mousetrap.serialize
 ```
 ## `set_acceleration_rate!`
 ```@docs
-mousetrap.set_acceleration_rate!
+Mousetrap.set_acceleration_rate!
 ```
 ## `set_accept_label!`
 ```@docs
-mousetrap.set_accept_label!
+Mousetrap.set_accept_label!
 ```
 ## `set_action!`
 ```@docs
-mousetrap.set_action!
+Mousetrap.set_action!
 ```
 ## `set_alignment!`
 ```@docs
-mousetrap.set_alignment!
+Mousetrap.set_alignment!
 ```
 ## `set_allow_only_numeric!`
 ```@docs
-mousetrap.set_allow_only_numeric!
+Mousetrap.set_allow_only_numeric!
 ```
 ## `set_always_show_arrow!`
 ```@docs
-mousetrap.set_always_show_arrow!
+Mousetrap.set_always_show_arrow!
 ```
 ## `set_application!`
 ```@docs
-mousetrap.set_application!
+Mousetrap.set_application!
 ```
 ## `set_autohide!`
 ```@docs
-mousetrap.set_autohide!
+Mousetrap.set_autohide!
 ```
 ## `set_bottom_margin!`
 ```@docs
-mousetrap.set_bottom_margin!
+Mousetrap.set_bottom_margin!
+```
+## `set_button_action!`
+```@docs
+Mousetrap.set_button_action!
 ```
 ## `set_button_label!`
 ```@docs
-mousetrap.set_button_label!
+Mousetrap.set_button_label!
 ```
 ## `set_can_respond_to_input!`
 ```@docs
-mousetrap.set_can_respond_to_input!
+Mousetrap.set_can_respond_to_input!
 ```
 ## `set_center_child!`
 ```@docs
-mousetrap.set_center_child!
+Mousetrap.set_center_child!
 ```
 ## `set_centroid!`
 ```@docs
-mousetrap.set_centroid!
+Mousetrap.set_centroid!
 ```
 ## `set_child!`
 ```@docs
-mousetrap.set_child!
+Mousetrap.set_child!
 ```
 ## `set_child_position!`
 ```@docs
-mousetrap.set_child_position!
+Mousetrap.set_child_position!
 ```
 ## `set_child_x_alignment!`
 ```@docs
-mousetrap.set_child_x_alignment!
+Mousetrap.set_child_x_alignment!
 ```
 ## `set_child_y_alignment!`
 ```@docs
-mousetrap.set_child_y_alignment!
+Mousetrap.set_child_y_alignment!
 ```
 ## `set_color!`
 ```@docs
-mousetrap.set_color!
+Mousetrap.set_color!
 ```
 ## `set_column_spacing!`
 ```@docs
-mousetrap.set_column_spacing!
+Mousetrap.set_column_spacing!
 ```
 ## `set_columns_homogeneous!`
 ```@docs
-mousetrap.set_columns_homogeneous!
+Mousetrap.set_columns_homogeneous!
 ```
 ## `set_comment_above!`
 ```@docs
-mousetrap.set_comment_above!
+Mousetrap.set_comment_above!
 ```
 ## `set_current_blend_mode`
 ```@docs
-mousetrap.set_current_blend_mode
+Mousetrap.set_current_blend_mode
 ```
 ## `set_current_theme!`
 ```@docs
-mousetrap.set_current_theme!
+Mousetrap.set_current_theme!
 ```
 ## `set_cursor!`
 ```@docs
-mousetrap.set_cursor!
+Mousetrap.set_cursor!
 ```
 ## `set_cursor_from_image!`
 ```@docs
-mousetrap.set_cursor_from_image!
+Mousetrap.set_cursor_from_image!
 ```
 ## `set_cursor_visible!`
 ```@docs
-mousetrap.set_cursor_visible!
+Mousetrap.set_cursor_visible!
 ```
 ## `set_default_button!`
 ```@docs
-mousetrap.set_default_button!
+Mousetrap.set_default_button!
 ```
 ## `set_default_widget!`
 ```@docs
-mousetrap.set_default_widget!
+Mousetrap.set_default_widget!
 ```
 ## `set_delay_factor!`
 ```@docs
-mousetrap.set_delay_factor!
+Mousetrap.set_delay_factor!
 ```
 ## `set_destroy_with_parent!`
 ```@docs
-mousetrap.set_destroy_with_parent!
+Mousetrap.set_destroy_with_parent!
 ```
 ## `set_detailed_description!`
 ```@docs
-mousetrap.set_detailed_description!
+Mousetrap.set_detailed_description!
+```
+## `set_duration!`
+```@docs
+Mousetrap.set_duration!
 ```
 ## `set_editable!`
 ```@docs
-mousetrap.set_editable!
+Mousetrap.set_editable!
 ```
 ## `set_ellipsize_mode!`
 ```@docs
-mousetrap.set_ellipsize_mode!
+Mousetrap.set_ellipsize_mode!
 ```
 ## `set_enable_rubberband_selection!`
 ```@docs
-mousetrap.set_enable_rubberband_selection!
+Mousetrap.set_enable_rubberband_selection!
 ```
 ## `set_enabled!`
 ```@docs
-mousetrap.set_enabled!
+Mousetrap.set_enabled!
 ```
 ## `set_end_child!`
 ```@docs
-mousetrap.set_end_child!
+Mousetrap.set_end_child!
 ```
 ## `set_end_child_resizable!`
 ```@docs
-mousetrap.set_end_child_resizable!
+Mousetrap.set_end_child_resizable!
 ```
 ## `set_end_child_shrinkable!`
 ```@docs
-mousetrap.set_end_child_shrinkable!
+Mousetrap.set_end_child_shrinkable!
 ```
 ## `set_expand!`
 ```@docs
-mousetrap.set_expand!
+Mousetrap.set_expand!
 ```
 ## `set_expand_horizontally!`
 ```@docs
-mousetrap.set_expand_horizontally!
+Mousetrap.set_expand_horizontally!
 ```
 ## `set_expand_vertically!`
 ```@docs
-mousetrap.set_expand_vertically!
+Mousetrap.set_expand_vertically!
 ```
 ## `set_extra_widget!`
 ```@docs
-mousetrap.set_extra_widget!
+Mousetrap.set_extra_widget!
 ```
 ## `set_file!`
 ```@docs
-mousetrap.set_file!
+Mousetrap.set_file!
 ```
 ## `set_file_chooser_action!`
 ```@docs
-mousetrap.set_file_chooser_action!
+Mousetrap.set_file_chooser_action!
 ```
 ## `set_fixed_width!`
 ```@docs
-mousetrap.set_fixed_width!
+Mousetrap.set_fixed_width!
 ```
 ## `set_focus_on_click!`
 ```@docs
-mousetrap.set_focus_on_click!
+Mousetrap.set_focus_on_click!
 ```
 ## `set_focus_visible!`
 ```@docs
-mousetrap.set_focus_visible!
+Mousetrap.set_focus_visible!
 ```
 ## `set_fraction!`
 ```@docs
-mousetrap.set_fraction!
+Mousetrap.set_fraction!
 ```
 ## `set_fullscreen!`
 ```@docs
-mousetrap.set_fullscreen!
+Mousetrap.set_fullscreen!
 ```
 ## `set_function!`
 ```@docs
-mousetrap.set_function!
+Mousetrap.set_function!
 ```
 ## `set_has_base_arrow!`
 ```@docs
-mousetrap.set_has_base_arrow!
+Mousetrap.set_has_base_arrow!
 ```
 ## `set_has_border!`
 ```@docs
-mousetrap.set_has_border!
+Mousetrap.set_has_border!
 ```
 ## `set_has_close_button!`
 ```@docs
-mousetrap.set_has_close_button!
+Mousetrap.set_has_close_button!
 ```
 ## `set_has_frame!`
 ```@docs
-mousetrap.set_has_frame!
+Mousetrap.set_has_frame!
 ```
 ## `set_has_origin!`
 ```@docs
-mousetrap.set_has_origin!
+Mousetrap.set_has_origin!
 ```
 ## `set_has_wide_handle!`
 ```@docs
-mousetrap.set_has_wide_handle!
+Mousetrap.set_has_wide_handle!
 ```
 ## `set_header_menu!`
 ```@docs
-mousetrap.set_header_menu!
+Mousetrap.set_header_menu!
 ```
 ## `set_hide_on_close!`
 ```@docs
-mousetrap.set_hide_on_close!
+Mousetrap.set_hide_on_close!
 ```
 ## `set_hide_on_overflow!`
 ```@docs
-mousetrap.set_hide_on_overflow!
+Mousetrap.set_hide_on_overflow!
 ```
 ## `set_homogeneous!`
 ```@docs
-mousetrap.set_homogeneous!
+Mousetrap.set_homogeneous!
 ```
 ## `set_horizontal_alignment!`
 ```@docs
-mousetrap.set_horizontal_alignment!
+Mousetrap.set_horizontal_alignment!
 ```
 ## `set_horizontal_scrollbar_policy!`
 ```@docs
-mousetrap.set_horizontal_scrollbar_policy!
+Mousetrap.set_horizontal_scrollbar_policy!
 ```
 ## `set_icon!`
 ```@docs
-mousetrap.set_icon!
+Mousetrap.set_icon!
 ```
 ## `set_image!`
 ```@docs
-mousetrap.set_image!
+Mousetrap.set_image!
 ```
 ## `set_initial_file!`
 ```@docs
-mousetrap.set_initial_file!
+Mousetrap.set_initial_file!
 ```
 ## `set_initial_filter!`
 ```@docs
-mousetrap.set_initial_filter!
+Mousetrap.set_initial_filter!
 ```
 ## `set_initial_folder!`
 ```@docs
-mousetrap.set_initial_folder!
+Mousetrap.set_initial_folder!
 ```
 ## `set_initial_name!`
 ```@docs
-mousetrap.set_initial_name!
+Mousetrap.set_initial_name!
 ```
 ## `set_inverted!`
 ```@docs
-mousetrap.set_inverted!
+Mousetrap.set_inverted!
 ```
 ## `set_is_active!`
 ```@docs
-mousetrap.set_is_active!
+Mousetrap.set_is_active!
 ```
 ## `set_is_circular!`
 ```@docs
-mousetrap.set_is_circular!
+Mousetrap.set_is_circular!
 ```
 ## `set_is_decorated!`
 ```@docs
-mousetrap.set_is_decorated!
+Mousetrap.set_is_decorated!
 ```
 ## `set_is_expanded!`
 ```@docs
-mousetrap.set_is_expanded!
+Mousetrap.set_is_expanded!
 ```
 ## `set_is_focusable!`
 ```@docs
-mousetrap.set_is_focusable!
+Mousetrap.set_is_focusable!
+```
+## `set_is_high_priority!`
+```@docs
+Mousetrap.set_is_high_priority!
 ```
 ## `set_is_horizontally_homogeneous!`
 ```@docs
-mousetrap.set_is_horizontally_homogeneous!
+Mousetrap.set_is_horizontally_homogeneous!
 ```
 ## `set_is_inverted!`
 ```@docs
-mousetrap.set_is_inverted!
+Mousetrap.set_is_inverted!
 ```
 ## `set_is_modal!`
 ```@docs
-mousetrap.set_is_modal!
+Mousetrap.set_is_modal!
 ```
 ## `set_is_resizable!`
 ```@docs
-mousetrap.set_is_resizable!
+Mousetrap.set_is_resizable!
 ```
 ## `set_is_revealed!`
 ```@docs
-mousetrap.set_is_revealed!
+Mousetrap.set_is_revealed!
+```
+## `set_is_reversed!`
+```@docs
+Mousetrap.set_is_reversed!
 ```
 ## `set_is_scrollable!`
 ```@docs
-mousetrap.set_is_scrollable!
+Mousetrap.set_is_scrollable!
 ```
 ## `set_is_selectable!`
 ```@docs
-mousetrap.set_is_selectable!
+Mousetrap.set_is_selectable!
 ```
 ## `set_is_spinning!`
 ```@docs
-mousetrap.set_is_spinning!
+Mousetrap.set_is_spinning!
 ```
 ## `set_is_vertically_homogeneous!`
 ```@docs
-mousetrap.set_is_vertically_homogeneous!
+Mousetrap.set_is_vertically_homogeneous!
 ```
 ## `set_is_visible!`
 ```@docs
-mousetrap.set_is_visible!
+Mousetrap.set_is_visible!
 ```
 ## `set_justify_mode!`
 ```@docs
-mousetrap.set_justify_mode!
+Mousetrap.set_justify_mode!
 ```
 ## `set_kinetic_scrolling_enabled!`
 ```@docs
-mousetrap.set_kinetic_scrolling_enabled!
+Mousetrap.set_kinetic_scrolling_enabled!
 ```
 ## `set_label_widget!`
 ```@docs
-mousetrap.set_label_widget!
+Mousetrap.set_label_widget!
 ```
 ## `set_label_x_alignment!`
 ```@docs
-mousetrap.set_label_x_alignment!
+Mousetrap.set_label_x_alignment!
 ```
 ## `set_layout!`
 ```@docs
-mousetrap.set_layout!
+Mousetrap.set_layout!
 ```
 ## `set_left_margin!`
 ```@docs
-mousetrap.set_left_margin!
+Mousetrap.set_left_margin!
 ```
 ## `set_listens_for_shortcut_action!`
 ```@docs
-mousetrap.set_listens_for_shortcut_action!
+Mousetrap.set_listens_for_shortcut_action!
 ```
 ## `set_log_file!`
 ```@docs
-mousetrap.set_log_file!
+Mousetrap.set_log_file!
 ```
 ## `set_lower!`
 ```@docs
-mousetrap.set_lower!
+Mousetrap.set_lower!
 ```
 ## `set_margin!`
 ```@docs
-mousetrap.set_margin!
+Mousetrap.set_margin!
 ```
 ## `set_margin_bottom!`
 ```@docs
-mousetrap.set_margin_bottom!
+Mousetrap.set_margin_bottom!
 ```
 ## `set_margin_end!`
 ```@docs
-mousetrap.set_margin_end!
+Mousetrap.set_margin_end!
 ```
 ## `set_margin_horizontal!`
 ```@docs
-mousetrap.set_margin_horizontal!
+Mousetrap.set_margin_horizontal!
 ```
 ## `set_margin_start!`
 ```@docs
-mousetrap.set_margin_start!
+Mousetrap.set_margin_start!
 ```
 ## `set_margin_top!`
 ```@docs
-mousetrap.set_margin_top!
+Mousetrap.set_margin_top!
 ```
 ## `set_margin_vertical!`
 ```@docs
-mousetrap.set_margin_vertical!
+Mousetrap.set_margin_vertical!
 ```
 ## `set_max_n_columns!`
 ```@docs
-mousetrap.set_max_n_columns!
+Mousetrap.set_max_n_columns!
 ```
 ## `set_max_value!`
 ```@docs
-mousetrap.set_max_value!
+Mousetrap.set_max_value!
 ```
 ## `set_max_width_chars!`
 ```@docs
-mousetrap.set_max_width_chars!
+Mousetrap.set_max_width_chars!
 ```
 ## `set_maximized!`
 ```@docs
-mousetrap.set_maximized!
+Mousetrap.set_maximized!
 ```
 ## `set_maximum_size!`
 ```@docs
-mousetrap.set_maximum_size!
+Mousetrap.set_maximum_size!
 ```
 ## `set_message!`
 ```@docs
-mousetrap.set_message!
+Mousetrap.set_message!
 ```
 ## `set_min_n_columns!`
 ```@docs
-mousetrap.set_min_n_columns!
+Mousetrap.set_min_n_columns!
 ```
 ## `set_min_value!`
 ```@docs
-mousetrap.set_min_value!
+Mousetrap.set_min_value!
 ```
 ## `set_minimized!`
 ```@docs
-mousetrap.set_minimized!
+Mousetrap.set_minimized!
 ```
 ## `set_mode!`
 ```@docs
-mousetrap.set_mode!
+Mousetrap.set_mode!
 ```
 ## `set_n_digits!`
 ```@docs
-mousetrap.set_n_digits!
+Mousetrap.set_n_digits!
 ```
 ## `set_only_listens_to_button!`
 ```@docs
-mousetrap.set_only_listens_to_button!
+Mousetrap.set_only_listens_to_button!
 ```
 ## `set_opacity!`
 ```@docs
-mousetrap.set_opacity!
+Mousetrap.set_opacity!
 ```
 ## `set_orientation!`
 ```@docs
-mousetrap.set_orientation!
+Mousetrap.set_orientation!
 ```
 ## `set_pixel!`
 ```@docs
-mousetrap.set_pixel!
+Mousetrap.set_pixel!
 ```
 ## `set_popover!`
 ```@docs
-mousetrap.set_popover!
+Mousetrap.set_popover!
 ```
 ## `set_popover_menu!`
 ```@docs
-mousetrap.set_popover_menu!
+Mousetrap.set_popover_menu!
 ```
 ## `set_position!`
 ```@docs
-mousetrap.set_position!
+Mousetrap.set_position!
 ```
 ## `set_primary_icon!`
 ```@docs
-mousetrap.set_primary_icon!
+Mousetrap.set_primary_icon!
 ```
 ## `set_propagate_natural_height!`
 ```@docs
-mousetrap.set_propagate_natural_height!
+Mousetrap.set_propagate_natural_height!
 ```
 ## `set_propagate_natural_width!`
 ```@docs
-mousetrap.set_propagate_natural_width!
+Mousetrap.set_propagate_natural_width!
 ```
 ## `set_propagation_phase!`
 ```@docs
-mousetrap.set_propagation_phase!
+Mousetrap.set_propagation_phase!
 ```
 ## `set_quick_change_menu_enabled!`
 ```@docs
-mousetrap.set_quick_change_menu_enabled!
+Mousetrap.set_quick_change_menu_enabled!
 ```
 ## `set_ratio!`
 ```@docs
-mousetrap.set_ratio!
+Mousetrap.set_ratio!
 ```
 ## `set_relative_position!`
 ```@docs
-mousetrap.set_relative_position!
+Mousetrap.set_relative_position!
+```
+## `set_repeat_count!`
+```@docs
+Mousetrap.set_repeat_count!
 ```
 ## `set_resource_path!`
 ```@docs
-mousetrap.set_resource_path!
+Mousetrap.set_resource_path!
 ```
 ## `set_right_margin!`
 ```@docs
-mousetrap.set_right_margin!
+Mousetrap.set_right_margin!
 ```
 ## `set_row_spacing!`
 ```@docs
-mousetrap.set_row_spacing!
+Mousetrap.set_row_spacing!
 ```
 ## `set_rows_homogeneous!`
 ```@docs
-mousetrap.set_rows_homogeneous!
+Mousetrap.set_rows_homogeneous!
 ```
 ## `set_scale!`
 ```@docs
-mousetrap.set_scale!
+Mousetrap.set_scale!
 ```
 ## `set_scale_mode!`
 ```@docs
-mousetrap.set_scale_mode!
+Mousetrap.set_scale_mode!
 ```
 ## `set_scope!`
 ```@docs
-mousetrap.set_scope!
+Mousetrap.set_scope!
 ```
 ## `set_scrollbar_placement!`
 ```@docs
-mousetrap.set_scrollbar_placement!
+Mousetrap.set_scrollbar_placement!
 ```
 ## `set_secondary_icon!`
 ```@docs
-mousetrap.set_secondary_icon!
+Mousetrap.set_secondary_icon!
 ```
 ## `set_selected!`
 ```@docs
-mousetrap.set_selected!
+Mousetrap.set_selected!
 ```
 ## `set_should_draw_value!`
 ```@docs
-mousetrap.set_should_draw_value!
+Mousetrap.set_should_draw_value!
 ```
 ## `set_should_interpolate_size!`
 ```@docs
-mousetrap.set_should_interpolate_size!
+Mousetrap.set_should_interpolate_size!
 ```
 ## `set_should_snap_to_ticks!`
 ```@docs
-mousetrap.set_should_snap_to_ticks!
+Mousetrap.set_should_snap_to_ticks!
 ```
 ## `set_should_wrap!`
 ```@docs
-mousetrap.set_should_wrap!
+Mousetrap.set_should_wrap!
 ```
 ## `set_show_column_separators`
 ```@docs
-mousetrap.set_show_column_separators
+Mousetrap.set_show_column_separators
 ```
 ## `set_show_row_separators`
 ```@docs
-mousetrap.set_show_row_separators
+Mousetrap.set_show_row_separators
 ```
 ## `set_show_separators!`
 ```@docs
-mousetrap.set_show_separators!
+Mousetrap.set_show_separators!
 ```
 ## `set_show_text!`
 ```@docs
-mousetrap.set_show_text!
+Mousetrap.set_show_text!
 ```
 ## `set_show_title_buttons!`
 ```@docs
-mousetrap.set_show_title_buttons!
+Mousetrap.set_show_title_buttons!
 ```
 ## `set_signal_activate_blocked!`
 ```@docs
-mousetrap.set_signal_activate_blocked!
+Mousetrap.set_signal_activate_blocked!
 ```
 ## `set_signal_activate_default_widget_blocked!`
 ```@docs
-mousetrap.set_signal_activate_default_widget_blocked!
+Mousetrap.set_signal_activate_default_widget_blocked!
 ```
 ## `set_signal_activate_focused_widget_blocked!`
 ```@docs
-mousetrap.set_signal_activate_focused_widget_blocked!
+Mousetrap.set_signal_activate_focused_widget_blocked!
 ```
 ## `set_signal_activate_item_blocked!`
 ```@docs
-mousetrap.set_signal_activate_item_blocked!
+Mousetrap.set_signal_activate_item_blocked!
 ```
 ## `set_signal_activated_blocked!`
 ```@docs
-mousetrap.set_signal_activated_blocked!
+Mousetrap.set_signal_activated_blocked!
+```
+## `set_signal_button_clicked_blocked!`
+```@docs
+Mousetrap.set_signal_button_clicked_blocked!
 ```
 ## `set_signal_click_pressed_blocked!`
 ```@docs
-mousetrap.set_signal_click_pressed_blocked!
+Mousetrap.set_signal_click_pressed_blocked!
 ```
 ## `set_signal_click_released_blocked!`
 ```@docs
-mousetrap.set_signal_click_released_blocked!
+Mousetrap.set_signal_click_released_blocked!
 ```
 ## `set_signal_click_stopped_blocked!`
 ```@docs
-mousetrap.set_signal_click_stopped_blocked!
+Mousetrap.set_signal_click_stopped_blocked!
 ```
 ## `set_signal_clicked_blocked!`
 ```@docs
-mousetrap.set_signal_clicked_blocked!
+Mousetrap.set_signal_clicked_blocked!
 ```
 ## `set_signal_close_request_blocked!`
 ```@docs
-mousetrap.set_signal_close_request_blocked!
+Mousetrap.set_signal_close_request_blocked!
 ```
 ## `set_signal_closed_blocked!`
 ```@docs
-mousetrap.set_signal_closed_blocked!
+Mousetrap.set_signal_closed_blocked!
 ```
 ## `set_signal_destroy_blocked!`
 ```@docs
-mousetrap.set_signal_destroy_blocked!
+Mousetrap.set_signal_destroy_blocked!
+```
+## `set_signal_dismissed_blocked!`
+```@docs
+Mousetrap.set_signal_dismissed_blocked!
 ```
 ## `set_signal_drag_begin_blocked!`
 ```@docs
-mousetrap.set_signal_drag_begin_blocked!
+Mousetrap.set_signal_drag_begin_blocked!
 ```
 ## `set_signal_drag_blocked!`
 ```@docs
-mousetrap.set_signal_drag_blocked!
+Mousetrap.set_signal_drag_blocked!
 ```
 ## `set_signal_drag_end_blocked!`
 ```@docs
-mousetrap.set_signal_drag_end_blocked!
+Mousetrap.set_signal_drag_end_blocked!
 ```
 ## `set_signal_focus_gained_blocked!`
 ```@docs
-mousetrap.set_signal_focus_gained_blocked!
+Mousetrap.set_signal_focus_gained_blocked!
 ```
 ## `set_signal_focus_lost_blocked!`
 ```@docs
-mousetrap.set_signal_focus_lost_blocked!
+Mousetrap.set_signal_focus_lost_blocked!
 ```
 ## `set_signal_hide_blocked!`
 ```@docs
-mousetrap.set_signal_hide_blocked!
+Mousetrap.set_signal_hide_blocked!
 ```
 ## `set_signal_items_changed_blocked!`
 ```@docs
-mousetrap.set_signal_items_changed_blocked!
+Mousetrap.set_signal_items_changed_blocked!
 ```
 ## `set_signal_key_pressed_blocked!`
 ```@docs
-mousetrap.set_signal_key_pressed_blocked!
+Mousetrap.set_signal_key_pressed_blocked!
 ```
 ## `set_signal_key_released_blocked!`
 ```@docs
-mousetrap.set_signal_key_released_blocked!
+Mousetrap.set_signal_key_released_blocked!
 ```
 ## `set_signal_kinetic_scroll_decelerate_blocked!`
 ```@docs
-mousetrap.set_signal_kinetic_scroll_decelerate_blocked!
+Mousetrap.set_signal_kinetic_scroll_decelerate_blocked!
 ```
 ## `set_signal_map_blocked!`
 ```@docs
-mousetrap.set_signal_map_blocked!
+Mousetrap.set_signal_map_blocked!
 ```
 ## `set_signal_modifiers_changed_blocked!`
 ```@docs
-mousetrap.set_signal_modifiers_changed_blocked!
+Mousetrap.set_signal_modifiers_changed_blocked!
 ```
 ## `set_signal_motion_blocked!`
 ```@docs
-mousetrap.set_signal_motion_blocked!
+Mousetrap.set_signal_motion_blocked!
 ```
 ## `set_signal_motion_enter_blocked!`
 ```@docs
-mousetrap.set_signal_motion_enter_blocked!
+Mousetrap.set_signal_motion_enter_blocked!
 ```
 ## `set_signal_motion_leave_blocked!`
 ```@docs
-mousetrap.set_signal_motion_leave_blocked!
+Mousetrap.set_signal_motion_leave_blocked!
 ```
 ## `set_signal_page_added_blocked!`
 ```@docs
-mousetrap.set_signal_page_added_blocked!
+Mousetrap.set_signal_page_added_blocked!
 ```
 ## `set_signal_page_removed_blocked!`
 ```@docs
-mousetrap.set_signal_page_removed_blocked!
+Mousetrap.set_signal_page_removed_blocked!
 ```
 ## `set_signal_page_reordered_blocked!`
 ```@docs
-mousetrap.set_signal_page_reordered_blocked!
+Mousetrap.set_signal_page_reordered_blocked!
 ```
 ## `set_signal_page_selection_changed_blocked!`
 ```@docs
-mousetrap.set_signal_page_selection_changed_blocked!
+Mousetrap.set_signal_page_selection_changed_blocked!
 ```
 ## `set_signal_paint_blocked!`
 ```@docs
-mousetrap.set_signal_paint_blocked!
+Mousetrap.set_signal_paint_blocked!
 ```
 ## `set_signal_pan_blocked!`
 ```@docs
-mousetrap.set_signal_pan_blocked!
+Mousetrap.set_signal_pan_blocked!
 ```
 ## `set_signal_press_cancelled_blocked!`
 ```@docs
-mousetrap.set_signal_press_cancelled_blocked!
+Mousetrap.set_signal_press_cancelled_blocked!
 ```
 ## `set_signal_pressed_blocked!`
 ```@docs
-mousetrap.set_signal_pressed_blocked!
+Mousetrap.set_signal_pressed_blocked!
 ```
 ## `set_signal_properties_changed_blocked!`
 ```@docs
-mousetrap.set_signal_properties_changed_blocked!
+Mousetrap.set_signal_properties_changed_blocked!
 ```
 ## `set_signal_proximity_blocked!`
 ```@docs
-mousetrap.set_signal_proximity_blocked!
+Mousetrap.set_signal_proximity_blocked!
 ```
 ## `set_signal_realize_blocked!`
 ```@docs
-mousetrap.set_signal_realize_blocked!
+Mousetrap.set_signal_realize_blocked!
 ```
 ## `set_signal_render_blocked!`
 ```@docs
-mousetrap.set_signal_render_blocked!
+Mousetrap.set_signal_render_blocked!
 ```
 ## `set_signal_resize_blocked!`
 ```@docs
-mousetrap.set_signal_resize_blocked!
+Mousetrap.set_signal_resize_blocked!
 ```
 ## `set_signal_revealed_blocked!`
 ```@docs
-mousetrap.set_signal_revealed_blocked!
+Mousetrap.set_signal_revealed_blocked!
 ```
 ## `set_signal_rotation_changed_blocked!`
 ```@docs
-mousetrap.set_signal_rotation_changed_blocked!
+Mousetrap.set_signal_rotation_changed_blocked!
 ```
 ## `set_signal_scale_changed_blocked!`
 ```@docs
-mousetrap.set_signal_scale_changed_blocked!
+Mousetrap.set_signal_scale_changed_blocked!
 ```
 ## `set_signal_scroll_begin_blocked!`
 ```@docs
-mousetrap.set_signal_scroll_begin_blocked!
+Mousetrap.set_signal_scroll_begin_blocked!
 ```
 ## `set_signal_scroll_blocked!`
 ```@docs
-mousetrap.set_signal_scroll_blocked!
+Mousetrap.set_signal_scroll_blocked!
 ```
 ## `set_signal_scroll_child_blocked!`
 ```@docs
-mousetrap.set_signal_scroll_child_blocked!
+Mousetrap.set_signal_scroll_child_blocked!
 ```
 ## `set_signal_scroll_end_blocked!`
 ```@docs
-mousetrap.set_signal_scroll_end_blocked!
+Mousetrap.set_signal_scroll_end_blocked!
 ```
 ## `set_signal_selection_changed_blocked!`
 ```@docs
-mousetrap.set_signal_selection_changed_blocked!
+Mousetrap.set_signal_selection_changed_blocked!
 ```
 ## `set_signal_show_blocked!`
 ```@docs
-mousetrap.set_signal_show_blocked!
+Mousetrap.set_signal_show_blocked!
 ```
 ## `set_signal_shutdown_blocked!`
 ```@docs
-mousetrap.set_signal_shutdown_blocked!
+Mousetrap.set_signal_shutdown_blocked!
 ```
 ## `set_signal_stylus_down_blocked!`
 ```@docs
-mousetrap.set_signal_stylus_down_blocked!
+Mousetrap.set_signal_stylus_down_blocked!
 ```
 ## `set_signal_stylus_up_blocked!`
 ```@docs
-mousetrap.set_signal_stylus_up_blocked!
+Mousetrap.set_signal_stylus_up_blocked!
 ```
 ## `set_signal_swipe_blocked!`
 ```@docs
-mousetrap.set_signal_swipe_blocked!
+Mousetrap.set_signal_swipe_blocked!
 ```
 ## `set_signal_switched_blocked!`
 ```@docs
-mousetrap.set_signal_switched_blocked!
+Mousetrap.set_signal_switched_blocked!
 ```
 ## `set_signal_text_changed_blocked!`
 ```@docs
-mousetrap.set_signal_text_changed_blocked!
+Mousetrap.set_signal_text_changed_blocked!
 ```
 ## `set_signal_toggled_blocked!`
 ```@docs
-mousetrap.set_signal_toggled_blocked!
+Mousetrap.set_signal_toggled_blocked!
 ```
 ## `set_signal_unmap_blocked!`
 ```@docs
-mousetrap.set_signal_unmap_blocked!
+Mousetrap.set_signal_unmap_blocked!
 ```
 ## `set_signal_unrealize_blocked!`
 ```@docs
-mousetrap.set_signal_unrealize_blocked!
+Mousetrap.set_signal_unrealize_blocked!
 ```
 ## `set_signal_update_blocked!`
 ```@docs
-mousetrap.set_signal_update_blocked!
+Mousetrap.set_signal_update_blocked!
 ```
 ## `set_signal_value_changed_blocked!`
 ```@docs
-mousetrap.set_signal_value_changed_blocked!
+Mousetrap.set_signal_value_changed_blocked!
 ```
 ## `set_signal_wrapped_blocked!`
 ```@docs
-mousetrap.set_signal_wrapped_blocked!
+Mousetrap.set_signal_wrapped_blocked!
 ```
 ## `set_single_click_activate!`
 ```@docs
-mousetrap.set_single_click_activate!
+Mousetrap.set_single_click_activate!
 ```
 ## `set_size_request!`
 ```@docs
-mousetrap.set_size_request!
+Mousetrap.set_size_request!
 ```
 ## `set_spacing!`
 ```@docs
-mousetrap.set_spacing!
+Mousetrap.set_spacing!
 ```
 ## `set_start_child!`
 ```@docs
-mousetrap.set_start_child!
+Mousetrap.set_start_child!
 ```
 ## `set_start_child_resizable!`
 ```@docs
-mousetrap.set_start_child_resizable!
+Mousetrap.set_start_child_resizable!
 ```
 ## `set_start_child_shrinkable!`
 ```@docs
-mousetrap.set_start_child_shrinkable!
+Mousetrap.set_start_child_shrinkable!
 ```
 ## `set_startup_notification_identifier!`
 ```@docs
-mousetrap.set_startup_notification_identifier!
+Mousetrap.set_startup_notification_identifier!
 ```
 ## `set_state!`
 ```@docs
-mousetrap.set_state!
+Mousetrap.set_state!
 ```
 ## `set_step_increment!`
 ```@docs
-mousetrap.set_step_increment!
+Mousetrap.set_step_increment!
 ```
 ## `set_string!`
 ```@docs
-mousetrap.set_string!
+Mousetrap.set_string!
 ```
 ## `set_surpress_debug!`
 ```@docs
-mousetrap.set_surpress_debug!
+Mousetrap.set_surpress_debug!
 ```
 ## `set_surpress_info!`
 ```@docs
-mousetrap.set_surpress_info!
+Mousetrap.set_surpress_info!
 ```
 ## `set_tab_position!`
 ```@docs
-mousetrap.set_tab_position!
+Mousetrap.set_tab_position!
 ```
 ## `set_tabs_reorderable!`
 ```@docs
-mousetrap.set_tabs_reorderable!
+Mousetrap.set_tabs_reorderable!
 ```
 ## `set_tabs_visible!`
 ```@docs
-mousetrap.set_tabs_visible!
+Mousetrap.set_tabs_visible!
 ```
 ## `set_text!`
 ```@docs
-mousetrap.set_text!
+Mousetrap.set_text!
 ```
 ## `set_text_to_value_function!`
 ```@docs
-mousetrap.set_text_to_value_function!
+Mousetrap.set_text_to_value_function!
 ```
 ## `set_text_visible!`
 ```@docs
-mousetrap.set_text_visible!
+Mousetrap.set_text_visible!
 ```
 ## `set_texture!`
 ```@docs
-mousetrap.set_texture!
+Mousetrap.set_texture!
 ```
 ## `set_tick_callback!`
 ```@docs
-mousetrap.set_tick_callback!
+Mousetrap.set_tick_callback!
+```
+## `set_timeout!`
+```@docs
+Mousetrap.set_timeout!
+```
+## `set_timing_function!`
+```@docs
+Mousetrap.set_timing_function!
 ```
 ## `set_title!`
 ```@docs
-mousetrap.set_title!
+Mousetrap.set_title!
 ```
 ## `set_title_widget!`
 ```@docs
-mousetrap.set_title_widget!
+Mousetrap.set_title_widget!
 ```
 ## `set_tooltip_text!`
 ```@docs
-mousetrap.set_tooltip_text!
+Mousetrap.set_tooltip_text!
 ```
 ## `set_tooltip_widget!`
 ```@docs
-mousetrap.set_tooltip_widget!
+Mousetrap.set_tooltip_widget!
 ```
 ## `set_top_left!`
 ```@docs
-mousetrap.set_top_left!
+Mousetrap.set_top_left!
 ```
 ## `set_top_margin!`
 ```@docs
-mousetrap.set_top_margin!
+Mousetrap.set_top_margin!
 ```
 ## `set_touch_only!`
 ```@docs
-mousetrap.set_touch_only!
+Mousetrap.set_touch_only!
 ```
 ## `set_transient_for!`
 ```@docs
-mousetrap.set_transient_for!
+Mousetrap.set_transient_for!
 ```
 ## `set_transition_duration!`
 ```@docs
-mousetrap.set_transition_duration!
+Mousetrap.set_transition_duration!
 ```
 ## `set_transition_type!`
 ```@docs
-mousetrap.set_transition_type!
+Mousetrap.set_transition_type!
 ```
 ## `set_uniform_float!`
 ```@docs
-mousetrap.set_uniform_float!
+Mousetrap.set_uniform_float!
 ```
 ## `set_uniform_hsva!`
 ```@docs
-mousetrap.set_uniform_hsva!
+Mousetrap.set_uniform_hsva!
 ```
 ## `set_uniform_int!`
 ```@docs
-mousetrap.set_uniform_int!
+Mousetrap.set_uniform_int!
 ```
 ## `set_uniform_rgba!`
 ```@docs
-mousetrap.set_uniform_rgba!
+Mousetrap.set_uniform_rgba!
 ```
 ## `set_uniform_transform!`
 ```@docs
-mousetrap.set_uniform_transform!
+Mousetrap.set_uniform_transform!
 ```
 ## `set_uniform_uint!`
 ```@docs
-mousetrap.set_uniform_uint!
+Mousetrap.set_uniform_uint!
 ```
 ## `set_uniform_vec2!`
 ```@docs
-mousetrap.set_uniform_vec2!
+Mousetrap.set_uniform_vec2!
 ```
 ## `set_uniform_vec3!`
 ```@docs
-mousetrap.set_uniform_vec3!
+Mousetrap.set_uniform_vec3!
 ```
 ## `set_uniform_vec4!`
 ```@docs
-mousetrap.set_uniform_vec4!
+Mousetrap.set_uniform_vec4!
 ```
 ## `set_upper!`
 ```@docs
-mousetrap.set_upper!
+Mousetrap.set_upper!
 ```
 ## `set_use_markup!`
 ```@docs
-mousetrap.set_use_markup!
+Mousetrap.set_use_markup!
 ```
 ## `set_value!`
 ```@docs
-mousetrap.set_value!
+Mousetrap.set_value!
 ```
 ## `set_value_to_text_function!`
 ```@docs
-mousetrap.set_value_to_text_function!
+Mousetrap.set_value_to_text_function!
 ```
 ## `set_vertex_color!`
 ```@docs
-mousetrap.set_vertex_color!
+Mousetrap.set_vertex_color!
 ```
 ## `set_vertex_position!`
 ```@docs
-mousetrap.set_vertex_position!
+Mousetrap.set_vertex_position!
 ```
 ## `set_vertex_texture_coordinate!`
 ```@docs
-mousetrap.set_vertex_texture_coordinate!
+Mousetrap.set_vertex_texture_coordinate!
 ```
 ## `set_vertical_alignment!`
 ```@docs
-mousetrap.set_vertical_alignment!
+Mousetrap.set_vertical_alignment!
 ```
 ## `set_vertical_scrollbar_policy!`
 ```@docs
-mousetrap.set_vertical_scrollbar_policy!
+Mousetrap.set_vertical_scrollbar_policy!
 ```
 ## `set_visible_child!`
 ```@docs
-mousetrap.set_visible_child!
+Mousetrap.set_visible_child!
 ```
 ## `set_was_modified!`
 ```@docs
-mousetrap.set_was_modified!
+Mousetrap.set_was_modified!
 ```
 ## `set_widget_at!`
 ```@docs
-mousetrap.set_widget_at!
+Mousetrap.set_widget_at!
 ```
 ## `set_wrap_mode!`
 ```@docs
-mousetrap.set_wrap_mode!
+Mousetrap.set_wrap_mode!
 ```
 ## `set_x_alignment!`
 ```@docs
-mousetrap.set_x_alignment!
+Mousetrap.set_x_alignment!
 ```
 ## `set_y_alignment!`
 ```@docs
-mousetrap.set_y_alignment!
+Mousetrap.set_y_alignment!
 ```
 ## `shift_pressed`
 ```@docs
-mousetrap.shift_pressed
+Mousetrap.shift_pressed
 ```
 ## `should_shortcut_trigger_trigger`
 ```@docs
-mousetrap.should_shortcut_trigger_trigger
+Mousetrap.should_shortcut_trigger_trigger
 ```
 ## `show!`
 ```@docs
-mousetrap.show!
+Mousetrap.show!
 ```
 ## `show_in_file_explorer`
 ```@docs
-mousetrap.show_in_file_explorer
+Mousetrap.show_in_file_explorer
+```
+## `show_message!`
+```@docs
+Mousetrap.show_message!
+```
+## `skew!`
+```@docs
+Mousetrap.skew!
 ```
 ## `start!`
 ```@docs
-mousetrap.start!
+Mousetrap.start!
 ```
 ## `stop!`
 ```@docs
-mousetrap.stop!
+Mousetrap.stop!
 ```
 ## `to_gl_coordinates`
 ```@docs
-mousetrap.to_gl_coordinates
+Mousetrap.to_gl_coordinates
 ```
 ## `translate!`
 ```@docs
-mousetrap.translate!
+Mousetrap.translate!
 ```
 ## `unbind`
 ```@docs
-mousetrap.unbind
+Mousetrap.unbind
 ```
 ## `unbind_as_render_target`
 ```@docs
-mousetrap.unbind_as_render_target
+Mousetrap.unbind_as_render_target
 ```
 ## `undo!`
 ```@docs
-mousetrap.undo!
+Mousetrap.undo!
 ```
 ## `unmark_as_busy!`
 ```@docs
-mousetrap.unmark_as_busy!
+Mousetrap.unmark_as_busy!
 ```
 ## `unparent!`
 ```@docs
-mousetrap.unparent!
+Mousetrap.unparent!
 ```
 ## `unselect!`
 ```@docs
-mousetrap.unselect!
+Mousetrap.unselect!
 ```
 ## `unselect_all!`
 ```@docs
-mousetrap.unselect_all!
+Mousetrap.unselect_all!
 ```
 ## `vbox`
 ```@docs
-mousetrap.vbox
+Mousetrap.vbox
 ```

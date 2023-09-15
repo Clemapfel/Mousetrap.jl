@@ -1,12 +1,288 @@
-using mousetrap
+# File used for debugging and for dosc examples, why are you snooping through this file?
+using Mousetrap
+
+add_css!("""
+@keyframes spin-animation {
+    0%   { transform: rotate(0turn)   scale(1); }
+    50%  { transform: rotate(0.5turn) scale(2); }
+    100% { transform: rotate(1turn)   scale(1); }
+}
+
+.spinning {
+    animation: spin-animation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.monospaced {
+    font-family: monospace;
+}
+""")
+
+main() do app::Application
+    window = Window(app)
+    set_title!(window, "mousesnap.jl")
+
+    button = Button()
+    add_css_class!(button, "spinning")
+
+    frame = AspectFrame(1.0, button)
+    set_margin!(frame, 10)
+
+    #set_child!(window, frame)
+
+    text_view = TextView();
+    add_css_class!(text_view, "monospaced")
+    set_child!(window, text_view)
+    present!(window)
+end
+
+exit(0)
+
+add_css!("""
+.custom {
+    background-color: hotpink;
+    border-color: darker(hotpink);
+    font-family: monospace;
+    border-radius: 0%;
+}
+""")
+
+function set_accent_color!(color::RGBA) 
+    add_css!("""
+        @define-color accent_bg_color $(serialize(color));
+    """)
+end
+
+main() do app::Application
+
+    window = Window(app)
+    set_title!(window, "mousetrap.jl")
+    
+    box = CenterBox(ORIENTATION_VERTICAL)
+    
+    check_button = CheckButton()
+    set_alignment!(check_button, ALIGNMENT_CENTER)
+    set_expand!(check_button, false)
+    set_start_child!(box, check_button)
+
+    scale = Scale(0, 1, 0.01)
+    set_expand!(scale, true)
+    set_center_child!(box, scale)
+
+    switch = Switch()
+    set_expand!(switch, false)
+    set_alignment!(switch, ALIGNMENT_CENTER)
+    set_end_child!(box, switch)
+
+    action = Action("change_accent_color", app) do self
+        set_accent_color!(RGBA(1, 0, 1, 1))
+    end
+    add_shortcut!(action, "<Control>e")
+    set_listens_for_shortcut_action!(scale, action)
+
+    set_expand!(box, true)
+    set_margin!(box, 10)
+    set_child!(window, box)
+    present!(window)
+end
+
+exit(0)
+
+# define widget colors
+const WidgetColor = String
+const WIDGET_COLOR_DEFAULT = "default"
+const WIDGET_COLOR_ACCENT = "accent"
+const WIDGET_COLOR_SUCCESS = "success"
+const WIDGET_COLOR_WARNING = "warning"
+const WIDGET_COLOR_ERROR = "error"
+
+# create a CSS classes for each and load it into the global theme
+for name in [WIDGET_COLOR_DEFAULT, WIDGET_COLOR_ACCENT, WIDGET_COLOR_SUCCESS, WIDGET_COLOR_WARNING, WIDGET_COLOR_ERROR]
+    add_css!("""
+    $name:not(.opaque) {
+        background-color: @$(name)_fg_color;
+    }
+    .$name.opaque {
+        background-color: @$(name)_bg_color;
+        color: @$(name)_fg_color;
+    }
+    """)
+end
+
+"""
+```
+set_color!(::Widget, ::WidgetColor) -> Nothing
+```
+"""
+function set_accent_color!(widget::Widget, color, opaque = true)
+    if !(color in [WIDGET_COLOR_DEFAULT, WIDGET_COLOR_ACCENT, WIDGET_COLOR_SUCCESS, WIDGET_COLOR_WARNING, WIDGET_COLOR_ERROR])
+        log_critical("In set_color!: Color ID `" * color * "` is not supported")
+    end    
+    add_css_class!(widget, color)
+    if opaque
+        add_css_class!(widget, "opaque")
+    end
+end
 
 main() do app::Application
     window = Window(app)
 
-    mousetrap.add_css_class!(get_header_bar(window), "flat")
+    set_title!(window, "mousetrap.jl")
+    function create_widget() 
+        return Button(Label("TEST"))
+    end
+    
+    column_view = ColumnView()
+    column = push_back_column!(column_view, " ")
+    set_widget_at!(column_view, column, 1, Label("<small>!opaque</small>"))
+    set_widget_at!(column_view, column, 2, Label("<small>opaque</small>"))
+
+    for color in [WIDGET_COLOR_DEFAULT, WIDGET_COLOR_ACCENT, WIDGET_COLOR_SUCCESS, WIDGET_COLOR_WARNING, WIDGET_COLOR_ERROR]
+        column = push_back_column!(column_view, color)
+        
+        # non-opaque version
+        widget = create_widget()
+        set_accent_color!(widget, color, false)
+        set_widget_at!(column_view, column, 1, widget)
+
+        # opaque version
+        widget = create_widget()
+        set_accent_color!(widget, color, true)
+        set_widget_at!(column_view, column, 2, widget)
+    end
+
+    set_child!(window, column_view)
+    present!(window)
+end
+exit(0)
+
+using Mousetrap
+main() do app::Application
+    window = Window(app)
+    widget = Button()
+
+    box = Box(ORIENTATION_HORIZONTAL)
+    for name in ["accent", "success", "warning", "error"]
+        add_css!("""
+        $name:not(.opaque) {
+            background-color: @$(name)_fg_color;
+        }
+        .$name.opaque {
+            background-color: @$(name)_bg_color;
+            color: @$(name)_fg_color;
+        }
+        """)
+    end
+
+    names = ["default", "accent", "success", "warning", "error"]
+
+
+    column_view = ColumnView()
+    
+    first_column = push_back_column!(column_view, " ")
+    
+
+    for name in names
+        push_back_column!(column_view, name)
+    end
+
+    #, Switch, CheckButton, ProgressBar, Spinner, Scale, SpinButton, Entry, Separator
+
+    j = 1
+    for create_widget in [
+        () -> Button(Label("TEST")), 
+        () -> Switch(),
+        () -> ProgressBar(),
+        () -> Spinner(),
+        () -> LevelBar(0, 1),
+        () -> Scale(0, 1, 1),
+        () -> Entry(),
+        () -> Separator()
+    ]
+        local default_label = Label("default")
+        local opaque_label = Label("opaque")
+
+        for label in [default_label, opaque_label]
+            add_css_class!(label, "dimmed")
+            add_css_class!(label, "caption")
+        end
+
+        set_widget_at!(column_view, first_column, j, default_label)
+        set_widget_at!(column_view, first_column, j + 1, opaque_label)
+
+        for name in names
+            i = j 
+            column = get_column_with_title(column_view, name)
+
+            local non_opaque = create_widget()
+            add_css_class!(non_opaque, name)
+            set_widget_at!(column_view, column, i, non_opaque)
+
+            try
+                set_child!(non_opaque, Label("TEST"))
+            catch end
+
+            i = i + 1
+
+            local opaque = create_widget()
+            add_css_class!(opaque, name)
+            add_css_class!(opaque, "opaque")
+            set_widget_at!(column_view, column, i, opaque)
+
+            try
+                set_child!(opaque, Label("TEST"))
+            catch end
+
+            for widget in [non_opaque, opaque]
+                #set_alignment!(widget, ALIGNMENT_CENTER)
+                #set_expand!(widget, false)
+            end
+        end
+        j = j + 2
+    end
+
+    set_child!(window, Viewport(column_view))
     present!(window)
 end
 
+exit(0)
+
+main() do app::Application
+    window = Window(app)
+    set_title!(window, "mousetrap.jl")
+
+    # animate a gradual fade-out
+    button = Button(Label("SPIN"))
+    aspect_frame = AspectFrame(1.0, button)
+    set_margin!(aspect_frame, 10)
+
+    transform_bin = TransformBin()
+    set_child!(transform_bin, aspect_frame)
+
+    animation = Animation(transform_bin, seconds(1))
+    on_tick!(animation, transform_bin) do self::Animation, value::AbstractFloat, transform_bin::TransformBin
+        reset!(transform_bin)
+        rotate!(transform_bin, degrees(value * 360))
+        scale!(transform_bin, 1 + value, 1 + value)
+    end
+
+    on_done!(animation, transform_bin) do self::Animation, transform_bin::TransformBin
+        reset!(transform_bin)
+    end
+
+    # start animation when button is clicked
+    connect_signal_clicked!(button, animation) do self::Button, animation::Animation
+        play!(animation)
+    end
+   
+    set_child!(window, transform_bin)
+    present!(window)
+end
+
+
+#=
 @static if false
 
 struct TexturePage <: Widget
@@ -45,12 +321,12 @@ struct TexturePage <: Widget
         return out
     end
 end
-mousetrap.get_top_level_widget(x::TexturePage) = x.center_box
+Mousetrap.get_top_level_widget(x::TexturePage) = x.center_box
 
 
 main() do app::Application
     window = Window(app)
-    set_title!(window, "mousetrap.jl")
+    set_title!(window, "Mousetrap.jl")
 
     render_area = RenderArea()
    
@@ -144,12 +420,12 @@ struct ShapePage <: Widget
         return out
     end
 end
-mousetrap.get_top_level_widget(x::ShapePage) = x.center_box
+Mousetrap.get_top_level_widget(x::ShapePage) = x.center_box
 
 main() do app::Application
 
     window = Window(app)
-    set_title!(window, "mousetrap.jl")
+    set_title!(window, "Mousetrap.jl")
 
     shapes = [
         "Point" => Point(
@@ -327,7 +603,7 @@ end
 main() do app::Application
 
     window = Window(app)
-    set_title!(window, "mousetrap.jl")
+    set_title!(window, "Mousetrap.jl")
 
     # create render areas with different MSAA modes
     left_area = RenderArea(ANTI_ALIASING_QUALITY_OFF)
@@ -380,3 +656,5 @@ main() do app::Application
 end
 
 end # @static if
+
+    =#

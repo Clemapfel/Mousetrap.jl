@@ -13,7 +13,7 @@ In this chapter we will learn:
 
 !!! danger "Native Rendering on MacOS"
     All classes and functions in this chapter **are impossible to use on MacOS**. For this platform,
-    mousetrap was compiled in a way where any function relating to OpenGL was made unavailable. This 
+    Mousetrap was compiled in a way where any function relating to OpenGL was made unavailable. This 
     is because of Apples decision to deprecate OpenGL in a way where only physical owners of a Mac
     can compile libraries that have it as a dependency. See [here](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978341) for more information.
 
@@ -23,7 +23,7 @@ In this chapter we will learn:
 
 In the [chapter on widgets](04_widgets.md), we learned that we can create new widgets by combining already predefined widgets as a *compound widget*. We can create a new widget that has a `Scale`, but we cannot render our own scale with, for example, a square knob. In this chapter, this will change.
 
-By using the native rendering facilities mousetrap provides, we are free to create any shape we want, assembling new widgets pixel-by-pixel, line-by-line, then adding interactivity using the [event controller system](./05_event_handling.md).
+By using the native rendering facilities Mousetrap provides, we are free to create any shape we want, assembling new widgets pixel-by-pixel, line-by-line, then adding interactivity using the [event controller system](./05_event_handling.md).
 
 ## RenderArea
 
@@ -41,7 +41,7 @@ In general, shapes are defined by a number of **vertices**. A vertex has a posit
 
 ### Vertex Coordinate System
 
-A shape's vertices define where inside the `RenderArea` it will be drawn. The coordinate system shapes use is different from the one we use for widgets. OpenGL, on which the native rendering component of mousetrap is based, uses the **right-hand coordinate system**, which is familiar from traditional math:
+A shape's vertices define where inside the `RenderArea` it will be drawn. The coordinate system shapes use is different from the one we use for widgets. OpenGL, on which the native rendering component of Mousetrap is based, uses the **right-hand coordinate system**, which is familiar from traditional math:
 
 ![](https://learnopengl.com/img/getting-started/coordinate_systems_right_handed.png)
 
@@ -94,7 +94,7 @@ We see that
 typeof(shape)
 ```
 ```
-mousetrap.Shape
+Mousetrap.Shape
 ```
 
 The variable `shape` is still of type `Shape`. [`Point`](@ref) is simply a convenience function for initializing a shape, then calling [`as_point!`](@ref) on that instance.
@@ -110,13 +110,13 @@ add_render_task!(render_area, RenderTask(shape))
 
 !!! details "How to generate this Image"
     ```julia
-    using mousetrap
+    using Mousetrap
     main() do app::Application
 
         set_current_theme!(app, THEME_DEFAULT_DARK)
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
+        set_title!(window, "Mousetrap.jl")
         render_area = RenderArea()
 
         shape = Point(Vector2f(0, 0))
@@ -514,7 +514,7 @@ Wrap mode governs how the texture behaves when a vertices texture coordinates co
 
 !!! details "How to generate this Image"
     ```julia
-    using mousetrap
+    using Mousetrap
 
     # compound widget that displays a texture with a label
     struct TexturePage <: Widget
@@ -555,18 +555,18 @@ Wrap mode governs how the texture behaves when a vertices texture coordinates co
             return out
         end
     end
-    mousetrap.get_top_level_widget(x::TexturePage) = x.center_box
+    Mousetrap.get_top_level_widget(x::TexturePage) = x.center_box
 
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
+        set_title!(window, "Mousetrap.jl")
 
         render_area = RenderArea()
     
         image = Image()
         create_from_file!(image, "docs/src/assets/logo.png")
-            # this assumes the script is run in `mousetrap.jl` root
+            # this assumes the script is run in `Mousetrap.jl` root
 
         # replace RGBA(0, 0, 0, 0) pixels with rainbow color
         size = get_size(image)
@@ -689,7 +689,7 @@ When shapes are drawn to the screen, they are *rasterized*, which is when the gr
 
 (Source: [learnopengl.com](https://learnopengl.com/Advanced-OpenGL/Anti-Aliasing))
 
-To address the unsightly nature of this issue, a number of remedies are available, the most appropriate of which is called [multi-sampled anti-aliasing (MSAA)](https://www.khronos.org/opengl/wiki/Multisampling). User of mousetrap are not required to understand the algorithm behind it, only that it causes jagged edges to appear smoother. 
+To address the unsightly nature of this issue, a number of remedies are available, the most appropriate of which is called [multi-sampled anti-aliasing (MSAA)](https://www.khronos.org/opengl/wiki/Multisampling). User of Mousetrap are not required to understand the algorithm behind it, only that it causes jagged edges to appear smoother. 
 
 To enable MSAA, we provide an enum value of type [`AntiAliasingQuality`](@ref) to `RenderArea`s constructor:
 
@@ -719,7 +719,7 @@ It's difficult to convey the result of MSAA using just pictures on a web page. I
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
+        set_title!(window, "Mousetrap.jl")
 
         # create render areas with different MSAA modes
         left_area = RenderArea(ANTI_ALIASING_QUALITY_OFF)
@@ -802,7 +802,7 @@ Using these four components, `RenderTask` gathers all objects necessary to rende
 
 [`GLTransform`](@ref) is an object representing a spatial transform. It is called **GL**Transform, because it **uses the GL coordinate system**. Applying a `GLTransform` to a vector in widget- or texture-space will produce incorrect results. They should only be applied to the position attribute of a `Shape`s vertices.
 
-Internally, a `GLTransform` is a 4x4 matrix of 32-bit floats. It is of size 4x4 because it's intended to be applied to OpenGL positions, which are vectors in 3D space. In mousetrap, the last coordinate of a spatial position is assumed to be `0`, but it is still part of each vectors' data.
+Internally, a `GLTransform` is a 4x4 matrix of 32-bit floats. It is of size 4x4 because it's intended to be applied to OpenGL positions, which are vectors in 3D space. In Mousetrap, the last coordinate of a spatial position is assumed to be `0`, but it is still part of each vectors' data.
 
 At any time, we can directly access the underlying matrix of a `GLtransform` using `getindex` or `setindex!`:
 
@@ -914,11 +914,11 @@ add_render_task!(render_area, task)
 
 !!! details "How to generate this Image"
     ```julia
-    using mousetrap
+    using Mousetrap
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
+        set_title!(window, "Mousetrap.jl")
         render_area = RenderArea()
         shape = Rectangle(Vector2f(-1, 1), Vector2f(2, 2))
 
@@ -1089,11 +1089,11 @@ set_uniform_rgba!(task, "_color_rgba", RGBA(1, 0, 1, 1))
 
 !!! details "How to generate this Image"
     ```julia
-    using mousetrap
+    using Mousetrap
     main() do app::Application
 
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
+        set_title!(window, "Mousetrap.jl")
         render_area = RenderArea()
         shape = Rectangle(Vector2f(-1, 1), Vector2f(2, 2))
 

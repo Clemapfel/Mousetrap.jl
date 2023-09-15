@@ -1,7 +1,8 @@
-name = "mousetrap"
+name = "Mousetrap"
 uuid = "5deeb4b9-6e04-4da7-8b7f-c77fb1eae65e"
 authors = ["C.Cords <mail@clemens-cords.com>"]
-version = "0.1.1"
+version = "0.2.0"
+
 
 [deps]
 BinaryBuilder = "12aac903-9f7c-5d81-afc2-d9565ea332ae"
@@ -16,7 +17,7 @@ mousetrap_linux_jll = "b6bb2801-a71f-530d-97b4-a6ed24b69d40"
 mousetrap_windows_jll = "1923bf96-b834-50bb-8499-88d15429481f"
 
 [compat]
-CxxWrap = "0.13.4"
-mousetrap_apple_jll = "0.1.0 - 0.2.0"
-mousetrap_linux_jll = "0.1.0 - 0.2.0"
-mousetrap_windows_jll = "0.1.0 - 0.2.0"
+CxxWrap = "0.14.0"
+mousetrap_apple_jll = "0.2.0"
+mousetrap_linux_jll = "0.2.0"
+mousetrap_windows_jll = "0.2.0"

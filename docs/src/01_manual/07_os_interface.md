@@ -2,7 +2,6 @@
 
 In this chapter, we will learn:
 + What other features `Application` has
-+ How to change our apps UI theme
 + How to properly do logging
 + How to copy / move / create / delete files 
 + How to automatically open a file or url for the user
@@ -22,8 +21,8 @@ We have already used it many times so far, but [`Application`](@ref), which is a
 It provides the following signals:
 
 ```@eval
-using mousetrap
-mousetrap.@signal_table(Application,
+using Mousetrap
+Mousetrap.@signal_table(Application,
     activate,
     shutdown
 )
@@ -64,13 +63,13 @@ The application ID has to contain at least one `.` and should be a human-readabl
 ```
 julia> label = Label()
 
-(process:15357): mousetrap-ERROR **: 21:22:29.003: 
+(process:15357): Mousetrap-ERROR **: 21:22:29.003: 
     Attempting to construct a widget, but the GTK4 backend has not yet been initialized.
     (...)
-    You have most likely attempted to construct a widget outside of `main` while using mousetrap interactively.
+    You have most likely attempted to construct a widget outside of `main` while using Mousetrap interactively.
 ```
 
-We can force initialization without an `Application` instance with `mousetrap.detail.initialize()`, though this is usually not recommended.
+We can force initialization without an `Application` instance with `Mousetrap.detail.initialize()`, though this is usually not recommended.
 
 At any point, we can attempt to end runtime by calling [`quit!`](@ref). This will usually cause the application to emit its signal `shutdown`. We should always `quit!` before calling Julias `exit()`, otherwise the apps process will be killed immediately, which can lead to undefined behavior.
 
@@ -83,58 +82,6 @@ Holding means that the application will attempt to prevent exiting in any way. W
 We have to make sure to call [`release!`](@ref) to undo a previous `hold!`, after which the app can exit normally again.
 
 Being **busy** marks the app so that the OS recognizes that it is currently busy. This will prevent the "`app` is not responding" dialog many OS will trigger automatically when an app freezes. Sometimes, freezing is unavoidable because a costly operation is taking place. During times like this, we should call [`mark_as_busy!`](@ref), which notifies the OS that everything is still working as intended, it will just take a while. Once the expensive task is complete, [`unmark_as_busy!`](@ref) reverts the flag.
-
-## UI Theme 
-
-### Global Theme
-
-Each pre-made widget in mousetrap has their exact look specified in what is called a **theme**.  These themes are applied globally, meaning they affect every widget associated with our app.
-
-Mousetrap supports four default application-wide themes, which are a values of enum [`Theme`](@ref):
-
-+ `THEME_DEFAULT_LIGHT`
-+ `THEME_DEFAULT_DARK`
-+ `THEME_HIGH_CONTRAST_LIGHT`
-+ `THEME_HIGH_CONTRAST_DARK`
-
-At any point after the back-end has been initialized, we can swap the global theme using [`set_current_theme!`](@ref). This will immediately change the look  of all widgets and windows, allowing apps to change the entire GUI with just one function call at runtime.
-
-For example, to create a window that has a button to switch between light and dark themes in its header bar, we could do the following:
-
-```julia
-main() do app::Application
-
-    window = Window(app)
-
-    # add theme swap button to windows header bar
-    header_bar = get_header_bar(window)
-    swap_button = Button()
-    set_tooltip_text!(swap_button, "Click to Swap Themes")
-    connect_signal_clicked!(swap_button, app) do self::Button, app::Application
-
-        # get currently used theme
-        current = get_current_theme(app)
-
-        # swap light with dark, preservng whether the theme is high contrast
-        if current == THEME_DEFAULT_DARK
-            next = THEME_DEFAULT_LIGHT
-        elseif current == THEME_DEFAULT_LIGHT
-            next = THEME_DEFAULT_DARK
-        elseif current == THEME_HIGH_CONTRAST_DARK
-            next = THEME_HIGH_CONTRAST_LIGHT
-        elseif current == THEME_HIGH_CONTRAST_LIGHT
-            next = THEME_HIGH_CONTRAST_DARK
-        end
-
-        # set new theme
-        set_current_theme!(app, next)
-    end
-    push_front!(header_bar, swap_button)
-    present!(window)
-end
-```
-
----
 
 ## Logging
 
@@ -156,10 +103,10 @@ push_back!(box, box)
 We get the following message, printed to our console:
 
 ```
-(example_target:45245): mousetrap-CRITICAL **: 16:44:27.065: In Box::push_back!: Attempting to insert widget into itself. This would cause an infinite loop
+(example_target:45245): Mousetrap-CRITICAL **: 16:44:27.065: In Box::push_back!: Attempting to insert widget into itself. This would cause an infinite loop
 ```
 
-We cannot insert a widget into itself, mousetrap prevented this action and printed a log message to inform us of this instead. This protects the applications' stability from potential developer errors. Any and all functions should follow this philosophy: **prevent the error or bug, print a log message instead**. 
+We cannot insert a widget into itself, Mousetrap prevented this action and printed a log message to inform us of this instead. This protects the applications' stability from potential developer errors. Any and all functions should follow this philosophy: **prevent the error or bug, print a log message instead**. 
 
 ### Log Message Properties
 
@@ -171,9 +118,9 @@ First, we have `(example_target:45245)`, which is the identification of our appl
 
 #### Log Domain
 
-Next we have `mousetrap-CRITICAL`. The word before the `-` is the **log domain**. This is a developer-defined identification that should state which part of the application or library caused the logging message. Pre-defined domains include `mousetrap` and `mousetrap.jl` for mousetrap specific warnings, `GTK` for GTK-based warning, `GLib`, `Gio`, etc. 
+Next we have `Mousetrap-CRITICAL`. The word before the `-` is the **log domain**. This is a developer-defined identification that should state which part of the application or library caused the logging message. Pre-defined domains include `Mousetrap` and `Mousetrap.jl` for Mousetrap specific warnings, `GTK` for GTK-based warning, `GLib`, `Gio`, etc. 
 
-As a user of mousetrap, we should choose a new log domain. For example, if we create a new application called "Foo Image Manipulation Program", we should choose a descriptive log domain, such as `foo_image_manipulation_program`, `FIMP`, or `foo`.
+As a user of Mousetrap, we should choose a new log domain. For example, if we create a new application called "Foo Image Manipulation Program", we should choose a descriptive log domain, such as `foo_image_manipulation_program`, `FIMP`, or `foo`.
 
 #### Log Levels
 
@@ -227,7 +174,7 @@ Note that logging will only work once our `Application` instance is initialized.
 
 If the operating system is Linux, many log messages will be written to the default location, usually `/var/log`. On other operating systems, messages may not be stored at all.
 
-Regardless of OS, we can forward all logging, including that of mousetrap itself, to a file using [`set_log_file!`](@ref), which takes the file path as a string. If the file already exists, it will be appended to (as opposed to being overwritten). If the file does not yet exist, it will be created. On successfully opening the file, `true` will be returned. We should react to the function's result, as not being able to log should be considered a fatal error.
+Regardless of OS, we can forward all logging, including that of Mousetrap itself, to a file using [`set_log_file!`](@ref), which takes the file path as a string. If the file already exists, it will be appended to (as opposed to being overwritten). If the file does not yet exist, it will be created. On successfully opening the file, `true` will be returned. We should react to the function's result, as not being able to log should be considered a fatal error.
 
 When stored to a file, logging messages will have a different format that may or may not list additional information when compared to logging to a console. The philosophy behind this is that it is better to log as much information as possible, then use second party software to filter it, as opposed to missing crucial information for the sake of brevity:
 
@@ -249,7 +196,7 @@ Will add the following lines to a `example_log.txt`
     PRIORITY 4
 ```
 
-Mousetraps logging system should be preferred over the native Julia one. Sending a message with Julias `@info`, will not be printed to the mousetrap log file and will not be accessible by a mousetrap application.
+Mousetraps logging system should be preferred over the native Julia one. Sending a message with Julias `@info`, will not be printed to the Mousetrap log file and will not be accessible by a Mousetrap application.
 
 ---
 
@@ -298,9 +245,9 @@ If the file is a folder, we can use [`get_children`](@ref) to get all files and/
 
 ## Manipulating the Disk
 
-`FileDescriptor` being non-mutating means we need a different part of mousetrap in order to actually modify files on the users' disk. For file input / output, such as reading the contents of files, we should use the [Julia standard library](https://docs.julialang.org/en/v1/base/file/), which is well-suited for this task. 
+`FileDescriptor` being non-mutating means we need a different part of Mousetrap in order to actually modify files on the users' disk. For file input / output, such as reading the contents of files, we should use the [Julia standard library](https://docs.julialang.org/en/v1/base/file/), which is well-suited for this task. 
 
-For manipulating files as a whole, as opposed to their contents, mousetrap offers multiple functions for common tasks:
+For manipulating files as a whole, as opposed to their contents, Mousetrap offers multiple functions for common tasks:
 
 ### Creating Files
 
@@ -327,7 +274,7 @@ end
 
 ### Moving / Copying File
 
-To move a file from one location to another, we use [`move!`](@ref). If we want to copy a file or directory instead of moving it, we use [`mousetrap.copy!`](@ref):
+To move a file from one location to another, we use [`move!`](@ref). If we want to copy a file or directory instead of moving it, we use [`Mousetrap.copy!`](@ref):
 
 ```julia
 from = FileDescriptor("/path/from/file.txt")
@@ -505,7 +452,7 @@ By default, no `FileFilter`s will be registered, which means the `FileChooser` w
 
 A very common task for an application that manipulates files is to make sure the user knows they are overwriting a file, for example, when the user selects a location using a `FileChooser` who's action is `FILE_CHOOSER_ACTION_SAVE_FILE`.
 
-While we could construct a custom widget for this purpose, put that widget in a `Window`, then present that window to the user, a task as common as this should be possible in only a few lines. For this purpose, mousetrap offers [`AlertDialog`](@ref), which is a dialog that shows a message to the user, along with one or more buttons they can click.
+While we could construct a custom widget for this purpose, put that widget in a `Window`, then present that window to the user, a task as common as this should be possible in only a few lines. For this purpose, Mousetrap offers [`AlertDialog`](@ref), which is a dialog that shows a message to the user, along with one or more buttons they can click.
 
 Each `AlertDialog` has a **message**, a **detailed description**, which we during `AlertDialogs`constructor:
 
@@ -568,15 +515,156 @@ On top of buttons, `AlertDialog` furthermore has a spot for a custom widget, whi
 
 With `AlertDialog`, we have a vastly simplified mechanism for showing short, message-style dialogs to the user. Each of these dialogs will be *modal*  by default, meaning all other windows and actions will be paused until the dialog is dismissed.
 
+## Popup Messages
+
+Mousetrap offers a less intrusive way of showing a message to a user, facilitated by [`PopupMessageOverlay`](@ref). This widget is a container which has a single child. It adds no graphical element to its child, instead, we can show a small popup message which will be shown above the chosen child:
+
+![](../assets/popup_message.png)
+
+!!! details "How to generate this image"
+    ```julia
+    using Mousetrap
+    main() do app::Application
+        window = Window(app)
+
+        child = Separator()
+        message_overlay = PopupMessageOverlay()
+        set_child!(message_overlay, child)
+
+        show_message_action = Action("example.show_message", app)
+        set_function!(show_message_action, message_overlay) do self::Action, message_overlay::PopupMessageOverlay
+            message = PopupMessage("This is a message")
+            set_button_label!(message, "OK")
+            set_button_action!(message, self)
+            show_message!(message_overlay, message)
+        end
+
+        button = Button()
+        set_opacity!(button, 0)
+        set_action!(button, show_message_action)
+        push_front!(get_header_bar(window), button)
+    
+        set_child!(window, message_overlay)
+        present!(window)
+    end
+    ```
+
+To send a message, we first need to instance an object of type [`PopupMessage`](@ref), which, unlike `PopupMessageOverlay`, is **not** a widget, though it is a `SignalEmitter`.
+
+A popup message always has a title, which we supply to its constructor. It will furthermore always have a close button the user can use to hide the message. 
+
+After instancing the `PopupMessage`, we present it to the user using [`show_message!`](@ref):
+
+```julia
+message_overlay = PopupMessageOverlay()
+set_child!(message_overlay, widget)
+
+popup_message = PopupMessage("Message Text")
+show_message!(message_overlay, popup_message)
+```
+We can set the message to hide itself automatically by setting [`set_timeout!`](@ref) to anything other than `0`. Only one message can be shown at a time. We can make sure an important message is jumped to the front of the queue by setting its priority using [`
+set_is_high_priority!`](@ref).
+
+This is enough for a simple notification, but `PopupMessage` also supports interactivity beyond just the close button.
+
+A `PopupMessage` has one optional button. To show this button, we need to choose a title using [`set_button_label!`](@ref). To react to the user pressing this button, we can either assign it an action using [`set_button_action!`](@ref), or we can connect to `PopupMessages` signals, `button_clicked` and `dismissed`, which are emitted when the optional button and close button are pressed, respectively. Both signals expect a signal handler with signature `(::PopupMessage, [::Data_t]) -> Nothing`.
+
+For example, to trigger a function when the user clicks the "OK" button of our `PopupMessage`, we could do:
+
+```julia
+popup_message = PopupMessage("Message Text")
+
+# connect to button press
+set_button_label!(popup_message, "OK")
+connect_signal_button_clicked!(popup_message) do self::PopupMessage
+    println("OK clicked")
+end
+
+show_message!(message_overlay, popup_message)
+```
+
+## Popup Messages
+
+Mousetrap offers a less intrusive way of showing a message to a user, facilitated by [`PopupMessageOverlay`](@ref). This widget is a container which has a single child. It adds no graphical element to its child, instead, we can present a small popup message to the user, which will be shown above the chosen child:
+
+![](../assets/popup_message.png)
+
+!!! details "How to generate this image"
+    ```julia
+    using Mousetrap
+    main() do app::Application
+        window = Window(app)
+
+        child = Separator()
+        message_overlay = PopupMessageOverlay()
+        set_child!(message_overlay, child)
+
+        show_message_action = Action("example.show_message", app)
+        set_function!(show_message_action, message_overlay) do self::Action, message_overlay::PopupMessageOverlay
+            message = PopupMessage("This is a message")
+            set_button_label!(message, "OK")
+            set_button_action!(message, self)
+            show_message!(message_overlay, message)
+        end
+
+        button = Button()
+        set_opacity!(button, 0)
+        set_action!(button, show_message_action)
+        push_front!(get_header_bar(window), button)
+    
+        set_child!(window, message_overlay)
+        present!(window)
+    end
+    ```
+
+To send a message, we first need to instance an object of type [`PopupMessage`](@ref), which, unlike `PopupMessageOverlay`, is **not** a widget, though it is a `SignalEmitter`.
+
+A popup message always has a title, which is supplied to its constructor. It will furthermore always have a close button the user can use to hide the message. 
+
+After instancing the `PopupMessage`, we push it to the overlay using [`show_message!`](@ref):
+
+```julia
+message_overlay = PopupMessageOverlay()
+set_child!(message_overlay, widget)
+
+popup_message = PopupMessage("Message Text")
+show_message!(message_overlay, popup_message)
+```
+We can set the message to hide itself automatically by setting [`set_timeout!`](@ref) to anything other than `0`. 
+
+Only one message can be shown at a time. We can make sure an important message is put to the front of the queue by setting marking it as high priority using [`set_is_high_priority!`](@ref).
+
+This is enough for a simple notification, but `PopupMessage` also supports interactivity beyond just the close button.
+
+A `PopupMessage` can have one optional button. To show this button, we need to choose the buttons label using [`set_button_label!`](@ref). 
+
+To react to the user pressing this button, we can either assign it an action using [`set_button_action!`](@ref), or we can connect to one of `PopupMessages` signals, `button_clicked` and `dismissed`, which are emitted when the optional button and close button are pressed, respectively. Both signals expect a signal handler with signature `(::PopupMessage, [::Data_t]) -> Nothing`.
+
+For example, to trigger a function when the user clicks the "OK" button of a `PopupMessage`, we could do:
+
+```julia
+popup_message = PopupMessage("Message Text")
+
+# connect to button press
+set_button_label!(popup_message, "OK")
+connect_signal_button_clicked!(popup_message) do self::PopupMessage
+    println("OK clicked")
+end
+
+show_message!(message_overlay, popup_message)
+```
+
+`PopupMessage` should be used for relatively insignificant messages that do not require immediate user action. Otherwise, we should `AlertDialog`, which is modal by default and will only go away once the user chose to dismiss the dialog.
+
 ---
 
 ## GLib Keyfiles
 
-For many objects like images, mousetrap [offers ways to store them on the disk](@ref save_to_file). For custom objects, such as the state of our application, we have no such option. While it may sometimes be necessary, for most purposes we do not need to create a custom file type, instead, we can use the [**GLib KeyFile**](https://docs.gtk.org/glib/struct.KeyFile.html), whose syntax is heavily inspired by Windows `.ini` settings files.
+For many objects like images, Mousetrap [offers ways to store them on the disk](@ref save_to_file). For custom objects, such as the state of our application, we have no such option. While it may sometimes be necessary, for most purposes we do not need to create a custom file type, instead, we can use the [**GLib KeyFile**](https://docs.gtk.org/glib/struct.KeyFile.html), whose syntax is heavily inspired by Windows `.ini` settings files.
 
 Keyfiles are human-readable and easy to edit, which makes them better suited for certain purposes when compared to [json](https://docs.fileformat.com/web/json/) or [xml](https://docs.fileformat.com/web/xml/) files.
 
-Thanks to [`mousetrap.KeyFile`](@ref), loading, saving, and modifying key files is easy and convenient.
+Thanks to [`Mousetrap.KeyFile`](@ref), loading, saving, and modifying key files is easy and convenient.
 
 ### GKib Keyfile Syntax
 

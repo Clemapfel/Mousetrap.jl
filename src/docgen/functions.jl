@@ -219,6 +219,44 @@ add_child!(fixed::Fixed, ::Widget, position::Vector2f)
 Add a widget at given position, in absolute widget-space coordinates.
 """
 
+@document add_css! """
+```
+add_css!(code::String) -> Cvoid
+```
+Execute CSS code and add it to the global style manager. If compied succesfully, 
+any class defined will be available to be applied to a widget using `add_css_class!`.
+
+## Example
+```julia
+mousetrap.add_css!(\"\"\"
+.custom {
+    color: green;
+    border-radius: 10%;
+}
+\"\"\")
+add_css_class!(window, ".custom")
+```
+"""
+
+@document add_css_class! """
+```
+add_css_class!(::Widget, class::String)
+```
+Apply a custom style class to the widget. Use `add_css!` to define a CSS
+class.
+
+## Example
+```julia
+mousetrap.add_css!(\"\"\"
+.custom {
+    color: green;
+    border-radius: 10%;
+}
+\"\"\")
+add_css_class!(window, ".custom")
+```
+"""
+
 @document add_controller! """
 ```
 add_controller!(::Widget, controller::EventController) 
@@ -295,21 +333,6 @@ Add a "section"-type menu item to the model, which will be constructed based on 
 add_shortcut!(::Action, shortcut::ShortcutTrigger) 
 ```
 Add a shortcut trigger to the list of shortcuts. To make a widget listen for action shortcuts, use [`set_listens_for_shortcut_action!`](@ref), or use a [`ShortcutEventController`](@ref).
-"""
-
-@document add_style_class! """
-```
-add_style_class(::T, ::Type{<: StyleClass}) -> Nothing
-```
-Modify a widget by applying a CSS style class to it, this will change the widgets look. Only certain widgets support certain styles.
-
-## Example
-
-```julia
-button = Button()
-set_child!(button, Label("Styled Label"))
-add_style_class!(button, STYLE_CLASS_SUGGESTED_ACTION)
-```
 """
 
 @document add_submenu! """
@@ -588,6 +611,7 @@ Clear the current framebuffer, this will reset `GL_COLOR_BUFFER_BIT` and replace
 @document clear! """
 ```
 clear!(::Box) 
+clear!(::FlowBox)
 clear!(::ImageDisplay) 
 clear!(::ListView) 
 clear!(::ListView, [iterator::ListViewIterator]) 
@@ -908,11 +932,25 @@ get_axis_value(::StylusEventController, ::DeviceAxis) -> Float32
 Get value for the devices axis, or 0 if no such axis is present. This value will usually be in `[0, 1]`.
 """
 
+@document get_button_action_id """
+```
+get_button_action_id(::PopupMessage) -> ActionID
+```
+Get the ID of the messages button, or `""` if no button is present.
+"""
+
 @document get_button_label """
 ```
 get_button_label!(::AlertDialog, index::Integer) -> String
 ```
 Get label of the button at given ID, obtained when calling `add_button!`.
+
+--
+
+```
+get_button_label!(::PopupMessage) -> String
+```
+Get label of the singular button, or `""` if no button is present.
 """
 
 @document get_bottom_margin """
@@ -994,6 +1032,7 @@ Get column at specified position, 1-based.
 
 @document get_column_spacing """
 ```
+get_column_spacing!(::FlowBox) -> Float32
 get_column_spacing(::Grid) -> Float32
 ```
 Get spacing between columns, in pixels.
@@ -1026,6 +1065,13 @@ Get the singular comment above a group or key declaration.
 get_content_type(::FileDescriptor) -> String
 ```
 Get the file type as a MIME identification string.
+"""
+
+@document get_css_classes """
+```
+get_css_classes(::Widget) -> Vector{String}
+```
+Get all CSS classes currently applied to that widget.
 """
 
 @document get_current_button """
@@ -1082,6 +1128,13 @@ Get whether the window should be closed and deallocated when its parent window i
 get_detailed_description(::AlertDIalog) -> String
 ```
 Get detailed message, this is the text shown below the dialogs title.
+"""
+
+@document get_duration """
+```
+get_duration(::Animation) -> Time
+```
+Get the target duration of the animation.
 """
 
 @document get_editable """
@@ -1398,6 +1451,13 @@ get_is_focusable(::Widget) -> Bool
 Get whether the widget can grab input focus.
 """
 
+@document get_is_high_priority """
+```
+get_is_high_priority(::PopupMessage) -> Bool
+```
+Get whether this message has a high priority. High priority messages will be shown before non-high-priority if queued with `PopupMessageOverlay`.
+"""
+
 @document get_is_holding """
 ```
 get_is_holding(::Application) -> Bool
@@ -1448,6 +1508,13 @@ Get whether the widget was initialized and is now shown on screen.
 get_is_resizable(::ColumnViewColumn) -> Bool
 ```
 Get whether the user can choose the width of this column by click-dragging.
+"""
+
+@document get_is_reversed """
+```
+get_is_reversed(::Animation) -> Bool
+```
+If `false`, the animation will interpolate its value from the lower to upper bound, or the other way around if `true`.
 """
 
 @document get_is_scrollable """
@@ -1542,8 +1609,9 @@ Get distance between the left side of the text and the `TextView`s frame.
 get_lower(::Adjustment) -> Float32
 get_lower(::Scale) -> Float32
 get_lower(::SpinButton) -> Float32
+get_lower(::Animation) -> Float64
 ```
-Get the lower bound of the (underlying) adjustment.
+Get the lower bound of the underlying range.
 """
 
 @document get_margin_bottom """
@@ -1662,6 +1730,7 @@ Get the number of digits the spin button should display.
 @document get_n_items """
 ```
 get_n_items(::Box) -> Unsigned
+get_n_items(::FlowBox) -> Unsigned
 get_n_items(::ListView) -> Unsigned
 get_n_items(::GridView) -> Unsigned
 ```
@@ -1737,6 +1806,7 @@ Get the widgets current opacity, in `[0, 1]`.
 @document get_orientation """
 ```
 get_orientation(::Box) -> Orientation
+get_orientation(::FlowBox) -> Orientation
 get_orientation(::CenterBox) -> Orientation 
 get_orientation(::ClampFrame) -> Orientation
 get_orientation(::LevelBar) -> Orientation 
@@ -1860,6 +1930,13 @@ get_relative_position(::PopoverButton) -> RelativePosition
 Get the position of the popover relative to the widget it is attached to.
 """
 
+@document get_repeat_count """
+```
+get_repeat_count(::Animation) -> Unsigned
+```
+Get the number of cycles the animation will perform, or `0` if the animation loops endlessly.
+"""
+
 @document get_is_revealed """
 ```
 get_is_revealed(::Revealer) -> Bool
@@ -1878,6 +1955,7 @@ Get distance between the right end of the text and the text views frame.
 @document get_row_spacing """
 ```
 get_row_spacing(::Grid) -> Float32
+get_row_spacing(::FlowBox) -> Float32
 ```
 Get the margin between two rows, in pixels.
 """
@@ -2109,16 +2187,16 @@ Get position at which the drag gesture was first recognized, in absolute widget-
 
 @document get_state """
 ```
-get_state(::Action) -> Bool
+get_state(::CheckButton) -> CheckButtonState
 ```
-If the action is stateful, get the underlying state, otherwise returns `false`.
+Get current state of the check button.
 
 ---
 
 ```
-get_state(::CheckButton) -> CheckButtonState
+get_state(::Animation) -> AnimationState
 ```
-Get current state of the check button.
+Get current state of the animation.
 """
 
 @document get_step_increment """
@@ -2219,11 +2297,25 @@ get_text_visible(::Entry) -> Bool
 Get whether the text entry is in "password mode".
 """
 
+@document get_timeout """
+```
+get_timeout(::PopupMessage) -> Time 
+```
+Get the duration after which the message should hide itself, or `0` for it to never hide on its own. Microsecond precision.
+"""
+
 @document get_time_since_last_frame """
 ```
 get_time_since_last_frame(::FrameClock) -> Time
 ```
 Get the actual duration of the last rendered frame.
+"""
+
+@document get_timing_function """
+```
+get_timing_function(::Animation) -> AnimationTimingFunction
+```
+Get the shape of the function used to interpolate the animations underlying value over time.
 """
 
 @document get_title """
@@ -2240,6 +2332,13 @@ Get the window title.
 get_title(::ColumnViewColumn) -> String 
 ```
 Get the title for this column, which uniquely identifies it.
+
+---
+
+```
+get_title!(::PopupMessage) -> String
+````
+Get the `PopupMessage`s text.
 """
 
 @document get_tool_type """
@@ -2285,8 +2384,8 @@ struct CompoundWidget <: Widget
     CompoundWidget() = new(hbox(Label("this is a compound widget")))
 end
 
-mousetrap.get_top_level_widget(x::CompoundWidget) = x.box
-# after this definition, `CompoundWidget` can be used like any native mousetrap widget
+Mousetrap.get_top_level_widget(x::CompoundWidget) = x.box
+# after this definition, `CompoundWidget` can be used like any native Mousetrap widget
 """
 
 @document get_transition_duration """
@@ -2380,8 +2479,9 @@ Get uniform `vec4`, or `Vector4f(0, 0, 0, 0)` if no such uniform exists.
 get_upper(::Adjustment) -> Float32
 get_upper(::Scale) -> Float32
 get_upper(::SpinButton) -> Float32
+get_upper(::Animation) -> Float64
 ```
-Get upper bound of the underlying adjustment.
+Get upper bound of the underlying range.
 """
 
 @document get_uri """
@@ -2400,17 +2500,18 @@ Set whether the label should respect [pango markup syntax](https://docs.gtk.org/
 
 @document get_value """
 ```
-get_value(::Adjustment) 
-get_value(::SpinButton) 
-get_value(::Scale) 
-get_value(::LevelBar) 
+get_value(::Adjustment) -> Float32
+get_value(::SpinButton) -> Float32
+get_value(::Scale) -> Float32
+get_value(::LevelBar) -> Float32
+get_value(::Animation) -> Float64
 ```
 Get current value of the underlying adjustment.
 
 ---
 
 ```
-get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:AbstractFloat}) 
+get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:AbstractFloat})
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T <: AbstractFloat 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{<:Signed}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Vector{T}}) where T <: Signed 
@@ -2424,7 +2525,7 @@ get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{RGBA})
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{HSVA}) 
 get_value(file::KeyFile, ::GroupID, ::KeyID, ::Type{Image}) 
 ```
-Deserialize a value from the keyfile. Returns a default value if the key-value pair or group does not exist.
+Deserialize a value from the keyfile, then return it as a the specfied type. Returns a default value if the key-value pair or group does not exist, or it cannot be converted to the given type.
 """
 
 @document get_velocity """
@@ -2640,6 +2741,16 @@ Read an html color code of the form `#RRGGBB` or `#RRGGBBAA`, in hexadecimal.
 
 @document insert_at! """
 ```
+insert_at!(::FlowBox, ::Widget, index::Integer) -> Cvoid
+insert_at!(::ListView, ::Widget, index::Integer, [::ListViewIterator]) -> ListViewIterator
+insert_at!(::GridView, inde::Integer, ::Widget) -> Cvoid
+insert_at!(::Grid, ::Widget, row_i::Signed, column_i::Signed, [n_horizontal_cells:Unsigned = 1, n_vertical_cells::Unsigned = 1]) -> Cvoid
+```
+Insert a widget at the given position.
+
+---
+
+```
 insert_at!(::DropDown, index::Integer, label_for_both::String) -> DropDownItemID
 insert_at!(::DropDown, index::Integer, list_widget::Widget, label_widget::Widget) -> DropDownItemID
 insert_at!(f, ::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
@@ -2659,19 +2770,10 @@ See the manual section on `DropDown` in the chapter on widgets for more informat
 ---
 
 ```
-insert_at!(::Notebook, inde::Integer, child_widget::Widget, label_widget::Widget)
+insert_at!(::Notebook, index::Integer, child_widget::Widget, label_widget::Widget)
 ```
 Insert a page at the given position, where `child_widget` is the widget used as the page, and `label_widget` is the 
 widget displayed in the tab bar.
-
----
-
-```
-insert_at!(::ListView, ::Widget, index::Integer, [::ListViewIterator]) -> ListViewIterator
-insert_at!(::GridView, inde::Integer, ::Widget) -> Cvoid
-insert_at!(::Grid, ::Widget, row_i::Signed, column_i::Signed, [n_horizontal_cells:Unsigned = 1, n_vertical_cells::Unsigned = 1]) -> Cvoid
-```
-Insert a widget at the given position.
 """
 
 @document insert_after! """
@@ -2743,7 +2845,7 @@ Check whether the location on disk contains points to a valid folder (not file).
 ```
 get_is_local(::Clipboard) -> Bool
 ```
-Check whether the content of the cliboard was set from within the currently active mousetrap application.
+Check whether the content of the cliboard was set from within the currently active Mousetrap application.
 """
 
 @document is_symlink """
@@ -2774,7 +2876,7 @@ during `f`, the application safely exits.
 
 ## Example
 ```julia
-using mousetrap
+using Mousetrap
 main() do app::Application
     window = Window(app)
     present!(window)
@@ -2985,6 +3087,27 @@ end
 ````
 """
 
+@document on_done! """
+```
+on_done!(f, ::Animation, [::Data_t])
+```
+Register a callback called when the animations state changes from `ANIMATION_STATE_PLAYING` to `ANIMATION_STATE_DONE`.
+
+`f` is required to be invocable as a function with signature 
+```
+(::Animation, [::Data_t]) -> Cvoid
+```
+
+## Example
+```julia
+animation = Animation(widget, seconds(1))
+on_done!(animation) do self::Animation
+    println("done")
+end
+play!(animation)
+```
+"""
+
 @document on_file_changed! """
 ```
 on_file_changed!(f, monitor::FileMonitor, [::Data_t]) 
@@ -3020,7 +3143,7 @@ Register a callback to be called when the user clicks one of the dialogs buttons
 Where `button_index` is the index of the current button (1-based), or `0` if the dialog was dismissed.
 
 ## Example
-```
+```julia
 alert_dialog = AlertDialog(["Yes", "No"], "Is this is a dialog?")
 on_selection!(alert_dialog) do self::AlertDialog, button_index::Signed
     if button_index == 0
@@ -3030,6 +3153,26 @@ on_selection!(alert_dialog) do self::AlertDialog, button_index::Signed
     end
 end
 present!(alert_dialog)
+```
+"""
+
+@document on_tick! """
+```
+on_tick!(f, ::Animation, [::Data_t])
+```
+Register a callback called every frame while the animmation is active. `f` is required to be invocable as a function with signature
+```
+(::Animation, value::AbstractFloat, [::Data_t]) -> Cvoid
+```
+Where `value` is the currently interpolated value.
+
+## Example
+```julia
+animation = Animation(widget, seconds(1))
+on_tick!(animation) do self::Animation, value::AbstractFloat
+    # use `value` here
+end
+play!(animation)
 ```
 """
 
@@ -3045,6 +3188,20 @@ Asynchronously launch the default application to open the file or folder. May pr
 open_url(uri::String) -> Cvoid
 ```
 Asynchronously launch the default application to open the uri. This will usually be the users web browser
+"""
+
+@document pause! """
+```
+pause!(::Animation)
+```
+If the animation is playing, pause it, otherwise does nothing.
+"""
+
+@document play! """
+```
+play!(::Animation)
+```
+If the animation is currently paused, resume playing, otherwise restart the animation from the beginning.
 """
 
 @document popdown! """
@@ -3092,6 +3249,7 @@ the displayed ratio of the progress bar.
 @document push_back! """
 ```
 push_back!(::Box, ::Widget) -> Cvoid
+push_back!(::FlowBox, ::Widget) -> Cvoid
 push_back!(::ListView, ::Widget, [::ListViewIterator]) -> ListViewIterator 
 push_back!(::GridView, ::Widget) -> Cvoid
 push_back!(::HeaderBar, ::Widget) -> Cvoid
@@ -3145,6 +3303,7 @@ lower than the number of columns, the left-over columns will contain an empty ce
 @document push_front! """
 ```
 push_front!(::Box, ::Widget) -> Cvoid
+push_front!(::FlowBox, ::Widget) -> Cvoid
 push_front!(::ListView, ::Widget, [::ListViewIterator]) -> ListViewIterator 
 push_front!(::GridView, ::Widget) -> Cvoid
 push_front!(::HeaderBar, ::Widget) -> Cvoid
@@ -3249,6 +3408,7 @@ Release an application that is currently being prevented from exiting because [`
 @document remove! """
 ```
 remove!(::Box, ::Widget) -> Cvoid
+remove!(::FlowBox, ::WIdget) -> Cvoid
 remove!(::ActionBar, ::Widget) -> Cvoid
 remove!(::ListView, index::Integer, [::ListViewIterator]) -> Cvoid 
 remove!(::GridView, ::Widget) -> Cvoid
@@ -3301,13 +3461,22 @@ remove_child!(::ToggleButton)
 remove_child!(::Expander) 
 remove_child!(::Frame) 
 remove_child!(::Overlay) 
+remove_child!(::PopupMessageOverlay)
 remove_child!(::Popover) 
 remove_child!(::PopoverButton) 
 remove_child!(::Stack, id::String) 
 remove_child!(::Revealer) 
 remove_child!(::Viewport) 
+remove_child!(::TransformBin)
 ```
 Remove the widgets singular child, such that it is now empty.
+"""
+
+@document remove_css_class! """
+```
+remove_css_class!(::Widget, class::String)
+```
+Undo the effects of `add_css_class!`.
 """
 
 @document remove_column! """
@@ -3404,13 +3573,6 @@ remove_start_child!(::CenterBox)
 Remove the start child such that the widget is now empty at that position
 """
 
-@document remove_style_class! """
-```
-remove_style_class!(::Widget)
-```
-Remove all applied style classes, reverting the widget to its default look.
-"""
-
 @document remove_texture! """
 ```
 remove_texture!(::Shape) 
@@ -3463,7 +3625,15 @@ signal `render`.
 
 @document reset! """
 ```
+reset!(::Animation)
+```
+Return the animations state to idle.
+
+---
+
+```
 reset!(::GLTransform) 
+reset!(::TransformBin)
 ```
 Override the transform such that it is now the identity transform.
 """
@@ -3512,6 +3682,13 @@ Convert the color to an html-style hexadecimal string of the form `#RRGGBB`. The
 
 @document rotate! """
 ```
+rotate!(::TransformBin, angle::Angle)
+```
+Rotate child widget around its center.
+
+---
+
+```
 rotate!(::GLTransform, angle::Angle, [origin::Vector2f]) 
 rotate!(::Shape, angle::Angle, [origin::Vector2f]) 
 ```
@@ -3524,7 +3701,7 @@ run!(app::Application) -> Cint
 ```
 
 Start the main loop, initializing the internal state and triggering `Application`s signal `activate`. Note that 
-no part of mousetrap should be used or initialized before this function is called.
+no part of Mousetrap should be used or initialized before this function is called.
 
 Usually, users are encouraged to use [`main`](@ref) instead, which does this automatically.
 
@@ -3558,12 +3735,13 @@ Returns `true` if the operation was successfull
 
 @document scale! """
 ```
+scale!(::TransformBin, x_scale::Number, y_scale::Number)
 scale!(::GLTransform, x_scale::AbstractFloat, y_scale::AbstractFloat) 
 ```
 Combine the transform with a scale transform. To scale around a point, first `translate!` the transform to that point, 
 then apply `scale!`, then `translate!` the transform back to origin.
 
-Uses the OpenGL coordinate system.
+Uses relative scale, where `2` is twice as big, `0.5` is half as big, `1` is no change compared to the original size.
 """
 
 @document seconds """
@@ -3599,6 +3777,14 @@ Check if the widget the controller was added to currently holds focus.
 self_or_child_is_focused(::FocusEventController) -> Bool
 ```
 Check if the widget the controller was added to, or any of the widgets children currently hold focus.
+"""
+
+@document serialize """
+```
+serialize(::RGBA) -> String
+serialize(::HSVA) -> String
+```
+Convert the object to its CSS representation.
 """
 
 @document set_acceleration_rate! """
@@ -3668,11 +3854,25 @@ set_autohide!(::Popover, ::Bool)
 Set whether the popover should hide itself when the attached widget looses focus.
 """
 
+@document set_button_action! """
+```
+set_button_action!(::PopupMessage, ::Action)
+```
+Connect an action to the singular button of the message. Note that the messages button label has to be set to anything other than `""` for the button to be visible.
+"""
+
 @document set_button_label! """
 ```
 set_button_label!(::AlertDialog, id::Integer, label::String)
 ```
 Replace the label of the button with given ID, obtained when calling `add_button!`.
+
+---
+
+```
+set_button_label!(::PopupMessage, label::String)
+```
+If `label` is not empty, add a singular button to the message with the given label. When that button is clicked, the `PopupMessage` will emit signal `button_clicked`.
 """
 
 @document set_bottom_margin! """
@@ -3715,9 +3915,11 @@ set_child!(::Viewport, child::Widget)
 set_child!(::Expander, child::Widget) 
 set_child!(::Frame, child::Widget) 
 set_child!(::Overlay, child::Widget) 
+set_child!(::PopupMessageOverlay, child::Widget)
 set_child!(::Popover, child::Widget) 
 set_child!(::PopoverButton, child::Widget) 
 set_child!(::Revealer, child::Widget) 
+set_child!(::TransformBin, child::Widget)
 ```
 Set the widgets singular child.
 """
@@ -3753,6 +3955,7 @@ Set the color of all vertices of the shape.
 
 @document set_column_spacing! """
 ```
+set_column_spacing!(::FlowBox, spacing::AbstractFloat)
 set_column_spacing!(::Grid, spacing::AbstractFloat) 
 ```
 Set spacing between two columns of the grid, in pixels.
@@ -3844,6 +4047,13 @@ Set whether the window should close and be destroyed when the toplevel window is
 set_detailed_description(::AlertDialog, message::String)
 ```
 Set the detailed message, this is the text shown below the dialogs title.
+"""
+
+@document set_duration! """
+```
+set_duration!(::Animation, ::Time)
+```
+Set the duration of the animation, microseconds precision.
 """
 
 @document set_editable! """
@@ -4174,6 +4384,13 @@ set_is_focusable!(::Widget, ::Bool)
 Set whether the widget can retrieve input focus. Most widgets that support interaction by default are already focusable.
 """
 
+@document set_is_high_priority! """
+```
+set_is_high_priority!(::PopupMessage, high_priority::Bool)
+```
+Set whether this message should be shown before any other non-high-priority messages already queue with the `PopupMessageOverlay`. `false` by default.
+"""
+
 @document set_is_horizontally_homogeneous! """
 ```
 set_is_horizontally_homogeneous!(::Stack, ::Bool) 
@@ -4203,6 +4420,13 @@ Set whether all others windows should be paused while this window is active.
 set_is_resizable!(::ColumnViewColumn, ::Bool) 
 ```
 Set whether the column can be resized. If set to `false`, the size set via [`set_fixed_width!`](@ref) will be used.
+"""
+
+@document set_is_reversed! """
+```
+set_is_reversed!(::Animation, is_reversed::Bool)
+```
+If set to `false`, the animation will interpolate its value from the lower to upper bound, or the other way around if `true`. `false` by default.
 """
 
 @document set_is_scrollable! """
@@ -4320,8 +4544,9 @@ Returns `true` if the file was succesfully opened.
 set_lower!(::Adjustment, ::Number) 
 set_lower!(::Scale, ::Number) 
 set_lower!(::SpinButton, ::Number) 
+set_lower!(::Animation, ::Number)
 ```
-Set lower bound of the underlying adjustment.
+Set lower bound of the underlying range.
 """
 
 @document set_listens_for_shortcut_action! """
@@ -4477,6 +4702,7 @@ Set the opacity of the widget, in `[0, 1]`.
 @document set_orientation! """
 ```
 set_orientation!(::Box, ::Orientation) 
+set_orientation!(::FlowBox, ::Orientation)
 set_orientation!(::CenterBox, ::Orientation) 
 set_orientation!(::ClampFrame, ::Orientation)
 set_orientation!(::LevelBar, ::Orientation) 
@@ -4579,6 +4805,13 @@ set_relative_position!(::PopoverButton, position::RelativePosition)
 Set position of the popover relative to the widget it is attached to.
 """
 
+@document set_repeat_count! """
+```
+set_repeat_count!(::Animation, ::Unsigned)
+```
+Set the number of cycles the animation should perform, or `0` if the animation loops endlessly. `1` by default.
+"""
+
 @document set_resource_path! """
 ```
 set_resource_path!(::IconTheme, path::String) 
@@ -4603,7 +4836,8 @@ Set margin between the right end of the text and the text views frame.
 
 @document set_row_spacing! """
 ```
-set_row_spacing!(::Grid, spacing::AbstractFloat) 
+set_row_spacing!(::Grid, spacing::Number) 
+set_row_spacing!(::FLowBox, spacing::Number)
 ```
 Set spacing between rows of the grid, in pixels.
 """
@@ -4783,13 +5017,6 @@ There is no guarantee that the users operating system supports this feature.
 
 @document set_state! """
 ```
-set_state!(::Action, ::Bool) 
-```
-If the action is stateful, override its internal state.
-
----
-
-```
 set_state!(::CheckButton, state::CheckButtonState) 
 ```
 Set the state of the check button, this will change its visual element and emit the `toggled` signal.
@@ -4915,6 +5142,22 @@ end
 ```
 """
 
+@document set_timeout! """
+```
+set_timeout!(::PopupMessage, duration::Time)
+```
+Set the duration after which the message should hide itself, or `0` for it to never hide on its own, forcing the user to close it. Microsecond precision, `0` by default.
+
+`PopupMessage` will not hide if it is clicked or currently holds input focus.
+"""
+
+@document set_timing_function! """
+```
+set_timing_function!(::Animation, ::AnimationTimingFunction)
+```
+Sets the shape of the function used to interpolate the animations underlying value over time.
+"""
+
 @document set_title! """
 ```
 set_title!(::Window, title::String) 
@@ -4929,6 +5172,13 @@ Set the windows title, which will be shown in its titlebar.
 set_title!(::ColumnViewColumn, title::String) 
 ```
 Set the columns title, which will uniquely identify that column.
+
+---
+
+```
+set_title!(::PopupMessage, title::String)
+```
+Set the `PopupMessage`s text, does not support pango markup.
 """
 
 @document set_title_widget! """
@@ -5091,8 +5341,9 @@ This value will be a `vec4` in GLSL.
 set_upper!(::Adjustment, ::Number) 
 set_upper!(::Scale, ::Number) 
 set_upper!(::SpinButton, ::Number) 
+set_upper!(::Animation, ::Number)
 ```
-Set upper bound of the underlying adjustment.
+Set upper bound of the underlying range.
 """
 
 @document set_use_markup! """
@@ -5261,11 +5512,25 @@ show!(::Widget)
 Reveal the widget if it is currently hidden. This will emit signal `show`.
 """
 
+@document show_message! """
+```
+show_message!(::PopupMessageOverlay, ::PopupMessage)
+```
+Queue a message to be shwon above the `PopupMessageOverlay`s child. Note that only one message can be shown at a time.
+"""
+
 @document show_in_file_explorer """
 ```
 show_in_file_explorer(::FileDescriptor) -> Cvoid
 ```
 Asynchronously open the users file explorer application to show the folder containing the given file.
+"""
+
+@document skew! """
+```
+skew!(::TransformBin, x::Number, y::Number)
+```
+Apply a skew transform to the child widget, where `x` skews along the horizontal, `y` along the vertical axis.
 """
 
 @document start! """
@@ -5290,6 +5555,11 @@ Convert absolute widget-space coordinates to OpenGL coordinates. This will take 
 """
 
 @document translate! """
+```
+translate!(::TransformBin, offset::Vector2f)
+```
+Move the child widget by given offset, widget space coordinates, in pixels.
+
 ```
 translate!(transform::GLTransform, offset::Vector2f) 
 ```
