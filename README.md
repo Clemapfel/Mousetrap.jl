@@ -136,9 +136,9 @@ Click registered at (367.5, 289.0)
 | MacOS            | yes                 | no                         |
 | FreeBSD          | yes                 | yes                        | 
 
-> * Linux systems running Wayland may require additional configuration before the OpenGL component becomes available. See [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
+> \* Linux systems running Wayland may require additional configuration before the OpenGL component becomes available. See [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
 
-> * Ubuntu systems using proprietary NVIDIA drivers may encounter a crash on initialization, a fix is available [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366).
+> \* Ubuntu systems using proprietary NVIDIA drivers may encounter a crash on initialization, a fix is available [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366).
 
 ---
 
