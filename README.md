@@ -6,8 +6,7 @@ Mousetrap is a GUI library for Julia. It, and its [stand-alone C++-component of 
 
 It aims to give developers of all skill levels the tools to start creating complex GUI applications with little time and effort.
 
-> **Note**: Mousetrap is under active development. While backwards-compatibility for all future releases can already be guaranteed, stability, portability, and quality of the documentation may be affected. <br>
-Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error or bug (which - as of now - will most likely happen).
+> **Note**: Mousetrap is under active development. Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error, bug, or missing feature.
 
 ---
 
@@ -136,7 +135,7 @@ Click registered at (367.5, 289.0)
 | MacOS            | yes                 | no                         |
 | FreeBSD          | yes                 | yes                        | 
 
-> Ubuntu systems using proprietary NVIDIA drivers may cause a crash on mousetrap initialization, see [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for how to fix this.
+> `*` Ubuntu systems using proprietary NVIDIA drivers may cause a crash on mousetrap initialization, see [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for how to fix this.
 
 ---
 
