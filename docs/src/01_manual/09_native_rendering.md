@@ -7,7 +7,6 @@ In this chapter we will learn:
 + How to change the currently used blend mode
 + How to apply a 3D transform to a shape GPU-side
 + How to compile a GLSL Shader and set its uniforms
-+ ~~How to render to a texture~~
 
 ---
 
@@ -18,6 +17,41 @@ In this chapter we will learn:
     can compile libraries that have it as a dependency. See [here](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978341) for more information.
 
     If we attempt to instantiate a disabled object on MacOS, a **fatal error** will be thrown at runtime.
+
+!!! details "Native Rendering on Linux Wayland"
+    Linux users using the Wayland windowing system may encounter the following error message when starting mousetrap:
+
+    ```
+    In gdk_window_create_gl_context: Faled to create EGL display
+    ```
+
+    This means we would be unable to use `RenderArea` or any other OpenGL-related functionality.
+
+    To address this, we need to [locate](https://linuxize.com/post/locate-command-in-linux/) the directory `egl_vendor.d`, which has to be non-empty and contain a json file
+
+    ```
+    locate egl_vendor.d
+    ```
+    ```
+    /etc/glvnd/egl_vendor.d
+    /usr/share/glvnd/egl_vendor.d
+    /usr/share/glvnd/egl_vendor.d/50_mesa.json
+    ```
+
+    Here we choose `/usr/share/glvnd/egl_vendor.d` instead of `/etc/glvnd/egl_vendor.d`, because only the former contains a json file, `50_mesa.json` in this case.
+
+    Armed with this path, we then execute, in a terminal, **before** Julia is started:
+
+    ```
+    export __EGL_VENDOR_LIBRARY_DIRS=/usr/share/glvnd/egl_vendor.d
+    ```
+
+    After which any OpenGL-related features from this chapter will become available. 
+    
+    To make this change permanent, we can paste the above line into the `~/.bashrc` text file, which will be loaded anytime a terminal starts, making the `export` permanent.
+
+!!! details "Manually Disabling the OpenGL Component"
+    We can disable all features from this chapter by setting the environment variable `MOUSETRAP_DISABLE_OPENGL_COMPONENT` to `TRUE`. See [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for more information.
 
 ---
 

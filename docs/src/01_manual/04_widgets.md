@@ -398,7 +398,8 @@ To change a `Label`s text after initialization, we use [`set_text!`](@ref). This
 
 [Justification](https://en.wikipedia.org/wiki/Typographic_alignment) determines how words are distributed along the horizontal axis. There are 5 modes in total, all of which are values of the enum [`JustifyMode`](@ref), set using [`set_justify_mode!`](@ref):
 
-![](../assets/text_justify_center.png)
+![](../assets/text_justify_left.png)
+
 `JUSTIFY_MODE_LEFT`
 
 ![](../assets/text_justify_center.png)

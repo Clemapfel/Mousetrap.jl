@@ -128,13 +128,15 @@ Click registered at (367.5, 289.0)
 ## Supported Platforms
 
 | Platform         | Basic GUI Component | OpenGL Rendering Component |
-|------------------|---------------------|-----------------------------|
-| Linux (64-bit)   | `✓`                | `✓`                        |
-| Linux (32-bit)   | `✓`                | `✕`                        |
-| Windows (64-bit) | `✓`                | `✓`                        |
-| Windows (32-bit) | `✕`                | `✕`                        |
-| MacOS            | `✓`                | `✕`                        |
-| FreeBSD          | `✓`                | `✓`                        | 
+|------------------|---------------------|----------------------------|
+| Linux (64-bit)   | yes                 | yes* (see below)           |
+| Linux (32-bit)   | yes                 | no                         |
+| Windows (64-bit) | yes                 | yes                        |
+| Windows (32-bit) | no                  | no                         |
+| MacOS            | yes                 | no                         |
+| FreeBSD          | yes                 | yes                        | 
+
+> Ubuntu systems using proprietary NVIDIA drivers may cause a crash on mousetrap initialization, see [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for how to fix this.
 
 ---
 
