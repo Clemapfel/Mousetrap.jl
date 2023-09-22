@@ -44,6 +44,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 Inn order of priority, highest first:
 
 + Simplify installation process to `] add mousetrap`
++ Implement widget that can act as a [Makie.jl](https://github.com/MakieOrg/Makie.jl) render target
 + Implement installation of .desktop files on end-user computers
 + Implement drag-and-drop for files, images, and widgets
 + Allow retrieving a widget from its container, for this to be possible the widgets type has to be stored C-side
@@ -128,14 +129,14 @@ Click registered at (367.5, 289.0)
 
 | Platform         | Basic GUI Component | OpenGL Rendering Component |
 |------------------|---------------------|----------------------------|
-| Linux (64-bit)   | yes                 | yes* (see below)           |
+| Linux (64-bit)   | yes                 | yes° (see below)           |
 | Linux (32-bit)   | yes                 | no                         |
 | Windows (64-bit) | yes                 | yes                        |
 | Windows (32-bit) | no                  | no                         |
 | MacOS            | yes                 | no                         |
 | FreeBSD          | yes                 | yes                        | 
 
-> `*` Ubuntu systems using proprietary NVIDIA drivers may cause a crash on mousetrap initialization, see [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for how to fix this.
+> ° Ubuntu systems using proprietary NVIDIA drivers may encounter a crash on initialization, see [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for how to fix this
 
 ---
 
@@ -164,7 +165,7 @@ test Mousetrap
 
 At the end it should say `Mousetrap tests passed`.
 
-> **Note**: On Windows, some `GLib` log messages regarding dbus connections and  may appear during testing. These do not indicate a problem, as long as at the end of the testing suite it says `mousetrap tests passed`.
+> **Note**: On Windows, some `GLib` log messages regarding dbus connections and  may appear during testing. These do not indicate a problem.
 
 ---
 
@@ -190,6 +191,7 @@ The goal is for mousetrap to be 100% stable and flawless when Julia [static comp
 
 Consider contributing by taking on one of these bounty projects:
 
++ [Makie Canvas](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=39514359)
 + [App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
 + [Native Rendering on MacOS](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978341)
 + [Cross-Platform Continuous Integration](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=35737729#)
