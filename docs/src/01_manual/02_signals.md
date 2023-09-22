@@ -342,21 +342,21 @@ button_02 = Button()
 connect_signal_clicked!(button_01, button_02) do button_01::Button, button_02::Button
     # button_01 is self, button_02 is data
     println("01 clicked")
-    activate!(button_02)
+    emit_signal_clicked(button_02)
 end
 
 # when button 02 is clicked, 01 is triggered programmatically
 connect_signal_clicked!(button_02, button_01) do button_02::Button, button_01::Button
     # button_02 is self, button_01 is data
     println("02 clicked")
-    activate!(button_01)
+    emit_signal_clicked(button_01)
 end
 
 # add both buttons to the window
 set_child!(window, hbox(button_01, button_02))
 ```
 
-In which we use [`activate!`](@ref), which triggers the exact same behavior as if a user has clicked the button on screen, including emission of signal `clicked`.  
+In which we use [`emit_signal_clicked`](@ref), which manually triggers emission of signal `clicked`.  
 
 [`hbox`](@ref) in the last line makes it so that we can display both buttons in the window.
 
@@ -401,7 +401,7 @@ connect_signal_clicked!(button_01, button_02) do button_01::Button, button_02::B
     set_signal_clicked_blocked!(button_01, true)
 
     # activate other (02)
-    activate!(button_02)
+    emit_signal_clicked(button_02)
 
     # unblock self (01)
     set_signal_clicked_blocked!(button_01, false)
@@ -414,7 +414,7 @@ connect_signal_clicked!(button_02) do button_02::Button, button_01::Button
     set_signal_clicked_blocked!(button_02, true)
 
     # activate other (01)
-    activate!(button_01)
+    emit_signal_clicked(button_01)
 
     # unblock self (02)
     set_signal_clicked_blocked!(button_02, false)
@@ -457,7 +457,7 @@ main() do app::Application
         println("01 clicked")
         
         set_signal_clicked_blocked!(button_01, true)
-        activate!(button_02)
+        emit_signal_clicked(button_02)
         set_signal_clicked_blocked!(button_01, false)
     end
 
@@ -465,7 +465,7 @@ main() do app::Application
         println("02 clicked")
 
         set_signal_clicked_blocked!(button_02, true)
-        activate!(button_01)
+        emit_signal_clicked(button_01)
         set_signal_clicked_blocked!(button_02, false)
     end
 

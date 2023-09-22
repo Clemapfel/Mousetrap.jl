@@ -401,4 +401,4 @@ end
 
 ![](../assets/css_style_animation_spin.webm)
 
-While we could create this animation using `Mousetrap.Animation` and `TransformBin`, using CSS means that we do not have to instance those two objects for every widget we want to animate, we can instead just apply the CSS modifier class each time. In return, this CSS-based animation cannot depend on any external variables and is thus only suited for animations that remain the same each time it is played.
+While we could create this animation using `Mousetrap.Animation` and `TransformBin`, using CSS means that we do not have to instance those two objects for every widget we want to animate, we can instead just apply the CSS modifier class each time. In return, this CSS-based animation cannot depend on any external variables and is thus only suited for animations that remain the same each time they are played.
