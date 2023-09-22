@@ -41,7 +41,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 
 ## Planned Features
 
-Inn order of priority, highest first:
+In order of priority, highest first:
 
 + Simplify installation process to `] add mousetrap`
 + Implement widget that can act as a [Makie.jl](https://github.com/MakieOrg/Makie.jl) render target
@@ -51,11 +51,8 @@ Inn order of priority, highest first:
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
 + Allow adding custom signals that use the GLib marshalling system
 + Allow bundling of mousetrap apps, their resources, and all their dependencies into a portable C-executable
-+ Fully polish interactive use from within the REPL
 + Make all functions that modify the global state thread-safe
-+ Expose the full `GtkTextView` and `GtkSourceView` interface, making `TextView` a fully feature text editor
-+ Allow binding textures to fragment shader uniforms at texture unit 1 or higher, currently, only texture unit 0 is supported
-+ Add 3D shapes and geometry shaders
++ Expose the full `GtkTextView` and `GtkSourceView` interface, making `TextView` a fully featured text editor
 
 ---
 
@@ -133,7 +130,7 @@ Click registered at (367.5, 289.0)
 | Linux (32-bit)   | yes                 | no                         |
 | Windows (64-bit) | yes                 | yes                        |
 | Windows (32-bit) | no                  | no                         |
-| MacOS            | yes                 | no                         |
+| macOS            | yes                 | no                         |
 | FreeBSD          | yes                 | yes                        | 
 
 > \* Linux systems running Wayland may require additional configuration before the OpenGL component becomes available. See [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
@@ -195,7 +192,7 @@ Consider contributing by taking on one of these bounty projects:
 
 + [Makie Canvas](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=39514359)
 + [App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
-+ [Native Rendering on MacOS](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978341)
++ [Native Rendering on macOS](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978341)
 + [Cross-Platform Continuous Integration](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=35737729#)
 
 I am unable to offer any monetary reward, but I'd be happy to credit you as a co-author of mousetrap on [GitHub](https://github.com/Clemapfel/mousetrap.jl#credits) and [as a Julia package author](https://github.com/Clemapfel/mousetrap.jl/blob/main/Project.toml#L3) if your work contributes significantly to the implementation of one of these three bounty projects.
@@ -212,3 +209,4 @@ C.
 The current and all past version of mousetrap, including any text or assets used in mousetraps documentation, are licensed under [GNU Lesser General Public License (Version 3.0)](https://www.gnu.org/licenses/lgpl-3.0.en.html). This means it can be used in both free, open-source, as well as commercial, closed-source software.
 
 ---
+
