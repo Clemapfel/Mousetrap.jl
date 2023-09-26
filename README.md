@@ -124,7 +124,9 @@ Click registered at (367.5, 289.0)
 
 ## Supported Platforms
 
-| Platform         | Basic GUI Component | OpenGL Rendering Component |
+Mousetrap is available for the following platforms. Note that on macOS, the [`RenderArea`](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) widget is unavailable, all other widgets and functionalities are fully supported.
+
+| Platform         | GUI Component       | `RenderArea` Widget        |
 |------------------|---------------------|----------------------------|
 | Linux (64-bit)   | yes                 | yes*                       |
 | Linux (32-bit)   | yes                 | no                         |
@@ -133,7 +135,7 @@ Click registered at (367.5, 289.0)
 | macOS            | yes                 | no                         |
 | FreeBSD          | yes                 | yes                        | 
 
-> \* Linux systems running Wayland may require additional configuration before the OpenGL component becomes available. See [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
+> \* Linux systems running Wayland may require additional configuration before `RenderArea` becomes available. See [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
 
 > \* Ubuntu systems using proprietary NVIDIA drivers may encounter a crash on initialization, a fix is available [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366).
 
