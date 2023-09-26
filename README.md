@@ -124,7 +124,7 @@ Click registered at (367.5, 289.0)
 
 ## Supported Platforms
 
-Mousetrap is available for the following platforms. Note that on macOS, the [`RenderArea`](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) widget is unavailable, all other widgets and functionalities are fully supported.
+Mousetrap is available for the following platforms. Note that on macOS, the [`RenderArea`](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) widget is unavailable, while all other widgets and functionalities are fully supported.
 
 | Platform         | GUI Component       | `RenderArea` Widget        |
 |------------------|---------------------|----------------------------|
@@ -192,7 +192,6 @@ The goal is for mousetrap to be 100% stable and flawless when Julia [static comp
 
 Consider contributing by taking on one of these bounty projects:
 
-+ [Makie Canvas](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=39514359)
 + [App Bundler](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978204)
 + [Native Rendering on macOS](https://github.com/users/Clemapfel/projects/2/views/1?pane=issue&itemId=33978341)
 + [Cross-Platform Continuous Integration](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=35737729#)
