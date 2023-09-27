@@ -17,7 +17,7 @@ Copyright © 2023 C.Cords, Licensed under lGPL-3.0
 """
 module Mousetrap
 
-    const VERSION = v"0.2.0"
+    const VERSION = v"0.3.0"
 
 ####### detail.jl
 
