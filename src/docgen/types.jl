@@ -911,6 +911,38 @@ end
 ```
 """
 
+@document GLCanvas """
+# GLCanvas <: Widget
+
+Canvas that can be used a an OpenGL render target. This widget is intended to be used by third libraries, 
+if you want to render using OpenGL using only Mousetrap, use `RenderArea` instead.
+
+
+$(@type_constructors(
+    GLCanvas()
+))
+
+$(@type_signals(GLCanvas,
+    render,
+    resize 
+))
+
+$(@type_fields())
+
+## Example
+```julia
+canvas = GLCanvas()
+connect_signal_resize!(canvas) do self::GLCanvas, x, y
+    # viewport was resized to x, y (in pixels)
+end 
+connect_signal_render!(canvas) do self::GLCanvas, gl_context::Ptr{Cvoid}
+    make_current!(canvas)
+    # do OpenGL rendering here
+    return true 
+end
+```
+"""
+
 @document GLTransform """
 # GLTransform <: SignalEmitter
 

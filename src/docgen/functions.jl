@@ -925,6 +925,13 @@ get_autohide(::Popover) -> Bool
 Get whether the popover should automatically hide when it looses focus.
 """
 
+@document get_auto_render """
+```
+get_auto_render(::GLCanvas) -> Bool
+```
+Get whether the `render` signal is emitted any time the widget is drawn.
+"""
+
 @document get_axis_value """
 ```
 get_axis_value(::StylusEventController, ::DeviceAxis) -> Float32
@@ -2932,6 +2939,7 @@ Dispay a log message with level `FATAL`. Immediately after, runtime ends. If [`s
 @document make_current """
 ```
 make_current(::RenderArea) 
+make_current(::GLCanvas)
 ```
 Bind the associated frame buffer as the one currently being rendered to. This is usually not necessary.
 """
@@ -3365,6 +3373,7 @@ Note that there is no guarantee that a file will contain a value for any of thes
 @document queue_render """
 ```
 queue_render(::RenderArea) 
+queue_render(::GLArea)
 ```
 Request for the `RendeArea` to performa a render cycle and flush the current framebuffer to the screen. There is no guarantee that this 
 will happen immediately.
@@ -3852,6 +3861,13 @@ Register the window with the application. This is usually done automatically.
 set_autohide!(::Popover, ::Bool) 
 ```
 Set whether the popover should hide itself when the attached widget looses focus.
+"""
+
+@document set_auto_render! """
+```
+set_auto_render(::GLCanvas, ::Bool)
+```
+Set whether the `render` signal should be emitted anytime the widget is drawn to the screen, `true` by default.
 """
 
 @document set_button_action! """

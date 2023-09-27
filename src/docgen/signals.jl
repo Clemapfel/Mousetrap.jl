@@ -218,11 +218,11 @@ const signal_descriptors = Dict([
         "Emitted any time a user triggers a scroll action that moves one or both of the `Viewport`s scroll bars, where `scroll_type` identifies the type of action that triggered the scrolling, while `is_horizontal` determines along which axis the scrolling took place."
     ),
     :render => (
-        void_signature, 
-        "Emitted once per frame before the `RenderArea` flushes the current frame buffer to the monitor."
+        "(::T, gdk_gl_context::Ptr{Cvoid}, [::Data_t]) -> Bool", 
+        "Emitted once per frame before the GL framebuffer is flushed to the screen. The `gdk_gl_context` argument is for internal use only and can be ignored."
     ),
     :resize => (
-        "(::T, width::Integer, height::Integer, [::Data_t]) -> void", 
+        "(::T, width::Integer, height::Integer, [::Data_t]) -> Cvoid", 
         "Emitted whenver the allocated area of a `RenderArea` changes, where `width` and `height` are the new size, in pixels."
     ),
     :activated => (

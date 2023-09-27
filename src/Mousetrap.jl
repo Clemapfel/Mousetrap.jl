@@ -987,6 +987,7 @@ module Mousetrap
 
     macro add_signal_scroll_child(x) return :(@add_signal $x scroll_child Cvoid ScrollType type Bool is_horizontal) end
     macro add_signal_resize(x) return :(@add_signal $x resize Cvoid Integer width Integer height) end
+    macro add_signal_render(x) return :(@add_signal $x render Bool Ptr{Cvoid} gdk_gl_context_ptr) end
 
     macro add_signal_modifiers_changed(x) return :(@add_signal $x modifiers_changed Cvoid ModifierState state) end
 
@@ -1441,73 +1442,6 @@ module Mousetrap
         push!(out.args, esc(:(
             function $emit_signal_name(x::$T, page_index::Integer) ::$Return_t
                 return convert($Return_t, detail.$emit_signal_name(x._internal, from_julia_index(page_index)))
-            end
-        )))
-
-        disconnect_signal_name = :disconnect_signal_ * snake_case * :!
-
-        push!(out.args, esc(:(
-            function $disconnect_signal_name(x::$T)
-                detail.$disconnect_signal_name(x._internal)
-            end
-        )))
-
-        set_signal_blocked_name = :set_signal_ * snake_case * :_blocked * :!
-
-        push!(out.args, esc(:(
-            function $set_signal_blocked_name(x::$T, b)
-                detail.$set_signal_blocked_name(x._internal, b)
-            end
-        )))
-
-        get_signal_blocked_name = :get_signal_ * snake_case * :_blocked
-
-        push!(out.args, esc(:(
-            function $get_signal_blocked_name(x::$T)
-                return detail.$get_signal_blocked_name(x._internal)
-            end
-        )))
-
-        push!(out.args, esc(:(export $connect_signal_name)))
-        push!(out.args, esc(:(export $disconnect_signal_name)))
-        push!(out.args, esc(:(export $set_signal_blocked_name)))
-        push!(out.args, esc(:(export $get_signal_blocked_name)))
-        push!(out.args, esc(:(export $emit_signal_name)))
-
-        return out
-    end
-
-    macro add_signal_render(T)
-
-        out = Expr(:block)
-        snake_case = :render
-        Return_t = Bool
-
-        connect_signal_name = :connect_signal_ * snake_case * :!
-
-        push!(out.args, esc(:(
-            function $connect_signal_name(f, x::$T)
-                typed_f = TypedFunction(f, $Return_t, ($T,))
-                detail.$connect_signal_name(x._internal, function(x)
-                    typed_f($T(x[1][]))
-                end)
-            end
-        )))
-
-        push!(out.args, esc(:(
-            function $connect_signal_name(f, x::$T, data::Data_t) where Data_t
-                typed_f = TypedFunction(f, $Return_t, ($T, Data_t))
-                detail.$connect_signal_name(x._internal, function(x)
-                    typed_f($T(x[1][]), data)
-                end)
-            end
-        )))
-
-        emit_signal_name = :emit_signal_ * snake_case
-
-        push!(out.args, esc(:(
-            function $emit_signal_name(x::$T) ::$Return_t
-                return convert($Return_t, detail.$emit_signal_name(x._internal, Ptr{Cvoid}()))
             end
         )))
 
@@ -5543,6 +5477,24 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     serialize(color::RGBA) ::String = detail.style_manager_color_to_css_rgba(color.r, color.g, color.b, color.a)
     serialize(color::HSVA) ::String = detail.style_manager_color_to_css_hsva(color.h, color.s, color.v, color.a)
     export serialize
+
+###### gl_canvas.jl
+
+    @export_type GLCanvas Widget
+    @declare_native_widget GLCanvas
+
+    GLCanvas() = GLCanvas(detail._GLCanvas())
+
+    @add_widget_signals GLCanvas
+    @add_signal_resize GLCanvas
+    @add_signal_render GLCanvas
+
+    @export_function GLCanvas make_current Cvoid
+    @export_function GLCanvas queue_render Cvoid
+    @export_function GLCanvas get_auto_render Bool
+    @export_function GLCanvas set_auto_render! Cvoid Bool b
+
+    Base.show(io::IO, x::GLCanvas) = show_aux(io, x)
 
 ###### key_codes.jl
 
