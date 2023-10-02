@@ -7,8 +7,8 @@ version = v"0.3.0"
 
 # Collection of sources required to complete build
 sources = [
-    GitSource("https://github.com/Clemapfel/mousetrap.git", "83d52a891eb55032ab53c3364156aeac634d0f20"),
-    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "d9e18f33808b55b3712ddc3f9d29b8fd88822efa")
+    GitSource("https://github.com/Clemapfel/mousetrap.git", "f14b9e4a7b9f83fca6082ce961e468da93529e6c"),
+    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "5fa37713123201a523051d4bed318da015f514b1")
 ]
 
 #julia -t 8 build_tarballs.jl --debug --verbose --deploy=local
@@ -18,15 +18,16 @@ sources = [
 # Bash recipe for building across all platforms
 script = raw"""
 cd $WORKSPACE/srcdir
+echo -e "[binaries]\ncmake='/usr/bin/cmake'" >> cmake_toolchain_patch.ini
 cd mousetrap
 mkdir ${prefix}/share/licenses/mousetrap
 cp LICENSE ${prefix}/share/licenses/mousetrap/LICENSE
-meson setup build --cross-file=$MESON_TARGET_TOOLCHAIN
+meson setup build --cross-file=$MESON_TARGET_TOOLCHAIN --cross-file=../cmake_toolchain_patch.ini
 meson install -C build
 cd ../mousetrap_julia_binding
-echo -e "[binaries]\ncmake='/usr/bin/cmake'" >> cmake_toolchain_patch.ini
-meson setup build --cross-file=$MESON_TARGET_TOOLCHAIN --cross-file=cmake_toolchain_patch.ini -DJulia_INCLUDE_DIRS=$prefix/include/julia
+meson setup build --cross-file=$MESON_TARGET_TOOLCHAIN --cross-file=../cmake_toolchain_patch.ini -DJulia_INCLUDE_DIRS=$prefix/include/julia
 meson install -C build
+cd ..
 rm cmake_toolchain_patch.ini
 """
 
