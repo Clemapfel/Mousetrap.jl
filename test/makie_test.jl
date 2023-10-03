@@ -6,7 +6,7 @@ using GLMakie: empty_postprocessor, fxaa_postprocessor, OIT_postprocessor, to_sc
 using GLMakie.Makie: MouseButtonEvent, KeyEvent
 using Gtk4.GLib: GObject, signal_handler_is_connected, signal_handler_disconnect
 
-export GTKScreen, grid, glarea, window
+export GTKScreen, glarea, window
 
 const WindowType = Union{Gtk4.GtkWindowLeaf, Gtk4.GtkApplicationWindowLeaf}
 
@@ -74,13 +74,6 @@ const GTKGLWindow = GtkGLMakie
 
 const screens = Dict{Ptr{Gtk4.GtkGLArea}, GLMakie.Screen}();
 const win2glarea = Dict{WindowType, GtkGLMakie}();
-
-"""
-    grid(screen::GLMakie.Screen{T}) where T <: GtkWindow
-
-For a Gtk4Makie screen, get the GtkGrid containing the GtkGLArea where Makie draws. Other widgets can be added to this grid.
-"""
-grid(screen::GLMakie.Screen{T}) where T <: GtkWindow = screen.glscreen[]
 
 """
     glarea(screen::GLMakie.Screen{T}) where T <: GtkWindow
@@ -225,9 +218,9 @@ Supported `screen_config` arguments and their default values are:
 * `fullscreen = false`: Whether or not the window should be fullscreened when first created.
 """
 function GTKScreen(;
-                resolution = (200, 200),
-                app = nothing,
-                screen_config...
+        resolution = (200, 200),
+        app = nothing,
+        screen_config...
     )
     config = Makie.merge_screen_config(GLMakie.ScreenConfig, screen_config)
     # Creating the framebuffers requires that the window be realized, it seems...
@@ -255,9 +248,9 @@ function GTKScreen(;
     end
 
     Gtk4.signal_connect(realizecb, glarea, "realize")
-    grid = GtkGrid()
-    window[] = grid
-    grid[1,1] = glarea
+    set_gtk_property!(glarea, :hexpand, true)
+    set_gtk_property!(glarea, :vexpand, true)
+    window[] = glarea
 
     # tell GLAbstraction that we created a new context.
     # This is important for resource tracking, and only needed for the first context
