@@ -1,1 +1,2 @@
 Window.get_is_closed 
+Widget.get_scale_factor

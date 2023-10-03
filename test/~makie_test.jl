@@ -320,7 +320,7 @@ function Makie.window_area(scene::Scene, screen::GLMakie.Screen{T}) where T <: G
         area[] = Recti(0, 0, w, h)
     end
     glarea=win2glarea[Makie.to_native(screen)]
-    signal_connect(on_resize, glarea, :resize)
+    signal_connect(on_resize, glarea, "resize")
     Gtk4.queue_render(glarea)
 end
 
