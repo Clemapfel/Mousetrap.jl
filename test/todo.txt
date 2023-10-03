@@ -1,0 +1,1 @@
+Window.get_is_closed 
