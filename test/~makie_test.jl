@@ -6,7 +6,7 @@ using GLMakie: empty_postprocessor, fxaa_postprocessor, OIT_postprocessor, to_sc
 using GLMakie.Makie: MouseButtonEvent, KeyEvent
 using Gtk4.GLib: GObject, signal_handler_is_connected, signal_handler_disconnect
 
-export GTKScreen, glarea, window
+export GtkScreen, glarea, window
 
 const WindowType = Union{Gtk4.GtkWindowLeaf, Gtk4.GtkApplicationWindowLeaf}
 
@@ -56,6 +56,9 @@ mutable struct GtkGLMakie <: GtkGLArea
     function GtkGLMakie()
         glarea = GtkGLArea()
         Gtk4.auto_render(glarea, false)
+
+        Gtk4.signal_connect(realizecb, glarea, "realize")
+        Gtk4.signal_connect(refreshwindowcb, glarea, "render", Cint, (Ptr{Gtk4.Gtk4.GdkGLContext},))
 
         # Following breaks rendering on my Mac
         Sys.isapple() || Gtk4.G_.set_required_version(glarea, 3, 3)
@@ -184,7 +187,7 @@ function GLMakie.destroy!(nw::WindowType)
 end
 
 """
-    GTKScreen(;
+    GtkScreen(;
                 resolution = (200, 200),
                 app = nothing,
                 screen_config...)
@@ -195,7 +198,7 @@ Supported `screen_config` arguments and their default values are:
 * `title::String = "Makie"`: Sets the window title.
 * `fullscreen = false`: Whether or not the window should be fullscreened when first created.
 """
-function GTKScreen(;
+function GtkScreen(;
         resolution = (200, 200),
         app = nothing,
         screen_config...
@@ -225,7 +228,6 @@ function GTKScreen(;
         rethrow(e)
     end
 
-    Gtk4.signal_connect(realizecb, glarea, "realize")
     set_gtk_property!(glarea, :hexpand, true)
     set_gtk_property!(glarea, :vexpand, true)
     window[] = glarea
@@ -258,8 +260,6 @@ function GTKScreen(;
     screens[Ptr{Gtk4.GtkGLArea}(glarea.handle)] = screen
     win2glarea[window] = glarea
 
-    Gtk4.signal_connect(refreshwindowcb, glarea, "render", Cint, (Ptr{Gtk4.Gtk4.GdkGLContext},))
-
     # start polling for changes to the scene every 50 ms - fast enough?
     update_timeout = Gtk4.GLib.g_timeout_add(50) do
         GLMakie.requires_update(screen) && Gtk4.queue_render(glarea)
@@ -290,6 +290,7 @@ function _disconnect_handler(glarea::GtkGLMakie, s::Symbol)
 end
 
 function Makie.window_open(scene::Scene, window::GtkGLMakie)
+    #=
     event = scene.events.window_open
     
     id = signal_connect(toplevel(window), :close_request) do w
@@ -298,6 +299,7 @@ function Makie.window_open(scene::Scene, window::GtkGLMakie)
     end
     window.handlers[:window_open] = (toplevel(window), id)
     event[] = true
+    =#
 end
 
 function calc_dpi(m::GdkMonitor)
@@ -373,7 +375,7 @@ signal_connect(app, "activate") do app
     app_window = GtkApplicationWindow(app)
     present(app_window)
 
-    screen = GTKScreen(resolution=(800, 800))
+    screen = GtkScreen(resolution=(800, 800))
     display(screen, scatter(1:4))
 end
 run(app)
