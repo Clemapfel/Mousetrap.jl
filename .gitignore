@@ -3,6 +3,6 @@ docs/build/
 docs/src/02_library/classes.md
 docs/src/02_library/enums.md
 docs/src/02_library/functions.md
-mousetrap_jll/build
-mousetrap_jll/products
+jll/build
+jll/products
 .idea/

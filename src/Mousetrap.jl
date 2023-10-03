@@ -25,18 +25,10 @@ module Mousetrap
         using CxxWrap
         function __init__() @initcxx end
 
-        #using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
+        #using mousetrap_jll
         function get_mousetrap_julia_binding()
-            return "/home/clem/Workspace/mousetrap_julia_binding/build/libmousetrap_julia_binding.so"
-            #=
-            @static if Sys.isapple()
-                return mousetrap_apple_jll.mousetrap_julia_binding
-            elseif Sys.iswindows()
-                return mousetrap_windows_jll.mousetrap_julia_binding
-            else
-                return mousetrap_linux_jll.mousetrap_julia_binding
-            end
-            =#
+            return "/home/clem/.julia/artifacts/eab203be3a1c75f4370ad90138ebc67618ab0deb/lib/libmousetrap_julia_binding.so"
+            #return mousetrap_jll.mousetrap_julia_binding
         end
       
         @wrapmodule(get_mousetrap_julia_binding)
