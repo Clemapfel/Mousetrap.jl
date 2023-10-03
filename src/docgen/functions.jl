@@ -2873,7 +2873,7 @@ Check whether `code` is a string that can be converted to a color using [`html_c
 ```
 main(f; application_id::ApplicationID) 
 ```
-Run `f`, it is required to be invocable as a function with signature
+Run `f`, which is required to be invocable as a function with signature
 ```
 (::Application, [::Data_t]) -> Cvoid
 ```
@@ -2882,12 +2882,14 @@ This functions automatically creates an application with given ID and starts the
 during `f`, the application safely exits.
 
 ## Example
+
 ```julia
 using Mousetrap
 main() do app::Application
     window = Window(app)
     present!(window)
 end
+```
 """
 
 @document log_debug """
