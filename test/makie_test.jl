@@ -289,9 +289,6 @@ function GTKScreen(;
 
     Gtk4.signal_connect(refreshwindowcb, glarea, "render", Cint, (Ptr{Gtk4.Gtk4.GdkGLContext},))
 
-    kc = GtkEventControllerKey(window)
-    signal_connect(key_cb, kc, "key-pressed", Cint, (UInt32, UInt32, UInt32), false, (window))
-    
     # start polling for changes to the scene every 50 ms - fast enough?
     update_timeout = Gtk4.GLib.g_timeout_add(50) do
         GLMakie.requires_update(screen) && Gtk4.queue_render(glarea)
