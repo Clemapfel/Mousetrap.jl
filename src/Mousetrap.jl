@@ -27,7 +27,7 @@ module Mousetrap
 
         #using mousetrap_jll
         function get_mousetrap_julia_binding()
-            return "/home/clem/.julia/artifacts/eab203be3a1c75f4370ad90138ebc67618ab0deb/lib/libmousetrap_julia_binding.so"
+            return "/home/clem/.julia/artifacts/148de813543f119d3c3b806cdf4e0ee5fa36e9d2/lib/libmousetrap_julia_binding.so"
             #return mousetrap_jll.mousetrap_julia_binding
         end
       

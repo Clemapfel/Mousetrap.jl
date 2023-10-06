@@ -1065,6 +1065,23 @@ function test_gl_transform(::Container)
     end
 end
 
+function test_gl_area(::Container)
+    @testset "GLArea" begin
+        area = GLArea()
+        Base.show(devnull, area)
+        connect_signal_render!(area) do self::GLArea, context::Ptr{Cvoid} 
+            return true
+        end
+        connect_signal_resize!(area) do self::GLArea, w, h end
+
+        #make_current(area) # would print gtk warning because area is not yet realized
+        queue_render(area)
+        @test get_auto_render(area) isa Bool
+        set_auto_render!(area, false)
+        @test get_auto_render(area) == false
+    end
+end
+
 function test_grid(::Container)
     @testset "Grid" begin
         grid = Grid()
@@ -2354,10 +2371,13 @@ function test_window(::Container)
         set_hide_on_close!(window, true)
         @test get_hide_on_close(window) == true
 
+        @test get_is_closed(window) == true
         present!(window)
+        @test get_is_closed(window) == false
         set_minimized!(window, true)
         set_maximized!(window, true)
         close!(window)
+        @test get_is_closed(window) == true
         destroy!(window)
     end
 end
@@ -2433,6 +2453,9 @@ function test_widget(widget::Container)
         set_opacity!(widget, 0.6)
         @test isapprox(get_opacity(widget), 0.6)
         set_opacity!(widget, 1.0)
+
+        @test calculate_monitor_dpi(widget) > 0
+        @test get_scale_factor(widget) > 0
 
         set_is_visible!(widget, false)
         @test get_is_visible(widget) == false
@@ -2791,6 +2814,7 @@ main(Main.app_id) do app::Application
         test_frame(container)
         test_flow_box(container)
         test_gl_transform(container)
+        test_gl_area(container)
         test_grid(container)
         test_grid_view(container)
         test_header_bar(container)
