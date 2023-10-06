@@ -601,6 +601,13 @@ cancel!(::FileMonitor)
 Cancel the file monitor. It will no longer monitor the file.
 """
 
+@document calculate_monitor_dpi """
+```
+calculate_monitor_dpi(::Widget) -> Float32
+```
+Calculate the dpi (dots per inch) of the monitor that is currently displaying the widgets associated window.
+"""
+
 @document clear """
 ```
 clear(::RenderArea) 
@@ -927,7 +934,7 @@ Get whether the popover should automatically hide when it looses focus.
 
 @document get_auto_render """
 ```
-get_auto_render(::GLCanvas) -> Bool
+get_auto_render(::GLArea) -> Bool
 ```
 Get whether the `render` signal is emitted any time the widget is drawn.
 """
@@ -1435,6 +1442,13 @@ get_is_circular(::ToggleButton) -> Bool
 get_is_circular(::PopoverButton)  -> Bool
 ```
 Get whether the button is circular (as opposed to rectangular, the default).
+"""
+
+@document get_is_closed """
+```
+get_is_closed(::Window) -> Bool
+```
+Returns `false` if the window is currently active and visible to the user, `true` otherwise.
 """
 
 @document get_is_decorated """
@@ -1986,6 +2000,16 @@ Get scale factor, in `{1, 2, 3, ...}``.
 get_scale_delta(::PinchZoomEventController) -> Float32
 ```
 Get the difference between the current scale of the pinch-zoom-gesture and the scale at the point the gesture started, in absolute widget-space coordinates.
+"""
+
+@document get_scale_factor """
+```
+get_scale_factor(::Widget) -> Float32
+```
+Retrieves the internal scale factor that maps from window coordinates to the actual device pixels.
+On traditional systems this is 1, on high density outputs, it can be a higher value (typically 2).
+
+Quoted from: https://docs.gtk.org/gtk4/method.Widget.get_scale_factor.html
 """
 
 @document get_scale_mode """
@@ -2941,7 +2965,7 @@ Dispay a log message with level `FATAL`. Immediately after, runtime ends. If [`s
 @document make_current """
 ```
 make_current(::RenderArea) 
-make_current(::GLCanvas)
+make_current(::GLArea)
 ```
 Bind the associated frame buffer as the one currently being rendered to. This is usually not necessary.
 """
@@ -3867,7 +3891,7 @@ Set whether the popover should hide itself when the attached widget looses focus
 
 @document set_auto_render! """
 ```
-set_auto_render(::GLCanvas, ::Bool)
+set_auto_render(::GLArea, ::Bool)
 ```
 Set whether the `render` signal should be emitted anytime the widget is drawn to the screen, `true` by default.
 """

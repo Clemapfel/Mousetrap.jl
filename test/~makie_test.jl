@@ -95,6 +95,7 @@ function GLMakie.set_screen_visibility!(nw::WindowType, b::Bool)
 end
 
 function GLMakie.apply_config!(screen::GLMakie.Screen{T},config::GLMakie.ScreenConfig; start_renderloop=true) where T <: GtkWindow
+    #=
     @debug("Applying screen config to existing screen")
     glw = screen.glscreen
     ShaderAbstractions.switch_context!(glw)
@@ -127,6 +128,7 @@ function GLMakie.apply_config!(screen::GLMakie.Screen{T},config::GLMakie.ScreenC
     screen.config = config
 
     GLMakie.set_screen_visibility!(screen, config.visible)
+    =#
     return screen
 end
 
@@ -198,11 +200,7 @@ Supported `screen_config` arguments and their default values are:
 * `title::String = "Makie"`: Sets the window title.
 * `fullscreen = false`: Whether or not the window should be fullscreened when first created.
 """
-function GtkScreen(;
-        resolution = (200, 200),
-        app = nothing,
-        screen_config...
-    )
+function GtkScreen(; resolution=(200, 200), screen_config...)
     config = Makie.merge_screen_config(GLMakie.ScreenConfig, screen_config)
     # Creating the framebuffers requires that the window be realized, it seems...
     # It would be great to allow initially invisible windows so that we don't pop
@@ -283,12 +281,6 @@ function Makie.disconnect!(window::GtkGLMakie, func)
     delete!(window.handlers,s)
 end
 
-function _disconnect_handler(glarea::GtkGLMakie, s::Symbol)
-    w,id=glarea.handlers[s]
-    signal_handler_disconnect(w, id)
-    delete!(glarea.handlers,s)
-end
-
 function Makie.window_open(scene::Scene, window::GtkGLMakie)
     #=
     event = scene.events.window_open
@@ -316,6 +308,7 @@ function Makie.window_area(scene::Scene, screen::GLMakie.Screen{T}) where T <: G
         m=Gtk4.monitor(a)
         if m!==nothing
             dpi[] = calc_dpi(m)
+            println(calc_dpi(m))
         end
         area[] = Recti(0, 0, w, h)
     end

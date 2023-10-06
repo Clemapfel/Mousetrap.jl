@@ -1561,6 +1561,7 @@ module Mousetrap
     @export_function Window get_hide_on_close Bool
     @export_function Window close! Cvoid
     @export_function Window destroy! Cvoid
+    @export_function Window get_is_closed Bool
 
     function set_child!(window::Window, child::Widget)
         detail.set_child!(window._internal, as_widget_pointer(child))
@@ -4651,6 +4652,8 @@ module Mousetrap
     @export_widget_function get_natural_size Vector2f
     @export_widget_function get_position Vector2f
     @export_widget_function get_allocated_size Vector2f
+    @export_widget_function calculate_monitor_dpi Cfloat
+    @export_widget_function get_scale_factor Cfloat
 
     @export_widget_function unparent! Cvoid
 
@@ -5472,21 +5475,21 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
 ###### gl_canvas.jl
 
-    @export_type GLCanvas Widget
-    @declare_native_widget GLCanvas
+    @export_type GLArea Widget
+    @declare_native_widget GLArea
 
-    GLCanvas() = GLCanvas(detail._GLCanvas())
+    GLArea() = GLArea(detail._GLArea())
 
-    @add_widget_signals GLCanvas
-    @add_signal_resize GLCanvas
-    @add_signal_render GLCanvas
+    @add_widget_signals GLArea
+    @add_signal_resize GLArea
+    @add_signal_render GLArea
 
-    @export_function GLCanvas make_current Cvoid
-    @export_function GLCanvas queue_render Cvoid
-    @export_function GLCanvas get_auto_render Bool
-    @export_function GLCanvas set_auto_render! Cvoid Bool b
+    @export_function GLArea make_current Cvoid
+    @export_function GLArea queue_render Cvoid
+    @export_function GLArea get_auto_render Bool
+    @export_function GLArea set_auto_render! Cvoid Bool b
 
-    Base.show(io::IO, x::GLCanvas) = show_aux(io, x)
+    Base.show(io::IO, x::GLArea) = show_aux(io, x)
 
 ###### key_codes.jl
 
