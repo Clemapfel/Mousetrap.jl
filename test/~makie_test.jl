@@ -1,138 +1,88 @@
-using Gtk4
+using mousetrap_jll
+using Mousetrap
 using ModernGL, GLMakie, Colors, GeometryBasics, ShaderAbstractions
+using GLMakie: empty_postprocessor, fxaa_postprocessor, OIT_postprocessor, to_screen_postprocessor
 using GLMakie.GLAbstraction
 using GLMakie.Makie
-using GLMakie: empty_postprocessor, fxaa_postprocessor, OIT_postprocessor, to_screen_postprocessor
-using GLMakie.Makie: MouseButtonEvent, KeyEvent
-using Gtk4.GLib: GObject, signal_handler_is_connected, signal_handler_disconnect
 
-export GtkScreen, glarea, window
-
-const WindowType = Union{Gtk4.GtkWindowLeaf, Gtk4.GtkApplicationWindowLeaf}
-
-const screens = Dict{Ptr{Gtk4.GtkGLArea}, GLMakie.Screen}();
+const WindowType = Mousetrap.Window
+const screens = Dict{UInt64, GLMakie.Screen}();
 
 function GLMakie.resize_native!(window::WindowType, resolution...)
+    # noop
+    @warn "called resize_native: $resolution"
 end
 
-Gtk4.@guarded Cint(false) function refreshwindowcb(a, c, user_data)
-    if haskey(screens, Ptr{GtkGLArea}(a))
-        screen = screens[Ptr{GtkGLArea}(a)]
-        isopen(screen) || return Cint(false)
+function on_makie_canvas_render(self, context)
+    key = Base.hash(self)
+    if haskey(screens, key)
+        screen = screens[key]
+        isopen(screen) || return false
         screen.render_tick[] = nothing
         glarea = win2glarea[screen.glscreen]
         glarea.framebuffer_id[] = glGetIntegerv(GL_FRAMEBUFFER_BINDING)
-        GLMakie.render_frame(screen)
+        GLMakie.render_frame(screen)    
     end
-    return Cint(true)
-end
-
-function realizecb(a)
-    Gtk4.make_current(a)
-    #=
-    c=Gtk4.context(a)
-    ma,mi = Gtk4.version(c)
-    v=ma+0.1*mi
-    @debug("using OPENGL version $(ma).$(mi)")
-    use_es = Gtk4.use_es(c)
-    @debug("use_es: $(use_es)")
-    e = Gtk4.get_error(a)
-    if e != C_NULL
-        msg = Gtk4.GLib.bytestring(Gtk4.GLib.GError(e).message)
-        @async println("Error during realize callback: $msg")
-        return
-    end
-    if v<3.3
-        @warn("Makie requires OpenGL 3.3")
-    end
-    =#
-end
-
-mutable struct GtkGLMakie <: GtkGLArea
-    handle::Ptr{GObject}
-    framebuffer_id::Ref{Int}
-    handlers::Dict{Symbol,Tuple{GObject,Culong}}
-
-    function GtkGLMakie()
-        glarea = GtkGLArea()
-        Gtk4.auto_render(glarea, false)
-
-        Gtk4.signal_connect(realizecb, glarea, "realize")
-        Gtk4.signal_connect(refreshwindowcb, glarea, "render", Cint, (Ptr{Gtk4.Gtk4.GdkGLContext},))
-
-        # Following breaks rendering on my Mac
-        Sys.isapple() || Gtk4.G_.set_required_version(glarea, 3, 3)
-        ids = Dict{Symbol,Culong}()
-        widget = new(getfield(glarea,:handle), Ref{Int}(0), ids)
-        return Gtk4.GLib.gobject_move_ref(widget, glarea)
-    end
-end
-
-const win2glarea = Dict{WindowType, GtkGLMakie}();
-
-GLMakie.framebuffer_size(w::WindowType) = GLMakie.framebuffer_size(win2glarea[w])
-GLMakie.framebuffer_size(w::GtkGLMakie) = size(w) .* GLMakie.retina_scaling_factor(w)
-GLMakie.window_size(w::GtkGLMakie) = size(w)
-
-GLMakie.to_native(w::WindowType) = win2glarea[w]
-GLMakie.to_native(gl::GtkGLMakie) = gl
-GLMakie.pollevents(::GLMakie.Screen{T}) where T <: GtkWindow = nothing
-
-function GLMakie.was_destroyed(nw::WindowType)
-    !(nw.handle in Gtk4.G_.list_toplevels()) || Gtk4.G_.in_destruction(nw)
-end
-function Base.isopen(win::WindowType)
-    GLMakie.was_destroyed(win) && return false
     return true
 end
 
-function GLMakie.set_screen_visibility!(nw::WindowType, b::Bool)
-    if b
-        Gtk4.show(nw)
+function on_makie_canvas_realize(self)
+    make_current(self)
+end
+
+mutable struct GtkGLMakie <: Widget
+
+    glarea::GLArea
+    framebuffer_id::Ref{Int}
+
+    function GtkGLMakie()
+        glarea = GLArea()
+        set_auto_render!(glarea, false)
+        connect_signal_realize!(on_makie_canvas_realize, glarea)
+        connect_signal_render!(on_makie_canvas_render, glarea)
+        return new(glarea, Ref{Int}(0))
+    end
+end
+Mousetrap.get_top_level_widget(x::GtkGLMakie) = x.glarea
+
+const win2glarea = Dict{WindowType, GtkGLMakie}()
+
+GLMakie.framebuffer_size(w::WindowType) = GLMakie.framebuffer_size(win2glarea[w])
+
+function GLMakie.framebuffer_size(w::GtkGLMakie) 
+    size = get_natural_size(w)
+    size.x = size.x * GLMakie.retina_scaling_factor(w)
+    size.y = size.y * GLMakie.retina_scaling_factor(w)
+    return (size.x, size.y)
+end
+
+GLMakie.window_size(w::GtkGLMakie) = size(w)
+GLMakie.to_native(w::WindowType) = win2glarea[w]
+GLMakie.pollevents(::GLMakie.Screen{Mousetrap.Window}) = nothing
+
+function GLMakie.was_destroyed(window::WindowType)
+    return get_is_closed(window)
+end
+
+function Base.isopen(w::WindowType)
+    return !GLMakie.was_destroyed(w)
+end
+
+function GLMakie.set_screen_visibility!(w::WindowType, b::Bool)
+    if b 
+        present!(w)
     else
-        Gtk4.hide(nw)
+        set_hide_on_close!(w, true)
+        close!(w)
     end
 end
 
-function GLMakie.apply_config!(screen::GLMakie.Screen{T},config::GLMakie.ScreenConfig; start_renderloop=true) where T <: GtkWindow
-    #=
-    @debug("Applying screen config to existing screen")
-    glw = screen.glscreen
-    ShaderAbstractions.switch_context!(glw)
-
-    # TODO: figure out what to do with "focus_on_show" and "float"
-    Gtk4.decorated(glw, config.decorated)
-    Gtk4.title(glw,config.title)
-    config.fullscreen && Gtk4.fullscreen(glw)
-
-    if !isnothing(config.monitor)
-        # TODO: set monitor where this window appears?
-    end
-
-    # following could probably be shared between Gtk4Makie and GLMakie
-    function replace_processor!(postprocessor, idx)
-        fb = screen.framebuffer
-        shader_cache = screen.shader_cache
-        post = screen.postprocessors[idx]
-        if post.constructor !== postprocessor
-            destroy!(screen.postprocessors[idx])
-            screen.postprocessors[idx] = postprocessor(fb, shader_cache)
-        end
-        return
-    end
-
-    replace_processor!(config.ssao ? ssao_postprocessor : empty_postprocessor, 1)
-    replace_processor!(config.oit ? OIT_postprocessor : empty_postprocessor, 2)
-    replace_processor!(config.fxaa ? fxaa_postprocessor : empty_postprocessor, 3)
-    # Set the config
-    screen.config = config
-
-    GLMakie.set_screen_visibility!(screen, config.visible)
-    =#
+function GLMakie.apply_config!(screen::GLMakie.Screen{Mousetrap.Window}, config::GLMakie.ScreenConfig; start_renderloop=true) 
+    # TODO
     return screen
 end
 
-function Makie.colorbuffer(screen::GLMakie.Screen{T}, format::Makie.ImageStorageFormat = Makie.JuliaNative) where T <: GtkWindow
+function Makie.colorbuffer(screen::GLMakie.Screen{Mousetrap.Window}, format::Makie.ImageStorageFormat = Makie.JuliaNative)
     if !isopen(screen)
         error("Screen not open!")
     end
@@ -150,8 +100,7 @@ function Makie.colorbuffer(screen::GLMakie.Screen{T}, format::Makie.ImageStorage
     end
 end
 
-function Base.close(screen::GLMakie.Screen{T}; reuse=true) where T <: GtkWindow
-    @debug("Close screen!")
+function Base.close(screen::GLMakie.Screen{Mousetrap.Window}; reuse = true)
     GLMakie.set_screen_visibility!(screen, false)
     GLMakie.stop_renderloop!(screen; close_after_renderloop=false)
     if screen.window_open[]
@@ -167,71 +116,43 @@ function Base.close(screen::GLMakie.Screen{T}; reuse=true) where T <: GtkWindow
     glw = screen.glscreen
     if haskey(win2glarea, glw)
         glarea = win2glarea[glw]
-        delete!(screens, Ptr{Gtk4.GtkGLArea}(glarea.handle))
+        delete!(screens, hash(glarea))
         delete!(win2glarea, glw)
     end        
     close(toplevel(screen.glscreen))
     return
 end
 
-ShaderAbstractions.native_switch_context!(a::GtkGLMakie) = Gtk4.make_current(a)
+ShaderAbstractions.native_switch_context!(a::GtkGLMakie) = make_current(a.glarea)
 ShaderAbstractions.native_switch_context!(a::WindowType) = ShaderAbstractions.native_switch_context!(win2glarea[a])
 
 ShaderAbstractions.native_context_alive(x::WindowType) = !GLMakie.was_destroyed(x)
-ShaderAbstractions.native_context_alive(x::GtkGLMakie) = !GLMakie.was_destroyed(toplevel(x))
+ShaderAbstractions.native_context_alive(x::GtkGLMakie) = get_is_realized(x)
 
-function GLMakie.destroy!(nw::WindowType)
-    was_current = ShaderAbstractions.is_current_context(nw)
+function GLMakie.destroy!(w::WindowType)
+    was_current = ShaderABstractions.is_current_context(w)
     if !GLMakie.was_destroyed(nw)
-        close(nw)
+        close!(nw)
     end
-    was_current && ShaderAbstractions.switch_context!()
+    return was_current && ShaderAbstractions.switch_context!()
 end
 
-"""
-    GtkScreen(;
-                resolution = (200, 200),
-                app = nothing,
-                screen_config...)
-
-Create a Gtk4Makie screen. The keyword argument `resolution` can be used to set the initial size of the window (which may be adjusted by Makie later). A GtkApplication instance can be passed using the keyword argument `app`. If this is done, a GtkApplicationWindow will be created rather than the default GtkWindow.
-
-Supported `screen_config` arguments and their default values are:
-* `title::String = "Makie"`: Sets the window title.
-* `fullscreen = false`: Whether or not the window should be fullscreened when first created.
-"""
-function GtkScreen(; resolution=(200, 200), screen_config...)
+function GtkScreen(app::Mousetrap.Application; resolution, screen_config...)
     config = Makie.merge_screen_config(GLMakie.ScreenConfig, screen_config)
-    # Creating the framebuffers requires that the window be realized, it seems...
-    # It would be great to allow initially invisible windows so that we don't pop
-    # up windows during precompilation.
-    config.visible || error("Invisible windows are not currently supported.")
-    window, glarea = try
-        w = if isnothing(app)
-            GtkWindow(config.title, -1, -1, true, false)
-        else
-            GtkApplicationWindow(app, config.title)
-        end
-        f=Gtk4.scale_factor(w)
-        Gtk4.default_size(w, resolution[1] ÷ f, resolution[2] ÷ f)
-        config.fullscreen && Gtk4.fullscreen(w)
-        config.visible && show(w)
-        glarea = GtkGLMakie()
-        glarea.hexpand = glarea.vexpand = true
-        w, glarea
-    catch e
-        @warn("""
-            Gtk4 couldn't create an OpenGL window.
-        """)
-        rethrow(e)
+    window = Mousetrap.Window(app)
+    glarea = GtkGLMakie()
+
+    if config.fullscreen
+        set_fullscreen!(window)
     end
 
-    set_gtk_property!(glarea, :hexpand, true)
-    set_gtk_property!(glarea, :vexpand, true)
-    window[] = glarea
+    if config.visible 
+        present!(window)
+    end
 
-    # tell GLAbstraction that we created a new context.
-    # This is important for resource tracking, and only needed for the first context
+    set_expand!(glarea, true)
+    set_child!(window, glarea)
+
     shader_cache = GLAbstraction.ShaderCache(glarea)
     ShaderAbstractions.switch_context!(glarea)
     fb = GLMakie.GLFramebuffer(resolution)
@@ -255,66 +176,55 @@ function GtkScreen(; resolution=(200, 200), screen_config...)
         Dict{UInt32, Makie.AbstractPlot}(),
         false,
     )
-    screens[Ptr{Gtk4.GtkGLArea}(glarea.handle)] = screen
-    win2glarea[window] = glarea
 
-    # start polling for changes to the scene every 50 ms - fast enough?
-    update_timeout = Gtk4.GLib.g_timeout_add(50) do
-        GLMakie.requires_update(screen) && Gtk4.queue_render(glarea)
-        if GLMakie.was_destroyed(window)
-            return Cint(0)
+    hash = Base.hash(glarea.glarea)
+    screens[hash] = screen
+    win2glarea[window] = glarea
+    
+    println("registered $hash")
+
+    set_tick_callback!(glarea) do clock::FrameClock
+        if GLMakie.requires_update(screen)
+            queue_render(glarea.glarea)
         end
-        Cint(1)
+
+        if GLMakie.was_destroyed(window)
+            return TICK_CALLBACK_RESULT_DISCONTINUE
+        else
+            return TICK_CALLBACK_RESULT_CONTINUE
+        end
     end
 
     return screen
 end
 
-Makie.disconnect!(window::WindowType, func) = Makie.disconnect!(win2glarea[window], func)
-function Makie.disconnect!(window::GtkGLMakie, func)
-    s=Symbol(func)
-    !haskey(window.handlers,s) && return
-    w,id=window.handlers[s]
-    if signal_handler_is_connected(w, id)
-        signal_handler_disconnect(w, id)
+Makie.disconnect!(window::WindowType, f) = Makie.disconnect!(win2glarea[window], f)
+function Makie.disconnect!(window::GtkGLMakie, f)
+    s = Symbol(f)
+    if !haskey(window.handlers, s)
+        return
     end
-    delete!(window.handlers,s)
+
+    disconnect_signal_render!(window)
+    disconnect_signal_realize!(window)
 end
 
 function Makie.window_open(scene::Scene, window::GtkGLMakie)
-    #=
-    event = scene.events.window_open
-    
-    id = signal_connect(toplevel(window), :close_request) do w
-        event[] = false
-        nothing
-    end
-    window.handlers[:window_open] = (toplevel(window), id)
-    event[] = true
-    =#
 end
 
-function calc_dpi(m::GdkMonitor)
-    g=Gtk4.geometry(m)
-    wdpi=g.width/(Gtk4.width_mm(m)/25.4)
-    hdpi=g.height/(Gtk4.height_mm(m)/25.4)
-    min(wdpi,hdpi)
-end
-
-function Makie.window_area(scene::Scene, screen::GLMakie.Screen{T}) where T <: GtkWindow
+function Makie.window_area(scene::Scene, screen::GLMakie.Screen{Mousetrap.Window})
     area = scene.events.window_area
     dpi = scene.events.window_dpi
-    function on_resize(a,w,h)
-        m=Gtk4.monitor(a)
-        if m!==nothing
-            dpi[] = calc_dpi(m)
-            println(calc_dpi(m))
-        end
+    glarea = win2glarea[Makie.to_native(screen)]
+
+    function on_resize(self, w, h)
+        dpi[] = Mousetrap.calculate_monitor_dpi(glarea)
         area[] = Recti(0, 0, w, h)
+        return nothing
     end
-    glarea=win2glarea[Makie.to_native(screen)]
-    signal_connect(on_resize, glarea, "resize")
-    Gtk4.queue_render(glarea)
+
+    connect_signal_resize!(on_resize, glarea.glarea)
+    queue_render(glarea.glarea)
 end
 
 function Makie.mouse_buttons(scene::Scene, glarea::GtkGLMakie)
@@ -336,17 +246,13 @@ function Makie.unicode_input(scene::Scene, window::GtkGLMakie)
 end
 
 function GLMakie.retina_scaling_factor(window::GtkGLMakie)
-    f=Gtk4.scale_factor(window)
-    (f,f)
+    return Mousetrap.get_scale_factor(window.glarea)
 end
 
 function GLMakie.correct_mouse(window::GtkGLMakie, w, h)
-    fb = GLMakie.framebuffer_size(window)
-    s = Gtk4.scale_factor(window)
-    (w * s, fb[2] - (h * s))
 end
 
-function Makie.mouse_position(scene::Scene, screen::GLMakie.Screen{T}) where T <: GtkWindow
+function Makie.mouse_position(scene::Scene, screen::GLMakie.Screen{Mousetrap.Window})
 end
 
 function Makie.scroll(scene::Scene, window::GtkGLMakie)
@@ -361,14 +267,7 @@ end
 function Makie.disconnect!(glarea::GtkGLMakie, ::typeof(entered_window))
 end
 
-using GLMakie
-
-app = Gtk4.GtkApplication("test.app")
-signal_connect(app, "activate") do app
-    app_window = GtkApplicationWindow(app)
-    present(app_window)
-
-    screen = GtkScreen(resolution=(800, 800))
+main() do app::Application
+    screen = GtkScreen(app, resolution = (800, 800))
     display(screen, scatter(1:4))
 end
-run(app)

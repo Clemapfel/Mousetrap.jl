@@ -9,15 +9,14 @@ const WindowType = Mousetrap.Window
 const screens = Dict{UInt64, GLMakie.Screen}();
 
 function GLMakie.resize_native!(window::WindowType, resolution...)
-    # noop
-    @warn "called resize_native: $resolution"
+    # noop, ignore makie size request in favor of GTK4 layout manager
 end
 
 function on_makie_canvas_render(self, context)
     key = Base.hash(self)
     if haskey(screens, key)
         screen = screens[key]
-        isopen(screen) || return false
+        if !isopen(screen) return false end
         screen.render_tick[] = nothing
         glarea = win2glarea[screen.glscreen]
         glarea.framebuffer_id[] = glGetIntegerv(GL_FRAMEBUFFER_BINDING)
@@ -28,6 +27,12 @@ end
 
 function on_makie_canvas_realize(self)
     make_current(self)
+end
+
+function on_makie_canvas_resize(self, w, h)
+    self.framebuffer_size.x = w
+    self.framebuffer_size.y = h
+    queue_render!(self)
 end
 
 mutable struct GtkGLMakie <: Widget
@@ -47,16 +52,16 @@ Mousetrap.get_top_level_widget(x::GtkGLMakie) = x.glarea
 
 const win2glarea = Dict{WindowType, GtkGLMakie}()
 
-GLMakie.framebuffer_size(w::WindowType) = GLMakie.framebuffer_size(win2glarea[w])
-
-function GLMakie.framebuffer_size(w::GtkGLMakie) 
+function GLMakie.window_size(w::GtkGLMakie)
     size = get_natural_size(w)
     size.x = size.x * GLMakie.retina_scaling_factor(w)
     size.y = size.y * GLMakie.retina_scaling_factor(w)
     return (size.x, size.y)
 end
 
-GLMakie.window_size(w::GtkGLMakie) = size(w)
+GLMakie.framebuffer_size(w::WindowType) = GLMakie.framebuffer_size(win2glarea[w])
+GLMakie.framebuffer_size(w::GtkGLMakie) = GLMakie.window_size(w)
+
 GLMakie.to_native(w::WindowType) = win2glarea[w]
 GLMakie.pollevents(::GLMakie.Screen{Mousetrap.Window}) = nothing
 
@@ -68,24 +73,13 @@ function Base.isopen(w::WindowType)
     return !GLMakie.was_destroyed(w)
 end
 
-function GLMakie.set_screen_visibility!(w::WindowType, b::Bool)
-    if b 
-        present!(w)
-    else
-        set_hide_on_close!(w, true)
-        close!(w)
-    end
-end
-
 function GLMakie.apply_config!(screen::GLMakie.Screen{Mousetrap.Window}, config::GLMakie.ScreenConfig; start_renderloop=true) 
     # TODO
     return screen
 end
 
 function Makie.colorbuffer(screen::GLMakie.Screen{Mousetrap.Window}, format::Makie.ImageStorageFormat = Makie.JuliaNative)
-    if !isopen(screen)
-        error("Screen not open!")
-    end
+
     ShaderAbstractions.switch_context!(screen.glscreen)
     ctex = screen.framebuffer.buffers[:color]
     if size(ctex) != size(screen.framecache)
@@ -110,7 +104,6 @@ function Base.close(screen::GLMakie.Screen{Mousetrap.Window}; reuse = true)
         empty!(screen)
     end
     if reuse && screen.reuse
-        @debug("reusing screen!")
         push!(SCREEN_REUSE_POOL, screen)
     end
     glw = screen.glscreen
@@ -181,8 +174,6 @@ function GtkScreen(app::Mousetrap.Application; resolution, screen_config...)
     screens[hash] = screen
     win2glarea[window] = glarea
     
-    println("registered $hash")
-
     set_tick_callback!(glarea) do clock::FrameClock
         if GLMakie.requires_update(screen)
             queue_render(glarea.glarea)
@@ -227,44 +218,40 @@ function Makie.window_area(scene::Scene, screen::GLMakie.Screen{Mousetrap.Window
     queue_render(glarea.glarea)
 end
 
-function Makie.mouse_buttons(scene::Scene, glarea::GtkGLMakie)
-end
-
-function Makie.disconnect!(glarea::GtkGLMakie, ::typeof(mouse_buttons))
-end
-
-function Makie.keyboard_buttons(scene::Scene, glarea::GtkGLMakie)
-end
-
-function Makie.disconnect!(glarea::GtkGLMakie, ::typeof(keyboard_buttons))
-end
-
-function Makie.dropped_files(scene::Scene, window::GtkGLMakie)
-end
-
-function Makie.unicode_input(scene::Scene, window::GtkGLMakie)
-end
-
 function GLMakie.retina_scaling_factor(window::GtkGLMakie)
     return Mousetrap.get_scale_factor(window.glarea)
 end
 
-function GLMakie.correct_mouse(window::GtkGLMakie, w, h)
+function Makie.mouse_buttons(scene::Scene, glarea::GtkGLMakie)
+    # noop, use mousetrap event controllers to handle input
+end
+
+function Makie.keyboard_buttons(scene::Scene, glarea::GtkGLMakie)
+    # noop, use mousetrap event controllers to handle input
+end
+
+function Makie.dropped_files(scene::Scene, window::GtkGLMakie)
+    # noop
+end
+
+function Makie.unicode_input(scene::Scene, window::GtkGLMakie)
+    # noop
 end
 
 function Makie.mouse_position(scene::Scene, screen::GLMakie.Screen{Mousetrap.Window})
+    # noop, use mousetrap event controllers to handle input
 end
 
 function Makie.scroll(scene::Scene, window::GtkGLMakie)
+    # noop, use mousetrap event controllers to handle input
 end
 
 function Makie.hasfocus(scene::Scene, window::GtkGLMakie)
+    # noop, use mousetrap event controllers to handle input
 end
 
 function Makie.entered_window(scene::Scene, window::GtkGLMakie)
-end
-
-function Makie.disconnect!(glarea::GtkGLMakie, ::typeof(entered_window))
+    # noop, use mousetrap event controllers to handle input
 end
 
 main() do app::Application
