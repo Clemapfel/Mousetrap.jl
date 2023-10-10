@@ -62,7 +62,7 @@ module Mousetrap
 
             match_found = false
             for type in actual_return_ts
-                if type <: return_t || return_t == Nothing
+                if type <: return_t #|| return_t == Nothing
                     match_found = true
                     break
                 end
