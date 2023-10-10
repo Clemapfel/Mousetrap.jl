@@ -8,7 +8,7 @@ version = v"0.3.0"
 # Collection of sources required to complete build
 sources = [
     GitSource("https://github.com/Clemapfel/mousetrap.git", "8f6356c58c37e0f41b5c5d4d2e7f7207260ab5d8"),
-    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "21e01444db8facf5d9e9c43a97522b75d26432ab"),
+    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "b83169f0cd2f2891d578e0c3abfc67c4e2b504c4"),
 ]
 
 # Bash recipe for building across all platforms
