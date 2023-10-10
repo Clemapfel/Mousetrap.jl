@@ -6,15 +6,17 @@ using GLMakie.GLAbstraction
 using GLMakie.Makie
 
 const WindowType = Mousetrap.Window
-const screens = Dict{Ptr{Cvoid}, GLMakie.Screen}();
+const screens = Dict{UInt64, GLMakie.Screen}();
 
 function GLMakie.resize_native!(window::WindowType, resolution...)
+    # noop
+    @warn "called resize_native: $resolution"
 end
 
 function on_makie_canvas_render(self, context)
-    hash = Mousetrap.as_widget_pointer(self)
-    if haskey(screens, hash)
-        screen = screens[hash]
+    key = Base.hash(self)
+    if haskey(screens, key)
+        screen = screens[key]
         isopen(screen) || return false
         screen.render_tick[] = nothing
         glarea = win2glarea[screen.glscreen]
@@ -30,12 +32,12 @@ end
 
 mutable struct GtkGLMakie <: Widget
 
-    glarea::GLCanvas
+    glarea::GLArea
     framebuffer_id::Ref{Int}
 
     function GtkGLMakie()
-        glarea = GLCanvas()
-        #set_auto_render!(glarea, false)
+        glarea = GLArea()
+        set_auto_render!(glarea, false)
         connect_signal_realize!(on_makie_canvas_realize, glarea)
         connect_signal_render!(on_makie_canvas_render, glarea)
         return new(glarea, Ref{Int}(0))
@@ -46,17 +48,24 @@ Mousetrap.get_top_level_widget(x::GtkGLMakie) = x.glarea
 const win2glarea = Dict{WindowType, GtkGLMakie}()
 
 GLMakie.framebuffer_size(w::WindowType) = GLMakie.framebuffer_size(win2glarea[w])
-GLMakie.framebuffer_size(w::GtkGLMakie) = size(w) .* GLMakie.retina_scaling_factor(w)
+
+function GLMakie.framebuffer_size(w::GtkGLMakie) 
+    size = get_natural_size(w)
+    size.x = size.x * GLMakie.retina_scaling_factor(w)
+    size.y = size.y * GLMakie.retina_scaling_factor(w)
+    return (size.x, size.y)
+end
+
 GLMakie.window_size(w::GtkGLMakie) = size(w)
 GLMakie.to_native(w::WindowType) = win2glarea[w]
 GLMakie.pollevents(::GLMakie.Screen{Mousetrap.Window}) = nothing
 
 function GLMakie.was_destroyed(window::WindowType)
-    return false #get_is_closed(window)
+    return get_is_closed(window)
 end
 
 function Base.isopen(w::WindowType)
-    return !GLMakie.was_destroyed(win)
+    return !GLMakie.was_destroyed(w)
 end
 
 function GLMakie.set_screen_visibility!(w::WindowType, b::Bool)
@@ -107,7 +116,7 @@ function Base.close(screen::GLMakie.Screen{Mousetrap.Window}; reuse = true)
     glw = screen.glscreen
     if haskey(win2glarea, glw)
         glarea = win2glarea[glw]
-        delete!(screens, Mousetrap.get_top_level_widget(glarea))
+        delete!(screens, hash(glarea))
         delete!(win2glarea, glw)
     end        
     close(toplevel(screen.glscreen))
@@ -167,8 +176,12 @@ function GtkScreen(app::Mousetrap.Application; resolution, screen_config...)
         Dict{UInt32, Makie.AbstractPlot}(),
         false,
     )
-    screens[Mousetrap.as_widget_pointer(glarea)] = screen
+
+    hash = Base.hash(glarea.glarea)
+    screens[hash] = screen
     win2glarea[window] = glarea
+    
+    println("registered $hash")
 
     set_tick_callback!(glarea) do clock::FrameClock
         if GLMakie.requires_update(screen)
@@ -199,18 +212,17 @@ end
 function Makie.window_open(scene::Scene, window::GtkGLMakie)
 end
 
-
 function Makie.window_area(scene::Scene, screen::GLMakie.Screen{Mousetrap.Window})
     area = scene.events.window_area
     dpi = scene.events.window_dpi
+    glarea = win2glarea[Makie.to_native(screen)]
 
     function on_resize(self, w, h)
-        dpi[] = 165.87755102040816
+        dpi[] = Mousetrap.calculate_monitor_dpi(glarea)
         area[] = Recti(0, 0, w, h)
         return nothing
     end
 
-    glarea = win2glarea[Makie.to_native(screen)]
     connect_signal_resize!(on_resize, glarea.glarea)
     queue_render(glarea.glarea)
 end
@@ -234,7 +246,7 @@ function Makie.unicode_input(scene::Scene, window::GtkGLMakie)
 end
 
 function GLMakie.retina_scaling_factor(window::GtkGLMakie)
-    (1, 1) # TODO
+    return Mousetrap.get_scale_factor(window.glarea)
 end
 
 function GLMakie.correct_mouse(window::GtkGLMakie, w, h)

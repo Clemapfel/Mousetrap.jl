@@ -27,7 +27,7 @@ module Mousetrap
 
         #using mousetrap_jll
         function get_mousetrap_julia_binding()
-            return "/home/clem/.julia/artifacts/148de813543f119d3c3b806cdf4e0ee5fa36e9d2/lib/libmousetrap_julia_binding.so"
+            return "/home/clem/.julia/artifacts/874587b3fdc57614f95352a594bb67dabcb0a511/lib/libmousetrap_julia_binding.so"
             #return mousetrap_jll.mousetrap_julia_binding
         end
       
@@ -4680,6 +4680,8 @@ module Mousetrap
         detail.set_listens_for_shortcut_action!(as_widget_pointer(widget), action._internal)
     end
     export set_listens_for_shortcut_action!
+
+    Base.hash(x::Widget) = UInt64(Mousetrap.detail.as_native_widget(Mousetrap.as_widget_pointer(x)))
 
 ####### clipboard.jl
 
