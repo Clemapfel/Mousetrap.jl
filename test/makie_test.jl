@@ -11,13 +11,15 @@ mutable struct GtkGLMakie <: Widget
 
     glarea::GLArea
     framebuffer_id::Ref{Int}
+    framebuffer_size::Vector2i
 
     function GtkGLMakie()
         glarea = GLArea()
         set_auto_render!(glarea, false)
         connect_signal_realize!(on_makie_canvas_realize, glarea)
         connect_signal_render!(on_makie_canvas_render, glarea)
-        return new(glarea, Ref{Int}(0))
+        connect_signal_resize!(on_makie_canvas_resize, glarea)
+        return new(glarea, Ref{Int}(0), Vector2i(0, 0))
     end
 end
 Mousetrap.get_top_level_widget(x::GtkGLMakie) = x.glarea
@@ -28,10 +30,9 @@ end
 
 function on_makie_canvas_render(self, context)
     key = Base.hash(self)
-    println("render: $key")
     if haskey(screens, key)
         screen = screens[key]
-        #if !isopen(screen) return false end
+        if !isopen(screen) return false end
         screen.render_tick[] = nothing
         glarea = screen.glscreen
         glarea.framebuffer_id[] = glGetIntegerv(GL_FRAMEBUFFER_BINDING)
@@ -45,9 +46,15 @@ function on_makie_canvas_realize(self)
 end
 
 function on_makie_canvas_resize(self, w, h)
-    self.framebuffer_size.x = w
-    self.framebuffer_size.y = h
-    queue_render!(self)
+    key = Base.hash(self)
+    if haskey(screens, key)
+        screen = screens[key]
+        glarea = screen.glscreen
+        glarea.framebuffer_size.x = w
+        glarea.framebuffer_size.y = h
+        queue_render!(glarea)
+    end
+    return nothing
 end
 
 function GLMakie.window_size(w::GtkGLMakie)
@@ -57,7 +64,7 @@ function GLMakie.window_size(w::GtkGLMakie)
     return (size.x, size.y)
 end
 
-GLMakie.framebuffer_size(w::GtkGLMakie) = GLMakie.window_size(w)
+GLMakie.framebuffer_size(self::GtkGLMakie) = (self.framebuffer_size.x, self.framebuffer_size.y)
 GLMakie.pollevents(::GLMakie.Screen{GtkGLMakie}) = nothing
 
 function GLMakie.was_destroyed(window::GtkGLMakie)
