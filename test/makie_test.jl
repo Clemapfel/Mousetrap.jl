@@ -7,13 +7,13 @@ using GLMakie.Makie
 
 const screens = Dict{UInt64, GLMakie.Screen}()
 
-mutable struct GtkGLMakie <: Widget
+mutable struct MakieCanvas <: Widget
 
     glarea::GLArea
     framebuffer_id::Ref{Int}
     framebuffer_size::Vector2i
 
-    function GtkGLMakie()
+    function MakieCanvas()
         glarea = GLArea()
         set_auto_render!(glarea, false)
         connect_signal_realize!(on_makie_canvas_realize, glarea)
@@ -22,9 +22,9 @@ mutable struct GtkGLMakie <: Widget
         return new(glarea, Ref{Int}(0), Vector2i(0, 0))
     end
 end
-Mousetrap.get_top_level_widget(x::GtkGLMakie) = x.glarea
+Mousetrap.get_top_level_widget(x::MakieCanvas) = x.glarea
 
-function GLMakie.resize_native!(window::GtkGLMakie, resolution...)
+function GLMakie.resize_native!(window::MakieCanvas, resolution...)
     # noop, ignore makie size request in favor of GTK4 layout manager
 end
 
@@ -57,25 +57,25 @@ function on_makie_canvas_resize(self, w, h)
     return nothing
 end
 
-function GLMakie.window_size(w::GtkGLMakie)
+function GLMakie.window_size(w::MakieCanvas)
     size = get_natural_size(w)
     size.x = size.x * GLMakie.retina_scaling_factor(w)
     size.y = size.y * GLMakie.retina_scaling_factor(w)
     return (size.x, size.y)
 end
 
-GLMakie.framebuffer_size(self::GtkGLMakie) = (self.framebuffer_size.x, self.framebuffer_size.y)
-GLMakie.pollevents(::GLMakie.Screen{GtkGLMakie}) = nothing
+GLMakie.framebuffer_size(self::MakieCanvas) = (self.framebuffer_size.x, self.framebuffer_size.y)
+GLMakie.pollevents(::GLMakie.Screen{MakieCanvas}) = nothing
 
-function GLMakie.was_destroyed(window::GtkGLMakie)
+function GLMakie.was_destroyed(window::MakieCanvas)
     return !get_is_realized(window)
 end
 
-function Base.isopen(w::GtkGLMakie)
+function Base.isopen(w::MakieCanvas)
     return !GLMakie.was_destroyed(w)
 end
 
-function GLMakie.set_screen_visibility!(screen::GtkGLMakie, bool)
+function GLMakie.set_screen_visibility!(screen::MakieCanvas, bool)
     if bool 
         show!(screen.glarea)
     else
@@ -83,12 +83,12 @@ function GLMakie.set_screen_visibility!(screen::GtkGLMakie, bool)
     end
 end
 
-function GLMakie.apply_config!(screen::GLMakie.Screen{GtkGLMakie}, config::GLMakie.ScreenConfig; start_renderloop=true) 
+function GLMakie.apply_config!(screen::GLMakie.Screen{MakieCanvas}, config::GLMakie.ScreenConfig; start_renderloop=true) 
     # TODO
     return screen
 end
 
-function Makie.colorbuffer(screen::GLMakie.Screen{GtkGLMakie}, format::Makie.ImageStorageFormat = Makie.JuliaNative)
+function Makie.colorbuffer(screen::GLMakie.Screen{MakieCanvas}, format::Makie.ImageStorageFormat = Makie.JuliaNative)
 
     ShaderAbstractions.switch_context!(screen.glscreen)
     ctex = screen.framebuffer.buffers[:color]
@@ -104,7 +104,7 @@ function Makie.colorbuffer(screen::GLMakie.Screen{GtkGLMakie}, format::Makie.Ima
     end
 end
 
-function Base.close(screen::GLMakie.Screen{GtkGLMakie}; reuse = true)
+function Base.close(screen::GLMakie.Screen{MakieCanvas}; reuse = true)
     GLMakie.set_screen_visibility!(screen, false)
     GLMakie.stop_renderloop!(screen; close_after_renderloop=false)
     if screen.window_open[]
@@ -122,14 +122,14 @@ function Base.close(screen::GLMakie.Screen{GtkGLMakie}; reuse = true)
     return
 end
 
-ShaderAbstractions.native_switch_context!(a::GtkGLMakie) = make_current(a.glarea)
-ShaderAbstractions.native_context_alive(x::GtkGLMakie) = get_is_realized(x)
+ShaderAbstractions.native_switch_context!(a::MakieCanvas) = make_current(a.glarea)
+ShaderAbstractions.native_context_alive(x::MakieCanvas) = get_is_realized(x)
 
-function GLMakie.destroy!(w::GtkGLMakie)
+function GLMakie.destroy!(w::MakieCanvas)
     # noop, lifetime is managed by mousetrap instead
 end
 
-function GtkScreen(glarea::GtkGLMakie; screen_config...)
+function GtkScreen(glarea::MakieCanvas; screen_config...)
 
     config = Makie.merge_screen_config(GLMakie.ScreenConfig, screen_config)
     if config.fullscreen
@@ -182,7 +182,7 @@ function GtkScreen(glarea::GtkGLMakie; screen_config...)
     return screen
 end
 
-function Makie.disconnect!(window::GtkGLMakie, f)
+function Makie.disconnect!(window::MakieCanvas, f)
     s = Symbol(f)
     if !haskey(window.handlers, s)
         return
@@ -193,11 +193,11 @@ function Makie.disconnect!(window::GtkGLMakie, f)
     disconnect_signal_resize!(window)
 end
 
-function Makie.window_open(scene::Scene, window::GtkGLMakie)
+function Makie.window_open(scene::Scene, window::MakieCanvas)
     # noop
 end
 
-function Makie.window_area(scene::Scene, screen::GLMakie.Screen{GtkGLMakie})
+function Makie.window_area(scene::Scene, screen::GLMakie.Screen{MakieCanvas})
     area = scene.events.window_area
     dpi = scene.events.window_dpi
     glarea = screen.glscreen
@@ -212,46 +212,46 @@ function Makie.window_area(scene::Scene, screen::GLMakie.Screen{GtkGLMakie})
     queue_render(glarea.glarea)
 end
 
-function GLMakie.retina_scaling_factor(window::GtkGLMakie)
+function GLMakie.retina_scaling_factor(window::MakieCanvas)
     return Mousetrap.get_scale_factor(window.glarea)
 end
 
-function Makie.mouse_buttons(scene::Scene, glarea::GtkGLMakie)
+function Makie.mouse_buttons(scene::Scene, glarea::MakieCanvas)
     # noop, use mousetrap event controllers to handle input
 end
 
-function Makie.keyboard_buttons(scene::Scene, glarea::GtkGLMakie)
+function Makie.keyboard_buttons(scene::Scene, glarea::MakieCanvas)
     # noop, use mousetrap event controllers to handle input
 end
 
-function Makie.dropped_files(scene::Scene, window::GtkGLMakie)
+function Makie.dropped_files(scene::Scene, window::MakieCanvas)
     # noop
 end
 
-function Makie.unicode_input(scene::Scene, window::GtkGLMakie)
+function Makie.unicode_input(scene::Scene, window::MakieCanvas)
     # noop
 end
 
-function Makie.mouse_position(scene::Scene, screen::GLMakie.Screen{GtkGLMakie})
+function Makie.mouse_position(scene::Scene, screen::GLMakie.Screen{MakieCanvas})
     # noop, use mousetrap event controllers to handle input
 end
 
-function Makie.scroll(scene::Scene, window::GtkGLMakie)
+function Makie.scroll(scene::Scene, window::MakieCanvas)
     # noop, use mousetrap event controllers to handle input
 end
 
-function Makie.hasfocus(scene::Scene, window::GtkGLMakie)
+function Makie.hasfocus(scene::Scene, window::MakieCanvas)
     # noop, use mousetrap event controllers to handle input
 end
 
-function Makie.entered_window(scene::Scene, window::GtkGLMakie)
+function Makie.entered_window(scene::Scene, window::MakieCanvas)
     # noop, use mousetrap event controllers to handle input
 end
 
 main() do app::Application
     window = Window(app)
 
-    glarea = GtkGLMakie()
+    glarea = MakieCanvas()
     set_size_request!(glarea, Vector2f(200, 200))
     set_child!(window, glarea)
 
