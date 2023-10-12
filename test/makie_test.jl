@@ -77,42 +77,16 @@ function GLMakie.set_screen_visibility!(screen::GLMakieArea, bool)
 end
 
 function GLMakie.apply_config!(screen::GLMakie.Screen{GLMakieArea}, config::GLMakie.ScreenConfig; start_renderloop=true) 
-    @warning "In MousetrapMakie: GLMakie.apply_config!: This feature is not yet implemented, ignoring config"
+    @warn "In MousetrapMakie: GLMakie.apply_config!: This feature is not yet implemented, ignoring config"
+    # cf https://github.com/JuliaGtk/Gtk4Makie.jl/blob/main/src/screen.jl#L111
     return screen
 end
 
 function Makie.colorbuffer(screen::GLMakie.Screen{GLMakieArea}, format::Makie.ImageStorageFormat = Makie.JuliaNative)
 
-    ShaderAbstractions.switch_context!(screen.glscreen)
-    ctex = screen.framebuffer.buffers[:color]
-    if size(ctex) != size(screen.framecache)
-        screen.framecache = Matrix{RGB{Colors.N0f8}}(undef, size(ctex))
-    end
-    GLMakie.fast_color_data!(screen.framecache, ctex)
-    if format == Makie.GLNative
-        return screen.framecache
-    elseif format == Makie.JuliaNative
-        img = screen.framecache
-        return PermutedDimsArray(view(img, :, size(img, 2):-1:1), (2, 1))
-    end
-end
-
-function Base.close(screen::GLMakie.Screen{GLMakieArea}; reuse = true)
-    GLMakie.set_screen_visibility!(screen, false)
-    GLMakie.stop_renderloop!(screen; close_after_renderloop=false)
-    if screen.window_open[]
-        screen.window_open[] = false
-    end
-    if !GLMakie.was_destroyed(screen.glscreen)
-        empty!(screen)
-    end
-    if reuse && screen.reuse
-        push!(SCREEN_REUSE_POOL, screen)
-    end
-    glarea = screen.glscreen
-    delete!(screens, hash(glarea))      
-    close(toplevel(screen.glscreen))
-    return
+    @warn "In MousetrapMakie: GLMakie.colorbuffer: This feature is not yet implemented, returning framecache"
+    # cf https://github.com/JuliaGtk/Gtk4Makie.jl/blob/main/src/screen.jl#L147
+    return screen.framecache
 end
 
 ShaderAbstractions.native_switch_context!(a::GLMakieArea) = make_current(a.glarea)
@@ -136,6 +110,7 @@ function create_glmakie_screen(area::GLMakieArea; screen_config...)
     set_is_visible!(area, config.visible)
     set_expand!(area, true)
 
+    # copy of https://github.com/JuliaGtk/Gtk4Makie.jl/blob/main/src/screen.jl#L342
     shader_cache = GLAbstraction.ShaderCache(area)
     ShaderAbstractions.switch_context!(area)
     fb = GLMakie.GLFramebuffer((1, 1)) # resized on GLMakieArea realization later
@@ -159,6 +134,7 @@ function create_glmakie_screen(area::GLMakieArea; screen_config...)
         Dict{UInt32, Makie.AbstractPlot}(),
         false,
     )
+    # end copy
 
     hash = Base.hash(area.glarea)
     screens[hash] = screen
@@ -201,6 +177,7 @@ function GLMakie.retina_scaling_factor(window::GLMakieArea)
     return Mousetrap.get_scale_factor(window.glarea)
 end
 
+# ignore makie event model, use the mousetrap event controllers instead
 GLMakie.pollevents(::GLMakie.Screen{GLMakieArea}) = nothing
 Makie.mouse_buttons(scene::Scene, glarea::GLMakieArea) = nothing
 Makie.keyboard_buttons(scene::Scene, glarea::GLMakieArea) = nothing
@@ -225,6 +202,8 @@ end
 Mousetrap.get_top_level_widget(x::MakieCanvas) = x.area
 
 function on_makie_canvas_realize(self::GLArea, out::MakieCanvas)
+    # screen initialization has to be delayed until underlying widget is realized
+    # because the OpenGL context of `GLArea` can only be created once the widget is visible on screen
     make_current(self)
     out.screen[] = create_glmakie_screen(out.area)
     return nothing
