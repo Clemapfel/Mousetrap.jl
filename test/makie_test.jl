@@ -16,7 +16,6 @@ mutable struct GLMakieArea <: Widget
     function GLMakieArea()
         glarea = GLArea()
         set_auto_render!(glarea, false)
-        connect_signal_realize!(on_makie_area_realize, glarea)
         connect_signal_render!(on_makie_area_render, glarea)
         connect_signal_resize!(on_makie_area_resize, glarea)
         return new(glarea, Ref{Int}(0), Vector2i(0, 0))
@@ -24,8 +23,8 @@ mutable struct GLMakieArea <: Widget
 end
 Mousetrap.get_top_level_widget(x::GLMakieArea) = x.glarea
 
-function GLMakie.resize_native!(window::GLMakieArea, resolution...)
-    # noop, ignore makie size request in favor of GTK4 layout manager
+function GLMakie.resize_native!(native::GLMakieArea, resolution...)
+    # noop, ignore makie size request to not interfere with widget layout manager
 end
 
 function on_makie_area_render(self, context)
@@ -39,10 +38,6 @@ function on_makie_area_render(self, context)
         GLMakie.render_frame(screen) 
     end
     return true
-end
-
-function on_makie_area_realize(self)
-    make_current(self)
 end
 
 function on_makie_area_resize(self, w, h)
@@ -63,9 +58,7 @@ function GLMakie.window_size(w::GLMakieArea)
     size.y = size.y * GLMakie.retina_scaling_factor(w)
     return (size.x, size.y)
 end
-
 GLMakie.framebuffer_size(self::GLMakieArea) = (self.framebuffer_size.x, self.framebuffer_size.y)
-GLMakie.pollevents(::GLMakie.Screen{GLMakieArea}) = nothing
 
 function GLMakie.was_destroyed(window::GLMakieArea)
     return !get_is_realized(window)
@@ -84,7 +77,7 @@ function GLMakie.set_screen_visibility!(screen::GLMakieArea, bool)
 end
 
 function GLMakie.apply_config!(screen::GLMakie.Screen{GLMakieArea}, config::GLMakie.ScreenConfig; start_renderloop=true) 
-    # TODO
+    @warning "In MousetrapMakie: GLMakie.apply_config!: This feature is not yet implemented, ignoring config"
     return screen
 end
 
@@ -131,6 +124,10 @@ end
     
 function create_glmakie_screen(area::GLMakieArea; screen_config...)
 
+    if !get_is_realized(area) 
+        log_critical("MousetrapMakie", "In MousetrapMakie.create_glmakie_screen: GLMakieArea is not yet realized, it's internal OpenGL context cannot yet be accessed")
+    end
+
     config = Makie.merge_screen_config(GLMakie.ScreenConfig, screen_config)
     if config.fullscreen
         # noop
@@ -141,7 +138,7 @@ function create_glmakie_screen(area::GLMakieArea; screen_config...)
 
     shader_cache = GLAbstraction.ShaderCache(area)
     ShaderAbstractions.switch_context!(area)
-    fb = GLMakie.GLFramebuffer((800, 800))
+    fb = GLMakie.GLFramebuffer((1, 1)) # resized on GLMakieArea realization later
 
     postprocessors = [
         config.ssao ? ssao_postprocessor(fb, shader_cache) : empty_postprocessor(),
@@ -182,20 +179,8 @@ function create_glmakie_screen(area::GLMakieArea; screen_config...)
     return screen
 end
 
-function Makie.disconnect!(window::GLMakieArea, f)
-    s = Symbol(f)
-    if !haskey(window.handlers, s)
-        return
-    end
-
-    disconnect_signal_render!(window)
-    disconnect_signal_realize!(window)
-    disconnect_signal_resize!(window)
-end
-
-function Makie.window_open(scene::Scene, window::GLMakieArea)
-    # noop
-end
+Makie.disconnect!(window::GLMakieArea, f) = nothing
+Makie.window_open(scene::Scene, window::GLMakieArea) = nothing
 
 function Makie.window_area(scene::Scene, screen::GLMakie.Screen{GLMakieArea})
     area = scene.events.window_area
@@ -216,52 +201,43 @@ function GLMakie.retina_scaling_factor(window::GLMakieArea)
     return Mousetrap.get_scale_factor(window.glarea)
 end
 
-function Makie.mouse_buttons(scene::Scene, glarea::GLMakieArea)
-    # noop, use mousetrap event controllers to handle input
-end
+GLMakie.pollevents(::GLMakie.Screen{GLMakieArea}) = nothing
+Makie.mouse_buttons(scene::Scene, glarea::GLMakieArea) = nothing
+Makie.keyboard_buttons(scene::Scene, glarea::GLMakieArea) = nothing
+Makie.dropped_files(scene::Scene, window::GLMakieArea) = nothing
+Makie.unicode_input(scene::Scene, window::GLMakieArea) = nothing
+Makie.mouse_position(scene::Scene, screen::GLMakie.Screen{GLMakieArea}) = nothing
+Makie.scroll(scene::Scene, window::GLMakieArea) = nothing
+Makie.hasfocus(scene::Scene, window::GLMakieArea) = nothing
+Makie.entered_window(scene::Scene, window::GLMakieArea) = nothing
 
-function Makie.keyboard_buttons(scene::Scene, glarea::GLMakieArea)
-    # noop, use mousetrap event controllers to handle input
-end
+mutable struct MakieCanvas <: Widget
+    area::GLMakieArea
+    screen::Ref{Union{GLMakie.Screen{GLMakieArea}, Nothing}}
 
-function Makie.dropped_files(scene::Scene, window::GLMakieArea)
-    # noop
+    function MakieCanvas()
+        area = GLMakieArea()
+        out = new(area, nothing)
+        connect_signal_realize!(on_makie_canvas_realize, area.glarea, out)
+        return out
+    end
 end
+Mousetrap.get_top_level_widget(x::MakieCanvas) = x.area
 
-function Makie.unicode_input(scene::Scene, window::GLMakieArea)
-    # noop
-end
-
-function Makie.mouse_position(scene::Scene, screen::GLMakie.Screen{GLMakieArea})
-    # noop, use mousetrap event controllers to handle input
-end
-
-function Makie.scroll(scene::Scene, window::GLMakieArea)
-    # noop, use mousetrap event controllers to handle input
-end
-
-function Makie.hasfocus(scene::Scene, window::GLMakieArea)
-    # noop, use mousetrap event controllers to handle input
-end
-
-function Makie.entered_window(scene::Scene, window::GLMakieArea)
-    # noop, use mousetrap event controllers to handle input
+function on_makie_canvas_realize(self::GLArea, out::MakieCanvas)
+    make_current(self)
+    out.screen[] = create_glmakie_screen(out.area)
+    return nothing
 end
 
 main() do app::Application
     window = Window(app)
-
-    glarea = GLMakieArea()
-    set_size_request!(glarea, Vector2f(200, 200))
-    set_child!(window, glarea)
-
-    screen = Ref{Union{GLMakie.Screen, Nothing}}(nothing)
-    connect_signal_realize!(glarea.glarea) do self
-        make_current(glarea.glarea)
-        screen[] = create_glmakie_screen(glarea)
-        display(screen[], scatter(1:4))
+    canvas = MakieCanvas()
+    set_size_request!(canvas, Vector2f(200, 200))
+    set_child!(window, canvas)
+    connect_signal_show!(window) do self::Window
+        display(canvas.screen[], scatter(1:4))
         return nothing
     end
-
     present!(window)
 end
