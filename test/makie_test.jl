@@ -22,20 +22,20 @@ mutable struct GtkGLMakie <: Widget
 end
 Mousetrap.get_top_level_widget(x::GtkGLMakie) = x.glarea
 
-
 function GLMakie.resize_native!(window::GtkGLMakie, resolution...)
     # noop, ignore makie size request in favor of GTK4 layout manager
 end
 
 function on_makie_canvas_render(self, context)
     key = Base.hash(self)
+    println("render: $key")
     if haskey(screens, key)
         screen = screens[key]
-        if !isopen(screen) return false end
+        #if !isopen(screen) return false end
         screen.render_tick[] = nothing
         glarea = screen.glscreen
         glarea.framebuffer_id[] = glGetIntegerv(GL_FRAMEBUFFER_BINDING)
-        GLMakie.render_frame(screen)    
+        GLMakie.render_frame(screen) 
     end
     return true
 end
@@ -58,7 +58,6 @@ function GLMakie.window_size(w::GtkGLMakie)
 end
 
 GLMakie.framebuffer_size(w::GtkGLMakie) = GLMakie.window_size(w)
-
 GLMakie.to_native(w::GtkGLMakie) = w
 GLMakie.pollevents(::GLMakie.Screen{GtkGLMakie}) = nothing
 
@@ -68,6 +67,14 @@ end
 
 function Base.isopen(w::GtkGLMakie)
     return !GLMakie.was_destroyed(w)
+end
+
+function GLMakie.set_screen_visibility!(screen::GtkGLMakie, bool)
+    if bool 
+        show!(screen.glarea)
+    else
+        hide!(screen.glarea)
+    end
 end
 
 function GLMakie.apply_config!(screen::GLMakie.Screen{GtkGLMakie}, config::GLMakie.ScreenConfig; start_renderloop=true) 
@@ -89,6 +96,11 @@ function Makie.colorbuffer(screen::GLMakie.Screen{GtkGLMakie}, format::Makie.Ima
         img = screen.framecache
         return PermutedDimsArray(view(img, :, size(img, 2):-1:1), (2, 1))
     end
+end
+
+function Base.open(screen::GLMakie.Screen{GtkGLMakie})
+    GLMakie.set_screen_visibility!(screen, true)
+    GLMakie.start_renderloop!(screen)
 end
 
 function Base.close(screen::GLMakie.Screen{GtkGLMakie}; reuse = true)
@@ -152,6 +164,7 @@ function GtkScreen(glarea::GtkGLMakie; screen_config...)
 
     hash = Base.hash(glarea.glarea)
     screens[hash] = screen
+    println("register: $hash")
     
     set_tick_callback!(glarea.glarea) do clock::FrameClock
         if GLMakie.requires_update(screen)
@@ -180,6 +193,7 @@ function Makie.disconnect!(window::GtkGLMakie, f)
 end
 
 function Makie.window_open(scene::Scene, window::GtkGLMakie)
+    # noop
 end
 
 function Makie.window_area(scene::Scene, screen::GLMakie.Screen{GtkGLMakie})
@@ -235,16 +249,18 @@ end
 
 main() do app::Application
     window = Window(app)
+
     glarea = GtkGLMakie()
+    set_size_request!(glarea, Vector2f(200, 200))
     set_child!(window, glarea)
 
-    action = Action("test", app) do self::Action
-        screen = GtkScreen(glarea)
-        display(screen, scatter(1:4))
+    screen = Ref{Union{GLMakie.Screen, Nothing}}(nothing)
+    connect_signal_map!(glarea.glarea) do self
+        make_current(glarea.glarea)
+        screen[] = GtkScreen(glarea)
+        display(screen[], scatter(1:4))
         return nothing
     end
-    add_shortcut!(action, "<Control>space")
-    set_listens_for_shortcut_action!(window, action)
 
     present!(window)
 end
