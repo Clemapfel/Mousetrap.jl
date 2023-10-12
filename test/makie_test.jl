@@ -58,11 +58,10 @@ function GLMakie.window_size(w::GtkGLMakie)
 end
 
 GLMakie.framebuffer_size(w::GtkGLMakie) = GLMakie.window_size(w)
-GLMakie.to_native(w::GtkGLMakie) = w
 GLMakie.pollevents(::GLMakie.Screen{GtkGLMakie}) = nothing
 
 function GLMakie.was_destroyed(window::GtkGLMakie)
-    return get_is_realized(window)
+    return !get_is_realized(window)
 end
 
 function Base.isopen(w::GtkGLMakie)
@@ -96,11 +95,6 @@ function Makie.colorbuffer(screen::GLMakie.Screen{GtkGLMakie}, format::Makie.Ima
         img = screen.framecache
         return PermutedDimsArray(view(img, :, size(img, 2):-1:1), (2, 1))
     end
-end
-
-function Base.open(screen::GLMakie.Screen{GtkGLMakie})
-    GLMakie.set_screen_visibility!(screen, true)
-    GLMakie.start_renderloop!(screen)
 end
 
 function Base.close(screen::GLMakie.Screen{GtkGLMakie}; reuse = true)
