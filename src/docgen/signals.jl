@@ -8,7 +8,6 @@
 
 void_signature = "(::T, [::Data_t]) -> Nothing"
 const signal_descriptors = Dict([
-
     :activate => (
         void_signature, 
         "Emitted when an activatable widget is activated by the user, usually by pressing the enter key."
@@ -16,10 +15,6 @@ const signal_descriptors = Dict([
     :activate_item => (
         "(::T, index::Integer, [::Data_t]) -> Nothing",
         "Emitted when the user presses the enter key while one or more items are selected."
-    ),
-    :startup => (
-        void_signature, 
-        "Emitted when an `Application` has initialzed the back-end and is about to start the main loop."
     ),
     :shutdown => (
         void_signature, 

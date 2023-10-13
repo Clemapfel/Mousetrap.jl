@@ -6,7 +6,6 @@
 # Copyright © 2023, Licensed under lGPL-3.0
 #
 
-
 """
 # Mousetrap GUI Engine ($(Mousetrap.VERSION))
 
@@ -362,7 +361,16 @@ module Mousetrap
     # no export
 
     macro declare_native_widget(Type)
-        :(is_native_widget(::$Type) = return true)
+        out = Expr(:block)
+        push!(out.args, esc(
+            :(is_native_widget(::$Type) = return true)
+        ))
+        #=
+        push!(out.args, esc(
+            :(Mousetrap.get_top_level_widget(x::$Type) = return x)
+        ))
+        =#
+        return out
     end
 
     macro export_type(name, super)
@@ -5500,4 +5508,58 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 ###### documentation
         
     include("./docs.jl")
+
+###### compound_widget.jl
+
+    macro define_compound_widget_signals()
+        out = Expr(:block)
+        for (signal, _) in Mousetrap.signal_descriptors
+            connect_signal_name = :connect_signal_ * signal * :!
+            push!(out.args, esc(:(
+                function Mousetrap.$connect_signal_name(f, x::Widget) 
+                    $connect_signal_name(f, Mousetrap.get_top_level_widget(x))
+                end
+            )))
+    
+            push!(out.args, esc(:(
+                function Mousetrap.$connect_signal_name(f, x::Widget, data::Data_t) where Data_t  
+                    $connect_signal_name(f, Mousetrap.get_top_level_widget(x), data)
+                end
+            )))
+    
+            emit_signal_name = :emit_signal_ * signal
+    
+            push!(out.args, esc(:(
+                function $emit_signal_name(x::Widget, args...) 
+                    $emit_signal_name(Mousetrap.get_top_level_widget(x), args)
+                end
+            )))
+    
+            disconnect_signal_name = :disconnect_signal_ * signal * :!
+    
+            push!(out.args, esc(:(
+                function $disconnect_signal_name(x::Widget)
+                    $disconnect_signal_name(Mousetrap.get_top_level_widget(x))
+                end
+            )))
+    
+            set_signal_blocked_name = :set_signal_ * signal * :_blocked * :!
+    
+            push!(out.args, esc(:(
+                function $set_signal_blocked_name(x::Widget, b)
+                    $set_signal_blocked_name(Mousetrap.get_top_level_widget(x), b)
+                end
+            )))
+    
+            get_signal_blocked_name = :get_signal_ * signal * :_blocked
+    
+            push!(out.args, esc(:(
+                function $get_signal_blocked_name(x::Widget)
+                    return $get_signal_blocked_name(Mousetrap.get_top_level_widget(x))
+                end
+            )))
+        end
+        return out
+    end
+    @define_compound_widget_signals()
 end
