@@ -10,14 +10,6 @@ In this chapter we will learn:
 
 ---
 
-!!! danger "Native Rendering on MacOS"
-    All classes and functions in this chapter **are impossible to use on MacOS**. For this platform,
-    Mousetrap was compiled in a way where any function relating to OpenGL was made unavailable. This 
-    is because of Apples decision to deprecate OpenGL in a way where only physical owners of a Mac
-    can compile libraries that have it as a dependency. See [here](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978341) for more information.
-
-    If we attempt to instantiate a disabled object on MacOS, a **fatal error** will be thrown at runtime.
-
 !!! details "Native Rendering on Linux Wayland"
     Linux users using the Wayland windowing system may encounter the following error message when starting mousetrap:
 

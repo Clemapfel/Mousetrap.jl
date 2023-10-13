@@ -287,6 +287,10 @@ Mousetrap.bind
 ```@docs
 Mousetrap.bind_as_render_target
 ```
+## `calculate_monitor_dpi`
+```@docs
+Mousetrap.calculate_monitor_dpi
+```
 ## `cancel!`
 ```@docs
 Mousetrap.cancel!
@@ -1219,6 +1223,10 @@ Mousetrap.get_always_show_arrow
 ```@docs
 Mousetrap.get_angle_delta
 ```
+## `get_auto_render`
+```@docs
+Mousetrap.get_auto_render
+```
 ## `get_autohide`
 ```@docs
 Mousetrap.get_autohide
@@ -1486,6 +1494,10 @@ Mousetrap.get_is_active
 ## `get_is_circular`
 ```@docs
 Mousetrap.get_is_circular
+```
+## `get_is_closed`
+```@docs
+Mousetrap.get_is_closed
 ```
 ## `get_is_decorated`
 ```@docs
@@ -1774,6 +1786,10 @@ Mousetrap.get_scale
 ## `get_scale_delta`
 ```@docs
 Mousetrap.get_scale_delta
+```
+## `get_scale_factor`
+```@docs
+Mousetrap.get_scale_factor
 ```
 ## `get_scale_mode`
 ```@docs
@@ -2798,6 +2814,10 @@ Mousetrap.set_always_show_arrow!
 ## `set_application!`
 ```@docs
 Mousetrap.set_application!
+```
+## `set_auto_render!`
+```@docs
+Mousetrap.set_auto_render!
 ```
 ## `set_autohide!`
 ```@docs

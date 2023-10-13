@@ -9,20 +9,28 @@ In this chapter, we will learn:
 
 ## Installation
 
-To install Mousetrap, in the REPL:
+To install Mousetrap, in the REPL, press `]` to enter `Pkg` mode, then:
 
 ```
-import Pkg
-begin
-    try Pkg.rm("mousetrap") catch end
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap_windows_jll")
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap_linux_jll")
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap_apple_jll")
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap.jl")
-end
+add Mousetrap
 ```
 
-This may take a long time. If installation was succesfull, `Mousetrap tests passed` will be printed.
+We can then make sure eveything works by executing `test Mousetrap` (still in `Pkg` mode). This may take a long time. If installation was succesfull, `Mousetrap tests passed` will be printed at the end.
+
+!!! compat "Removing older versions"
+  Mousetraps installation procedure has changed significantly from version starting with v0.3.0. If we have mousetrap v0.2 or older installed on our computer, we should make sure to delete any trace of it by executing the following, before running `add Mousetrap`:
+
+  ```
+  import Pkg
+  begin
+      try Pkg.rm("mousetrap") catch end
+      try Pkg.rm("mousetrap_windows_jll") catch end
+      try Pkg.rm("mousetrap_linux_jll") catch end
+      try Pkg.rm("mousetrap_apple_jll") catch end
+  end
+  ```
+
+```
 
 ## Hello World
 

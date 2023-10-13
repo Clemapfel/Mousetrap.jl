@@ -1,4 +1,4 @@
-# Chapter 10: Theme & Widget Customization
+# Chapter 9: Theme & Widget Customization
 
 In this chapter we will learn:
 + How to swap between light- and dark- mode
