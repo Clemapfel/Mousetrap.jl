@@ -231,15 +231,16 @@ end
 using Mousetrap, .MousetrapMakie, GLMakie
 main() do app::Application
     window = Window(app)
+    set_title!(window, "Mousetrap x Makie")
     canvas = GLMakieArea()
-    set_size_request!(canvas, Vector2f(400, 400))
+    set_size_request!(canvas, Vector2f(200, 200))
     set_child!(window, canvas)
 
     # use optional ref to delay screen allocation after `realize`
     screen = Ref{Union{Nothing, GLMakie.Screen{GLMakieArea}}}(nothing)
     connect_signal_realize!(canvas) do self
         screen[] = create_glmakie_screen(canvas)
-        display(screen[], scatter(rand(1234)))
+        display(screen[], scatter(rand(123)))
         return nothing
     end
     present!(window)

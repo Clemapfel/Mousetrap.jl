@@ -29,7 +29,6 @@ rm cmake_toolchain_patch.ini
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-#=
 platforms = Platform[]
 include("../../L/libjulia/common.jl")
 for version in [v"1.7.0", v"1.8.2", v"1.9.0", v"1.10", v"1.11"]
@@ -39,8 +38,7 @@ for version in [v"1.7.0", v"1.8.2", v"1.9.0", v"1.10", v"1.11"]
         end
     end
 end
-=#
-platforms = [Platform("x86_64", "linux"; libc = "glibc")]
+#platforms = [Platform("x86_64", "linux"; libc = "glibc")]
 
 # The products that we will ensure are always built
 products = [

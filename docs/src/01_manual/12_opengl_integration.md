@@ -95,10 +95,13 @@ We see that we make sure to bind the context using `make_current`, and to reques
 
 # Example: GLMakie 
 
-[`GLMakie`](https://docs.makie.org/stable/explanations/backends/glmakie/index.html) is one backend for the hugely popular [`Makie`](https://github.com/MakieOrg/Makie.jl) plotting library. As it's name suggests, `GLMakie` uses OpenGL for rendering, which means it is possible to allow makie to render to a mousetrap `GLArea`, allowing us to integrate plots and graphics not really possible in mousetrap into our application.
+[`GLMakie`](https://docs.makie.org/stable/explanations/backends/glmakie/index.html) is one backend for the hugely popular [`Makie`](https://github.com/MakieOrg/Makie.jl) plotting library. As it's name suggests, `GLMakie` uses OpenGL for rendering, which means it is possible to allow makie to render to a mousetrap `GLArea`, allowing us to integrate plots and graphics into our mousetrap application.
 
-Given here will be a minimum working example that displays a scatterplot inside a `Mousetrap.Window`, by creating a `GLArea`-based widget, that can be used to create a `GLMakie.Screen`.
+Given here will be a minimum working example that displays a scatterplot inside a `Mousetrap.Window`, by creating a `GLArea`-based widget that can be used to create a `GLMakie.Screen`.
 
 Note that this example is incomplete and does not support all of Makies features. One conflict that mousetrap users will have to resolve for themself is how to handle input events. In the following, all of Makies input-related behavior was surpressed, making it so users will have to handle input events and window behavior using only mousetrap.
+
+!!! details "Note from the Author: Makie Interface"
+    The example here most likely does not implement enough of makies interface to be fully ready for usage. Most of the code was based on [`Gtk4GLMakie`](https://github.com/JuliaGtk/Gtk4Makie.jl), which itself is still rough and unfinished. I'm not that familiar with Makie to begin with, and writing a fully capable interface requires knowledge of GLMakies internals on top of that. If you or your project is very familiar with Makie and would like to improve this code, feel free to [open a PR](https://github.com/Clemapfel/Mousetrap.jl/pulls) that modifies [`test/makie_test.jl`](https://github.com/Clemapfel/Mousetrap.jl/blob/main/test/makie_test.jl), which ideally will become its own Julia package, similar to `Gtk4GLMakie`, for whom any contributer will be credited as an author.
 
 
