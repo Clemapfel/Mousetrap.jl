@@ -9,7 +9,7 @@ In this chapter we will learn:
 + How to compile a GLSL Shader and set its uniforms
 
 !!! compat 
-    In v0.2.0 and earlier, features from this chapter were not available on MacOS. Since v0.3.0, 100% of Mousetrap is portable, meaning MacOS is now fully supported.
+    In `v0.2.0` and earlier, features from this chapter were not available on MacOS. Since `v0.3.0`, 100% of Mousetrap is portable, meaning MacOS is now fully supported.
 
 ---
 

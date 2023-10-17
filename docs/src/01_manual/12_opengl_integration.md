@@ -5,7 +5,7 @@ In this chapter, we will learn:
 + How to display a `GLMakie` plot in a mousetrap window
 
 !!! compat 
-    These features are only available in Mousetrap v0.3.0 or newer
+    Features from this chapter are only available in Mousetrap `v0.3.0` or newer.
 
 ---
 
