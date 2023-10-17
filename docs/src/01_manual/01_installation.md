@@ -98,7 +98,7 @@ In the above, `T()` (the constructor, which is a function), *instantiates* an ob
 
 #### Scope
 
-"Scope" refers to where a variable is available after it is defined. For example, the following function introduces what is called a "hard scope", meaning we do not have access to any variable defined inside the *functions scope*, which is the block of code between `function` and `end`
+"Scope" refers to where a variable is available after it is defined. For example, the following function introduces what is called a "hard scope", meaning we do not have access to any variable defined inside the *function's scope*, which is the block of code between `function` and `end`
 
 ```julia
 function f(x) # hard scope begin
@@ -185,7 +185,7 @@ using Mousetrap
 methodswith(Window)
 ```
 
-Which will print a list of all functions that have at least one argument of type `Window`.
+which will print a list of all functions that have at least one argument of type `Window`.
 
 ---
 
@@ -258,7 +258,7 @@ example_f(1234) do x::Integer
 end
 ```
 
-Here, the first argument of `example_f` was ommitted, while the second argument, `1234` remained. Instead of the first argument, we append the line `do x::Integer`, where `x` is the name of the anonymous functions argument. After this line, we define the functions body, then `end`.
+Here, the first argument of `example_f` was ommitted, while the second argument, `1234` remained. Instead of the first argument, we append the line `do x::Integer`, where `x` is the name of the anonymous function's argument. After this line, we define the function's body, then `end`.
 
 ## Anonymous Functions in Stacktraces
 
@@ -322,7 +322,7 @@ Stacktrace:
    @ Mousetrap ~/Workspace/Mousetrap.jl/src/Mousetrap.jl:1581
 ```
 
-We see that the anonymous functions was allocated as `var"#11#12"`. This refers to the function defined using the do-block after `main()`.
+We see that the anonymous function was allocated as `var"#11#12"`. This refers to the function defined using the do-block after `main()`.
 
 Mousetrap stack traces can get quite long, so it's best to parse them by reading the original message at the top first:
 
