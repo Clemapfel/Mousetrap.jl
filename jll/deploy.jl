@@ -1,3 +1,5 @@
+throw(AssertionError("In Mousetrap/jll/deploy.jl: This script is meant for internal use only and should not be tampered with by the general public. Do not run this file."))
+
 const VERSION = "0.3.0"
 
 function get_most_recent_commit(folder::String)
