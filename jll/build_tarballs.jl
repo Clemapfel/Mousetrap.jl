@@ -7,8 +7,8 @@ version = v"0.3.0"
 
 # Collection of sources required to complete build
 sources = [
-    GitSource("https://github.com/Clemapfel/mousetrap.git", "8f6356c58c37e0f41b5c5d4d2e7f7207260ab5d8"),
-    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "b83169f0cd2f2891d578e0c3abfc67c4e2b504c4"),
+    GitSource("https://github.com/Clemapfel/mousetrap.git", "ffa28d0bd569118320a6bb063286edfb35fc0429"),
+    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "6b838ea238e118d694ffc1b3a1e0225441c8cfb3"),
 ]
 
 # Bash recipe for building across all platforms
@@ -30,6 +30,7 @@ rm cmake_toolchain_patch.ini
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
 platforms = Platform[]
+#=
 include("../../L/libjulia/common.jl")
 for version in [v"1.7.0", v"1.8.2", v"1.9.0", v"1.10", v"1.11"]
     for platform in libjulia_platforms(version)
@@ -38,7 +39,8 @@ for version in [v"1.7.0", v"1.8.2", v"1.9.0", v"1.10", v"1.11"]
         end
     end
 end
-#platforms = [Platform("x86_64", "linux"; libc = "glibc")]
+=#
+platforms = [Platform("x86_64", "linux"; libc = "glibc")]
 
 # The products that we will ensure are always built
 products = [

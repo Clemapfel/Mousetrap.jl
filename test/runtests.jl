@@ -567,7 +567,6 @@ function test_event_controller(this::Container)
             @test get_signal_scroll_begin_blocked(controller) == false
 
             connect_signal_scroll!(controller) do self::ScrollEventController, x_delta::AbstractFloat, y_delta::AbstractFloat
-                return true
             end
             @test get_signal_scroll_blocked(controller) == false
 
@@ -2261,7 +2260,7 @@ function test_typed_function(::Container)
 
         Test.@test TypedFunction(yes_f, Nothing, (Int64,)) isa TypedFunction
         Test.@test_throws AssertionError TypedFunction(no_f1, Nothing, (Int64,))
-        Test.@test TypedFunction(no_f2, Nothing, (Int64,)) isa TypedFunction
+        Test.@test_throws AssertionError TypedFunction(no_f2, Nothing, (Int64,)) isa TypedFunction
             # if return_t is nothing, the result is ignored, regardless of the results type
 
         Base.show(devnull, TypedFunction(() -> nothing, Nothing, ()))

@@ -297,7 +297,6 @@ Again, we can write the above more succinctly using do-syntax:
 
 ```julia
 button = Button()
-
 connect_signal_clicked!(button, (
     string_value = "abc", integer_value = 999, vector_value = [1.0, 2.0, 3.0]
 )) do self::Button, data
@@ -308,6 +307,56 @@ end
 ```
 
 Using this technique, we can forward any and all objects to the signal handler via the optional `[::Data_t]` argument. This technique is available for all signals.
+
+## Implicit Return Types
+
+Julia allows functions to return a value without using the `return` keyword. This may cause side effects in applications where functions are required to conform to a specific signature. Consider the following example:
+
+```julia
+button = Button()
+
+to_append = []
+function on_clicked(self::Button)
+    push!(to_append, 1234)
+end
+
+connect_signal_clicked!(on_clicked, button)
+```
+
+Here we are appending a value to `to_append`, a vector, from within the signal handler for signal `clicked`, which is required to have the signature:
+
+```julia
+(::Button, [::Data_t]) -> Nothing
+```
+
+`on_clicked`, in this example, does not explicitly return a value, yet running the above code we get:
+
+```
+[ERROR] In Mousetrap.main: AssertionError: Object `on_clicked` is not invokable as function with signature `(Button) -> Nothing`, because its return type is not `Nothing`
+```
+
+This is because `Base.push!` actually **does** return a value, the vector it is operating on:
+
+```julia
+to_append = []
+out = push!(to_append, 1234)
+out == to_append # true
+```
+
+Because `push!` returns a value and it is the last line of the `on_clicked` definition, `on_clicked`, in turn, returns a value, meaning its return type is no longer `Nothing`, which triggers the error.
+
+In mousetrap, all functions whose documentation does not explicitly mention a return type, will return `nothing`. This may not be true for functions in `Base` or foreign libraries, so we should take care to be aware of implicit return types. 
+
+To fix the above error, we should return `nothing` manually:
+
+```julia
+to_append = []
+function on_clicked(self::Button)
+    push!(to_append, 1234)
+    return nothing
+end
+connect_signal_clicked!(on_clicked, button) # works
+```
 
 ---
 

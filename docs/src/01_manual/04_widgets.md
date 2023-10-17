@@ -1925,7 +1925,7 @@ To check which page is currently visible, we use [`get_visible_child`](@ref), wh
 To keep track of which page is currently selected, we should connect to the stacks underlying `SelectionModel`, just like we would with `ListView` and `GridView`:
 
 ```julia
-function on_selection_changed(self::SelectionModel, position::Integer, n_items::Integer, stack::Stack)
+function on_selection_changed(self::SelectionModel, position::Integer, n_items::Integer, stack::Stack) ::Nothing
     println("Current stack page is now: $(get_child_at(stack, position))")
 end
 

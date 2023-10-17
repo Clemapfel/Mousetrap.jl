@@ -41,6 +41,7 @@ end
 app = Application("com.example")
 connect_signal_activate!(app) do app::Application
     # behavior here
+    return nothing
 end
 run!(app)
 ```

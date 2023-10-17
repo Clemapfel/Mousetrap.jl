@@ -8,6 +8,9 @@ In this chapter we will learn:
 + How to apply a 3D transform to a shape GPU-side
 + How to compile a GLSL Shader and set its uniforms
 
+!!! compat 
+    In v0.2.0 and earlier, features from this chapter were not available on MacOS. Since v0.3.0, 100% of Mousetrap is portable, meaning MacOS is now fully supported.
+
 ---
 
 !!! details "Native Rendering on Linux Wayland"
@@ -17,7 +20,7 @@ In this chapter we will learn:
     In gdk_window_create_gl_context: Faled to create EGL display
     ```
 
-    This means we would be unable to use `RenderArea` or any other OpenGL-related functionality.
+    This means we would be unable to use the `RenderArea` widget, which this chapter centers around.
 
     To address this, we need to [locate](https://linuxize.com/post/locate-command-in-linux/) the directory `egl_vendor.d`, which has to be non-empty and contain a json file
 
@@ -40,10 +43,10 @@ In this chapter we will learn:
 
     After which any OpenGL-related features from this chapter will become available. 
     
-    To make this change permanent, we can paste the above line into the `~/.bashrc` text file, which will be loaded anytime a terminal starts, making the `export` permanent.
+    To make this change permanent, we can paste the above line into the `~/.bashrc` text file, which will be loaded automatically anytime a terminal starts. 
 
 !!! details "Manually Disabling the OpenGL Component"
-    We can disable all features from this chapter by setting the environment variable `MOUSETRAP_DISABLE_OPENGL_COMPONENT` to `TRUE`. See [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for more information.
+    We can disable all features from this chapter by setting the environment variable `MOUSETRAP_DISABLE_OPENGL_COMPONENT` to `TRUE`. This may be necessary for machines that do not have a OpenGL 3.3-compatible graphics card driver. See [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for more information.
 
 ---
 

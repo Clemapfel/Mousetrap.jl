@@ -11,12 +11,6 @@ module MousetrapMakie
     using GLMakie.GLAbstraction
     using GLMakie.Makie
 
-    # maps hash(GLMakieArea) to GLMakie.Screen
-    const screens = Dict{UInt64, GLMakie.Screen}()
-
-    # maps hash(GLMakieArea) to Scene, used in `on_makie_area_resize`
-    const scenes = Dict{UInt64, GLMakie.Scene}()
-
     """
     ## GLMakieArea <: Widget
     `GLArea` wrapper that automatically connects all necessary callbacks in order for it to be used as a GLMakie render target. 
@@ -54,9 +48,10 @@ module MousetrapMakie
     ```
     """
     mutable struct GLMakieArea <: Widget
-        glarea::GLArea
-        framebuffer_id::Ref{Int}
-        framebuffer_size::Vector2i
+
+        glarea::GLArea              # wrapped native widget
+        framebuffer_id::Ref{Int}    # set by render callback, used in MousetrapMakie.create_glmakie_screen
+        framebuffer_size::Vector2i  # set by resize callback, used in GLMakie.framebuffer_size
 
         function GLMakieArea()
             glarea = GLArea()
@@ -67,6 +62,12 @@ module MousetrapMakie
         end
     end
     Mousetrap.get_top_level_widget(x::GLMakieArea) = x.glarea
+
+    # maps hash(GLMakieArea) to GLMakie.Screen
+    const screens = Dict{UInt64, GLMakie.Screen}()
+
+    # maps hash(GLMakieArea) to Scene, used in `on_makie_area_resize`
+    const scenes = Dict{UInt64, GLMakie.Scene}()
 
     # render callback: if screen is open, render frame to `GLMakieArea`s OpenGL context
     function on_makie_area_render(self, context)
@@ -137,16 +138,23 @@ module MousetrapMakie
         # noop
     end
 
+    # check if canvas is still realized
     GLMakie.was_destroyed(window::GLMakieArea) = !get_is_realized(window)
+
+    # check if canvas should signal it is open
     Base.isopen(w::GLMakieArea) = !GLMakie.was_destroyed(w)
+
+    # react to makie screen visibility request
     GLMakie.set_screen_visibility!(screen::GLMakieArea, bool) = bool ? show(screen.glarea) : hide!(screen.glarea)
 
+    # apply glmakie config
     function GLMakie.apply_config!(screen::GLMakie.Screen{GLMakieArea}, config::GLMakie.ScreenConfig; start_renderloop=true) 
         @warn "In MousetrapMakie: GLMakie.apply_config!: This feature is not yet implemented, ignoring config"
         # cf https://github.com/JuliaGtk/Gtk4Makie.jl/blob/main/src/screen.jl#L111
         return screen
     end
 
+    # screenshot framebuffer
     function Makie.colorbuffer(screen::GLMakie.Screen{GLMakieArea}, format::Makie.ImageStorageFormat = Makie.JuliaNative)
         @warn "In MousetrapMakie: GLMakie.colorbuffer: This feature is not yet implemented, returning framecache"
         # cf https://github.com/JuliaGtk/Gtk4Makie.jl/blob/main/src/screen.jl#L147
@@ -154,23 +162,23 @@ module MousetrapMakie
     end
 
     # ignore makie event model, use the mousetrap event controllers instead
-    Makie.window_open(scene::Scene, window::GLMakieArea) = nothing
-    Makie.disconnect!(window::GLMakieArea, f) = nothing
+    Makie.window_open(::Scene, ::GLMakieArea) = nothing
+    Makie.disconnect!(::GLMakieArea, f) = nothing
     GLMakie.pollevents(::GLMakie.Screen{GLMakieArea}) = nothing
-    Makie.mouse_buttons(scene::Scene, glarea::GLMakieArea) = nothing
-    Makie.keyboard_buttons(scene::Scene, glarea::GLMakieArea) = nothing
-    Makie.dropped_files(scene::Scene, window::GLMakieArea) = nothing
-    Makie.unicode_input(scene::Scene, window::GLMakieArea) = nothing
-    Makie.mouse_position(scene::Scene, screen::GLMakie.Screen{GLMakieArea}) = nothing
-    Makie.scroll(scene::Scene, window::GLMakieArea) = nothing
-    Makie.hasfocus(scene::Scene, window::GLMakieArea) = nothing
-    Makie.entered_window(scene::Scene, window::GLMakieArea) = nothing
+    Makie.mouse_buttons(::Scene, ::GLMakieArea) = nothing
+    Makie.keyboard_buttons(::Scene, ::GLMakieArea) = nothing
+    Makie.dropped_files(::Scene, ::GLMakieArea) = nothing
+    Makie.unicode_input(::Scene, ::GLMakieArea) = nothing
+    Makie.mouse_position(::Scene, ::GLMakie.Screen{GLMakieArea}) = nothing
+    Makie.scroll(::Scene, ::GLMakieArea) = nothing
+    Makie.hasfocus(::Scene, ::GLMakieArea) = nothing
+    Makie.entered_window(::Scene, ::GLMakieArea) = nothing
 
     """
     ```
     create_gl_makie_screen(::GLMakieArea; screen_config...) -> GLMakie.Screen{GLMakieArea}
     ```
-    For a `GLMakieArea`, create a GLMakie screen that can be used to display makie graphics
+    For a `GLMakieArea`, create a `GLMakie.Screen` that can be used to display makie graphics
     """
     function create_glmakie_screen(area::GLMakieArea; screen_config...)
 

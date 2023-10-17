@@ -58,6 +58,7 @@ connect_signal_activate!(entry) do self::Entry
     else
         # handle malformatted string
     end
+    return nothing
 end
 ```
 
