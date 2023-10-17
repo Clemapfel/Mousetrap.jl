@@ -28,6 +28,7 @@ Pages = [
     "01_manual/09_native_rendering.md"
     "01_manual/10_theme_customization.md"
     "01_manual/11_app_distribution.md"
+    "01_manual/12_opengl_integration.md"
 ]
 
 Depth = 5
@@ -44,12 +45,6 @@ Depth = 5
 ---
 
 ## FAQ
-
-### Why is installation so complicated, why are there three jlls?
-
-Simplifying the installation to `] add Mousetrap` is a very high priority, and, as of version 0.2.0, is actively being worked on.
-
-The reason for three jlls is that the C++ build of Mousetrap is quite complex to begin with, and making it work inside the BinaryBuidler sandbox, which is the cross-compilation environment used to deploy jlls, was quite the struggle for me, even though building on an actual machine works flawlessly. Because of this, the jlls were split by platform, which works but is incredibly bad style. I didn't want to upload packages of this low quality to Yggdrasil, the BinaryBuilder registry, so I decided to host them locally until I have the skill necessary to make it one, well-maintained `mousetrap_jll`. Once this exists on Ygddrasil, `Mousetrap.jl` can be uploaded to the Julia registry the same day. Maintainers of BinaryBuilder have graciously reached out to me to assist me in this process, and we are actively collaborating to address this issue.
 
 ### Why is there a C++ Component at all?
 
