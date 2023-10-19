@@ -1,4 +1,4 @@
-throw(AssertionError("In Mousetrap/jll/deploy.jl: This script is meant for internal use only and should not be tampered with by the general public. Do not run this file."))
+#throw(AssertionError("In Mousetrap/jll/deploy.jl: This script is meant for internal use only and should not be tampered with by the general public. Do not run this file."))
 
 const VERSION = "0.3.0"
 
@@ -16,11 +16,13 @@ const mousetrap_julia_binding_commit = get_most_recent_commit("../../mousetrap_j
 
 # if local, files will be written to ~/.julia/dev/mousetrap_jll
 const deploy_local = true
-println("local : $deploy_local")
 
 if deploy_local
     @info "Deployment: local"
     repo = "local"
+else
+    @info "Deployment: github"
+    repo = "Clemapfel/mousetrap_jll"
 end
 
 ## Configure
