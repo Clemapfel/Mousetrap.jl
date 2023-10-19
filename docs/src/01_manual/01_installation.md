@@ -9,16 +9,21 @@ In this chapter, we will learn:
 
 ## Installation
 
-To install Mousetrap, in the REPL, we press `]` to enter `Pkg` mode, then:
 
-```
-add Mousetrap
+To install mousetrap, in the REPL:
+
+```julia
+import Pkg;
+begin
+  Pkg.install(url="https://github.com/clemapfel/mousetrap_jll")
+  Pkg.install(url="https://github.com/clemapfel/mousetrap.jl")
+end
 ```
 
 We can then make sure eveything works by executing `test Mousetrap` (still in `Pkg` mode). This may take a long time. If installation was succesfull, `Mousetrap tests passed` will be printed at the end.
 
 !!! compat "Removing older versions"
-  Mousetraps installation procedure has changed significantly starting with `v0.3.0`. If mousetrap `v0.2.*` or older installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
+  Mousetraps installation procedure has changed starting with `v0.3.0`. If mousetrap `v0.2.*` or older installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
 
   ```
   import Pkg

@@ -24,10 +24,9 @@ module Mousetrap
         using CxxWrap
         function __init__() @initcxx end
 
-        #using mousetrap_jll
+        using libmousetrap_jll
         function get_mousetrap_julia_binding()
-            return "/home/clem/.julia/artifacts/b292ae2e313d5ab559c9838dfb8390f192b4f3b8/lib/libmousetrap_julia_binding.so"
-            #return mousetrap_jll.mousetrap_julia_binding
+            return libmousetrap_jll.mousetrap_julia_binding
         end
       
         @wrapmodule(get_mousetrap_julia_binding)

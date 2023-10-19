@@ -144,14 +144,6 @@ Click registered at (367.5, 289.0)
 In the Julia REPL, execute:
 
 ```julia
-import Pkg
-begin
-    try Pkg.rm("mousetrap") catch end
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap_windows_jll")
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap_linux_jll")
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap_apple_jll")
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap.jl")
-end
 ```
 
 Mousetrap was renamed from `mousetrap.jl` to `Mousetrap.jl` in version 0.2.0, which is why we have to remove the old package to assure compatibility.

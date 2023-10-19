@@ -2,13 +2,13 @@
 # `julia build_tarballs.jl --help` to see a usage message.
 using BinaryBuilder, Pkg
 
-name = "mousetrap"
+name = "libmousetrap"
 version = v"0.3.0"
 
 # Collection of sources required to complete build
 sources = [
     GitSource("https://github.com/Clemapfel/mousetrap.git", "ffa28d0bd569118320a6bb063286edfb35fc0429"),
-    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "6b838ea238e118d694ffc1b3a1e0225441c8cfb3"),
+    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "6b838ea238e118d694ffc1b3a1e0225441c8cfb3")
 ]
 
 # Bash recipe for building across all platforms
@@ -29,18 +29,7 @@ rm cmake_toolchain_patch.ini
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = Platform[]
-#=
-include("../../L/libjulia/common.jl")
-for version in [v"1.7.0", v"1.8.2", v"1.9.0", v"1.10", v"1.11"]
-    for platform in libjulia_platforms(version)
-        if !(arch(platform) == "i686" || contains(arch(platform), "arm"))
-            push!(platforms, platform)
-        end
-    end
-end
-=#
-platforms = [Platform("x86_64", "linux"; libc = "glibc")]
+platforms = filter(p -> nbits(p) == 64, supported_platforms())
 
 # The products that we will ensure are always built
 products = [
@@ -62,4 +51,4 @@ dependencies = [
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
-build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies; julia_compat="1.7", preferred_gcc_version = v"12.1.0")
+build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies; julia_compat="1.6", preferred_gcc_version = v"12.1.0")
