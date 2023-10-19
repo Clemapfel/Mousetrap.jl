@@ -14,7 +14,6 @@ jobs:
           version:
               - '1.7'
               - '1.9'
-              - 'nightly'
           os:
             - macOS-latest
             - windows-latest
@@ -23,11 +22,11 @@ jobs:
             - aarch64
             - x86
       steps: 
-        - uses: actions/checkout@latest
-        - uses: julia-actions/setup-julia@latest
+        - uses: actions/checkout@v4
+        - uses: julia-actions/setup-julia@v1
           with:
             version: ${{ matrix.version }}
             arch: ${{ matrix.arch }}
-        - run: julia -e "using Pkg; Pkg.status()"
-        - uses: julia-actions/julia-buildpkg@latest
-        - uses: julia-actions/julia-runtest@latest
+            show-versioninfo: true
+        - uses: julia-actions/julia-buildpkg@v1
+        - uses: julia-actions/julia-runtest@v1
