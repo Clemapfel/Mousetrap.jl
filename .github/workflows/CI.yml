@@ -19,7 +19,6 @@ jobs:
             - windows-latest
             - ubuntu-latest
           arch:
-            - aarch64
             - x86
       steps: 
         - uses: actions/checkout@v4
