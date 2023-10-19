@@ -6,7 +6,7 @@ Mousetrap is a GUI library designed for Julia. It fully wraps [GTK4](https://doc
 
 It aims to give developers of all skill levels the tools to start creating complex GUI applications with little time and effort, while taking full advantage of Julias idiosyncrasies.
 
-> **Note**: Mousetrap is under active development. Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error, bug, or missing feature.
+> **Note**: Mousetrap is under active development. Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error, bug, question, or missing feature.
 
 ---
 
@@ -33,7 +33,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 + Choose from over 40 different kinds of pre-made widgets, or create your own
 + Supports mice, keyboards, touchscreens, touchpads, and stylus devices
 + Image processing facilities, well-suited for image manipulation programs
-+ Built using OpenGL, allowing for high-performance, hardware-accelerated rendering, as well as [integration of other OpenGL-based libraries](http://clemens-cords.com/mousetrap/01_manual/12_opengl_integration) such as [GLMakie](https://github.com/JuliaPlots/GLMakie.jl)
++ Built using OpenGL, allowing for high-performance, hardware-accelerated rendering, as well as [integration of other OpenGL-based libraries](http://clemens-cords.com/mousetrap/01_manual/12_opengl_integration) such as [`GLMakie`](https://github.com/JuliaPlots/GLMakie.jl)
 + [Hand-written manual and extensive documentation](https://clemens-cords.com/mousetrap): every exported symbol is documented
 
 ---
@@ -42,7 +42,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 
 In order of priority, highest first:
 
-+ Allow bundling of mousetrap apps using [PackageCompiler](https://github.com/JuliaLang/PackageCompiler.jl)
++ Allow bundling of mousetrap apps using [`PackageCompiler.jl`](https://github.com/JuliaLang/PackageCompiler.jl)
 + Implement installation of .desktop files on end-user computers
 + Implement drag-and-drop for files, images, and widgets
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
@@ -150,7 +150,7 @@ At the end, it should say `Mousetrap tests passed`.
 
 > **Note**: On Windows, some `GLib` log messages regarding dbus connections may appear during testing. These do not indicate a problem.
 
-> **Note**: On Linux wayland, a warning regarding EGL displays may appear during installation. See the [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for how to fix this issue.
+> **Note**: On Linux Wayland, a warning regarding EGL displays may appear during installation. See the [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for how to fix this issue.
 
 If you have had mousetrap version 0.2.0 or earlier installed on your device before, run the following before installing the current version of mousetrap:
 
@@ -161,6 +161,7 @@ begin
     try Pkg.rm("mousetrap_windows_jll") catch end
     try Pkg.rm("mousetrap_linux_jll") catch end
     try Pkg.rm("mousetrap_apple_jll") catch end
+    Pkg.gc()
 end
 ```
 
