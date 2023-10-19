@@ -38,6 +38,6 @@ jobs:
         - uses: actions/checkout@v4
         - uses: julia-actions/setup-julia@latest
         - name: Install Documenter.jl Latest
-          run: julia --colors=yes -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\")"
+          run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\")"
         - name: Build Docs
           run: julia --color=yes docs/make.jl
