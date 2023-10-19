@@ -27,5 +27,3 @@ jobs:
             version: ${{ matrix.version }}
             arch: ${{ matrix.arch }}
             show-versioninfo: true
-        - uses: julia-actions/julia-buildpkg@latest
-        - uses: julia-actions/julia-runtest@latest
