@@ -15,8 +15,8 @@ To install mousetrap, in the REPL:
 ```julia
 import Pkg;
 begin
-  Pkg.install(url="https://github.com/clemapfel/mousetrap_jll")
-  Pkg.install(url="https://github.com/clemapfel/mousetrap.jl")
+  Pkg.add(url="https://github.com/clemapfel/mousetrap_jll")
+  Pkg.add(url="https://github.com/clemapfel/mousetrap.jl")
 end
 ```
 
