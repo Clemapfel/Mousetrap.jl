@@ -1,10 +1,12 @@
-name: test
+name: CI
 on:
   push:
   pull_request:  
+  
 defaults:
   run:
     shell: bash
+    
 jobs:
     test:
       name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }}
@@ -28,3 +30,14 @@ jobs:
             version: ${{ matrix.version }}
             arch: ${{ matrix.arch }}
             show-versioninfo: true
+            
+    docs:
+      name: 'Documentation'
+      runs-on: ubuntu-latest
+      steps: 
+        - uses: actions/checkout@v4
+        - uses: julia-actions/setup-julia@latest
+        - name: Install Documenter.jl Latest
+          run: julia --colors=yes -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\")"
+        - name: Build Docs
+          run: julia --color=yes docs/make.jl
