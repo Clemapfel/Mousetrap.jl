@@ -42,7 +42,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 
 In order of priority, highest first:
 
-+ Allow bundling of mousetrap apps using [`PackageCompiler.jl`](https://github.com/JuliaLang/PackageCompiler.jl)
++ Allow bundling of Mousetrap apps using [`PackageCompiler.jl`](https://github.com/JuliaLang/PackageCompiler.jl)
 + Implement installation of .desktop files on end-user computers
 + Implement drag-and-drop for files, images, and widgets
 + Allow filtering and searching of selectable widget containers such as `ListView` and `ColumnView`
@@ -119,7 +119,7 @@ Click registered at (367.5, 289.0)
 
 ## Supported Platforms
 
-Since `v0.3.0`, mousetrap is fully portable. All features are available for all 64-bit versions of Linux, FreeBSD, macOS, and Windows.
+Since `v0.3.0`, Mousetrap is fully portable. All features are available for all 64-bit versions of Linux, FreeBSD, macOS, and Windows.
 
 > **Note**: Linux systems running Wayland may require additional configuration before the `RenderArea` widget becomes available. See [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
 
@@ -129,7 +129,7 @@ Since `v0.3.0`, mousetrap is fully portable. All features are available for all 
 
 ## Documentation
 
-Documentation is available [here](https://clemens-cords.com/mousetrap). This includes a tutorial on how to get started using mousetrap, a manual introducing users to mousetrap and GUI programming in general, as well as an index of all classes, enums, and functions.
+Documentation is available [here](https://clemens-cords.com/mousetrap). This includes a tutorial on how to get started using Mousetrap, a manual introducing users to Mousetrap and GUI programming in general, as well as an index of all classes, enums, and functions.
 
 ---
 
@@ -152,7 +152,7 @@ At the end, it should say `Mousetrap tests passed`.
 
 > **Note**: On Linux Wayland, a warning regarding EGL displays may appear during installation. See the [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for how to fix this issue.
 
-If you have had mousetrap version 0.2.0 or earlier installed on your device before, run the following before installing the current version of mousetrap:
+If you have had Mousetrap version 0.2.0 or earlier installed on your device before, run the following before installing the current version of Mousetrap:
 
 ```julia
 import Pkg
@@ -177,11 +177,11 @@ It was created with no expectation of compensation and made available for free. 
 + [GitHub Sponsors](https://github.com/sponsors/Clemapfel)
 + [PayPal](https://www.paypal.com/donate/?hosted_button_id=8KWF3JTDF8XL2)
 
-The goal is for mousetrap to be 100% stable and flawless when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of fully featured, easy-to-use, GUI libraries are currently the largest factors as to why Julia is ill-suited for front-end development. Mousetrap aims to address this.
+The goal is for Mousetrap to be 100% stable and flawless when Julia [static compilation](https://github.com/JuliaLang/PackageCompiler.jl) finishes development. Static compilation and the lack of fully featured, easy-to-use, GUI libraries are currently the largest factors as to why Julia is ill-suited for front-end development. Mousetrap aims to address this.
 
 ---
 
 ## License
 
-The current and all past version of mousetrap, including any text or assets used in mousetraps documentation, are licensed under [GNU Lesser General Public License (Version 3.0)](https://www.gnu.org/licenses/lgpl-3.0.en.html). This means it can be used in both free, open-source, as well as commercial, closed-source software.
+The current and all past version of Mousetrap, including any text or assets used in Mousetraps documentation, are licensed under [GNU Lesser General Public License (Version 3.0)](https://www.gnu.org/licenses/lgpl-3.0.en.html). This means it can be used in both free, open-source, as well as commercial, closed-source software.
 
