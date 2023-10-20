@@ -105,14 +105,15 @@ add_render_task!(render_area, RenderTask(rectangle))
 ```julia
 using GLMakie, MousetrapMakie
 canvas = GLMakieArea()
-set_child!(window, canvas) # can be used just like any other widget
+window = Mousetrap.Window()
+set_child!(window, canvas) # can be used like any other widget
 
 screen = create_glmakie_screen(canvas)
 display(screen, scatter(rand(123)))
 ```
 ![](docs/src/assets/makie_scatter.png)
 
-(This feature is still experimental, see [here](https://github.com/Clemapfel/Mousetrap.jl/blob/main/test/makie_test.jl) for a complete example)
+(**Note**: This feature is still experimental. See [here](https://github.com/Clemapfel/Mousetrap.jl/blob/main/test/makie_test.jl) for a complete example)
 
 ---
 
