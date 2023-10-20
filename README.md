@@ -33,7 +33,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 + Choose from over 40 different kinds of pre-made widgets, or create your own
 + Supports mice, keyboards, touchscreens, touchpads, and stylus devices
 + Image processing facilities, well-suited for image manipulation programs
-+ Built using OpenGL, allowing for high-performance, hardware-accelerated rendering, as well as [integration of other OpenGL-based libraries](http://clemens-cords.com/mousetrap/01_manual/12_opengl_integration) such as [`GLMakie`](https://github.com/JuliaPlots/GLMakie.jl)
++ Built using OpenGL, allowing for high-performance, hardware-accelerated rendering, as well as[integration of other OpenGL-based libraries, such as [GLMakie](https://github.com/MakieOrg/Makie.jl)
 + [Hand-written manual and extensive documentation](https://clemens-cords.com/mousetrap): every exported symbol is documented
 
 ---
