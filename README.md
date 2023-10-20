@@ -100,20 +100,19 @@ add_render_task!(render_area, RenderTask(rectangle))
 
 ---
 
-### Reacting to Mouse / Touchscreen Presses
+### Displaying a GLMakie Plot in a Mousetrap Window
 
 ```julia
-function on_click(::ClickEventController, x, y)
-    println("Click registered at ($x, $y)") # in pixels
-end
+using GLMakie, MousetrapMakie
+canvas = GLMakieArea()
+set_child!(window, canvas) # can be used just like any other widget
 
-click_controller = ClickEventController()
-connect_signal_clicked!(on_click, click_controller)
-add_controller!(window, click_controller)
+screen = create_glmakie_screen(canvas)
+display(screen, scatter(rand(123)))
 ```
-```
-Click registered at (367.5, 289.0)
-```
+![](docs/src/assets/makie_scatter.png)
+
+(This feature is still experimental, see [here](https://github.com/Clemapfel/Mousetrap.jl/blob/main/test/makie_test.jl) for a complete example)
 
 ---
 
