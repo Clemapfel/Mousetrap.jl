@@ -8,7 +8,6 @@
 
 void_signature = "(::T, [::Data_t]) -> Nothing"
 const signal_descriptors = Dict([
-
     :activate => (
         void_signature, 
         "Emitted when an activatable widget is activated by the user, usually by pressing the enter key."
@@ -16,10 +15,6 @@ const signal_descriptors = Dict([
     :activate_item => (
         "(::T, index::Integer, [::Data_t]) -> Nothing",
         "Emitted when the user presses the enter key while one or more items are selected."
-    ),
-    :startup => (
-        void_signature, 
-        "Emitted when an `Application` has initialzed the back-end and is about to start the main loop."
     ),
     :shutdown => (
         void_signature, 
@@ -162,7 +157,7 @@ const signal_descriptors = Dict([
         "Emitted any time the distance between two fingers of a pinch-zoom-gesture changes, where `scale` is the factor of the current distance between the two fingers, compared to the distance at the start of the gesture."
     ),
     :rotation_changed => (
-        "(::T, angle_absolute::AbstractFloat, angle_delta::AbstractFloat, [::Data_t]) -> Cvoid", 
+        "(::T, angle_absolute::AbstractFloat, angle_delta::AbstractFloat, [::Data_t]) -> Nothing", 
         "Emitted when the angle between the two fingers of a rotate-gesture changes, where `angle_delta` is the offset, `angle_absolute` the current angle, in radians."
     ),
     :scroll_begin => (
@@ -178,27 +173,27 @@ const signal_descriptors = Dict([
         "Emitted to signal the end of a scroll gesture."
     ),
     :kinetic_scroll_decelerate => (
-        "(::T, x_velocity::AbstractFloat, y_velocity::AbstractFloat, [::Data_t]) -> Cvoid", 
+        "(::T, x_velocity::AbstractFloat, y_velocity::AbstractFloat, [::Data_t]) -> Nothing", 
         "Emitted once per frame while kinetic scrolling is active, see the manual on `ScrollEventController` for more information."
     ),
     :stylus_down => (
-        "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Cvoid", 
+        "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
         "Emitted once when the stylus makes contact with the touchpad, where `x` and `y` are the cursor position, in pixels."
     ),
     :stylus_up => (
-        "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Cvoid", 
+        "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
         "Emitted once when the stylus seizes to make contact with the touchpad, where `x` and `y` is the cursor position, in pixels."
     ),
     :proximity => (
-        "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Cvoid", 
+        "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
         "Emitted when the stylus enters or exits the proximity distance recognized by the touchpad. This will usually precede a `stylus_down` or `stylus_up` signal."
     ),
     :swipe => (
-        "(::T, x_velocity::AbstractFloat, y_velocity::AbstractFloat, [::Data_t]) -> Cvoid", 
+        "(::T, x_velocity::AbstractFloat, y_velocity::AbstractFloat, [::Data_t]) -> Nothing", 
         "Emitted once per frame while a swipe gesture is active, where `x_velocity` and `y_velocity` are the current velocity of the swipe, in pixels."
     ),
     :pan => (
-        "(::T, ::PanDirection, offset::AbstractFloat, [::Data_t]) -> Cvoid", 
+        "(::T, ::PanDirection, offset::AbstractFloat, [::Data_t]) -> Nothing", 
         "Emitted once per frame while a pan gesture is active, where `offset` is the horizontal (or vertical) distance between the current position of the cursor, and the position at the start of the gesture, in pixels."
     ),
     :value_changed => (
@@ -214,15 +209,15 @@ const signal_descriptors = Dict([
         "Emitted when a `SpinButton`s value wraps from the minimum to the maximum, or vice-versa, while `set_should_wrap!` was set to `true`." 
     ),
     :scroll_child => (
-        "(::T, scroll_type::ScrollType, is_horizontal::Bool, [::Data_t]) -> Cvoid", 
+        "(::T, scroll_type::ScrollType, is_horizontal::Bool, [::Data_t]) -> Nothing", 
         "Emitted any time a user triggers a scroll action that moves one or both of the `Viewport`s scroll bars, where `scroll_type` identifies the type of action that triggered the scrolling, while `is_horizontal` determines along which axis the scrolling took place."
     ),
     :render => (
-        void_signature, 
-        "Emitted once per frame before the `RenderArea` flushes the current frame buffer to the monitor."
+        "(::T, gdk_gl_context::Ptr{Cvoid}, [::Data_t]) -> Bool", 
+        "Emitted once per frame before the GL framebuffer is flushed to the screen. The `gdk_gl_context` argument is for internal use only and can be ignored."
     ),
     :resize => (
-        "(::T, width::Integer, height::Integer, [::Data_t]) -> void", 
+        "(::T, width::Integer, height::Integer, [::Data_t]) -> Nothing", 
         "Emitted whenver the allocated area of a `RenderArea` changes, where `width` and `height` are the new size, in pixels."
     ),
     :activated => (
@@ -238,31 +233,31 @@ const signal_descriptors = Dict([
         "Emitted whenever the internal state of a `Switch` changes, for example by `set_is_active!`, or by the user operating the `Switch`."
     ),
     :page_reordered => (
-        "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
+        "(::T, page_index::Integer, [::Data_t]) -> Nothing", 
         "Emitted when a page changes position, where `page_index` is the new position of the page."
     ),
     :page_added => (
-        "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
+        "(::T, page_index::Integer, [::Data_t]) -> Nothing", 
         "Emitted when the total number of pages increases, where `page_index` is the position of the page that was inserted."
     ),
     :page_removed => (
-        "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
+        "(::T, page_index::Integer, [::Data_t]) -> Nothing", 
         "Emitted when a page is removed, where `page_index` is the old index of the page that was removed."
     ),
     :page_selection_changed => (
-        "(::T, page_index::Integer, [::Data_t]) -> Cvoid", 
+        "(::T, page_index::Integer, [::Data_t]) -> Nothing", 
         "Emitted when the currently active page changes by any means, where `page_index` is the index of the now visible page." 
     ),
     :items_changed => (
-        "(::T, position::Integer, n_removed::Integer, n_added::Integer, [::Data_t]) -> Cvoid", 
+        "(::T, position::Integer, n_removed::Integer, n_added::Integer, [::Data_t]) -> Nothing", 
         "Emitted when the number of menu items, or any of their properties, changes."
     ),
     :dismissed => (
-        "(::T, [::Data_t]) -> Cvoid", 
+        "(::T, [::Data_t]) -> Nothing", 
         "Emitted when the user clicks the close button of the `PopupMessage`"
     ),
     :button_clicked => (
-        "(::T, [::Data_t]) -> Cvoid", 
+        "(::T, [::Data_t]) -> Nothing", 
         "Emitted when the user clicks the button of a `PopupMessage`. Note that the button is only visible if `set_button_label!` was set to anything but `\"\"`"
     )
 ])

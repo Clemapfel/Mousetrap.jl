@@ -24,13 +24,13 @@ To receive events, we need an [`EventController`](@ref). The `EventController` t
 
 ## Input Focus
 
-The concept of [**input focus**](https://en.wikipedia.org/wiki/Focus_(computing)) is important to understand. In Mousetrap (and GUIs in general), each widget has a hidden property that indicates whether the widget currently **holds focus**. If a widget holds focus, all its children hold focus as well. For example, if the focused widget is a `Box`, all widgets inside that box also hold focus.
+The concept of [**input focus**](https://en.wikipedia.org/wiki/Focus_(computing)) is important to understand. In Mousetrap (and GUIs in general), each widget has a hidden property that indicates whether the widget currently **holds focus**. If a widget holds focus, all its children hold focus as well. For example, if the focused widget is a `Box`, all widgets inside that box also hold focus, while the widget the box is contained within does not.
 
 **Only a widget holding focus can receive input events**. Which widget acquires focus is controlled by a somewhat complex heuristic, usually using things like which window is on top and where the user last interacted with the GUI. For most situations, this mechanism works very well and we don't have to worry about it much, in the rare cases we do, we can control the focus directly.
 
 ### Preventing Focus
 
-Only `focusable` widgets can hold focus. We can make a widget focusable by calling [`set_is_focusable!`](@ref). Not all widgets are focusable by default. To know which are and are not focusable, we can use [`get_is_focusable`](@ref), or common sense: Any widget that has a way of interacting with it (such as a `Button`, `Entry`, `Scale`, `SpinButton` etc.) will be focusable by default. Widgets that have no native way of interacting with them are not focusable, unless we specifically request them to be. This includes widgets like `Label`, `ImageDisplay`, `Separator`, etc.
+Only `focusable` widgets can hold focus. We can make a widget focusable by calling [`set_is_focusable!`](@ref). Not all widgets are focusable by default. To know which are and are not focusable, we can use [`get_is_focusable`](@ref), or common sense: Any widget that has a way of interacting with it (such as a `Button`, `Entry`, `Scale`, `SpinButton`, etc.) will be focusable by default. Widgets that have no native way of interacting with them are not focusable, unless we specifically request them to be. This includes widgets like `Label`, `ImageDisplay`, `Separator`, etc.
 
 If a container widget has at least one focusable child, it itself is focusable.
 
@@ -52,7 +52,7 @@ The user can also decide which widget should hold focus, usually by pressing the
 
 Using our newly gained knowledge about focus, we'll create our first event controller: [`FocusEventController`](@ref). This controller reacts to a widget gaining or losing input focus.
 
-After creating an event controller, it will not yet react to any events. We need to **add the controller to a widget**. For this chapter, we will assume that this widget is the top-level window, called `window` in the code snippets in this chapter.
+After creating an event controller, it will not yet react to any events. We need to **add the controller to a widget**. For this chapter, we will assume that this widget is the top-level window, called `window` in the code snippets henceforth.
 
 We create and connect a `FocusEventController` like so:
 
@@ -78,11 +78,11 @@ return Mousetrap.@signal_table(FocusEventController,
 After connecting to these signals:
 
 ```julia
-function on_focus_gained(self::FocusEventController)
+function on_focus_gained(self::FocusEventController) ::Nothing
     println("focus gained")
 end
 
-function on_focus_lost(self::FocusEventController)
+function on_focus_lost(self::FocusEventController) ::Nothing
     println("focus lost")
 end
 
@@ -133,7 +133,7 @@ The signal handler for any of the three signals is handed two arguments, a `KeyC
 For example, to test whether the user pressed the space key while shift is held, we could do:
 
 ```julia
-function on_key_pressed(self::KeyEventController, code::KeyCode, modifier_state::ModifierState)
+function on_key_pressed(self::KeyEventController, code::KeyCode, modifier_state::ModifierState) ::Nothing
     if code == KEY_space && shift_pressed(modifier_state)
         println("shift + space pressed")
     end
@@ -148,11 +148,11 @@ add_controller!(window, key_controller)
 While we would connect to the `KeyEventController`s other signals like so:
 
 ```julia
-function on_key_released(self::KeyEventController, code::KeyCode, modifier_state::ModifierState)
-    # handle key up here
+function on_key_released(self::KeyEventController, code::KeyCode, modifier_state::ModifierState) ::Nothing
+    # handle key here
 end
 
-function on_modifiers_changed(self::KeyEventController, modifier_state::ModifierState)
+function on_modifiers_changed(self::KeyEventController, modifier_state::ModifierState) ::Nothing
     # handle modifiers here
 end
 
@@ -218,7 +218,7 @@ return Mousetrap.@signal_table(MotionEventController,
 Shown here is an example of how to connect to these signals, where we forwarded `window`, the host widget of the controller, as the `data` argument of signal `motion`, in order to calculate the absolute position of the cursor on screen.
 
 ```julia
-function on_motion(::MotionEventController, x::AbstractFloat, y::AbstractFloat, data::Widget)
+function on_motion(::MotionEventController, x::AbstractFloat, y::AbstractFloat, data::Widget) ::Nothing
     widget_position = get_position(data)
     cursor_position = Vector2f(x, y)
 
@@ -235,11 +235,11 @@ add_controller!(window, motion_controller)
 While we would connect to `MotionEventController`s other signals like so:
 
 ```julia
-function on_motion_enter(::MotionEventController, x::AbstractFloat, y::AbstractFloat)
+function on_motion_enter(::MotionEventController, x::AbstractFloat, y::AbstractFloat) ::Nothing
     # handle cursor enter
 end
 
-function on_motion_leave(::MotionEventController)
+function on_motion_leave(::MotionEventController) ::Nothing
     # handle cursor leave
 end
 
@@ -299,7 +299,7 @@ If we only want signals to be emitted for certain buttons, we can use [`set_only
 As an example, if we want to check if the user pressed the left mouse button twice, we can do the following:
 
 ```julia
-function on_click_pressed(self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat)
+function on_click_pressed(self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat) ::Nothing
     if n_presses == 2 && get_current_button(self) == BUTTON_ID_BUTTON_01
         println("double click registered at ($x, $y)")
     end
@@ -313,11 +313,11 @@ add_controller!(window, click_controller)
 While we would connect to `ClickEventController`s other signals like so:
 
 ```julia
-function on_click_released(self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat)
+function on_click_released(self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat) ::Nothing
     # handle button up
 end
 
-function on_click_stopped(self::ClickEventController)
+function on_click_stopped(self::ClickEventController) ::Nothing
     # handle end of a series of clicks
 end
 
@@ -349,11 +349,11 @@ Similar to `clicked`, `LongPressEventController` provides us with the location o
 `LongPressEventController`, like `ClickEventController`, subtypes `SingleClickGesture`, which allows us to differentiate between different mouse buttons or a touchscreen, just as before.
 
 ```julia
-function on_pressed(self::LongPressEventController, x::AbstractFloat, y::AbstractFloat)
+function on_pressed(self::LongPressEventController, x::AbstractFloat, y::AbstractFloat) ::Nothing
     println("long press registered at ($x, $y)")
 end
 
-function on_press_cancelled(self::LongPressEventController)
+function on_press_cancelled(self::LongPressEventController) ::Nothing
     println("long press aborted")
 end
 
@@ -392,16 +392,16 @@ To get the current position of the cursor, we have to add the offset from `scrol
 To track the cursor position during a drag gesture, we can connect to `DragEventController`s signals like so:
 
 ```julia
-function on_drag_begin(self::DragEventController, start_x::AbstractFloat, start_y::AbstractFloat)
+function on_drag_begin(self::DragEventController, start_x::AbstractFloat, start_y::AbstractFloat) ::Nothing
     println("drag start: ($start_x, $start_y)")
 end
 
-function on_drag(self::DragEventController, x_offset::AbstractFloat, y_offset::AbstractFloat)
+function on_drag(self::DragEventController, x_offset::AbstractFloat, y_offset::AbstractFloat) ::Nothing
     start = get_start_position(self)
     println("drag update: ($(start.x + x_offset), $(start.y + y_offset)))")
 end
 
-function on_drag_end(self::DragEventController, x_offset::AbstractFloat, y_offset::AbstractFloat)
+function on_drag_end(self::DragEventController, x_offset::AbstractFloat, y_offset::AbstractFloat) ::Nothing
     start = get_start_position(self)
     println("drag end: ($(start.x + x_offset), $(start.y + y_offset)))")
 end
@@ -439,7 +439,7 @@ Which is emitted once per frame while the gesture is active.
 The second argument is the current offset, that is, the distance between the current position of the cursor and the position at which the gesture was first recognized, relative to the host widget's origin, in pixels.
 
 ```julia
-function on_pan(self::PanEventController, direction::PanDirection, offset::AbstractFloat)
+function on_pan(self::PanEventController, direction::PanDirection, offset::AbstractFloat) ::Nothing
     if direction == PAN_DIRECTION_LEFT
         println("panning left by $offset")
     elseif direction == PAN_DIRECTION_RIGHT
@@ -481,7 +481,7 @@ If we want to keep track of how far the user has scrolled a widget that had a `S
 distance_scrolled = Ref{Vector2f}(Vector2f(0, 0))
 
 # at the start of scroll, set sum to 0
-function on_scroll_begin(self::ScrollEventController)
+function on_scroll_begin(self::ScrollEventController) ::Nothing
     global distance_scrolled[] = Vector2f(0, 0)
     println("scroll start")
 end
@@ -493,7 +493,7 @@ function on_scroll(self::ScrollEventController, x_delta::AbstractFloat, y_delta:
 end
 
 # at the end of scroll, print distance
-function on_scroll_end(self::ScrollEventController)
+function on_scroll_end(self::ScrollEventController) ::Nothing
     println("scrolled ($(distance_scrolled[].x), $(distance_scrolled[].y))")
 end
 
@@ -519,7 +519,7 @@ To allow for kinetic scrolling, we need to enable it using [`set_kinetic_scrolli
 set_kinetic_scrolling_enabled!(scroll_controller, true)
 
 # signal handler
-function on_kinetic_scroll_decelerate(::ScrollEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat)
+function on_kinetic_scroll_decelerate(::ScrollEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat) ::Nothing
     println("kinetically scrolling with velocity of ($x_velocity, $y_velocity)")
 end
 
@@ -549,7 +549,7 @@ The argument `scale` is a *relative* scale, where `1` means no change between th
 To detect whether a user is currently zooming out (pinching) or zooming in, we could do the following:
 
 ```julia
-function on_scale_changed(self::PinchZoomEventController, scale::AbstractFloat)
+function on_scale_changed(self::PinchZoomEventController, scale::AbstractFloat) ::Nothing
     if scale < 1
         println("zooming in")
     elseif scale > 1
@@ -580,8 +580,7 @@ return Mousetrap.@signal_table(RotateEventController,
 It takes two arguments: `angle_absolute` and `angle_delta`. `angle_absolute` provides the current angle between the two fingers. `angle_delta` is the difference between the current angle and the angle at the start of the gesture.  Both `angle_absolute` and `angle_delta` are provided in radians, to convert them we can use [`Mousetrap.Angle`](@ref):
 
 ```julia
-function on_rotation_changed(self::RotateEventController, angle_delta, angle_absolute)
-
+function on_rotation_changed(self::RotateEventController, angle_delta, angle_absolute) ::Nothing
     # convert to unit-agnostic Mousetrap.Angle
     absolute = radians(angle_absolute)
     delta = radians(angle_delta)
@@ -614,7 +613,7 @@ The signal handler provides two arguments, `x_velocity` and `y_velocity`, which 
 To illustrate how to deduce the direction of the swipe, consider this example:
 
 ```julia
-function on_swipe(self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat)
+function on_swipe(self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat) ::Nothing
     print("swiping ")
     if (y_velocity < 0)
         print("up ")
@@ -663,19 +662,19 @@ We recognize signal `motion` from `MotionEventController`. It behaves [exactly t
 The three other signals are used to react to the physical distance between the stylus and touchpad. `stylus_down` is emitted when the pen's tip makes contact with the touchpad, `stylus_up` is emitted when this contact is broken, `proximity` is emitted when the stylus is about to touch the touchpad, or just left the touchpad.
 
 ```julia
-function on_stylus_up(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
+function on_stylus_up(self::StylusEventController, x::AbstractFloat, y::AbstractFloat) ::Nothing
     println("stylus is no longer touching touchpad, position: ($x, $y)")
 end
 
-function on_stylus_down(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
+function on_stylus_down(self::StylusEventController, x::AbstractFloat, y::AbstractFloat) ::Nothing
     println("stylus is ow touching touchpad, position: ($x, $y)")
 end
 
-function on_proximity(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
+function on_proximity(self::StylusEventController, x::AbstractFloat, y::AbstractFloat) ::Nothing
     println("stylus entered proximity range, position: ($x, $y)")
 end
 
-function on_motion(self::StylusEventController, x::AbstractFloat, y::AbstractFloat)
+function on_motion(self::StylusEventController, x::AbstractFloat, y::AbstractFloat) ::Nothing
     println("stylus position: ($x, $y)")
 end
 
@@ -728,6 +727,4 @@ Some styluses have a "mode" function, where the user can choose between differen
 | `TOOL_TYPE_UNKNOWN`          | none of the above         |
 
 If the stylus does not support modes, `TOOL_TYPE_UNKNOWN` will be returned.
-
----
 

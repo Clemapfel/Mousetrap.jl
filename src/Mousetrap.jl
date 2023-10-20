@@ -6,7 +6,6 @@
 # Copyright © 2023, Licensed under lGPL-3.0
 #
 
-
 """
 # Mousetrap GUI Engine ($(Mousetrap.VERSION))
 
@@ -17,7 +16,7 @@ Copyright © 2023 C.Cords, Licensed under lGPL-3.0
 """
 module Mousetrap
 
-    const VERSION = v"0.2.0"
+    const VERSION = v"0.3.0"
 
 ####### detail.jl
 
@@ -25,15 +24,9 @@ module Mousetrap
         using CxxWrap
         function __init__() @initcxx end
 
-        using mousetrap_linux_jll, mousetrap_windows_jll, mousetrap_apple_jll
+        using libmousetrap_jll
         function get_mousetrap_julia_binding()
-                        @static if Sys.isapple()
-                return mousetrap_apple_jll.mousetrap_julia_binding
-            elseif Sys.iswindows()
-                return mousetrap_windows_jll.mousetrap_julia_binding
-            else
-                return mousetrap_linux_jll.mousetrap_julia_binding
-            end
+            return libmousetrap_jll.mousetrap_julia_binding
         end
       
         @wrapmodule(get_mousetrap_julia_binding)
@@ -67,7 +60,7 @@ module Mousetrap
 
             match_found = false
             for type in actual_return_ts
-                if type <: return_t || return_t == Nothing
+                if type <: return_t #|| return_t == Nothing
                     match_found = true
                     break
                 end
@@ -367,7 +360,16 @@ module Mousetrap
     # no export
 
     macro declare_native_widget(Type)
-        :(is_native_widget(::$Type) = return true)
+        out = Expr(:block)
+        push!(out.args, esc(
+            :(is_native_widget(::$Type) = return true)
+        ))
+        #=
+        push!(out.args, esc(
+            :(Mousetrap.get_top_level_widget(x::$Type) = return x)
+        ))
+        =#
+        return out
     end
 
     macro export_type(name, super)
@@ -984,6 +986,7 @@ module Mousetrap
 
     macro add_signal_scroll_child(x) return :(@add_signal $x scroll_child Cvoid ScrollType type Bool is_horizontal) end
     macro add_signal_resize(x) return :(@add_signal $x resize Cvoid Integer width Integer height) end
+    macro add_signal_render(x) return :(@add_signal $x render Bool Ptr{Cvoid} gdk_gl_context_ptr) end
 
     macro add_signal_modifiers_changed(x) return :(@add_signal $x modifiers_changed Cvoid ModifierState state) end
 
@@ -1474,73 +1477,6 @@ module Mousetrap
         return out
     end
 
-    macro add_signal_render(T)
-
-        out = Expr(:block)
-        snake_case = :render
-        Return_t = Bool
-
-        connect_signal_name = :connect_signal_ * snake_case * :!
-
-        push!(out.args, esc(:(
-            function $connect_signal_name(f, x::$T)
-                typed_f = TypedFunction(f, $Return_t, ($T,))
-                detail.$connect_signal_name(x._internal, function(x)
-                    typed_f($T(x[1][]))
-                end)
-            end
-        )))
-
-        push!(out.args, esc(:(
-            function $connect_signal_name(f, x::$T, data::Data_t) where Data_t
-                typed_f = TypedFunction(f, $Return_t, ($T, Data_t))
-                detail.$connect_signal_name(x._internal, function(x)
-                    typed_f($T(x[1][]), data)
-                end)
-            end
-        )))
-
-        emit_signal_name = :emit_signal_ * snake_case
-
-        push!(out.args, esc(:(
-            function $emit_signal_name(x::$T) ::$Return_t
-                return convert($Return_t, detail.$emit_signal_name(x._internal, Ptr{Cvoid}()))
-            end
-        )))
-
-        disconnect_signal_name = :disconnect_signal_ * snake_case * :!
-
-        push!(out.args, esc(:(
-            function $disconnect_signal_name(x::$T)
-                detail.$disconnect_signal_name(x._internal)
-            end
-        )))
-
-        set_signal_blocked_name = :set_signal_ * snake_case * :_blocked * :!
-
-        push!(out.args, esc(:(
-            function $set_signal_blocked_name(x::$T, b)
-                detail.$set_signal_blocked_name(x._internal, b)
-            end
-        )))
-
-        get_signal_blocked_name = :get_signal_ * snake_case * :_blocked
-
-        push!(out.args, esc(:(
-            function $get_signal_blocked_name(x::$T)
-                return detail.$get_signal_blocked_name(x._internal)
-            end
-        )))
-
-        push!(out.args, esc(:(export $connect_signal_name)))
-        push!(out.args, esc(:(export $disconnect_signal_name)))
-        push!(out.args, esc(:(export $set_signal_blocked_name)))
-        push!(out.args, esc(:(export $get_signal_blocked_name)))
-        push!(out.args, esc(:(export $emit_signal_name)))
-
-        return out
-    end
-
 ####### theme.jl
 
     @export_enum Theme begin
@@ -1632,6 +1568,7 @@ module Mousetrap
     @export_function Window get_hide_on_close Bool
     @export_function Window close! Cvoid
     @export_function Window destroy! Cvoid
+    @export_function Window get_is_closed Bool
 
     function set_child!(window::Window, child::Widget)
         detail.set_child!(window._internal, as_widget_pointer(child))
@@ -4722,6 +4659,8 @@ module Mousetrap
     @export_widget_function get_natural_size Vector2f
     @export_widget_function get_position Vector2f
     @export_widget_function get_allocated_size Vector2f
+    @export_widget_function calculate_monitor_dpi Cfloat
+    @export_widget_function get_scale_factor Cfloat
 
     @export_widget_function unparent! Cvoid
 
@@ -4748,6 +4687,8 @@ module Mousetrap
         detail.set_listens_for_shortcut_action!(as_widget_pointer(widget), action._internal)
     end
     export set_listens_for_shortcut_action!
+
+    Base.hash(x::Widget) = UInt64(Mousetrap.detail.as_native_widget(Mousetrap.as_widget_pointer(x)))
 
 ####### clipboard.jl
 
@@ -5541,6 +5482,24 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     serialize(color::HSVA) ::String = detail.style_manager_color_to_css_hsva(color.h, color.s, color.v, color.a)
     export serialize
 
+###### gl_canvas.jl
+
+    @export_type GLArea Widget
+    @declare_native_widget GLArea
+
+    GLArea() = GLArea(detail._GLArea())
+
+    @add_widget_signals GLArea
+    @add_signal_resize GLArea
+    @add_signal_render GLArea
+
+    @export_function GLArea make_current Cvoid
+    @export_function GLArea queue_render Cvoid
+    @export_function GLArea get_auto_render Bool
+    @export_function GLArea set_auto_render! Cvoid Bool b
+
+    Base.show(io::IO, x::GLArea) = show_aux(io, x)
+
 ###### key_codes.jl
 
     include("./key_codes.jl")
@@ -5548,4 +5507,58 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 ###### documentation
         
     include("./docs.jl")
+
+###### compound_widget.jl
+
+    macro define_compound_widget_signals()
+        out = Expr(:block)
+        for (signal, _) in Mousetrap.signal_descriptors
+            connect_signal_name = :connect_signal_ * signal * :!
+            push!(out.args, esc(:(
+                function Mousetrap.$connect_signal_name(f, x::Widget) 
+                    $connect_signal_name(f, Mousetrap.get_top_level_widget(x))
+                end
+            )))
+    
+            push!(out.args, esc(:(
+                function Mousetrap.$connect_signal_name(f, x::Widget, data::Data_t) where Data_t  
+                    $connect_signal_name(f, Mousetrap.get_top_level_widget(x), data)
+                end
+            )))
+    
+            emit_signal_name = :emit_signal_ * signal
+    
+            push!(out.args, esc(:(
+                function $emit_signal_name(x::Widget, args...) 
+                    $emit_signal_name(Mousetrap.get_top_level_widget(x), args)
+                end
+            )))
+    
+            disconnect_signal_name = :disconnect_signal_ * signal * :!
+    
+            push!(out.args, esc(:(
+                function $disconnect_signal_name(x::Widget)
+                    $disconnect_signal_name(Mousetrap.get_top_level_widget(x))
+                end
+            )))
+    
+            set_signal_blocked_name = :set_signal_ * signal * :_blocked * :!
+    
+            push!(out.args, esc(:(
+                function $set_signal_blocked_name(x::Widget, b)
+                    $set_signal_blocked_name(Mousetrap.get_top_level_widget(x), b)
+                end
+            )))
+    
+            get_signal_blocked_name = :get_signal_ * signal * :_blocked
+    
+            push!(out.args, esc(:(
+                function $get_signal_blocked_name(x::Widget)
+                    return $get_signal_blocked_name(Mousetrap.get_top_level_widget(x))
+                end
+            )))
+        end
+        return out
+    end
+    @define_compound_widget_signals()
 end

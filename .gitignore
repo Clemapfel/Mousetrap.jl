@@ -1,3 +1,9 @@
 
 docs/build/
+docs/mousetrap
+docs/src/02_library/classes.md
+docs/src/02_library/enums.md
+docs/src/02_library/functions.md
+jll/build
+jll/products
 .idea/

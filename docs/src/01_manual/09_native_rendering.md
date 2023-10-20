@@ -8,24 +8,19 @@ In this chapter we will learn:
 + How to apply a 3D transform to a shape GPU-side
 + How to compile a GLSL Shader and set its uniforms
 
+!!! compat 
+    In `v0.2.0` and earlier, features from this chapter were not available on MacOS. Since `v0.3.0`, 100% of Mousetrap is portable, meaning MacOS is now fully supported.
+
 ---
 
-!!! danger "Native Rendering on MacOS"
-    All classes and functions in this chapter **are impossible to use on MacOS**. For this platform,
-    Mousetrap was compiled in a way where any function relating to OpenGL was made unavailable. This 
-    is because of Apples decision to deprecate OpenGL in a way where only physical owners of a Mac
-    can compile libraries that have it as a dependency. See [here](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=33978341) for more information.
-
-    If we attempt to instantiate a disabled object on MacOS, a **fatal error** will be thrown at runtime.
-
 !!! details "Native Rendering on Linux Wayland"
-    Linux users using the Wayland windowing system may encounter the following error message when starting mousetrap:
+    Linux users using the Wayland windowing system may encounter the following error message when starting Mousetrap:
 
     ```
     In gdk_window_create_gl_context: Faled to create EGL display
     ```
 
-    This means we would be unable to use `RenderArea` or any other OpenGL-related functionality.
+    This means we would be unable to use the `RenderArea` widget, which this chapter centers around.
 
     To address this, we need to [locate](https://linuxize.com/post/locate-command-in-linux/) the directory `egl_vendor.d`, which has to be non-empty and contain a json file
 
@@ -48,10 +43,10 @@ In this chapter we will learn:
 
     After which any OpenGL-related features from this chapter will become available. 
     
-    To make this change permanent, we can paste the above line into the `~/.bashrc` text file, which will be loaded anytime a terminal starts, making the `export` permanent.
+    To make this change permanent, we can paste the above line into the `~/.bashrc` text file, which will be loaded automatically anytime a terminal starts. 
 
 !!! details "Manually Disabling the OpenGL Component"
-    We can disable all features from this chapter by setting the environment variable `MOUSETRAP_DISABLE_OPENGL_COMPONENT` to `TRUE`. See [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for more information.
+    We can disable all features from this chapter by setting the environment variable `MOUSETRAP_DISABLE_OPENGL_COMPONENT` to `TRUE`. This may be necessary for machines that do not have a OpenGL 3.3-compatible graphics card driver. See [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for more information.
 
 ---
 
@@ -448,7 +443,7 @@ We can access the centroid using [`get_centroid`](@ref). To move a shape a certa
 
 #### Rotation
 
-We can rotate all of a `Shape`s vertices around a point in GL coordinates by calling [`rotate!`](@ref), which takes an `Angle` as its first argument:
+We can rotate all of a `Shape`'s vertices around a point in GL coordinates by calling [`rotate!`](@ref), which takes an `Angle` as its first argument:
 
 ```julia
 # rotate shape around its center
@@ -457,7 +452,7 @@ rotate!(shape, degrees(90), get_centroid(shape))
 
 #### Color
 
-To change the color of a shape as a whole, we use [`set_color!`](@ref). This simply calls `set_vertex_color!` on all of a shapes vertices. By default, a shape's color will be `RBGA(1, 1, 1, 1)`, white.
+To change the color of a shape as a whole, we use [`set_color!`](@ref). This simply calls `set_vertex_color!` on all of a shape's vertices. By default, a shape's color will be `RBGA(1, 1, 1, 1)`, white.
 
 #### Visibility
 
@@ -471,7 +466,7 @@ Using this, we can query the top-left coordinate and size of the bounding box.
 
 ---
 
-Lastly, each shape has an optional **texture**, which is what the texture coordinate properties of each vertex are used for. If a shape does not have a texture, it will be rendered as a solid color. If it does, the color of each pixel in the texture will be multiplied with the shapes color.
+Lastly, each shape has an optional **texture**, which is what the texture coordinate properties of each vertex are used for. If a shape does not have a texture, it will be rendered as a solid color. If it does, the color of each pixel in the texture will be multiplied with the shape's color.
 
 ## Textures
 
@@ -534,7 +529,7 @@ While the resulting image behaves similarly to how `InterpolationType` will resu
 
 #### Wrap Mode
 
-Wrap mode governs how the texture behaves when a vertices texture coordinates components are outside `[0, 1]`. Mousetrap offers the following wrap modes, which are all part of the enum [`TextureWrapMode`](@ref):
+Wrap mode governs how the texture behaves when a vertices' texture coordinate components are outside `[0, 1]`. Mousetrap offers the following wrap modes, which are all part of the enum [`TextureWrapMode`](@ref):
 
 | `TextureWrapMode` | Pixel will be filled with |
 |-------------------|--------|
@@ -630,7 +625,7 @@ Wrap mode governs how the texture behaves when a vertices texture coordinates co
 
 Where the default wrap mode is `TEXTURE_WRAP_MODE_REPEAT`.
 
-By being able to modify the vertex coordinates for any of a shapes vertices, we have much more control over how image data is displayed on screen. Only the part of the texture that conceptually overlaps a shape will be displayed, which is governed by that shape's vertices texture coordinates. 
+By being able to modify the vertex coordinates for any of a shape's vertices, we have much more control over how image data is displayed on screen. Only the part of the texture that conceptually overlaps a shape will be displayed, which is governed by that shape's texture coordinates. 
 
 ---
 
@@ -744,7 +739,7 @@ Where `ANTI_ALIASING_QUALITY_OFF` will be used when calling the `RenderArea` con
 
 The higher the number of samples, the better the smoothing will be. MSAA comes at a cost: any quality other than `OFF` will induce the `RenderArea` to take about twice as much space in the graphic card's memory. Furthermore, the higher the number of samples, the more time each render step will take.
 
-It's difficult to convey the result of MSAA using just pictures on a web page. Instead, readers are encouraged to run the following `main.jl`, which will show off the anti-aliasing in high resolution on the screen:
+It's difficult to convey the result of MSAA using just pictures on a web page due to compression. Instead, readers are encouraged to run the following `main.jl`, which will show off the anti-aliasing in high resolution on the screen:
 
 ![](../assets/msaa_comparison.png)
 
@@ -834,7 +829,7 @@ Using these four components, `RenderTask` gathers all objects necessary to rende
 
 ## Transforms
 
-[`GLTransform`](@ref) is an object representing a spatial transform. It is called **GL**Transform, because it **uses the GL coordinate system**. Applying a `GLTransform` to a vector in widget- or texture-space will produce incorrect results. They should only be applied to the position attribute of a `Shape`s vertices.
+[`GLTransform`](@ref) is an object representing a spatial transform. It is called **GL**Transform, because it **uses the GL coordinate system**. Applying a `GLTransform` to a vector in widget- or texture-space will produce incorrect results. They should only be applied to the position attribute of a `Shape`'s vertices.
 
 Internally, a `GLTransform` is a 4x4 matrix of 32-bit floats. It is of size 4x4 because it's intended to be applied to OpenGL positions, which are vectors in 3D space. In Mousetrap, the last coordinate of a spatial position is assumed to be `0`, but it is still part of each vectors' data.
 
@@ -1016,7 +1011,7 @@ Where any variable name prefixed with `_` signals that it was defined outside of
 
 We see that it requires OpenGL 3.3 due to the `location` syntax. In terms of behavior, this shader simply forwards the interpolated vertex attributes to the fragment shader.
 
-The current vertices position is supplied via `_vertex_position_in`, the vertices texture coordinates as `_vertex_color_in`, and the vertices texture coordinates are `_vertex_texture_coordinates`. These values will contain the data from the Julia-side `Shape`. We should take care that the `location` attribute exactly matches this order, `0` for vertex position, `1` for vertex color, `2` for texture coordinate.
+The current vertices' position is supplied via `_vertex_position_in`, the vertices' texture coordinates as `_vertex_color_in`, and the vertices' texture coordinates are `_vertex_texture_coordinates`. These values will contain the data from the Julia-side `Shape`. We should take care that the `location` attribute exactly matches this order, `0` for vertex position, `1` for vertex color, `2` for texture coordinate.
 
 The output variables of the vertex shader are `_vertex_color`, `_texture_coordinates` and `_vertex_position`, which need to be assigned with results gained from within the vertex shader. The shader has furthermore access to the uniform `_transform`, which holds the `GLTransform` the current `RenderTask` associates with the current `Shape`. 
 

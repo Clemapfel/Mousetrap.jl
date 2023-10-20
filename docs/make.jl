@@ -49,12 +49,14 @@ let file = open("docs/src/02_library/classes.md", "w+")
                 # first or second argument is type, this is the equivalent of a member function in Julia
                 try
                     if hasproperty(method.sig, :parameters) && (method.sig.parameters[2] == binding || method.sig.parameters[3] == binding)
-                        if method.name in ["copy!", "flush", "bind", "download"]
-                            method.name = "Mousetrap." * method.name 
+                        if method.name in [:copy!, :flush, :bind, :download]
+                            push!(non_signal_methods, Symbol("Mousetrap." * string(method.name)))
+                        else
+                            push!(non_signal_methods, method.name)
                         end
-                        push!(non_signal_methods, "Mousetrap." * method.name)
                     end
-                catch end
+                catch e
+                end
             else
                 push!(signal_methods, method.name)
             end
@@ -96,6 +98,8 @@ let file = open("docs/src/02_library/classes.md", "w+")
 
                 seen = m in already_seen
                 push!(already_seen, m)
+
+                try 
                 if seen
                     continue
                 elseif binding === String # skip ID typedefs
@@ -103,6 +107,7 @@ let file = open("docs/src/02_library/classes.md", "w+")
                 elseif getproperty(Mousetrap, m) isa Type # omit ctors
                     continue
                 end
+                catch end # to deal with copy!, flush, etc.
 
                 out *= "+ [`$m`](@ref)\n"
             end

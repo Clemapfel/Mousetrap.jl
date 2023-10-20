@@ -136,9 +136,9 @@ $(@type_fields())
 @document Application """
 # Application <: SignalEmitter
 
-Used to register an application with the users OS.
+Used to register an application with the user's OS.
 
-The applications ID is required to contain at least one `.`, and it should be unique, meaning no
+The application's ID is required to contain at least one `.`, and it should be unique, meaning no
 other application on the users operating system shares this ID.
 
 When all windows of an application are closed, or [`quit!`](@ref) is called,
@@ -179,13 +179,13 @@ run!(app)
 @document ApplicationID """
 # ApplicationID
 
-Application name as a string, in reverse domain name syntax. For example, if the apps homepage is `Foo.julia.org`, an appropriate application ID would be `"org.julia.foo"`
+Application name as a string, in reverse domain name syntax. For example, if the app's homepage is `Foo.julia.org`, an appropriate application ID would be `"org.julia.foo"`
 """
 
 @document Animation """
 # Animation <: SignalEmitter
 
-Object that provides a steady  timing function which is synched to a widgets render cycle. It can be used as the basis of implementing animations.
+Object that provides a steady  timing function which is synched to a widget's render cycle. It can be used as the basis of implementing animations.
 
 Use `on_tick!` to register a callback with the signature
 ```
@@ -193,7 +193,7 @@ Use `on_tick!` to register a callback with the signature
 ```
 Which will be called once per frame while the widget is visible.
 
-By default, the animations `value` will be in [0, 1], this can be changed with `set_lower!` and `set_upper!`. The shape of the function 
+By default, the animation's `value` will be in [0, 1], this can be changed with `set_lower!` and `set_upper!`. The shape of the function 
 interpolating the value over time can be set using `set_timing_function!`.
 
 $(@type_constructors(
@@ -348,7 +348,7 @@ set_end_child!(center_box, Label("Right"))
 @document CheckButton """
 # CheckButton <: Widget
 
-Rectangle that displays a checkmark and an optional label. Connect to signal `toggled` to react to the user changing the `CheckButton`s state by clicking it.
+Rectangle that displays a checkmark and an optional label. Connect to signal `toggled` to react to the user changing the `CheckButton`'s state by clicking it.
 
 $(@type_constructors(
     CheckButton()
@@ -382,7 +382,7 @@ set_child!(window, check_button)
 @document ClampFrame """
 # ClampFrame <: Widget
 
-Constrains its single child such that the childs width (or height, if vertically orientated) cannot
+Constrains its single child such that the child's width (or height, if vertically orientated) cannot
 exceed the size set using `set_maximum_size!`. 
 
 $(@type_constructors(
@@ -428,7 +428,7 @@ add_controller!(window, click_controller)
 @document Clipboard """
 # Clipboard <: SignalEmitter
 
-Allows for accessing and overwriting the data in the users OS-wide clipboard.
+Allows for accessing and overwriting the data in the user's OS-wide clipboard.
 Construct an instance of this type by calling [`get_clipboard`](@ref) on the
 toplevel window.
 
@@ -591,7 +591,7 @@ add_controller!(window, drag_controller)
 @document DropDown """
 # DropDown <: Widget
 
-Presents the user with a collapsible list of items. If one of its items is clicked, that items callback will be invoked.
+Presents the user with a collapsible list of items. If one of its items is clicked, that item's callback will be invoked.
 
 $(@type_constructors(
     DropDown()
@@ -892,7 +892,7 @@ $(@type_fields())
 @document FrameClock """
 # FrameClock <: SignalEmitter
 
-Clock that is synched with a widgets render cycle. Connect to its signals to trigger behavior once per frame.
+Clock that is synched with a widget's render cycle. Connect to its signals to trigger behavior once per frame.
 
 $(@type_constructors(
 ))
@@ -907,6 +907,38 @@ $(@type_fields())
 frame_clock = get_frame_clock(widget)
 connect_signal_paint!(frame_clock) do x::FrameClock
     println("Widget was drawn.")
+end
+```
+"""
+
+@document GLArea """
+# GLArea <: Widget
+
+Canvas that can be used a an OpenGL render target. This widget is intended to be used by third libraries, 
+if you want to render using OpenGL using only Mousetrap, use `RenderArea` instead.
+
+
+$(@type_constructors(
+    GLArea()
+))
+
+$(@type_signals(GLArea,
+    render,
+    resize 
+))
+
+$(@type_fields())
+
+## Example
+```julia
+canvas = GLArea()
+connect_signal_resize!(canvas) do self::GLArea, x, y
+    # viewport was resized to x, y (in pixels)
+end 
+connect_signal_render!(canvas) do self::GLArea, gl_context::Ptr{Cvoid}
+    make_current!(canvas)
+    # do OpenGL rendering here
+    return true 
 end
 ```
 """
@@ -944,8 +976,6 @@ $(@type_signals(Grid,
 ))
 
 $(@type_fields())
-
-
 
 ## Example
 ```julia
@@ -1634,7 +1664,7 @@ show_message!(message_overlay, message)
 @document PopupMessageOverlay """
 # PopupMessageOverlay <: SignalEmitter
 
-Widget that can display a `PopupMessage` above the `PopupMessageOverlay`s singular child. Only one message can be shown at a time.
+Widget that can display a `PopupMessage` above the `PopupMessageOverlay`'s singular child. Only one message can be shown at a time.
 
 $(@type_constructors(
     PopupMessageOverlay()
@@ -1677,8 +1707,6 @@ $(@type_signals(Popover,
 ))
 
 $(@type_fields())
-
-
 
 ## Example
 ```julia
@@ -1771,8 +1799,7 @@ $(@type_fields())
 @document RGBA """
 # RGBA
 
-Color representation in rgba. All components 
-are `Float32` in `[0, 1]`.
+Color representation in rgba. All components are `Float32` in `[0, 1]`.
 
 $(@type_constructors(
     RGBA(r::AbstractFloat, g::AbstractFloat, b::AbstractFloat, a::AbstractFloat)
@@ -2143,7 +2170,7 @@ Object that can emit signals.
 Any signal emitter is memory-managed independently of Julia, once its
 internal reference counter reaches zero, it is safely deallocated. Julia
 users do not have to worry about keeping any signal emitters in scope, it
-is done automatically.
+is kept alive automatically.
 """)
 
 @document SingleClickGesture abstract_type_docs(SingleClickGesture, Any, """
@@ -2574,7 +2601,7 @@ of its child.
 
 The user can control which part is shown 
 by operating two scrollbars. These  will automatically hide 
-or show themself when the users cursor enters the viewport.
+or show themself when the user's cursor enters the viewport.
 This behavior can be influenced by setting the 
 [`ScrollbarVisibilityPolicy`](@ref) for one or both of the scrollbars.
 

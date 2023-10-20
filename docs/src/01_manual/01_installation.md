@@ -9,20 +9,33 @@ In this chapter, we will learn:
 
 ## Installation
 
+
 To install Mousetrap, in the REPL:
 
-```
-import Pkg
+```julia
+import Pkg;
 begin
-    try Pkg.rm("mousetrap") catch end
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap_windows_jll")
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap_linux_jll")
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap_apple_jll")
-    Pkg.add(url="https://github.com/Clemapfel/mousetrap.jl")
+  Pkg.add(url="https://github.com/clemapfel/mousetrap_jll")
+  Pkg.add(url="https://github.com/clemapfel/mousetrap.jl")
 end
 ```
 
-This may take a long time. If installation was succesfull, `Mousetrap tests passed` will be printed.
+We can then make sure eveything works by executing `test Mousetrap` (still in `Pkg` mode). This may take a long time. If installation was succesfull, `Mousetrap tests passed` will be printed at the end.
+
+!!! compat "Removing older versions"
+  Mousetraps installation procedure has changed starting with `v0.3.0`. If Mousetrap `v0.2.*` or older installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
+
+  ```
+  import Pkg
+  begin
+      try Pkg.rm("mousetrap") catch end
+      try Pkg.rm("mousetrap_windows_jll") catch end
+      try Pkg.rm("mousetrap_linux_jll") catch end
+      try Pkg.rm("mousetrap_apple_jll") catch end
+  end
+  ```
+
+```
 
 ## Hello World
 
@@ -56,10 +69,8 @@ julia main.jl
 
     This is due to a non-critical bug in one of Mousetraps dependencies, and does not indicate a problem. **These warnings can be safely ignored** and will be fixed in future versions of Mousetrap. See [here](https://github.com/Clemapfel/mousetrap.jl/issues/5) for more information.
 
-!!! danger "Using Mousetrap from within the REPL"
-    As of version `v0.1.0`, **interactive use of Mousetrap is discouraged**. 
-    
-    `main` will stall, meaning as long as the application from our `main.jl` is running, the REPL will "hang". When the application exits, `main` will exit, restoring the interactivity of the REPL. Because of this, the application state cannot be modified interactively while it is running.
+!!! compat "Interactive Use"
+  Interactive use inside the Julia REPL is only available for Mousetrap `v0.2.1` or newer.
 
 ---
 
@@ -85,11 +96,11 @@ foo(1234) # invocation
 In Julia, for a type `T`, to create an actual object of this type, we need to call its *constructor*. This is a function that returns an object of that type:
 
 ```julia
-# define object type
-struct T end
-
-# define constructor
-T() = return T()
+struct T 
+  function T() # constructor
+    return new() 
+  end
+end
 ```
 
 We call an object returned by a constructor an **instance** of `T`. The act of creating an instance is called **instantiation** of `T`. 
@@ -145,8 +156,8 @@ In our `main.jl` above, Mousetrap created a window and presented it on the physi
 
 Each screen updates at a set frequency, for example 60hz, which means a new image is drawn to the screen every 1/60th of a second. Each of these drawing steps is called a *frame*. This is why we often refer to the speed at which a graphical app updates as *frames-per-second* (fps), the number of times a new frame is drawn to the screen - per second.
 
-In Mousetrap, fps is tied to  the monitors refresh rate. If the user's monitor updates at 120Hz, Mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why Mousetrap features a "lazy" rendering process. An area on screen will only be updated if it needs to be. 
-For example, in the `main.jl` above, the label `"Hello World!"` will only be drawn once. Because it is static (it stays the same and does not move) there is no need to redraw it every frame.
+In Mousetrap, fps is tied to the monitor's refresh rate. If the user's monitor updates at 120Hz, Mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why Mousetrap features a "lazy" rendering process. An area on screen will only be updated if it needs to be. 
+For example, in the `main.jl` above, the label `"Hello World!"` will only be drawn once. Because it is static (it stays the same and does not move) there is no need to redraw it every frame, unless the window is moved or the label is changed.
 
 This is in opposition to how many video games work. Usually, in video game engines, each frame will make it such that the entire screen is re-drawn every time. This difference is important to realize.
 
@@ -178,7 +189,7 @@ Where `get_foo` accesses a hidden property of our `T` instance, while `set_foo!`
 
 Because we cannot inspect an object's properties to learn about it, we are reliant on the Mousetrap documentation to know which functions are available for which object. Navigating to the [index of classes](../02_library/classes.md), we see that after each class, there is a list of all "member functions", that is, all functions that operate on that object.
 
-Another way to find out which functions are available is to use [`methodswith](https://docs.julialang.org/en/v1/stdlib/InteractiveUtils/#InteractiveUtils.methodswith) from within the REPL:
+Another way to find out which functions are available is to use [`methodswith`](https://docs.julialang.org/en/v1/stdlib/InteractiveUtils/#InteractiveUtils.methodswith) from within the REPL:
 
 ```julia
 using Mousetrap
@@ -221,7 +232,7 @@ julia> ORIENTATION_HORIZONTAL isa Orientation && ORIENTATION_VERTICAL isa Orient
 true
 ```
 
-All enum values are written in `SCREAMING_SNAKE_CASE`, while the enum type's name uses `UpperCamelCase`. 
+All enum values are written in `SCREAMING_SNAKE_CASE`, while the enum types name uses `UpperCamelCase`. 
 
 To check which enum has which values, we can again use the [Mousetrap documentation](../02_library/enums.md).
 
@@ -324,7 +335,7 @@ Stacktrace:
 
 We see that the anonymous functions was allocated as `var"#11#12"`. This refers to the function defined using the do-block after `main()`.
 
-Mousetrap stack traces can get quite long, so it's best to parse them by reading the original message at the top first:
+Mousetrap stacktraces can get quite long, so it's best to parse them by reading the original message at the top first:
 
 ```
 [ERROR] In Mousetrap.main: error
