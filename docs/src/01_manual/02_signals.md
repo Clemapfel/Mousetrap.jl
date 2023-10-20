@@ -345,7 +345,7 @@ out == to_append # true
 
 Because `push!` returns a value and it is the last line of the `on_clicked` definition, `on_clicked`, in turn, returns a value, meaning its return type is no longer `Nothing`, which triggers the error.
 
-In mousetrap, all functions whose documentation does not explicitly mention a return type, will return `nothing`. This may not be true for functions in `Base` or foreign libraries, so we should take care to be aware of implicit return types. 
+In Mousetrap, all functions whose documentation does not explicitly mention a return type, will return `nothing`. This may not be true for functions in `Base` or foreign libraries, so we should take care to be aware of implicit return types. 
 
 To fix the above error, we should return `nothing` manually:
 

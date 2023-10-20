@@ -24,13 +24,13 @@ To receive events, we need an [`EventController`](@ref). The `EventController` t
 
 ## Input Focus
 
-The concept of [**input focus**](https://en.wikipedia.org/wiki/Focus_(computing)) is important to understand. In Mousetrap (and GUIs in general), each widget has a hidden property that indicates whether the widget currently **holds focus**. If a widget holds focus, all its children hold focus as well. For example, if the focused widget is a `Box`, all widgets inside that box also hold focus.
+The concept of [**input focus**](https://en.wikipedia.org/wiki/Focus_(computing)) is important to understand. In Mousetrap (and GUIs in general), each widget has a hidden property that indicates whether the widget currently **holds focus**. If a widget holds focus, all its children hold focus as well. For example, if the focused widget is a `Box`, all widgets inside that box also hold focus, while the widget the box is contained within does not.
 
 **Only a widget holding focus can receive input events**. Which widget acquires focus is controlled by a somewhat complex heuristic, usually using things like which window is on top and where the user last interacted with the GUI. For most situations, this mechanism works very well and we don't have to worry about it much, in the rare cases we do, we can control the focus directly.
 
 ### Preventing Focus
 
-Only `focusable` widgets can hold focus. We can make a widget focusable by calling [`set_is_focusable!`](@ref). Not all widgets are focusable by default. To know which are and are not focusable, we can use [`get_is_focusable`](@ref), or common sense: Any widget that has a way of interacting with it (such as a `Button`, `Entry`, `Scale`, `SpinButton` etc.) will be focusable by default. Widgets that have no native way of interacting with them are not focusable, unless we specifically request them to be. This includes widgets like `Label`, `ImageDisplay`, `Separator`, etc.
+Only `focusable` widgets can hold focus. We can make a widget focusable by calling [`set_is_focusable!`](@ref). Not all widgets are focusable by default. To know which are and are not focusable, we can use [`get_is_focusable`](@ref), or common sense: Any widget that has a way of interacting with it (such as a `Button`, `Entry`, `Scale`, `SpinButton`, etc.) will be focusable by default. Widgets that have no native way of interacting with them are not focusable, unless we specifically request them to be. This includes widgets like `Label`, `ImageDisplay`, `Separator`, etc.
 
 If a container widget has at least one focusable child, it itself is focusable.
 
@@ -52,7 +52,7 @@ The user can also decide which widget should hold focus, usually by pressing the
 
 Using our newly gained knowledge about focus, we'll create our first event controller: [`FocusEventController`](@ref). This controller reacts to a widget gaining or losing input focus.
 
-After creating an event controller, it will not yet react to any events. We need to **add the controller to a widget**. For this chapter, we will assume that this widget is the top-level window, called `window` in the code snippets in this chapter.
+After creating an event controller, it will not yet react to any events. We need to **add the controller to a widget**. For this chapter, we will assume that this widget is the top-level window, called `window` in the code snippets henceforth.
 
 We create and connect a `FocusEventController` like so:
 
@@ -727,6 +727,4 @@ Some styluses have a "mode" function, where the user can choose between differen
 | `TOOL_TYPE_UNKNOWN`          | none of the above         |
 
 If the stylus does not support modes, `TOOL_TYPE_UNKNOWN` will be returned.
-
----
 

@@ -58,9 +58,9 @@ By the end of this chapter, we will have learned when all these signals are emit
 
 ## Widget Properties
 
-When displayed on screen, a widgets size and location will be chosen dynamically. Resizing the window may or may not resize all widgets inside such that they fill the entire window. A somewhat complex heuristic determines the exact position and size of a widget during runtime. We can influence this process using multiple properties all widgets share.
+When displayed on screen, a widget's size and location will be chosen dynamically. Resizing the window may or may not resize all widgets inside such that they fill the entire window. A somewhat complex heuristic determines the exact position and size of a widget during runtime. We can influence this process using multiple properties all widgets share.
 
-Each widget will choose a position and size on screen. We call this area, an [axis-aligned rectangle](https://en.wikipedia.org/wiki/Minimum_bounding_box#Axis-aligned_minimum_bounding_box), the widgets **allocated area**. The allocated area can change over the course of runtime, most widgets are easily resized either by us, the developers, or the user.
+Each widget will choose a position and size on screen. We call this area, an [axis-aligned rectangle](https://en.wikipedia.org/wiki/Minimum_bounding_box#Axis-aligned_minimum_bounding_box), the widget's **allocated area**. The allocated area can change over the course of runtime, most widgets are easily resized either by us, the developers, or the user.
 
 ### Parent and Children
 
@@ -100,29 +100,29 @@ push_back!(box_a, button_a)
 push_back!(box_b, button_b)
 ```
 
-By connecting the same handler to both of these buttons signals, we have two identically behaving objects, that are still separate widget instances.
+By connecting the same handler to both of these buttons' signals, we have two identically behaving objects, that are still separate widget instances.
 
 ### Size Request
  
-Moving onto the properties that determines the widgets size, we have its **size request**. This is a [`Vector2f`](@ref Vector2) which governs the minimum width and height of the widget, in pixels. Once set with [`set_size_request!`](@ref), no matter what, that widget will always allocate at least that amount of space. 
+Moving onto the properties that determines the widget's size, we have its **size request**. This is a [`Vector2f`](@ref Vector2) which governs the minimum width and height of the widget, in pixels. Once set with [`set_size_request!`](@ref), no matter what, that widget will always allocate at least that amount of space. 
 
-By default, all widgets size request is `Vector2f(0, 0)`. Setting the width and/or height of a widgets size request to `0` will tell the size manager, the algorithm determining the widgets final size on screen, that the widget has not made a request for a minimum size. A size request may not be negative.
+By default, all widget's size request is `Vector2f(0, 0)`. Setting the width and/or height of a widget's size request to `0` will tell the size manager, the algorithm determining the widget's final size on screen, that the widget has not made a request for a minimum size. A size request may not be negative.
 
-Manipulating the size request to influence a widgets minimum size is also called **size-hinting**.
+Manipulating the size request to influence a widget's minimum size is also called **size-hinting**.
 
 ### Accessing Widget Size
 
-We can query information about a widgets current and target size using multiple functions, some of which are only available after a widget is **realized**. Realization means that the widget is initialized, has chosen its final size on screen, and is ready to be displayed. When these conditions are met, any widget will emit its signal `realize`. 
+We can query information about a widget's current and target size using multiple functions, some of which are only available after a widget is **realized**. Realization means that the widget is initialized, has chosen its final size on screen, and is ready to be displayed. When these conditions are met, any widget will emit its signal `realize`. 
 
 Once realized, [`get_allocated_size`](@ref) and [`get_position`](@ref) return the current size and position of a widget, in pixels.
 
-This size may or may not be equal to what we size-hinted the widget to, as size-hinting only determines the widgets *minimum size*. The layout manager is free to allocate a size larger than that.
+This size may or may not be equal to what we size-hinted the widget to, as size-hinting only determines the widget's *minimum size*. The layout manager is free to allocate a size larger than that.
 
 Lastly, [`get_natural_size`](@ref) will access the size preferred by the layout manager. This size will always be equal to or larger than the size request. When trying to predict the size a widget has, `get_natural_size` will give us the best estimate. Once the widget and all its children are realized, `get_allocated_size` and `get_position`  will gives us the exact value.
 
 Layout management is complex and the algorithm behind managing the size of the totality of all widgets is sophisiticated. Users of Mousetrap are not required to understand this exact mechanism, only how to influence it.
 
-On top of a widgets size request, a widgets final allocated size depends on a number of other variables.
+On top of a widget's size request, a widget's final allocated size depends on a number of other variables.
 
 ### Margin
 
@@ -286,7 +286,7 @@ button = Button()
 set_cursor!(button, CURSOR_TYPE_POINTER)
 ```
 
-The exact look of each cursor type depends on the users operating system and UI configuration. To choose a fully custom cursor, we use [`set_cursor_from_image!`](@ref), which takes an `Image`. We will learn more about `Image` in the [chapter dedicated to it](./06_image.md). Until then, this is how we set a cursor from a `.png` file on disk:
+The exact look of each cursor type depends on the user's operating system and UI configuration. To choose a fully custom cursor, we use [`set_cursor_from_image!`](@ref), which takes an `Image`. We will learn more about `Image` in the [chapter dedicated to it](./06_image.md). Until then, this is how we set a cursor from a `.png` file on disk:
 
 ```julia
 widget = # ...
@@ -297,7 +297,7 @@ set_cursor_from_image!(widget, Image("/path/to/image.png"))
 
 ### Tooltip
 
-Each widget can have a **tooltip**. This is a little window that opens when the cursor hovers over a widgets allocated area for enough time. The exact duration is decided by the users OS, we do not have control over it. 
+Each widget can have a **tooltip**. This is a little window that opens when the cursor hovers over a widget's allocated area for enough time. The exact duration is decided by the users OS, we do not have control over it. 
 
 Tooltips are usually a simple text message. We can set the text directly using [`set_tooltip_text!`](@ref):
 
@@ -351,7 +351,7 @@ Mousetrap.@signal_table(Window,
 )
 ```
 
-When the window handler of the users OS asks the window to close, for example because user pressed the "x" button, signal `close_request` will be emitted. Its result, of type [`WindowCloseRequestResult`](@ref), determines whether the window actually does close.
+When the window handler of the user's OS asks the window to close, for example because user pressed the "x" button, signal `close_request` will be emitted. Its result, of type [`WindowCloseRequestResult`](@ref), determines whether the window actually does close.
 
 ```julia
 # create a window that cannot be closed
@@ -370,7 +370,7 @@ Other than its singular child, `Window` has a number of other properties.
 
 #### Title & Header Bar
 
-[`set_title!`](@ref) sets the name displayed in the windows **header bar**, which is the part on top of the content area. By default, this name will be the name of the application. We can choose to hide the title by simply calling `set_title!(window, "")`.
+[`set_title!`](@ref) sets the name displayed in the window's **header bar**, which is the part on top of the content area. By default, this name will be the name of the application. We can choose to hide the title by simply calling `set_title!(window, "")`.
 
 By default, the header bar will show the window title, a minimize-, maximize-, and close-button. We can completely hide the header bar using `set_is_decorated!(window, false)`, which also means the user has now way to move or close the window.
 
@@ -380,7 +380,7 @@ When dealing with multiple windows, we can influence the way two windows interac
 
 By setting [`set_is_modal!`](@ref) to true, if the window is revealed, **all other windows of the application will be deactivated**, preventing user interaction with them. This also freezes animations, it essentially pauses all other windows. The most common use-case for this is for dialogs, for example, if the user requests to close the application, it is common to open a small dialog requesting the user to confirm exiting the application. While this dialog is shown, the main window should be disabled and all other processes should halt until a selection is made. This is possible by making the dialog window *modal*. If two modal windows are active at the same time, the user can choose to swap betwee active windows by clicking a currently inactive window.
 
-Using [`set_transient_for!`](@ref), we can make sure a window will always be shown in front of another. `set_transient_for!(A, B)` will make it so, while `A` overlaps `B` on the users desktop, `A` will be shown in front of `B`. 
+Using [`set_transient_for!`](@ref), we can make sure a window will always be shown in front of another. `set_transient_for!(A, B)` will make it so, while `A` overlaps `B` on the user's desktop, `A` will be shown in front of `B`. 
 
 ---
 
@@ -463,7 +463,7 @@ Where in the last row, we used the [decimal html code](https://www.compart.com/e
 
 !!! warning
     Pango only accepts the **decimal** code, not *hexadecimal*. For example, the Mousetrap emoji has the decimal code `129700`, while its hexadecimal code is `x1FAA4`. 
-    To use this emote in text, we choose `&#129700;`, **not** `&#x1FAA4;`. The latter will not work.
+    To use this emoji in text, we choose `&#129700;`, **not** `&#x1FAA4;`. The latter will not work.
 
 !!! note 
     All `<`, `>` will be parsed as style tags, regardless of whether they are escaped. To display them as characters, we us `&lt;` 
@@ -518,7 +518,7 @@ set_child!(window, box)
 
 ![](../assets/box_example.png)
 
-In this example, we use margins to add a 10px gap in between each child. This can be done more succinctly using the boxes own **spacing** property. By setting [`set_spacing!`](@ref) to `10`, it will automatically insert a 10 pixel gap in between any two children, in addition to the childrens regular margin.
+In this example, we use margins to add a 10px gap in between each child. This can be done more succinctly using the boxe's own **spacing** property. By setting [`set_spacing!`](@ref) to `10`, it will automatically insert a 10 pixel gap in between any two children, in addition to the children's regular margin.
 
 [`hbox`](@ref) and [`vbox`](@ref) are two convenience functions that take any number of widgets and return a horizontal or vertical box with those widgets already inserted. Using this, and spacing instead of margins, we can write the above as two lines:
 
@@ -947,7 +947,7 @@ connect_signal_value_changed!(spin_button) do self::SpinButton
 end
 ```
 
-The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) was set to `true` and the spin buttons value under- or overflows.
+The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) was set to `true` and the `SpinButton`'s value under- or overflows.
 
 ---
 
@@ -1017,7 +1017,7 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
     end
     ```
 
-`Scale`supports most of `SpinButton`s functions, including querying information about its underlying range, setting the orientation, and signal `value_changed`:
+`Scale`supports most of `SpinButton`'s functions, including querying information about its underlying range, setting the orientation, and signal `value_changed`:
 
 ```julia
 scale = Scale(0, 2, 0.5)
@@ -1530,11 +1530,11 @@ Note that `Expander` should not be used to create nested lists, as `ListView`, a
 
 ## Viewport
 
-By default, most containers will allocate a size equal to or exceeding that of its children. For example, if we create a widget that has a natural size of 5000x1000 px and use it as the child of a `Window`, the `Window` will attempt to allocate 5000x1000 pixels on screen, making the window far larger than most screens can display. 
+By default, most containers will allocate a size equal to or exceeding that of its children. For example, if we create a widget that has a natural size of 5000x1000 px and use it as the child of a `Window`, the `Window` will attempt to allocate 5000x1000 pixels on screen, making the window far larger than most monitors can display. 
 
-Sometimes widgets that are this large are unavoidable. In situations like this, we can use [`Viewport`](@ref) to only display part of a widget.
+Sometimes, widgets that are this large are unavoidable. In situations like this, we can use [`Viewport`](@ref) to only display part of a widget.
 
-We set the viewports singular child using `set_child!`, after which the user can operate the two scrollbars to change which part of the child is currently visible:
+We set the viewport's singular child using `set_child!`, after which the user can operate the two scrollbars to change which part of the child is currently visible:
 
 ![](../assets/viewport.png)
 
@@ -1557,9 +1557,9 @@ We set the viewports singular child using `set_child!`, after which the user can
 
 ### Size Propagation
 
-By default, `Viewport` will disregard the size of its child and simply allocate an area based only on the properties of the `Viewport` itself. This behavior can be overridden by setting the viewports **size propagation**.
+By default, `Viewport` will disregard the size of its child and simply allocate an area based only on the properties of the `Viewport` itself. This behavior can be overridden by setting the viewport's **size propagation**.
 
-If [`set_propagate_natural_height!`](@ref) is set to true, the viewports height will be equal the height of its child. Conversely, [`set_propagate_natural_width!`](@ref) does the same for the childs width.
+If [`set_propagate_natural_height!`](@ref) is set to true, the viewport's height will be equal the height of its child. Conversely, [`set_propagate_natural_width!`](@ref) does the same for the child's width.
 
 ```julia
 set_propagate_natural_width!(viewport, true)
@@ -1568,18 +1568,18 @@ set_propagate_natural_height!(viewport, false)
 
 ![](../assets/viewport_propagation.png)
 
-Here, the viewport will be the same width as the child, but the viewports height is independent of that of its child. 
+Here, the viewport will be the same width as the child, but the viewport's height is independent of that of its child. 
 
 ### Scrollbar Policy
 
-`Viewport` has two scrollbars, controlling the horizontal and vertical position. By default, these will automatically reveal themself when the users cursor enters the viewport, hiding again once the cursor exists.
+`Viewport` has two scrollbars, controlling the horizontal and vertical position. By default, these will automatically reveal themself when the user's cursor enters the viewport, hiding again once the cursor exists.
 
 If and when to reveal the scrollbars is determined by the viewports **scrollbar policy**, set with [`set_horizontal_scrollbar_policy!`](@ref) and  [`set_vertical_scrollbar_policy!`](@ref), both of which take a value of the enum [`ScrollbarVisibilityPolicy`](@ref), which has the following instances:
 
 
 | `ScrollbarVisibilityPolicy` | Meaning |
 |-----------------------------|-----------|
-| `SCROLLBAR_VISIBILITY_POLICY_NEVER` | scrollbar always hidden |
+| `SCROLLBAR_VISIBILITY_POLICY_NEVER` | scrollbar is always hidden |
 | `SCROLLBAR_VISIBILITY_POLICY_ALWAYS` | scrollbar is always shown |
 | `SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC` | scrollbar hides/shows automatically|
 
@@ -1598,7 +1598,7 @@ Lastly, we can customize the location of both scrollbars at the same time using 
 
 ### Signals
 
-If we want to react to the user scrolling the `Viewport`s child, we can either connect to its signal `scroll_child`, or we can access the `Adjustment` controlling each scrollbar using `get_horizontal_adjustment` and `get_vertical_adjustment`, then connect to the signals of the obtained `Adjustment`s.
+If we want to react to the user scrolling the `Viewport`'s child, we can either connect to its signal `scroll_child`, or we can access the `Adjustment` controlling each scrollbar using [`get_horizontal_adjustment`](@ref) and [`get_vertical_adjustment`](@ref), then connect to the signals of the obtained `Adjustment`s.
 
 With this, scrollbar policy, and size propagation we have full control over every aspect of `Viewport`.
 
@@ -1673,9 +1673,9 @@ Mousetrap.@signal_table(PopoverButton,
 )
 ```
 
-Instead of triggering behavior, `PopoverButton`s purpose is to reveal and hide a `Popover`.
+Instead of triggering behavior, `PopoverButton`'s purpose is to reveal and hide a `Popover`.
 
-We first create the `Popover`, then supply it as the argument to `PopoverButton`s constructor:
+We first create the `Popover`, then supply it as the argument to `PopoverButton`'s constructor:
 
 ```julia
 popover = Popover()
@@ -1690,7 +1690,7 @@ Additionally, an arrow is shown next to the label of the `PopoverButton`, indica
 
 We will now move on to **selectable widgets**, which tend to be the most complex and powerful widgets in Mousetrap.
 
-All selectable widgets have on thing in common: their multiple children are managed by a **selection model**. This model is a list of widgets. For each widget, the model will keep track of whether that widget is currently selected. If it is, a graphical element will be added to the selectable widget that indicates to the user which item(s) are currently selected:
+All selectable widgets have on thing in common: their multiple children are managed by a **selection model**. This model is an ordered list of widgets. For each widget, the model will keep track of whether that widget is currently selected. If it is, a graphical element will be added to the selectable widget that indicates to the user which item(s) are currently selected:
 
 ![](../assets/list_view_selected.png)
 
@@ -1711,7 +1711,7 @@ Each model has an associated property called the **selection mode**, which is ex
 | `SELECTION_MODE_MULTIPLE` | zero or more    |
 
 
-We do not create instances of `SelectionModel` ourselves, instead, they are automatically created along with the selectable widget. Because of this, we will need to specify the selection mode in the selectable widgets constructor.
+We do not create instances of `SelectionModel` ourselves, instead, they are automatically created along with the selectable widget. Because of this, we will need to specify the selection mode in the selectable widget's constructor.
 
 ## ListView
 
@@ -1910,7 +1910,7 @@ This is a more convenient way to fill the column view, though if we later want t
 
 [`Stack`](@ref) is a selectable widget that can only ever display exactly one child at a time. Each child of the stack is called a **page**.
 
-We add a page using `add_child!`, which takes any widget, and the pages title. This title is mandatory and it has to uniquely identify the page. `add_child!` returns the pages ID, which, similarly to how adding elements to `DropDown` works, we need to keep track of in order to later refer to pages in a position-independent manner.
+We add a page using `add_child!`, which takes any widget, and the pages title. This title is mandatory and it has to uniquely identify the page. `add_child!` returns the page's ID, which, similarly to how adding elements to `DropDown` works, we need to keep track of in order to later refer to pages in a position-independent manner.
 
 ```julia
 stack = Stack()
@@ -1920,9 +1920,9 @@ id_02 = add_child!(stack, page_02_widget, "Page #02")
 id_03 = add_child!(stack, page_03_widget, "Page #03")
 ```
 
-To check which page is currently visible, we use [`get_visible_child`](@ref), which returns that pages ID. If we loose track of it, we can retrieve the ID of a stack page at a given position using [`get_child_at`](@ref).
+To check which page is currently visible, we use [`get_visible_child`](@ref), which returns that page's ID. If we loose track of it, we can retrieve the ID of a stack page at a given position using [`get_child_at`](@ref).
 
-To keep track of which page is currently selected, we should connect to the stacks underlying `SelectionModel`, just like we would with `ListView` and `GridView`:
+To keep track of which page is currently selected, we should connect to the stack's underlying `SelectionModel`, just like we would with `ListView` and `GridView`:
 
 ```julia
 function on_selection_changed(self::SelectionModel, position::Integer, n_items::Integer, stack::Stack) ::Nothing
@@ -1934,14 +1934,14 @@ stack_model = get_selection_model(stack)
 connect_signal_selection_changed!(on_selection_changed, stack_model, stack)
 ```
 
-Where we provided the `Stack` instance to the selection models signal handler as the optional `data` argument, so that we can reference it from within the signal handler.
+Where we provided the `Stack` instance to the selection model's signal handler as the optional `data` argument, so that we can reference it from within the signal handler.
 
 While we can change the currently active page using `set_visible_child!`, our user cannot. To allow them to change the page of a `Stack`, we either need
 to provide another widget that modifies the stack, or we can use one of two pre-made widgets for this purpose: `StackSwitcher` and `StackSidebar`.
 
 ### StackSwitcher
 
-[`StackSwitcher`](@ref) presents the user with a row of buttons, each of which use the corresponding stack pages title:
+[`StackSwitcher`](@ref) presents the user with a row of buttons, each of which use the corresponding stack page's title:
 
 ![](../assets/stack_switcher.png)
 
@@ -2057,7 +2057,7 @@ Not to be confused with `GridView`, [`Grid`](@ref) arranges its children in a **
     end
     ```
 
-Each widget in the grid has a x- and y-position, along with a widget and height, both measured in **number of cells** . 
+Each widget in the grid has an x- and y-position, along with a widget and height, both measured in **number of cells** . 
 
 For example, in the image above, the widget labeled `05` has the x-position of 2, y-position of 2, a width of 1 cell and a height of 1 cell. 
 
@@ -2085,7 +2085,7 @@ Mousetrap.insert_at!(
 )
 ```
 
-When using `insert_at!`, we have to make sure that no two widgets overlap.
+When using `insert_at!`, we have to make sure ourselves that no two widgets overlap.
 
 For a less manual way of arranging widgets, we can insert a widget next to another widget already in the grid using [`insert_next_to!`](@ref), which takes an argument of type [`RelativePosition`](@ref) in order to specify whether we want to insert the new widget above, below, left of, or right of the widget already inside the grid:
 
@@ -2154,7 +2154,7 @@ We can allow the user to reorder the pages by setting [`set_tabs_reorderable!`](
 
 If we want to change the currently selected page, we use `next_page!`, `previous_page!`, or `goto_page!`, the latter of which takes the page position as an integer.
 
-To react to the user changing the currently selected page, we have to connect to one of `Notebook`s unique signals, all of which require a signal handler with the same signature: 
+To react to the user changing the currently selected page, we have to connect to one of `Notebook`'s unique signals, all of which require a signal handler with the same signature: 
 
 ```@eval
 using Mousetrap
@@ -2179,7 +2179,7 @@ end
 
 ## Compound Widgets
 
-Now that we have many new widgets in our arsenal, a natural question is "how do we make our own?". If we want to construct a completely new widget pixel-by-pixel we will have to wait until the chapter on [native rendering](./09_native_rendering.md). Until then, we are already perfectly capable of creating what we'll call a **compound widget**.
+Now that we have many new widgets in our arsenal, a natural question is "how do we make our own?". If we want to construct a completely new widget pixel-by-pixel, we will have to wait until the chapter on [native rendering](./09_native_rendering.md). Until then, we are already perfectly capable of creating what we'll call a **compound widget**.
 
 A compound widget is a widget that groups many other, pre-made widgets together. Compound widgets give an easy mechanism to 
 logically group a collection of widgets and treat them as a whole, instead of having to operate on each of its parts individually.
@@ -2188,9 +2188,9 @@ In order for a Julia object to be considered a `Widget`, that is, all functions 
 on this new object, it has to implement the **widget interface**. An object is considered a `Widget` if...
 
 + it is a direct or indirect subtype of `Widget`
-+ [`get_top_level_widget`](@ref), which maps it to its top-level widget, is defined for this type
++ [`Mousetrap.get_top_level_widget`](@ref), which maps it to its top-level widget, is defined for this type
 
-In this section we will work through an example, explain what both of these conditions mean, and how to fullfill them.
+In this section we will work through an example, explaining what both of these conditions mean, and how to fullfill them.
 
 ### Example: Placeholder
 
@@ -2266,7 +2266,7 @@ To solve this, we come back to our two properties that make something a widget:
 1) it is direct or indirect subtype of `Widget`
 2) `get_top_level_widget`, which maps it to its top-level widget, is defined for this type
 
-Solving 1), we make `Placeholder` a subtype of `mousetra.Widget`:
+Solving 1), we make `Placeholder` a subtype of `mousetrap.Widget`:
 
 ```julia
 struct Placeholder <: Widget
@@ -2341,6 +2341,9 @@ end
 Now that `Placeholder` is a proper widget, all of Mousetraps functions, including all widget signals, have become avaialable to use. We need to keep in mind that these functions will modify the top-level widget, so only signals of the top-level widget are available to compound widgets.
 
 Using this technique, we can build an application piece by piece. A compound widget itself can be made up of multiple other compound widgets. In some way, the entire application itself is just one giant compound widget, with a `Window` as the top-level widget.
+
+!!! compat 
+    Since Mousetrap `v0.3.0`, compound widgets will assume the signals of their top-level widgets. For example, if the compound widget `EntryWrapper` has its top-level widget be an `Entry`, then `connect_signal_activate!` will work on instances of `EntryWrapper`, since `EntryWarpper` assumed signal `activate`
 
 Our users are only able to interact with the compound widget by interacting with each of its components, which works but is fairly limiting. In the next chapter, this will change. By learning about **event handling**, we will be able to react to any kind of user-interaction, giving us the last tool needed to create an application that isn't just a collection of pre-made widgets, but something we have built ourselves.
 

@@ -10,7 +10,7 @@ In this chapter, we will learn:
 ## Installation
 
 
-To install mousetrap, in the REPL:
+To install Mousetrap, in the REPL:
 
 ```julia
 import Pkg;
@@ -23,7 +23,7 @@ end
 We can then make sure eveything works by executing `test Mousetrap` (still in `Pkg` mode). This may take a long time. If installation was succesfull, `Mousetrap tests passed` will be printed at the end.
 
 !!! compat "Removing older versions"
-  Mousetraps installation procedure has changed starting with `v0.3.0`. If mousetrap `v0.2.*` or older installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
+  Mousetraps installation procedure has changed starting with `v0.3.0`. If Mousetrap `v0.2.*` or older installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
 
   ```
   import Pkg
@@ -157,7 +157,7 @@ In our `main.jl` above, Mousetrap created a window and presented it on the physi
 Each screen updates at a set frequency, for example 60hz, which means a new image is drawn to the screen every 1/60th of a second. Each of these drawing steps is called a *frame*. This is why we often refer to the speed at which a graphical app updates as *frames-per-second* (fps), the number of times a new frame is drawn to the screen - per second.
 
 In Mousetrap, fps is tied to the monitor's refresh rate. If the user's monitor updates at 120Hz, Mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why Mousetrap features a "lazy" rendering process. An area on screen will only be updated if it needs to be. 
-For example, in the `main.jl` above, the label `"Hello World!"` will only be drawn once. Because it is static (it stays the same and does not move) there is no need to redraw it every frame.
+For example, in the `main.jl` above, the label `"Hello World!"` will only be drawn once. Because it is static (it stays the same and does not move) there is no need to redraw it every frame, unless the window is moved or the label is changed.
 
 This is in opposition to how many video games work. Usually, in video game engines, each frame will make it such that the entire screen is re-drawn every time. This difference is important to realize.
 
@@ -169,7 +169,7 @@ Native rendering, in Mousetrap, is the process of updating the currently display
 
 ## Object Oriented Design
 
-While Julia is technically object-oriented, it lacks many of the features of "proper" OOP languages such as C++ or Java. Examples of missing features include [member functions](https://en.cppreference.com/w/cpp/language/member_functions) and [inheritance from concrete types](https://learn.microsoft.com/en-us/cpp/cpp/inheritance-cpp?view=msvc-170). Additionally, in mousetrap specifically, most objects will have **no public properties**.
+While Julia is technically object-oriented, it lacks many of the features of "proper" OOP languages such as C++ or Java. Examples of missing features include [member functions](https://en.cppreference.com/w/cpp/language/member_functions) and [inheritance from concrete types](https://learn.microsoft.com/en-us/cpp/cpp/inheritance-cpp?view=msvc-170). Additionally, in Mousetrap specifically, most objects will have **no public properties**.
 
 To interact with an object, we use *outer methods*, which are functions defined in global scope that operate on one of their arguments by modifying its hidden properties.
 
@@ -202,7 +202,7 @@ Which will print a list of all functions that have at least one argument of type
 
 ## C Enums   
 
-Mousetraps back-end is written in C++, whose enums differ from Julia enums in a number of ways. To assure compatibility, mousetrap uses its own enum definitions, it does not use Julias `@enum`.
+Mousetraps back-end is written in C++, whose enums differ from Julia enums in a number of ways. To assure compatibility, Mousetrap uses its own enum definitions, it does not use Julias `@enum`.
 
 Each enum is a proper Mousetrap type, while each enum *value* is a numerical constant which is defined as being of that type. 
 
@@ -342,5 +342,5 @@ Mousetrap stacktraces can get quite long, so it's best to parse them by reading 
 ```
 We see that the message mentions that the error occured during invokation of `Mousetrap.main`. We should therefore look for an error inside the do-block after `main`.
 
-Knowledge about anonymous functions and how to read stacktraces will greatly aid us in debugging mousetrap applications while learning.
+Knowledge about anonymous functions and how to read stacktraces will greatly aid us in debugging Mousetrap applications while learning.
 

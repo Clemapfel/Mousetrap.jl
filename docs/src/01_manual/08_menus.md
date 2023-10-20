@@ -195,7 +195,7 @@ popover_button = PopoverButton(popover_menu)
 set_child!(window, popover_button)
 ```
 
-The `PopoverMenu`-`PopoverButton` combo should be reserved for **context menus**, which are menus that act on some local part of the application. For a menu that affects the entire application, and should be accessible at all times, we should use the next menu model view.
+The `PopoverMenu`-`PopoverButton` combo should be reserved for **context menus**, which are menus that act on some local part of the application. For a menu that affects the entire application and should be accessible at all times, we should use the next menu model view instead.
 
 ### MenuBar
 
@@ -261,7 +261,7 @@ The **top-level** menu is `root`. It is used as the argument for the constructor
 No direct child of `root` is an "action"-, "widget"-, "icon"- or "section"-type item. This is what is required for `MenuBar`. All top-level items have to be submenus.
 
 !!! Warning
-    Due to a bug in the backend, as of version 0.1.0, a menu model used for a `MenuBar` **may not have a "widget"-type item in a submenu of a submenu**.
+    Due to a bug in the backend, as of `v0.3.0`, a menu model used for a `MenuBar` **may not have a "widget"-type item in a submenu of a submenu**.
 
     This means we *can* add a widget to any submenu of `root`, but we may not add 
     a widget to any submenu that is nested any deeper than a direct child of `root`.
@@ -274,6 +274,7 @@ No direct child of `root` is an "action"-, "widget"-, "icon"- or "section"-type 
 ## Style End Note
 
 Menus are extremely powerful and complex to construct. With practice and good software / UI design, we can create deep, complex menus that are still easy to understand and use. We, as developers, should make this our first priority. 
+
 Some additional notes:
 
 ### Ellipses

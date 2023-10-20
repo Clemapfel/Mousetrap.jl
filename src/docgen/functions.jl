@@ -50,14 +50,14 @@ Create a shape as a 1-fragment thick line between two points, in OpenGL coordina
 
 @document Lines """
 ```
-Lines(:Vector{Pair{Vector2f, Vector2f}) -> Shape
+Lines(::Vector{Pair{Vector2f, Vector2f}) -> Shape
 ```
 Create a shape as a set of unconnected lines, vertex positions in OpenGL coordinates.
 """
 
 @document LineStrip """
 ```
-LineStrip(points::StaticArraysCore.SVector{2, Vector2f}) -> Shape
+LineStrip(points::Vector{Vector2f}) -> Shape
 ```
 Create a shape as a line-strip. For points `{a1, a2, ..., an}`, this will be a set of connected lines `{a1, a2}, {a2, a3}, ..., {an-1, an}`, in OpenGL coordinates.
 """
@@ -130,7 +130,7 @@ If the widget is activatable, trigger it. Depending on the widget, this may not 
 ```
 activate!(::Action) 
 ```
-Trigger the actions callback. This will also emit signal `activated`.
+Trigger the action's callback. This will also emit signal `activated`.
 
 """
 
@@ -223,7 +223,7 @@ Add a widget at given position, in absolute widget-space coordinates.
 ```
 add_css!(code::String) -> Cvoid
 ```
-Execute CSS code and add it to the global style manager. If compied succesfully, 
+Execute CSS code and add it to the global style manager. If compied successfuly, 
 any class defined will be available to be applied to a widget using `add_css_class!`.
 
 ## Example
@@ -582,7 +582,7 @@ Bind a texture for rendering, which will make it available at `GL_TEXTURE_UNIT_0
 bind_as_render_target(render_texture::RenderTexture) 
 ```
 Bind a render texture as the current frame buffer. This should be done inside the signal handler 
-of `RenderArea`s signal `render`.
+of `RenderArea`'s signal `render`.
 
 Use [`unbind_as_render_target`](@ref) to restore the previously bound frame buffer.
 """
@@ -701,7 +701,7 @@ Check whether the modifier state indicates that `Control` is currently pressed.
 ```
 copy!(from::FileDescriptor, to::FileDescriptor, allow_overwrite::Bool ; make_backup::Bool = false, follow_symlink::Bool = false) -> Bool
 ```
-Copy a file from one location to another. Returns `true` if the operation was succesfull.
+Copy a file from one location to another. Returns `true` if the operation was successful.
 """
 
 @document create! """
@@ -724,14 +724,14 @@ files default icon.
 ```
 create_directory_at!(destination::FileDescriptor) -> Bool
 ```
-Create folder at given location, returns `true` if the operation was succesfull.
+Create folder at given location, returns `true` if the operation was successful.
 """
 
 @document create_file_at! """
 ```
 create_file_at!(destination::FileDescriptor, should_replace::Bool) -> Bool
 ```
-Create file at given location, returns `true` if the operation was succesfull
+Create file at given location, returns `true` if the operation was successful
 """
 
 @document create_from_file! """
@@ -742,7 +742,7 @@ create_from_file!(::ImageDisplay, path::String) -> Bool
 create_from_file!(::KeyFile, path::String) -> Bool
 create_from_file!(::Shader, type::ShaderType, file::String) -> Bool 
 ```
-Initialize the object from a file. Returns `true` if the operation was succesfull.
+Initialize the object from a file. Returns `true` if the operation was successful.
 """
 
 @document create_from_icon! """
@@ -813,7 +813,7 @@ Create angle from degrees, automatically clamped to [0°, 360°].
 ```
 delete_at!(::FileDescriptor) -> Bool
 ```
-Irreversibly delete file at given location, returns `true` if the operation was succesfull. 
+Irreversibly delete file at given location, returns `true` if the operation was successful. 
 """
 
 @document device_axis_to_string """
@@ -1214,7 +1214,7 @@ Get whether the widget can expand along the y-axis.
 ```
 get_is_expanded(::Expander) -> Bool
 ```
-Get whether the expanders child is currently visible.
+Get whether the `Expander`'s child is currently visible.
 """
 
 @document get_file_chooser_action """
@@ -1256,7 +1256,7 @@ Get whether which widget currently holds input focus should be highlighted using
 ```
 get_fraction(::ProgressBar) -> Float32
 ```
-Get the currently displayed fraction of the progress bar, in `[0, 1]`.
+Get the currently displayed fraction of the `ProgressBar`, in `[0, 1]`.
 """
 
 @document get_fragment_shader_id """
@@ -1315,7 +1315,7 @@ get_has_frame(::Viewport) -> Bool
 get_has_frame(::Entry) -> Bool
 get_has_frame(::PopoverButton) -> Bool 
 ```
-Get whether the widgets outline should be displayed, it will remain interactable.
+Get whether the widget's outline should be displayed, it will remain interactable.
 """
 
 @document get_has_origin """
@@ -1329,14 +1329,14 @@ Get whether the area between the origin of the scales trough and the current val
 ```
 get_has_wide_handle(::Paned) -> Bool
 ```
-Get whether the barrier in between the paneds two children is wide or thin, wide by default.
+Get whether the barrier in between the `Paned`'s two children is wide or thin, wide by default.
 """
 
 @document get_header_bar """
 ```
 get_header_bar(::Window) -> header_bar
 ```
-Access the `HeaderBar` instance used as the windows titlebar widget.
+Access the `HeaderBar` instance used as the window's titlebar widget.
 """
 
 @document get_hide_on_close """
@@ -1357,7 +1357,7 @@ Get whether the entire widget should be hidden if its allocated area is smaller 
 ```
 get_homogeneous(::Box) -> Bool
 ```
-Get whether all of the boxes children should be allocated the same width (or height, if orientation is `ORIENTATION_VERTICAL`).
+Get whether all of the `Box`'s children should be allocated the same width (or height, if orientation is `ORIENTATION_VERTICAL`).
 """
 
 @document get_horizontal_adjustment """
@@ -1393,7 +1393,7 @@ Get the ID of all icons available in the icon theme.
 get_id(::Application) -> ApplicationID
 get_id(::Action) -> ActionID
 ```
-Access the ID specified during the objects construction.
+Access the ID specified during the object's construction.
 """
 
 @document get_image """
@@ -1608,7 +1608,7 @@ Get whether scrolling should continue once the user stopped operating the mouse 
 ```
 get_label_x_alignment(::Frame) -> Float32
 ```
-Get the horizontal alignment of the frames optional label widget, in `[0, 1]`.
+Get the horizontal alignment of the `Frame`'s optional label widget, in `[0, 1]`.
 """
 
 @document get_layout """
@@ -1622,7 +1622,7 @@ Get the layout string of the header bar. See the manual section on `HeaderBar` i
 ```
 get_left_margin(::TextView) -> Float32
 ```
-Get distance between the left side of the text and the `TextView`s frame.
+Get distance between the left side of the text and the `TextView`'s frame.
 """
 
 @document get_lower """
@@ -1821,7 +1821,7 @@ Get whether the event controller should not capture events send by a touch devic
 ```
 get_opacity(::Widget) -> Float32
 ```
-Get the widgets current opacity, in `[0, 1]`.
+Get the widget's current opacity, in `[0, 1]`.
 """
 
 @document get_orientation """
@@ -1883,7 +1883,7 @@ Get the color of the pixel at given position, 1-indexed.
 ```
 get_position(::Widget) -> Vector2f
 ```
-Get the current position on screen, relative to the toplevel windows origin, in pixels.
+Get the current position on screen, relative to the toplevel window's origin, in pixels.
 
 ---
 
@@ -1963,14 +1963,14 @@ Get the number of cycles the animation will perform, or `0` if the animation loo
 get_is_revealed(::Revealer) -> Bool
 get_is_revealed(::ActionBar) -> Bool
 ```
-Get whether the widgets child is currently visible.
+Get whether the widget's child is currently visible.
 """
 
 @document get_right_margin """
 ```
 get_right_margin(::TextView) -> Float32
 ```
-Get distance between the right end of the text and the text views frame.
+Get distance between the right end of the text and the `TextView`'s frame.
 """
 
 @document get_row_spacing """
@@ -2030,7 +2030,7 @@ Get the scope in which the controller listens for shortcut events, see [here](ht
 ```
 get_scrollbar_placement(::Viewport) -> CornerPlacement
 ```
-Get the position of both scrollbars relative to the viewports center.
+Get the position of both scrollbars relative to the `Viewport`'s center.
 """
 
 @document get_is_selectable """
@@ -2051,7 +2051,7 @@ Get the ID of the currently selected item.
 ```
 get_selection(::SelectionModel) -> Vector{Int64}
 ```
-Get all currently selected items indices, 1-based.
+Get all currently selected items' indices, 1-based.
 """
 
 @document get_selection_model """
@@ -2082,7 +2082,7 @@ Get all registered shortcuts for the action.
 ```
 get_should_draw_value(::Scale) -> Bool
 ```
-Get whether the value of the scales adjustment is drawn next to the knob.
+Get whether the value of the `Scale`'s `Adjustment` is drawn as a label next to the slider.
 """
 
 @document get_should_interpolate_size """
@@ -2096,7 +2096,7 @@ Get whether the stack should slowly transition its size when switching from one 
 ```
 get_should_snap_to_ticks(::SpinButton) -> Bool
 ```
-Get whether when the user enters a value using the spin buttons text entry, that value should be clamped to the nearest tick.
+Get whether when the user enters a value using the `SpinButton`'s text entry, that value should be clamped to the nearest tick.
 """
 
 @document get_should_wrap """
@@ -2139,7 +2139,7 @@ Get whether a separator should be drawn between two items.
 ```
 get_show_text(::ProgressBar) - Bool
 ```
-Get whether a percentage or custom label should be displayed above the progress bar. User [`set_text!`](@ref) to choose the custom label.
+Get whether a percentage or custom label should be displayed above the `ProgressBar`. User [`set_text!`](@ref) to choose the custom label.
 """
 
 @document get_show_title_buttons """
@@ -2318,7 +2318,7 @@ Get the content of the underlying text buffer.
 ```
 get_text(::ProgressBar) -> String
 ```
-Get text currently displayed by the progress bar, or `""` if the percentage is displayed instead.
+Get text currently displayed by the `ProgressBar`, or `""` if the percentage is displayed instead.
 """
 
 @document get_text_visible """
@@ -2346,7 +2346,7 @@ Get the actual duration of the last rendered frame.
 ```
 get_timing_function(::Animation) -> AnimationTimingFunction
 ```
-Get the shape of the function used to interpolate the animations underlying value over time.
+Get the shape of the function used to interpolate the animation's underlying value over time.
 """
 
 @document get_title """
@@ -2390,7 +2390,7 @@ Get the position of the top left corner of the axis-aligned bounding box, in Ope
 ```
 get_top_margin(::TextView) -> Float32
 ```
-Get distance between the top of the text and the text views frame.
+Get distance between the top of the text and the `TextView`'s frame.
 """
 
 @document get_touch_only """
@@ -2519,7 +2519,7 @@ Get upper bound of the underlying range.
 ```
 get_uri(::FileDescriptor) -> String
 ```
-Transform the descriptors path to URI format.
+Transform the descriptor's path to URI format.
 """
 
 @document get_use_markup """
@@ -2668,14 +2668,14 @@ Get the OpenGL texture wrap mode.
 ```
 get_x_alignment(::Label) -> Float32
 ```
-Get the horizontal alignment of the labels text.
+Get the horizontal alignment of the label's text.
 """
 
 @document get_y_alignment """
 ```
 get_y_alignment(::Label) -> Float32
 ```
-Get the vertical alignment of the labels text.
+Get the vertical alignment of the label's text.
 """
 
 @document goto_page! """
@@ -2739,7 +2739,7 @@ Check whether the key file has a group with the given ID, and whether that group
 ```
 hbox(::Widget...) -> Box
 ```
-Convenience functions that wraps list of a widget in a horizonally oriented box. 
+Convenience function that wraps list of a widget in a horizonally oriented box. 
 """
 
 @document hide! """
@@ -2902,7 +2902,7 @@ Run `f`, which is required to be invocable as a function with signature
 (::Application, [::Data_t]) -> Cvoid
 ```
 
-This functions automatically creates an application with given ID and starts the main loop. If an error occurrs
+This function automatically creates an application with given ID and starts the main loop. If an error occurrs
 during `f`, the application safely exits.
 
 ## Example
@@ -3016,7 +3016,7 @@ Check whether the modifier state indicates that the right mouse button is curren
 ```
 move!(from::FileDescriptor, to::FileDescriptor, allow_overwrite::Bool ; [make_backup::Bool = false, follow_symlink::Bool = true]) -> Bool 
 ```
-Move a file to a different location. Returns `true` if the operation was succesfull.
+Move a file to a different location. Returns `true` if the operation was successful.
 """
 
 @document move_page_to! """
@@ -3030,7 +3030,7 @@ Move notebook page at position `current_index` to position `new_index`, 1-based.
 ```
 move_to_trash!(file::FileDescriptor) ::Bool
 ```
-Safely move the file to the operating system garbage bin. This operation can be undone by the user. Returns `true` if the operation was succesfull.
+Safely move the file to the operating system garbage bin. This operation can be undone by the user. Returns `true` if the operation was successful.
 """
 
 @document nanoseconds """
@@ -3504,7 +3504,7 @@ remove_child!(::Revealer)
 remove_child!(::Viewport) 
 remove_child!(::TransformBin)
 ```
-Remove the widgets singular child, such that it is now empty.
+Remove the widget's singular child, such that it is now empty.
 """
 
 @document remove_css_class! """
@@ -3826,7 +3826,7 @@ Convert the object to its CSS representation.
 ```
 set_acceleration_rate!(::SpinButton, factor::AbstractFloat) 
 ```
-Set the rate at which the spin buttons value accelerates when a button is held down, where `0.0` is default rate, `0.1` is 10%, `1.0` is 100%, etc. May not be negative.
+Set the rate at which the `SpinButton`'s value accelerates when a button is held down, where `0.0` is default rate, `0.1` is 10%, `1.0` is 100%, etc. May not be negative.
 """
 
 @document set_accept_label! """
@@ -3921,7 +3921,7 @@ If `label` is not empty, add a singular button to the message with the given lab
 ```
 set_bottom_margin!(::TextView, margin::AbstractFloat) 
 ```
-Set margin between the bottom of the text and the text views frame.
+Set margin between the bottom of the text and the `TextView`'s frame.
 """
 
 @document set_can_respond_to_input! """
@@ -3963,7 +3963,7 @@ set_child!(::PopoverButton, child::Widget)
 set_child!(::Revealer, child::Widget) 
 set_child!(::TransformBin, child::Widget)
 ```
-Set the widgets singular child.
+Set the widget's singular child.
 """
 
 @document set_child_position! """
@@ -3977,14 +3977,14 @@ Set fixed position of the child, in absolute widget-space coordinates.
 ```
 set_child_x_alignment!(::AspectFrame, alignment::AbstractFloat) 
 ```
-Set horizontal alignment of the aspect frames child. `0.5` by default.
+Set horizontal alignment of the `AspectFrame`'s child. `0.5` by default.
 """
 
 @document set_child_y_alignment! """
 ```
 set_child_y_alignment!(::AspectFrame, alignment::AbstractFloat) 
 ```
-Set vertical alignment of the aspect frames child. `0.5` by default.
+Set vertical alignment of the `AspectFrame`'s child. `0.5` by default.
 """
 
 @document set_color! """
@@ -4023,7 +4023,7 @@ Set the singular comment above a group or key-value pair in the file.
 set_current_blend_mode(::BlendMode; allow_alpha_blending::Bool = true) 
 ```
 Enable GPU-side blending and set the current OpenGL blend mode. If `allow_alpha_blending` is set to `false`, 
-only the rgb components of a fragments color will participate in blending.
+only the rgb components of a fragment's color will participate in blending.
 """
 
 @document set_current_theme! """
@@ -4163,7 +4163,7 @@ Set whether the widget should expand along both the horizontal and vertical axis
 ```
 set_is_expanded(::Expander, ::Bool) 
 ```
-Automatically expand or hide the expanders child.
+Automatically expand or hide the `Expander`'s child.
 """
 
 @document set_expand_horizontally! """
@@ -4184,7 +4184,7 @@ Set whether the widget should expand along the y-axis.
 ```
 set_extra_widget!(::AlertDialog, ::Widget)
 ```
-Insert a widget into the dialogs content area, it will be displayed underneath the detailed message.
+Insert a widget into the dialog's content area, it will be displayed underneath the detailed message.
 """
 
 @document set_file! """
@@ -4226,7 +4226,7 @@ Set whether which widget currently holds input focus should be highlighted using
 ```
 set_fraction!(::ProgressBar, zero_to_one::AbstractFloat) 
 ```
-Set the currently displayed fraction of the progress bar, in `[0, 1]`.
+Set the currently displayed fraction of the `ProgressBar`, in `[0, 1]`.
 """
 
 @document set_fullscreen! """
@@ -4262,7 +4262,7 @@ Set whether the "tail" of the popover pointing to widget it is attached to shoul
 ```
 set_has_border!(::Notebook, ::Bool) 
 ```
-Set whether a border should be drawn around the notebooks perimeter.
+Set whether a border should be drawn around the notebook's perimeter.
 """
 
 @document set_has_close_button! """
@@ -4279,7 +4279,7 @@ set_has_frame!(::Viewport, ::Bool)
 set_has_frame!(::Entry, ::Bool) 
 set_has_frame!(::PopoverButton, ::Bool) 
 ```
-Set whether the widgets outline should be displayed. This does not impact the widgets interactability.
+Set whether the widget's outline should be displayed. This does not impact the widget's interactability.
 """
 
 @document set_has_origin! """
@@ -4300,8 +4300,8 @@ Set whether the barrier in-between the `Paned`s two children is wide or thin, wi
 ```
 set_header_menu!(::ColumnViewColumn, model::MenuModel) 
 ```
-Add a menu model to be used as the columns header menu, which the user can access by 
-clicking the columns title.
+Add a menu model to be used as the column's header menu, which the user can access by 
+clicking the column's title.
 """
 
 @document set_hide_on_close! """
@@ -4339,7 +4339,7 @@ Set alignment along the x-axis.
 ```
 set_horizontal_scrollbar_policy!(::Viewport, policy::ScrollbarVisibilityPolicy) 
 ```
-Set the policy governing how and if the horizontal scrollbar is revealed / hidden.
+Set the policy governing when the horizontal scrollbar is revealed / hidden.
 """
 
 @document set_icon! """
@@ -4348,14 +4348,14 @@ set_icon!(::Button, ::Icon)
 set_icon!(::ToggleButton, ::Icon)
 set_icon!(::PopoverButton, ::Icon)
 ```
-Replace the buttons label with an icon.
+Replace the button's label with an icon.
 """
 
 @document set_image! """
 ```
 set_image!(::Clipboard, image::Image) 
 ```
-Override the clipboards content with an image. Use [`get_image`](@ref) to retrieve it.
+Override the clipboard's content with an image. Use [`get_image`](@ref) to retrieve it.
 """
 
 @document set_initial_file! """
@@ -4384,7 +4384,7 @@ For `FILE_CHOOSER_ACTION_SELECT_FOLDER` or `FILE_CHOOSER_ACTION_OPEN_MULTIPLE_FO
 ```
 set_initial_name!(::FileChooser, ::String)
 ```
-For `FILE_CHOOSER_ACTION_SAVE`, set the name field that will be used to determine the saved files name.
+For `FILE_CHOOSER_ACTION_SAVE`, set the name field that will be used to determine the saved file's name.
 """
 
 @document set_inverted! """
@@ -4568,7 +4568,7 @@ set_layout!(header_bar, "close:maximize,minimize")
 ```
 set_left_margin!(::TextView, margin::AbstractFloat) 
 ```
-Set distance between the left end of the text and the text views frame.
+Set distance between the left end of the text and the `TextView`'s frame.
 """
 
 @document set_log_file! """
@@ -4578,7 +4578,7 @@ set_log_file!(path::String) -> Bool
 Set file at `path` as the log file. Any logging will be pushed to the file as opposed to being printed to the console. The file
 will be created if it does not exist. If it does exist, the file will be appended to, as opposed to being overwritten.
 
-Returns `true` if the file was succesfully opened.
+Returns `true` if the file was successfuly opened.
 """
 
 @document set_lower! """
@@ -4595,15 +4595,15 @@ Set lower bound of the underlying range.
 ```
 set_listens_for_shortcut_action!(::Widget, ::Action)
 ```
-Adds the action to the widgets internal `ShortcutEventController`. While the widget holds focus,
-if the user presses the actions associated shortcut, the action will trigger.
+Adds the action to the widget's internal `ShortcutEventController`. While the widget holds focus,
+if the user presses the action's associated shortcut, the action will trigger.
 """
 
 @document set_margin_bottom! """
 ```
 set_margin_bottom!(::Widget, margin::AbstractFloat) 
 ```
-Set distance between the bottom of the text and the text views frame, in pixels.
+Set distance between the bottom of the text and the `TextView`'s frame, in pixels.
 """
 
 @document set_margin_end! """
@@ -4794,7 +4794,7 @@ Attach a [`PopoverMenu`](@ref) to the popover button. This will detach any alrea
 ```
 set_position!(::Paned, position::Integer) 
 ```
-Set position of the paned handle, relative to the `Paned`s origin, in pixels.
+Set position of the paned handle, relative to the `Paned`'s origin, in pixels.
 """
 
 @document set_primary_icon! """
@@ -4873,7 +4873,7 @@ Set whether widget or its children should be visible. If the visibility changes,
 ```
 set_right_margin!(::TextView, margin::AbstractFloat) 
 ```
-Set margin between the right end of the text and the text views frame.
+Set margin between the right end of the text and the `TextView`'s frame.
 """
 
 @document set_row_spacing! """
@@ -4916,7 +4916,7 @@ Set the scope in which the controller listens for shortcut events, see [here](ht
 ```
 set_scrollbar_placement!(::Viewport, placement::CornerPlacement) 
 ```
-Set placement of both scrollbars relative to the viewports center.
+Set placement of both scrollbars relative to the viewport's center.
 """
 
 @document set_secondary_icon! """
@@ -4993,7 +4993,7 @@ Set whether separators should be drawn between two items.
 ```
 set_show_text!(::ProgressBar, ::Bool)
 ```
-Set whether a percentage or custom text should be displayed above the progress bar. Use [`set_text!`](@ref) to specify the custom text.
+Set whether a percentage or custom text should be displayed above the `ProgressBar`. Use [`set_text!`](@ref) to specify the custom text.
 """
 
 @document set_show_title_buttons! """
@@ -5098,7 +5098,7 @@ If set to `false`, log message with log-level `INFO` will now be printed to cons
 ```
 set_tab_position!(::Notebook, relative_position::RelativePosition) 
 ```
-Set position of the tab bar, relative to the notebooks center.
+Set position of the tab bar, relative to the notebook's center.
 """
 
 @document set_tabs_reorderable! """
@@ -5135,7 +5135,7 @@ Set text that will be displayed instead of the percentage when [`set_show_text!`
 ```
 set_text_to_value_function!(f, spin_button::SpinButton, [::Data_t]) 
 ```
-Set function that converts the text in the spin buttons text entry to a value. `f` is required to be invocable as a function with signature
+Set function that converts the text in the `SpinButton`'s text entry to a value. `f` is required to be invocable as a function with signature
 ```
 (::SpinButton, text::String) -> Float32
 ```
@@ -5206,21 +5206,21 @@ set_title!(::Window, title::String)
 set_title!(::FileChooser, title::String)
 set_title!(::ColorChooser, title::String)
 ```
-Set the windows title, which will be shown in its titlebar.
+Set the window's title, which will be shown in its titlebar.
 
 ---
 
 ```
 set_title!(::ColumnViewColumn, title::String) 
 ```
-Set the columns title, which will uniquely identify that column.
+Set the column's title, which will uniquely identify that column.
 
 ---
 
 ```
 set_title!(::PopupMessage, title::String)
 ```
-Set the `PopupMessage`s text, does not support pango markup.
+Set the `PopupMessage`'s text, does not support pango markup.
 """
 
 @document set_title_widget! """
@@ -5234,14 +5234,14 @@ Replace the default header bar with a custom widget.
 ```
 set_tooltip_text!(::Widget, text::String) 
 ```
-Create a simple text tooltip. It will be automatically shown when the user hovers above the widgets allocated area for a certain duration.
+Create a simple text tooltip. It will be automatically shown when the user hovers above the widget's allocated area for a certain duration.
 """
 
 @document set_tooltip_widget! """
 ```
 set_tooltip_widget!(::Widget, tooltip::Widget) 
 ```
-Set a custom widget as the widgets tooltip. It will be automatically shown when the user hovers above the widgets allocated area for a certain duration.
+Set a custom widget as the widget's tooltip. It will be automatically shown when the user hovers above the widgets allocated area for a certain duration.
 
 This widget should not be interactable.
 """
@@ -5257,7 +5257,7 @@ Move the shape such that the top left corner of its axis-aligned bounding box is
 ```
 set_top_margin!(::TextView, margin::AbstractFloat) 
 ```
-Set margin between the top of the text and the text views frame, in pixels.
+Set margin between the top of the text and the `TextView`'s frame, in pixels.
 """
 
 @document set_touch_only! """

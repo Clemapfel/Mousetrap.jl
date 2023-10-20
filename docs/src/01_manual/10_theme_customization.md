@@ -11,13 +11,15 @@ In this chapter, we will learn:
 !!! compat 
     These features are only available in Mousetrap v0.2.0 or newer
 
+---
+
 As our app grows and becomes closer to what we personally envisioned for our project, we want to not only customizes the layout and functionality of widgets, but how each widget looks. This can range from small changes such as changing something that is blue by default to green, or large sweeping changes that affect the entire application, such as moving to a light- or dark-, low- or high-contrast theme, or even using a completely custom theme.
 
 Mousetrap allows for all of these options. Using its very powerful theme customization component, we can customize our app to a point where most will not able to tell it was ever Mousetrap- / GTK4-based at all.
 
 ## Switching between Dark- and Light Mode
 
-The most common task that almost any app will want to offer is for the user to be able to swap between light and dark mode. This is an ubiquitous feature of modern UI, as such, mousetrap offers a very simple way of changing the global theme.
+The most common task that almost any app will want to offer is for the user to be able to swap between light and dark mode. This is an ubiquitous feature of modern UI, as such, Mousetrap offers a very simple way of changing the global theme.
 
 Mousetrap supports four default application-wide themes, which are values of enum [`Theme`](@ref):
 
@@ -73,7 +75,7 @@ Mousetrap offers a convenient mechanism for implementing animations like this fr
 
 If we want to animate a widget "fading out" over 1 second, that is, its opacity changes from 1 to 0 over that period of time, we should decrease the opacity by a specified amount each frame. Actually tying the amount to the frame rate of our window is ill-advised, many things can influence the frame rate and fluctuations would cause fluctuations in the speed of the fade-out. 
 
-To address this, mousetrap offers [`Animation`](@ref), which acts as a *stable clock*, an object that outputs a value over a specified amount of time in a way that is independent of the frame rate.
+To address this, Mousetrap offers [`Animation`](@ref), which acts as a *stable clock*, an object that outputs a value over a specified amount of time in a way that is independent of the frame rate.
 
 Continuing with our fade-out example, we first need to instance the widget we want to fade-out, a `Button`. We then create an instance of `Animation`, which takes for its constructor the widget we want to animate, along with the target duration of the animation:
 
@@ -82,9 +84,9 @@ to_animate = Button(Label("Fade Out"))
 animation = Animation(to_animate, seconds(1))
 ```
 
-By tying the `Animation` to the widget we will target, mousetrap will automatically preserve the animation while that widget is visible, as well as tie the animations clock to the render cycle of that specific widget, meaning the `Animation` will not play if the widget is not visible.
+By tying the `Animation` to the widget we will target, Mousetrap will automatically preserve the animation while that widget is visible, as well as tie the animations clock to the render cycle of that specific widget, meaning the `Animation` will not play if the widget is not visible.
 
-To start the animation, we call [`play!`](@ref). Of course, we have not yet implemented the behavior of the widgets' opacity decreasing. To do this, we register a callback using `Animation`s [`on_tick!`](@ref), which requires a function with the signature:
+To start the animation, we call [`play!`](@ref). Of course, we have not yet implemented the behavior of the widgets' opacity decreasing. To do this, we register a callback using `Animation`'s [`on_tick!`](@ref), which requires a function with the signature:
 
 ```julia
 (::Animation, value::Float64) -> Nothing
@@ -92,7 +94,7 @@ To start the animation, we call [`play!`](@ref). Of course, we have not yet impl
 
 Where `value` is the animations output value. By default, this will be in `[0, 1]`, though we can freely choose the upper and lower bound using [`set_lower!`](@ref) and [`set_upper!`](@ref). Once the animation is finished, the callback registered using [`on_done!`](@ref) is invoked.
 
-Since a widgets' opacity is already in `[0, 1]`, we can use the animations value directly:
+Since a widget's opacity is already in `[0, 1]`, we can use the animations value directly:
 
 ```julia
 to_animate = Button(Label("Fade Out"))
@@ -113,7 +115,7 @@ We can then start the animation using `play!`, for example, by clicking the butt
     using Mousetrap
     main() do app::Application
         window = Window(app)
-        set_title!(window, "mousetrap.jl")
+        set_title!(window, "Mousetrap.jl")
 
         button = Button(Label("Fade Out"))
         aspect_frame = AspectFrame(1.0, button)
@@ -155,7 +157,7 @@ In the chapter on rendering, we learned that we can apply a `GLTransform` to a `
 | [`reset!`](@ref) | `(none)` | Reset transform to identity |
 
 !!! tip "Rotate around a Point"
-    To rotate a widget around a fixed point `p`, we can `translate!` the transform such 
+    To rotate a widget around a fixed point `p`, we can `translate!` such 
     that the widgets new center is at `p`, `rotate!`, then `translate!` back to the widgets initial position. 
 
 These functions are called on the `TransformBin` instance directly, we do not use a separate transform object. The arguments for these functions operate in absolute widget space, with `(0, 0)` being the top left corner of the `TransformBin`s size allocation, in pixels.
@@ -214,13 +216,12 @@ add_css!("""
 
 We can then apply this class to any widget using [`add_css_class!`](@ref), at which point that widgets' appearance will change accordingly. To remove the modifier, we call [`remove_css_class!`](@ref). A widget can have more than one modifier class. To list all applied CSS classes, we use [`get_css_classes`](@ref).
 
-For a list of CSS properties supported by mousetrap, see [here](https://docs.gtk.org/gtk4/css-properties.html).
+For a list of CSS properties supported by Mousetrap, see [here](https://docs.gtk.org/gtk4/css-properties.html).
 
 For example, the following defines a `ToggleButton` that, when toggled, applies the following CSS class to both the `Window` (which is a Widget), and its `HeaderBar`:
 
 ```julia
 using Mousetrap
-
 add_css!("""
 .custom {
     background-color: hotpink;
@@ -232,7 +233,7 @@ add_css!("""
 main() do app::Application
 
     window = Window(app)
-    set_title!(window, "mousetrap.jl")
+    set_title!(window, "Mousetrap.jl")
     
     button = ToggleButton()
     connect_signal_toggled!(button, window) do self::ToggleButton, window::Window
@@ -265,10 +266,9 @@ We can make an `Entry` or `TextView` use monospaced text by calling `add_css_cla
 
 ---
 
-
 ## Changing a Widgets Color
 
-The following implements `set_accent_color!`, which is not part of mousetrap. `set_accent_color!` takes a widget, one of the below constants, as well as a boolean indicating whether the window should be opaque, as its arguments. When applied to a widget, this function changes that widgets color to one of the 5 pre-defined UI colors, such that their look fits well with the default UI theme:
+The following implements `set_accent_color!`, which is not part of Mousetrap. `set_accent_color!` takes a widget, one of the below constants, as well as a boolean indicating whether the window should be opaque, as its arguments. When applied to a widget, this function changes that widgets color to one of the 5 pre-defined UI colors, such that their look fits well with the default UI theme:
 
 ```julia
 using Mousetrap
@@ -357,7 +357,7 @@ Where we use a `HeaderBar` instead of `Button`. CSS modifiers can be applied to 
 
 To change a color used by the global theme, we need to redefine one of the themes [color constants](https://docs.gtk.org/gtk4/css-properties.html#colors) using CSS.
 
-For example, the global accent color, blue by default, can be redefined to any other color using the following function, which is also not part of mousetrap:
+For example, the global accent color, blue by default, can be redefined to any other color using the following function, which is also not part of Mousetrap:
 
 ```julia
 set_accent_color!(color::RGBA) = add_css!("@define-color accent_bg_color $(serialize(color));")
@@ -367,7 +367,7 @@ For example, calling `set_accent_color!(RGBA(1, 0, 1, 1))` changes the accent co
 
 ![](../assets/css_style_magenta_accent.png)
 
-For the names of palette colors other than `accent_bg_color`, see [here](https://gitlab.gnome.org/GNOME/libadwaita/-/blob/main/src/stylesheet/_colors.scss?ref_type=heads).
+For names of palette colors other than `accent_bg_color`, see [here](https://gitlab.gnome.org/GNOME/libadwaita/-/blob/main/src/stylesheet/_colors.scss?ref_type=heads).
 
 ## CSS Animations
 
@@ -404,4 +404,4 @@ end
 
 ![](../assets/css_style_animation_spin.webm)
 
-While we could create this animation using `Mousetrap.Animation` and `TransformBin`, using CSS means that we do not have to instance these two objects for every widget we want to animate, we can instead just apply the CSS modifier class to any instance. In return, the CSS-based animation cannot depend on any external variables and is thus only suited for animations that remain the same each time they are played.
+While we could create this animation using `Mousetrap.Animation` and `TransformBin`, using CSS means that we do not have to instance these two objects for every widget we want to animate, we can instead just apply the CSS modifier class to any instance. In return, the CSS-based animation cannot depend on any external variables and is thus only suited for animations that remain the same each time they are played. 
