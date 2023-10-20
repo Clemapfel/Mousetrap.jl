@@ -1,0 +1,43 @@
+name: CI
+on:
+  push:
+  pull_request:  
+  
+defaults:
+  run:
+    shell: bash
+    
+jobs:
+    test:
+      name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }}
+      runs-on: ${{ matrix.os }}
+      strategy:
+        fail-fast: false
+        matrix:
+          version:
+              - '1.7'
+              - '1.9'
+          os:
+            - macOS-latest
+            - windows-latest
+            - ubuntu-latest
+          arch:
+            - x64
+      steps: 
+        - uses: actions/checkout@v4
+        - uses: julia-actions/setup-julia@latest
+          with:
+            version: ${{ matrix.version }}
+            arch: ${{ matrix.arch }}
+            show-versioninfo: true
+            
+    docs:
+      name: 'Documentation'
+      runs-on: ubuntu-latest
+      steps: 
+        - uses: actions/checkout@v4
+        - uses: julia-actions/setup-julia@latest
+        - name: Install Documenter.jl Latest
+          run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\")"
+        - name: Build Docs
+          run: julia --color=yes docs/make.jl
