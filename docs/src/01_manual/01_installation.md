@@ -156,7 +156,7 @@ In our `main.jl` above, Mousetrap created a window and presented it on the physi
 
 Each screen updates at a set frequency, for example 60hz, which means a new image is drawn to the screen every 1/60th of a second. Each of these drawing steps is called a *frame*. This is why we often refer to the speed at which a graphical app updates as *frames-per-second* (fps), the number of times a new frame is drawn to the screen - per second.
 
-In Mousetrap, fps is tied to the monitors refresh rate. If the user's monitor updates at 120Hz, Mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why Mousetrap features a "lazy" rendering process. An area on screen will only be updated if it needs to be. 
+In Mousetrap, fps is tied to the monitor's refresh rate. If the user's monitor updates at 120Hz, Mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why Mousetrap features a "lazy" rendering process. An area on screen will only be updated if it needs to be. 
 For example, in the `main.jl` above, the label `"Hello World!"` will only be drawn once. Because it is static (it stays the same and does not move) there is no need to redraw it every frame.
 
 This is in opposition to how many video games work. Usually, in video game engines, each frame will make it such that the entire screen is re-drawn every time. This difference is important to realize.
