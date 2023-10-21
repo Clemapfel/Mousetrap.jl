@@ -113,7 +113,7 @@ display(screen, scatter(rand(123)))
 ```
 ![](docs/src/assets/makie_scatter.png)
 
-(**Note**: This feature is still experimental. See [here](https://github.com/Clemapfel/Mousetrap.jl/blob/main/test/makie_test.jl) for a complete example)
+(**Note**: This feature is still experimental. See [here](https://github.com/Clemapfel/MousetrapMakie.jl) for more information)
 
 ---
 
