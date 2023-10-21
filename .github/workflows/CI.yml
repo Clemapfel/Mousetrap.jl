@@ -14,14 +14,14 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          julia-version:
+          version:
             - "1.7"
             - "1.9"
           os:
             - ubuntu-latest
             - macos-latest
             - windows-latest
-          julia-arch:
+          arch:
             - x86
           include:
             - os: ubuntu-latest
