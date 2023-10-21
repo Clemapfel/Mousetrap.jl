@@ -17,7 +17,6 @@ jobs:
           version:
               - '1.7'
               - '1.9'
-              - 'nightly'
           os:
             - macOS-latest
             - windows-latest
@@ -47,3 +46,4 @@ jobs:
           run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/clemapfel/mousetrap_jll\"); Pkg.add(url=\"https://github.com/clemapfel/mousetrap.jl\")"
         - name: Build Docs
           run: julia docs/make.jl
+          
