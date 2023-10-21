@@ -34,24 +34,6 @@ jobs:
             arch: ${{ matrix.arch }}
             show-versioninfo: true
         - name: Install Mousetrap
-          run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/clemapfel/mousetrap_jll\"); Pkg.add(url=\"https://github.com/clemapfel/mousetrap.jl\")"
-        - name: Debug Precompile
-          run: julia -e "import Pkg; Pkg.precompile(\"Mousetrap\")"
+          run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/clemapfel/mousetrap_jll\"); Pkg.add(url=\"https://github.com/clemapfel/mousetrap.jl\"); Pkg.precompile()"
         - name: Run Tests
           run: julia -e "import Pkg; Pkg.test(\"Mousetrap\")"
-
-    docs:
-      name: 'Documentation'
-      runs-on: ubuntu-latest
-      steps: 
-        - uses: actions/checkout@v4
-        - uses: julia-actions/setup-julia@latest
-        - name: Install Documenter.jl
-          run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\")"
-        - name: Install Mousetrap
-          run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/clemapfel/mousetrap_jll\"); Pkg.add(url=\"https://github.com/clemapfel/mousetrap.jl\")"
-        - name: Debug Precompile
-          run: julia -e "import Pkg; Pkg.precompile(\"Mousetrap\")"
-        - name: Build Docs
-          run: julia docs/make.jl
-          
