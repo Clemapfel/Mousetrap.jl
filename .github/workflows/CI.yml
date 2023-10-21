@@ -28,7 +28,6 @@ jobs:
               prefix: xvfb-run
       steps: 
         - uses: actions/checkout@v4
-        - uses: coactions/setup-xvfb@v1
         - uses: julia-actions/setup-julia@latest
           with:
             version: ${{ matrix.version }}
@@ -43,7 +42,6 @@ jobs:
       runs-on: ubuntu-latest
       steps: 
         - uses: actions/checkout@v4
-        - uses: coactions/setup-xvfb@v1
         - uses: julia-actions/setup-julia@latest
         - name: Install Documenter.jl
           run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\")"
