@@ -14,17 +14,21 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          version:
-              - '1.7'
-              - '1.9'
+          julia-version:
+            - "1.7"
+            - "1.9"
           os:
-            - macOS-latest
-            - windows-latest
             - ubuntu-latest
-          arch:
-            - x64
+            - macos-latest
+            - windows-latest
+          julia-arch:
+            - x86
+          include:
+            - os: ubuntu-latest
+              prefix: xvfb-run
       steps: 
         - uses: actions/checkout@v4
+        - uses: coactions/setup-xvfb@v1
         - uses: julia-actions/setup-julia@latest
           with:
             version: ${{ matrix.version }}
@@ -39,6 +43,7 @@ jobs:
       runs-on: ubuntu-latest
       steps: 
         - uses: actions/checkout@v4
+        - uses: coactions/setup-xvfb@v1
         - uses: julia-actions/setup-julia@latest
         - name: Install Documenter.jl
           run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\")"
