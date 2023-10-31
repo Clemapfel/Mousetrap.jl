@@ -25,7 +25,7 @@ We can then make sure eveything works by executing `test Mousetrap` (still in `P
 !!! compat "Removing older versions"
   Mousetraps installation procedure has changed starting with `v0.3.0`. If Mousetrap `v0.2.*` or older installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
 
-  ```
+  ```julia
   import Pkg
   begin
       try Pkg.rm("mousetrap") catch end
@@ -34,8 +34,6 @@ We can then make sure eveything works by executing `test Mousetrap` (still in `P
       try Pkg.rm("mousetrap_apple_jll") catch end
   end
   ```
-
-```
 
 ## Hello World
 
