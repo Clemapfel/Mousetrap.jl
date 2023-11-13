@@ -16,7 +16,7 @@ Copyright © 2023 C.Cords, Licensed under lGPL-3.0
 """
 module Mousetrap
 
-    const VERSION = v"0.3.0"
+    const VERSION = v"0.3.1"
 
 ####### detail.jl
 
@@ -24,9 +24,15 @@ module Mousetrap
         using CxxWrap
         function __init__() @initcxx end
 
-        using libmousetrap_jll
+        # use GTK4_jlls settings schema if none are available on the machine
+        import GTK4_jll 
+        if !Sys.islinux() && (!haskey(ENV, "GSETTINGS_SCHEMA_DIR") || isempty(ENV["GSETTINGS_SCHEMA_DIR"]))
+            ENV["GSETTINGS_SCHEMA_DIR"] = normpath(joinpath(GTK4_jll.libgtk4, "../../share/glib-2.0/schemas"))
+        end
+
+        using mousetrap_jll
         function get_mousetrap_julia_binding()
-            return libmousetrap_jll.mousetrap_julia_binding
+            return mousetrap_jll.mousetrap_julia_binding
         end
       
         @wrapmodule(get_mousetrap_julia_binding)
