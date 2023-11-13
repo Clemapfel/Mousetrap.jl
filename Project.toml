@@ -19,5 +19,6 @@ mousetrap_jll = "0e90efc8-2bbd-550f-bf3c-306a2edaaeef"
 
 [compat]
 CxxWrap = "0.14.0"
+mousetrap_jll = "0.3.0"
 GTK4_jll = "4.10"
 Glib_jll = "2.76"
