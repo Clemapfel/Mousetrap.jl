@@ -25,9 +25,7 @@ module Mousetrap
         import GTK4_jll, Glib_jll
         function try_update_gsettings_schema_dir()
             # request to use GTK4_jll-supplied settings schema if none are available on the machine
-            schema_maybe = @ccall Glib_jll.libgio.g_settings_schema_source_get_default()::Ptr{Cvoid}
-            if schema_maybe == C_NULL && (!haskey(ENV, "GSETTINGS_SCHEMA_DIR") || isempty(ENV["GSETTINGS_SCHEMA_DIR"]))
-                @info "setting GSETTINGS_SECHMAD"
+            if !Sys.islinux() && (!haskey(ENV, "GSETTINGS_SCHEMA_DIR") || isempty(ENV["GSETTINGS_SCHEMA_DIR"]))
                 ENV["GSETTINGS_SCHEMA_DIR"] = normpath(joinpath(GTK4_jll.libgtk4, "../../share/glib-2.0/schemas"))
             end
         end
