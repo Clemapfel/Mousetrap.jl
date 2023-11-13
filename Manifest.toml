@@ -2,7 +2,7 @@
 
 julia_version = "1.9.3"
 manifest_format = "2.0"
-project_hash = "6066635ead310b16d9afae4d267afd84e6a92a34"
+project_hash = "35df27af9c014d69e11708d80e596801030231d1"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -976,14 +976,6 @@ git-tree-sha1 = "d2058c04963d424ae69f95460fc34fdfce4dc0cf"
 uuid = "3eaa8342-bff7-56a5-9981-c04077f7cee7"
 version = "0.11.0+1"
 
-[[deps.libmousetrap_jll]]
-deps = ["Artifacts", "GLEW_jll", "GLU_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "libadwaita_jll", "libcxxwrap_julia_jll"]
-git-tree-sha1 = "13b6c248b5b603997cbf738ce7804b016ecec776"
-repo-rev = "main"
-repo-url = "https://github.com/clemapfel/mousetrap_jll"
-uuid = "287f9a42-973b-50d0-ae32-9952e735a47d"
-version = "0.3.0+0"
-
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
 git-tree-sha1 = "94d180a6d2b5e55e447e2d27a29ed04fe79eb30c"
@@ -995,6 +987,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "848ab3d00fe39d6fbc2a8641048f8f272af1c51e"
 uuid = "a9144af2-ca23-56d9-984f-0d03f7b5ccf8"
 version = "1.0.20+0"
+
+[[deps.mousetrap_jll]]
+deps = ["Artifacts", "GLEW_jll", "GLU_jll", "GTK4_jll", "JLLWrappers", "Libdl", "OpenGLMathematics_jll", "libadwaita_jll", "libcxxwrap_julia_jll"]
+git-tree-sha1 = "6e5d87111686530feb339af45210317f56c27a82"
+uuid = "0e90efc8-2bbd-550f-bf3c-306a2edaaeef"
+version = "0.3.0+0"
 
 [[deps.nghttp2_jll]]
 deps = ["Artifacts", "Libdl"]

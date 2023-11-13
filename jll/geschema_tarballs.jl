@@ -20,21 +20,17 @@ mkdir ${prefix}/share/licenses/mousetrap
 cp LICENSE ${prefix}/share/licenses/mousetrap/LICENSE
 meson setup build --cross-file=$MESON_TARGET_TOOLCHAIN --cross-file=../cmake_toolchain_patch.ini
 meson install -C build
-cd ../mousetrap_julia_binding
-meson setup build --cross-file=$MESON_TARGET_TOOLCHAIN --cross-file=../cmake_toolchain_patch.ini -DJulia_INCLUDE_DIRS=$prefix/include/julia
-meson install -C build
-cd ..
 rm cmake_toolchain_patch.ini
 """
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = filter(p -> nbits(p) == 64, supported_platforms())
+platforms = filter(p -> nbits(p) == 64 && Sys.iswindows(p), supported_platforms())
 
 # The products that we will ensure are always built
 products = [
     LibraryProduct("libmousetrap", :mousetrap),
-    LibraryProduct("libmousetrap_julia_binding", :mousetrap_julia_binding),
+    #LibraryProduct("libmousetrap_julia_binding", :mousetrap_julia_binding),
     FileProduct("")
 ]
 

@@ -1,18 +1,23 @@
 name = "Mousetrap"
 uuid = "5deeb4b9-6e04-4da7-8b7f-c77fb1eae65e"
 authors = ["C.Cords <mail@clemens-cords.com>"]
-version = "0.3.0"
+version = "0.3.1"
 
 [deps]
 BinaryBuilder = "12aac903-9f7c-5d81-afc2-d9565ea332ae"
 CxxWrap = "1f15a43c-97ca-5a2a-ae31-89f07a497df4"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+GTK4_jll = "6ebb71f1-8434-552f-b6b1-dc18babcca63"
+Glib_jll = "7746bdde-850d-59dc-9ae8-88ece973131d"
 InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 Latexify = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
 Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+libadwaita_jll = "583852a3-1c13-5035-b52b-3b742a7b3316"
 libcxxwrap_julia_jll = "3eaa8342-bff7-56a5-9981-c04077f7cee7"
-libmousetrap_jll = "287f9a42-973b-50d0-ae32-9952e735a47d"
+mousetrap_jll = "0e90efc8-2bbd-550f-bf3c-306a2edaaeef"
 
 [compat]
 CxxWrap = "0.14.0"
+GTK4_jll = "4.10"
+Glib_jll = "2.76"
