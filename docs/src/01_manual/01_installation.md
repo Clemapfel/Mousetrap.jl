@@ -10,20 +10,21 @@ In this chapter, we will learn:
 ## Installation
 
 
-To install Mousetrap, in the REPL:
+To install Mousetrap, in the REPL, press the `]` key, then
+
 
 ```julia
 import Pkg;
 begin
-  Pkg.add(url="https://github.com/clemapfel/mousetrap_jll")
-  Pkg.add(url="https://github.com/clemapfel/mousetrap.jl")
+    Pkg.add(url="https://github.com/clemapfel/mousetrap.jl")
+    Pkg.test("Mousetrap")
 end
 ```
 
-We can then make sure eveything works by executing `test Mousetrap` (still in `Pkg` mode). This may take a long time. If installation was succesfull, `Mousetrap tests passed` will be printed at the end.
+If installation was succesfull, `Mousetrap tests passed` will be printed at the end.
 
 !!! compat "Removing older versions"
-  Mousetraps installation procedure has changed starting with `v0.3.0`. If Mousetrap `v0.2.*` or older installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
+  Mousetraps installation procedure has changed starting with `v0.3.0`. If older versions of Mousetrap are installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
 
   ```
   import Pkg
@@ -32,10 +33,9 @@ We can then make sure eveything works by executing `test Mousetrap` (still in `P
       try Pkg.rm("mousetrap_windows_jll") catch end
       try Pkg.rm("mousetrap_linux_jll") catch end
       try Pkg.rm("mousetrap_apple_jll") catch end
+      try Pkg.rm("libmousetrap_jll") catch end
   end
   ```
-
-```
 
 ## Hello World
 
@@ -63,8 +63,6 @@ julia main.jl
 
     ```
     (julia:10512): GLib-GIO-WARNING **: 15:29:40.047: dbus binary failed to launch bus, maybe incompatible version
-
-    (julia:10512): GLib-GIO-CRITICAL **: 15:29:41.923: g_settings_schema_source_lookup: assertion 'source != NULL' failed  
     ```
 
     This is due to a non-critical bug in one of Mousetraps dependencies, and does not indicate a problem. **These warnings can be safely ignored** and will be fixed in future versions of Mousetrap. See [here](https://github.com/Clemapfel/mousetrap.jl/issues/5) for more information.

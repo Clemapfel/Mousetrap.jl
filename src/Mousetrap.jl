@@ -22,12 +22,15 @@ module Mousetrap
 
     module detail
         using CxxWrap
-        function __init__() @initcxx end
-
-        # use GTK4_jlls settings schema if none are available on the machine
         import GTK4_jll 
-        if !Sys.islinux() && (!haskey(ENV, "GSETTINGS_SCHEMA_DIR") || isempty(ENV["GSETTINGS_SCHEMA_DIR"]))
-            ENV["GSETTINGS_SCHEMA_DIR"] = normpath(joinpath(GTK4_jll.libgtk4, "../../share/glib-2.0/schemas"))
+        function __init__() 
+            
+            # use GTK4_jlls settings schema if none are available on the machine
+            if !Sys.islinux() && (!haskey(ENV, "GSETTINGS_SCHEMA_DIR") || isempty(ENV["GSETTINGS_SCHEMA_DIR"]))
+                ENV["GSETTINGS_SCHEMA_DIR"] = normpath(joinpath(GTK4_jll.libgtk4, "../../share/glib-2.0/schemas"))
+            end
+            println("called")
+            @initcxx()
         end
 
         using mousetrap_jll

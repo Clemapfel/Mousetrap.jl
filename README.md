@@ -140,7 +140,6 @@ In the Julia REPL, execute:
 ```julia
 import Pkg;
 begin
-    Pkg.add(url="https://github.com/clemapfel/mousetrap_jll")
     Pkg.add(url="https://github.com/clemapfel/mousetrap.jl")
     Pkg.test("Mousetrap")
 end
@@ -152,7 +151,9 @@ At the end, it should say `Mousetrap tests passed`.
 
 > **Note**: On Linux Wayland, a warning regarding EGL displays may appear during installation. See the [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for how to fix this issue.
 
-If you have had Mousetrap version 0.2.0 or earlier installed on your device before, run the following before installing the current version of Mousetrap:
+---
+
+If you have had Mousetrap version 0.3.0 or earlier installed on your device before, run the following before installing the current version of Mousetrap:
 
 ```julia
 import Pkg
@@ -161,6 +162,7 @@ begin
     try Pkg.rm("mousetrap_windows_jll") catch end
     try Pkg.rm("mousetrap_linux_jll") catch end
     try Pkg.rm("mousetrap_apple_jll") catch end
+    try Pkg.rm("libmousetrap_jll") catch end
     Pkg.gc()
 end
 ```
