@@ -54,7 +54,7 @@ const signal_descriptors = Dict([
     ),
     :unmap => (
         void_signature, 
-        "Emitted when the widget looses its current size allocation, usually in the process of being hidden or destroyed."
+        "Emitted when the widget loses its current size allocation, usually in the process of being hidden or destroyed."
     ),
     :close_request => (
         "(::T, [::Data_t]) -> WindowCloseRequestResult", 
@@ -62,7 +62,7 @@ const signal_descriptors = Dict([
     ),
     :closed => (
         void_signature, 
-        "Emitted when a popover-window is closed, for example by calling `popdown!`, or it loosing focus while `set_autohide!` is set to `true`."
+        "Emitted when a popover-window is closed, for example by calling `popdown!`, or it losing focus while `set_autohide!` is set to `true`."
     ),
     :activate_default_widget => (
         void_signature, 
@@ -90,19 +90,19 @@ const signal_descriptors = Dict([
     ),
     :key_pressed => (
         "(::T, code::KeyCode, modifiers::ModifierState, [::Data_t]) -> Nothing", 
-        "Emitted when the user presses a non-modifier key (which is currently not pressed), while the controllers associated widget holds input focus."
+        "Emitted when the user presses a non-modifier key (which is currently not pressed), while the controller's associated widget holds input focus."
     ),
     :key_released => (
         "(::T, code::KeyCode, modifiers::ModifierState, [::Data_t]) -> Nothing", 
-        "Emitted when the user releases a non-modifier key (which is currently pressed), while the controllers associated widget holds input focus."
+        "Emitted when the user releases a non-modifier key (which is currently pressed), while the controller's associated widget holds input focus."
     ),
     :modifiers_changed => (
         "(::T, modifiers::ModifierState, [::Data_t]) -> Nothing", 
-        "Emitted when the user presses or releases a modifier key, while the controllers associated widget holds input focus."
+        "Emitted when the user presses or releases a modifier key, while the controller's associated widget holds input focus."
     ),
     :drag_begin => (
         "(::T, start_x::AbstractFloat, start_y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted exaclty once, on the first frame a drag gesture is recognized, where `start_y` and `start_x` are the initial position of the cursor, in pixels."
+        "Emitted exactly once, on the first frame a drag gesture is recognized, where `start_y` and `start_x` are the initial position of the cursor, in pixels."
     ),
     :drag => (
         "(::T, x_offset::AbstractFloat, y_offset::AbstractFloat, [::Data_t]) -> Nothing", 
@@ -114,11 +114,11 @@ const signal_descriptors = Dict([
     ),
     :click_pressed => (
         "(::T, n_presses::Integer, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "User presses a mouse button (which is currently not pressed), while the controllers associated widget holds input focus. Where `n_presses` are the current number of clicks in the sequence, `x`, `y` are the current cursor position, in pixels."
+        "User presses a mouse button (which is currently not pressed), while the controller's associated widget holds input focus. Where `n_presses` are the current number of clicks in the sequence, `x`, `y` are the current cursor position, in pixels."
     ),
     :click_released => (
         "(::T, n_presses::Integer, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "User releases a mouse button (which is currently pressed), while the controllers associated widget holds input focus. Where `n_presses` are the current number of clicks in the sequence, `x`, `y` are the current cursor position, in pixels."
+        "User releases a mouse button (which is currently pressed), while the controller's associated widget holds input focus. Where `n_presses` are the current number of clicks in the sequence, `x`, `y` are the current cursor position, in pixels."
     ),
     :click_stopped => (
         void_signature, 
@@ -130,7 +130,7 @@ const signal_descriptors = Dict([
     ),
     :focus_lost => (
         void_signature, 
-        "Emitted when the widget that is currently focused looses focus."
+        "Emitted when the widget that is currently focused loses focus."
     ),
     :pressed => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
@@ -142,7 +142,7 @@ const signal_descriptors = Dict([
     ),
     :motion_enter => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted once when the users cursor first enters the allocated area of the widget on screen, where `x` and `y` are the current position of the cursor, in pixels."
+        "Emitted once when the user's cursor first enters the allocated area of the widget on screen, where `x` and `y` are the current position of the cursor, in pixels."
     ),
     :motion => (
         "(::T, x::AbstractFloat, y::AbstractFloat, [::Data_t]) -> Nothing", 
@@ -154,11 +154,11 @@ const signal_descriptors = Dict([
     ),
     :scale_changed => (
         "(::T, scale::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted any time the distance between two fingers of a pinch-zoom-gesture changes, where `scale` is the factor of the current distance between the two fingers, compared to the distance at the start of the gesture."
+        "Emitted any time the distance between two fingers of a pinch-zoom-gesture change, where `scale` is the factor of the current distance between the two fingers, compared to the distance at the start of the gesture."
     ),
     :rotation_changed => (
         "(::T, angle_absolute::AbstractFloat, angle_delta::AbstractFloat, [::Data_t]) -> Nothing", 
-        "Emitted when the angle between the two fingers of a rotate-gesture changes, where `angle_delta` is the offset, `angle_absolute` the current angle, in radians."
+        "Emitted when the angle between the two fingers of a rotate-gesture changes, where `angle_delta` is the offset, `angle_absolute`the current angle, in radians."
     ),
     :scroll_begin => (
         void_signature, 
@@ -214,11 +214,11 @@ const signal_descriptors = Dict([
     ),
     :render => (
         "(::T, gdk_gl_context::Ptr{Cvoid}, [::Data_t]) -> Bool", 
-        "Emitted once per frame before the GL framebuffer is flushed to the screen. The `gdk_gl_context` argument is for internal use only and can be ignored."
+        "Emitted once per frame before the GL frame buffer is flushed to the screen. The `gdk_gl_context` argument is for internal use only and can be ignored."
     ),
     :resize => (
         "(::T, width::Integer, height::Integer, [::Data_t]) -> Nothing", 
-        "Emitted whenver the allocated area of a `RenderArea` changes, where `width` and `height` are the new size, in pixels."
+        "Emitted whenever the allocated area of a `RenderArea` changes, where `width` and `height` are the new size, in pixels."
     ),
     :activated => (
         void_signature, 

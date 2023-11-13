@@ -139,7 +139,7 @@ $(@type_fields())
 Used to register an application with the user's OS.
 
 The application's ID is required to contain at least one `.`, and it should be unique, meaning no
-other application on the users operating system shares this ID.
+other application on the user's operating system shares this ID.
 
 When all windows of an application are closed, or [`quit!`](@ref) is called,
 the application exits. This can be prevented with [`hold!`](@ref), 
@@ -293,8 +293,7 @@ box = hbox(Label("01"), Button(), Label("02"))
 @document Button """
 # Button <: Widget
 
-Button with a label. Connect to signal `clicked` or specify an action via [`set_action!`](@ref)
-in order to react to the user clicking the button.
+Button with a label. Connect to signal `clicked` or specify an action via [`set_action!`](@ref) to react to the user clicking the button.
 
 $(@type_constructors(
     Button(),
@@ -430,10 +429,10 @@ add_controller!(window, click_controller)
 
 Allows for accessing and overwriting the data in the user's OS-wide clipboard.
 Construct an instance of this type by calling [`get_clipboard`](@ref) on the
-toplevel window.
+top-level window.
 
 If the clipboard contains an image, use [`get_image`](@ref) to access it,
-any other kind of data needs to be accesses with [`get_string`](@ref).
+any other kind of data needs to be accessed with [`get_string`](@ref).
 
 $(@type_constructors(
 ))
@@ -539,7 +538,7 @@ set_child!(window, column_view)
 # ColumnViewColumn <: SignalEmitter
 
 Class representing a column of [`ColumnView`](@ref). Has a label, any number of children 
-which represented that columns rows, and an optional header menu.
+which represented that column's rows, and an optional header menu.
 
 $(@type_constructors(
 ))
@@ -730,8 +729,8 @@ present!(file_chooser)
 @document FileDescriptor """
 # FileDescriptor <: SignalEmitter
 
-Read-only object that points a specific location on disk. There is no
-guaruantee that this location contains a valid file or folder.
+Read-only object that points to a specific location on disk. There is no
+guarantee that this location contains a valid file or folder.
 
 $(@type_constructors(
     FileDescriptor(path::String)
@@ -830,7 +829,7 @@ $(@type_fields())
 @document FlowBox """
 # FlowBox <: Widget
 
-`Box`-like widget that dynamically rearranges its children into multiple rows (or columns), as the widgets width (or height) changes.
+`Box`-like widget that dynamically rearranges its children into multiple rows (or columns), as the widget's width (or height) changes.
 
 $(@type_constructors(
     FlowBox(Orientation)
@@ -847,7 +846,7 @@ $(@type_fields())
 @document FocusEventController """
 # FocusEventController <: EventController
 
-Reacts to a widget gaining or loosing input focus.
+Reacts to a widget gaining or losing input focus.
 
 $(@type_constructors(
     FocusEventController()
@@ -914,7 +913,7 @@ end
 @document GLArea """
 # GLArea <: Widget
 
-Canvas that can be used a an OpenGL render target. This widget is intended to be used by third libraries, 
+Canvas that can be used as an OpenGL render target. This widget is intended to be used by third libraries, 
 if you want to render using OpenGL using only Mousetrap, use `RenderArea` instead.
 
 
@@ -966,7 +965,7 @@ $(@type_fields(
 # Grid <: Widget
 
 Selectable container that arranges its children in a non-uniform grid. 
-Each child has a row- and column-index, as well as a width and height, measured in number of cells.
+Each child has a row- and column index, as well as a width and height, measured in number of cells.
 
 $(@type_constructors(
     Grid()  
@@ -1039,7 +1038,7 @@ $(@type_fields(
 @document HeaderBar """
 # HeaderBar <: Widget
 
-Widget that usually used as the title bar of a window. It contains a title, 
+Widget that is usually used as the title bar of a window. It contains a title, 
 close-, maximize-, minimize buttons, as well as an area for widgets on both sides of the title.
 
 $(@type_constructors(
@@ -1065,7 +1064,7 @@ set_titlebar_widget!(window, header_bar)
 @document Icon """
 # Icon
 
-Allows loading of icons from a image file or icon theme.
+Allows loading of icons from an image file or icon theme.
 
 $(@type_constructors(
     Icon(),
@@ -1095,7 +1094,7 @@ $(@type_fields()))
 Allows loading of items from a folder if that folder strictly adheres to 
 the [freedesktop icon theme specifications](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html). 
 
-A [`Window`](@ref) is required to construct the icon theme, at which point the default icons for that windows display are also loaded.
+A [`Window`](@ref) is required to construct the icon theme, at which point the default icons for that window's display are also loaded.
 
 $(@type_constructors(
 IconTheme(::Window)
@@ -1159,7 +1158,7 @@ $(@type_fields(
 @document KeyEventController """
 # KeyEventController <: EventController
 
-Event controller that recognizes keyboard key strokes.
+Event controller that recognizes keyboard keystrokes.
 
 $(@type_constructors(
     KeyEventController()
@@ -1200,7 +1199,7 @@ Allows (de-)serializing of the following types:
 + `HSVA`
 + `Image`
 
-All key-values pairs have to be in exactly one group.
+All key-value pairs have to be in exactly one group.
 
 $(@type_constructors(
     KeyFile(),
@@ -1229,7 +1228,7 @@ key_id=123;456;789;
 @document KeyID """
 # KeyID
 
-ID of [`KeyFile`](@ref) key-value-pair. Contains only roman letters, 0-9, and '_'.
+ID of [`KeyFile`](@ref) key-value-pair. Contains only Roman letters, 0-9, and '_'.
 
 $(@type_constructors(
 ))
@@ -1428,7 +1427,7 @@ $(@type_fields())
 @document ModifierState """
 # ModifierState
 
-Holds information about which modifier are currently pressed
+Holds information about which modifiers are currently pressed
 
 See also:
 + [`control_pressed`](@ref)
@@ -1522,7 +1521,7 @@ set_child!(window, notebook)
 @document Overlay """
 # Overlay <: Widget
 
-Widget that has exaclty one "base" child, and any number of "overlay" children. If 
+Widget that has exactly one "base" child, and any number of "overlay" children. If 
 two interactable widgets overlap, only the top-most widget will be interactable. 
 
 $(@type_constructors(
@@ -1750,7 +1749,7 @@ set_child!(window, popover_button)
 @document PopoverMenu """
 # PopoverMenu <: Widget
 
-Menu view that display a [`MenuModel`](@ref) in a popover window. 
+Menu view that displays a [`MenuModel`](@ref) in a popover window. 
 Use [`PopoverButton`](@ref) to automatically show / hide the popover.
 
 $(@type_constructors(
@@ -1986,7 +1985,7 @@ end
 @document ScrollEventController """
 # ScrollEventController <: EventController
 
-Controller recognizing scrolling gestures by a mouse scrollwheel or touch device.
+Controller able to recognize scrolling gestures by a mouse scroll wheel or touch device.
 
 $(@type_constructors(
     ScrollEventController([kinetic_scrolling_enabled::Bool = false])
@@ -2299,7 +2298,7 @@ $(@type_fields())
 
 Controller handling events from a stylus devices, such as drawing tablets.
 
-Has access to many manufacturer specific sensors, see the section on `StylusEventController`
+Has access to many manufacturer-specific sensors, see the section on `StylusEventController`
 in the manual chapter on event handling for more information.
 
 $(@type_constructors(
@@ -2600,7 +2599,7 @@ allocated size of the `Viewport` is independent of that
 of its child. 
 
 The user can control which part is shown 
-by operating two scrollbars. These  will automatically hide 
+by operating two scrollbars. These will automatically hide 
 or show themself when the user's cursor enters the viewport.
 This behavior can be influenced by setting the 
 [`ScrollbarVisibilityPolicy`](@ref) for one or both of the scrollbars.
@@ -2612,7 +2611,7 @@ of its child by setting [`set_propagate_natural_width!`](@ref) or
 The placement of both scrollbars at the same time can be set with [`set_scrollbar_placement!`](@ref).
 
 Connect to the `value_changed` signal of each of the scrollbars [`Adjustment`](@ref)
-in order to react to the user scrolling the `Viewport`.
+to react to the user scrolling the `Viewport`.
 
 $(@type_constructors(
     Viewport()
@@ -2629,7 +2628,7 @@ $(@type_fields())
 # Widget <: SignalEmitter
 
 Superclass of all renderable entities in Mousetrap. Like all
-[`SignalEmitter`](@ref)s, a widgets lifetime is managed automatically.
+[`SignalEmitter`](@ref)s, a widget's lifetime is managed automatically.
 
 Widgets have a large number of properties that influence their 
 size and position on screen. See the manual chapter on widgets 
@@ -2662,7 +2661,7 @@ $(@type_fields())
 Top-level window, associated with an [`Application`](@ref). Has exactly one child, 
 as well as a titlebar widget, which will usually be a [`HeaderBar`](@ref).
 
-When the users window manager requests for a window to close,
+When the user's window manager requests for a window to close,
 signal `close_request` will be emitted, whose return value can 
 prevent the window from closing.
 
