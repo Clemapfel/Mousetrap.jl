@@ -8,7 +8,7 @@ In this chapter, we will learn:
 ---
 
 In the [chapter on actions](./03_actions.md) we learned that we can trigger an action using [`Button`](@ref), by assigning an action to it using [`set_action!`](@ref).
-This works if we want to have a GUI element that has a one or maybe a few actions. In practice, an application can have hundreds of different actions. Asking users to trigger these using an equal number of buttons would be unsustainable. For situations like these, we should instead turn to **menus**.
+This works if we want to have a GUI element that has one or maybe a few actions. In practice, an application can have hundreds of different actions. Asking users to trigger these using an equal number of buttons would be unsustainable. For situations like these, we should instead turn to **menus**.
 
 ## MenuModel Architecture
 
@@ -63,7 +63,7 @@ add_action!(model, "Action item #3", action)
 
 ### Item Type #2: Widgets
 
-Secondly, we have perhaps the most powerful type of item: A custom widget. We add an item of this type using [`add_widget!`](@ref), which only takes a single argument, the widget itself. This widget can be arbitrarily complex, though it is usually not advisable to insert an entire `ColumnView` into a tiny menu. Good-practice examples include `Button`, `Entry`, `CheckButton`, `ToggleButton`, `Switch` and `SpinButton`, all of which are interactable.
+Secondly, we have perhaps the most powerful type of item: A custom widget. We add an item of this type using [`add_widget!`](@ref), which only takes a single argument, the widget itself. This widget can be arbitrarily complex, though it is usually not advisable to insert an entire `ColumnView` into a tiny menu. Good-practice examples include `Button`, `Entry`, `CheckButton`, `ToggleButton`, `Switch`, and `SpinButton`, all of which are intractable.
 
 We do not supply an `Action` instance with this item, if we want the user interacting with the menu item to trigger behavior, we will have to connect that behavior to the signals of the widget we inserted into the menu, or any of its event controllers.
 
@@ -75,7 +75,7 @@ add_widget!(model, hbox(Label("Enter Text:  "), Entry()))
 
 ![](../assets/menu_model_widgets.png)
 
-Widgets are the most flexible type of menu items. They should be used with caution, and only if absolutely necessary. It is often better to create an action that opens a separate [`Window`](@ref) which contains the widget, as opposed to directly adding the widget to the menu.
+Widgets are the most flexible type of menu item. They should be used with caution, and only if absolutely necessary. It is often better to create an action that opens a separate [`Window`](@ref) that contains the widget, as opposed to directly adding the widget to the menu.
 
 ### Item Type #3: Submenu
 
@@ -100,7 +100,7 @@ Clicking on of these items will reveal the submenu content:
 
 ![](../assets/menu_model_submenu_inner.png)
 
-Where `submenu_content()` returns a simple place-holder widget, in reality this will be many other menu items or other submenus.
+Where `submenu_content()` returns a simple place-holder widget, in reality, this will be many other menu items or other submenus.
 
 ### Item Type #4: Icons
 
@@ -114,7 +114,7 @@ add_icon!(model, Icon(#=...=#), action)
 ```
 ![](../assets/menu_model_icons.png)
 
-Where we used the default Gnome icons for weather-indicators as placeholders.
+Where we used the default Gnome icons for weather indicators as placeholders.
 
 When creating a menu item with an action, we have to decide whether to use a simple text label or an icon. We may not have both.
 
@@ -138,11 +138,11 @@ add_section!(model, "Section Label", section)
 ![](../assets/menu_model_section.png)
 
 
-We see that the section label, `"Section Label"` in this case, is displayed above all its items, which are inserted into the outer menu. In this way, sections can be helpful to group a number of menu items together, which makes a menu easier to parse without adding another nested level via a submenu.
+We see that the section label, `"Section Label"` in this case, is displayed above all its items, which are inserted into the outer menu. In this way, sections can be helpful to group multiple menu items, which makes a menu easier to parse without adding another nested level via a submenu.
 
 #### Section Formats
 
-[`add_section!`](@ref) takes one additional, optional argument, which is a [`SectionFormat`](@ref). This enum has a number of values that govern how the sections is displayed:
+[`add_section!`](@ref) takes one additional, optional argument, which is a [`SectionFormat`](@ref). This enum has a number of values that govern how the section is displayed:
 
 + `SECTION_FORMAT_CIRCULAR_BUTTONS` displays all its elements in circular buttons
 + `SECTION_FORMAT_HORIZONTAL_BUTTONS`: display its elements as a row of rectangular buttons
@@ -169,7 +169,7 @@ add_icon_section("Circular Buttons", SECTION_FORMAT_CIRCULAR_BUTTONS)
 ```
 ![](../assets/menu_model_section_formats.png)
 
-Using `SectionFormat` and mixing a number of menu item types, we can construct arbitrarily complex menus. We should realize that the highest priority when constructing menu items is the **user experience**. Presenting users with a giant, deeply nested mess of buttons may be very functional, but it may not very usable to anyone but the developers themself.
+Using `SectionFormat` and mixing several menu item types, we can construct arbitrarily complex menus. We should realize that the highest priority when constructing menu items is the **user experience**. Presenting users with a giant, deeply nested mess of buttons may be very functional, but it may not be very usable to anyone but the developers themself.
 
 ---
 
@@ -232,7 +232,7 @@ add_submenu!(root, "Help", help_submenu)
 menubar = MenuBar(model)
 ```
 
-Where, in a real application, each item will have a different action.
+Where in a real application, each item will have a different action.
 
 This code can be quite hard to read. To make the nesting easier to understand, we'll write it out as if it were a file system folder structure:
 
@@ -254,7 +254,7 @@ model \
 Where any line suffixed with a `\` is a submenu.
 
 We see that we have four models in total. The top-most menu model is called `root`, it is what `MenuBar` will be initialized with.
-Next, we have the model called `file_submenu`, which has the title `File`. It contains five items, titled `Open`, `Recent...`, `Save`, `Save As` and `Exit`. `Recent...` is a submenu-type item, created from a `MenuModel` called `file_recent_submenu` in the above code. This model, in turn, has three items.  On the same level as `File`, we have a second menu `Help`.
+Next, we have the model called `file_submenu`, which has the title `File`. It contains five items, titled `Open`, `Recent...`, `Save`, `Save As`, and `Exit`. `Recent...` is a submenu-type item, created from a `MenuModel` called `file_recent_submenu` in the above code. This model, in turn, has three items.  On the same level as `File`, we have a second menu `Help`.
 
 The **top-level** menu is `root`. It is used as the argument for the constructor of `MenuBar`. We see that all direct children of `root` (`File` and `Help`) **are themselves submenus** (they were added using `add_submenu!`). 
 
@@ -267,13 +267,13 @@ No direct child of `root` is an "action"-, "widget"-, "icon"- or "section"-type 
     a widget to any submenu that is nested any deeper than a direct child of `root`.
 
     This bug does not affect `PopoverMenu`, for whom we can put a widget at any 
-    depth. `PopoverMenu` has no requirement as to the structure of its menu model, while `MenuBar` requires that all top-level items are submenus, and that no submenu of a submenu may have a "widget"-type item.
+    depth. `PopoverMenu` has no requirement as to the structure of its menu model, while `MenuBar` requires that all top-level items are submenus and that no submenu of a submenu may have a "widget"-type item.
 
 ---
 
 ## Style End Note
 
-Menus are extremely powerful and complex to construct. With practice and good software / UI design, we can create deep, complex menus that are still easy to understand and use. We, as developers, should make this our first priority. 
+Menus are extremely powerful and complex to construct. With practice and good software / UI design, we can create deep, complex menus that are still easy to understand and use. We, as developers, should make this our priority. 
 
 Some additional notes:
 
@@ -293,4 +293,4 @@ Lastly, some schools of UI design believe that **every menu item should be insid
 
 This adds considerable complexity to the code (adding 4 models, one for each section, making our total 8). In return, items are grouped logically, and each item gets a "heading", which helps make long menus easier to understand. For this small example, this is most likely unnecessary, but it will be more attractive for a menubar with dozens of items.
 
-In the end, each UI designer should decide for themselves which technique to use. What all should agree on, however, is that ease-of-use for the end-user is the most important thing. It should trump ease-of-development in every case. If something is harder for us developers but makes it easier for our users, we should go through the effort of doing it.
+In the end, each UI designer should decide for themselves which technique to use. What all should agree on, however, is that ease of use for the end-user is the most important thing. It should trump ease of development in every case. If something is harder for us developers but makes it easier for our users, we should go through the effort of doing it.

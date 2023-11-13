@@ -47,7 +47,7 @@ end
 
 !!! details "Running Code Snippets"
 
-    In this section, code snippets will only show the relevant lines. To actually compile and run the code stated here, we need to create a Julia script with the following content:
+    In this section, code snippets will only show the relevant lines. To compile and run the code stated here, we need to create a Julia script with the following content:
 
     ```julia
     using Mousetrap
@@ -105,9 +105,9 @@ end
 
 ## SignalEmitters
 
-`Button`, as most classes in Mousetrap, is a subtype of an abstract type called [`SignalEmitter`](@ref). 
+`Button`, like most classes in Mousetrap, is a subtype of an abstract type called [`SignalEmitter`](@ref). 
 
-Subtyping `SignalEmitter` is equivalent to saying "this object can emit signals". Not all objects in Mousetrap are signal emitters, but most are. 
+Subtyping `SignalEmitter` is equivalent to saying "This object can emit signals". Not all objects in Mousetrap are signal emitters, but most are. 
 
 When we say "an object can emit signal `<id>`", what that means is that the following functions are defined for that object:
 
@@ -117,7 +117,7 @@ When we say "an object can emit signal `<id>`", what that means is that the foll
 + `set_signal_<id>_blocked!`
 + `get_signal_<id>_blocked`
 
-For example, `Button` supports the signal with id `clicked`, so the following functions are defined for it:
+For example, `Button` supports the signal with ID `clicked`, so the following functions are defined for it:
 
 + `connect_signal_clicked!`
 + `disconnect_signal_clicked!`
@@ -138,7 +138,7 @@ What may not have been obvious is that the signal handler, the anonymous functio
 
 !!! note "Function Signature Syntax" 
     
-    A functions' **signature** describes a functions' return- and argument types. For example, the function
+    A function's **signature** describes a function's return- and argument types. For example, the function
 
     ```julia
     function foo(i::Int32, s::String) ::String
@@ -166,7 +166,7 @@ What may not have been obvious is that the signal handler, the anonymous functio
     end
     ```
 
-    We convey that the last argument is optional be enclosing it in `[]`: `(::Int32, ::String, [::Bool]) -> String`
+    We convey that the last argument is optional by enclosing it in `[]`: `(::Int32, ::String, [::Bool]) -> String`
 
     In general, a function with argument types `Arg1_t, Arg2_t, ...`, return type `Return_t`, and optional arguments `Optional1_t, Optional2_t` has the signature 
     ```
@@ -176,11 +176,11 @@ What may not have been obvious is that the signal handler, the anonymous functio
     If and only if the `Return_t` of a function is `Nothing`, we can omit the return types along with the trailing `->`.
 
 
-Each signal requires it's a callback to conform to a specific signature. This signature is different for each signals. If we attempt to connect a handler that has the wrong signature, an `AssertionError` will be thrown at compile time. This makes it important to know how to check which signal requires which signature. 
+Each signal requires it's a callback to conform to a specific signature. This signature is different for each signal. If we attempt to connect a handler that has the wrong signature, an `AssertionError` will be thrown at compile time. This makes it important to know how to check which signal requires which signature. 
 
 ## Checking Signal Signature
 
-Working with our example, signal `clicked` of class `Button`, let's say we do not know what function is able to connect to this signal.
+Working with our example, signal `clicked` of class `Button`, let's say we do not know what function signature this signal expects.
 To find out, we check the Mousetrap documentation, either by visiting [`Button`](@ref)s documentation online, or from within the REPL by pressing `?` and entering the name of the class we want to look up:
 
 ```
@@ -226,7 +226,7 @@ help?> Mousetrap.Button
   set_child!(window, button)
 ```
 
-We see that button has a single signal, `clicked`. Along with this information, a description of when that signal is emitted is given, and that its signature is `(::Button, [::Data_t]) -> Nothing`, where `Data_t` is an optional argument of arbitrary type, which we can use to hand data to the signal handler.
+We see that button has a single signal, `clicked`. Along with this information, a description of when that signal is emitted is given, and that it requires the signature `(::Button, [::Data_t]) -> Nothing`, where `Data_t` is an optional argument of arbitrary type, which we can use to hand data to the signal handler.
 
 ## Handing Data to Signal Handlers
 
@@ -268,7 +268,7 @@ Any and all objects can be provided as `data`, but they have to be packaged as e
 Because there is only one `data`, it may seem limiting as to what or how much data we can pass to the signal handlers. In practice, this is not true, 
 because we can use a simple trick to group any number of objects into a single argument.
 
-Let's say we want to forward a string `"abc"`, an integer `999` and a vector of floats `[1.0, 2.0, 3.0]` to the signal handler. To achieve this, we can do the following:
+Let's say we want to forward a string `"abc"`, an integer `999`, and a vector of floats `[1.0, 2.0, 3.0]` to the signal handler. To achieve this, we can do the following:
 
 ```julia
 button = Button()
@@ -290,7 +290,7 @@ named_tuple = (
 connect_signal_clicked!(on_clicked, button, named_tuple)
 ```
 
-Here, we grouped the values in a [named tuple](https://docs.julialang.org/en/v1/manual/types/#Named-Tuple-Types), then accessed each individual value using an
+Here, we grouped the values in a [named tuple](https://docs.julialang.org/en/v1/manual/types/#Named-Tuple-Types), then accessed each value using an
 easy-to-read name.
 
 Again, we can write the above more succinctly using do-syntax:
@@ -306,7 +306,7 @@ connect_signal_clicked!(button, (
 end
 ```
 
-Using this technique, we can forward any and all objects to the signal handler via the optional `[::Data_t]` argument. This technique is available for all signals.
+Using this technique, we can forward any objects to the signal handler via the optional `[::Data_t]` argument. This technique is available for all signals.
 
 ## Implicit Return Types
 
@@ -345,7 +345,7 @@ out == to_append # true
 
 Because `push!` returns a value and it is the last line of the `on_clicked` definition, `on_clicked`, in turn, returns a value, meaning its return type is no longer `Nothing`, which triggers the error.
 
-In Mousetrap, all functions whose documentation does not explicitly mention a return type, will return `nothing`. This may not be true for functions in `Base` or foreign libraries, so we should take care to be aware of implicit return types. 
+In Mousetrap, all functions whose documentation does not explicitly mention a return type will return `nothing`. This may not be true for functions in `Base` or foreign libraries, so we should take care to be aware of implicit return types. 
 
 To fix the above error, we should return `nothing` manually:
 
@@ -476,10 +476,10 @@ Let's talk through what happens when the user clicks one of the two buttons now,
 
 + `button_01` invokes its signal handler
 + `button_01`s signal handler prints `01 clicked`
-+ `button_01` blocks invocation of its own signal handler
++ `button_01` blocks invocation of its signal handler
 + `button_01` activates `button_02`, triggering emission of signal `clicked`
 + `button_02`s signal handler prints `02 clicked`
-+ `button_02` blocks invocation of its own signal handler
++ `button_02` blocks invocation of its signal handler
 + `button_02` attempts to activate `button_01`, **but that buttons signal is blocked, so nothing happens**
 + `button_02` unblocks itself
 + `button_01` unblocks itself

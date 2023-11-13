@@ -4,7 +4,7 @@ In this chapter, we will learn:
 + What other features `Application` has
 + How to properly do logging
 + How to copy / move / create / delete files 
-+ How to automatically open a file or url for the user
++ How to automatically open a file or URL for the user
 + How to access a file's metadata
 + How to monitor a file changing
 + How to open a dialog that lets users select files
@@ -16,7 +16,7 @@ In this chapter, we will learn:
 
 ## Application
 
-We have already used it many times so far, but [`Application`](@ref), which is a signal emitter, offers a number of additional functionalities other than just storing our actions for us and keeping track of windows.
+We have already used it many times so far, but [`Application`](@ref), which is a signal emitter, offers several additional functionalities other than just storing our actions for us and keeping track of windows.
 
 It provides the following signals:
 
@@ -50,7 +50,7 @@ run!(app)
 
 In the previous code snippet, `"com.example"` is the **application ID**. This ID will be used to identify the application on the user's OS. It should be unique, meaning that no other application on the user's operating system shares this ID. 
 
-The application ID has to contain at least one `.` and should be a human-readable identifier in [RDNN format](https://docs.flatpak.org/en/latest/conventions.html#application-ids). For example, if our app is called "Foo Image Manipulation Program" and the apps website domain is `fimp.org`, we should use `org.fimp` as our ID.
+The application ID has to contain at least one `.` and should be a human-readable identifier in [RDNN format](https://docs.flatpak.org/en/latest/conventions.html#application-ids). For example, if our app is called "Foo Image Manipulation Program" and the app's website domain is `fimp.org`, we should use `org.fimp` as our ID.
 
 !!! warning "Running two apps with the same ID"
     If two applications with the same ID are active at the same time, **they will share assets**.
@@ -59,7 +59,7 @@ The application ID has to contain at least one `.` and should be a human-readabl
 
 ### Starting / Ending Runtime
 
-[`run!`](@ref) starts the application. This function initializes the various back-ends needed to show widgets, after which it emits signal `activate`. This is why we cannot initialize a widget before `run!` was called, or we will get an error:
+[`run!`](@ref) starts the application. This function initializes the various back-ends needed to show widgets, after which it emits signal `activate`. This is why we cannot initialize a widget before `run!` is called, or we will get an error:
 
 ```
 julia> label = Label()
@@ -72,7 +72,7 @@ julia> label = Label()
 
 We can force initialization without an `Application` instance with `Mousetrap.detail.initialize()`, though this is usually not recommended.
 
-At any point, we can attempt to end runtime by calling [`quit!`](@ref). This will usually cause the application to emit its signal `shutdown`. We should always `quit!` before calling Julias `exit()`, otherwise the apps process will be killed immediately, which can lead to undefined behavior.
+At any point, we can attempt to end runtime by calling [`quit!`](@ref). This will usually cause the application to emit its signal `shutdown`. We should always `quit!` before calling Julias `exit()`, otherwise the app's process will be killed immediately, which can lead to undefined behavior.
 
 ### Holding & Busy
 
@@ -119,7 +119,7 @@ First, we have `(example_target:45245)`, which is the identification of our appl
 
 #### Log Domain
 
-Next we have `Mousetrap-CRITICAL`. The word before the `-` is the **log domain**. This is a developer-defined identification that should state which part of the application or library caused the logging message. Pre-defined domains include `Mousetrap` and `Mousetrap.jl` for Mousetrap specific warnings, `GTK` for GTK-based warning, `GLib`, `Gio`, etc. 
+Next, we have `Mousetrap-CRITICAL`. The word before the `-` is the **log domain**. This is a developer-defined identification that should state which part of the application or library caused the logging message. Pre-defined domains include `Mousetrap` and `Mousetrap.jl` for Mousetrap-specific warnings, `GTK` for GTK-based warnings, `GLib`, `Gio`, etc. 
 
 As a user of Mousetrap, we should choose a new log domain. For example, if we create a new application called "Foo Image Manipulation Program", we should choose a descriptive log domain, such as `foo_image_manipulation_program`, `FIMP`, or `foo`.
 
@@ -130,12 +130,12 @@ As a user of Mousetrap, we should choose a new log domain. For example, if we cr
 + `DEBUG` is for messages that should not appear when the end user operates the application, they are **only meant for developers**. These messages will not be stored or printed to the console unless we specifically request the logging suite to do so
 + `INFO` is for **benign status updates**, for example, `successfully opened file at (...)`. We should not overuse these, as they can clutter up log files.
 + `WARNING` is for messages that should attempt to **prevent undesirable but not critical behavior before it occurs**. For example, when attempting to close a file while it is still being written to, a warning should be printed and the closing should be postponed until the writing is done.
-+ `CRITICAL` is for errors. In many languages, an error means the end of runtime, which is unacceptable for GUI applications. If the application throws an Julia exception, that exception [should be caught](https://docs.julialang.org/en/v1/manual/control-flow/#Exception-Handling) and printed as a `CRITICAL` log message instead. 
-+ `FATAL` is the most severe log level and should only be used as an absolute last resort. Once a `FATAL` warning is printed, the application exits immediately. These should be reserved for issues that make it impossible to run an application, for example `no gaphics card detected. quitting...`
++ `CRITICAL` is for errors. In many languages, an error means the end of runtime, which is unacceptable for GUI applications. If the application throws a Julia exception, that exception [should be caught](https://docs.julialang.org/en/v1/manual/control-flow/#Exception-Handling) and printed as a `CRITICAL` log message instead. 
++ `FATAL` is the most severe log level and should only be used as an absolute last resort. Once a `FATAL` warning is printed, the application exits immediately. These should be reserved for issues that make it impossible to run an application, for example, `no graphics card detected. quitting...`
 
 We see that our message from before was designated as `CRITICAL`. This is because adding a widget to itself would effectively deadlock the application, ending runtime. This makes it an issue too severe for a `WARNING`, but it is still recoverable (by preventing the insertion), therefore `FATAL` would be inappropriate. 
 
-`WARNING`s may be triggered by users. If a user is able to trigger a `CRITICAL` log message, this inherently means we as developers failed to prevent the user from doing so. An issue like this should be addressed by redesigning the application, as opposed to educating users. For a large enough user base, the latter will inevitably fail and cause the error to happen anyway.
+`WARNING`s may be triggered by users. If a user can trigger a `CRITICAL` log message, this inherently means we as developers failed to prevent the user from doing so. An issue like this should be addressed by redesigning the application, as opposed to educating users. For a large enough user base, the latter will inevitably fail and cause the error to happen anyway.
 
 #### Time Stamp
 
@@ -149,9 +149,9 @@ Messages should not end with a `\n` (a newline), as one is automatically appende
 
 ### Printing Messages
 
-All interaction with the log is handled by only a few functions. To print a log message of a given log level, we use `log_debug`, `log_info`, `log_warning`, `log_critical` and `log_fatal`. These functions take as their first argument the log domain and as their second argument the message as a string.
+All interaction with the log is handled by only a few functions. To print a log message of a given log level, we use `log_debug`, `log_info`, `log_warning`, `log_critical`, and `log_fatal`. These functions take as their first argument the log domain and as their second argument the message as a string.
 
-As mentioned before, messages of level `DEBUG` are only printed if we specifically request them to do so. We enable these on a per-log-domain basis, [`set_surpress_debug!`](@ref), while we can choose to surpress message with log level `INFO` using [`set_surpress_info!`](@ref). 
+As mentioned before, messages of level `DEBUG` are only printed if we specifically request them to do so. We enable these on a per-log-domain basis, [`set_surpress_debug!`](@ref), while we can choose to suppress message with log level `INFO` using [`set_surpress_info!`](@ref). 
 
 For example, if our log domain is `foo`:
 
@@ -159,14 +159,14 @@ For example, if our log domain is `foo`:
 # define custom domain
 const FOO_DOMAIN = "foo"
 
-# print `DEBUG` level message but nothing will happen because it is surpressed by default
+# print `DEBUG` level message but nothing will happen because it is suppressed by default
 log_debug(FOO_DOMAIN, "Surpressed message")
 
 # enable `INFO` level messages
 set_surpress_debug!(FOO_DOMAIN, false)
 
 # message will be printed
-log_debug(FOO_DOMAIN, "No longer surpressed message")
+log_debug(FOO_DOMAIN, "No longer suppressed message")
 ```
 
 Note that logging will only work once our `Application` instance is initialized. This is because the logging system needs a valid application ID, which is only registered once `Application` emits its `activate` signal.
@@ -177,7 +177,7 @@ If the operating system is Linux, many log messages will be written to the defau
 
 Regardless of OS, we can forward all logging, including that of Mousetrap itself, to a file using [`set_log_file!`](@ref), which takes the file path as a string. If the file already exists, it will be appended to (as opposed to being overwritten). If the file does not yet exist, it will be created. On successfully opening the file, `true` will be returned. We should react to the function's result, as not being able to log should be considered a fatal error.
 
-When stored to a file, logging messages will have a different format that may or may not list additional information when compared to logging to a console. The philosophy behind this is that it is better to log as much information as possible, then use second party software to filter it, as opposed to missing crucial information for the sake of brevity:
+When stored to a file, logging messages will have a different format that may or may not list additional information when compared to logging to a console. The philosophy behind this is that it is better to log as much information as possible, and then use second-party software to filter it, as opposed to missing crucial information for the sake of brevity:
 
 ```cpp
 const LogDomain FOO_DOMAIN = "foo"
@@ -207,11 +207,11 @@ Most GUI applications on desktops are centralized around modifying files. A text
 
 There are two kinds of objects in a file system: **files**, which contain arbitrary data, and **directories**, which contain other files and/or other directories. We also call a directory a **folder**. 
 
-Examples for files that are not folders include `.png`, `.txt`, `.jl` text files, shared libraries, binaries, or executable files.
+Examples of files that are not folders include `.png`, `.txt`, `.jl` text files, shared libraries, binaries, or executable files.
 
-A **path** is a string, made up of folder names separated by `/`, (or `\` on windows, though this should be avoided). Examples include `/var/log`, `~/Desktop`, etc. A path starting at root (`/` on unix, usually `C:/` on windows) is called an **absolute path**, while any other path is called a **relative path**. 
+A **path** is a string, made up of folder names separated by `/`, (or `\` on windows, though this should be avoided). Examples include `/var/log`, `~/Desktop`, etc. A path starting at root (`/` on Unix, usually `C:/` on Windows) is called an **absolute path**, while any other path is called a **relative path**. 
 
-An **uri** (universal resource identifier) is another way to express the location of the file. It follows a [strict scheme](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier), which is followed by most internet browsers, and should be preferred to regular paths for file transfers between different machines, or when referring to files on the internet.
+An **URI** (universal resource identifier) is another way to express the location of the file. It follows a [strict scheme](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier), which is followed by most internet browsers, and should be preferred to regular paths for file transfers between different machines, or when referring to files on the internet.
 
 ### FileDescriptor
 
@@ -224,16 +224,16 @@ readonly = FileDescriptor()
 create_from_path!(readonly, "/home/user/Desktop/example.txt");
 ```
 
-Where the argument to [`create_from_path!`](@ref) will be automatically detected as either a relative or absolute path. If it is not an absolute path, it will be prefixed with the applications runtime directory. For example, if we create a `FileDescriptor` from path `"assets/image.png"`, and our application is located in `/usr/bin/foo`, then the path will be treated as `/usr/bin/foo/assets/image.png`.
+Where the argument to [`create_from_path!`](@ref) will be automatically detected as either a relative or absolute path. If it is not an absolute path, it will be prefixed with the application's runtime directory. For example, if we create a `FileDescriptor` from path `"assets/image.png"`, and our application is located in `/usr/bin/foo`, then the path will be treated as `/usr/bin/foo/assets/image.png`.
 
-`FileDescriptor` does not make sure the underlying file or folder actually exists or that it is a valid file. Creating a descriptor from an invalid path or a path that does not point to a file or folder works just fine, and we won't get a warning. To check whether a file descriptor points to a valid file or folder, we have to use [`exists`](@ref). 
+`FileDescriptor` does not make sure the underlying file or folder exists or that it is a valid file. Creating a descriptor from an invalid path or a path that does not point to a file or folder works just fine, and we won't get a warning. To check whether a file descriptor points to a valid file or folder, we have to use [`exists`](@ref). 
 
-In order to check whether a `FileDescriptor` points to a file (as opposed to a directory), we use [`is_file`](@ref) or [`is_folder`](@ref), respectively. If the file pointed to by `FileDescriptor` does not exist, both of these functions will return `false`.
+To check whether a `FileDescriptor` points to a file (as opposed to a directory), we use [`is_file`](@ref) or [`is_folder`](@ref), respectively. If the file pointed to by `FileDescriptor` does not exist, both of these functions will return `false`.
 
 `FileDescriptor` allows us to query a variety of information about the file or folder, including, but not limited to:
 
 + [`get_path`](@ref) returns the location of the file as a path, eg. `~/Desktop/example.txt`
-+ [`get_uri`](@ref) returns the location as an uri, eg. `file://~/Desktop/example.txt`
++ [`get_uri`](@ref) returns the location as an URI, eg. `file://~/Desktop/example.txt`
 + [`get_file_extension`](@ref) returns the file extension, eg. `txt`
 + [`is_executable`](@ref) checks whether the file is executable
 + [`get_content_type`](@ref) returns the [MIME type](https://en.wikipedia.org/wiki/Media_type), eg. `text/plain`
@@ -246,7 +246,7 @@ If the file is a folder, we can use [`get_children`](@ref) to get all files and/
 
 ## Manipulating the Disk
 
-`FileDescriptor` being non-mutating means we need a different part of Mousetrap in order to actually modify files on the users' disk. For file input / output, such as reading the contents of files, we should use the [Julia standard library](https://docs.julialang.org/en/v1/base/file/), which is well-suited for this task. 
+`FileDescriptor` being non-mutating means we need a different part of Mousetrap in order to modify files on the users' disk. For file input/output, such as reading the contents of files, we should use the [Julia standard library](https://docs.julialang.org/en/v1/base/file/), which is well-suited for this task. 
 
 For manipulating files as a whole, as opposed to their contents, Mousetrap offers multiple functions for common tasks:
 
@@ -298,7 +298,7 @@ Often, we will want to open an external file for the user, for example, showing 
 
 Similarly, [`show_in_file_explorer`](@ref) will open the user's file explorer to the enclosing folder of the file. 
 
-Lastly, [`open_url`](@ref) takes an URL as a string, opening the user's default internet browser to show that page.
+Lastly, [`open_url`](@ref) takes a URL as a string, opening the user's default internet browser to show that page.
 
 All of these functions are designed to work on all operating systems, making them a convenient way to perform what would be quite a complex task otherwise.
 
@@ -306,13 +306,13 @@ All of these functions are designed to work on all operating systems, making the
 
 ### Monitoring File Changes
 
-Often, when writing a GUI, we want the graphical interface to reflect the contents of a file on the disk. A good example would be a text editor. We can modify the file from inside our own application, however, if the file is modified by a third entity, such as another application, a conflict may arise. In this case, we will usually want to update the state of our application such that it reflects the state of the file on disk. This should happen whenever the underlying file changes. 
+Often, when writing a GUI, we want the graphical interface to reflect the contents of a file on the disk. A good example would be a text editor. We can modify the file from inside our application, however, if the file is modified by a third entity, such as another application, a conflict may arise. In this case, we will usually want to update the state of our application such that it reflects the state of the file on disk. This should happen whenever the underlying file changes. 
 
 This is made possible by [`FileMonitor`](@ref), which monitors a file or directory for changes.
 
 `FileMonitor` cannot be created directly, instead, we first create a `FileDescriptor`, then call [`create_monitor`](@ref), which returns the `FileMonitor` instance.
 
-`FileMonitor` works similar to a signal emitter. To register a function that is called whenever the file changes, we use [`on_file_changed!`](@ref), which expects a function with the signature 
+`FileMonitor` works similarly to a signal emitter. To register a function that is called whenever the file changes, we use [`on_file_changed!`](@ref), which expects a function with the signature 
 
 ```julia
 (::FileMonitor, event::FileMonitorEvent, self::FileDescriptor, other::FileDescriptor, [::Data_t]) -> Nothing
@@ -357,7 +357,7 @@ If we no longer want to monitor a file, we can call [`cancel!`](@ref), at which 
 
 ## File Chooser Dialog
 
-Opening a dialog to allow a user to select a file or folder is a task so common, most operating systems provide a native widget just for this purpose. Mousetrap, conversely, also has an object tailor-made for this: [`FileChooser`](@ref)
+Opening a dialog to allow a user to select a file or folder is a task so common, that most operating systems provide a native widget just for this purpose. Mousetrap, conversely, also has an object tailor-made for this: [`FileChooser`](@ref)
 
 `FileChooser` is not a widget, and it cannot emit any signals. It is what's called a **dialog**, which is a graphical object that can only exist in its own window.
 
@@ -380,7 +380,7 @@ present!(file_chooser)
 
 ![](../assets/file_chooser.png)
 
-In order to react to the user making a selection or canceling the operation, we need to register a **callback** with the file chooser.
+To react to the user making a selection or canceling the operation, we need to register a **callback** with the file chooser.
 
 [`on_accept!`](@ref) takes a function that is invoked when the user makes a file selection, for example by pressing the "Open" button. This function is required to have the signature
 
@@ -430,7 +430,7 @@ We now have to specify which files should pass the filter. `FileFilter` offers m
 | [`add_allowed_mime_type!`](@ref)                 | `text/plain`   | files classified as plain text, for example `.txt`        |
 | [`add_allowed_pattern!`](@ref)                    | `*.jl`         | files whose name match the given regular expression  |
 
-Where a table with the allowed image formats is available in [the chapter on images](06_image.md#supported-image-formats).
+A table with the allowed image formats is available in [the chapter on images](06_image.md#supported-image-formats).
 
 After having set up our filter, we simply add it to the `FileChooser` instance using [`add_filter!`](@ref):
 
@@ -451,9 +451,9 @@ By default, no `FileFilter`s will be registered, which means the `FileChooser` w
 
 ## Alert Dialog
 
-A very common task for an application that manipulates files is to make sure the user knows they are overwriting a file, for example, when the user selects a location using a `FileChooser` who's action is `FILE_CHOOSER_ACTION_SAVE_FILE`.
+A very common task for an application that manipulates files is to make sure the user knows they are overwriting a file, for example, when the user selects a location using a `FileChooser` whose action is `FILE_CHOOSER_ACTION_SAVE_FILE`.
 
-While we could construct a custom widget for this purpose, put that widget in a `Window`, then present that window to the user, a task as common as this should be possible in only a few lines. For this purpose, Mousetrap offers [`AlertDialog`](@ref), which is a dialog that shows a message to the user, along with one or more buttons they can click.
+While we could construct a custom widget for this purpose, put that widget in a `Window`, and then present that window to the user, a task as common as this should be possible in only a few lines. For this purpose, Mousetrap offers [`AlertDialog`](@ref), which is a dialog that shows a message to the user, along with one or more buttons they can click.
 
 Each `AlertDialog` has a **message**, a **detailed description**, which we during `AlertDialogs`constructor:
 
@@ -464,7 +464,7 @@ overwrite_file_warning_dialog = AlertDialog(
 )
 ```
 
-With just this, the only way for the user to interact with the dialog is to press escape, which closes it. We will most like want to add buttons, which we accomplish using [`add_button!`](@ref)
+With just this, the only way for the user to interact with the dialog is to press escape, which closes it. We will most likely want to add buttons, which we accomplish using [`add_button!`](@ref)
 
 ```julia
 add_button!(overwrite_file_warning_dialog, "Continue")
@@ -512,13 +512,13 @@ present!(overwrite_file_warning_dialog)
 
 Note that we do not need to close the dialog from within the `on_selection!` callback, it is closed automatically.
 
-On top of buttons, `AlertDialog` furthermore has a spot for a custom widget, which will be displayed underneath the detail message. We choose this widget with [`set_extra_widget!`](@ref), which gives us some additional flexibility for when we want a dialog that has more than just text.
+On top of buttons, `AlertDialog` furthermore has a spot for a custom widget, which will be displayed underneath the detail message. We choose this widget with [`set_extra_widget!`](@ref), which gives us some additional flexibility when we want a dialog that has more than just text.
 
 With `AlertDialog`, we have a vastly simplified mechanism for showing short, message-style dialogs to the user. Each of these dialogs will be *modal*  by default, meaning all other windows and actions will be paused until the dialog is dismissed.
 
 ## Popup Messages
 
-Mousetrap offers a less intrusive way of showing a message to a user, facilitated by [`PopupMessageOverlay`](@ref). This widget is a container which has a single child. It adds no graphical element to its child, instead, we can show a small popup message which will be shown above the chosen child:
+Mousetrap offers a less intrusive way of showing a message to a user, facilitated by [`PopupMessageOverlay`](@ref). This widget is a container that has a single child. It adds no graphical element to its child, instead, we can show a small popup message which will be shown above the chosen child:
 
 ![](../assets/popup_message.png)
 
@@ -586,7 +586,7 @@ show_message!(message_overlay, popup_message)
 
 ## Popup Messages
 
-Mousetrap offers a less intrusive way of showing a message to a user, facilitated by [`PopupMessageOverlay`](@ref). This widget is a container which has a single child. It adds no graphical element to its child, instead, we can present a small popup message to the user, which will be shown above the chosen child:
+Mousetrap offers a less intrusive way of showing a message to a user, facilitated by [`PopupMessageOverlay`](@ref). This widget is a container that has a single child. It adds no graphical element to its child, instead, we can present a small popup message to the user, which will be shown above the chosen child:
 
 ![](../assets/popup_message.png)
 
@@ -637,7 +637,7 @@ Only one message can be shown at a time. We can make sure an important message i
 
 This is enough for a simple notification, but `PopupMessage` also supports interactivity beyond just the close button.
 
-A `PopupMessage` can have one optional button. To show this button, we need to choose the buttons label using [`set_button_label!`](@ref). 
+A `PopupMessage` can have one optional button. To show this button, we need to choose the button's label using [`set_button_label!`](@ref). 
 
 To react to the user pressing this button, we can either assign it an action using [`set_button_action!`](@ref), or we can connect to one of `PopupMessages` signals, `button_clicked` and `dismissed`, which are emitted when the optional button and close button are pressed, respectively. Both signals expect a signal handler with signature `(::PopupMessage, [::Data_t]) -> Nothing`.
 
@@ -655,7 +655,7 @@ end
 show_message!(message_overlay, popup_message)
 ```
 
-`PopupMessage` should be used for relatively insignificant messages that do not require immediate user action. Otherwise, we should `AlertDialog`, which is modal by default and will only go away once the user chose to dismiss the dialog.
+`PopupMessage` should be used for relatively insignificant messages that do not require immediate user action. Otherwise, we should `AlertDialog`, which is modal by default and will only go away once the user chooses to dismiss the dialog.
 
 ---
 
@@ -696,11 +696,11 @@ height=300
 default_color_rgba=0.1;0.7;0.2;1
 ```
 
-Key-value pairs belong to the group that was last opened. Groups cannot be nested, they always have a depth of 1 and every key-value-pair has to be inside exactly one group.
+Key-value pairs belong to the group that was last opened. Groups cannot be nested, they always have a depth of 1 and every key-value pair has to be inside exactly one group.
 
 ### Accessing Values
 
-If the above key file is stored at `assets/example_key_file.txt`, we can access the values of the above named keys like so:
+If the above key file is stored at `assets/example_key_file.txt`, we can access the values of the above-named keys like so:
 
 ```julia
 # load file
@@ -741,7 +741,7 @@ where `type` is one of the following:
 | RGBA                      | `RGBA(0.1, 0.9, 0, 1)`                       | `0.1;0.9;0.0;1.0`                 |
 | Image                     | `RGBA(1, 0, 1, 1), RGBA(0.5, 0.5, 0.7, 0.0)` | `1.0;0.0;1.0;1.0;0.5;0.5;0.7;0.0` | 
 
-We can also interact with comments from Julia. To access the comment above a group ID or key-value-pair, we use [`get_comment_above`](@ref) which takes either just a group name for comments above groups, or a group- and key-name for comments above key-value pairs.
+We can also interact with comments from Julia. To access the comment above a group ID or key-value pair, we use [`get_comment_above`](@ref) which takes either just a group name for comments above groups or a group- and key-name for comments above key-value pairs.
 
 ### Storing Values
 

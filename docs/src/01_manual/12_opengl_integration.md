@@ -11,7 +11,7 @@ In this chapter, we will learn:
 
 # Introduction: Use Case
 
-If we want to render shapes or images using `OpenGL`, Mousetraps `RenderArea` offers a convenient interface for this. In some applications, we may want to use [OpenGL](https://github.com/JuliaGL/ModernGL.jl) itself. One common use case for this is integration of another, separate library that is unrelated to Mousetrap and shares no interface with it, except for the fact that both use OpenGL for rendering. 
+If we want to render shapes or images using `OpenGL`, Mousetraps `RenderArea` offers a convenient interface for this. In some applications, we may want to use [OpenGL](https://github.com/JuliaGL/ModernGL.jl) itself. One common use case for this is the integration of another, separate library that is unrelated to Mousetrap and shares no interface with it, except for the fact that both use OpenGL for rendering. 
 
 For situations like this, Mousetrap offers a low-level, generic widget, [`GLArea`](@ref), which provides an OpenGL context and render surface, thus allowing OpenGL-based graphics to be displayed inside a Mousetrap application.
 
@@ -34,7 +34,7 @@ After which it can be used just like any other widget, meaning it has a size req
 
 ## Signals
 
-`GLArea` has two unique signals, `render` and `resize`. Alongside these, in most situations we will also want to connect to the `realize` signal, which all widgets share.
+`GLArea` has two unique signals, `render` and `resize`. Alongside these, in most situations, we will also want to connect to the `realize` signal, which all widgets share.
 
 We recognize `resize` from `RenderArea`. Just as then, it requires a signal handler with the signature
 
@@ -42,9 +42,9 @@ We recognize `resize` from `RenderArea`. Just as then, it requires a signal hand
 (::GLArea, width::Integer, height::Integer, [::Data_t]) -> Nothing
 ```
 
-`resize` is emitted anytime `GLArea` changes size, according to its widget properties. Crucially, this also means its [default framebuffer](https://www.khronos.org/opengl/wiki/Default_Framebuffer) and [viewport](https://www.khronos.org/opengl/wiki/GLAPI/glViewport) are resized accordingly. **We cannot change either size ourselves**, Mousetraps back-end handles this for us. 
+`resize` is emitted anytime `GLArea` changes size, according to its widget properties. Crucially, this also means its [default framebuffer](https://www.khronos.org/opengl/wiki/Default_Framebuffer) and [viewport](https://www.khronos.org/opengl/wiki/GLAPI/glViewport) are resized accordingly. **We cannot change either size ourselves**, Mousetrap's back-end handles this for us. 
 
-For each `resize` invocation, we can assume that the default framebuffer has a size of `width * height` pixels.
+For each `resize` invocation, we can assume that the default frame buffer has a size of `width * height` pixels.
 
 Signal `render` is usually emitted once per frame, whenever the widget is drawn on screen. This signal requires a callback with the signature
 
@@ -54,12 +54,12 @@ Signal `render` is usually emitted once per frame, whenever the widget is drawn 
 
 Where `gdk_gl_context` is a C-pointer to the internally held [OpenGL context](https://docs.gtk.org/gdk4/class.GLContext.html). We usually do not have to interact with this context, though any `render` signal handler still requires including this argument to conform to the above signature.
 
-We note that signal `render` requires its callback to return a boolean. This return value notifies Mousetrap whether the `GLArea`s framebuffer was updated during the draw step. If we modified the image we want to appear on screen, we should return `true`, if no drawing has taken place and the `GLArea` does not need to be updated, `false` should be returned.
+We note that signal `render` requires its callback to return a boolean. This return value notifies Mousetrap whether the `GLArea`s framebuffer was updated during the draw step. If we have modified the image we want to appear on screen, we should return `true`, if no drawing has taken place and the `GLArea` does not need to be updated, `false` should be returned.
 
 In the signal handler of `render`, we should make sure to bind the current `GLArea`s OpenGL context as the active one using [`make_current`](@ref) (see below). This is to make sure that we are rendering to the buffer associated with the specific `GLArea` emitting the signal, not another instance of the same widget type, or a completely separate OpenGL context from another library.
 
 !!! warning "GLAreas do not share a Context"
-    Unlike `RenderArea`, which all share a singular global OpenGL context, each `GLArea` instance has their own OpenGL context, meaning objects cannot be transmitted between `GLArea`s, and, if one is unrealized, all objects associated with that context will be inaccessible (but not freed).
+    Unlike `RenderArea`, which all share a singular global OpenGL context, each `GLArea` instance has its own OpenGL context, meaning objects cannot be transmitted between `GLArea`s, and, if one is unrealized, all objects associated with that context will be inaccessible (but not freed).
 
 For performance optimization reasons, `GLArea` will only be drawn when necessary, as is the case for all objects subtyping `Widget`. We can manually request `GLArea` to update the frame after this one, by calling [`queue_render`](@ref).
 
@@ -108,18 +108,18 @@ connect_signal_destroy!(glarea) do self::GLArea
 end
 ```
 
-We see that we should make sure to bind the context using `make_current` before doing any OpenGL-related work, and to manually request a redraw after the area was initialized or resized.
+We see that we should make sure to bind the context using `make_current` before doing any OpenGL-related work and to manually request a redraw after the area was initialized or resized.
 
 # Example: GLMakie 
 
-[`GLMakie`](https://docs.makie.org/stable/explanations/backends/glmakie/index.html) is one backend for the hugely popular [`Makie`](https://github.com/MakieOrg/Makie.jl) plotting library. As its name suggests, `GLMakie` uses OpenGL for rendering, which means it is possible to allow makie to render to a Mousetrap `GLArea`, allowing us to integrate plots and graphics into our Mousetrap application.
+[`GLMakie`](https://docs.makie.org/stable/explanations/backends/glmakie/index.html) is one backend for the hugely popular [`Makie`](https://github.com/MakieOrg/Makie.jl) plotting library. As its name suggests, `GLMakie` uses OpenGL for rendering, which means it is possible to allow Makie to render to a Mousetrap `GLArea`, allowing us to integrate plots and graphics into our Mousetrap application.
 
 Given here will be a minimum working example that displays a scatter plot inside a `Mousetrap.Window` by creating a `GLArea`-based widget that can be used to create a `GLMakie.Screen`.
 
 Note that this example is incomplete and does not support all of Makies features. One conflict that Mousetrap users will have to resolve for themselves is how to handle input events. In the following, all of Makies input-related behavior was suppressed, making it so users will have to handle input events and window behavior using only the Mousetrap event model.
 
 !!! details "Note from the Author: Makie Interface"
-    The example here most likely does not implement enough of makies interface to be fully ready for usage. Most of the code was based on [`Gtk4GLMakie`](https://github.com/JuliaGtk/Gtk4Makie.jl), which itself is still rough. I'm not that familiar with Makie in general usage, and fully implementing an interface requires knowledge of Makies internals on top of that. 
+    The example here most likely does not implement enough of Makies interface to be fully ready for usage. Most of the code was based on [`Gtk4GLMakie`](https://github.com/JuliaGtk/Gtk4Makie.jl), which itself is still rough. I'm not that familiar with Makie in general usage, and fully implementing an interface requires knowledge of Makies internals on top of that. 
 
     If you or your project is very familiar with Makie and would like to improve this code, feel free to [open a PR](https://github.com/Clemapfel/Mousetrap.jl/pulls) that modifies [`test/makie_test.jl`](https://github.com/Clemapfel/Mousetrap.jl/blob/main/test/makie_test.jl), which ideally will become its own Julia package in the future, similar to `Gtk4GLMakie`. Any contributor will be credited as an author. Thank you for your consideration.
 
@@ -142,7 +142,7 @@ Note that this example is incomplete and does not support all of Makies features
 
         """
         ## GLMakieArea <: Widget
-        `GLArea` wrapper that automatically connects all necessary callbacks in order for it to be used as a GLMakie render target. 
+        `GLArea` wrapper that automatically connects all necessary callbacks to be used as a GLMakie render target. 
 
         Use `create_glmakie_screen` to initialize a screen you can render to using Makie from this widget. Note that `create_glmakie_screen` needs to be 
         called **after** `GLMakieArea` has been realized, as only then will the internal OpenGL context be available. See the example below.
@@ -400,4 +400,4 @@ Where we delayed the call to `create_gl_makie_screen` to *after* `realize` was e
 optional = Ref{Union{Nothing, T}}(nothing)
 ```
 
-Which initializes a reference with `nothing`, such that the references value can later be assigned with a value of `T`, `GLMakie:Screen{GLMakieArea}` in our example above. After `realize` was emitted, we can access the screen using `screen[]`.
+Which initializes a reference with `nothing`, such that the reference value can later be assigned with a value of `T`, `GLMakie:Screen{GLMakieArea}` in our example above. After `realize` was emitted, we can access the screen using `screen[]`.

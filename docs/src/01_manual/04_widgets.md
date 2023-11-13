@@ -15,22 +15,22 @@ In this chapter, we will learn:
     main() do app::Application
         window = Window(app)
 
-        # snippet here, creates widget and adds it to `window' using `set_child!`
+        # snippet here, creates widget, and adds it to `window' using `set_child!`
 
         present!(window)
     end
     ```
 
 !!! note "Images in this Chapter"
-    Images for this chapter were captured on a Fedora Linux machine running Gnome 44.2. The exact look of each window and widget may be slightly different, depending on the users operating system and application theme. We will learn how to manually change the look of widgets by creating our own theme in the [section on app customization](./10_theme_customization.md).
+    Images for this chapter were captured on a Fedora Linux machine running Gnome 44.2. The exact look of each window and widget may be slightly different, depending on the user's operating system and application theme. We will learn how to manually change the look of widgets by creating our own theme in the [section on app customization](./10_theme_customization.md).
 
 ---
 
 ## What is a widget?
 
-Widgets are the central element to any and all GUI applications. In general, a widget is anything that can be rendered on screen. Often, wigdets are **interactable**, which means that the user can trigger behavior by interacting with the widget using a device such as a mouse, keyboard, or touchcsreen.
+Widgets are the central element of all GUI applications. In general, a widget is anything that can be rendered on screen. Often, widgets are **interactable**, which means that the user can trigger behavior by interacting with the widget using a device such as a mouse, keyboard, or touch screen.
 
-For example, to interact with the widget [`Button`](@ref) from the previous chapter, the user has to move the cursor over the area of the button on screen, then press the left mouse button. This will trigger an animation where the button changes its appearance to look "pressed in", emit its signal `clicked` to trigger custom behavior, then return to its previous state. 
+For example, to interact with the widget [`Button`](@ref) from the previous chapter, the user has to move the cursor over the area of the button on the screen, and then press the left mouse button. This will trigger an animation where the button changes its appearance to look "pressed in", emit its signal `clicked` to trigger custom behavior, then return to its previous state. 
 
 Having used computers for many years, most of us never think about how things work in this gradual of a manner. `Button` makes it so we don't have to, all of these steps are already implemented for us. All we have to do is place the button and connect to its signals.
 
@@ -66,7 +66,7 @@ Each widget will choose a position and size on screen. We call this area, an [ax
 
 Widgets can be inside other widgets. A widget that can contain other widgets is called a **container** widget. Each widget inside this container is called the **child** of the container. `Window`, in our previous `main.jl`, is a container widget, we inserted `Button`, a widget, into it using `set_child!`.
 
-How many children a widget can contain depends on the type of widget. Some may have no children, exactly one child, exactly two, excatly three, or any number of children. Shared for all widgets, however, is that each widget has exactly one **parent**. This is the widget it is contained within. 
+How many children a widget can contain depends on the type of widget. Some may have no children, exactly one child, exactly two, exactly three, or any number of children. Shared for all widgets, however, is that each widget has exactly one **parent**. This is the widget it is contained within. 
 
 Because a widget can only have exactly one parent, we cannot put the same widget instance into two containers. If we want two identical `Button`s in two different positions on screen, we have to create two button instances.
 
@@ -85,7 +85,7 @@ push_back!(box_b, button)
 This latter call will print a warning
 
 ```
-(julia:445703): Mousetrap-CRITICAL **: 18:13:31.132: In Box::push_back: Attemping to insert widget into a container, but that widget already has a parent.
+(julia:445703): Mousetrap-CRITICAL **: 18:13:31.132: In Box::push_back: Attempting to insert widget into a container, but that widget already has a parent.
 ```
 
 because `button`s parent is already `box_a`. Instead, we should create two buttons:
@@ -104,9 +104,9 @@ By connecting the same handler to both of these buttons' signals, we have two id
 
 ### Size Request
  
-Moving onto the properties that determines the widget's size, we have its **size request**. This is a [`Vector2f`](@ref Vector2) which governs the minimum width and height of the widget, in pixels. Once set with [`set_size_request!`](@ref), no matter what, that widget will always allocate at least that amount of space. 
+Moving onto the properties that determine the widget's size, we have its **size request**. This is a [`Vector2f`](@ref Vector2) which governs the minimum width and height of the widget, in pixels. Once set with [`set_size_request!`](@ref), no matter what, that widget will always allocate at least that amount of space. 
 
-By default, all widget's size request is `Vector2f(0, 0)`. Setting the width and/or height of a widget's size request to `0` will tell the size manager, the algorithm determining the widget's final size on screen, that the widget has not made a request for a minimum size. A size request may not be negative.
+By default, all widget's size request is `Vector2f(0, 0)`. Setting the width and/or height of a widget's size request to `0` will tell the size manager, the algorithm determining the widget's final size on screen, that the widget has not requested a minimum size. A size request may not be negative.
 
 Manipulating the size request to influence a widget's minimum size is also called **size-hinting**.
 
@@ -118,15 +118,15 @@ Once realized, [`get_allocated_size`](@ref) and [`get_position`](@ref) return th
 
 This size may or may not be equal to what we size-hinted the widget to, as size-hinting only determines the widget's *minimum size*. The layout manager is free to allocate a size larger than that.
 
-Lastly, [`get_natural_size`](@ref) will access the size preferred by the layout manager. This size will always be equal to or larger than the size request. When trying to predict the size a widget has, `get_natural_size` will give us the best estimate. Once the widget and all its children are realized, `get_allocated_size` and `get_position`  will gives us the exact value.
+Lastly, [`get_natural_size`](@ref) will access the size preferred by the layout manager. This size will always be equal to or larger than the size requested. When trying to predict the size a widget has, `get_natural_size` will give us the best estimate. Once the widget and all its children are realized, `get_allocated_size` and `get_position`  will give us the exact value.
 
-Layout management is complex and the algorithm behind managing the size of the totality of all widgets is sophisiticated. Users of Mousetrap are not required to understand this exact mechanism, only how to influence it.
+Layout management is complex and the algorithm behind managing the size of the totality of all widgets is sophisticated. Users of Mousetrap are not required to understand this exact mechanism, only how to influence it.
 
 On top of a widget's size request, a widget's final allocated size depends on a number of other variables.
 
 ### Margin
 
-Any widget has four margins: `start`, `end`, `top` and `bottom`. Usually, these correspond to empty space left, right, above, and below the widget, respectively. Margins are rendered as empty space added to the corresponding side of the widget. In this way, they work similar to the [css properties of the same name](https://www.w3schools.com/css/css_margin.asp), though in Mousetrap, margins may not be negative.
+Any widget has four margins: `start`, `end`, `top`, and `bottom`. Usually, these correspond to space left, right, above, and below the widget, respectively. Margins are rendered as empty space added to the corresponding side of the widget. In this way, they work similarly to the [css properties of the same name](https://www.w3schools.com/css/css_margin.asp), though in Mousetrap, margins may not be negative.
 
 We use [`set_margin_start!`](@ref), [`set_margin_end!`](@ref), [`set_margin_top!`](@ref) and [`set_margin_bottom!`](@ref) to control each individual margin:
 
@@ -203,13 +203,13 @@ set_vertical_alignment!(widget, ALIGNMENT_START)
 set_alignment!(widget, ALIGNMENT_START)
 ```
 
-Using alignment, size-hinting, and expansion, we can fully control where and at what size a widget will appear on screen, without having to worry to manually place it by choosing the exact position or size.
+Using alignment, size-hinting, and expansion, we can fully control where and at what size a widget will appear on screen, without having to worry about manually placing it by choosing the exact position or size.
 
 ---
 
 ### Visibility & Opacity
 
-Once a widget is realized, when we call [`present!`](@ref) on the window it is contained within, it is **shown**, appearing on screen and emitting signal `show`. If the widget leaves the screen, for example because it is removed from a container or its window is closed, it is **hidden**, emitting signal `hide`.
+Once a widget is realized, when we call [`present!`](@ref) on the window it is contained within, it is **shown**, appearing on screen and emitting signal `show`. If the widget leaves the screen, for example, because it is removed from a container or its window is closed, it is **hidden**, emitting signal `hide`.
 
 To hide a shown widget or show a hidden widget, we use [`set_is_visible!`](@ref):
 
@@ -223,10 +223,10 @@ set_child!(window, button)
 
 In which a button is hidden when it is clicked. This means the button cannot be clicked again, as its interactivity is only available while it is shown. Once the button is hidden, its allocated size becomes `(0, 0)`.
 
-If we instead just want to make the button invisible, but still have it be clickable, we should use [`set_opacity!`](@ref). This functions takes a float in `[0, 1]`, where `0` is fully transparent, `1` is fully opaque:
+If we instead just want to make the button invisible but still have it be clickable, we should use [`set_opacity!`](@ref). This function takes a float in `[0, 1]`, where `0` is fully transparent, `1` is fully opaque:
 
 ```julia
-# make a button invisibile if it is visible, or visible if it is invisible
+# make a button invisible if it is visible, or visible if it is invisible
 button = Button()
 connect_signal_clicked!(button) do self::Button
     current = get_opacity(self)
@@ -245,9 +245,9 @@ Setting opacity does **not** emit the `hide` or `show` signal. While the widget 
 
 ### Cursor Type
 
-Each widget has a property governing what the user's cursor will look like while it is inside the widgets allocated area. By default, the cursor is a simple arrow. A widget intended for text-entry would want the cursor to be a [caret](https://en.wikipedia.org/wiki/Cursor_(user_interface)), while a clickable widget would likely want a [pointer](https://en.wikipedia.org/wiki/Cursor_(user_interface)#Pointer).
+Each widget has a property governing what the user's cursor will look like while it is inside the widget's allocated area. By default, the cursor is a simple arrow. A widget intended for text entry would want the cursor to be a [caret](https://en.wikipedia.org/wiki/Cursor_(user_interface)), while a clickable widget would likely want a [pointer](https://en.wikipedia.org/wiki/Cursor_(user_interface)#Pointer).
 
-Some widgets already set the cursor to an appropriate shape automatically, but we can control the cursor shape for each individual widget manually using [`set_cursor!`](@ref), which takes a value of the enum [`CursorType`](@ref):
+Some widgets already set the cursor to an appropriate shape automatically, but we can control the cursor shape for each widget manually using [`set_cursor!`](@ref), which takes a value of the enum [`CursorType`](@ref):
 
 | `CursorType` value             | Appearance                                                                                          |
 |--------------------------------|-----------------------------------------------------------------------------------------------------|
@@ -297,7 +297,7 @@ set_cursor_from_image!(widget, Image("/path/to/image.png"))
 
 ### Tooltip
 
-Each widget can have a **tooltip**. This is a little window that opens when the cursor hovers over a widget's allocated area for enough time. The exact duration is decided by the users OS, we do not have control over it. 
+Each widget can have a **tooltip**. This is a little window that opens when the cursor hovers over a widget's allocated area for enough time. The exact duration is decided by the user's OS, we do not have control over it. 
 
 Tooltips are usually a simple text message. We can set the text directly using [`set_tooltip_text!`](@ref):
 
@@ -311,15 +311,15 @@ If we want to use something more complex than just simple text, we can register 
 
 ---
 
-Now that we know properties shared by all widgets, we can continue onto learning about all the specific widget types. From this point onwards, we can be sure that **all widgets support all properties and signals discussed so far**.
+Now that we know the properties shared by all widgets, we can continue onto learning about all the specific widget types. From this point onwards, we can be sure that **all widgets support all properties and signals discussed so far**.
 
 ## Window
 
 For our first widget, we have [`Window`](@ref). Windows are central to any application, as such, `Window` and `Application` are inherently connected. We cannot create a `Window` without an `Application` instance. If all windows are closed, the underlying application usually exists.
 
-While windows are widget, they occupy a somewhat of a special place. `Window` is the only widget that does not have a parent. This is called being **top-level**, nothing is "above" the window in the parent-child hierarchy. 
+While windows are widgets, they occupy a somewhat of a special place. `Window` is the only widget that does not have a parent. This is called being **top-level**, nothing is "above" the window in the parent-child hierarchy. 
 
-`Window` has exactly on child, which we set with `set_child!`, as we have so far already.
+`Window` has exactly one child, which we set with `set_child!`, as we have so far already.
 
 ### Opening / Closing a Window
 
@@ -336,7 +336,7 @@ main() do app::Application
 end
 ```
 
-At any point we can call `close!`, which hides the window. This does not destroy the window permanently, unless [`set_hide_on_close!`](@ref) was set to `false` previously, we can `present!` to show the window again. For an application to exit, all its windows only need to be hidden, not permanently destroyed. Therefore, calling `close!` on all windows may cause the application to attempt to exit.
+At any point, we can call `close!`, which hides the window. This does not destroy the window permanently unless [`set_hide_on_close!`](@ref) was set to `false` previously, we can `present!` to show the window again. For an application to exit, all its windows only need to be hidden, not permanently destroyed. Therefore, calling `close!` on all windows may cause the application to attempt to exit.
 
 ### Close Request
 
@@ -351,7 +351,7 @@ Mousetrap.@signal_table(Window,
 )
 ```
 
-When the window handler of the user's OS asks the window to close, for example because user pressed the "x" button, signal `close_request` will be emitted. Its result, of type [`WindowCloseRequestResult`](@ref), determines whether the window actually does close.
+When the window handler of the user's OS asks the window to close, for example, because the user pressed the "x" button, signal `close_request` will be emitted. Its result, of type [`WindowCloseRequestResult`](@ref), determines whether the window does close.
 
 ```julia
 # create a window that cannot be closed
@@ -362,7 +362,7 @@ end
 present!(window)
 ```
 
-If the signal handler instead returns `WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE`, the window will close, which is the default behavior. We should never call `close!` from within the signal handler of `closer_request`. Whether the window is closed should only be controlled by the handlers return value.
+If the signal handler instead returns `WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE`, the window will close, which is the default behavior. We should never call `close!` from within the signal handler of `closer_request`. Whether the window is closed should only be controlled by the handler's return value.
 
 ### Window Properties
 
@@ -372,13 +372,13 @@ Other than its singular child, `Window` has a number of other properties.
 
 [`set_title!`](@ref) sets the name displayed in the window's **header bar**, which is the part on top of the content area. By default, this name will be the name of the application. We can choose to hide the title by simply calling `set_title!(window, "")`.
 
-By default, the header bar will show the window title, a minimize-, maximize-, and close-button. We can completely hide the header bar using `set_is_decorated!(window, false)`, which also means the user has now way to move or close the window.
+By default, the header bar will show the window title, a minimize-, maximize-, and close-button. We can completely hide the header bar using `set_is_decorated!(window, false)`, which also means the user has no way to move or close the window.
 
 #### Modality & Transience
 
 When dealing with multiple windows, we can influence the way two windows interact with each other. Two of these interactions are determined by whether a window is **modal** and whether it is **transient** for another window.
 
-By setting [`set_is_modal!`](@ref) to true, if the window is revealed, **all other windows of the application will be deactivated**, preventing user interaction with them. This also freezes animations, it essentially pauses all other windows. The most common use-case for this is for dialogs, for example, if the user requests to close the application, it is common to open a small dialog requesting the user to confirm exiting the application. While this dialog is shown, the main window should be disabled and all other processes should halt until a selection is made. This is possible by making the dialog window *modal*. If two modal windows are active at the same time, the user can choose to swap betwee active windows by clicking a currently inactive window.
+By setting [`set_is_modal!`](@ref) to true, if the window is revealed, **all other windows of the application will be deactivated**, preventing user interaction with them. This also freezes animations, it essentially pauses all other windows. The most common use-case for this is for dialogs, for example, if the user requests to close the application, it is common to open a small dialog requesting the user to confirm exiting the application. While this dialog is shown, the main window should be disabled and all other processes should halt until a selection is made. This is possible by making the dialog window *modal*. If two modal windows are active at the same time, the user can choose to swap between active windows by clicking a currently inactive window.
 
 Using [`set_transient_for!`](@ref), we can make sure a window will always be shown in front of another. `set_transient_for!(A, B)` will make it so, while `A` overlaps `B` on the user's desktop, `A` will be shown in front of `B`. 
 
@@ -418,7 +418,7 @@ Where the fifth mode is `JUSTIFY_MODE_NONE`, which arranges all text in exactly 
 
 ### Wrapping
 
-Wrapping determines where a line break is inserted if the a lines width exceeds that of `Label`s allocated area. For wrapping to happen at all, the `JustifyMode` has to be set to anything other than `LABEL_WRAP_MODE_NONE`.
+Wrapping determines where a line break is inserted if the linewidth exceeds that of `Label`s allocated area. For wrapping to happen at all, the `JustifyMode` has to be set to anything other than `LABEL_WRAP_MODE_NONE`.
 
 Wrapping modes are values of the enum [`LabelWrapMode`](@ref). We set the wrap mode of a `Label` using [`set_wrap_mode!`](@ref).
 
@@ -433,7 +433,7 @@ Where `\n` is the newline character.
 
 ### Ellipsize Mode
 
-If a line is too long for the available space and wrapping is disabled, **ellipsizing** will take place. The corresponding enum [`EllipsizeMode`](@ref) has four possible value, which we set using [`set_ellipsize_mode!`](@ref).
+If a line is too long for the available space and wrapping is disabled, **ellipsizing** will take place. The corresponding enum [`EllipsizeMode`](@ref) has four possible values, which we set using [`set_ellipsize_mode!`](@ref).
 
 | `EllipsizeMode` value | Meaning                                                  | Example                     |
 |-----------------------|----------------------------------------------------------|-----------------------------|
@@ -466,7 +466,7 @@ Where in the last row, we used the [decimal html code](https://www.compart.com/e
     To use this emoji in text, we choose `&#129700;`, **not** `&#x1FAA4;`. The latter will not work.
 
 !!! note 
-    All `<`, `>` will be parsed as style tags, regardless of whether they are escaped. To display them as characters, we us `&lt;` 
+    All `<`, `>` will be parsed as style tags, regardless of whether they are escaped. To display them as characters, we use `&lt;` 
     (less-than) and `&gt;` (greater-than) instead of `<` and `>`. For example, we would write `x < y` as `"x &lt; y"`.
 
 Pango also supports colors, different fonts, text direction, and more. For these, we can [consult the Pango documentation](https://docs.gtk.org/Pango/pango_markup.html) directly.
@@ -531,7 +531,7 @@ set_child!(window, box)
 
 ## CenterBox
 
-[`CenterBox`](@ref) is an orientable container that has exactly three children. `CenterBox` prioritizes keeping the designated center child centered at all costs, making it a good choice when symmetry is desired.
+[`CenterBox`](@ref) is an orientable container that has exactly three children. `CenterBox` prioritizes keeping the designated center-child centered at all costs, making it a good choice when symmetry is desired.
 
 We use [`set_start_child!`](@ref), [`set_center_child!`](@ref), and [`set_end_child!`](@ref) to insert a child widget in the corresponding position:
 
@@ -554,7 +554,7 @@ center_box = CenterBox(ORIENTATION_HORIZONTAL, Label("start"), Button(), Label("
 
 ## FlowBox
 
-Third of the `Box` relatives, we have [`FlowBox`](@ref). This widget is similiar to `Box`, except that it will **redistribute** its children along more than one row (or column, if vertical) depending on the available width (or height) of the `FlowBox`. This is useful for situations where we want to group a number of widgets in a way that does not impact resizability.
+Third of the `Box` relatives, we have [`FlowBox`](@ref). This widget is similar to `Box`, except that it will **redistribute** its children along more than one row (or column, if vertical) depending on the available width (or height) of the `FlowBox`. This is useful for situations where we want to group a number of widgets in a way that does not impact resizability.
 
 ```julia
 flow_box = FlowBox(ORIENTATION_VERTICAL)
@@ -569,7 +569,7 @@ end
 
 ## HeaderBar
 
-The visual element on top of a window, which usually contains the windows title along with the title buttons, is actually its own separate widget called [`HeaderBar`](@ref). All `Window` instances come with their own `HeaderBar`, which we can access using [`get_header_bar`](@ref). It's rarely necessary to create a `HeaderBar` on our own.
+The visual element on top of a window, which usually contains the window's title along with the title buttons, is its own separate widget called [`HeaderBar`](@ref). All `Window` instances come with their own `HeaderBar`, which we can access using [`get_header_bar`](@ref). It's rarely necessary to create a `HeaderBar` on our own.
 
 Each `HeaderBar` has a title widget, which will usually be a `Label`, along with two areas for widgets to be inserted. To insert widgets left of the title, we use [`push_front!](@ref), while inserting widgets right of the title is done using [`push_back!`](@ref).
 
@@ -579,7 +579,7 @@ Each `HeaderBar` can have a close-, minimize- and maximize- button, all of which
 + `minimize`
 + `maximize`
 
-Each element is separated using `,`. The string has to furthermore contain a `:`. Each element before the `:` will appear left of the title, while elements after `:` will appear right of the title. Note that this just affects the close-, minimize-, and maximize-buttons, any widget inserted using `push_front!` or `push_back!` is unaffected.
+Each element is separated using `,`. The string has to furthermore contain a `:`. Each element before the `:` will appear left of the title, while elements after `:` will appear right of the title. Note that this just affects the close-, minimize-, and maximize buttons, any widget inserted using `push_front!` or `push_back!` is unaffected.
 
 A few examples:
 
@@ -622,7 +622,7 @@ set_child!(window, separator)
 
 ![](../assets/separator_example.png)
 
-This widget is used as a background to another widget, to fill empty space, or as en element visually separating two sections. 
+This widget is used as a background to another widget, to fill empty space, or as an element visually separating two sections. 
 
 Often, we want to have the separator be a specific thickness. This can be accomplished using size-hinting. For example, to draw a horizontal line similar to the `<hr>` element in HTML, we would do the following:
 
@@ -636,7 +636,7 @@ set_size_request!(hr, Vector2f(
 ));
 ```
 
-This will render as a line that has a height of `3` px at all times, but will assume the entire width of its parent.
+This will render as a line that has a height of `3` px at all times but will assume the entire width of its parent.
 
 ---
 
@@ -724,7 +724,7 @@ We can manually emit this signal using `emit_signal_clicked`, or by calling `act
     end
     ```
 
-Where the above shown buttons have the following properties:
+Where the above-shown buttons have the following properties:
 
 | Button | `set_has_frame!` | `set_is_circular!`|
 |--------|------------------|-------------------|
@@ -736,7 +736,7 @@ Where the above shown buttons have the following properties:
 
 ## ToggleButton
 
-[`ToggleButton`](@ref) is a specialized form of `Button`. It supports most of `Button`s methods / signals, including `set_child!`, `set_has_frame!`, `set_is_circular!` and signal `clicked`.
+[`ToggleButton`](@ref) is a specialized form of `Button`. It supports most of `Button`s methods / signals, including `set_child!`, `set_has_frame!`, `set_is_circular!`, and signal `clicked`.
 
 Unique to `ToggleButton` is that, if clicked, the button will **remain pressed**. When clicked again, it returns to being unpressed. Anytime the state of the `ToggleButton` changes, signal `toggled` will be emitted. In this way, `ToggleButton` can be used to track a boolean state.
 
@@ -762,7 +762,7 @@ set_child!(window, toggle_button)
 
 ## CheckButton
 
-[`CheckButton`](@ref) is very similar to `ToggleButton` in function - but not appearance. `CheckButton` is an empty box in which a checkmark appears when it is toggled. Just like before, we query whether it is pressed by calling `get_is_active`. 
+[`CheckButton`](@ref) is very similar to `ToggleButton` in function - but not in appearance. `CheckButton` is an empty box in which a checkmark appears when it is toggled. Just like before, we query whether it is pressed by calling `get_is_active`. 
 
 ```@eval
 using Mousetrap
@@ -878,7 +878,7 @@ adjustment = Adjustment(
 ```
 Expresses the range `{0, 0.5, 1, 1.5, 2}`, with `1` being the value on initialization.
 
-We usually do not need to create our own `Adjustment`, rather, it is provided by a number of widgets which use it to select their value. Notably, if the `Adjustment` is modified, that widget appearance is modified, and if the widget is modified, the adjustment is, too. 
+We usually do not need to create our own `Adjustment`, rather, it is provided by a number of widgets that use it to select their value. Notably, if the `Adjustment` is modified, that widget's appearance is modified, and if the widget is modified, the adjustment is, too. 
 
 `Adjustment` has two signals:
 
@@ -896,7 +896,7 @@ We can connect to `value_changed` to monitor the `value` property of an `Adjustm
 
 ## SpinButton
 
-`SpinButton` is used to pick an exact value from a range. The user can click the rectangular area and manually enter a value using the keyboard, or they can increase or decrease the current value by the step increment of the the widgets `Adjustment` by pressing the plus or minus button.
+`SpinButton` is used to pick an exact value from a range. The user can click the rectangular area and manually enter a value using the keyboard, or they can increase or decrease the current value by the step increment of the widgets `Adjustment` by pressing the plus or minus button.
 
 We supply the properties of the range underlying the `SpinButton` to its constructor:
 
@@ -947,7 +947,7 @@ connect_signal_value_changed!(spin_button) do self::SpinButton
 end
 ```
 
-The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) was set to `true` and the `SpinButton`'s value under- or overflows.
+The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) is set to `true` and the `SpinButton`'s value under- or overflows.
 
 ---
 
@@ -982,7 +982,7 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
     end
     ```
 
-[`Scale`](@ref), just like `SpinButton`, is a widget that allows a user to choose a value from the underlying `Adjustment`. This is done by click-dragging the knob of the scale, or clicking anywhere on its rail. In this way, it is usually harder to pick an exact decimal value on a `Scale` as opposed to a `SpinButton`. We can aid in this task by displaying the exact value next to the scale, which is enabled with [`set_should_draw_value!`](@ref):
+[`Scale`](@ref), just like `SpinButton`, is a widget that allows a user to choose a value from the underlying `Adjustment`. This is done by click-dragging the knob of the scale or clicking anywhere on its rail. In this way, it is usually harder to pick an exact decimal value on a `Scale` as opposed to a `SpinButton`. We can aid in this task by displaying the exact value next to the scale, which is enabled with [`set_should_draw_value!`](@ref):
 
 ![](../assets/scale_with_value.png)
 
@@ -1017,7 +1017,7 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
     end
     ```
 
-`Scale`supports most of `SpinButton`'s functions, including querying information about its underlying range, setting the orientation, and signal `value_changed`:
+`Scale` supports most of `SpinButton`'s functions, including querying information about its underlying range, setting the orientation, and signal `value_changed`:
 
 ```julia
 scale = Scale(0, 2, 0.5)
@@ -1029,7 +1029,7 @@ end
 
 ## LevelBar
 
-[`LevelBar`](@ref) is used to display a fraction to indicate the level of something, for example the volume of a playback device. This widget is static, it cannot be interacted with.
+[`LevelBar`](@ref) is used to display a fraction to indicate the level of something, for example, the volume of a playback device. This widget is static, it cannot be interacted with.
 
 To create a `LevelBar`, we need to specify the minimum and maximum value of the range we wish to display. We can then set the current value using `set_value!`. The resulting fraction is computed automatically, based on the upper and lower limit we supplied to the constructor:
 
@@ -1135,15 +1135,15 @@ To signal progress when we do not have an exact fraction, we use [`Spinner`](@re
 
 ## Entry
 
-Text entry is central to many application. Mousetrap offers two widgets that allow the user to type freely. [`Entry`](@ref) is the widget of choice for **single-line** text entry.
+Text entry is central to many applications. Mousetrap offers two widgets that allow the user to type freely. [`Entry`](@ref) is the widget of choice for **single-line** text entry.
 
-The entries currently displayed text is stored in an internal text buffer. We can freely access or modify the buffers content with [`get_text`](@ref) and [`set_text!`](@ref).
+The entries currently displayed text is stored in an internal text buffer. We can freely access or modify the buffer's content with [`get_text`](@ref) and [`set_text!`](@ref).
 
-While we could control the size of an `Entry` using size-hinting, a better way is [`set_max_width_chars!`](@ref), which resizes the entry such that its width is enough to fit a certain number of characters into its area. This automatically respects the systesm font and font size.
+While we could control the size of an `Entry` using size-hinting, a better way is [`set_max_width_chars!`](@ref), which resizes the entry such that its width is enough to fit a certain number of characters into its area. This automatically respects the system font and font size.
 
-`Entry` supports "password mode", in which each character typed is replaced with a dot. This is to prevent a third party in the real world looking at a user screen and seeing what they are typing. 
+`Entry` supports "password mode", in which each character typed is replaced with a dot. This is to prevent a third party in the real world looking at a user's screen and seeing what they are typing. 
 
-To enter password mode, we set [`set_text_visible!`](@ref) to `false`. Note that this does not actually encrypt the text buffer in memory, it is a purely visual change.
+To enter password mode, we set [`set_text_visible!`](@ref) to `false`. Note that this does not encrypt the text buffer in memory, it is a purely visual change.
 
 ![](../assets/entry.png)
 
@@ -1190,15 +1190,15 @@ connect_signal_text_changed!(entry) do self::Entry
 end
 ```
 
-Note that the user cannot insert a newline character using the enter key. `Entry` should exclusively be used for text prompts which have **no line breaks**. For multi-line text entry, we should use the next widget instead.
+Note that the user cannot insert a newline character using the enter key. `Entry` should exclusively be used for text prompts that have **no line breaks**. For multi-line text entry, we should use the next widget instead.
 
 ## TextView
 
-[`TextView`](@ref) is the multi-line equivalent of `Entry`. It supports a number of basic text-editor features, including **undo / redo**, which are triggered by the user pressing `Control + Z` and `Control + Y` respectively. We as developers can also trigger this behavior manually with [`undo!`](@ref) / [`redo!`](@ref).
+[`TextView`](@ref) is the multi-line equivalent of `Entry`. It supports several basic text-editor features, including **undo / redo**, which are triggered by the user pressing `Control + Z` and `Control + Y` respectively. We as developers can also trigger this behavior manually with [`undo!`](@ref) / [`redo!`](@ref).
 
 Much like `Label`, we can set how the text aligns horizontally using `set_justify_mode!`. To further customize how text is displayed, we can choose the **internal margin**, which is the distance between the frame of the `TextView` and the text inside of it. `set_left_margin!`, `set_right_margin!`, `set_top_margin!` and `set_bottom_margin!` allow us to choose these values freely.
 
-`TextView` does **not** have the `activate` signal, pressing enter while the cursor is inside the widget will simply create a new line. Instead, it only has signal `text_changed`, which behaves identical to that of `Entry`:
+`TextView` does **not** have the `activate` signal, pressing enter while the cursor is inside the widget will simply create a new line. Instead, it only has signal `text_changed`, which behaves identically to that of `Entry`:
 
 ```@eval
 using Mousetrap
@@ -1221,7 +1221,7 @@ end
 
 We sometimes want users to be able to pick a value from a **set list of values**, which may or may not be numeric. [`DropDown`](@ref) allows for this. If clicked, a small popup presents the user with a list of items. When clicking one of these items, that item becomes the active item.
 
-We add an item using `push_back!`, which takes a string that will be used as the items label:
+We add an item using `push_back!`, which takes a string that will be used as the item's label:
 
 ```julia
 dropdown = DropDown()
@@ -1234,7 +1234,7 @@ item_03_id = push_back!(dropdown, "Item #03")
 
 `push_back!` returns the internal ID of the item. We should keep track of this ID, as it will be used to identify the currently selected item when using [`get_selected`](@ref).
 
-If we do loose track of the ID, we can always retrieve it using [`get_item_at`](@ref), which returns the ID of the item at a given position.
+If we do lose track of the ID, we can always retrieve it using [`get_item_at`](@ref), which returns the ID of the item at a given position.
 
 `push_back!`, and its equivalents `push_front!` and `insert_at!`, provide a method that also takes a *callback*. This callback will be invoked when the item is selected. It is required to have the signature:
 
@@ -1255,7 +1255,7 @@ push_back!(dropdown, "Item #03") do self::DropDown
 end
 ```
 
-This gives us a better mechanism of keeping track of which item is currently selected. Instead of querying the `DropDown` using `get_selected` and react to its result, we should instead register a callback using this method, in a similar way to using signals.
+This gives us a better mechanism for keeping track of which item is currently selected. Instead of querying the `DropDown` using `get_selected` and reacting to its result, we should instead register a callback using this method, in a similar way to using signals.
 
 Lastly, sometimes we want a different label for when an item is selected, and for when the user opens the menu to select an item. For this situation, `push_back!` offers a method that lets us specify the label widgets separately:
 
@@ -1316,7 +1316,7 @@ Using [`set_label_widget!`](@ref), we can furthermore choose a widget to be disp
 
 ## AspectFrame
 
-Not to be confused with `Frame`, [`AspectFrame`](@ref) adds no graphical element to its singular child. Instead, the widget added with `set_child!` will be forced to allocate a size that conforms to a specific **aspect ratio**. That is, its width-to-height ratio will stay constant, regardless of the size of its parent. If expansion is enabled, the `AspectFrame` will still try to expand to the maximum size that still fullfills the aspect ratio requirement.
+Not to be confused with `Frame`, [`AspectFrame`](@ref) adds no graphical element to its singular child. Instead, the widget added with `set_child!` will be forced to allocate a size that conforms to a specific **aspect ratio**. That is, its width-to-height ratio will stay constant, regardless of the size of its parent. If expansion is enabled, the `AspectFrame` will still try to expand to the maximum size that still fulfills the aspect ratio requirement.
 
 We choose the aspect ratio in `AspectFrame`s constructor, though we can later adjust it using [`set_ratio!`](@ref). Both of these functions accept a floating point ratio calculated as `width / height`. For example, if we want to force a widget to keep an aspect ratio of 4:3, we would do:
 
@@ -1330,7 +1330,7 @@ set_child!(aspect_frame, child_widget);
 
 ## ClampFrame
 
-Using size-hinting, we are able to control the *minimum* size of a widget. There is no widget property that lets us control the *maximum size*, however. For this, we need [`ClampFrame`](@ref), a widget which constrains it singular child to never exceed the given maximum width, or height if the frames orientation is `ORIENTATION_VERTICAL`.
+Using size-hinting, we can control the *minimum* size of a widget. No widget property lets us control the *maximum size*, however. For this, we need [`ClampFrame`](@ref), a widget that constrains its singular child to never exceed the given maximum width, or height if the frame's orientation is `ORIENTATION_VERTICAL`.
 
 We choose the maximum size in pixels during construction, or using [`set_maximum_size!`](@ref):
 
@@ -1350,7 +1350,7 @@ In which we use two nested `ClampFrame`s, such that `child_widget` can never exc
 
 ## Overlay
 
-So far, all widget containers have aligned their children such that they do not overlap. In cases where we do want this to happen, for example if we want to render one widget in front of another, we have to use [`Overlay`](@ref).
+So far, all widget containers have aligned their children such that they do not overlap. In cases where we do want this to happen, for example, if we want to render one widget in front of another, we have to use [`Overlay`](@ref).
 
 `Overlay` has one "base" widget, which is at the conceptual bottom of the overlay. It is set using `set_child!`. We can then add any number of widgets "on top" of the base widget using [`add_overlay!`](@ref):
 
@@ -1381,7 +1381,7 @@ So far, all widget containers have aligned their children such that they do not 
 
 Where the position and size of overlayed widgets depend on their expansion and alignment properties.
 
-By default, `Overlay` will allocate exactly as much space as the base widget (set with `set_child!`) does. If one of the overlaid widgets takes up more space than the base widget, it will be truncated. We can avoid this by supplying a second argument to `add_overlay!`, which is a boolean keyword argument indicated whether the overlay widget should be included in the entire containers size allocation. That is, if the overlaid widget is larger than the base widget, should the `Overlay` resize itself such that the entire overlaid widget is visible:
+By default, `Overlay` will allocate exactly as much space as the base widget (set with `set_child!`) does. If one of the overlaid widgets takes up more space than the base widget, it will be truncated. We can avoid this by supplying a second argument to `add_overlay!`, which is a boolean keyword argument indicating whether the overlay widget should be included in the entire container's size allocation. That is, if the overlaid widget is larger than the base widget, should the `Overlay` resize itself such that the entire overlaid widget is visible:
 
 ```julia
 add_overlay!(overlay, overlaid_widge; include_in_measurement = true)
@@ -1425,7 +1425,7 @@ add_overlay!(overlay, overlaid_widge; include_in_measurement = true)
 
 Resizable means that if the `Paned` changes size, the allocated area of its child should resize accordingly.
 
-Shrinkable sets whether the side of the `Paned` can be made smaller than the allocated size of that sides child widget. If set to `true`, the user can drag the `Paned`s barrier, such that one of the widgets is partially or completely hidden:
+Shrinkable sets whether the side of the `Paned` can be made smaller than the allocated size of that side's child widget. If set to `true`, the user can drag the `Paned`s barrier, such that one of the widgets is partially or completely hidden:
 
 ```julia
 set_start_child_shrinkable!(paned, true)
@@ -1438,11 +1438,11 @@ set_end_child_shrinkable!(paned, true)
 
 ## Revealer
 
-While not technically necessary, animations can improve user experience drastically. Not only do they add visual style, they can hide abrupt transitions or small loading times. As such, they should be in any advanced GUI designer's repertoire.
+While not technically necessary, animations can improve user experience drastically. Not only do they add visual style, but they can also hide abrupt transitions or small loading times. As such, they should be in any advanced GUI designer's repertoire.
 
 One of the most common applications for animations is the act of hiding or showing a widget. [`Revealer`](@ref) was made for this purpose.
 
-To trigger the `Revealer`s animation and change whether its singular child widget is currently visible, we call [`set_is_revealed!`](@ref) which takes a boolean as its argument. If the widget goes from hidden to shown or shown to hidden, the animation will play. Once the animation is done, signal `revealed` will be emittedd.
+To trigger the `Revealer`s animation and change whether its singular child widget is currently visible, we call [`set_is_revealed!`](@ref) which takes a boolean as its argument. If the widget goes from hidden to shown or shown to hidden, the animation will play. Once the animation is done, signal `revealed` will be emitted.
 
 ### Transition Animation
 
@@ -1492,7 +1492,7 @@ Apart from the speed, we also have a choice of animation **type**, represented b
 
 One common application for using a `Revealer` is to show or hide a *toolbar*, which is a horizontal box with any number of buttons for contextual actions. For this purpose, [`ActionBar`](@ref) is well suited, because it can be shown/hidden using [`set_is_revealed!`](@ref) all by itself, making it so we don't need to use a separate `Revealer` instance.
 
-`ActionBar` is always horizontal, it cannot be oriented. It has space for any number of widgets on either side, along with having a singular centered widget. We pack widgets at to both sides using `push_start!` and `push_end!`, while the centered widget is set using `set_center_widget!`. 
+`ActionBar` is always horizontal, it cannot be oriented. It has space for any number of widgets on either side, along with having a singular centered widget. We can pack widgets to either side using `push_start!` and `push_end!`, while the centered widget is set using `set_center_widget!`. 
 
 ---
 
@@ -1559,7 +1559,7 @@ We set the viewport's singular child using `set_child!`, after which the user ca
 
 By default, `Viewport` will disregard the size of its child and simply allocate an area based only on the properties of the `Viewport` itself. This behavior can be overridden by setting the viewport's **size propagation**.
 
-If [`set_propagate_natural_height!`](@ref) is set to true, the viewport's height will be equal the height of its child. Conversely, [`set_propagate_natural_width!`](@ref) does the same for the child's width.
+If [`set_propagate_natural_height!`](@ref) is set to true, the viewport's height will be equal to the height of its child. Conversely, [`set_propagate_natural_width!`](@ref) does the same for the child's width.
 
 ```julia
 set_propagate_natural_width!(viewport, true)
@@ -1622,7 +1622,7 @@ set_child!(window, scrollbar)
 
 Where we made it such that the scrollbar expresses the range `[0, 1]`, with a step increment of `0.01` and an initial value of `0.5`.
 
-If we loose track of the `Adjustment` instance after constructing the `ScrollBar`, we can retrieve it anytime using `get_adjustment`.
+If we lose track of the `Adjustment` instance after constructing the `ScrollBar`, we can retrieve it anytime using `get_adjustment`.
 
 ---
 
@@ -1630,7 +1630,7 @@ If we loose track of the `Adjustment` instance after constructing the `ScrollBar
 
 A [`Popover`](@ref) is a special kind of window. It is always [modal](#modality--transience). Rather than having the normal window decoration with a close button and title, `Popover` closes dynamically (or when requested by the application).
 
-Showing the popover is called **popup**, closing the popover is called **popdown**, `Popover` correspondingly has [`popup!`](@ref) and [`popdown!`](@ref) to show / hide itself.
+Showing the popover is called **popup**, closing the popover is called **popdown**, `Popover` correspondingly has [`popup!`](@ref) and [`popdown!`](@ref) to show or hide itself.
 
 ![](../assets/popover.png)
 
@@ -1660,7 +1660,7 @@ Showing the popover is called **popup**, closing the popover is called **popdown
     end
     ```
 
-Manually calling `popup!` or `popdown!` to show / hide the `Popover` can be bothersome. To address this, Mousetrap offers a widget that automatically manages the popover for us: [`PopoverButton`](@ref)
+Manually calling `popup!` or `popdown!` to show or hide the `Popover` can be bothersome. To address this, Mousetrap offers a widget that automatically manages the popover for us: [`PopoverButton`](@ref)
 
 ## PopoverButton
 
@@ -1690,7 +1690,7 @@ Additionally, an arrow is shown next to the label of the `PopoverButton`, indica
 
 We will now move on to **selectable widgets**, which tend to be the most complex and powerful widgets in Mousetrap.
 
-All selectable widgets have on thing in common: their multiple children are managed by a **selection model**. This model is an ordered list of widgets. For each widget, the model will keep track of whether that widget is currently selected. If it is, a graphical element will be added to the selectable widget that indicates to the user which item(s) are currently selected:
+All selectable widgets have one thing in common: their multiple children are managed by a **selection model**. This model is an ordered list of widgets. For each widget, the model will keep track of whether that widget is currently selected. If it is, a graphical element will be added to the selectable widget that indicates to the user which item(s) are currently selected:
 
 ![](../assets/list_view_selected.png)
 
@@ -1728,7 +1728,7 @@ push_back!(list_view, Label("Child #03"))
 
 Where the second child is currently selected.
 
-`ListView` can be requested to automatically show separators in-between two items by setting [`set_show_separators!`](@ref) to `true`. To check which item is selected, we query its selection model, which we obtain using [`get_selection_model`](@ref).
+`ListView` can be requested to automatically show separators in between two items by setting [`set_show_separators!`](@ref) to `true`. To check which item is selected, we query its selection model, which we obtain using [`get_selection_model`](@ref).
 
 ### Nested Trees
 
@@ -1772,7 +1772,7 @@ child_02_it = push_back!(list_view, Lable("Child #02"))
 child_03_it = push_back!(list_view, Lable("Child #03"))
 ```
 
-If we want to convert the item containing the label `Child #02` to a list view and insert an item as its child, we use that items iterator as the optional argument:
+If we want to convert the item containing the label `Child #02` to a list view and insert an item as its child, we use that item's iterator as the optional argument:
 
 ```julia
 nested_child_01_it = push_back!(list_view, Label("Nested Child #01"), child_02_it)
@@ -1780,7 +1780,7 @@ nested_child_01_it = push_back!(list_view, Label("Nested Child #01"), child_02_i
 
 To insert a new widget as the child of this already nested list, we use its iterator. Through this mechanism, we can create arbitrarily deep nested lists.
 
-If we do not want a nested list, we can instead completely ignore the iterator. Specifying no iterator when using `push_back!` means we will be inserting items into the outer most list.
+If we do not want a nested list, we can instead completely ignore the iterator. Specifying no iterator when using `push_back!` means we will be inserting items into the outermost list.
 
 ---
 
@@ -1788,7 +1788,7 @@ If we do not want a nested list, we can instead completely ignore the iterator. 
 
 [`GridView`](@ref) supports many of the same functions as `ListView`, including `push_back!`, `push_front!`, and `insert_at!`. Unlike `ListView`, `GridView` cannot be nested, as it instead displays its children in a **uniform grid**.
 
-`GridView`s constructor also takes an orientation as well as the selection mode. The orientation determines in which order elements will be shown. Consider the next two images, the first of which is a `GridView` whose orientation is `ORIENTATION_HORIZONTAL`, while the latters is `ORIENTATION_VERTICAL`:
+`GridView`s constructor also takes an orientation as well as the selection mode. The orientation determines in which order elements will be shown. Consider the next two images, the first of which is a `GridView` whose orientation is `ORIENTATION_HORIZONTAL`, while the latter is `ORIENTATION_VERTICAL`:
 
 ![](../assets/grid_view_horizontal.png)
 
@@ -1835,7 +1835,7 @@ We can control the exact distribution of widgets more closely by using [`set_max
 
 [`ColumnView`](@ref) is used to display widgets as a table, with rows and columns. Each column has a title, which uniquely identifies it.
 
-To fill our `ColumnView`, we first instance it, then allocate a number of columns:
+To fill our `ColumnView`, we first instance it, then allocate a non-zero number of columns:
 
 ```julia
 column_view = ColumnView()
@@ -1889,11 +1889,11 @@ set_widget_at!(column_view, column_01, Label("03"))
     end
     ```
 
-Any rows that does not yet have widgets will be backfilled and appear empty. 
+Any rows that do not yet have widgets will be backfilled and appear empty. 
 
-If we loose track of the `ColumnViewColumn` instance returned when adding a new column, we can retrieve it using `get_column_at` or `get_column_with_title`, the latter of which takes the unique title we chose when adding the column.
+If we lose track of the `ColumnViewColumn` instance returned when adding a new column, we can retrieve it using `get_column_at` or `get_column_with_title`, the latter of which takes the unique title we chose when adding the column.
 
-Since most of the time we will want all cells in a row to contain a widget, we can also use [`push_back_row!`](@ref), [`push_front_row!`](@ref), or [`insert_row_at!`](@ref), which insert n widgets at once, where n is the number of columns:
+Since most of the time, we will want all cells in a row to contain a widget, we can also use [`push_back_row!`](@ref), [`push_front_row!`](@ref), or [`insert_row_at!`](@ref), which insert n widgets at once, where n is the number of columns:
 
 ```julia
 # add 1st widget to 1st column, 2nd widget to 2nd column, etc.
@@ -1902,7 +1902,7 @@ push_back_row!(column_view, Label("Column 01 Child"), Label("Column 02 Child"), 
 
 This is a more convenient way to fill the column view, though if we later want to edit it, we will have to use `set_widget_at!` to override widgets in any rows.
 
-`ColumnViewColumn` has a number of other features. We can make it so the user can freely resize each column by setting [`set_is_resizable!`](@ref) to `true`, or we can force each column to have an exact width using [`set_fixed_width!`](@ref), which takes the widget as a number of pixels.
+`ColumnViewColumn` has several other features. We can make it so the user can freely resize each column by setting [`set_is_resizable!`](@ref) to `true`, or we can force each column to have an exact width using [`set_fixed_width!`](@ref), which takes the widget width in pixels.
 
 ---
 
@@ -1910,7 +1910,7 @@ This is a more convenient way to fill the column view, though if we later want t
 
 [`Stack`](@ref) is a selectable widget that can only ever display exactly one child at a time. Each child of the stack is called a **page**.
 
-We add a page using `add_child!`, which takes any widget, and the pages title. This title is mandatory and it has to uniquely identify the page. `add_child!` returns the page's ID, which, similarly to how adding elements to `DropDown` works, we need to keep track of in order to later refer to pages in a position-independent manner.
+We add a page using `add_child!`, which takes any widget, and the title of the page. This title is mandatory and it has to uniquely identify the page. `add_child!` returns the page's ID, which, similarly to how adding elements to `DropDown` works, we need to keep track of to later refer to pages in a position-independent manner.
 
 ```julia
 stack = Stack()
@@ -1941,7 +1941,7 @@ to provide another widget that modifies the stack, or we can use one of two pre-
 
 ### StackSwitcher
 
-[`StackSwitcher`](@ref) presents the user with a row of buttons, each of which use the corresponding stack page's title:
+[`StackSwitcher`](@ref) presents the user with a row of buttons, each of which uses the corresponding stack page's title:
 
 ![](../assets/stack_switcher.png)
 
@@ -2011,7 +2011,7 @@ Other than this visual component, its purpose is identical to that of `StackSwit
 
 ### Transition Animation
 
-When changing which of the stacks pages is currently shown, regardless of how that selection was triggered, an animation transitioning from one page to the other plays. Similar to `Revealer`, we can influence the type and speed of animation in multiple ways:
+When changing which of the stack pages is currently shown, regardless of how that selection was triggered, an animation transitioning from one page to the other plays. Similar to `Revealer`, we can influence the type and speed of the animation in multiple ways:
 
 + [`set_transition_duration!`](@ref) chooses how long the animation will take to complete
 + [`set_should_interpolate_size!`](@ref), if set to `true`, makes it, such that while the transition animation plays, the stack will change from the size of the previous child to the size of the current child gradually. If set to `false`, this size change happens instantly
@@ -2059,7 +2059,7 @@ Not to be confused with `GridView`, [`Grid`](@ref) arranges its children in a **
 
 Each widget in the grid has an x- and y-position, along with a widget and height, both measured in **number of cells** . 
 
-For example, in the image above, the widget labeled `05` has the x-position of 2, y-position of 2, a width of 1 cell and a height of 1 cell. 
+For example, in the image above, the widget labeled `05` has an x-position of 2, y-position of 2, a width of 1 cell, and a height of 1 cell. 
 
 ```julia
 Mousetrap.insert_at!(
@@ -2072,7 +2072,7 @@ Mousetrap.insert_at!(
 )
 ```
 
-Meanwhile, the widget labeled `07` has an x-position of 2, y-position of 3, width of 3 cells and height of 1 cell.
+Meanwhile, the widget labeled `07` has an x-position of 2, y-position of 3, width of 3 cells, and height of 1 cell.
 
 ```julia
 Mousetrap.insert_at!(
@@ -2085,7 +2085,7 @@ Mousetrap.insert_at!(
 )
 ```
 
-When using `insert_at!`, we have to make sure ourselves that no two widgets overlap.
+When using `insert_at!`, we have to make sure that no two widgets overlap.
 
 For a less manual way of arranging widgets, we can insert a widget next to another widget already in the grid using [`insert_next_to!`](@ref), which takes an argument of type [`RelativePosition`](@ref) in order to specify whether we want to insert the new widget above, below, left of, or right of the widget already inside the grid:
 
@@ -2100,7 +2100,7 @@ new_widget = # ...
 insert_next_to!(grid, new_widget, child, RELATIVE_POSITION_LEFT_OF)
 ```
 
-Where we ommitted the width and height in cells, which default to `1` respectively. 
+Where we omitted the width and height in cells, which default to `1` respectively. 
 
 Note that in this example, `child` is at position `(1, 1)`, and `new_widget` was inserted left of `child`, meaning it is now at position `(0, 1)`. `Grid` will dynamically insert rows and columns as needed, meaning that the x- and y-position may be `0` or even negative.
 
@@ -2179,7 +2179,7 @@ end
 
 ## Compound Widgets
 
-Now that we have many new widgets in our arsenal, a natural question is "how do we make our own?". If we want to construct a completely new widget pixel-by-pixel, we will have to wait until the chapter on [native rendering](./09_native_rendering.md). Until then, we are already perfectly capable of creating what we'll call a **compound widget**.
+Now that we have many new widgets in our arsenal, a natural question is "How do we make our own?". If we want to construct a completely new widget pixel-by-pixel, we will have to wait until the chapter on [native rendering](./09_native_rendering.md). Until then, we are already perfectly capable of creating what we'll call a **compound widget**.
 
 A compound widget is a widget that groups many other, pre-made widgets together. Compound widgets give an easy mechanism to 
 logically group a collection of widgets and treat them as a whole, instead of having to operate on each of its parts individually.
@@ -2190,11 +2190,11 @@ on this new object, it has to implement the **widget interface**. An object is c
 + it is a direct or indirect subtype of `Widget`
 + [`Mousetrap.get_top_level_widget`](@ref), which maps it to its top-level widget, is defined for this type
 
-In this section we will work through an example, explaining what both of these conditions mean, and how to fullfill them.
+In this section we will work through an example, explaining what both of these conditions mean, and how to fulfill them.
 
 ### Example: Placeholder
 
-In the previous section on selectable containers such as a `ListView` and `GridView`, we used this "placeholder" widget:
+In the previous section on selectable containers such as `ListView` and `GridView`, we used this "placeholder" widget:
 
 ![](../assets/compound_widget_list_view.png)
 
@@ -2214,7 +2214,7 @@ struct Placeholder
 end
 ```
 
-We add a constructor that assembles these widgets in the correct way like so:
+We add a constructor that correctly assembles these widgets like so:
 
 ```julia
 function Placeholder(text::String)
@@ -2263,7 +2263,7 @@ We can't, because `Placeholder`, the new Julia struct, is not yet considered a `
 ### Widget Interface
 
 To solve this, we come back to our two properties that make something a widget:
-1) it is direct or indirect subtype of `Widget`
+1) it is a direct or indirect subtype of `Widget`
 2) `get_top_level_widget`, which maps it to its top-level widget, is defined for this type
 
 Solving 1), we make `Placeholder` a subtype of `mousetrap.Widget`:
@@ -2338,18 +2338,16 @@ end
 
 ![](../assets/compound_widget_complete.png)
 
-Now that `Placeholder` is a proper widget, all of Mousetraps functions, including all widget signals, have become avaialable to use. We need to keep in mind that these functions will modify the top-level widget, so only signals of the top-level widget are available to compound widgets.
+Now that `Placeholder` is a proper widget, all of Mousetraps functions, including all widget signals, have become available to use. We need to keep in mind that these functions will modify the top-level widget, so only signals of the top-level widget are available to compound widgets.
 
 Using this technique, we can build an application piece by piece. A compound widget itself can be made up of multiple other compound widgets. In some way, the entire application itself is just one giant compound widget, with a `Window` as the top-level widget.
 
 !!! compat 
     Since Mousetrap `v0.3.0`, compound widgets will assume the signals of their top-level widgets. For example, if the compound widget `EntryWrapper` has its top-level widget be an `Entry`, then `connect_signal_activate!` will work on instances of `EntryWrapper`, since `EntryWarpper` assumed signal `activate`
 
-Our users are only able to interact with the compound widget by interacting with each of its components, which works but is fairly limiting. In the next chapter, this will change. By learning about **event handling**, we will be able to react to any kind of user-interaction, giving us the last tool needed to create an application that isn't just a collection of pre-made widgets, but something we have built ourselves.
+Our users are only able to interact with the compound widget by interacting with each of its components, which works but is fairly limiting. In the next chapter, this will change. By learning about **event handling**, we will be able to react to any kind of user interaction, giving us the last tool needed to create an application that isn't just a collection of pre-made widgets, but something we have built ourselves.
 
 ## Custom Signals
 
 !!! compat
     This feature is not yet implemented, this section is incomplete. See [here](https://github.com/users/Clemapfel/projects/2?pane=issue&itemId=35716010#) for more information.
-
-

@@ -893,34 +893,36 @@ function test_file_chooser(::Container)
     end
 
     @testset "FileChooser" begin
-        file_chooser = FileChooser(FILE_CHOOSER_ACTION_SAVE)
-        Base.show(devnull, file_chooser)
+        for action in instances(FileChooserAction)
+            file_chooser = FileChooser(action)
+            Base.show(devnull, file_chooser)
 
-        add_filter!(file_chooser, filter)
-        set_initial_filter!(file_chooser, filter)
-        set_initial_file!(file_chooser, FileDescriptor("."))
-        set_initial_folder!(file_chooser, FileDescriptor("."))
-        set_initial_name!(file_chooser, "name");
+            add_filter!(file_chooser, filter)
+            set_initial_filter!(file_chooser, filter)
+            set_initial_file!(file_chooser, FileDescriptor("."))
+            set_initial_folder!(file_chooser, FileDescriptor("."))
+            set_initial_name!(file_chooser, "name");
 
-        set_accept_label!(file_chooser, "accept")
-        @test get_accept_label(file_chooser) == "accept"
+            set_accept_label!(file_chooser, "accept")
+            @test get_accept_label(file_chooser) == "accept"
 
-        @test get_is_modal(file_chooser) == true
-        set_is_modal!(file_chooser, false)
-        @test get_is_modal(file_chooser) == false
+            @test get_is_modal(file_chooser) == true
+            set_is_modal!(file_chooser, false)
+            @test get_is_modal(file_chooser) == false
 
-        @test get_title(file_chooser) == ""
-        set_title!(file_chooser, "TEST")
-        @test get_title(file_chooser) == "TEST"
+            @test get_title(file_chooser) == ""
+            set_title!(file_chooser, "TEST")
+            @test get_title(file_chooser) == "TEST"
 
-        on_accept!(file_chooser) do x::FileChooser, files::Vector{FileDescriptor}
+            on_accept!(file_chooser) do x::FileChooser, files::Vector{FileDescriptor}
+            end
+
+            on_cancel!(file_chooser) do x::FileChooser
+            end
+
+            #present!(file_chooser)
+            cancel!(file_chooser)
         end
-
-        on_cancel!(file_chooser) do x::FileChooser
-        end
-
-        #present!(file_chooser)
-        cancel!(file_chooser)
     end
 end
 

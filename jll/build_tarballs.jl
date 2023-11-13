@@ -34,7 +34,8 @@ platforms = filter(p -> nbits(p) == 64, supported_platforms())
 # The products that we will ensure are always built
 products = [
     LibraryProduct("libmousetrap", :mousetrap),
-    LibraryProduct("libmousetrap_julia_binding", :mousetrap_julia_binding)
+    LibraryProduct("libmousetrap_julia_binding", :mousetrap_julia_binding),
+    FileProduct("")
 ]
 
 x11_platforms = filter(p -> Sys.islinux(p) || Sys.isfreebsd(p), platforms)

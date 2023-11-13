@@ -37,7 +37,7 @@ In this section, we will learn how to reproduce this behavior using the command 
 
 ### Action IDs
 
-When creating an action, we first need to choose the action's **ID**. An ID is an identifier that uniquely identifies the action. The ID can only contain the character `[a-zA-Z0-9_-.]`, that is, all roman letters, numbers `0` to `9`, `_`, `-` and `.`. The dot is usually reserved to simulate scoping. 
+When creating an action, we first need to choose the action's **ID**. An ID is an identifier that uniquely identifies the action. The ID can only contain the character `[a-zA-Z0-9_-.]`, that is, all Roman letters, numbers `0` to `9`, `_`, `-` and `.`. The dot is usually reserved to simulate scoping. 
 
 For example, one action could be called `image_file.save`, while another is called `text_file.save`. Both actions say what they do, `save` a file, but the prefix makes it clear which part of the application they act on.
 
@@ -144,9 +144,9 @@ This way, we do not have to keep track of actions ourselves; by simply rememberi
 
 ## Shortcuts
 
-An action can have a number of optional **shortcut triggers**, which are aslo called **keybindings**. 
+An action can have any number of optional **shortcut triggers**, which are also called **keybindings**. 
 
-A keybinding is a combination of keyboard keys that, when pressed, trigger an action exactly once. Common keyboard shortcuts familiar to most users of modern operating systems are `Control + C` to copy,`Control + A` to "select all", etc. 
+A keybinding is a combination of keyboard keys that, when pressed, trigger an action exactly once. Common keyboard shortcuts familiar to most users of modern operating systems are `Control + C` to copy, `Control + A` to "select all", etc. 
 
 Most of the time, we will have to implement behavior like this and associate a shortcut with it manually, using actions.
 
@@ -161,7 +161,7 @@ A modifier is one of the following:
 + `Alt`
 
 !!! note 
-    Additional modifiers include `CapsLock`, `AltGr`, `Meta`, `Apple` and `Win`. These are keyboard-layout and/or OS-specific. See [here](https://docs.gtk.org/gdk4/flags.ModifierType.html) for more information.
+    Additional modifiers include `CapsLock`, `AltGr`, `Meta`, `Apple`, and `Win`. These are keyboard-layout and/or OS-specific. See [here](https://docs.gtk.org/gdk4/flags.ModifierType.html) for more information.
 
 A non-modifier, then, is any key that is not a modifier.
 
@@ -170,15 +170,15 @@ A keybinding, or **shortcut trigger**, henceforth also called "shortcut", is the
 + `a` (that is the `A` keyboard key) is a shortcut
 + `<Control><Shift>plus` (that is the `+` keyboard key, along with the `Control` and `Shift` modifiers) is a shortcut
 + `<Alt><Control><Shift>` is **not** a shortcut, because it does not contain a non-modifier
-+ `<Control>xy` (that is the `X` key *and* the `Y` key) is **not** a shortcut, because it contains more than one non-modifier key
++ `<Control>xy` (that is the `X` key *and* the `Y` key) is **not** a shortcut because it contains more than one non-modifier key
 
-Shortcuts are represented as strings, which have a specific syntax. As seen above, each modifier is enclosed in `<``>`, with no spaces in between. After the group of modifiers, the non-modifier key is placed after the last modifiers `>`. Some more examples:
+Shortcuts are represented as strings, which have a specific syntax. As seen above, each modifier is enclosed in `<``>`, with no spaces in between. After the group of modifiers, the non-modifier key is placed after the last modifier`>`. Some more examples:
 
 + "Control + C" is written `<Control>c`
 + "Alt + LeftArrow" is written as `<Alt>Left` (sic, `L` is capitalized)
 + "Shift + 1" is written as `exclam`
 
-That last one requires explanation. On most keyboard layouts, to type `!`, the user has to press the shift modifier key, then press the `1` key. When "Shift + 1" is pressed,  Mousetrap does not receive this keyboard key event as-is, instead, it receives a single key event for the `!` key with no modifiers. The identifier of `!` is `exclam`, hence why "Shift + 1" is written as `exclam`.
+That last one requires an explanation. On most keyboard layouts, to type `!`, the user has to press the shift modifier key, then press the `1` key. When "Shift + 1" is pressed,  Mousetrap does not receive this keyboard key event as-is, instead, it receives a single key event for the `!` key with no modifiers. The identifier of `!` is `exclam`, hence why "Shift + 1" is written as `exclam`.
 
 !!! tip "Looking up Key Identifiers"
 
@@ -187,7 +187,7 @@ That last one requires explanation. On most keyboard layouts, to type `!`, the u
     Let's say we want to write the shortcut "Control + Space". We know that we can write "Control" as `<Control>`. Next, we navigate to [https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl), 
     which has a list of all keys recognized by Mousetrap. In [line 1039](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L1039), we find that the constant for the space key is called `KEY_space`. The identifier of a key used for shortcuts is this name, without the `KEY_` prefix. For the space bar key, the enum value is `KEY_space`, the identifier is therefore `space`.
 
-    One more obscure example: to write "Alt + Beta", that is, the `β` key on the somewhat rare greek keyboard layout, we find the constant named `KEY_Greek_BETA` in [line 3034](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L3034). Erasing `KEY_` again, the keys' identifier is `Greek_BETA`. "Alt + Beta" is therefore written as `<Alt>Greek_BETA`
+    One more obscure example: to write "Alt + Beta", that is, the `β` key on the somewhat rare Greek keyboard layout, we find the constant named `KEY_Greek_BETA` in [line 3034](https://github.com/Clemapfel/mousetrap.jl/blob/main/src/key_codes.jl#L3034). Erasing `KEY_` again, the key's identifier is `Greek_BETA`. "Alt + Beta" is therefore written as `<Alt>Greek_BETA`
 
     If we make an error and use the wrong identifier, a soft warning will be printed at runtime, informing us of this. 
 
@@ -203,7 +203,7 @@ That last one requires explanation. On most keyboard layouts, to type `!`, the u
     ```
 
 !!! warning "Operating System Priority"
-    Depending on the operating system, some shortcuts will already be assigned. If this is the case, we should take care not to use them in our application. For example, the above mentioned `<Control>space` shortcut [is reserved for changing input sources on macOS](https://discussions.apple.com/thread/8507324), while on Windows `<Control><Alt>Delete` will always open the task manager.
+    Depending on the operating system, some shortcuts will already be assigned. If this is the case, we should take care not to use them in our application. For example, the abovementioned `<Control>space` shortcut [is reserved for changing input sources on macOS](https://discussions.apple.com/thread/8507324), while on Windows `<Control><Alt>Delete` will always open the task manager.
 
 ### Assigning Shortcuts to Actions
 
@@ -218,7 +218,7 @@ add_shortcut!(shortcut_action, "<Control>M")
 
 An action can have multiple shortcuts, and one shortcut can be associated with two or more actions, though the latter is usually not recommended.
 
-We need one more thing before we can trigger our action: an object that can receive keyboard key events. We will learn much more about the event model in [its own dedicated chapter](./05_event_handling.md). For now, we can use [`set_listens_for_shortcut_action!`](@ref) on our top-level window. This makes the window instance listen for any keyboard presses. If it recognizes that a keybinding associated with an action it is listening for was pressed, it will trigger that action.
+We need one more thing before we can trigger our action: an object that can receive keyboard key events. We will learn much more about the event model [in the chapter dedicated to it](./05_event_handling.md). For now, we can use [`set_listens_for_shortcut_action!`](@ref) on our top-level window. This makes the window instance listen for any keyboard presses. If it recognizes that a keybinding associated with an action it is listening for was pressed, it will trigger that action.
 
 A complete `main.jl` file showing how to trigger an action using a shortcut is given here:
 

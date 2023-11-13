@@ -44,9 +44,9 @@ as_rgba = hsva_to_rgba(as_hsva)
 
 ### Color to Hexadecimal
 
-Mousetrap offers a function to convert `RGBA` to its HTML-color-code. This code is a a string of the form `#RRGGBB`, where `RR` is the red, `GG` the green, and `BB` the blue component, in unsigned 8-bit hexadecimal. For example, the color `RGBA(1, 0, 1, 1)` would have the HTML-code `#FF00FF`, where the alpha component was omitted. Using `html_code_to_rgba` and `rgba_to_html_code`, we can freely convert between a colors in-memory and hexadecimal representation.
+Mousetrap offers a function to convert `RGBA` to its HTML color code. This code is a a string of the form `#RRGGBB`, where `RR` is the red, `GG` the green, and `BB` the blue component, in unsigned 8-bit hexadecimal. For example, the color `RGBA(1, 0, 1, 1)` would have the HTML-code `#FF00FF`, where the alpha component was omitted. Using `html_code_to_rgba` and `rgba_to_html_code`, we can freely convert between a colors in-memory and hexadecimal representation.
 
-For example, if we want to use an `Entry` in order for the user to be able to enter a color as an HTML color code, we could do the following:
+For example, if we want to use an `Entry` for the user to be able to enter a color as an HTML color code, we could do the following:
 
 ```julia
 entry = Entry()
@@ -164,7 +164,7 @@ It is recommended to use `Image` only for raster-based file types. While possibl
 
 #### Creating an Image from Scratch
 
-Sometimes, we want to fill an image with our own custom image data programmatically. For this, we use [`create!`](@ref), which allocates an image of a given size and fills each pixel with the color supplied as an optional argument. 
+Sometimes, we want to fill an image with our custom image data programmatically. For this, we use [`create!`](@ref), which allocates an image of a given size and fills each pixel with the color supplied as an optional argument. 
 
 For example, the following allocates an image of size 400x300, then sets every pixel to red (`RGBA(1, 0, 0, 1)`):
 
@@ -224,7 +224,7 @@ If no interpolation type is specified when calling `as_scaled`, `INTERPOLATION_T
 
 ### Cropping
 
-To crop an image, we use [`as_cropped`](@ref). Similar to `as_scaled`, this functions returns a newly allocated image, it does not modify the original image.
+To crop an image, we use [`as_cropped`](@ref). Similar to `as_scaled`, this function returns a newly allocated image, it does not modify the original image.
 
 `as_cropped` takes 4 arguments, the new width and height, and the x- and y-**offset**. The offset specifies which pixel is used as the new top-left coordinate of the cropped image. This offset can be negative. We can also specify a new resolution greater than that of the current image. Any newly allocated space that is not part of the original image will be filled with `RGBA(0, 0, 0, 0)`:
 
@@ -249,7 +249,7 @@ vertically_flipped = as_flipped(image, false, true)
 
 ### Saving an Image to Disk
 
-Having edited our image, we can store it on the users' disk using [`save_to_file`](@ref). This function takes a path as a string, and returns a boolean indicating whether the operation was succesfull. The resulting image format will be deduced based on the file extension. For example, to save an image as a `.png` to the location `/assets/export`, we would do:
+Having edited our image, we can store it on the users' disk using [`save_to_file`](@ref). This function takes a path as a string and returns a boolean indicating whether the operation was successful. The resulting image format will be deduced based on the file extension. For example, to save an image as a `.png` to the location `/assets/export`, we would do:
 
 ```julia
 image = # ...
@@ -264,7 +264,7 @@ Now that we know how to load and manipulate images in memory, we will most likel
 
 So far, we have been using `create_from_file!` to load the image directly from the disk. To create an `ImageDisplay` from an image in memory we use [`create_from_image!`](@ref).
 
-`ImageDisplay` [deep-copies](https://docs.julialang.org/en/v1/base/base/#Base.deepcopy) the contents of the image, the underlying data cannot be modified after this point. This means, if we change the original `Image`, `ImageDisplay` **will not change**. To update the `ImageDisplay`, we need to call `create_from_image!` again. 
+`ImageDisplay` [deep-copies](https://docs.julialang.org/en/v1/base/base/#Base.deepcopy) the contents of the image, the underlying data cannot be modified after this point. This means if we change the original `Image`, `ImageDisplay` **will not change**. To update the `ImageDisplay`, we need to call `create_from_image!` again. 
 
 By default, `ImageDisplay` will expand according to the widget property of the same name. The graphical component of all widgets is expanded using linear interpolation, which may blur images in an undesirable way. To make sure `ImageDisplay` is always at the correct resolution and displays an image 1-to-1 (that is, 1 pixel of the image is exactly 1 pixel on the screen), we can use the following trick:
 
@@ -290,4 +290,4 @@ Because expansion is disabled, `ImageDisplay` will always be exactly the size of
 
 `create_from_image!` is a costly operation and would be insufficient to, for example, fluently display an animation at 60fps. We would have to call `create_from_image!` every frame, which is not feasible on most machines.
 
-In situations like this, we should instead use a custom render widget to displays the image as an **OpenGL texture**, which has no problems rendering large, frequently updated images in a performant manner. We will learn more about textures in the [chapter on native rendering](./09_native_rendering.md).
+In situations like this, we should instead use a custom render widget to display the image as an **OpenGL texture**, which has no problems rendering large, frequently updated images in a performant manner. We will learn more about textures in the [chapter on native rendering](./09_native_rendering.md).

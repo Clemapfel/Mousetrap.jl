@@ -67,11 +67,11 @@
 @document ANIMATION_TIMING_FUNCTION_ELASTIC_EASE_OUT "simulates stretching of a spring, ease out"
 @document ANIMATION_TIMING_FUNCTION_ELASTIC_SIGMOID "simulates stretching of a spring, ease in and ease out"
 @document ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_IN "simulates bouncing of a ball under gravity, ease in"
-@document ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_OUT "simulates bouncing of a ball under gravtiy, ease out"
+@document ANIMATION_TIMING_FUNCTION_BOUNCE_EASE_OUT "simulates bouncing of a ball under gravity, ease out"
 @document ANIMATION_TIMING_FUNCTION_BOUNCE_SIGMOID "simulates bouncing of a ball under gravity, ease in and ease out"
 
 @document AntiAliasingQuality enum_docs(:AntiAliasingQuality,
-    "Number of samples when performing multi-sampled anti aliasing (MSAA).", [
+    "Number of samples when performing multi-sampled anti-aliasing (MSAA).", [
     :ANTI_ALIASING_QUALITY_OFF,
     :ANTI_ALIASING_QUALITY_MINIMAL,
     :ANTI_ALIASING_QUALITY_GOOD,
@@ -135,7 +135,7 @@
     :CHECK_BUTTON_STATE_INACTIVE,
     :CHECK_BUTTON_STATE_INCONSISTENT
 ])
-@document CHECK_BUTTON_STATE_ACTIVE "Active, usually displayed as a check mark"
+@document CHECK_BUTTON_STATE_ACTIVE "Active, usually displayed as a checkmark"
 @document CHECK_BUTTON_STATE_INACTIVE "Inactive, usually displayed as no check mark"
 @document CHECK_BUTTON_STATE_INCONSISTENT "Neither active nor inactive, usually displayed with a tilde `~`"
 
@@ -152,7 +152,7 @@
 @document CORNER_PLACEMENT_TOP_RIGHT "Horizontal scrollbar top, vertical scrollbar right"
 
 @document CursorType enum_docs(:CursorType,
-    "Determines what the users cursor will look like while it is inside the allocated area of the widget.", [
+    "Determines what the user cursor will look like while it is inside the allocated area of the widget.", [
     :CURSOR_TYPE_ALL_SCROLL,
     :CURSOR_TYPE_CELL,
     :CURSOR_TYPE_COLUMN_RESIZE,
@@ -210,7 +210,7 @@
 @document CURSOR_TYPE_ZOOM_OUT "Lens, usually with a minus icon"
 
 @document DeviceAxis enum_docs(:DeviceAxis,
-    "Axes of stylus- and touchpad device, capture by `StylusEventController`. Not all manufactures support all or even any of these.", [
+    "Axes of stylus- and touchpad device, captured by `StylusEventController`. Not all manufacturers support all or even any of these.", [
     :DEVICE_AXIS_DELTA_X,
     :DEVICE_AXIS_DELTA_Y,
     :DEVICE_AXIS_DISTANCE,
@@ -244,7 +244,7 @@
 ])
 @document ELLIPSIZE_MODE_END "Inserted at the end: `text...`"
 @document ELLIPSIZE_MODE_MIDDLE "Inserted in the middle: `te...xt`"
-@document ELLIPSIZE_MODE_NONE "No ellipsizing will take place"
+@document ELLIPSIZE_MODE_NONE "No eclipsing will take place"
 @document ELLIPSIZE_MODE_START "Insert at the start: `...text`"
 
 @document FileChooserAction enum_docs(:FileChooserAction,
@@ -276,8 +276,8 @@
 @document FILE_MONITOR_EVENT_CHANGED "Content of monitored file changed"
 @document FILE_MONITOR_EVENT_CHANGES_DONE_HINT "Emitted to signal the end of a series of changes"
 @document FILE_MONITOR_EVENT_CREATED "A new file was created inside the monitored folder"
-@document FILE_MONITOR_EVENT_DELETED "File, Folder, or file inside monitored folder was deleted"
-@document FILE_MONITOR_EVENT_MOVED_IN "File was move into the monitored folder"
+@document FILE_MONITOR_EVENT_DELETED "File, Folder, or file inside the monitored folder was deleted"
+@document FILE_MONITOR_EVENT_MOVED_IN "File was moved into the monitored folder"
 @document FILE_MONITOR_EVENT_MOVED_OUT "File was moved out of the monitored folder"
 @document FILE_MONITOR_EVENT_RENAMED "File or folder was renamed"
 
@@ -290,7 +290,7 @@
 ])
 @document INTERPOLATION_TYPE_BILINEAR "Linear interpolation, adequate speed and quality"
 @document INTERPOLATION_TYPE_HYPERBOLIC "Cubic interpolation, slow speed, high quality"
-@document INTERPOLATION_TYPE_NEAREST "Nearest neigbhor interpolation, fastest but no filtering takes place"
+@document INTERPOLATION_TYPE_NEAREST "Nearest neighbor interpolation, fastest but no filtering takes place"
 @document INTERPOLATION_TYPE_TILES "Linear when scaling down, nearest neighbor when scaling up."
 
 @document JustifyMode enum_docs(:JustifyMode,
@@ -346,14 +346,14 @@
 @document PAN_DIRECTION_UP "Pen down-up"
 
 @document PropagationPhase enum_docs(:PropagationPhase,
-    "Determines at which part during the main loop event propgataion an event controller will consume the event, cf. https://developer-old.gnome.org/gtk4/stable/event-propagation.html", [
+    "Determines at which part during the main loop event propagation an event controller will consume the event, cf. https://developer-old.gnome.org/gtk4/stable/event-propagation.html", [
     :PROPAGATION_PHASE_BUBBLE,
     :PROPAGATION_PHASE_CAPTURE,
     :PROPAGATION_PHASE_NONE,
     :PROPAGATION_PHASE_TARGET
 ])
 @document PROPAGATION_PHASE_BUBBLE "Consume event during propagation \"upwards\", from child to parent"
-@document PROPAGATION_PHASE_CAPTURE "Consume event during progagation \"downwards\", from parent to child"
+@document PROPAGATION_PHASE_CAPTURE "Consume event during propagation \"downwards\", from parent to child"
 @document PROPAGATION_PHASE_NONE "Do not capture events"
 @document PROPAGATION_PHASE_TARGET "Consume events when the widget targets its event controllers with events"
 
@@ -414,15 +414,15 @@
 ])
 @document SCROLL_TYPE_JUMP "Jump keybinding, if present"
 @document SCROLL_TYPE_NONE "No keybinding was used"
-@document SCROLL_TYPE_PAGE_BACKWARD "Move one page backwards"
+@document SCROLL_TYPE_PAGE_BACKWARD "Move one page backward"
 @document SCROLL_TYPE_PAGE_DOWN "Move one page vertically down"
 @document SCROLL_TYPE_PAGE_FORWARD "Move one page forward"
 @document SCROLL_TYPE_PAGE_LEFT "Move one page vertically left"
 @document SCROLL_TYPE_PAGE_RIGHT "Move one page horizontally right"
-@document SCROLL_TYPE_PAGE_UP "Move one page vetically up"
+@document SCROLL_TYPE_PAGE_UP "Move one page vertically up"
 @document SCROLL_TYPE_SCROLL_END "Jump to the end"
 @document SCROLL_TYPE_SCROLL_START "Jump to the start"
-@document SCROLL_TYPE_STEP_BACKWARD "Move one scroll step backwards"
+@document SCROLL_TYPE_STEP_BACKWARD "Move one scroll step backward"
 @document SCROLL_TYPE_STEP_DOWN "Move one scroll step vertically down"
 @document SCROLL_TYPE_STEP_FORWARD "Move on scroll step forward"
 @document SCROLL_TYPE_STEP_LEFT "Move one scroll step horizontally left"
@@ -436,7 +436,7 @@
     :SCROLLBAR_VISIBILITY_POLICY_NEVER
 ])
 @document SCROLLBAR_VISIBILITY_POLICY_ALWAYS "Stay revealed at all times"
-@document SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC "Reveal when the users cursor enters the [`Viewport`](@ref), hide when it exits"
+@document SCROLLBAR_VISIBILITY_POLICY_AUTOMATIC "Reveal when the user's cursor enters the [`Viewport`](@ref), hide when it exits"
 @document SCROLLBAR_VISIBILITY_POLICY_NEVER "Stay hidden at all times"
 
 @document SectionFormat enum_docs(:SectionFormat,
@@ -452,7 +452,7 @@
 @document SECTION_FORMAT_HORIZONTAL_BUTTONS "Rectangular buttons"
 @document SECTION_FORMAT_HORIZONTAL_BUTTONS_LEFT_TO_RIGHT "Rectangular buttons, pushed to the left"
 @document SECTION_FORMAT_HORIZONTAL_BUTTONS_RIGHT_TO_LEFT "Rectangular buttons, pushed to the right"
-@document SECTION_FORMAT_INLINE_BUTTONS "Buttons are appeneded right of the section title"
+@document SECTION_FORMAT_INLINE_BUTTONS "Buttons are appended right of the section title"
 @document SECTION_FORMAT_NORMAL "Default layout"
 
 @document SelectionMode enum_docs(:SelectionMode,
@@ -516,14 +516,14 @@
 @document STACK_TRANSITION_TYPE_OVER_UP "Slide next page over current, from bottom to top"
 @document STACK_TRANSITION_TYPE_OVER_UP_DOWN "Slide next page over current, exiting up and entering bottom"
 @document STACK_TRANSITION_TYPE_ROTATE_LEFT "Rotate the previous page from right to left, then enter the next page from right to left"
-@document STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT "Rotate the pervious page to the right to left, then enter next next page from left to right"
+@document STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT "Rotate the previous page to the right to left, then enter next next page from left to right"
 @document STACK_TRANSITION_TYPE_ROTATE_RIGHT "Rotate the previous page from left to right, then enter the next page from left to right"
 @document STACK_TRANSITION_TYPE_SLIDE_DOWN "Slide the current page top to bottom, enter the next page from top to bottom"
 @document STACK_TRANSITION_TYPE_SLIDE_LEFT "Slide the current page right to left, enter the next page from right to left"
 @document STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT "Slide the current page left, enter the next page from left to right"
 @document STACK_TRANSITION_TYPE_SLIDE_RIGHT "Slide the current page left to right, enter the next page left to right"
 @document STACK_TRANSITION_TYPE_SLIDE_UP "Slide the current page bottom to top, enter the next page bottom to top"
-@document STACK_TRANSITION_TYPE_SLIDE_UP_DOWN "Slide the current page bottom top top, enter next bage top to bottom"
+@document STACK_TRANSITION_TYPE_SLIDE_UP_DOWN "Slide the current page bottom top, enter next page top to bottom"
 @document STACK_TRANSITION_TYPE_UNDER_DOWN "Slide next page under current, from top to bottom"
 @document STACK_TRANSITION_TYPE_UNDER_LEFT "Slide next page under current, from left to right"
 @document STACK_TRANSITION_TYPE_UNDER_RIGHT "Slide next page under current, from right to left"
@@ -535,10 +535,10 @@
     :TEXTURE_SCALE_MODE_NEAREST
 ])
 @document TEXTURE_SCALE_MODE_LINEAR "Linear interpolation"
-@document TEXTURE_SCALE_MODE_NEAREST "Nearest-neighbor interploation"
+@document TEXTURE_SCALE_MODE_NEAREST "Nearest-neighbor interpolation"
 
 @document TextureWrapMode enum_docs(:TextureWrapMode,
-    "Determines content of fragments with a texture coordinate outside of `[0, 1]`.", [
+    "Determines color of fragments with a texture coordinate outside of `[0, 1]`.", [
     :TEXTURE_WRAP_MODE_MIRROR,
     :TEXTURE_WRAP_MODE_ONE,
     :TEXTURE_WRAP_MODE_REPEAT,
@@ -570,7 +570,7 @@
     :TICK_CALLBACK_RESULT_DISCONTINUE
 ])
 @document TICK_CALLBACK_RESULT_CONTINUE "Continue the callback, it will be invoked the next frame"
-@document TICK_CALLBACK_RESULT_DISCONTINUE "Remove the callback, it will not longer be invoked"
+@document TICK_CALLBACK_RESULT_DISCONTINUE "Remove the callback, it will no longer be invoked"
 
 @document ToolType enum_docs(:ToolType,
     "Tool type classification of a stylus, not all manufactures support all or even any of these.", [
@@ -599,4 +599,3 @@
 ])
 @document WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE "Allow invocation of the default handler, the window will close."
 @document WINDOW_CLOSE_REQUEST_RESULT_PREVENT_CLOSE "Prevent the window from closing."
-

@@ -17,7 +17,7 @@ Create a shape as a circle, defined by its center and radius. In OpenGL coordina
 ```
 CircularRing(center::Vector2f, outer_radius::Number, thickness::Number, n_outer_vertices::Integer) -> Shape 
 ```
-Create a shape as a circular ring, defined by its center, `outer_radius`, which is the distance to the out perimeter, and `thickness` which is the distance between the inner and out perimeter.
+Create a shape as a circular ring, defined by its center, `outer_radius`, which is the distance to the out perimeter, and `thickness` which is the distance between the inner and outer perimeter.
 """
 
 @document Ellipse """
@@ -59,7 +59,7 @@ Create a shape as a set of unconnected lines, vertex positions in OpenGL coordin
 ```
 LineStrip(points::Vector{Vector2f}) -> Shape
 ```
-Create a shape as a line-strip. For points `{a1, a2, ..., an}`, this will be a set of connected lines `{a1, a2}, {a2, a3}, ..., {an-1, an}`, in OpenGL coordinates.
+Create a shape as a line strip. For points `{a1, a2, ..., an}`, this will be a set of connected lines `{a1, a2}, {a2, a3}, ..., {an-1, an}`, in OpenGL coordinates.
 """
 
 @document Outline """
@@ -115,7 +115,7 @@ Create a shape as a triangle defined by three points, in OpenGL coordinates.
 ```
 Wireframe(points::Vector{Vector2f}) -> Shape
 ```
-Create a shape as a wire-frame. For points `{a1, a2, a3, ..., an}`, the shape
+Create a shape as a wireframe. For points `{a1, a2, a3, ..., an}`, the shape
 will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a1}`. In OpenGL coordinates.
 """
 
@@ -123,7 +123,7 @@ will be a connected series of lines `{a1, a2}, {a2, a3}, ..., {an-1, an}, {an, a
 ```
 activate!(::Widget)
 ```
-If the widget is activatable, trigger it. Depending on the widget, this may not necssarily emit signal `activate`. Use [`emit_signal_activate`](@ref) to manually emit the signal instead.
+If the widget is activatable, trigger it. Depending on the widget, this may not necessarily emit signal `activate`. Use [`emit_signal_activate`](@ref) to manually emit the signal instead.
 
 ---
 
@@ -188,7 +188,7 @@ add_allowed_pattern!(filter, "*.jl")
 ```
 add_allowed_suffix!(::FileFilter, suffix::String) 
 ```
-Let all files pass through the filter whose file extension equal the given string, where `suffix` should **not** contain a dot.
+Let all files pass through the filter whose file extension is equal to the given string, where `suffix` should **not** contain a dot.
 
 ## Example
 ```julia
@@ -202,7 +202,7 @@ add_allowed_suffix!(filter, "jl") # "jl", not ".jl"
 ```
 add_button!(::AlertDialog, label::String) -> Integer
 ```
-Add a new button to the dialog. If the button is clicked, the dialog closes automatically. The return value of this function is the buttons ID, which should be stored to later reference the button.
+Add a new button to the dialog. If the button is clicked, the dialog closes automatically. The return value of this function is the button's ID, which should be stored to later reference the button.
 """
 
 @document add_child! """
@@ -223,7 +223,7 @@ Add a widget at given position, in absolute widget-space coordinates.
 ```
 add_css!(code::String) -> Cvoid
 ```
-Execute CSS code and add it to the global style manager. If compied successfuly, 
+Execute CSS code and add it to the global style manager. If compiled successfully, 
 any class defined will be available to be applied to a widget using `add_css_class!`.
 
 ## Example
@@ -298,7 +298,7 @@ add_overlay!(overlay::Overlay, child::Widget ; [include_in_measurement::Bool = t
 ```
 Add an additional overlay widget. It will be display "on top" of previously added widgets. 
 
-If `include_in_measurement` is `true`, the overlaid widget will be included in size allocation of 
+If `include_in_measurement` is `true`, the overlaid widget will be included in size-allocation of 
 the entire `Overlay`.
 
 If `clip` is `true`, if part of a widget goes outside the overlays allocated area, it will be truncated.
@@ -375,7 +375,7 @@ Create a shape as a circle, defined by its center and radius. In OpenGL coordina
 ```
 as_circular_ring!(::Shape, center::Vector2f, outer_radius::Number, thickness::Number, n_outer_vertices::Integer) 
 ```
-Create a shape as a circular ring, defined by its center, `outer_radius`, which is the distance to the out perimeter, and `thickness` which is the distance between the inner and out perimeter.
+Create a shape as a circular ring, defined by its center, `outer_radius`, which is the distance to the out perimeter, and `thickness` which is the distance between the inner and outer perimeter.
 """
 
 @document as_cropped """
@@ -438,7 +438,7 @@ Create a shape as a 1-fragment thick line between two points, in OpenGL coordina
 ```
 as_line_strip!(::Shape, points::Vector{Vector2f}) 
 ```
-Create a shape as a line-strip. For points `{a1, a2, ..., an}`, this will be a set of connected lines `{a1, a2}, {a2, a3}, ..., {an-1, an}`, in OpenGL coordinates.
+Create a shape as a line strip. For points `{a1, a2, ..., an}`, this will be a set of connected lines `{a1, a2}, {a2, a3}, ..., {an-1, an}`, in OpenGL coordinates.
 """
 
 @document as_lines! """
@@ -673,7 +673,7 @@ Perform matrix-multiplication and return the resulting transform, in OpenGL coor
 ```
 contains_file(::Clipboard) -> Bool
 ```
-Check whether the cliboard contains a file path.
+Check whether the clipboard contains a file path.
 """
 
 @document contains_image """
@@ -716,7 +716,7 @@ Clear the current pixeldata and reinitialize it at given size. Will fille each p
 ```
 create_as_file_preview!(image_display::ImageDisplay, file::FileDescriptor) 
 ```
-If the `file` points to an image file, create as a preview for that image, otherwise create from the 
+If the `file` points to an image file, create a preview for that image, otherwise create from the 
 files default icon.
 """
 
@@ -929,7 +929,7 @@ Get the difference between the current angle and the angle recognized when the g
 ```
 get_autohide(::Popover) -> Bool
 ```
-Get whether the popover should automatically hide when it looses focus.
+Get whether the popover should automatically hide when it loses focus.
 """
 
 @document get_auto_render """
@@ -1193,7 +1193,7 @@ Get whether the end child should resize when the `Paned` is resized.
 ```
 get_end_child_shrinkable(::Paned) -> Bool
 ```
-Get whether the user can resize the end child such that its allocated area inside the paned is smaller than the natural size of the child.
+Get whether the user can resize the end child such that its allocated area inside the `Paned` is smaller than the natural size of the child.
 """
 
 @document get_expand_horizontally """
@@ -1405,7 +1405,7 @@ Register a callback to read an image from the clipboad. Once the clipboard is re
 `f` is required to be invocable as a function with signature
 
 ```julia
-(::Clipboard, ::Image, [::Data_t]) -> Cvoid
+(::Clipboard, ::Image, [::Data_t]) -> Nothing
 ```
 
 ## Example
@@ -1542,14 +1542,14 @@ If `false`, the animation will interpolate its value from the lower to upper bou
 ```
 get_is_scrollable(::Notebook) -> Bool
 ```
-Get whether the user can scroll between pages using the mouse scrollwheel or touchscreen.
+Get whether the user can scroll between pages using the mouse scroll wheel or touchscreen.
 """
 
 @document get_is_spinning """
 ```
 get_is_spinning(::Spinner) -> Bool
 ```
-Get whether the spinners animation is currently playing.
+ Get whether the `Spinner`s animation is currently playing.
 """
 
 @document get_is_vertically_homogeneous """
@@ -1601,7 +1601,7 @@ Get all keys in this group, or an empty vector if the group does not exist.
 get_kinetic_scrolling_enabled(::Viewport) -> Bool
 get_kinetic_scrolling_enabled(::ScrollEventController) -> Bool
 ```
-Get whether scrolling should continue once the user stopped operating the mouse wheel or touchscreen, simulating "inertia".
+Get whether scrolling should continue once the user stops operating the mouse wheel or touchscreen, simulating "inertia".
 """
 
 @document get_label_x_alignment """
@@ -2267,14 +2267,14 @@ end
 ```
 get_surpress_debug(::LogDomain) -> Bool
 ```
-Get whether log message of level "DEBUG" will be ommitted from the console output.
+Get whether log messages of level "DEBUG" will be omitted from the console output.
 """
 
 @document get_surpress_info """
 ```
 get_surpress_info(::LogDomain) -> Bool
 ```
-Get whether log message of level "INFO" will be ommitted from the console output.
+Get whether log message of level "INFO" will be omitted from the console output.
 """
 
 @document get_tab_position """
@@ -2397,14 +2397,14 @@ Get distance between the top of the text and the `TextView`'s frame.
 ```
 get_touch_only(::SingleClickGesture) -> Bool
 ```
-Get whether the event controller should exclusively react to events from touch-devices.
+Get whether the event controller should exclusively react to events from touch devices.
 """
 
 @document get_top_level_widget """
 ```
 get_top_level_widget(::Widget) -> Widget
 ```
-Function that maps a non-native compount widget (subtyping `Widget`) to its top-level widget component. 
+Function that maps a non-native compound widget (subtyping `Widget`) to its top-level widget component. 
 
 See the manual section on compound widgets in the chapter on widgets for more information.
 
@@ -2563,7 +2563,7 @@ Deserialize a value from the keyfile, then return it as a the specfied type. Ret
 ```
 get_velocity(SwipeEventController) -> Vector2f
 ```
-Get the swipes current velocity, in absolute widget-space coordinates.
+Get the swipe's current velocity, in absolute widget-space coordinates.
 """
 
 @document get_vertex_color """
@@ -2654,7 +2654,7 @@ Get whether the "was modified" flag of a `TextView` was set to `true`.
 ```
 get_wrap_mode(::Label) -> LabelWrapMode
 ```
-Get the mode use to determine at which point in a line a linebreak will be inserted.
+Get the mode used to determine at which point in a line a linebreak will be inserted.
 
 ---
 
@@ -2703,7 +2703,7 @@ Check whether an action with the given ID is registered.
 ```
 has_axis(::StylusEventController, ::DeviceAxis) -> Bool
 ```
-Check whether a stylus-device supports the given axis.
+Check whether a stylus device supports the given axis.
 """
 
 @document has_column_with_title """
@@ -2717,7 +2717,7 @@ Check whether the `ColumnVIew` has a column with the given title.
 ```
 has_group(::KeyFile, group::GroupID) -> Bool
 ```
-Check if the `KeyFile` has a group with given id.
+Check if the `KeyFile` has a group with given ID.
 """
 
 @document has_icon """
@@ -2732,14 +2732,14 @@ Check whether icon theme has an icon.
 ```
 has_key(::KeyFile, group::GroupID, key::KeyID) -> Bool
 ```
-Check whether the key file has a group with the given ID, and whether that group has a key with given ID.
+Check whether the key file has a group with the given ID and whether that group has a key with given ID.
 """
 
 @document hbox """
 ```
 hbox(::Widget...) -> Box
 ```
-Convenience function that wraps list of a widget in a horizonally oriented box. 
+Convenience function that wraps list of a widget in a horizontally oriented box. 
 """
 
 @document hide! """
@@ -2787,10 +2787,10 @@ insert_at!(::DropDown, index::Integer, list_widget::Widget, label_widget::Widget
 insert_at!(f, ::DropDown, index::Integer, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
 insert_at!(f, ::DropDown, index::Integer, label_for_both::String, [::Data_t]) -> DropDownItemID
 ```
-Add an item to the drop down at given index. When it is selected `label_widget` will appear as the 
-child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
+Add an item to the `DropDown` at given index. When it is selected `label_widget` will appear as the 
+child of the `DropDown`, while `list_widget` will be used as the widget displayed when the `DropDown` menu is open.
 
-`f` is called when the corresponding item is select. `f` is required to be invocable as a function with the signature
+`f` is called when the corresponding item is selected. `f` is required to be invocable as a function with the signature
 ```
 (::DropDown, [::Data_t]) -> Cvoid
 ```
@@ -2847,7 +2847,7 @@ Insert an empty row after the given index (may be negative).
 ```
 insert_row_at!(::ColumnView, index::Integer, widgets::Widget...)
 ```
-Insert a number of widgets as a row, inserting them into the corresponding column. If the number of widgets is
+Insert several widgets as a row, inserting them into the corresponding column. If the number of widgets is
 lower than the number of columns, the left-over columns will contain an empty cell in that row.
 """
 
@@ -2855,7 +2855,7 @@ lower than the number of columns, the left-over columns will contain an empty ce
 ```
 is_cancelled(::FileMonitor) -> Bool
 ```
-Check whether the file monitor has be cancelled.
+Check whether the file monitor has been cancelled.
 """
 
 @document is_file """
@@ -2876,7 +2876,7 @@ Check whether the location on disk contains points to a valid folder (not file).
 ```
 get_is_local(::Clipboard) -> Bool
 ```
-Check whether the content of the cliboard was set from within the currently active Mousetrap application.
+Check whether the content of the clipboard was set from within the currently active Mousetrap application.
 """
 
 @document is_symlink """
@@ -2902,7 +2902,7 @@ Run `f`, which is required to be invocable as a function with signature
 (::Application, [::Data_t]) -> Cvoid
 ```
 
-This function automatically creates an application with given ID and starts the main loop. If an error occurrs
+This function automatically creates an application with given ID and starts the main loop. If an error occurs
 during `f`, the application safely exits.
 
 ## Example
@@ -2959,7 +2959,7 @@ Display a log message with level `CRITICAL`. If [`set_log_file!`](@ref) was call
 log_fatal(::LogDomain, message::Sting)
 @log_fatal(::LogDomain, message::Sting)
 ```
-Dispay a log message with level `FATAL`. Immediately after, runtime ends. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
+Display a log message with level `FATAL`. Immediately after, runtime ends. If [`set_log_file!`](@ref) was called before, the message will also be appended to that file.
 """
 
 @document make_current """
@@ -3070,7 +3070,7 @@ end
 ```
 on_accept!(f, chooser::ColorChooser, [::Data_t]) 
 ```
-Register a callback to be called when the users makes a color selection. `f` is required to be invocable as a function with signature:
+Register a callback to be called when the user makes a color selection. `f` is required to be invocable as a function with signature:
 ```
 (::FileChooser, ::RGBA, [::Data_t]) -> Cvoid
 ```
@@ -3088,7 +3088,7 @@ end
 ```
 on_cancel!(f, chooser::FileChooser, [::Data_t]) 
 ```
-Register a callback to be called when the user clicks the "cancel" button f the file chooser. 
+Register a callback to be called when the user clicks the "cancel" button of the file chooser. 
 `f` is required to be invocable as a function with signature
 ```
 (::FileChooser, [::Data_t]) -> Cvoid
@@ -3107,7 +3107,7 @@ end
 ```
 on_cancel!(f, chooser::ColorChooser, [::Data_t]) 
 ```
-Register a callback to be called the users cancels color selection or otherwise closes the dialog. `f` is required to be invocable as a function with signature:
+Register a callback to be called when the user cancels color selection or otherwise closes the dialog. `f` is required to be invocable as a function with signature:
 ```
 (::FileChooser, [::Data_t]) -> Cvoid
 ```
@@ -3170,7 +3170,7 @@ end
 ```
 on_selection!(f, ::AlertDialog, [::Data_t])
 ```
-Register a callback to be called when the user clicks one of the dialogs buttons or dismisses the dialog. `f` is required to be invocable as a function with signature
+Register a callback to be called when the user clicks one of the dialog's buttons or dismisses the dialog. `f` is required to be invocable as a function with signature
 ```
 (::AlertDialog, button_index::Signed, [::Data_t]) -> Cvoid
 ```
@@ -3178,7 +3178,7 @@ Where `button_index` is the index of the current button (1-based), or `0` if the
 
 ## Example
 ```julia
-alert_dialog = AlertDialog(["Yes", "No"], "Is this is a dialog?")
+alert_dialog = AlertDialog(["Yes", "No"], "Is this a dialog?")
 on_selection!(alert_dialog) do self::AlertDialog, button_index::Signed
     if button_index == 0
         println("User dismissed the dialog")
@@ -3194,7 +3194,7 @@ present!(alert_dialog)
 ```
 on_tick!(f, ::Animation, [::Data_t])
 ```
-Register a callback called every frame while the animmation is active. `f` is required to be invocable as a function with signature
+Register a callback called every frame while the animation is active. `f` is required to be invocable as a function with signature
 ```
 (::Animation, value::AbstractFloat, [::Data_t]) -> Cvoid
 ```
@@ -3221,7 +3221,7 @@ Asynchronously launch the default application to open the file or folder. May pr
 ```
 open_url(uri::String) -> Cvoid
 ```
-Asynchronously launch the default application to open the uri. This will usually be the users web browser
+Asynchronously launch the default application to open the URI. This will usually be the user's web browser
 """
 
 @document pause! """
@@ -3276,8 +3276,7 @@ Go to the previous page, if possible.
 ```
 pulse(::ProgressBar) 
 ```
-Trigger an animation that signifies to the user that progress has been made. This does not actually increase 
-the displayed ratio of the progress bar.
+Trigger an animation that signifies to the user that progress has been made. This does not increase the displayed ratio of the progress bar.
 """
 
 @document push_back! """
@@ -3299,10 +3298,10 @@ push_back!(::DropDown, list_widget::Widget, label_widget::Widget) -> DropDownIte
 push_back!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
 push_back!(f, drop_down::DropDown, label_for_both::String, [::Data_t]) -> DropDownItemID
 ```
-Add an item to the end of the drop down. When it is selected `label_widget` will appear as the 
-child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
+Add an item to the end of the `DropDown`. When it is selected `label_widget` will appear as the 
+child of the `DropDown`, while `list_widget` will be used as the widget displayed when the `DropDown` menu is open.
 
-`f` is called when the corresponding item is select. `f` is required to be invocable as a function with the signature
+`f` is called when the corresponding item is selected. `f` is required to be invocable as a function with the signature
 ```
 (::DropDown, [::Data_t]) -> Cvoid
 ```
@@ -3330,7 +3329,7 @@ Add a column to the end of the column view.
 ```
 push_back_row!(column_view::ColumnView, widgets::Widget...) -> Cvoid
 ```
-Add a number of widgets to the end of the rows, inserting them into the corresponding column. If the number of widgets is
+Add widgets to the end of the rows, inserting them into the corresponding column. If the number of widgets is
 lower than the number of columns, the left-over columns will contain an empty cell in that row. 
 """
 
@@ -3353,10 +3352,10 @@ push_front!(::DropDown, list_widget::Widget, label_widget::Widget) -> DropDownIt
 push_front!(f, drop_down::DropDown, list_widget::Widget, label_widget::Widget, [::Data_t]) -> DropDownItemID
 push_front!(f, drop_down::DropDown, label_for_both::String, [::Data_t]) -> DropDownItemID
 ```
-Add an item to the start of the drop down. When it is selected `label_widget` will appear as the 
-child of the drop down, while `list_widget` will be used as the widget displayed when the drop down menu is open.
+Add an item to the start of the `DropDown`. When it is selected `label_widget` will appear as the 
+child of the `DropDown`, while `list_widget` will be used as the widget displayed when the `DropDown` menu is open.
 
-`f` is called when the corresponding item is select. `f` is required to be invocable as a function with the signature
+`f` is called when the corresponding item is selected. `f` is required to be invocable as a function with the signature
 ```
 (::DropDown, [::Data_t]) -> Cvoid
 ```
@@ -3384,7 +3383,7 @@ Add a column to the start of the column view.
 ```
 push_front_row!(column_view::ColumnView, widgets::Widget...) -> Cvoid
 ```
-Add a number of widgets to the start of the rows, inserting them into the corresponding column. If the number of widgets is
+Add widgets to the start of the rows, inserting them into the corresponding column. If the number of widgets is
 lower than the number of columns, the leftover columns will contain an empty cell in that row. 
 """
 
@@ -3612,7 +3611,7 @@ Remove the start child such that the widget is now empty at that position
 ```
 remove_texture!(::Shape) 
 ```
-Make it such that shape no long has a texture, meaning it will be rendered as a solid color.
+Make it such that shape no longer has a texture, meaning it will be rendered as a solid color.
 """
 
 @document remove_tick_callback! """
@@ -3634,7 +3633,7 @@ Remove widget that is currently used as the title element, and instead use the d
 ```
 remove_tooltip_widget!(::Widget) 
 ```
-Remove the tooltip widget. The widget will now no longer display a tooltip.
+Remove the tooltip widget. The widget will no longer display a tooltip.
 """
 
 @document render """
@@ -3645,7 +3644,7 @@ render(shape::Shape, shader::Shader, transform::GLTransform)
 Draw a shape to the currently bound framebuffer, forwarding the transform to the vertex shader and applying the
 fragment shader to all fragments of the shape.
 
-Note that calling this function is usually not necessary, instead, regsiter a `RenderTask` with a `RenderArea` 
+Note that calling this function is usually not necessary, instead, register a `RenderTask` with a `RenderArea` 
 using `add_render_task!`, after which the task will be automatically rendered every frame, unless a custom
 signal handler was connected to `RenderArea`s signal `render`.
 """
@@ -3662,7 +3661,7 @@ signal `render`.
 ```
 reset!(::Animation)
 ```
-Return the animations state to idle.
+Reset animation's state to idle.
 
 ---
 
@@ -3756,7 +3755,7 @@ save_to_file(::Image, path::String) -> Bool
 ```
 Save the image to a file, the file format is automatically determined based on the extension of the given path.
 
-Returns `true` if the operation was successfull.
+Returns `true` if the operation was successful.
 
 ---
 
@@ -3765,7 +3764,7 @@ save_to_file(::KeyFile, path::String) -> Bool
 ```
 Serialize the key file to a string and save that string to a file. Usually, the extension for this file should be `.ini`.
 
-Returns `true` if the operation was successfull
+Returns `true` if the operation was successful
 """
 
 @document scale! """
@@ -3826,7 +3825,7 @@ Convert the object to its CSS representation.
 ```
 set_acceleration_rate!(::SpinButton, factor::AbstractFloat) 
 ```
-Set the rate at which the `SpinButton`'s value accelerates when a button is held down, where `0.0` is default rate, `0.1` is 10%, `1.0` is 100%, etc. May not be negative.
+Set the rate at which the `SpinButton`'s value accelerates when a button is held down, where `0.0` is the default rate, `0.1` is 10%, `1.0` is 100%, etc. May not be negative.
 """
 
 @document set_accept_label! """
@@ -3872,7 +3871,7 @@ Set whether the spin button should only accept numeric text entry, as opposed to
 set_always_show_arrow!(::DropDown, ::Bool) 
 set_always_show_arrow!(::PopoverButton, ::Bool) 
 ```
-Set wether an arrow should be drawn next to the label.
+Set whether an arrow should be drawn next to the label.
 """
 
 @document set_application! """
@@ -3886,7 +3885,7 @@ Register the window with the application. This is usually done automatically.
 ```
 set_autohide!(::Popover, ::Bool) 
 ```
-Set whether the popover should hide itself when the attached widget looses focus.
+Set whether the popover should hide itself when the attached widget loses focus.
 """
 
 @document set_auto_render! """
@@ -4023,14 +4022,14 @@ Set the singular comment above a group or key-value pair in the file.
 set_current_blend_mode(::BlendMode; allow_alpha_blending::Bool = true) 
 ```
 Enable GPU-side blending and set the current OpenGL blend mode. If `allow_alpha_blending` is set to `false`, 
-only the rgb components of a fragment's color will participate in blending.
+only the RGB components of a fragment's color will participate in blending.
 """
 
 @document set_current_theme! """
 ```
 set_current_theme!(::Application, ::Theme)
 ```
-Swap the global theme used to determine all widgets looks and colors. This function is only available, after the backend has been initialized.
+Swap the global theme used to determine the look and color of all widgets. This function is only available after the backend has been initialized.
 """
 
 @document set_cursor! """
@@ -4081,14 +4080,14 @@ Set a factor that multiplies the default delay after which a longpress gesture i
 ```
 set_destroy_with_parent!(::Window, ::Bool) 
 ```
-Set whether the window should close and be destroyed when the toplevel window is closed.
+Set whether the window should close and be destroyed when the top-level window is closed.
 """
 
 @document set_detailed_description! """
 ```
 set_detailed_description(::AlertDialog, message::String)
 ```
-Set the detailed message, this is the text shown below the dialogs title.
+Set the detailed message, this is the text shown below the dialog's title.
 """
 
 @document set_duration! """
@@ -5168,7 +5167,7 @@ Set the texture of the shape. It will be automatically bound when rendering.
 ```
 set_tick_callback!(f, ::Widget, [::Data_t]) 
 ```
-Register a function that will be invoced exactly once per frame while the widget is shown. `f` is required to be invocable as a function with signature
+Register a function that will be invoked exactly once per frame while the widget is shown. `f` is required to be invocable as a function with signature
 ```
 (::FrameClock, [::Data_t]) -> TickCallbackResult
 ```
@@ -5206,7 +5205,7 @@ set_title!(::Window, title::String)
 set_title!(::FileChooser, title::String)
 set_title!(::ColorChooser, title::String)
 ```
-Set the window's title, which will be shown in its titlebar.
+Set the window's title, which will be shown in its title bar.
 
 ---
 
@@ -5220,7 +5219,7 @@ Set the column's title, which will uniquely identify that column.
 ```
 set_title!(::PopupMessage, title::String)
 ```
-Set the `PopupMessage`'s text, does not support pango markup.
+Set the `PopupMessage`'s text, does not support Pango markup.
 """
 
 @document set_title_widget! """
@@ -5241,7 +5240,7 @@ Create a simple text tooltip. It will be automatically shown when the user hover
 ```
 set_tooltip_widget!(::Widget, tooltip::Widget) 
 ```
-Set a custom widget as the widget's tooltip. It will be automatically shown when the user hovers above the widgets allocated area for a certain duration.
+Set a custom widget as the widget's tooltip. It will be automatically shown when the user hovers above the widget's allocated area for a certain duration.
 
 This widget should not be interactable.
 """
@@ -5428,7 +5427,7 @@ Serialize a value and save it to a key-value pair in given group. If the group o
 set_value_to_text_function!(f, spin_button::SpinButton) 
 set_value_to_text_function!(f, spin_button::SpinButton, data::Data_t) where Data_t 
 ```
-Register a function that converts the value of the underyling range to the text displayed in the text-entry area of the spin button.
+Register a function that converts the value of the underlying range to the text displayed in the text-entry area of the spin button.
 `f` is required to be invocable as a function with signature
 ```
 (::SpinButton, ::AbstractFloat) -> String
@@ -5484,7 +5483,7 @@ Set policy of vertical scrollbar, this determines when/if the scrollbar is shown
 ```
 set_visible_child!(stack::Stack, id::StackID) 
 ```
-Make the current page of the stack that identified by ID.
+Make the current page of the stack the one identified by ID.
 """
 
 @document set_was_modified! """
@@ -5558,7 +5557,7 @@ Reveal the widget if it is currently hidden. This will emit signal `show`.
 ```
 show_message!(::PopupMessageOverlay, ::PopupMessage)
 ```
-Queue a message to be shwon above the `PopupMessageOverlay`s child. Note that only one message can be shown at a time.
+Queue a message to be shown above the `PopupMessageOverlay`s child. Note that only one message can be shown at a time.
 """
 
 @document show_in_file_explorer """
@@ -5655,7 +5654,7 @@ Make item at given position no longer selected.
 ```
 unselect_all!(::SelectionModel) 
 ```
-Make it such that no item is selected, if the selection mode allows for that. 
+Make it such that no item is selected if the selection mode allows for that. 
 """
 
 @document vbox """
