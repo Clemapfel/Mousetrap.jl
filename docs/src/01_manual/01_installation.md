@@ -24,18 +24,18 @@ end
 Installation may take a long time. Once installation is succesfull, `Mousetrap tests passed` will be printed.
 
 !!! compat "Removing older versions"
-  Mousetraps installation procedure has changed starting with `v0.3.0`. If older versions of Mousetrap are installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
-
-  ```
-  import Pkg
-  begin
-      try Pkg.rm("mousetrap") catch end
-      try Pkg.rm("mousetrap_windows_jll") catch end
-      try Pkg.rm("mousetrap_linux_jll") catch end
-      try Pkg.rm("mousetrap_apple_jll") catch end
-      try Pkg.rm("libmousetrap_jll") catch end
-  end
-  ```
+    Mousetraps installation procedure has changed starting with `v0.3.0`. If older versions of Mousetrap are installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
+    ```julia
+    import Pkg
+    begin
+        try Pkg.rm("mousetrap") catch end
+        try Pkg.rm("mousetrap_windows_jll") catch end
+        try Pkg.rm("mousetrap_linux_jll") catch end
+        try Pkg.rm("mousetrap_apple_jll") catch end
+        try Pkg.rm("libmousetrap_jll") catch end
+    end
+    ```
+  
 
 ## Hello World
 
@@ -59,7 +59,7 @@ julia main.jl
 ![](../assets/readme_hello_world.png)
 
 !!! compat "GIO Warnings on non-Linux"
-    On Windows and macOS, running `main` may  produce warnings of the type:
+    On Windows and macOS, running `main` may  produce a warning of the type:
 
     ```
     (julia:10512): GLib-GIO-WARNING **: 15:29:40.047: dbus binary failed to launch bus, maybe incompatible version
@@ -68,7 +68,7 @@ julia main.jl
     This is due to a non-critical bug in one of Mousetraps dependencies, and does not indicate a problem.
 
 !!! compat "Interactive Use"
-  Interactive use inside the Julia REPL is only available for Mousetrap `v0.2.1` or newer.
+    Interactive use inside the Julia REPL is only available for Mousetrap `v0.2.1` or newer.
 
 ---
 
