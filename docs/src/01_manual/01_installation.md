@@ -21,7 +21,7 @@ begin
 end
 ```
 
-If installation was succesfull, `Mousetrap tests passed` will be printed at the end.
+Installation may take a long time. Once installation is succesfull, `Mousetrap tests passed` will be printed.
 
 !!! compat "Removing older versions"
   Mousetraps installation procedure has changed starting with `v0.3.0`. If older versions of Mousetrap are installed on our computer, we should make sure to delete any trace of the older versions by executing the following, before running `add Mousetrap`:
@@ -59,13 +59,13 @@ julia main.jl
 ![](../assets/readme_hello_world.png)
 
 !!! compat "GIO Warnings on non-Linux"
-    On Windows and macOS, running `main` may be produce warnings of the type:
+    On Windows and macOS, running `main` may  produce warnings of the type:
 
     ```
     (julia:10512): GLib-GIO-WARNING **: 15:29:40.047: dbus binary failed to launch bus, maybe incompatible version
     ```
 
-    This is due to a non-critical bug in one of Mousetraps dependencies, and does not indicate a problem. **These warnings can be safely ignored** and will be fixed in future versions of Mousetrap. See [here](https://github.com/Clemapfel/mousetrap.jl/issues/5) for more information.
+    This is due to a non-critical bug in one of Mousetraps dependencies, and does not indicate a problem.
 
 !!! compat "Interactive Use"
   Interactive use inside the Julia REPL is only available for Mousetrap `v0.2.1` or newer.
@@ -115,7 +115,7 @@ function f(x) # hard scope begin
     return y
 end # hard scope end
 
-println(y) # errors because y not available, it was defined in hard scope
+println(y) # errors because y is not available, it was defined in hard scope
 ```
 
 `begin`-`end` blocks are a "soft scope", meaning we can access definitions from within this soft scope from the outer scope:
@@ -152,20 +152,20 @@ An *engine* is a programming library that allows developers to create the *front
 
 In our `main.jl` above, Mousetrap created a window and presented it on the physical screen. This process of drawing graphics to the screen is also called *rendering*.
 
-Each screen updates at a set frequency, for example 60hz, which means a new image is drawn to the screen every 1/60th of a second. Each of these drawing steps is called a *frame*. This is why we often refer to the speed at which a graphical app updates as *frames-per-second* (fps), the number of times a new frame is drawn to the screen - per second.
+Each screen updates at a set frequency, for example 60hz, which means a new image is drawn to the screen every 1/60th of a second. Each of these drawing steps is called a *frame*. This is why we often refer to the speed at which a graphical apps updates as *frames-per-second* (fps), the number of times a new frame is drawn to the screen - per second.
 
-In Mousetrap, fps is tied to the monitor's refresh rate. If the user's monitor updates at 120Hz, Mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why Mousetrap features a "lazy" rendering process. An area on screen will only be updated if it needs to be. 
+In Mousetrap, fps is tied to the monitor's refresh rate. If the user's monitor updates at 120Hz, Mousetrap will attempt to draw a new image 120 times per second. Depending on the user's machine, this could be too costly performance-wise, which is why Mousetrap features a "lazy" rendering process. An area on the screen will only be updated if it needs to be. 
 For example, in the `main.jl` above, the label `"Hello World!"` will only be drawn once. Because it is static (it stays the same and does not move) there is no need to redraw it every frame, unless the window is moved or the label is changed.
 
 This is in opposition to how many video games work. Usually, in video game engines, each frame will make it such that the entire screen is re-drawn every time. This difference is important to realize.
 
 #### Native Rendering
 
-Native rendering, in Mousetrap, is the process of updating the currently displayed frame using the graphics card, making it a hardware accelerated, GPU-side operation. This is in opposition to CPU-side rendering, which is generally slower. Native rendering in Mousetrap is performed using [OpenGL](https://www.khronos.org/opengl/wiki/), with an entire chapter of this manual dedicated to this technique.
+Native rendering, in Mousetrap, is the process of updating the currently displayed frame using the graphics card, making it a hardware-accelerated, GPU-side operation. This is in opposition to CPU-side rendering, which is generally slower. Native rendering in Mousetrap is performed using [OpenGL](https://www.khronos.org/opengl/wiki/), with an entire chapter of this manual dedicated to this technique.
 
 ---
 
-## Object Oriented Design
+## Object-Oriented Design
 
 While Julia is technically object-oriented, it lacks many of the features of "proper" OOP languages such as C++ or Java. Examples of missing features include [member functions](https://en.cppreference.com/w/cpp/language/member_functions) and [inheritance from concrete types](https://learn.microsoft.com/en-us/cpp/cpp/inheritance-cpp?view=msvc-170). Additionally, in Mousetrap specifically, most objects will have **no public properties**.
 
@@ -200,11 +200,11 @@ which will print a list of all functions that have at least one argument of type
 
 ## C Enums   
 
-Mousetraps back-end is written in C++, whose enums differ from Julia enums in a number of ways. To assure compatibility, Mousetrap uses its own enum definitions, it does not use Julias `@enum`.
+Mousetraps back-end is written in C++, whose enums differ from Julia enums in several ways. To assure compatibility, Mousetrap uses its own enum definitions, it does not use Julias `@enum`.
 
 Each enum is a proper Mousetrap type, while each enum *value* is a numerical constant which is defined as being of that type. 
 
-For example, the enum `Orientation`, which describes whether on object is vertically or horizontally oriented, is a type called `Mousetrap.Orientation`.
+For example, the enum `Orientation`, which describes whether an object is vertically or horizontally oriented, is a type called `Mousetrap.Orientation`.
 
 The **values** of `Orientation` are global constants:
 
@@ -267,11 +267,11 @@ example_f(1234) do x::Integer
 end
 ```
 
-Here, the first argument of `example_f` was ommitted, while the second argument, `1234` remained. Instead of the first argument, we append the line `do x::Integer`, where `x` is the name of the anonymous function's argument. After this line, we define the function's body, then `end`.
+Here, the first argument of `example_f` was omitted, while the second argument, `1234` remained. Instead of the first argument, we append the line `do x::Integer`, where `x` is the name of the anonymous function's argument. After this line, we define the function's body, then `end`.
 
 ## Anonymous Functions in Stacktraces
 
-In the REPL, we can print any objects name to inspect it. Creating a new function, which prints its argument's name:
+In the REPL, we can print any object's name to inspect it. Creating a new function, which prints its argument's name:
 
 ```julia
 print_f_name(f) = println(f)
@@ -338,7 +338,7 @@ Mousetrap stacktraces can get quite long, so it's best to parse them by reading 
 ```
 [ERROR] In Mousetrap.main: error
 ```
-We see that the message mentions that the error occured during invokation of `Mousetrap.main`. We should therefore look for an error inside the do-block after `main`.
+We see that the message mentions that the error occurred during invokation of `Mousetrap.main`. We should therefore look for an error inside the do-block after `main`.
 
 Knowledge about anonymous functions and how to read stacktraces will greatly aid us in debugging Mousetrap applications while learning.
 

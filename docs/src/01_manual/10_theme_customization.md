@@ -13,13 +13,13 @@ In this chapter, we will learn:
 
 ---
 
-As our app grows and becomes closer to what we personally envisioned for our project, we want to not only customizes the layout and functionality of widgets, but how each widget looks. This can range from small changes such as changing something that is blue by default to green, or large sweeping changes that affect the entire application, such as moving to a light- or dark-, low- or high-contrast theme, or even using a completely custom theme.
+As our app grows and becomes closer to what we envisioned for our project, we want to not only customize the layout and functionality of widgets but also how each widget looks. This can range from small changes such as changing something that is blue by default to green, or large sweeping changes that affect the entire application, such as moving to a light- or dark-, low- or high-contrast theme, or even using a completely custom theme.
 
-Mousetrap allows for all of these options. Using its very powerful theme customization component, we can customize our app to a point where most will not able to tell it was ever Mousetrap- / GTK4-based at all.
+Mousetrap allows for all of these options. Using its very powerful theme customization component, we can customize our app to a point where most will not be able to tell it was ever Mousetrap- / GTK4-based at all.
 
 ## Switching between Dark- and Light Mode
 
-The most common task that almost any app will want to offer is for the user to be able to swap between light and dark mode. This is an ubiquitous feature of modern UI, as such, Mousetrap offers a very simple way of changing the global theme.
+The most common task that almost any app will want to offer is for the user to be able to swap between light and dark mode. This is a ubiquitous feature of modern UI, as such, Mousetrap offers a very simple way of changing the global theme.
 
 Mousetrap supports four default application-wide themes, which are values of enum [`Theme`](@ref):
 
@@ -73,18 +73,18 @@ We've seen in the chapter on widgets that certain kind of widgets animate their 
 
 Mousetrap offers a convenient mechanism for implementing animations like this from scratch, which this section will demonstrate.
 
-If we want to animate a widget "fading out" over 1 second, that is, its opacity changes from 1 to 0 over that period of time, we should decrease the opacity by a specified amount each frame. Actually tying the amount to the frame rate of our window is ill-advised, many things can influence the frame rate and fluctuations would cause fluctuations in the speed of the fade-out. 
+If we want to animate a widget "fading out" over 1 second, that is, its opacity changes from 1 to 0 over that period of time, we should decrease the opacity by a specified amount each frame. Tying the amount to the frame rate of our window is ill-advised, many things can influence the frame rate and fluctuations would cause fluctuations in the speed of the fade-out. 
 
 To address this, Mousetrap offers [`Animation`](@ref), which acts as a *stable clock*, an object that outputs a value over a specified amount of time in a way that is independent of the frame rate.
 
-Continuing with our fade-out example, we first need to instance the widget we want to fade-out, a `Button`. We then create an instance of `Animation`, which takes for its constructor the widget we want to animate, along with the target duration of the animation:
+Continuing with our fade-out example, we first need to instance the widget we want to fade out, a `Button`. We then create an instance of `Animation`, which takes for its constructor the widget we want to animate, along with the target duration of the animation:
 
 ```julia
 to_animate = Button(Label("Fade Out"))
 animation = Animation(to_animate, seconds(1))
 ```
 
-By tying the `Animation` to the widget we will target, Mousetrap will automatically preserve the animation while that widget is visible, as well as tie the animations clock to the render cycle of that specific widget, meaning the `Animation` will not play if the widget is not visible.
+By tying the `Animation` to the widget we will target, Mousetrap will automatically preserve the animation while that widget is visible, as well as tie the animation clock to the render cycle of that specific widget, meaning the `Animation` will not play if the widget is not visible.
 
 To start the animation, we call [`play!`](@ref). Of course, we have not yet implemented the behavior of the widgets' opacity decreasing. To do this, we register a callback using `Animation`'s [`on_tick!`](@ref), which requires a function with the signature:
 
@@ -104,7 +104,7 @@ on_tick!(animation, button) do self::Animation, value::Float64, target::Button
 end
 ```
 
-Where we used `1 - value` to invert the range, such that the widgets starts fully opaque and decreases in opacity.
+Where we used `1 - value` to invert the range, such that the widget starts fully opaque and decreases in opacity.
 
 We can then start the animation using `play!`, for example, by clicking the button:
 
@@ -144,7 +144,7 @@ Attentive readers may remember that pre-made animations for `Stack` and `Reveale
 
 ## TransformBin
 
-In the chapter on rendering, we learned that we can apply a `GLTransform` to a `Shape`, a non-widget, in order to move that shape **without** actually changing its vertex data. [`TransformBin`](@ref) offers similar functionality to this, except it only applies to widgets.
+In the chapter on rendering, we learned that we can apply a `GLTransform` to a `Shape`, a non-widget, in order to move that shape **without** changing its vertex data. [`TransformBin`](@ref) offers similar functionality to this, except it only applies to widgets.
 
 `TransformBin` is a widget that does not add any visual elements to its singular child. It furthermore always assumes the same size as its child. Instead, it offers a number of functions that allow us to apply a spatial transformation:
 
@@ -158,7 +158,7 @@ In the chapter on rendering, we learned that we can apply a `GLTransform` to a `
 
 !!! tip "Rotate around a Point"
     To rotate a widget around a fixed point `p`, we can `translate!` such 
-    that the widgets new center is at `p`, `rotate!`, then `translate!` back to the widgets initial position. 
+    that the widget's new center is at `p`, `rotate!`, then `translate!` back to the widget's initial position. 
 
 These functions are called on the `TransformBin` instance directly, we do not use a separate transform object. The arguments for these functions operate in absolute widget space, with `(0, 0)` being the top left corner of the `TransformBin`s size allocation, in pixels.
 
@@ -190,13 +190,13 @@ end
 
 Note that applying a transform using `TransformBin` does not change the size allocation of the widget, it only applies the effect visually, similarly to how a `GLTransform` is only applied to the rendered image, not the `Shape` itself.
 
-By default, the function used to map the elapsed duration of the `Animation` to the output value of `on_tick!` is linear in shape (`f(x) = x`). Mousetrap offers additional functions with different shapes, allowing users to more easily implement animations that appear to speed up or slow down at certain points. Using [`set_timing_function!`](@ref), which takes a value of the enum [`AnimationTimingFunction`](@ref), we can choose from a number of presets. See its documentation for more information.
+By default, the function used to map the elapsed duration of the `Animation` to the output value of `on_tick!` is linear in shape (`f(x) = x`). Mousetrap offers additional functions with different shapes, allowing users to more easily implement animations that appear to speed up or slow down at certain points. Using [`set_timing_function!`](@ref), which takes a value of the enum [`AnimationTimingFunction`](@ref), we can choose from multiple presets. See its documentation for more information.
 
 ---
 
 # Widget Themes & Style Classes
 
-Mousetrap uses [Cascading Style Sheets (CSS)](https://developer.mozilla.org/en-US/docs/Web/CSS) to define the exact look of a widget. A UI theme is nothing more than a huge CSS file from whom all widgets take information about how they should be rendered. 
+Mousetrap uses [Cascading Style Sheets (CSS)](https://developer.mozilla.org/en-US/docs/Web/CSS) to define the exact look of a widget. A UI theme is nothing more than a huge CSS file from which all widgets take information about how they should be rendered. 
 
 !!! Warning "CSS"
     The rest of this chapter will assume that readers are familiar with the basics of CSS. Readers are encouraged to consult [this documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference) for CSS-related questions.
@@ -214,7 +214,7 @@ add_css!("""
 """)
 ```
 
-We can then apply this class to any widget using [`add_css_class!`](@ref), at which point that widgets' appearance will change accordingly. To remove the modifier, we call [`remove_css_class!`](@ref). A widget can have more than one modifier class. To list all applied CSS classes, we use [`get_css_classes`](@ref).
+We can then apply this class to any widget using [`add_css_class!`](@ref), at which point the widgets' appearance will change accordingly. To remove the modifier, we call [`remove_css_class!`](@ref). A widget can have more than one modifier class. To list all applied CSS classes, we use [`get_css_classes`](@ref).
 
 For a list of CSS properties supported by Mousetrap, see [here](https://docs.gtk.org/gtk4/css-properties.html).
 
@@ -307,7 +307,7 @@ function set_accent_color!(widget::Widget, color, opaque = true)
 end
 ```
 
-Users are encouraged to just copy the above code into their own project, in order for `set_accent_color!` to become available.
+Users are encouraged to just copy the above code into their own project, for `set_accent_color!` to become available.
 
 We can use this function like so:
 
@@ -326,7 +326,7 @@ set_widget_at!(column_view, column, 2, Label("<small>opaque</small>"))
 for color in [
     WIDGET_COLOR_DEFAULT, # column 2: default look of a widget
     WIDGET_COLOR_ACCENT,  # column 3: accented, usually blue
-    WIDGET_COLOR_SUCCESS, # column 4: marked succesful, usually green
+    WIDGET_COLOR_SUCCESS, # column 4: marked successful, usually green
     WIDGET_COLOR_WARNING, # column 5: marked as warning, usually yellow
     WIDGET_COLOR_ERROR]   # column 6: marked as destructive action, usually red
     column = push_back_column!(column_view, color)
