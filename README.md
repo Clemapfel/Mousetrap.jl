@@ -19,7 +19,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 3.2 [Swapping between Light- and Dark Themes](#swapping-between-light--and-dark-themes)<br>
 3.3 [Opening a File Explorer Dialog](#opening-a-file-explorer-dialog)<br>
 3.4 [Rendering a Rectangle using OpenGL](#rendering-a-rectangle-with-opengl)<br>
-3.5 [Reacting to Mouse / Touchscreen Events](#reacting-to-mouse--touchscreen-presses)<br>
+3.5 [Displaying a GLMakie Plot in a Mousetrap Window](#displaying-a-glmakie-plot-in-a-mousetrap-window)<br>
 4. [Supported Platforms](#supported-platforms)<br>
 6. [Documentation](#documentation)<br>
 5. [Installation](#installation)<br>
