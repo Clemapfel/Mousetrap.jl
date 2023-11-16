@@ -18,7 +18,7 @@ jobs:
             - "1.7"
             - "1.9"
           os:
-            - ubuntu-latest
+            #- ubuntu-latest
             - macos-latest
             - windows-latest
           julia-arch:
@@ -35,3 +35,24 @@ jobs:
             show-versioninfo: true
         - uses: julia-actions/julia-buildpkg@v1
         - uses: julia-actions/julia-runtest@v1
+  
+    docs:
+      name: Documentation ${{ matrix.julia-version }}
+      runs-on: windows-latest
+      strategy:
+        fail-fast: false
+        matrix:
+          julia-version:
+            - "1.7"
+            - "1.9"
+          julia-arch:
+            - x64
+      steps: 
+        - uses: actions/checkout@v4
+        - uses: julia-actions/setup-julia@latest
+          with:
+            version: ${{ matrix.julia-version }}
+            arch: ${{ matrix.julia-arch }}
+            show-versioninfo: true
+        - name: Build Docs
+          run: julia docs/make.jl
