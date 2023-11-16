@@ -37,25 +37,18 @@ jobs:
         - uses: julia-actions/julia-runtest@v1
   
     docs:
-      name: Documentation ${{ matrix.julia-version }}
+      name: Documentation
       runs-on: windows-latest
-      strategy:
-        fail-fast: false
-        matrix:
-          julia-version:
-            - "1.7"
-            - "1.9"
-          julia-arch:
-            - x64
-      steps: 
+      steps:
         - uses: actions/checkout@v4
         - uses: julia-actions/setup-julia@latest
           with:
-            version: ${{ matrix.julia-version }}
-            arch: ${{ matrix.julia-arch }}
-            show-versioninfo: true
-        - uses: julia-actions/julia-buildpkg@v1
-        - name: Install Documenter.jl
-          run: julia -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\"); Pkg.add(url=\"https://github.com/JuliaDocs/Mousetrap.jl\")"
-        - name: Build Docs
-          run: julia docs/make.jl
+            version: '1.7'
+        - run: julia --project=docs -e '
+            using Pkg;
+            Pkg.develop(PackageSpec(; path=pwd()));
+            Pkg.instantiate();'
+        - run: julia --project=docs docs/make.jl
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
