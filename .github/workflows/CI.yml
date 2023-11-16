@@ -17,6 +17,7 @@ jobs:
           version:
               - '1.7'
               - '1.9'
+              - 'nightly'
           os:
             - macOS-latest
             - windows-latest
@@ -33,7 +34,5 @@ jobs:
             version: ${{ matrix.version }}
             arch: ${{ matrix.arch }}
             show-versioninfo: true
-        - name: Install Mousetrap
-          run: julia --color=yes -e "import Pkg; Pkg.add(url=\"https://github.com/clemapfel/mousetrap_jll\"); Pkg.add(url=\"https://github.com/clemapfel/mousetrap.jl\"); Pkg.precompile()"
-        - name: Run Tests
-          run: julia -e "import Pkg; Pkg.test(\"Mousetrap\")"
+        - uses: julia-actions/julia-buildpkg@v1
+        - uses: julia-actions/julia-runtest@v1
