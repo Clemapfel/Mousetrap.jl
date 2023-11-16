@@ -9,20 +9,19 @@ defaults:
     
 jobs:
     test:
-      name: Julia ${{ matrix.version }} ${{ matrix.os }}
+      name: Julia ${{ matrix.julia-version }} ${{ matrix.os }}
       runs-on: ${{ matrix.os }}
       strategy:
         fail-fast: false
         matrix:
-          version:
-              - '1.7'
-              - '1.9'
-              - 'nightly'
+          julia-version:
+            - "1.7"
+            - "1.9"
           os:
-            - macOS-latest
-            - windows-latest
             - ubuntu-latest
-          arch:
+            - macos-latest
+            - windows-latest
+          julia-arch:
             - x64
           include:
             - os: ubuntu-latest
@@ -31,8 +30,8 @@ jobs:
         - uses: actions/checkout@v4
         - uses: julia-actions/setup-julia@latest
           with:
-            version: ${{ matrix.version }}
-            arch: ${{ matrix.arch }}
+            version: ${{ matrix.julia-version }}
+            arch: ${{ matrix.julia-arch }}
             show-versioninfo: true
         - uses: julia-actions/julia-buildpkg@v1
         - uses: julia-actions/julia-runtest@v1
