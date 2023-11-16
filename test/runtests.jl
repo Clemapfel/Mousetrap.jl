@@ -1291,6 +1291,16 @@ function test_image_display(::Container)
     end
 end
 
+### INTERNAL
+
+function test_internal(x::Container)
+    @testset "Internal" begin
+        @test as_gobject_pointer(x) != C_NULL
+        @test as_internal_pointer(x) != C_NULL
+        @test as_native_widget(x) != C_NULL
+    end
+end
+
 ### KEY_FILE
 
 function test_key_file(::Container)
@@ -1565,6 +1575,10 @@ function test_menus(::Container)
     @testset "MenuModel" begin
         Base.show(devnull, root)
         @test items_changed_called[] == true
+
+        if Sys.isapple() 
+            set_menubar(app[], root)
+        end
     end
    
     @testset "MenuBar" begin
@@ -2822,6 +2836,7 @@ main(Main.app_id) do app::Application
         test_icon(container)
         test_image(container)
         test_image_display(container)
+        test_internal(container)
         test_key_file(container)
         test_label(container)
         test_level_bar(container)

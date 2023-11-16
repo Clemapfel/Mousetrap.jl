@@ -3211,6 +3211,13 @@ module Mousetrap
 
     @add_signal_items_changed MenuModel
 
+    function set_menubar(app::Application, model::MenuModel)
+        if !Sys.isapple() 
+            log_warning(MOUSETRAP_DOMAIN, "In set_menubar: setting an application-wide menubar is only supported on macOS. Use `Sys.isapple()` to verify the users system before calling this function")
+        end
+        Mousetrap.detail.set_menubar(app._internal, model._internal)
+    end
+
     Base.show(io::IO, x::MenuModel) = show_aux(io, x)
 
 ###### menubar.jl
@@ -5573,4 +5580,18 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
         return out
     end
     @define_compound_widget_signals()
+
+###### internal.jl
+
+    function as_gobject_pointer(x::T) where T <: Union{SignalEmitter, Widget} :: Ptr{Cvoid}
+        return Mousetrap.detail.as_gobject(x._internal.cpp_object)
+    end
+
+    function as_internal_pointer(x::T) where T <: Union{SignalEmitter, Widget} ::Ptr{Cvoid}
+        return Mousetrap.detail.as_internal(x._internal.cpp_object)
+    end
+
+    function as_native_widget(x::Widget) 
+        return Mousetrap.detail.as_native_widget(Mousetrap.as_widget_pointer(x))
+    end
 end
