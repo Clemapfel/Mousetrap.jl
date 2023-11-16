@@ -48,8 +48,7 @@ jobs:
             using Pkg;
             Pkg.develop(PackageSpec(; path=pwd()));
             Pkg.instantiate();
-            Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\")
-            '
+            Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\");'
         - run: julia --project=docs docs/make.jl
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
