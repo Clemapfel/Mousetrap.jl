@@ -56,6 +56,6 @@ jobs:
             show-versioninfo: true
         - uses: julia-actions/julia-buildpkg@v1
         - name: Install Documenter.jl
-          run: julia -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\"); Pkg.add(url=\"https://github.com/JuliaDocs/Mousetrap.jl\")"        - name: Build Docs
+          run: julia -e "import Pkg; Pkg.add(url=\"https://github.com/JuliaDocs/Documenter.jl\"); Pkg.add(url=\"https://github.com/JuliaDocs/Mousetrap.jl\")"
         - name: Build Docs
           run: julia docs/make.jl
