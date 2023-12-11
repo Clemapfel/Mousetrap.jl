@@ -198,7 +198,7 @@ By default, the function used to map the elapsed duration of the `Animation` to 
 
 Mousetrap uses [Cascading Style Sheets (CSS)](https://developer.mozilla.org/en-US/docs/Web/CSS) to define the exact look of a widget. A UI theme is nothing more than a huge CSS file from which all widgets take information about how they should be rendered. 
 
-!!! Warning "CSS"
+!!! warning "CSS"
     The rest of this chapter will assume that readers are familiar with the basics of CSS. Readers are encouraged to consult [this documentation](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference) for CSS-related questions.
 
 ## Applying CSS Properties to a Widget

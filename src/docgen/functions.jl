@@ -427,6 +427,22 @@ Create a new image that is a horizontally and/or vertically mirrored.
 This function does not modify the original image.
 """
 
+@document as_gobject_pointer """
+```
+as_gobject_pointer(<: SignalEmitter) -> Ptr{Cvoid}
+as_gobject_pointer(<: Widget) -> Ptr{Cvoid}
+```
+Get the raw C pointer pointing to the native `GObject` in memory, for use with `ccall` and `Glib_jll`. Note that Mousetrap handles the lifetime of this object automatically, calling `g_object_ref` or `g_object_unref` on the pointer will cause memory leaks or segmentation faults.
+"""
+
+@document as_internal_pointer """
+```
+as_internal_pointer(<: SignalEmitter) -> Ptr{Cvoid}
+as_internal_pointer(<: Widget) -> Ptr{Cvoid}
+```
+Get the raw C pointer pointing to the Mousetrap C++ object, for use with `ccall` and `mousetrap_jll.mousetrap`.
+"""
+
 @document as_line! """
 ```
 as_line!(::Shape, a::Vector2f, b::Vector2f) 
@@ -446,6 +462,13 @@ Create a shape as a line strip. For points `{a1, a2, ..., an}`, this will be a s
 as_lines!(::Shape, points::Vector{Pair{Vector2f, Vector2f}}) 
 ```
 Create a shape as a set of unconnected lines, vertex positions in OpenGL coordinates.
+"""
+
+@document as_native_widget """
+```
+as_native_widget(<: Widget) -> Ptr{Cvoid}
+```
+Get the raw C pointer pointing to the native `GObject` in memory, for use with `ccall` and `GTK4_jll`. Note that Mousetrap handles the lifetime of this object automatically, calling `g_object_ref` or `g_object_unref` on the pointer will cause memory leaks or segmentation faults.
 """
 
 @document as_microseconds """
@@ -4688,6 +4711,16 @@ Attempt to maximize or unmaximize the window.
 set_message!(::AlertDialog, ::String)
 ```
 Set the main message of the dialog, this will be used as the dialogs title.
+"""
+
+@document set_menubar """
+```
+set_menubar(::Application, ::MenuModel)
+```
+Associate a menu model with the application-wide menubar. On macOS only, this will update the Apple main menu at the very top of the screen.
+
+This function will print a warning if called on a non-Apple machine. Use `Sys.isapple` to verify the users OS before calling this function.
+```
 """
 
 @document set_minimized! """
