@@ -4132,7 +4132,7 @@ module Mousetrap
             @log_warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
         end
 
-        row_i = get_n_rows(column_view)
+        row_i = get_n_rows(column_view) + 1
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
             set_widget_at!(column_view, column, row_i, widgets[i])
