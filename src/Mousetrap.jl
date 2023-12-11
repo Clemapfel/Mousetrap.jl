@@ -4122,27 +4122,26 @@ module Mousetrap
     function push_back_row!(column_view::ColumnView, widgets::Widget...)
 
         if length(widgets) > get_n_columns(column_view)
-            @log_warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
+            @log_warning MOUSETRAP_DOMAIN "In ColumnView.push_back_row!: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
         end
 
-        row_i = get_n_rows(column_view)
-        for i in 1:get_n_columns(column_view)
-            column = get_column_at(column_view, i)
-            set_widget_at!(column_view, column, row_i, widgets[i])
-        end
+        row_i = get_n_rows(column_view) + 1
+        insert_row_at!(column_view, row_i, widgets...)
     end
     export push_back_row!
 
     function push_front_row!(column_view::ColumnView, widgets::Widget...)
 
+        @log_critical MOUSETRAP_DOMAIN "In ColumnView.push_front_row!: This method was deprecated in v0.3.2, use `insert_row_at!` instead"
+
         if length(widgets) > get_n_columns(column_view)
-            @log_warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
+            @log_warning MOUSETRAP_DOMAIN "In ColumnView.push_front_row!: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
         end
 
         row_i = 1
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
-            set_widget_at!(column_view, column, from_julia_index(row_i), widgets[i])
+            detail.set_widget_at!(column_view._internal, column._internal, 0, as_widget_pointer(widgets[i]))
         end
     end
     export push_front_row!
@@ -4150,13 +4149,13 @@ module Mousetrap
     function insert_row_at!(column_view::ColumnView, index::Integer, widgets::Widget...)
 
         if length(widgets) > get_n_columns(column_view)
-            @log_warning MOUSETRAP_DOMAIN "In ColumnView::push_back_rows: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
+            @log_warning MOUSETRAP_DOMAIN "In ColumnView.insert_row_at!: Attempting to push $(length(widgets)) widgets, but ColumnView only has $(get_n_columns(column_view)) columns"
         end
 
         row_i = index
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
-            set_widget!(column_view, column, row_i, widgets[i])
+            set_widget_at!(column_view, column, row_i, widgets[i])
         end
     end
     export push_front_row!

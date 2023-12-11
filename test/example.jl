@@ -1,5 +1,37 @@
 # File used for debugging and for dosc examples, why are you snooping through this file?
+
+# File used for debugging and for dosc examples, why are you snooping through this file?
 using Mousetrap
+
+main() do app::Application
+    window = Window(app)
+
+    column_view = ColumnView()
+
+    row_index = push_back_column!(column_view, " ")
+    count_column = push_back_column!(column_view, "#")
+    name_column = push_back_column!(column_view, "Name")
+    weigt_column = push_back_column!(column_view, "Weight")
+    unit_column = push_back_column!(column_view, "Units")
+
+    # fill columns with example text
+    for i in 1:100
+        push_front_row!(column_view,
+            Label(string(i)),           # row index
+            Label(string(rand(0:99))),  # count
+            Label(rand(["Apple", "Orange", "Banana", "Kumquat", "Durian", "Mangosteen"])), # name
+            Label(string(rand(0:100))), # weight
+            Label(string(rand(["mg", "g", "kg", "ton"]))) # unit
+        )
+    end
+
+    scrolled_viewport = Viewport()
+    set_child!(scrolled_viewport, column_view)
+    set_child!(window, scrolled_viewport)
+    present!(window)
+end
+
+if false
 
 add_css!("""
 @keyframes spin-animation {
@@ -658,3 +690,5 @@ end
 end # @static if
 
     =#
+
+end
