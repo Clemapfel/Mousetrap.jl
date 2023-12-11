@@ -749,6 +749,9 @@ function test_column_view(::Container)
         column_name = "column 02"
         column = insert_column_at!(column_view, 1, column_name)
 
+        push_back_row!(column_view, Label(""), Label(""), Label(""))
+        push_front_row!(column_view, Label(""), Label(""), Label(""))
+        insert_row_at!(column_view, 2, Label(""), Label(""), Label(""))
         @test get_title(column) == column_name
 
         new_title = "new title"

@@ -3383,6 +3383,10 @@ Add a column to the start of the column view.
 ```
 push_front_row!(column_view::ColumnView, widgets::Widget...) -> Cvoid
 ```
+
+!!! compat
+    This function was deprecated in v0.3.2, use [`insert_row_at!`](@ref) instead
+
 Add widgets to the start of the rows, inserting them into the corresponding column. If the number of widgets is
 lower than the number of columns, the leftover columns will contain an empty cell in that row. 
 """
