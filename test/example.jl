@@ -4,27 +4,37 @@ using Mousetrap
 main() do app::Application
     window = Window(app)
 
+    # create column view with columns
     column_view = ColumnView()
 
-    row_index = push_back_column!(column_view, " ")
+    row_index_column = push_back_column!(column_view, " ")
     count_column = push_back_column!(column_view, "#")
     name_column = push_back_column!(column_view, "Name")
-    weigt_column = push_back_column!(column_view, "Weight")
+    weight_column = push_back_column!(column_view, "Weight")
     unit_column = push_back_column!(column_view, "Units")
 
-    # fill columns with example text
+    set_expand!.((row_index, count_column, name_column, weight_column, unit_column), true)
+
+    # fill columns with text
     for i in 1:100
-        push_back_row!(column_view,
+        row = [
             Label(string(i)),           # row index
             Label(string(rand(0:99))),  # count
             Label(rand(["Apple", "Orange", "Banana", "Kumquat", "Durian", "Mangosteen"])), # name
             Label(string(rand(0:100))), # weight
             Label(string(rand(["mg", "g", "kg", "ton"]))) # unit
-        )
+        ]
+
+        set_horizontal_alignment!.(row, ALIGNMENT_START)
+        push_back_row!(column_view, row...)
     end
 
+    # create viewport, this will add a scrollbar
     scrolled_viewport = Viewport()
+    set_propagate_natural_width!(scrolled_viewport, true) # hides horizontal scrollbar
     set_child!(scrolled_viewport, column_view)
+
+    # show both in window
     set_child!(window, scrolled_viewport)
     present!(window)
 end

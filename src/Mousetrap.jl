@@ -4085,6 +4085,17 @@ module Mousetrap
     @export_function ColumnViewColumn set_is_resizable! Cvoid Bool b
     @export_function ColumnViewColumn get_is_resizable Bool
 
+    function set_expand!(column::ColumnViewColumn, should_expand::Bool)
+        @ccall detail.GTK4_jll.libgtk4.gtk_column_view_column_set_expand(Mousetrap.as_internal_pointer(column)::Ptr{Cvoid}, should_expand::Bool)::Cvoid
+        return nothing
+    end
+    export set_expand!
+
+    function get_expand(column::ColumnViewColumn) ::Bool 
+        return @ccall detail.GTK4_jll.libgtk4.gtk_column_view_column_get_expand(Mousetrap.as_internal_pointer(column)::Ptr{Cvoid})::Bool
+    end
+    export get_expand
+
     @export_type ColumnView Widget
     @declare_native_widget ColumnView
 
@@ -5583,12 +5594,16 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
 ###### internal.jl
 
-    function as_gobject_pointer(x::T) where T <: Union{SignalEmitter, Widget} :: Ptr{Cvoid}
+    function as_gobject_pointer(x::T) where T <: Union{SignalEmitter, Widget} #::Ptr{Cvoid}
         return Mousetrap.detail.as_gobject(x._internal.cpp_object)
     end
 
-    function as_internal_pointer(x::T) where T <: Union{SignalEmitter, Widget} ::Ptr{Cvoid}
+    function as_internal_pointer(x::T) where T <: Union{SignalEmitter, Widget} #::Ptr{Cvoid}
         return Mousetrap.detail.as_internal(x._internal.cpp_object)
+    end
+
+    function as_internal_pointer(column::ColumnViewColumn) 
+        return @ccall detail.mousetrap_jll.mousetrap._ZNK9mousetrap10ColumnView6Column12get_internalEv(column._internal.cpp_object::Ptr{Cvoid})::Ptr{Cvoid}
     end
 
     function as_native_widget(x::Widget) 

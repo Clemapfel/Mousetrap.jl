@@ -749,6 +749,10 @@ function test_column_view(::Container)
         column_name = "column 02"
         column = insert_column_at!(column_view, 1, column_name)
 
+        @test get_expand(column) == false 
+        set_expand!(column, true)
+        @test get_expand(column) == true
+
         @test get_title(column) == column_name
 
         new_title = "new title"
@@ -1295,9 +1299,9 @@ end
 
 function test_internal(x::Container)
     @testset "Internal" begin
-        @test as_gobject_pointer(x) != C_NULL
-        @test as_internal_pointer(x) != C_NULL
-        @test as_native_widget(x) != C_NULL
+        @test Mousetrap.as_gobject_pointer(x) != C_NULL
+        @test Mousetrap.as_internal_pointer(x) != C_NULL
+        @test Mousetrap.as_native_widget(x) != C_NULL
     end
 end
 

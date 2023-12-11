@@ -1219,6 +1219,13 @@ get_end_child_shrinkable(::Paned) -> Bool
 Get whether the user can resize the end child such that its allocated area inside the `Paned` is smaller than the natural size of the child.
 """
 
+@document get_expand """
+```
+get_expand(::ColumnViewColumn) -> Bool
+```
+Get whether this column expands horizontally.
+"""
+
 @document get_expand_horizontally """
 ```
 get_expand_horizontally(::Widget) -> Bool
@@ -4179,6 +4186,13 @@ Set whether the user can resize the end child such that its allocated area insid
 set_expand!(::Widget, ::Bool) 
 ```
 Set whether the widget should expand along both the horizontal and vertical axis.
+
+---
+
+```
+set_expand!(::ColumnViewColumn, ::Bool)
+```
+Set whether the column should expand along the horizontal axis.
 """
 
 @document set_is_expanded! """
