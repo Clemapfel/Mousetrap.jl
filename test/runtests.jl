@@ -2878,31 +2878,3 @@ main(Main.app_id) do app::Application
     close!(window)
     #quit!(app)
 end
-
-using Mousetrap
-main() do app
-    window = Window(app)
-
-    revealer = Revealer()
-    set_transition_type!(revealer, REVEALER_TRANSITION_TYPE_SLIDE_LEFT)
-
-    button = Button()
-    set_child!(button, Label("click me"))
-    connect_signal_clicked!(button) do self
-        set_is_revealed!(revealer, !get_is_revealed(revealer))
-    end
-
-    to_reveal = Label("REVEALED")
-    set_margin!(to_reveal, 10)
-    set_child!(revealer, to_reveal)
-    set_is_revealed!(revealer, false)
-    connect_signal_revealed!(revealer) do self
-        println("revealed")
-    end
-
-    box = Box(ORIENTATION_HORIZONTAL)
-    push_back!(box, button)
-    push_back!(box, revealer)
-    set_child!(window, box)
-    present!(window)
-end
