@@ -142,7 +142,7 @@ set_margin_horizontal(widget, 10)
 set_margin_vertical(widget, 10)
 
 # equivalent to
-set_margin(widget, 10)
+set_margin!(widget, 10)
 ```
 
 Where [`set_margin_horizontal!`](@ref), [`set_margin_vertical!`](@ref) set two of the margins at the same time, while [`set_margin!`](@ref) sets all four margins at once.
