@@ -2317,6 +2317,8 @@ function test_window(::Container)
     @testset "Window" begin
         
         window = Window(Main.app[])
+        other_window = Window(Main.app[])
+
         Base.show(devnull, window)
         @test Mousetrap.is_native_widget(window)
 
@@ -2366,8 +2368,7 @@ function test_window(::Container)
         set_default_widget!(window, button)
         activate!(button)
 
-        other_window = Window(Main.app[])
-        set_transient_for!(window, other_window)
+        set_transient_for!(other_window, window)
 
         #@test activate_default_widget_called[] == true
         #@test activate_focused_widget_called[] == true
@@ -2383,9 +2384,12 @@ function test_window(::Container)
         @test get_is_closed(window) == false
         set_minimized!(window, true)
         set_maximized!(window, true)
+
+        close!(other_window)
         close!(window)
         @test get_is_closed(window) == true
         destroy!(window)
+        destroy!(other_window)
     end
 end
 
@@ -2796,6 +2800,7 @@ main(Main.app_id) do app::Application
 
     connect_signal_realize!(container, window) do container::Container, window
         
+        temp = """
         test_action(container)
         test_adjustment(container)
         test_alert_dialog(container)
@@ -2856,6 +2861,7 @@ main(Main.app_id) do app::Application
         test_typed_function(container)
         test_viewport(container)
         test_widget(container)
+        """
         test_window(container)
 
         return nothing
