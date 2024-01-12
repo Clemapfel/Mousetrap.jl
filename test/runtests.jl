@@ -2366,6 +2366,9 @@ function test_window(::Container)
         set_default_widget!(window, button)
         activate!(button)
 
+        other_window = Window(Main.app[])
+        set_transient_for!(window, other_window)
+
         #@test activate_default_widget_called[] == true
         #@test activate_focused_widget_called[] == true
 
