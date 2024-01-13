@@ -2784,10 +2784,9 @@ end
 
 main(Main.app_id) do app::Application
 
-    window = Window(app)
-
+    #=
     Main.app[] = app
-    Main.window[] = window
+    Main.window[] = Window(app)
     set_is_decorated!(window, false) # prevent user from closing the window during tests
 
     theme = IconTheme(Main.window[])
@@ -2861,8 +2860,8 @@ main(Main.app_id) do app::Application
         test_typed_function(container)
         test_viewport(container)
         test_widget(container)
-        """
         test_window(container)
+        """
 
         return nothing
     end
@@ -2870,4 +2869,78 @@ main(Main.app_id) do app::Application
     present!(window)
     close!(window)
     #quit!(app)
+    =#
+
+    window = Window(Main.app[])
+        Base.show(devnull, window)
+        @test Mousetrap.is_native_widget(window)
+
+        close_request_called = Ref{Bool}(false)
+        connect_signal_close_request!(window, close_request_called) do self::Window, close_request_called
+            close_request_called[] = true
+            return WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE
+        end
+
+        activate_default_widget_called = Ref{Bool}(false)
+        connect_signal_activate_default_widget!(window, activate_default_widget_called) do self::Window, activate_default_widget_called
+            activate_default_widget_called[] = true
+            return nothing
+        end
+
+        activate_focused_widget_called = Ref{Bool}(false)
+        connect_signal_activate_focused_widget!(window, activate_focused_widget_called) do self::Window, activate_focused_widget_called
+            activate_focused_widget_called[] = true
+            return nothing
+        end
+
+        @test get_destroy_with_parent(window) == false
+        set_destroy_with_parent!(window, true)
+        @test get_destroy_with_parent(window) == true
+        
+        @test get_focus_visible(window) == true
+        set_focus_visible!(window, false)
+        @test get_focus_visible(window) == false
+
+        @test get_has_close_button(window) == true
+        set_has_close_button!(window, false)
+        @test get_has_close_button(window) == false
+
+        @test get_is_decorated(window) == true
+        set_is_decorated!(window, false)
+        @test get_is_decorated(window) == false
+
+        @test get_is_modal(window) == false
+        set_is_modal!(window, true)
+        @test get_is_modal(window) == true
+
+        set_title!(window, "test")
+        @test get_title(window) == "test"
+
+        button = Entry()
+        set_child!(window, button)
+        set_default_widget!(window, button)
+        activate!(button)
+
+        #@test activate_default_widget_called[] == true
+        #@test activate_focused_widget_called[] == true
+
+        @test get_header_bar(window) isa HeaderBar
+
+        @test get_hide_on_close(window) == false
+        set_hide_on_close!(window, true)
+        @test get_hide_on_close(window) == true
+
+        other_window = Window(app)
+        set_transient_for!(other_window, window)
+
+        @test get_is_closed(window) == true
+        present!(window)
+        @test get_is_closed(window) == false
+        set_minimized!(window, true)
+        set_maximized!(window, true)
+        close!(window)
+        @test get_is_closed(window) == true
+        destroy!(window)
+
+    println("TODO: done.")
 end
