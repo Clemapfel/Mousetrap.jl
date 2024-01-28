@@ -17,6 +17,7 @@ jobs:
           julia-version:
             - "1.7"
             - "1.9"
+            - "1"
           os:
             - ubuntu-latest
             - macos-latest
