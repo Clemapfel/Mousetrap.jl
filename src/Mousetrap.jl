@@ -30,7 +30,7 @@ module Mousetrap
             end
         end
 
-        function __init__() 
+        function __init__()
             try_update_gsettings_schema_dir()   # executed on `using Mousetrap`, env needs to be set each time before `adw_init` is called
             @initcxx()
         end
@@ -39,7 +39,7 @@ module Mousetrap
         function get_mousetrap_julia_binding()
             return mousetrap_jll.mousetrap_julia_binding
         end
-      
+
         try_update_gsettings_schema_dir()       # executed on `precompile Mousetrap`, but not on using, silences warning during installation
         @wrapmodule(get_mousetrap_julia_binding)
     end
@@ -47,7 +47,7 @@ module Mousetrap
     const MOUSETRAP_ENABLE_OPENGL_COMPONENT = convert(Bool, detail.MOUSETRAP_ENABLE_OPENGL_COMPONENT)
 
 ####### typed_function.jl
-    
+
     mutable struct TypedFunction
 
         _apply::Function
@@ -105,7 +105,7 @@ module Mousetrap
     export LogDomain
 
     const MOUSETRAP_DOMAIN = detail.MOUSETRAP_DOMAIN * ".jl"
-    # no export   
+    # no export
 
     """
     See [`log_debug`](@ref).
@@ -222,7 +222,7 @@ module Mousetrap
         return :($name(
                 x::$type,
                 $arg1_name::$arg1_origin_type
-            ) = Base.convert($return_t, detail.$name(x._internal, 
+            ) = Base.convert($return_t, detail.$name(x._internal,
                 convert($arg1_destination_type, $arg1_name)
             )))
     end
@@ -254,8 +254,8 @@ module Mousetrap
                 x::$type,
                 $arg1_name::$arg1_origin_type,
                 $arg2_name::$arg2_origin_type
-            ) = Base.convert($return_t, detail.$name(x._internal, 
-                convert($arg1_destination_type, $arg1_name), 
+            ) = Base.convert($return_t, detail.$name(x._internal,
+                convert($arg1_destination_type, $arg1_name),
                 convert($arg2_destination_type, $arg2_name)
             )))
     end
@@ -297,10 +297,10 @@ module Mousetrap
                 $arg1_name::$arg1_origin_type,
                 $arg2_name::$arg2_origin_type,
                 $arg3_name::$arg3_origin_type
-            ) = Base.convert($return_t, detail.$name(x._internal, 
-                convert($arg1_destination_type, $arg1_name), 
-                convert($arg2_destination_type, $arg2_name), 
-                convert($arg3_destination_type, $arg3_name), 
+            ) = Base.convert($return_t, detail.$name(x._internal,
+                convert($arg1_destination_type, $arg1_name),
+                convert($arg2_destination_type, $arg2_name),
+                convert($arg3_destination_type, $arg3_name),
             )))
     end
 
@@ -351,17 +351,17 @@ module Mousetrap
                 $arg2_name::$arg2_origin_type,
                 $arg3_name::$arg3_origin_type,
                 $arg4_name::$arg4_origin_type
-            ) = Base.convert($return_t, detail.$name(x._internal, 
-                convert($arg1_destination_type, $arg1_name), 
-                convert($arg2_destination_type, $arg2_name), 
-                convert($arg3_destination_type, $arg3_name), 
+            ) = Base.convert($return_t, detail.$name(x._internal,
+                convert($arg1_destination_type, $arg1_name),
+                convert($arg2_destination_type, $arg2_name),
+                convert($arg3_destination_type, $arg3_name),
                 convert($arg4_destination_type, $arg4_name)
             )))
     end
-    
+
     @generated function get_top_level_widget(x) ::Widget
         return :(
-            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `Mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `Mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
+            throw(AssertionError("Object of type $(typeof(x)) does not fulfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `Mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `Mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
         )
     end
     export get_top_level_widget
@@ -510,7 +510,7 @@ module Mousetrap
         x::T
         y::T
         z::T
-        
+
         Vector3{T}(all::Number) where T = new{T}(convert(T, all), convert(T, all), convert(T, all))
         Vector3{T}(x::Number, y::Number, z::Number) where T = new{T}(convert(T, x), convert(T, y), convert(T, z))
     end
@@ -534,7 +534,7 @@ module Mousetrap
         y::T
         z::T
         w::T
-        
+
         Vector4{T}(all::Number) where T = new{T}(convert(T, all), convert(T, all), convert(T, all), convert(T, all))
         Vector4{T}(x::Number, y::Number, z::Number, w::Number) where T = new{T}(convert(T, x), convert(T, y), convert(T, z), convert(T, w))
     end
@@ -600,7 +600,7 @@ module Mousetrap
     Base.:(!=)(a::Time, b::Time) = !(a == b)
     Base.:(<)(a::Time, b::Time) = a._ns < b._ns
     Base.:(>)(a::Time, b::Time) = a._ns > b._ns
-  
+
     Base.show(io::IO, x::Time) = print(io, "Time($(as_seconds(x))s)")
 
     @export_type Clock SignalEmitter
@@ -954,46 +954,46 @@ module Mousetrap
     macro add_signal_items_changed(x) return :(@add_signal $x items_changed Cvoid Integer position Integer n_removed Integer n_added) end
     macro add_signal_closed(x) return :(@add_signal $x closed Cvoid) end
     macro add_signal_text_changed(x) return :(@add_signal $x text_changed Cvoid) end
-     
+
     macro add_signal_drag_begin(x) return :(@add_signal $x drag_begin Cvoid AbstractFloat start_x AbstractFloat start_y) end
     macro add_signal_drag(x) return :(@add_signal $x drag Cvoid AbstractFloat offset_x AbstractFloat offset_y) end
     macro add_signal_drag_end(x) return :(@add_signal $x drag_end Cvoid AbstractFloat offset_x AbstractFloat offset_y) end
-    
+
     macro add_signal_click_pressed(x) return :(@add_signal $x click_pressed Cvoid Integer n_press AbstractFloat x AbstractFloat y) end
     macro add_signal_click_released(x) return :(@add_signal $x click_released Cvoid Integer n_press AbstractFloat x AbstractFloat y) end
     macro add_signal_click_stopped(x) return :(@add_signal $x click_stopped Cvoid) end
-    
+
     macro add_signal_focus_gained(x) return :(@add_signal $x focus_gained Cvoid) end
     macro add_signal_focus_lost(x) return :(@add_signal $x focus_lost Cvoid) end
 
     macro add_signal_pressed(x) return :(@add_signal $x pressed Cvoid AbstractFloat x AbstractFloat y) end
     macro add_signal_press_cancelled(x) return :(@add_signal $x press_cancelled Cvoid) end
-    
+
     macro add_signal_motion_enter(x) return :(@add_signal $x motion_enter Cvoid AbstractFloat x AbstractFloat y) end
     macro add_signal_motion(x) return :(@add_signal $x motion Cvoid AbstractFloat x AbstractFloat y) end
     macro add_signal_motion_leave(x) return :(@add_signal $x motion_leave Cvoid) end
-    
+
     macro add_signal_scale_changed(x) return :(@add_signal $x scale_changed Cvoid AbstractFloat scale) end
     macro add_signal_rotation_changed(x) return :(@add_signal $x rotation_changed Cvoid AbstractFloat angle_absolute_rads AbstractFloat angle_delta_rads) end
-    
+
     macro add_signal_kinetic_scroll_decelerate(x) return :(@add_signal $x kinetic_scroll_decelerate Cvoid AbstractFloat x_velocity AbstractFloat y_velocity) end
     macro add_signal_scroll_begin(x) return :(@add_signal $x scroll_begin Cvoid) end
     macro add_signal_scroll(x) return :(@add_signal $x scroll Cvoid AbstractFloat delta_x AbstractFloat delta_y) end # sic, jl_unbox_bool(jl_nothing) == true
     macro add_signal_scroll_end(x) return :(@add_signal $x scroll_end Cvoid) end
-   
+
     macro add_signal_stylus_up(x) return :(@add_signal $x stylus_up Cvoid AbstractFloat x AbstractFloat y) end
     macro add_signal_stylus_down(x) return :(@add_signal $x stylus_down Cvoid AbstractFloat x AbstractFloat y) end
     macro add_signal_proximity(x) return :(@add_signal $x proximity Cvoid AbstractFloat x AbstractFloat y) end
-    
+
     macro add_signal_swipe(x) return :(@add_signal $x swipe Cvoid AbstractFloat x_velocity AbstractFloat y_velocity) end
     macro add_signal_pan(x) return :(@add_signal $x pan Cvoid PanDirection direction AbstractFloat offset) end
-   
+
     macro add_signal_paint(x) return :(@add_signal $x paint Cvoid) end
     macro add_signal_update(x) return :(@add_signal $x update Cvoid) end
-    
+
     macro add_signal_value_changed(x) return :(@add_signal $x value_changed Cvoid) end
     macro add_signal_properties_changed(x) return :(@add_signal $x properties_changed Cvoid) end
-    
+
     macro add_signal_wrapped(x) return :(@add_signal $x wrapped Cvoid) end
 
     macro add_signal_scroll_child(x) return :(@add_signal $x scroll_child Cvoid ScrollType type Bool is_horizontal) end
@@ -1005,7 +1005,7 @@ module Mousetrap
     macro add_signal_activate_item(T)
 
         snake_case = :activate_item
-        Return_t = Cvoid 
+        Return_t = Cvoid
         Arg1_t = Integer
         arg1_name = :index
 
@@ -1346,7 +1346,7 @@ module Mousetrap
 
         return out
     end
-    
+
     macro add_key_event_controller_signal(T, name, Return_t)
 
         out = Expr(:block)
@@ -1534,7 +1534,7 @@ module Mousetrap
     @add_signal_activate Application
     @add_signal_shutdown Application
 
-    function main(f, application_id::String = "com.julia.mousetrap") 
+    function main(f, application_id::String = "com.julia.mousetrap")
         app = Application(application_id)
         typed_f = TypedFunction(f, Any, (Application,))
         connect_signal_activate!(app)  do app::Application
@@ -1552,7 +1552,7 @@ module Mousetrap
         return run!(app)
     end
     export main
-    
+
     Base.show(io::IO, x::Application) = show_aux(io, x, :is_holding, :is_marked_as_busy)
 
 ####### window.jl
@@ -1788,7 +1788,7 @@ module Mousetrap
 
     import Base.==
     ==(x::RGBA, y::RGBA) = x.r == y.r && x.g == y.g && x.b == y.b && x.a == y.a
-    function ==(x::HSVA, y::HSVA) 
+    function ==(x::HSVA, y::HSVA)
         hue_equal = x.h == y.h || abs(x.h - y.h) == 1
         return hue_equal && x.s == y.s && x.v == y.v && x.a == y.a
     end
@@ -1828,7 +1828,7 @@ module Mousetrap
 
     @export_type Icon
     Icon() = Icon(detail._Icon())
-    
+
     function Icon(path::String)
         out = Icon()
         create_from_file!(out, path)
@@ -1952,7 +1952,7 @@ module Mousetrap
     @export_function KeyFile get_keys Vector{KeyID} GroupID group
     @export_function KeyFile has_key Bool GroupID group KeyID key
     @export_function KeyFile has_group Bool GroupID group
-   
+
     set_comment_above!(file::KeyFile, group::GroupID, key::KeyID, comment::String) = detail.set_comment_above_key!(file._internal, group, key, comment)
     set_comment_above!(file::KeyFile, group::GroupID, comment::String) = detail.set_comment_above_group!(file._internal, group, comment)
     export set_comment_above!
@@ -2361,7 +2361,7 @@ module Mousetrap
     @export_function PopupMessage get_button_action_id String
     @export_function PopupMessage set_is_high_priority! Cvoid Bool b
     @export_function PopupMessage get_is_high_priority Bool
-    
+
     set_timeout!(popup_message::PopupMessage, duration::Time) = detail.set_timeout!(popup_message._internal, convert(Cfloat, as_microseconds(duration)))
     export set_timeout!
 
@@ -2510,7 +2510,7 @@ module Mousetrap
     @export_type ClampFrame Widget
     @declare_native_widget ClampFrame
 
-    function ClampFrame(size::Number, orientation::Orientation = ORIENTATION_HORIZONTAL) 
+    function ClampFrame(size::Number, orientation::Orientation = ORIENTATION_HORIZONTAL)
         out = ClampFrame(detail._ClampFrame(orientation))
         set_maximum_size!(out, size)
         return out
@@ -2535,7 +2535,7 @@ module Mousetrap
 
     Box(orientation::Orientation) = Box(detail._Box(orientation))
 
-    function hbox(widgets::Widget...) 
+    function hbox(widgets::Widget...)
         out = Box(ORIENTATION_HORIZONTAL)
         for widget in widgets
             push_back!(out, widget)
@@ -2544,7 +2544,7 @@ module Mousetrap
     end
     export hbox
 
-    function vbox(widgets::Widget...) 
+    function vbox(widgets::Widget...)
         out = Box(ORIENTATION_VERTICAL)
         for widget in widgets
             push_back!(out, widget)
@@ -2624,14 +2624,14 @@ module Mousetrap
         detail.set_row_spacing!(box._internal, convert(Cfloat, spacing))
     end
     export set_row_spacing!
-    
+
     @export_function FlowBox get_row_spacing Cfloat
 
     function set_column_spacing!(box::FlowBox, spacing::Number)
         detail.set_column_spacing!(box._internal, convert(Cfloat, spacing))
     end
     export set_column_spacing!
-    
+
     @export_function FlowBox get_column_spacing Cfloat
 
     @export_function FlowBox get_n_items Cint
@@ -2649,7 +2649,7 @@ module Mousetrap
 
     Button() = Button(detail._Button())
 
-    function Button(label::Widget) 
+    function Button(label::Widget)
         out = Button()
         set_child!(out, label)
         return out
@@ -2694,7 +2694,7 @@ module Mousetrap
     @declare_native_widget CenterBox
 
     CenterBox(orientation::Orientation) = CenterBox(detail._CenterBox(orientation))
-    
+
     function CenterBox(orientation::Orientation, left::Widget, center::Widget, right::Widget) ::CenterBox
         out = CenterBox(orientation)
         set_start_child!(out, left)
@@ -2702,7 +2702,7 @@ module Mousetrap
         set_end_child!(out, right)
         return out
     end
-    
+
     function set_start_child!(center_box::CenterBox, child::Widget)
         detail.set_start_child!(center_box._internal, as_widget_pointer(child))
     end
@@ -2892,8 +2892,8 @@ module Mousetrap
     @add_widget_signals Viewport
     @add_signal_scroll_child Viewport
 
-    Base.show(io::IO, x::Viewport) = show_aux(io, x, 
-        :propagate_natural_height, 
+    Base.show(io::IO, x::Viewport) = show_aux(io, x,
+        :propagate_natural_height,
         :propagate_natural_width
     )
 
@@ -3068,10 +3068,10 @@ module Mousetrap
 
     @add_widget_signals Label
 
-    Base.show(io::IO, x::Label) = show_aux(io, x, 
-        :text,    
-        :ellipsize_mode, 
-        :wrap_mode, 
+    Base.show(io::IO, x::Label) = show_aux(io, x,
+        :text,
+        :ellipsize_mode,
+        :wrap_mode,
         :justify_mode
     )
 
@@ -3350,7 +3350,7 @@ module Mousetrap
             typed_f(DropDown(drop_down_internal_ref[]))
         end)
     end
-    
+
     push_back!(drop_down::DropDown, list_widget::Widget, label_widget::Widget) = push_back!((_::DropDown) -> nothing, drop_down, list_widget, label_widget)
     push_back!(drop_down::DropDown, label::String) = push_back!((_::DropDown) -> nothing, drop_down, label)
     export push_back!
@@ -3664,7 +3664,7 @@ module Mousetrap
     @export_function StylusEventController get_tool_type ToolType
     @export_function StylusEventController has_axis Bool DeviceAxis axis
     @export_function StylusEventController get_axis_value Float64 DeviceAxis axis
-    
+
     @add_signal_stylus_up StylusEventController
     @add_signal_stylus_down StylusEventController
     @add_signal_proximity StylusEventController
@@ -3726,9 +3726,9 @@ module Mousetrap
     @export_function SelectionModel select_all! Cvoid
     @export_function SelectionModel unselect_all! Cvoid
     @export_function SelectionModel get_n_items Int64
-    
+
     @export_function SelectionModel get_selection_mode SelectionMode
-    
+
     select!(model::SelectionModel, i::Integer, unselect_others::Bool = true) = detail.select!(model._internal, from_julia_index(i), unselect_others)
     export select!
 
@@ -3775,11 +3775,11 @@ module Mousetrap
     set_widget_at!(list_view::ListView, index::Integer, widget::Widget, iterator::ListViewIterator) = detail.set_widget_at!(list_view._internal, from_julia_index(index), as_widget_pointer(widget), iterator._internal)
     export set_widget_at!
 
-    function find(list_view::ListView, widget::Widget, iterator::ListViewIterator) ::Signed 
+    function find(list_view::ListView, widget::Widget, iterator::ListViewIterator) ::Signed
         i = detail.find(list_view._internal, as_widget_pointer(widget), iterator._internal)
         return i == -1 ? -1 : to_julia_index(i)
     end
-    function find(list_view::ListView, widget::Widget) ::Signed 
+    function find(list_view::ListView, widget::Widget) ::Signed
         i = detail.find(list_view._internal, as_widget_pointer(widget), Ptr{Cvoid}())
         return i == -1 ? -1 : to_julia_index(i)
     end
@@ -3787,7 +3787,7 @@ module Mousetrap
 
     get_selection_model(list_view::ListView) ::SelectionModel = SelectionModel(detail.get_selection_model(list_view._internal))
     export get_selection_model
-    
+
     @export_function ListView set_enable_rubberband_selection! Cvoid Bool b
     @export_function ListView get_enable_rubberband_selection Bool
     @export_function ListView set_show_separators! Cvoid Bool b
@@ -3826,7 +3826,7 @@ module Mousetrap
     clear!(grid_view::GridView) = detail.clear!(grid_view._internal)
     export clear!
 
-    function find(grid_view::GridView, widget::Widget) ::Signed 
+    function find(grid_view::GridView, widget::Widget) ::Signed
         i = detail.find(grid_view._internal, as_widget_pointer(widget))
         return i == -1 ? -1 : to_julia_index(i)
     end
@@ -4025,7 +4025,7 @@ module Mousetrap
     end
     export move_page_to!
 
-    remove!(notebook::Notebook, index::Integer) = detail.remove!(notebook._internal, from_julia_index(index)) 
+    remove!(notebook::Notebook, index::Integer) = detail.remove!(notebook._internal, from_julia_index(index))
     export remove!
 
     @export_function Notebook next_page! Cvoid
@@ -4083,17 +4083,17 @@ module Mousetrap
 
     ColumnView(selection_mode::SelectionMode = SELECTION_MODE_NONE) = ColumnView(detail._ColumnView(selection_mode))
 
-    function push_back_column!(column_view::ColumnView, title::String) ::ColumnViewColumn 
+    function push_back_column!(column_view::ColumnView, title::String) ::ColumnViewColumn
         return ColumnViewColumn(detail.push_back_column!(column_view._internal, title))
     end
     export push_back_column!
 
-    function push_front_column!(column_view::ColumnView, title::String) ::ColumnViewColumn 
+    function push_front_column!(column_view::ColumnView, title::String) ::ColumnViewColumn
         return ColumnViewColumn(detail.push_front_column!(column_view._internal, title))
     end
     export push_front_column!
 
-    function insert_column_at!(column_view::ColumnView, index::Integer, title::String) ::ColumnViewColumn 
+    function insert_column_at!(column_view::ColumnView, index::Integer, title::String) ::ColumnViewColumn
         return ColumnViewColumn(detail.insert_column!(column_view._internal, from_julia_index(index), title))
     end
     export insert_column_at!
@@ -4196,7 +4196,7 @@ module Mousetrap
     set_title_widget!(header_bar::HeaderBar, widget::Widget) = detail.set_title_widget!(header_bar._internal, as_widget_pointer(widget))
     export set_title_widget!
 
-    @export_function HeaderBar remove_title_widget! Cvoid    
+    @export_function HeaderBar remove_title_widget! Cvoid
 
     push_front!(header_bar::HeaderBar, widget::Widget) = detail.push_front!(header_bar._internal, as_widget_pointer(widget))
     export push_front!
@@ -4224,7 +4224,7 @@ module Mousetrap
         set_end_child!(out, end_child)
         return out
     end
-    
+
     @export_function Paned get_position Cint
     @export_function Paned set_position! Cvoid Integer position
 
@@ -4367,7 +4367,7 @@ module Mousetrap
     @add_widget_signals ActionBar
 
     Base.show(io::IO, x::ActionBar) = show_aux(io, x, :is_revealed)
-    
+
 ###### scale.jl
 
     @export_type Scale Widget
@@ -4394,7 +4394,7 @@ module Mousetrap
     @export_function Scale set_upper! Cvoid Number => Cfloat value
     @export_function Scale set_step_increment! Cvoid Number => Cfloat value
     @export_function Scale set_value! Cvoid Number => Cfloat value
-    
+
     @export_function Scale set_should_draw_value! Cvoid Bool b
     @export_function Scale get_should_draw_value Bool
     @export_function Scale set_has_origin! Cvoid Bool b
@@ -4421,9 +4421,9 @@ module Mousetrap
 
     function SpinButton(lower::Number, upper::Number, step_increment::Number, orientation::Orientation = ORIENTATION_HORIZONTAL)
         return SpinButton(detail._SpinButton(
-            convert(Cfloat, lower), 
-            convert(Cfloat, upper), 
-            convert(Cfloat, step_increment), 
+            convert(Cfloat, lower),
+            convert(Cfloat, upper),
+            convert(Cfloat, step_increment),
             orientation
         ))
     end
@@ -4564,7 +4564,7 @@ module Mousetrap
         return_t = esc(return_t)
 
         Mousetrap.eval(:(export $name))
-        return :(function $name(widget::Widget)            
+        return :(function $name(widget::Widget)
             return Base.convert($return_t, detail.$name(as_widget_pointer(widget)))
         end)
         return out
@@ -4573,7 +4573,7 @@ module Mousetrap
     macro export_widget_function(name, return_t, arg1_type, arg1_name)
 
         return_t = esc(return_t)
-        
+
         if arg1_type isa Expr
             arg1_origin_type = arg1_type.args[2]
             arg1_destination_type = arg1_type.args[3]
@@ -4585,7 +4585,7 @@ module Mousetrap
 
         Mousetrap.eval(:(export $name))
         out = Expr(:toplevel)
-        return :(function $name(widget::Widget, $arg1_name::$arg1_origin_type) 
+        return :(function $name(widget::Widget, $arg1_name::$arg1_origin_type)
             return Base.convert($return_t, detail.$name(as_widget_pointer(widget), convert($arg1_destination_type, $arg1_name)))
         end)
         return out
@@ -4705,7 +4705,7 @@ module Mousetrap
 
     @export_type Clipboard SignalEmitter
 
-    function Clipboard(internal::Ptr{Cvoid}) 
+    function Clipboard(internal::Ptr{Cvoid})
         out = Clipboard(detail._Clipboard(internal))
     end
 
@@ -4908,7 +4908,7 @@ module Mousetrap
 
     abstract type TextureObject <: SignalEmitter end
     export TextureObject
-    
+
     @export_enum TextureWrapMode begin
         TEXTURE_WRAP_MODE_ZERO
         TEXTURE_WRAP_MODE_ONE
@@ -4990,7 +4990,7 @@ module Mousetrap
         if isempty(positions)
             @log_critical MOUSETRAP_DOMAIN "In as_points!: Vector `positions` is empty."
         end
-        
+
         return detail.as_points!(shape._internal, positions)
     end
     export as_points!
@@ -5156,7 +5156,7 @@ module Mousetrap
     end
     export get_vertex_texture_coordinate
 
-    function set_vertex_texture_coordinate!(shape::Shape, index::Integer, coordinate::Vector2f) 
+    function set_vertex_texture_coordinate!(shape::Shape, index::Integer, coordinate::Vector2f)
         detail.set_vertex_texture_coordinate!(shape._internal, from_julia_index(index), coordinate)
     end
     export set_vertex_texture_coordinate!
@@ -5166,7 +5166,7 @@ module Mousetrap
     end
     export get_vertex_position
 
-    function set_vertex_position!(shape::Shape, index::Integer, coordinate::Vector3f) 
+    function set_vertex_position!(shape::Shape, index::Integer, coordinate::Vector3f)
         detail.set_vertex_position!(shape._internal, from_julia_index(index), coordinate)
     end
     export set_vertex_position!
@@ -5383,7 +5383,7 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     end
 
     @export_type Animation SignalEmitter
-    function Animation(target::Widget, duration::Time) 
+    function Animation(target::Widget, duration::Time)
         return Animation(detail._Animation(as_widget_pointer(target), convert(Float32, as_microseconds(duration))))
     end
 
@@ -5460,7 +5460,7 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
     @export_function TransformBin remove_child! Cvoid
     @export_function TransformBin reset! Cvoid
-    
+
     rotate!(bin::TransformBin, angle::Angle) = detail.rotate!(bin._internal, convert(Float32, as_degrees(angle)))
     export rotate!
 
@@ -5469,9 +5469,9 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
     @export_function TransformBin scale! Cvoid Number => Cfloat x Number => Cfloat y
     scale!(bin::TransformBin, both::Number) = scale!(bin, both, both)
-    
+
     @export_function TransformBin skew! Cvoid Number => Cfloat x Number => Cfloat y
-    
+
     @add_widget_signals TransformBin
     Base.show(io::IO, x::TransformBin) = show_aux(io, x)
 
@@ -5516,7 +5516,7 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
     include("./key_codes.jl")
 
 ###### documentation
-        
+
     include("./docs.jl")
 
 ###### compound_widget.jl
@@ -5526,43 +5526,43 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
         for (signal, _) in Mousetrap.signal_descriptors
             connect_signal_name = :connect_signal_ * signal * :!
             push!(out.args, esc(:(
-                function Mousetrap.$connect_signal_name(f, x::Widget) 
+                function Mousetrap.$connect_signal_name(f, x::Widget)
                     $connect_signal_name(f, Mousetrap.get_top_level_widget(x))
                 end
             )))
-    
+
             push!(out.args, esc(:(
-                function Mousetrap.$connect_signal_name(f, x::Widget, data::Data_t) where Data_t  
+                function Mousetrap.$connect_signal_name(f, x::Widget, data::Data_t) where Data_t
                     $connect_signal_name(f, Mousetrap.get_top_level_widget(x), data)
                 end
             )))
-    
+
             emit_signal_name = :emit_signal_ * signal
-    
+
             push!(out.args, esc(:(
-                function $emit_signal_name(x::Widget, args...) 
+                function $emit_signal_name(x::Widget, args...)
                     $emit_signal_name(Mousetrap.get_top_level_widget(x), args)
                 end
             )))
-    
+
             disconnect_signal_name = :disconnect_signal_ * signal * :!
-    
+
             push!(out.args, esc(:(
                 function $disconnect_signal_name(x::Widget)
                     $disconnect_signal_name(Mousetrap.get_top_level_widget(x))
                 end
             )))
-    
+
             set_signal_blocked_name = :set_signal_ * signal * :_blocked * :!
-    
+
             push!(out.args, esc(:(
                 function $set_signal_blocked_name(x::Widget, b)
                     $set_signal_blocked_name(Mousetrap.get_top_level_widget(x), b)
                 end
             )))
-    
+
             get_signal_blocked_name = :get_signal_ * signal * :_blocked
-    
+
             push!(out.args, esc(:(
                 function $get_signal_blocked_name(x::Widget)
                     return $get_signal_blocked_name(Mousetrap.get_top_level_widget(x))
