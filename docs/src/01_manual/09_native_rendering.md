@@ -697,7 +697,7 @@ main() do app::Application
     add_render_task!(render_area, RenderTask(shape))
 
     # connect callback, providing our shape as `Data_t` argument
-    connect_signal_resize!(render_area, on_resize, shape)
+    connect_signal_resize!(on_resize, render_area, shape)
 
     set_child!(window, render_area)
     present!(window)
