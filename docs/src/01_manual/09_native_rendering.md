@@ -482,8 +482,7 @@ If we need the additional flexibility, we should instead use a `Shape` along wit
 We create a texture from an `Image` like so:
 
 ```julia
-image = Image()
-load_from_file!(image, "path/to/image.png")
+image = Image("path/to/image.png")
 
 texture = Texture()
 create_from_image!(texture, image)
@@ -593,8 +592,7 @@ Wrap mode governs how the texture behaves when a vertice's texture coordinate co
 
         render_area = RenderArea()
     
-        image = Image()
-        create_from_file!(image, "docs/src/assets/logo.png")
+        image = Image("docs/src/assets/logo.png")
             # this assumes the script is run in `Mousetrap.jl` root
 
         # replace RGBA(0, 0, 0, 0) pixels with rainbow color
