@@ -1897,7 +1897,7 @@ module Mousetrap
     @export_function Image get_n_pixels Int64
     @export_function Image get_size Vector2i
 
-    function as_scaled(image::Image, size_x::Integer, size_y::Integer, interpolation::InterpolationType)
+    function as_scaled(image::Image, size_x::Integer, size_y::Integer, interpolation::InterpolationType = INTERPOLATION_TYPE_TILES)
         return Image(detail.as_scaled(image._internal, UInt64(size_x), UInt64(size_y), interpolation))
     end
     export as_scaled
