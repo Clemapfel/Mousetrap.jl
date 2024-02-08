@@ -8,6 +8,7 @@ It aims to give developers of all skill levels the tools to start creating compl
 
 > **Note**: Mousetrap is under active development. Consider participating in the development by [opening an issue](https://github.com/clemapfel/mousetrap.jl) when you encounter an error, bug, question, or missing feature.
 
+> **Note**: February 8th, 2024: I've been having some health issues at the moment, it may take me some time to get to open issues. Mousetrap is still usable and (mostly) stable, the repo will be maintained in the immediate future to the best of my abilities. Thank you for your understanding, C.
 ---
 
 ## Table of Contents
