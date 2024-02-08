@@ -1602,7 +1602,7 @@ module Mousetrap
     @export_function Window get_is_modal Bool
 
     function set_transient_for!(self::Window, other::Window)
-        detail.set_transient_for!(self._itnernal, other._internal)
+        detail.set_transient_for!(self._internal, other._internal)
     end
     export set_transient_for!
 
