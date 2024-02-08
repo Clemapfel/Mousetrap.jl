@@ -497,7 +497,7 @@ To display the texture on screen, we need to bind it to a shape, and then render
 texture_shape::Shape = Rectangle(Vector2f(-1, 1), Vector2f(2, 2))
 set_texture!(texture_shape, texture)
 
-add_render_tasK!(render_area, RenderTask(texture_shape))
+add_render_task!(render_area, RenderTask(texture_shape))
 ```
 
 How and where the texture is displayed depends on the shape's vertices **texture coordinate**. These coordinates are in `([0, 1], [0, 1])`, meaning the x- and y- component are in `[0, 1]` each. We will call this coordinate system **texture space**. 
@@ -697,7 +697,7 @@ main() do app::Application
     add_render_task!(render_area, RenderTask(shape))
 
     # connect callback, providing our shape as `Data_t` argument
-    connect_signal_resize!(render_area, on_resize, shape)
+    connect_signal_resize!(on_resize, render_area, shape)
 
     set_child!(window, render_area)
     present!(window)

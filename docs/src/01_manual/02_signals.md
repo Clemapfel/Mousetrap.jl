@@ -456,7 +456,7 @@ connect_signal_clicked!(button_01, button_02) do button_01::Button, button_02::B
     set_signal_clicked_blocked!(button_01, false)
 end
 
-connect_signal_clicked!(button_02) do button_02::Button, button_01::Button
+connect_signal_clicked!(button_02, button_01) do button_02::Button, button_01::Button
     println("02 clicked")
 
     # block self (02)

@@ -1,4 +1,6 @@
 # File used for debugging and for dosc examples, why are you snooping through this file?
+
+# File used for debugging and for dosc examples, why are you snooping through this file?
 using Mousetrap
 
 main() do app::Application
@@ -39,8 +41,7 @@ main() do app::Application
     present!(window)
 end
 
-if false 
-
+#==
 add_css!("""
 @keyframes spin-animation {
     0%   { transform: rotate(0turn)   scale(1); }
@@ -700,3 +701,4 @@ end # @static if
     =#
 
 end
+==#
