@@ -376,11 +376,6 @@ module Mousetrap
         push!(out.args, esc(
             :(is_native_widget(::$Type) = return true)
         ))
-        #=
-        push!(out.args, esc(
-            :(Mousetrap.get_top_level_widget(x::$Type) = return x)
-        ))
-        =#
         return out
     end
 
@@ -4162,7 +4157,7 @@ module Mousetrap
         row_i = 1
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
-            set_widget_at!(column_view, column, row_i, widgets[i]
+            set_widget_at!(column_view, column, row_i, widgets[i])
         end
     end
     export push_front_row!
@@ -5548,13 +5543,21 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
             connect_signal_name = :connect_signal_ * signal * :!
             push!(out.args, esc(:(
                 function Mousetrap.$connect_signal_name(f, x::Widget)
-                    $connect_signal_name(f, Mousetrap.get_top_level_widget(x))
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(connect_signal_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $connect_signal_name(f, Mousetrap.get_top_level_widget(x))
+                    end
                 end
             )))
 
             push!(out.args, esc(:(
                 function Mousetrap.$connect_signal_name(f, x::Widget, data::Data_t) where Data_t
-                    $connect_signal_name(f, Mousetrap.get_top_level_widget(x), data)
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(connect_signal_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $connect_signal_name(f, Mousetrap.get_top_level_widget(x), data)
+                    end
                 end
             )))
 
@@ -5562,7 +5565,11 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
             push!(out.args, esc(:(
                 function $emit_signal_name(x::Widget, args...)
-                    $emit_signal_name(Mousetrap.get_top_level_widget(x), args)
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(emit_signal_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $emit_signal_name(Mousetrap.get_top_level_widget(x), args)
+                    end
                 end
             )))
 
@@ -5570,7 +5577,11 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
             push!(out.args, esc(:(
                 function $disconnect_signal_name(x::Widget)
-                    $disconnect_signal_name(Mousetrap.get_top_level_widget(x))
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(disconnect_signal_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $disconnect_signal_name(Mousetrap.get_top_level_widget(x))
+                    end
                 end
             )))
 
@@ -5578,7 +5589,11 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
             push!(out.args, esc(:(
                 function $set_signal_blocked_name(x::Widget, b)
-                    $set_signal_blocked_name(Mousetrap.get_top_level_widget(x), b)
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(set_signal_blocked_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $set_signal_blocked_name(Mousetrap.get_top_level_widget(x), b)
+                    end
                 end
             )))
 
@@ -5586,7 +5601,12 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
             push!(out.args, esc(:(
                 function $get_signal_blocked_name(x::Widget)
-                    return $get_signal_blocked_name(Mousetrap.get_top_level_widget(x))
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(get_signal_blocked_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                        return false
+                    else
+                        return $get_signal_blocked_name(Mousetrap.get_top_level_widget(x))
+                    end
                 end
             )))
         end
