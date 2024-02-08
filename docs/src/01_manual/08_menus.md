@@ -260,7 +260,7 @@ The **top-level** menu is `root`. It is used as the argument for the constructor
 
 No direct child of `root` is an "action"-, "widget"-, "icon"- or "section"-type item. This is what is required for `MenuBar`. All top-level items have to be submenus.
 
-!!! Warning
+!!! warning
     Due to a bug in the backend, as of `v0.3.0`, a menu model used for a `MenuBar` **may not have a "widget"-type item in a submenu of a submenu**.
 
     This means we *can* add a widget to any submenu of `root`, but we may not add 
@@ -268,6 +268,27 @@ No direct child of `root` is an "action"-, "widget"-, "icon"- or "section"-type 
 
     This bug does not affect `PopoverMenu`, for whom we can put a widget at any 
     depth. `PopoverMenu` has no requirement as to the structure of its menu model, while `MenuBar` requires that all top-level items are submenus and that no submenu of a submenu may have a "widget"-type item.
+
+## Main Menu (macOS only)
+
+!!! compat
+    Features from this section are only available with Mousetrap `v0.3.1` or newer, and should only be used by applications targeting macOS. We can use `Sys.isapple` to verify the user's operating system.
+
+On macOS, applications are able to target the [**main menu**](https://support.apple.com/en-gb/guide/mac-help/mchlp1446/mac), which is the menubar at the very top of the screen (outside the Mousetrap window). This bar contains the Apple menu, as well as a native menubar with application-specific options. To bind a `Mousetrap.MenuModel` to this menubar, we use `set_menubar` on our `Application` instance:
+
+```julia
+main() do app::Application
+
+    model = MenuModel()
+    # fill model here
+    
+    if Sys.isapple()
+        set_menubar(app, model) # associate model with the Apple main menu
+    end
+end
+```
+
+Note that it may be necessary to call `set_menubar` again when the `MenuModel` is modified in order for the main menu to be updated.
 
 ---
 

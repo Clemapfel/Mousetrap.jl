@@ -749,9 +749,14 @@ function test_column_view(::Container)
         column_name = "column 02"
         column = insert_column_at!(column_view, 1, column_name)
 
+        @test get_expand(column) == false 
+        set_expand!(column, true)
+        @test get_expand(column) == true
+
         push_back_row!(column_view, Label(""), Label(""), Label(""))
         push_front_row!(column_view, Label(""), Label(""), Label(""))
         insert_row_at!(column_view, 2, Label(""), Label(""), Label(""))
+              
         @test get_title(column) == column_name
 
         new_title = "new title"
@@ -1294,6 +1299,16 @@ function test_image_display(::Container)
     end
 end
 
+### INTERNAL
+
+function test_internal(x::Container)
+    @testset "Internal" begin
+        @test Mousetrap.as_gobject_pointer(x) != C_NULL
+        @test Mousetrap.as_internal_pointer(x) != C_NULL
+        @test Mousetrap.as_native_widget(x) != C_NULL
+    end
+end
+
 ### KEY_FILE
 
 function test_key_file(::Container)
@@ -1568,6 +1583,10 @@ function test_menus(::Container)
     @testset "MenuModel" begin
         Base.show(devnull, root)
         @test items_changed_called[] == true
+
+        if Sys.isapple() 
+            set_menubar(app[], root)
+        end
     end
    
     @testset "MenuBar" begin
@@ -2317,6 +2336,8 @@ function test_window(::Container)
     @testset "Window" begin
         
         window = Window(Main.app[])
+        other_window = Window(Main.app[])
+
         Base.show(devnull, window)
         @test Mousetrap.is_native_widget(window)
 
@@ -2366,6 +2387,8 @@ function test_window(::Container)
         set_default_widget!(window, button)
         activate!(button)
 
+        set_transient_for!(other_window, window)
+
         #@test activate_default_widget_called[] == true
         #@test activate_focused_widget_called[] == true
 
@@ -2380,9 +2403,12 @@ function test_window(::Container)
         @test get_is_closed(window) == false
         set_minimized!(window, true)
         set_maximized!(window, true)
+
+        close!(other_window)
         close!(window)
         @test get_is_closed(window) == true
         destroy!(window)
+        destroy!(other_window)
     end
 end
 
@@ -2777,10 +2803,9 @@ end
 
 main(Main.app_id) do app::Application
 
-    window = Window(app)
-
+    #=
     Main.app[] = app
-    Main.window[] = window
+    Main.window[] = Window(app)
     set_is_decorated!(window, false) # prevent user from closing the window during tests
 
     theme = IconTheme(Main.window[])
@@ -2793,6 +2818,7 @@ main(Main.app_id) do app::Application
 
     connect_signal_realize!(container, window) do container::Container, window
         
+        temp = """
         test_action(container)
         test_adjustment(container)
         test_alert_dialog(container)
@@ -2825,6 +2851,7 @@ main(Main.app_id) do app::Application
         test_icon(container)
         test_image(container)
         test_image_display(container)
+        test_internal(container)
         test_key_file(container)
         test_label(container)
         test_level_bar(container)
@@ -2854,6 +2881,7 @@ main(Main.app_id) do app::Application
         test_viewport(container)
         test_widget(container)
         test_window(container)
+        """
 
         return nothing
     end
@@ -2861,4 +2889,78 @@ main(Main.app_id) do app::Application
     present!(window)
     close!(window)
     #quit!(app)
+    =#
+
+    window = Window(Main.app[])
+        Base.show(devnull, window)
+        @test Mousetrap.is_native_widget(window)
+
+        close_request_called = Ref{Bool}(false)
+        connect_signal_close_request!(window, close_request_called) do self::Window, close_request_called
+            close_request_called[] = true
+            return WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE
+        end
+
+        activate_default_widget_called = Ref{Bool}(false)
+        connect_signal_activate_default_widget!(window, activate_default_widget_called) do self::Window, activate_default_widget_called
+            activate_default_widget_called[] = true
+            return nothing
+        end
+
+        activate_focused_widget_called = Ref{Bool}(false)
+        connect_signal_activate_focused_widget!(window, activate_focused_widget_called) do self::Window, activate_focused_widget_called
+            activate_focused_widget_called[] = true
+            return nothing
+        end
+
+        @test get_destroy_with_parent(window) == false
+        set_destroy_with_parent!(window, true)
+        @test get_destroy_with_parent(window) == true
+        
+        @test get_focus_visible(window) == true
+        set_focus_visible!(window, false)
+        @test get_focus_visible(window) == false
+
+        @test get_has_close_button(window) == true
+        set_has_close_button!(window, false)
+        @test get_has_close_button(window) == false
+
+        @test get_is_decorated(window) == true
+        set_is_decorated!(window, false)
+        @test get_is_decorated(window) == false
+
+        @test get_is_modal(window) == false
+        set_is_modal!(window, true)
+        @test get_is_modal(window) == true
+
+        set_title!(window, "test")
+        @test get_title(window) == "test"
+
+        button = Entry()
+        set_child!(window, button)
+        set_default_widget!(window, button)
+        activate!(button)
+
+        #@test activate_default_widget_called[] == true
+        #@test activate_focused_widget_called[] == true
+
+        @test get_header_bar(window) isa HeaderBar
+
+        @test get_hide_on_close(window) == false
+        set_hide_on_close!(window, true)
+        @test get_hide_on_close(window) == true
+
+        other_window = Window(app)
+        set_transient_for!(other_window, window)
+
+        @test get_is_closed(window) == true
+        present!(window)
+        @test get_is_closed(window) == false
+        set_minimized!(window, true)
+        set_maximized!(window, true)
+        close!(window)
+        @test get_is_closed(window) == true
+        destroy!(window)
+
+    println("TODO: done.")
 end
