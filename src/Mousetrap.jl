@@ -361,7 +361,7 @@ module Mousetrap
 
     @generated function get_top_level_widget(x) ::Widget
         return :(
-            throw(AssertionError("Object of type $(typeof(x)) does not fulfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `Mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `Mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
+            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `Mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `Mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
         )
     end
     export get_top_level_widget
