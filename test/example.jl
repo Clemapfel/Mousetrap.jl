@@ -1,7 +1,21 @@
 # File used for debugging and for dosc examples, why are you snooping through this file?
 
-# File used for debugging and for dosc examples, why are you snooping through this file?
 using Mousetrap
+
+main() do app::Application
+    window = Window(app)
+    aspect_frame = AspectFrame(1.0)
+
+    set_child!(window, aspect_frame)
+
+    connect_signal_motion!(aspect_frame) do _, x, y
+        println((x,y))
+    end
+
+    present!(window)
+end
+
+#==
 
 main() do app::Application
     window = Window(app)

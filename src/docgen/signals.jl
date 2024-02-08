@@ -272,10 +272,8 @@ macro signal_table(T, signals...)
 
     for signal_id in signals
         push!(ids, string(signal_id))
-
         signature = signal_descriptors[signal_id][1]
         push!(signatures, replace(signature, "T" => string(T)))
-
         push!(descriptions, signal_descriptors[signal_id][2])
     end
 

@@ -376,11 +376,6 @@ module Mousetrap
         push!(out.args, esc(
             :(is_native_widget(::$Type) = return true)
         ))
-        #=
-        push!(out.args, esc(
-            :(Mousetrap.get_top_level_widget(x::$Type) = return x)
-        ))
-        =#
         return out
     end
 
@@ -4162,7 +4157,7 @@ module Mousetrap
         row_i = 1
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
-            set_widget_at!(column_view, column, row_i, widgets[i]
+            set_widget_at!(column_view, column, row_i, widgets[i])
         end
     end
     export push_front_row!
