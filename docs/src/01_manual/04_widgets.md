@@ -1479,7 +1479,7 @@ Apart from the speed, we also have a choice of animation **type**, represented b
         # create a button that, when clicked, triggers the revealer animation
         button = Button()
         connect_signal_clicked!(button, revealer) do self::Button, revealer::Revealer
-            set_is_revealed!(revealer, !get_revealed(revealer))
+            set_is_revealed!(revealer, !get_is_revealed(revealer))
         end
     
         set_child!(window, vbox(button, revealer))
