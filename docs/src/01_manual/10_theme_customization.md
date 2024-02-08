@@ -140,6 +140,11 @@ We can then start the animation using `play!`, for example, by clicking the butt
 
 For cyclical animations, we can use [`set_repeat_count!`](@ref) to specify the number of times the animation should loop, or `0` to loop infinitely. We can easily reverse an animation by setting [`set_is_reversed!`](@ref) to `true`.
 
+
+If we want an animation to run indefinitely, but *not* repeat, for example to animate an object continuously bouncing, setting the animation duration to a very large value is not right way to achieve this, as it [may cause side-effects](https://github.com/Clemapfel/Mousetrap.jl/issues/63). Instead, use [`set_tick_callback!`](@ref). This function registers a callback to be invoked once per frame in synch with the corresponding widgets render cycle. By keeping track of the elapsed time, we can time animations this way without using `Animation`. The tick callback will continue until a value other than `TICK_CALLBACK_RESULT_CONTINUE` is returned. For an example of converting a regular `Animation`-based animation to tick callback, see [here](https://github.com/Clemapfel/Mousetrap.jl/issues/63).
+
+`Animation` should be reserved to short "one-shot" animations such as an object sliding or spinning, or to cyclical animations, which are just those short animations repeating.
+
 Attentive readers may remember that pre-made animations for `Stack` and `Revealer` also include widgets spinning or moving around the screen. So far, we have no good way of implementing motion like this. This is about to change.
 
 ## TransformBin
