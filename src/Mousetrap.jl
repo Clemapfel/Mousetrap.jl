@@ -4160,7 +4160,7 @@ module Mousetrap
         row_i = 1
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
-            set_widget_at!(column_view, column, from_julia_index(row_i), widgets[i])
+            set_widget_at!(column_view, column, row_i, widgets[i])
         end
     end
     export push_front_row!
@@ -4174,7 +4174,7 @@ module Mousetrap
         row_i = index
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
-            set_widget!(column_view, column, row_i, widgets[i])
+            set_widget_at!(column_view, column, row_i, widgets[i])
         end
     end
     export push_front_row!

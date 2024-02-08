@@ -753,6 +753,10 @@ function test_column_view(::Container)
         set_expand!(column, true)
         @test get_expand(column) == true
 
+        push_back_row!(column_view, Label(""), Label(""), Label(""))
+        push_front_row!(column_view, Label(""), Label(""), Label(""))
+        insert_row_at!(column_view, 2, Label(""), Label(""), Label(""))
+
         @test get_title(column) == column_name
 
         new_title = "new title"
