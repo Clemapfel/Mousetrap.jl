@@ -444,8 +444,9 @@ module Mousetrap
         enum_sym = QuoteNode(enum)
         to_int_name = Symbol(enum) * :_to_int
 
+        push!(out.args, :(Base.ndigits(x::$enum) = ndigits(Mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.string(x::$enum) = string(Mousetrap.detail.$to_int_name(x))))
-        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(Mousetrap.detail.to_int_name(x))))
+        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(Mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.instances(x::Type{$enum}) = [$(names...)]))
         push!(out.args, :(Base.show(io::IO, x::Type{$enum}) = print(io, (isdefined(Main, $enum_sym) ? "" : "Mousetrap.") * $enum_str)))
         push!(out.args, :(Base.show(io::IO, x::$enum) = print(io, string($enum) * "(" * string(convert(Int64, x)) * ")")))
