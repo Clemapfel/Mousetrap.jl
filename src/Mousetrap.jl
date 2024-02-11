@@ -1757,7 +1757,7 @@ module Mousetrap
     export RGBA
 
     function RGBA(r::AbstractFloat, g::AbstractFloat, b::AbstractFloat, a::AbstractFloat)
-        return RBGA(
+        return RGBA(
             convert(Cfloat, r),
             convert(Cfloat, g),
             convert(Cfloat, b),
