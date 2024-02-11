@@ -46,7 +46,7 @@ At any point after the back-end has been initialized, we can swap the global the
 
 For example, to create a window that has a button to switch between light and dark themes in its header bar, we could do the following:
 
-```julia
+```jldoctest; output = false
 main() do app::Application
 
     window = Window(app)
@@ -77,6 +77,8 @@ main() do app::Application
     push_front!(header_bar, swap_button)
     present!(window)
 end
+# output
+0
 ```
 
 ---
@@ -110,12 +112,13 @@ Where `value` is the animations output value. By default, this will be in `[0, 1
 
 Since a widget's opacity is already in `[0, 1]`, we can use the animations value directly:
 
-```julia
+```jldoctest; output = false
 to_animate = Button(Label("Fade Out"))
 animation = Animation(to_animate, seconds(1))
-on_tick!(animation, button) do self::Animation, value::Float64, target::Button
+on_tick!(animation, to_animate) do self::Animation, value::Float64, target::Button
     set_opacity!(target, 1 - value)
 end
+# output
 ```
 
 Where we used `1 - value` to invert the range, such that the widget starts fully opaque and decreases in opacity.
@@ -125,7 +128,7 @@ We can then start the animation using `play!`, for example, by clicking the butt
 ![](../assets/animation_fade_out.webm)
 
 !!! details "How to generate this Image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
     main() do app::Application
         window = Window(app)
@@ -150,6 +153,8 @@ We can then start the animation using `play!`, for example, by clicking the butt
         set_child!(window, aspect_frame)
         present!(window);
     end
+    # output
+    0
     ```
 
 For cyclical animations, we can use [`set_repeat_count!`](@ref) to specify the number of times the animation should loop, or `0` to loop infinitely. We can easily reverse an animation by setting [`set_is_reversed!`](@ref) to `true`.
@@ -183,7 +188,7 @@ These functions are called on the `TransformBin` instance directly, we do not us
 
 For example, to make a button spin one time when it is clicked, we can use `TransformBin` and `Animation` as follows:
 
-```julia
+```jldoctest; output = false
 # animation target
 to_animate = Button(Label("Spin"))
 
@@ -203,6 +208,7 @@ end
 connect_signal_clicked!(to_animate, animation) do self::Button, animation::Animation
     play!(animation)
 end
+# output
 ```
 
 ![](../assets/animation_spin.webm)
@@ -224,13 +230,14 @@ Mousetrap uses [Cascading Style Sheets (CSS)](https://developer.mozilla.org/en-U
 
 We can define a CSS modifier class as a string, then compile that string using [`add_css!`](@ref), which makes that modifier class globally available:
 
-```julia
+```jldoctest; output = false
 # define modifier class `sharp-corners`
 add_css!("""
 .sharp-corners {
    border-radius: 0%;
 }
 """)
+# output
 ```
 
 We can then apply this class to any widget using [`add_css_class!`](@ref), at which point the widgets' appearance will change accordingly. To remove the modifier, we call [`remove_css_class!`](@ref). A widget can have more than one modifier class. To list all applied CSS classes, we use [`get_css_classes`](@ref).
@@ -239,7 +246,7 @@ For a list of CSS properties supported by Mousetrap, see [here](https://docs.gtk
 
 For example, the following defines a `ToggleButton` that, when toggled, applies the following CSS class to both the `Window` (which is a Widget), and its `HeaderBar`:
 
-```julia
+```jldoctest; output = false
 using Mousetrap
 add_css!("""
 .custom {
@@ -255,7 +262,7 @@ main() do app::Application
     set_title!(window, "Mousetrap.jl")
     
     button = ToggleButton()
-    connect_signal_toggled!(button, window) do self::ToggleButton, window::Window
+    connect_signal_toggled!(button, window) do self::ToggleButton, window::Widget
         if get_is_active(self) 
             add_css_class!(window, "custom")
             add_css_class!(get_header_bar(window), "custom")
@@ -267,6 +274,8 @@ main() do app::Application
     set_child!(window, button)
     present!(window)
 end
+# output
+0
 ```
 
 ![](../assets/css_style_pink_window.png)
@@ -289,7 +298,7 @@ We can make an `Entry` or `TextView` use monospaced text by calling `add_css_cla
 
 The following implements `set_accent_color!`, which is not part of Mousetrap. `set_accent_color!` takes a widget, one of the below constants, as well as a boolean indicating whether the window should be opaque, as its arguments. When applied to a widget, this function changes that widgets color to one of the 5 pre-defined UI colors, such that their look fits well with the default UI theme:
 
-```julia
+```jldoctest accent_color; output = false
 using Mousetrap
 
 # define widget colors
@@ -324,13 +333,16 @@ function set_accent_color!(widget::Widget, color, opaque = true)
         add_css_class!(widget, "opaque")
     end
 end
+# output
+set_accent_color! (generic function with 2 methods)
 ```
+
 
 Users are encouraged to just copy the above code into their own project, for `set_accent_color!` to become available.
 
 We can use this function like so:
 
-```julia
+```jldoctest accent_color; output = false
 # widget factory
 create_widget() = Button(Label("TEST"))
 
@@ -338,9 +350,9 @@ create_widget() = Button(Label("TEST"))
 column_view = ColumnView()
 
 # column 1: whether `opaque` was set to true
-column = push_back_column!(column_view, " ")
-set_widget_at!(column_view, column, 1, Label("<small>!opaque</small>"))
-set_widget_at!(column_view, column, 2, Label("<small>opaque</small>"))
+first_column = push_back_column!(column_view, " ")
+set_widget_at!(column_view, first_column, 1, Label("<small>!opaque</small>"))
+set_widget_at!(column_view, first_column, 2, Label("<small>opaque</small>"))
 
 for color in [
     WIDGET_COLOR_DEFAULT, # column 2: default look of a widget
@@ -360,6 +372,7 @@ for color in [
     set_accent_color!(widget, color, true)
     set_widget_at!(column_view, column, 2, widget)
 end
+# output
 ```
 
 Here, we created a column view that shows all permutations of the arguments of `set_accent_color!`. We defined `create_widget() = Button(Label("TEST"))`, therefore each cell will have a button with a label:
@@ -392,7 +405,7 @@ For names of palette colors other than `accent_bg_color`, see [here](https://git
 
 `Animation` offers an in-engine way to do animations, which is usually preferred. However, [CSS animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations) are supported as well, and are defined as they would be in pure CSS:
 
-```julia
+```jldoctest; output = false
 # define CSS animation and modifier
 add_css!("""
 @keyframes spin-animation {
@@ -419,6 +432,8 @@ main() do app::Application
     set_child!(window, AspectFrame(1.0, button))
     present!(window)
 end
+# output
+0
 ```
 
 ![](../assets/css_style_animation_spin.webm)
