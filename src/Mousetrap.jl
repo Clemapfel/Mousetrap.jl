@@ -1782,6 +1782,9 @@ module Mousetrap
         )
     end
 
+    Base.isapprox(x::RGBA, y::RGBA) = isapprox(x.r, y.r) && isapprox(x.g, y.g) && isapprox(x.b, y.b) && isapprox(x.a, y.a)
+    Base.isapprox(x::HSVA, y::HSVA) = isapprox(x.h, y.h) && isapprox(x.s, y.s) && isapprox(x.v, y.v) && isapprox(x.a, y.a)
+
     import Base.==
     ==(x::RGBA, y::RGBA) = x.r == y.r && x.g == y.g && x.b == y.b && x.a == y.a
     function ==(x::HSVA, y::HSVA)
