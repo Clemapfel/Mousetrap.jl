@@ -708,11 +708,13 @@ ColumnView
 ColumnViewColumn
 ```
 #### Functions that operate on this type:
++ [`get_expand`](@ref)
 + [`get_fixed_width`](@ref)
 + [`get_is_resizable`](@ref)
 + [`get_is_visible`](@ref)
 + [`get_title`](@ref)
 + [`remove_column!`](@ref)
++ [`set_expand!`](@ref)
 + [`set_fixed_width!`](@ref)
 + [`set_header_menu!`](@ref)
 + [`set_is_resizable!`](@ref)

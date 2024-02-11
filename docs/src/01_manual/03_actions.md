@@ -1,3 +1,17 @@
+```@meta
+DocTestSetup = quote
+  using Mousetrap
+  function Window(app::Application)
+      out = Mousetrap.Window(app)
+      set_tick_callback!(out, out) do clock, self
+          close!(self)
+          return TICK_CALLBACK_RESULT_DISCONTINUE
+      end
+      return out
+  end
+end
+```
+
 # Chapter 3: Actions
 
 In this chapter, we will learn:
@@ -222,10 +236,9 @@ We need one more thing before we can trigger our action: an object that can rece
 
 A complete `main.jl` file showing how to trigger an action using a shortcut is given here:
 
-```julia
+```jldoctest; output = false
 using Mousetrap
 main() do app::Application
-
     # create a window
     window = Window(app)
 
@@ -243,6 +256,8 @@ main() do app::Application
     # show the window to the user
     present!(window)
 end
+# output
+0
 ```
 
 Pressing "Control + M", we get:

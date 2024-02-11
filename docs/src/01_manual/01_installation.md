@@ -1,3 +1,17 @@
+```@meta
+DocTestSetup = quote
+  using Mousetrap
+  function Window(app::Application)
+      out = Mousetrap.Window(app)
+      set_tick_callback!(out, out) do clock, self
+          close!(self)
+          return TICK_CALLBACK_RESULT_DISCONTINUE
+      end
+      return out
+  end
+end
+```
+
 # Chapter 1: Installation & Workflow
 
 In this chapter, we will learn:
@@ -9,9 +23,7 @@ In this chapter, we will learn:
 
 ## Installation
 
-
 To install Mousetrap, in the REPL, press the `]` key, then
-
 
 ```julia
 import Pkg;
@@ -41,13 +53,16 @@ Installation may take a long time. Once installation is succesfull, `Mousetrap t
 
 To create our first Mousetrap app, we create a Julia file `main.jl`, with the following contents:
 
-```julia
+```jldoctest; output = false
 using Mousetrap
 main() do app::Application
     window = Window(app)
     set_child!(window, Label("Hello World!"))
     present!(window)
 end
+
+# output
+0
 ```
 
 To start our app, we navigate to the location of `main.jl` in our console, then execute:
