@@ -444,7 +444,7 @@ module Mousetrap
         enum_sym = QuoteNode(enum)
         to_int_name = Symbol(enum) * :_to_int
 
-        push!(out.args, :(Base.ndigits(x::$enum) = ndigits(Mousetrap.detail.$to_int_name(x))))
+        #push!(out.args, :(Base.ndigits(x::$enum) = ndigits(Mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.string(x::$enum) = string(Mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(Mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.instances(x::Type{$enum}) = [$(names...)]))
@@ -4534,7 +4534,7 @@ module Mousetrap
     @export_type Separator Widget
     @declare_native_widget Separator
 
-    Separator(orientation::Orientation = ORIENTATION_HORIZONTAL) = Separator(detail._Separator(orientation))
+    Separator(orientation::Orientation = ORIENTATION_HORIZONTAL; opacity = 1.0) = Separator(detail._Separator(orientation))
 
     @export_function Separator set_orientation! Cvoid Orientation orientation
     @export_function Separator get_orientation Orientation
