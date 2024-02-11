@@ -9,6 +9,9 @@ DocTestSetup = quote
       end
       return out
   end
+
+  app = Mousetrap.Application("test.app")
+  window = Separator()
 end
 ```
 
@@ -70,9 +73,10 @@ After creating an event controller, it will not yet react to any events. We need
 
 We create and connect a `FocusEventController` like so:
 
-```julia
+```jldoctest; output = false
 focus_controller = FocusEventController()
 add_controller!(window, focus_controller)
+# output
 ```
 
 While the controller will now receive events, nothing else will happen. We need to connect to one or more of its signals, using the familiar signal handler mechanism.
@@ -91,7 +95,7 @@ return Mousetrap.@signal_table(FocusEventController,
 
 After connecting to these signals:
 
-```julia
+```jldoctest; output = false
 function on_focus_gained(self::FocusEventController) ::Nothing
     println("focus gained")
 end
@@ -104,6 +108,7 @@ focus_controller = FocusEventController()
 connect_signal_focus_gained!(on_focus_gained, focus_controller)
 connect_signal_focus_gained!(on_focus_lost, focus_controller)
 add_controller!(window, focus_controller)
+# output
 ```
 
 We have successfully created our first event controller. Now, whenever `window` gains focus, a message will be printed.
@@ -146,7 +151,7 @@ The signal handler for any of the three signals is handed two arguments, a `KeyC
 
 For example, to test whether the user pressed the space key while the shift key is held, we could do:
 
-```julia
+```jldoctest; output = false
 function on_key_pressed(self::KeyEventController, code::KeyCode, modifier_state::ModifierState) ::Nothing
     if code == KEY_space && shift_pressed(modifier_state)
         println("shift + space pressed")
@@ -157,11 +162,14 @@ key_controller = KeyEventController()
 
 connect_signal_key_pressed!(on_key_pressed, key_controller)
 add_controller!(window, key_controller)
+# output
 ```
 
 While we would connect to the `KeyEventController`s other signals like so:
 
-```julia
+```jldoctest; output = false
+key_controller = KeyEventController()
+
 function on_key_released(self::KeyEventController, code::KeyCode, modifier_state::ModifierState) ::Nothing
     # handle key here
 end
@@ -172,6 +180,7 @@ end
 
 connect_signal_key_released!(on_key_released, key_controller)
 connect_signal_modifiers_changed!(on_modifiers_changed, key_controller)
+# output
 ```
 
 `KeyEventController` should be used if we have to monitor both pressing **and releasing** a key or key combination. If all we want to do is trigger behavior when the user presses a combination once, we should use `ShortcutEventController` instead.
@@ -184,11 +193,12 @@ To react to the user pressing such a shortcut, we should use [`ShortcutEventCont
 
 We first need an `Action`, which we associate a shortcut trigger with:
 
-```julia
+```jldoctest shortcut_controller; output = false
 action = Action("shortcut_controller.example", app) do self::Action
     println("shift + space pressed")
 end
 add_shortcut!(action, "<Shift>space")
+# output
 ```
 
 Where `app` is an `Application` instance.
@@ -197,10 +207,11 @@ We can then create a `ShortcutEventController` instance and call `add_action!`, 
 
 For the shortcut controller to start receiving events, we also need to connect it to a widget:
 
-```julia
+```jldoctest shortcut_controller; output = false
 shortcut_controller = ShortcutEventController()
 add_action!(shortcut_controller, action)
 add_controller!(window, shortcut_controller)
+# output
 ```
 
 Where `window` is the top-level window. Note that `ShortcutEventController` does not have any signals to connect to it. Instead, it automatically listens for shortcuts depending on which `Action` we added.
@@ -231,7 +242,7 @@ return Mousetrap.@signal_table(MotionEventController,
 
 Shown here is an example of how to connect to these signals, where we forwarded `window`, the host widget of the controller, as the `data` argument of signal `motion`, to calculate the absolute position of the cursor on screen.
 
-```julia
+```jldoctest motion_controller; output = false
 function on_motion(::MotionEventController, x::AbstractFloat, y::AbstractFloat, data::Widget) ::Nothing
     widget_position = get_position(data)
     cursor_position = Vector2f(x, y)
@@ -239,27 +250,31 @@ function on_motion(::MotionEventController, x::AbstractFloat, y::AbstractFloat, 
     println("Absolute Cursor Position: $(widget_position + cursor_position)")
 end
 
-window = Window(app)
 motion_controller = MotionEventController()
-
 connect_signal_motion!(on_motion, motion_controller, window)
 add_controller!(window, motion_controller)
+# output
 ```
 
 While we would connect to `MotionEventController`s other signals like so:
 
-```julia
-function on_motion_enter(::MotionEventController, x::AbstractFloat, y::AbstractFloat) ::Nothing
+```jldoctest motion_controller; output = false
+function on_motion_enter(::MotionEventController, x::AbstractFloat, y::AbstractFloat, data::Widget) ::Nothing
     # handle cursor enter
+    return nothing
 end
 
-function on_motion_leave(::MotionEventController) ::Nothing
+function on_motion_leave(::MotionEventController, data::Widget) ::Nothing
     # handle cursor leave
+    return nothing
 end
 
 connect_signal_motion_enter!(on_motion_enter, motion_controller, window)
 connect_signal_motion_leave!(on_motion_leave, motion_controller, window)
+# output
 ```
+
+Where `window` was passed as the data argument of `connect_signal_` such that is available from within the signal handler.
 
 ---
 
@@ -312,7 +327,7 @@ If we only want signals to be emitted for certain buttons, we can use [`set_only
 
 As an example, if we want to check if the user pressed the left mouse button twice, we can do the following:
 
-```julia
+```jldoctest click_controller; output = false
 function on_click_pressed(self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat) ::Nothing
     if n_presses == 2 && get_current_button(self) == BUTTON_ID_BUTTON_01
         println("double click registered at ($x, $y)")
@@ -322,11 +337,12 @@ end
 click_controller = ClickEventController()
 connect_signal_click_pressed!(on_click_pressed, click_controller)  
 add_controller!(window, click_controller)
+# output
 ```
 
 While we would connect to `ClickEventController`s other signals like so:
 
-```julia
+```jldoctest click_controller; output = false
 function on_click_released(self::ClickEventController, n_presses::Integer, x::AbstractFloat, y::AbstractFloat) ::Nothing
     # handle button up
 end
@@ -337,6 +353,7 @@ end
 
 connect_signal_click_released!(on_click_released, click_controller)
 connect_signal_click_stopped!(on_click_stopped, click_controller)
+# output
 ```
 
 While `ClickEventController` gives us full control over one or more clicks, there is a more specialized
@@ -362,7 +379,7 @@ Similar to `clicked`, `LongPressEventController` provides us with the location o
 
 `LongPressEventController`, like `ClickEventController`, subtypes `SingleClickGesture`, which allows us to differentiate between different mouse buttons or a touchscreen, just as before.
 
-```julia
+```jldoctest; output = false
 function on_pressed(self::LongPressEventController, x::AbstractFloat, y::AbstractFloat) ::Nothing
     println("long press registered at ($x, $y)")
 end
@@ -375,6 +392,7 @@ long_press_controller = LongPressEventController()
 connect_signal_pressed!(on_pressed, long_press_controller)
 connect_signal_press_cancelled!(on_press_cancelled, long_press_controller)
 add_controller!(window, long_press_controller)
+# output
 ```
 
 ---
@@ -405,7 +423,7 @@ To get the current position of the cursor, we have to add the offset from `scrol
 
 To track the cursor position during a drag gesture, we can connect to `DragEventController`s signals like so:
 
-```julia
+```jldoctest; output = false
 function on_drag_begin(self::DragEventController, start_x::AbstractFloat, start_y::AbstractFloat) ::Nothing
     println("drag start: ($start_x, $start_y)")
 end
@@ -426,6 +444,7 @@ connect_signal_drag!(on_drag, drag_controller)
 connect_signal_drag_end!(on_drag_end, drag_controller)
 
 add_controller!(window, drag_controller)
+# output
 ```
 ---
 
@@ -452,7 +471,7 @@ Which is emitted once per frame while the gesture is active.
 
 The second argument is the current offset, that is, the distance between the current position of the cursor and the position at which the gesture was first recognized, relative to the host widget's origin, in pixels.
 
-```julia
+```jldoctest; output = false
 function on_pan(self::PanEventController, direction::PanDirection, offset::AbstractFloat) ::Nothing
     if direction == PAN_DIRECTION_LEFT
         println("panning left by $offset")
@@ -464,6 +483,7 @@ end
 pan_controller = PanEventController(ORIENTATION_HORIZONTAL)
 connect_signal_pan!(on_pan, pan_controller)
 add_controller!(window, pan_controller)
+# output
 ```
 
 ---
@@ -490,7 +510,7 @@ When the user stops scrolling, `scroll_end` is emitted once.
 
 If we want to keep track of how far the user has scrolled a widget that had a `ScrollEventController` connect, we do the following:
 
-```julia
+```jldoctest scroll_controller; output = false
 # variable to keep track of distance scrolled
 distance_scrolled = Ref{Vector2f}(Vector2f(0, 0))
 
@@ -518,6 +538,7 @@ connect_signal_scroll!(on_scroll, scroll_controller)
 connect_signal_scroll_end!(on_scroll_end, scroll_controller)
 
 add_controller!(window, scroll_controller)
+# output
 ```
 
 Where we used a global [`Ref`](https://docs.julialang.org/en/v1/base/c/#Core.Ref) to safely reference the value of `distance_scrolled` from within the signal handlers.
@@ -528,7 +549,7 @@ Where we used a global [`Ref`](https://docs.julialang.org/en/v1/base/c/#Core.Ref
 
 To allow for kinetic scrolling, we need to enable it using [`set_kinetic_scrolling_enabled!`](@ref), then connect to the appropriate signal:
 
-```julia
+```jldoctest scroll_controller; output = false
 # enable kinetic scrolling
 set_kinetic_scrolling_enabled!(scroll_controller, true)
 
@@ -539,6 +560,7 @@ end
 
 # connect handler
 connect_signal_kinetic_scroll_decelerate!(on_kinetic_scroll_decelerate, scroll_controller)
+# output
 ```
 
 ---
@@ -562,7 +584,7 @@ The argument `scale` is a *relative* scale, where `1` means no change between th
 
 To detect whether a user is currently zooming out (pinching) or zooming in, we could do the following:
 
-```julia
+```jldoctest; output = false
 function on_scale_changed(self::PinchZoomEventController, scale::AbstractFloat) ::Nothing
     if scale < 1
         println("zooming in")
@@ -574,6 +596,7 @@ end
 zoom_controller = PinchZoomEventController()
 connect_signal_scale_changed!(on_scale_changed, zoom_controller)
 add_controller!(window, zoom_controller)
+# output
 ```
 
 ---
@@ -593,7 +616,7 @@ return Mousetrap.@signal_table(RotateEventController,
 
 It takes two arguments: `angle_absolute` and `angle_delta`. `angle_absolute` provides the current angle between the two fingers. `angle_delta` is the difference between the current angle and the angle at the start of the gesture.  Both `angle_absolute` and `angle_delta` are provided in radians, to convert them we can use [`Mousetrap.Angle`](@ref):
 
-```julia
+```jldoctest; output = false
 function on_rotation_changed(self::RotateEventController, angle_delta, angle_absolute) ::Nothing
     # convert to unit-agnostic Mousetrap.Angle
     absolute = radians(angle_absolute)
@@ -605,6 +628,7 @@ end
 rotation_controller = RotateEventController()
 connect_signal_rotation_changed!(on_rotation_changed, rotation_controller)
 add_controller!(window, rotation_controller)
+# output
 ```
 
 ---
@@ -626,7 +650,7 @@ The signal handler provides two arguments, `x_velocity` and `y_velocity`, which 
 
 To illustrate how to deduce the direction of the swipe, consider this example:
 
-```julia
+```jldoctest; output = false
 function on_swipe(self::SwipeEventController, x_velocity::AbstractFloat, y_velocity::AbstractFloat) ::Nothing
     print("swiping ")
     if (y_velocity < 0)
@@ -645,6 +669,7 @@ end
 swipe_controller = SwipeEventController()
 connect_signal_swipe!(on_swipe, swipe_controller)  
 add_controller!(window, swipe_controller)
+# output
 ```
 
 UIs should react to both the direction and magnitude of the vector, even though the latter is ignored in this example.
@@ -675,7 +700,7 @@ We recognize signal `motion` from `MotionEventController`. It behaves [exactly t
 
 The three other signals are used to react to the physical distance between the stylus and touchpad. `stylus_down` is emitted when the pen's tip makes contact with the touchpad, `stylus_up` is emitted when this contact is broken, `proximity` is emitted when the stylus is about to touch the touchpad, or just left the touchpad.
 
-```julia
+```jldoctest; output = false
 function on_stylus_up(self::StylusEventController, x::AbstractFloat, y::AbstractFloat) ::Nothing
     println("stylus is no longer touching touchpad, position: ($x, $y)")
 end
@@ -699,6 +724,7 @@ connect_signal_proximity!(on_proximity, stylus_controller)
 connect_signal_motion!(on_motion, stylus_controller)
 
 add_controller!(window, stylus_controller)
+# output
 ```
 
 ### Stylus Axis
