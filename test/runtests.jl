@@ -2332,10 +2332,7 @@ function test_viewport(::Container)
     end
 end
 
-function test_window(::Container)
-    @testset "Window" begin
-        
-        
+     
 main() do app::Application
     window = Window(app)
 
@@ -2851,7 +2848,6 @@ main(Main.app_id) do app::Application
     present!(window)
     close!(window)
     #quit!(app)
-
 
     println("TODO: done.")
 end
