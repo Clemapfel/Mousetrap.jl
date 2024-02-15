@@ -12,7 +12,7 @@ DocTestSetup = quote
 
   app = Application("test.app")
   action = Action("test.action", app)
-  submenu_content() = Separator
+  submenu_content() = Separator()
 end
 ```
 
@@ -50,11 +50,11 @@ widget users can manipulate. Changing the model changes the view.
 
         # model that we will be modifying in the snippet
         root = MenuModel()
-
+        model = MenuModel()
         # snippet goes here
 
         # display menu
-        add_submenu!(root, "Title", root)
+        add_submenu!(root, "Title", model)
         view = PopoverButton(PopoverMenu(root))
         set_child!(window, view)
         present!(window)

@@ -9,10 +9,6 @@ DocTestSetup = quote
       end
       return out
   end
-
-    function present!(chooser::ColorChooser)
-     # noop
-    end
 end
 ```
 
@@ -121,7 +117,7 @@ The function called when the dialog is dismissed is registered using `on_cancel!
 
 We would use these two functions like so:
 
-```jldoctest; output = false
+```julia
 color_chooser = ColorChooser("Choose Color")
 
 # react to user selection
@@ -135,7 +131,6 @@ on_cancel!(color_chooser) do self::ColorChooser
 end
 
 present!(color_chooser)
-# output
 ```
  
 At any point, we can also access the last selected color by calling [`get_color`](@ref) on the `ColorChooser` instance.
