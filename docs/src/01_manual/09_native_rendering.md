@@ -61,8 +61,19 @@ In this chapter we will learn:
     
     To make this change permanent, we can paste the above line into the `~/.bashrc` text file, which will be loaded automatically anytime a terminal starts. 
 
-!!! details "Manually Disabling the OpenGL Component"
+!!! warning "Manually Disabling the OpenGL Component"
     We can disable all features from this chapter by setting the environment variable `MOUSETRAP_DISABLE_OPENGL_COMPONENT` to `TRUE`. This may be necessary for machines that do not have an OpenGL 3.3-compatible graphics card driver. See [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for more information.
+
+!!! danger "RenderArea: OpenGL component is disabled"
+    Newer macOS machines and some Linux machines with proprietary graphics drivers may encounter the following error when the initializing the `RenderArea` widget:
+    
+    ```
+    In RenderArea(): trying to instantiate RenderArea, but the OpenGL component is disabled.
+    ```
+
+    Mousetrap uses a custom, shared OpenGL state that is necessary for `RenderArea` to function. On some machines, creation of this state may fail, at which point Mousetrap has no option other than disabling the `RenderArea` widget. We may still use all other features of Mousetrap, this only affects `RenderArea`, specifically. **This also means we are unable to use any featues described in this chapter**.
+
+    While this issue is technically fixable, Mousetrap developers would need access to the specific hardware configurations that are causing the issues, which is not monetarily viable. 
 
 ---
 
