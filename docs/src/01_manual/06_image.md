@@ -9,6 +9,10 @@ DocTestSetup = quote
       end
       return out
   end
+
+    function present!(chooser::ColorChooser)
+     # noop
+    end
 end
 ```
 
