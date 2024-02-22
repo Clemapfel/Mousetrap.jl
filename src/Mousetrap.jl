@@ -12,11 +12,11 @@
 GitHub: https://github.com/clemapfel/mousetrap.jl
 Documentation: http://clemens-cords.com/mousetrap/
 
-Copyright © 2023 C.Cords, Licensed under lGPL-3.0
+Copyright © 2024 C.Cords, Licensed under lGPL-3.0
 """
 module Mousetrap
 
-    const VERSION = v"0.3.1"
+    const VERSION = v"0.3.2"
 
 ####### detail.jl
 

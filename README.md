@@ -122,6 +122,8 @@ display(screen, scatter(rand(123)))
 
 Since `v0.3.0`, Mousetrap is fully portable. All features are available for all 64-bit versions of Linux, FreeBSD, macOS, and Windows.
 
+> **WARNING**: macOS systems with a newer architecture, such as the M1/M2 macs, seem to be causing an issue when using the `RenderArea` widget, forcing it to be disabled. Only this single widget is affected, see the [manual section on native rendering](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
+
 > **Note**: Linux systems running Wayland may require additional configuration before the `RenderArea` widget becomes available. See [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
 
 > **Note**: Ubuntu systems using proprietary NVIDIA drivers may encounter a crash on initialization, a fix is available [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366).
