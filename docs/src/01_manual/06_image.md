@@ -1,3 +1,17 @@
+```@meta
+DocTestSetup = quote
+  using Mousetrap
+  function Window(app::Application)
+      out = Mousetrap.Window(app)
+      set_tick_callback!(out, out) do clock, self
+          close!(self)
+          return TICK_CALLBACK_RESULT_DISCONTINUE
+      end
+      return out
+  end
+end
+```
+
 # Chapter 6: Images
 
 In this chapter, we will learn:
@@ -35,12 +49,15 @@ For both representations, all components are 32-bit floats in `[0, 1]`. The **al
 
 We can freely convert between `RGBA` and `HSVA`. To do this, we use [`rgba_to_hsva`](@ref) and [`hsva_to_rgba`](@ref):
 
-```julia
+```jldoctest; output = false
 rgba = RGBA(0.1, 0.2, 0.3, 0.4)
 as_hsva = rgba_to_hsva(rgba)
 as_rgba = hsva_to_rgba(as_hsva)
-@assert rgba == as_rgba # true
+@assert isapprox(rgba, as_rgba) # true
+# output
 ```
+
+Note the use of `isapprox`, which can also be written as `rgba ≈ as_rgba`. Conversion can introduce floating point error, but their precision will be such that for the actual color on screen, a difference is not noticeable. If we directly compare the floating point components, the above assertion would fail.
 
 ### Color to Hexadecimal
 
@@ -48,7 +65,7 @@ Mousetrap offers a function to convert `RGBA` to its HTML color code. This code 
 
 For example, if we want to use an `Entry` for the user to be able to enter a color as an HTML color code, we could do the following:
 
-```julia
+```jldoctest; output = false
 entry = Entry()
 connect_signal_activate!(entry) do self::Entry
     text = get_text(self)
@@ -60,6 +77,7 @@ connect_signal_activate!(entry) do self::Entry
     end
     return nothing
 end
+# output
 ```
 
 If parsing was successful, `is_valid_html_code` will return `true`, at which point we can be sure that `html_code_to_rgba` will return a valid color.

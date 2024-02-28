@@ -7,8 +7,8 @@ version = v"0.3.0"
 
 # Collection of sources required to complete build
 sources = [
-    GitSource("https://github.com/Clemapfel/mousetrap.git", "ffa28d0bd569118320a6bb063286edfb35fc0429"),
-    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "6b838ea238e118d694ffc1b3a1e0225441c8cfb3")
+    GitSource("https://github.com/Clemapfel/mousetrap.git", "aab1826318c43f0172d1ccd14faa06e7e61eba08"),
+    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "ffba2656ef05ab4dc052e6d53ee524b6f5e2371b")
 ]
 
 # Bash recipe for building across all platforms
@@ -34,8 +34,7 @@ platforms = filter(p -> nbits(p) == 64, supported_platforms())
 # The products that we will ensure are always built
 products = [
     LibraryProduct("libmousetrap", :mousetrap),
-    LibraryProduct("libmousetrap_julia_binding", :mousetrap_julia_binding),
-    FileProduct("")
+    LibraryProduct("libmousetrap_julia_binding", :mousetrap_julia_binding)
 ]
 
 x11_platforms = filter(p -> Sys.islinux(p) || Sys.isfreebsd(p), platforms)

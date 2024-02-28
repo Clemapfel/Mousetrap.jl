@@ -12,11 +12,11 @@
 GitHub: https://github.com/clemapfel/mousetrap.jl
 Documentation: http://clemens-cords.com/mousetrap/
 
-Copyright © 2023 C.Cords, Licensed under lGPL-3.0
+Copyright © 2024 C.Cords, Licensed under lGPL-3.0
 """
 module Mousetrap
 
-    const VERSION = v"0.3.1"
+    const VERSION = v"0.3.2"
 
 ####### detail.jl
 
@@ -361,7 +361,7 @@ module Mousetrap
 
     @generated function get_top_level_widget(x) ::Widget
         return :(
-            throw(AssertionError("Object of type $(typeof(x)) does not fulfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `Mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `Mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
+            throw(AssertionError("Object of type $(typeof(x)) does not fullfill the widget interface. In order for it to be able to be treated as a widget, you need to subtype `Mousetrap.Widget` **and** add a method with signature `(::$(typeof(x))) -> Widget` to `Mousetrap.get_top_level_widget`, which should map an instance of $(typeof(x)) to its top-level widget component."))
         )
     end
     export get_top_level_widget
@@ -376,11 +376,6 @@ module Mousetrap
         push!(out.args, esc(
             :(is_native_widget(::$Type) = return true)
         ))
-        #=
-        push!(out.args, esc(
-            :(Mousetrap.get_top_level_widget(x::$Type) = return x)
-        ))
-        =#
         return out
     end
 
@@ -449,8 +444,9 @@ module Mousetrap
         enum_sym = QuoteNode(enum)
         to_int_name = Symbol(enum) * :_to_int
 
+        #push!(out.args, :(Base.ndigits(x::$enum) = ndigits(Mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.string(x::$enum) = string(Mousetrap.detail.$to_int_name(x))))
-        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(Mousetrap.detail.to_int_name(x))))
+        push!(out.args, :(Base.convert(::Type{Integer}, x::$enum) = Integer(Mousetrap.detail.$to_int_name(x))))
         push!(out.args, :(Base.instances(x::Type{$enum}) = [$(names...)]))
         push!(out.args, :(Base.show(io::IO, x::Type{$enum}) = print(io, (isdefined(Main, $enum_sym) ? "" : "Mousetrap.") * $enum_str)))
         push!(out.args, :(Base.show(io::IO, x::$enum) = print(io, string($enum) * "(" * string(convert(Int64, x)) * ")")))
@@ -1761,7 +1757,7 @@ module Mousetrap
     export RGBA
 
     function RGBA(r::AbstractFloat, g::AbstractFloat, b::AbstractFloat, a::AbstractFloat)
-        return RBGA(
+        return RGBA(
             convert(Cfloat, r),
             convert(Cfloat, g),
             convert(Cfloat, b),
@@ -1785,6 +1781,9 @@ module Mousetrap
             convert(Cfloat, a)
         )
     end
+
+    Base.isapprox(x::RGBA, y::RGBA) = isapprox(x.r, y.r) && isapprox(x.g, y.g) && isapprox(x.b, y.b) && isapprox(x.a, y.a)
+    Base.isapprox(x::HSVA, y::HSVA) = isapprox(x.h, y.h) && isapprox(x.s, y.s) && isapprox(x.v, y.v) && isapprox(x.a, y.a)
 
     import Base.==
     ==(x::RGBA, y::RGBA) = x.r == y.r && x.g == y.g && x.b == y.b && x.a == y.a
@@ -1902,7 +1901,7 @@ module Mousetrap
     @export_function Image get_n_pixels Int64
     @export_function Image get_size Vector2i
 
-    function as_scaled(image::Image, size_x::Integer, size_y::Integer, interpolation::InterpolationType)
+    function as_scaled(image::Image, size_x::Integer, size_y::Integer, interpolation::InterpolationType = INTERPOLATION_TYPE_TILES)
         return Image(detail.as_scaled(image._internal, UInt64(size_x), UInt64(size_y), interpolation))
     end
     export as_scaled
@@ -3211,6 +3210,13 @@ module Mousetrap
 
     @add_signal_items_changed MenuModel
 
+    function set_menubar(app::Application, model::MenuModel)
+        if !Sys.isapple() 
+            log_warning(MOUSETRAP_DOMAIN, "In set_menubar: setting an application-wide menubar is only supported on macOS. Use `Sys.isapple()` to verify the users system before calling this function")
+        end
+        Mousetrap.detail.set_menubar(app._internal, model._internal)
+    end
+
     Base.show(io::IO, x::MenuModel) = show_aux(io, x)
 
 ###### menubar.jl
@@ -4078,6 +4084,17 @@ module Mousetrap
     @export_function ColumnViewColumn set_is_resizable! Cvoid Bool b
     @export_function ColumnViewColumn get_is_resizable Bool
 
+    function set_expand!(column::ColumnViewColumn, should_expand::Bool)
+        @ccall detail.GTK4_jll.libgtk4.gtk_column_view_column_set_expand(Mousetrap.as_internal_pointer(column)::Ptr{Cvoid}, should_expand::Bool)::Cvoid
+        return nothing
+    end
+    export set_expand!
+
+    function get_expand(column::ColumnViewColumn) ::Bool 
+        return @ccall detail.GTK4_jll.libgtk4.gtk_column_view_column_get_expand(Mousetrap.as_internal_pointer(column)::Ptr{Cvoid})::Bool
+    end
+    export get_expand
+
     @export_type ColumnView Widget
     @declare_native_widget ColumnView
 
@@ -4126,7 +4143,10 @@ module Mousetrap
         end
 
         row_i = get_n_rows(column_view) + 1
-        insert_row_at!(column_view, row_i, widgets...)
+        for i in 1:get_n_columns(column_view)
+            column = get_column_at(column_view, i)
+            set_widget_at!(column_view, column, row_i, widgets[i])
+        end
     end
     export push_back_row!
 
@@ -4141,7 +4161,7 @@ module Mousetrap
         row_i = 1
         for i in 1:get_n_columns(column_view)
             column = get_column_at(column_view, i)
-            detail.set_widget_at!(column_view._internal, column._internal, 0, as_widget_pointer(widgets[i]))
+            set_widget_at!(column_view, column, row_i, widgets[i])
         end
     end
     export push_front_row!
@@ -4517,7 +4537,7 @@ module Mousetrap
     @export_type Separator Widget
     @declare_native_widget Separator
 
-    Separator(orientation::Orientation = ORIENTATION_HORIZONTAL) = Separator(detail._Separator(orientation))
+    Separator(orientation::Orientation = ORIENTATION_HORIZONTAL; opacity = 1.0) = Separator(detail._Separator(orientation))
 
     @export_function Separator set_orientation! Cvoid Orientation orientation
     @export_function Separator get_orientation Orientation
@@ -5527,13 +5547,21 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
             connect_signal_name = :connect_signal_ * signal * :!
             push!(out.args, esc(:(
                 function Mousetrap.$connect_signal_name(f, x::Widget)
-                    $connect_signal_name(f, Mousetrap.get_top_level_widget(x))
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(connect_signal_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $connect_signal_name(f, Mousetrap.get_top_level_widget(x))
+                    end
                 end
             )))
 
             push!(out.args, esc(:(
                 function Mousetrap.$connect_signal_name(f, x::Widget, data::Data_t) where Data_t
-                    $connect_signal_name(f, Mousetrap.get_top_level_widget(x), data)
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(connect_signal_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $connect_signal_name(f, Mousetrap.get_top_level_widget(x), data)
+                    end
                 end
             )))
 
@@ -5541,7 +5569,11 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
             push!(out.args, esc(:(
                 function $emit_signal_name(x::Widget, args...)
-                    $emit_signal_name(Mousetrap.get_top_level_widget(x), args)
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(emit_signal_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $emit_signal_name(Mousetrap.get_top_level_widget(x), args)
+                    end
                 end
             )))
 
@@ -5549,7 +5581,11 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
             push!(out.args, esc(:(
                 function $disconnect_signal_name(x::Widget)
-                    $disconnect_signal_name(Mousetrap.get_top_level_widget(x))
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(disconnect_signal_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $disconnect_signal_name(Mousetrap.get_top_level_widget(x))
+                    end
                 end
             )))
 
@@ -5557,7 +5593,11 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
             push!(out.args, esc(:(
                 function $set_signal_blocked_name(x::Widget, b)
-                    $set_signal_blocked_name(Mousetrap.get_top_level_widget(x), b)
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(set_signal_blocked_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                    else
+                        $set_signal_blocked_name(Mousetrap.get_top_level_widget(x), b)
+                    end
                 end
             )))
 
@@ -5565,11 +5605,34 @@ end # else MOUSETRAP_ENABLE_OPENGL_COMPONENT
 
             push!(out.args, esc(:(
                 function $get_signal_blocked_name(x::Widget)
-                    return $get_signal_blocked_name(Mousetrap.get_top_level_widget(x))
+                    if Mousetrap.is_native_widget(x) 
+                        log_critical(Mousetrap.MOUSETRAP_DOMAIN, "In " * $(string(get_signal_blocked_name)) * ": object of type `$(typeof(x))` has no signal with ID `" * $(string(signal)) * "`")
+                        return false
+                    else
+                        return $get_signal_blocked_name(Mousetrap.get_top_level_widget(x))
+                    end
                 end
             )))
         end
         return out
     end
     @define_compound_widget_signals()
+
+###### internal.jl
+
+    function as_gobject_pointer(x::T) where T <: Union{SignalEmitter, Widget} #::Ptr{Cvoid}
+        return Mousetrap.detail.as_gobject(x._internal.cpp_object)
+    end
+
+    function as_internal_pointer(x::T) where T <: Union{SignalEmitter, Widget} #::Ptr{Cvoid}
+        return Mousetrap.detail.as_internal(x._internal.cpp_object)
+    end
+
+    function as_internal_pointer(column::ColumnViewColumn) 
+        return @ccall detail.mousetrap_jll.mousetrap._ZNK9mousetrap10ColumnView6Column12get_internalEv(column._internal.cpp_object::Ptr{Cvoid})::Ptr{Cvoid}
+    end
+
+    function as_native_widget(x::Widget) 
+        return Mousetrap.detail.as_native_widget(Mousetrap.as_widget_pointer(x))
+    end
 end

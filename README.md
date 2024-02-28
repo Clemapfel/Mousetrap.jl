@@ -101,26 +101,11 @@ add_render_task!(render_area, RenderTask(rectangle))
 
 ---
 
-### Displaying a GLMakie Plot in a Mousetrap Window
-
-```julia
-using GLMakie, MousetrapMakie
-canvas = GLMakieArea()
-window = Mousetrap.Window()
-set_child!(window, canvas) # can be used like any other widget
-
-screen = create_glmakie_screen(canvas)
-display(screen, scatter(rand(123)))
-```
-![](docs/src/assets/makie_scatter.png)
-
-(**Note**: This feature is still experimental. See [here](https://github.com/Clemapfel/MousetrapMakie.jl) for more information)
-
----
-
 ## Supported Platforms
 
 Since `v0.3.0`, Mousetrap is fully portable. All features are available for all 64-bit versions of Linux, FreeBSD, macOS, and Windows.
+
+> **WARNING**: macOS systems with a newer architecture, such as the M1/M2 macs, seem to be causing an issue when using the `RenderArea` widget, forcing it to be disabled. Only this single widget is affected, see the [manual section on native rendering](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
 
 > **Note**: Linux systems running Wayland may require additional configuration before the `RenderArea` widget becomes available. See [here](http://clemens-cords.com/mousetrap/01_manual/09_native_rendering/) for more information.
 

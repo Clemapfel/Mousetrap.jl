@@ -1,3 +1,21 @@
+```@meta
+DocTestSetup = quote
+  using Mousetrap
+  function Window(app::Application)
+      out = Mousetrap.Window(app)
+      set_tick_callback!(out, out) do clock, self
+          close!(self)
+          return TICK_CALLBACK_RESULT_DISCONTINUE
+      end
+      return out
+  end
+
+  app = Application("test.app")
+  action = Action("test.action", app)
+  submenu_content() = Separator()
+end
+```
+
 # Chapter 8: Menus
 
 In this chapter, we will learn:
@@ -19,7 +37,7 @@ widget users can manipulate. Changing the model changes the view.
 !!! details "Running Snippets from this Section"
 
     To follow along with code snippets from this section, we can use the following `main.jl` file:
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap 
     main() do app::Application
 
@@ -32,7 +50,7 @@ widget users can manipulate. Changing the model changes the view.
 
         # model that we will be modifying in the snippet
         root = MenuModel()
-
+        model = MenuModel()
         # snippet goes here
 
         # display menu
@@ -41,6 +59,8 @@ widget users can manipulate. Changing the model changes the view.
         set_child!(window, view)
         present!(window)
     end
+    # output
+    0
     ```
 
 ## Menu Items
@@ -53,10 +73,12 @@ The first and most simple item type is called "action". Added via [`add_action!`
 
 Similar to `Button`, if the action is disabled (via [`set_enabled!`](@ref)) or does not yet have a callback registered, the menu item will appear "greyed out" and cannot be activated.
 
-```cpp
+```jldoctest menu_model; output = false
+model = MenuModel()
 add_action!(model, "Action Item #1", action)
 add_action!(model, "Action item #2", action)
 add_action!(model, "Action item #3", action)
+# output
 ```
 
 ![](../assets/menu_model_actions.png)
@@ -67,10 +89,11 @@ Secondly, we have perhaps the most powerful type of item: A custom widget. We ad
 
 We do not supply an `Action` instance with this item, if we want the user interacting with the menu item to trigger behavior, we will have to connect that behavior to the signals of the widget we inserted into the menu, or any of its event controllers.
 
-```cpp
+```jldoctest menu_model; output = false
 add_widget!(model, hbox(Label("Choose Value:  "), SpinButton(0, 1, 0.01)))
 add_widget!(model, Scale(0, 1, 0.01, ORIENTATION_HORIZONTAL))
 add_widget!(model, hbox(Label("Enter Text:  "), Entry()))
+# output
 ```
 
 ![](../assets/menu_model_widgets.png)
@@ -85,7 +108,7 @@ We call a `MenuModel` that is nested within another model a **submenu**. It will
 
 To add this type of submenu item, we use [`add_submenu!`](@ref), which takes a title and another menu model:
 
-```julia
+```jldoctest menu_model; output = false
 submenu_01 = MenuModel()
 add_widget!(submenu_01, submenu_content())
 add_submenu!(model, "Submenu #1", submenu_01)
@@ -93,6 +116,7 @@ add_submenu!(model, "Submenu #1", submenu_01)
 submenu_02 = MenuModel()
 add_widget!(submenu_02, submenu_content())
 add_submenu!(model, "Submenu #2", submenu_02)
+# output
 ```
 ![](../assets/menu_model_submenu_outer.png)
 
@@ -150,10 +174,11 @@ We see that the section label, `"Section Label"` in this case, is displayed abov
 
 The following shows these section formats:
 
-```julia
+```jldoctest; output = false
+icon_model = MenuModel()
+
 # generate a menu model with the 4 weather icons, then add as section with given format
 function add_icon_section(title::String, format::SectionFormat)
-        
     section = MenuModel()
     add_icon!(section, Icon(#=...=#), action)
     add_icon!(section, Icon(#=...=#), action)
@@ -166,7 +191,9 @@ add_icon_section("Normal", SECTION_FORMAT_NORMAL)
 add_icon_section("Horizontal Buttons", SECTION_FORMAT_HORIZONTAL_BUTTONS)
 add_icon_section("Inline Buttons:  ", SECTION_FORMAT_INLINE_BUTTONS)
 add_icon_section("Circular Buttons", SECTION_FORMAT_CIRCULAR_BUTTONS)
+# output
 ```
+
 ![](../assets/menu_model_section_formats.png)
 
 Using `SectionFormat` and mixing several menu item types, we can construct arbitrarily complex menus. We should realize that the highest priority when constructing menu items is the **user experience**. Presenting users with a giant, deeply nested mess of buttons may be very functional, but it may not be very usable to anyone but the developers themself.
@@ -260,7 +287,7 @@ The **top-level** menu is `root`. It is used as the argument for the constructor
 
 No direct child of `root` is an "action"-, "widget"-, "icon"- or "section"-type item. This is what is required for `MenuBar`. All top-level items have to be submenus.
 
-!!! Warning
+!!! warning
     Due to a bug in the backend, as of `v0.3.0`, a menu model used for a `MenuBar` **may not have a "widget"-type item in a submenu of a submenu**.
 
     This means we *can* add a widget to any submenu of `root`, but we may not add 
@@ -268,6 +295,26 @@ No direct child of `root` is an "action"-, "widget"-, "icon"- or "section"-type 
 
     This bug does not affect `PopoverMenu`, for whom we can put a widget at any 
     depth. `PopoverMenu` has no requirement as to the structure of its menu model, while `MenuBar` requires that all top-level items are submenus and that no submenu of a submenu may have a "widget"-type item.
+
+## Main Menu (macOS only)
+
+!!! compat
+    Features from this section are only available with Mousetrap `v0.3.1` or newer, and should only be used by applications targeting macOS. We can use `Sys.isapple` to verify the user's operating system.
+
+On macOS, applications are able to target the [**main menu**](https://support.apple.com/en-gb/guide/mac-help/mchlp1446/mac), which is the menubar at the very top of the screen (outside the Mousetrap window). This bar contains the Apple menu, as well as a native menubar with application-specific options. To bind a `Mousetrap.MenuModel` to this menubar, we use `set_menubar` on our `Application` instance:
+
+```julia
+main() do app::Application
+    model = MenuModel()
+    # fill model here
+    
+    if Sys.isapple()
+        set_menubar(app, model) # associate model with the Apple main menu
+    end
+end
+```
+
+Note that it may be necessary to call `set_menubar` again when the `MenuModel` is modified in order for the main menu to be updated.
 
 ---
 

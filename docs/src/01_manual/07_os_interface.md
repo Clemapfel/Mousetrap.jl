@@ -1,3 +1,19 @@
+```@meta
+DocTestSetup = quote
+  using Mousetrap
+  function Window(app::Application)
+      out = Mousetrap.Window(app)
+      set_tick_callback!(out, out) do clock, self
+          close!(self)
+          return TICK_CALLBACK_RESULT_DISCONTINUE
+      end
+      return out
+  end
+
+  widget = Separator()
+end
+```
+
 # Chapter 7: Operating System Interface
 
 In this chapter, we will learn:
@@ -155,7 +171,7 @@ As mentioned before, messages of level `DEBUG` are only printed if we specifical
 
 For example, if our log domain is `foo`:
 
-```julia
+```@repl
 # define custom domain
 const FOO_DOMAIN = "foo"
 
@@ -179,7 +195,7 @@ Regardless of OS, we can forward all logging, including that of Mousetrap itself
 
 When stored to a file, logging messages will have a different format that may or may not list additional information when compared to logging to a console. The philosophy behind this is that it is better to log as much information as possible, and then use second-party software to filter it, as opposed to missing crucial information for the sake of brevity:
 
-```cpp
+```julia
 const LogDomain FOO_DOMAIN = "foo"
 if !set_log_file(FOO_DOMAIN, "example_log.txt")
     log_fatal(FOO_DOMAIN, "In set_log_file: Unable to create file at `example_log.txt`")
@@ -219,7 +235,7 @@ When querying information about a file, we use [`FileDescriptor`](@ref), which r
 
 We can create a file descriptor from a path like so:
 
-```cpp
+```julia
 readonly = FileDescriptor()
 create_from_path!(readonly, "/home/user/Desktop/example.txt");
 ```
@@ -339,7 +355,7 @@ The following monitor events are supported:
 
 For example, if we want to trigger an action whenever `/path/to/file.txt` changes its content, we could do the following:
 
-```julia
+```jldoctest; output = false
 to_watch = FileDescriptor("/path/to/file.txt")  # equivalent to create_from_path!
 monitor = create_monitor(to_watch)
 
@@ -349,6 +365,7 @@ function on_file_changed_callback(monitor::FileMonitor, event::FileMonitorEvent,
     end
 end
 on_file_changed!(on_file_changed_callback, monitor)
+# output
 ```
 
 If we no longer want to monitor a file, we can call [`cancel!`](@ref), at which point the `FileMonitor` instance may be safely deallocated.
@@ -523,7 +540,7 @@ Mousetrap offers a less intrusive way of showing a message to a user, facilitate
 ![](../assets/popup_message.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
     main() do app::Application
         window = Window(app)
@@ -548,6 +565,8 @@ Mousetrap offers a less intrusive way of showing a message to a user, facilitate
         set_child!(window, message_overlay)
         present!(window)
     end
+    # output
+    0
     ```
 
 To send a message, we first need to instance an object of type [`PopupMessage`](@ref), which, unlike `PopupMessageOverlay`, is **not** a widget, though it is a `SignalEmitter`.
@@ -556,12 +575,13 @@ A popup message always has a title, which we supply to its constructor. It will 
 
 After instancing the `PopupMessage`, we present it to the user using [`show_message!`](@ref):
 
-```julia
+```jldoctest popup_message; output = false
 message_overlay = PopupMessageOverlay()
 set_child!(message_overlay, widget)
 
 popup_message = PopupMessage("Message Text")
 show_message!(message_overlay, popup_message)
+# output
 ```
 We can set the message to hide itself automatically by setting [`set_timeout!`](@ref) to anything other than `0`. Only one message can be shown at a time. We can make sure an important message is jumped to the front of the queue by setting its priority using [`
 set_is_high_priority!`](@ref).
@@ -572,7 +592,7 @@ A `PopupMessage` has one optional button. To show this button, we need to choose
 
 For example, to trigger a function when the user clicks the "OK" button of our `PopupMessage`, we could do:
 
-```julia
+```jldoctest popup_message; output = false
 popup_message = PopupMessage("Message Text")
 
 # connect to button press
@@ -582,6 +602,7 @@ connect_signal_button_clicked!(popup_message) do self::PopupMessage
 end
 
 show_message!(message_overlay, popup_message)
+# output
 ```
 
 ## Popup Messages
@@ -591,7 +612,7 @@ Mousetrap offers a less intrusive way of showing a message to a user, facilitate
 ![](../assets/popup_message.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
     main() do app::Application
         window = Window(app)
@@ -616,6 +637,8 @@ Mousetrap offers a less intrusive way of showing a message to a user, facilitate
         set_child!(window, message_overlay)
         present!(window)
     end
+    # output
+    0
     ```
 
 To send a message, we first need to instance an object of type [`PopupMessage`](@ref), which, unlike `PopupMessageOverlay`, is **not** a widget, though it is a `SignalEmitter`.

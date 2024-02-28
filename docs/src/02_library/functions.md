@@ -1371,6 +1371,10 @@ Mousetrap.get_end_child_resizable
 ```@docs
 Mousetrap.get_end_child_shrinkable
 ```
+## `get_expand`
+```@docs
+Mousetrap.get_expand
+```
 ## `get_expand_horizontally`
 ```@docs
 Mousetrap.get_expand_horizontally

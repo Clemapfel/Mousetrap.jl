@@ -749,9 +749,14 @@ function test_column_view(::Container)
         column_name = "column 02"
         column = insert_column_at!(column_view, 1, column_name)
 
+        @test get_expand(column) == false 
+        set_expand!(column, true)
+        @test get_expand(column) == true
+
         push_back_row!(column_view, Label(""), Label(""), Label(""))
         push_front_row!(column_view, Label(""), Label(""), Label(""))
         insert_row_at!(column_view, 2, Label(""), Label(""), Label(""))
+              
         @test get_title(column) == column_name
 
         new_title = "new title"
@@ -1294,6 +1299,16 @@ function test_image_display(::Container)
     end
 end
 
+### INTERNAL
+
+function test_internal(x::Container)
+    @testset "Internal" begin
+        @test Mousetrap.as_gobject_pointer(x) != C_NULL
+        @test Mousetrap.as_internal_pointer(x) != C_NULL
+        @test Mousetrap.as_native_widget(x) != C_NULL
+    end
+end
+
 ### KEY_FILE
 
 function test_key_file(::Container)
@@ -1568,6 +1583,10 @@ function test_menus(::Container)
     @testset "MenuModel" begin
         Base.show(devnull, root)
         @test items_changed_called[] == true
+
+        if Sys.isapple() 
+            set_menubar(app[], root)
+        end
     end
    
     @testset "MenuBar" begin
@@ -2313,86 +2332,6 @@ function test_viewport(::Container)
     end
 end
 
-function test_window(::Container)
-    @testset "Window" begin
-        
-        window = Window(Main.app[])
-        other_window = Window(Main.app[])
-
-        Base.show(devnull, window)
-        @test Mousetrap.is_native_widget(window)
-
-        close_request_called = Ref{Bool}(false)
-        connect_signal_close_request!(window, close_request_called) do self::Window, close_request_called
-            close_request_called[] = true
-            return WINDOW_CLOSE_REQUEST_RESULT_ALLOW_CLOSE
-        end
-
-        activate_default_widget_called = Ref{Bool}(false)
-        connect_signal_activate_default_widget!(window, activate_default_widget_called) do self::Window, activate_default_widget_called
-            activate_default_widget_called[] = true
-            return nothing
-        end
-
-        activate_focused_widget_called = Ref{Bool}(false)
-        connect_signal_activate_focused_widget!(window, activate_focused_widget_called) do self::Window, activate_focused_widget_called
-            activate_focused_widget_called[] = true
-            return nothing
-        end
-
-        @test get_destroy_with_parent(window) == false
-        set_destroy_with_parent!(window, true)
-        @test get_destroy_with_parent(window) == true
-        
-        @test get_focus_visible(window) == true
-        set_focus_visible!(window, false)
-        @test get_focus_visible(window) == false
-
-        @test get_has_close_button(window) == true
-        set_has_close_button!(window, false)
-        @test get_has_close_button(window) == false
-
-        @test get_is_decorated(window) == true
-        set_is_decorated!(window, false)
-        @test get_is_decorated(window) == false
-
-        @test get_is_modal(window) == false
-        set_is_modal!(window, true)
-        @test get_is_modal(window) == true
-
-        set_title!(window, "test")
-        @test get_title(window) == "test"
-
-        button = Entry()
-        set_child!(window, button)
-        set_default_widget!(window, button)
-        activate!(button)
-
-        set_transient_for!(other_window, window)
-
-        #@test activate_default_widget_called[] == true
-        #@test activate_focused_widget_called[] == true
-
-        @test get_header_bar(window) isa HeaderBar
-
-        @test get_hide_on_close(window) == false
-        set_hide_on_close!(window, true)
-        @test get_hide_on_close(window) == true
-
-        @test get_is_closed(window) == true
-        present!(window)
-        @test get_is_closed(window) == false
-        set_minimized!(window, true)
-        set_maximized!(window, true)
-
-        close!(other_window)
-        close!(window)
-        @test get_is_closed(window) == true
-        destroy!(window)
-        destroy!(other_window)
-    end
-end
-
 ### WIDGET
 
 function test_widget(widget::Container)
@@ -2780,98 +2719,12 @@ function test_render_area(::Container)
     end
 end
 
-### MAIN
-
-main(Main.app_id) do app::Application
-
-    #=
-    Main.app[] = app
-    Main.window[] = Window(app)
-    set_is_decorated!(window, false) # prevent user from closing the window during tests
-
-    theme = IconTheme(Main.window[])
-    Main.icon[] = Icon()
-
-    container = Container()
-    viewport = Viewport()
-    set_child!(viewport, container)
-    set_child!(window, viewport)
-
-    connect_signal_realize!(container, window) do container::Container, window
+function test_window(::Container)
+    @testset "Window" begin
         
-        temp = """
-        test_action(container)
-        test_adjustment(container)
-        test_alert_dialog(container)
-        test_angle(container)
-        test_application(container)
-        test_aspect_frame(container)
-        test_box(container)
-        test_button(container)
-        test_center_box(container)
-        test_check_button(container)
-        test_clamp_frame(container)
-        test_clipboard(container)
-        test_color_chooser(container)
-        test_colors(container)
-        test_column_view(container)
-        test_drop_down(container)
-        test_entry(container)
-        test_event_controller(container)
-        test_expander(container)
-        test_file_chooser(container)
-        test_file_descriptor(container)
-        test_fixed(container)
-        test_frame(container)
-        test_flow_box(container)
-        test_gl_transform(container)
-        test_gl_area(container)
-        test_grid(container)
-        test_grid_view(container)
-        test_header_bar(container)
-        test_icon(container)
-        test_image(container)
-        test_image_display(container)
-        test_key_file(container)
-        test_label(container)
-        test_level_bar(container)
-        test_list_view(container)
-        test_log(container)
-        test_menus(container)
-        test_notebook(container)
-        test_overlay(container)
-        test_paned(container)
-        test_popup_message(container)
-        test_popover(container)
-        test_progress_bar(container)
-        test_revealer(container)
-        test_render_area(container)
-        test_scale(container)
-        test_scrollbar(container)
-        test_selection_model(container)
-        test_separator(container)
-        test_spin_button(container)
-        test_spinner(container)
-        test_stack(container)
-        test_switch(container)
-        test_text_view(container)
-        test_time(container)
-        test_toggle_button(container)
-        test_typed_function(container)
-        test_viewport(container)
-        test_widget(container)
-        test_window(container)
-        """
+        window = Window(Main.app[])
+        other_window = Window(Main.app[])
 
-        return nothing
-    end
-
-    present!(window)
-    close!(window)
-    #quit!(app)
-    =#
-
-    window = Window(Main.app[])
         Base.show(devnull, window)
         @test Mousetrap.is_native_widget(window)
 
@@ -2921,6 +2774,8 @@ main(Main.app_id) do app::Application
         set_default_widget!(window, button)
         activate!(button)
 
+        set_transient_for!(other_window, window)
+
         #@test activate_default_widget_called[] == true
         #@test activate_focused_widget_called[] == true
 
@@ -2930,17 +2785,104 @@ main(Main.app_id) do app::Application
         set_hide_on_close!(window, true)
         @test get_hide_on_close(window) == true
 
-        other_window = Window(app)
-        set_transient_for!(other_window, window)
-
         @test get_is_closed(window) == true
         present!(window)
         @test get_is_closed(window) == false
         set_minimized!(window, true)
         set_maximized!(window, true)
+
+        close!(other_window)
         close!(window)
         @test get_is_closed(window) == true
         destroy!(window)
+        destroy!(other_window)
+    end
+end
 
-    println("TODO: done.")
+### MAIN
+
+main(Main.app_id) do app::Application
+
+    Main.app[] = app
+    Main.window[] = Window(app)
+    set_is_decorated!(Main.window[], false) # prevent user from closing the window during tests
+
+    theme = IconTheme(Main.window[])
+    Main.icon[] = Icon()
+
+    container = Container()
+    viewport = Viewport()
+    set_child!(viewport, container)
+    set_child!(Main.window[], viewport)
+
+    connect_signal_realize!(container, window) do container::Container, window
+        test_action(container)
+        test_adjustment(container)
+        test_alert_dialog(container)
+        test_angle(container)
+        test_application(container)
+        test_aspect_frame(container)
+        test_box(container)
+        test_button(container)
+        test_center_box(container)
+        test_check_button(container)
+        test_clamp_frame(container)
+        test_clipboard(container)
+        test_color_chooser(container)
+        test_colors(container)
+        test_column_view(container)
+        test_drop_down(container)
+        test_entry(container)
+        test_event_controller(container)
+        test_expander(container)
+        test_file_chooser(container)
+        test_file_descriptor(container)
+        test_fixed(container)
+        test_frame(container)
+        test_flow_box(container)
+        test_gl_transform(container)
+        test_gl_area(container)
+        test_grid(container)
+        test_grid_view(container)
+        test_header_bar(container)
+        test_icon(container)
+        test_image(container)
+        test_image_display(container)
+        test_internal(container)
+        test_key_file(container)
+        test_label(container)
+        test_level_bar(container)
+        test_list_view(container)
+        test_log(container)
+        test_menus(container)
+        test_notebook(container)
+        test_overlay(container)
+        test_paned(container)
+        test_popup_message(container)
+        test_popover(container)
+        test_progress_bar(container)
+        test_revealer(container)
+        test_render_area(container)
+        test_scale(container)
+        test_scrollbar(container)
+        test_selection_model(container)
+        test_separator(container)
+        test_spin_button(container)
+        test_spinner(container)
+        test_stack(container)
+        test_switch(container)
+        test_text_view(container)
+        test_time(container)
+        test_toggle_button(container)
+        test_typed_function(container)
+        test_viewport(container)
+        test_widget(container)
+        test_window(container)
+
+        return nothing
+    end
+
+    present!(Main.window[])
+    close!(Main.window[])
+    quit!(app)
 end

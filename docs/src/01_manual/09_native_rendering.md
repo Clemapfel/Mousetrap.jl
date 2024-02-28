@@ -1,3 +1,19 @@
+```@meta
+DocTestSetup = quote
+  using Mousetrap
+  function Window(app::Application)
+      out = Mousetrap.Window(app)
+      set_tick_callback!(out, out) do clock, self
+          close!(self)
+          return TICK_CALLBACK_RESULT_DISCONTINUE
+      end
+      return out
+  end
+
+  shape = rectangle = Rectangle(Vector2f(-0.5, 0.5), Vector2f(1, 1))
+end
+```
+
 # Chapter 9: Native Rendering
 
 In this chapter we will learn:
@@ -45,8 +61,19 @@ In this chapter we will learn:
     
     To make this change permanent, we can paste the above line into the `~/.bashrc` text file, which will be loaded automatically anytime a terminal starts. 
 
-!!! details "Manually Disabling the OpenGL Component"
+!!! warning "Manually Disabling the OpenGL Component"
     We can disable all features from this chapter by setting the environment variable `MOUSETRAP_DISABLE_OPENGL_COMPONENT` to `TRUE`. This may be necessary for machines that do not have an OpenGL 3.3-compatible graphics card driver. See [here](https://github.com/Clemapfel/Mousetrap.jl/issues/25#issuecomment-1731349366) for more information.
+
+!!! danger "RenderArea: OpenGL component is disabled"
+    Newer macOS machines and some Linux machines with proprietary graphics drivers may encounter the following error when the initializing the `RenderArea` widget:
+    
+    ```
+    In RenderArea(): trying to instantiate RenderArea, but the OpenGL component is disabled.
+    ```
+
+    Mousetrap uses a custom, shared OpenGL state that is necessary for `RenderArea` to function. On some machines, creation of this state may fail, at which point Mousetrap has no option other than disabling the `RenderArea` widget. We may still use all other features of Mousetrap, this only affects `RenderArea`, specifically. **This also means we are unable to use any featues described in this chapter**.
+
+    While this issue is technically fixable, Mousetrap developers would need access to the specific hardware configurations that are causing the issues, which is not monetarily viable. 
 
 ---
 
@@ -104,7 +131,7 @@ At any point, we can convert between the coordinate systems using [`from_gl_coor
 
 We'll now create our first shape, which is a point. A point is always exactly one pixel in size.
 
-```julia
+```@repl
 shape = Shape()
 as_point!(shape, Vector2f(0, 0))
 ```
@@ -113,7 +140,7 @@ Where we use `Vector2f(0, 0)` as the point's position, meaning it will appear at
 
 The above is directly equivalent to the following:
 
-```julia
+```@repl
 shape = Point(Vector2f(0, 0))
 ```
 
@@ -138,7 +165,7 @@ add_render_task!(render_area, RenderTask(shape))
 ![](../assets/shape_hello_world.png)
 
 !!! details "How to generate this Image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
     main() do app::Application
 
@@ -157,6 +184,8 @@ add_render_task!(render_area, RenderTask(shape))
         set_child!(window, frame)
         present!(window)
     end
+    # output
+    0
     ```
 
 If we want to remove a task from our render area, we need to call [`clear_render_tasks!`](@ref), then add all other render tasks again.
@@ -169,8 +198,10 @@ Mousetrap offers a wide variety of pre-defined shape types. Thanks to this, we d
 
 As we've seen, [`Point`](@ref) is always exactly one pixel in size. Its constructor takes a single `Vector2f`:
 
-```julia
+```jldoctest; output = false
 point = Point(Vector2f(0, 0))
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_point.png)
@@ -179,12 +210,14 @@ point = Point(Vector2f(0, 0))
 
 [`Points`](@ref) is a number of points. Instead of taking a single `Vector2f`, its constructor takes `Vector{Vector2f}`:
 
-```julia
+```jldoctest; output = false
 points = Points([
     Vector2f(-0.5, 0.5), 
     Vector2f(0.5, 0.5), 
     Vector2f(0.0, -0.5)
 ])
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_points.png)
@@ -195,11 +228,13 @@ Rendering several points using `Points` is much more performant, a four-vertex `
 
 A [`Line`](@ref) is defined by two points, between which a 1-pixel thick line will be drawn:
 
-```julia
+```jldoctest; output = false
 line = Line(
     Vector2f(-0.5, +0.5), 
     Vector2f(+0.5, -0.5)
 )
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_line.png)
@@ -208,11 +243,13 @@ line = Line(
 
 [`Lines`](@ref) will draw unconnected lines. It takes a vector of point pairs. For each of these, a 1-pixel thick line will be drawn between them.
 
-```julia
+```jldoctest; output = false
 lines = Lines([
     Vector2f(-0.5, 0.5) => Vector2f(0.5, -0.5),
     Vector2f(-0.5, -0.5) => Vector2f(0.5, 0.5)
 ])
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_lines.png)
@@ -223,13 +260,15 @@ lines = Lines([
 
 A line will be drawn between each successive pair of coordinates, meaning the last vertex of the previous line will be used as the first vertex of the current line. If the supplied vector of points is `{a1, a2, a3, ..., a(n)}` then `LineStrip` will render as a series of lines with coordinate pairs `{a1, a2}, {a2, a3}, ..., {a(n-1), a(n)}`
 
-```julia
+```jldoctest; output = false
 line_strip = LineStrip([
     Vector2f(-0.5, +0.5),
     Vector2f(+0.5, +0.5),
     Vector2f(+0.5, -0.5),
     Vector2f(-0.5, -0.5)
 ])
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_line_strip.png)
@@ -238,13 +277,15 @@ line_strip = LineStrip([
 
 [`Wireframe`](@ref) is similar to a `LineStrip`, except that it also connects the last and first vertex. For a supplied vector of points `{a1, a2, a3, ..., an}`, the series of lines will be `{a1, a2}, {a2, a3}, ..., {a(n-1), a(n)}, {a(n), a1}`, the last vertex-coordinate pair is what distinguishes it from a `LineStrip`. As such, `Wireframe` is sometimes also called a **line loop**.
 
-```julia
+```jldoctest; output = false
 wireframe = Wireframe([
     Vector2f(-0.5, +0.5),
     Vector2f(+0.5, +0.5),
     Vector2f(+0.5, -0.5),
     Vector2f(-0.5, -0.5)
 ])
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_wireframe.png)
@@ -255,12 +296,14 @@ Note how this shape takes the same coordinates as `LineStrip`, but draws one mor
 
 A [`Triangle`](@ref) is constructed as one would expect, using three `Vector2f`, one for each of its vertices:
 
-```julia
+```jldoctest; output = false
 triangle = Triangle(
     Vector2f(-0.5, 0.5),
     Vector2f(+0.5, 0.5),
     Vector2f(0.0, -0.5)
 )
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_triangle.png)
@@ -269,11 +312,13 @@ triangle = Triangle(
 
 A [`Rectangle`](@ref) has four vertices. It is defined by its top-left point and its width and height. As such, it is always axis-aligned.
 
-```julia
+```jldoctest; output = false
 rectangle = Rectangle(
     Vector2f(-0.5, 0.5), # top left
     Vector2f(1, 1)       # width, height
 )
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_rectangle.png)
@@ -284,12 +329,14 @@ A [`Circle`](@ref) is constructed from a center point and radius. We also need t
 
 As the number of outer vertices increases, the shape approaches a mathematical circle, but will also require more processing power.
 
-```julia
+```jldoctest; output = false
 circle = Circle(
     Vector2f(0, 0), # center
     0.5,            # radius
     32              # n outer vertices
 )
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_circle.png)
@@ -298,13 +345,15 @@ circle = Circle(
 
 An [`Ellipse`](@ref) is a more generalized form of a `Circle`. It has two radii, the x- and y-radius:
 
-```julia
+```jldoctest; output = false
 ellipse = Ellipse(
     Vector2f(0, 0), # center
     0.6,            # x-radius
     0.4,            # y-radius
     32              # n outer vertices
 )
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_ellipse.png)
@@ -313,7 +362,7 @@ ellipse = Ellipse(
 
 The most general form of convex shapes, [`Polygon`](@ref) is constructed using a vector of vertices, which will be sorted clockwise, then their [outer hull](https://en.wikipedia.org/wiki/Convex_hull) will be calculated, which results in the final convex polygon:
 
-```julia
+```jldoctest; output = false
 polygon = Polygon([
     Vector2f(0.0, 0.75),
     Vector2f(0.75, 0.25),
@@ -321,6 +370,8 @@ polygon = Polygon([
     Vector2f(-0.5, -0.5),
     Vector2f(-0.75, 0.0)
 ])
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_polygon.png)
@@ -331,13 +382,15 @@ We note that a 4-vertex polygon is a rectangle. Therefore, if we want to render 
 
 A [`RectangularFrame`](@ref) takes a top-left vertex, a width, a height, and the x- and y-width, the latter of which is the thickness of the frame along the x- and y-axes:
 
-```julia
+```jldoctest; output = false
 rectangular_frame = RectangularFrame(
     Vector2f(-0.5, 0.5),  # top-left
     Vector2f(1, 1),       # width, height
     0.15,                 # x-thickness
     0.15,                 # y-thickness
 )
+# output
+Shape(native_handle = 0)
 ```
 ![](../assets/shape_rectangular_frame.png)
 
@@ -347,13 +400,15 @@ Note how the top left and size govern the position and size of the outer perimet
 
 For the round equivalent of a rectangular frame, we have [`CircularRing`](@ref), which takes a center, the radius of the outer perimeter, as well as the ring's thickness. Like `Circle` and `Ellipse`, we have to specify the number of outer vertices, which decides the smoothness of the ring:
 
-```julia
+```jldoctest; output = false
 circular_ring = CircularRing(
     Vector2f(0, 0),  # center
     0.5,             # radius of outer circle
     0.15,            # thickness
     32               # n outer vertices
 )
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_circular_ring.png)
@@ -364,7 +419,7 @@ As before, the center and radius determine the position and size of the outer pe
 
 A generalization of `CircularRing`, [`EllipticalRing`](@ref) has an ellipse as its outer shape. Its thickness along the horizontal and vertical dimensions are supplied separately, making it more flexible than `CircularRing`.
 
-```julia
+```jldoctest; output = false
 elliptcal_ring = EllipticalRing(
     Vector2f(0, 0),  # center
     0.6,             # x-radius
@@ -373,6 +428,8 @@ elliptcal_ring = EllipticalRing(
     0.15,            # y-thickness
     32               # n outer vertices
 )
+# output
+Shape(native_handle = 0)
 ```
 
 ![](../assets/shape_elliptical_ring.png)
@@ -445,9 +502,10 @@ We can access the centroid using [`get_centroid`](@ref). To move a shape a certa
 
 We can rotate all of a `Shape`'s vertices around a point in GL coordinates by calling [`rotate!`](@ref), which takes an `Angle` as its first argument:
 
-```julia
+```jldoctest; output = false
 # rotate shape around its center
 rotate!(shape, degrees(90), get_centroid(shape))
+# output
 ```
 
 #### Color
@@ -542,7 +600,7 @@ Wrap mode governs how the texture behaves when a vertice's texture coordinate co
 ![](../assets/texture_wrap_modes.png)
 
 !!! details "How to generate this Image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
 
     # compound widget that displays a texture with a label
@@ -593,9 +651,9 @@ Wrap mode governs how the texture behaves when a vertice's texture coordinate co
 
         render_area = RenderArea()
     
-        image = Image()
-        create_from_file!(image, "docs/src/assets/logo.png")
-            # this assumes the script is run in `Mousetrap.jl` root
+        image = Image(1, 1)
+        # create_from_file!(image, "docs/src/assets/logo.png")
+        # uncomment above, this assumes the script is run in `Mousetrap.jl` root
 
         # replace RGBA(0, 0, 0, 0) pixels with rainbow color
         size = get_size(image)
@@ -621,6 +679,8 @@ Wrap mode governs how the texture behaves when a vertice's texture coordinate co
         set_child!(window, box)
         present!(window)
     end
+    # output
+    0
     ```
 
 Where the default wrap mode is `TEXTURE_WRAP_MODE_REPEAT`.
@@ -673,7 +733,7 @@ Where `width` and `height` are the new sizes of the `RenderArea` widget, in pixe
 
 Using this information and some simple geometry, we can change the x- and y-radius dynamically whenever the `RenderArea` changes aspect ratio:
 
-```julia
+```jldoctest; output = false
 # define resize callback
 function on_resize(::RenderArea, width::Integer, height::Integer, shape::Shape)
 
@@ -702,6 +762,8 @@ main() do app::Application
     set_child!(window, render_area)
     present!(window)
 end
+# output
+0 
 ```
 
 ![](../assets/render_area_destretched.png)
@@ -744,7 +806,7 @@ It's difficult to convey the result of MSAA using just pictures on a web page du
 ![](../assets/msaa_comparison.png)
 
 !!! details "How to generate this Image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
 
         window = Window(app)
@@ -799,6 +861,8 @@ It's difficult to convey the result of MSAA using just pictures on a web page du
         set_child!(window, paned)
         present!(window)
     end
+    # output
+    0
     ```
 ---
 
@@ -835,7 +899,7 @@ Internally, a `GLTransform` is a 4x4 matrix of 32-bit floats. It is of size 4x4 
 
 At any time, we can directly access the underlying matrix of a `GLtransform` using `getindex` or `setindex!`:
 
-```julia
+```@repl
 transform = GLTransform()
 for i in 1:4
     for j in 1:4
@@ -843,12 +907,6 @@ for i in 1:4
     end
     print("\n")
 end
-```
-```
-1 0 0 0
-0 1 0 0
-0 0 1 0
-0 0 0 1
 ```
 
 We see that after construction, `GLTransform` is initialized as the identity transform. No matter the current state of the transform, we can reset it back to this identity matrix by calling [`reset!`](@ref).
@@ -865,14 +923,16 @@ We can combine two transforms using [`combine_with`](@ref). If we wish to apply 
 
 While we could apply the transform to each vertex of a `Shape` manually, then render the shape, it is much more performant to do this kind of math GPU-side. By registering the transform with a `RenderTask`, the transform will be forwarded to the vertex shaders, which, for the default vertex shader, is then applied to the shape's vertices automatically:
 
-```julia
+```jldoctest; output = false
 shape = Shape() 
 
-transform = Transform()
+transform = GLTransform()
 translate!(transform, Vector2f(-0.5, 0.1))
 rotate!(transform, degrees(180))
 
 task = RenderTask(shape; transform = transform)
+# output
+RenderTask()
 ```
 
 Where we used the `transform` keyword argument to specify the transform while leaving the other render task component unspecified. This means the transform is applied automatically during rendering, allowing us to take advantage of the increased performance gained from the GPU architecture.
@@ -942,7 +1002,7 @@ add_render_task!(render_area, task)
 ![](../assets/shader_hello_world.png)
 
 !!! details "How to generate this Image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
     main() do app::Application
 
@@ -977,6 +1037,8 @@ add_render_task!(render_area, task)
         set_child!(window, frame)
         present!(window)
     end
+    # output
+    0
     ```
 
 If we do not initialize the vertex- or fragment shader, the **default shader component will be used**. It may be instructive to see how the default shaders are defined, as any user-defined shader should build upon them.
@@ -1086,7 +1148,7 @@ The following types can be assigned this way:
 
 We would therefore set the `_color_rgba` uniform value like so:
 
-```julia
+```jldoctest; output = false
 # create shader
 shader = Shader()
 create_from_string!(shader, SHADER_TYPE_FRAGMENT, """
@@ -1112,12 +1174,13 @@ task = RenderTask(shape; shader = shader) # shader bound to `shader` keyword arg
 
 # set uniform
 set_uniform_rgba!(task, "_color_rgba", RGBA(1, 0, 1, 1))
+# output
 ```
 
 ![](../assets/shader_rgba_uniform.png)
 
 !!! details "How to generate this Image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
     main() do app::Application
 
@@ -1155,6 +1218,8 @@ set_uniform_rgba!(task, "_color_rgba", RGBA(1, 0, 1, 1))
         set_child!(window, frame)
         present!(window)
     end
+    # output
+    0
     ```
 
 Where the name used in `set_uniform_*!` has to exactly match the variable name in GLSL.

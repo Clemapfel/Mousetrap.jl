@@ -1,3 +1,17 @@
+```@meta
+DocTestSetup = quote
+  using Mousetrap
+  function Window(app::Application)
+      out = Mousetrap.Window(app)
+      set_tick_callback!(out, out) do clock, self
+          close!(self)
+          return TICK_CALLBACK_RESULT_DISCONTINUE
+      end
+      return out
+  end
+end
+```
+
 # Chapter 2: Signals
 
 In this chapter, we will learn:
@@ -63,7 +77,7 @@ end
 
     For example, to execute the example snippet above, we would create the following `main.jl` file:
 
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
     main() do app::Application
         window = Window(app)
@@ -78,6 +92,8 @@ end
         set_child!(window, button) # add the button to the window
         present!(window)
     end
+    # output
+    0
     ```
 
     Then execute it from the console by calling `julia main.jl`
@@ -494,7 +510,7 @@ By blocking signals, we get the correct behavior of both buttons being triggered
 
 To verify this is indeed the resulting behavior, we can use the following `main.jl`:
 
-```julia
+```jldoctest; output = false
 using Mousetrap
 main() do app::Application
     window = Window(app)
@@ -521,6 +537,8 @@ main() do app::Application
     set_child!(window, hbox(button_01, button_02))
     present!(window)
 end
+# output
+0
 ```
 
 ![](../assets/double_button_signal_blocking.png)

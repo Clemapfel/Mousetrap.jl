@@ -1,3 +1,17 @@
+```@meta
+DocTestSetup = quote
+  using Mousetrap
+  function Window(app::Application)
+      out = Mousetrap.Window(app)
+      set_tick_callback!(out, out) do clock, self
+          close!(self)
+          return TICK_CALLBACK_RESULT_DISCONTINUE
+      end
+      return out
+  end
+end
+```
+
 # Chapter 4: Widgets
 
 In this chapter, we will learn:
@@ -325,7 +339,7 @@ While windows are widgets, they occupy a somewhat of a special place. `Window` i
 
 When we create a `Window` instance, it will be initially hidden. None of its children will be realized or shown, and the user has no way to know that the window exists. A `Window`s lifetime only begins once we call [`present!`](@ref). This opens the window and shows it to the user, realizing all its children. We've seen this in our `main` functions before:
 
-```julia
+```jldoctest; output = false
 main() do app::Application
 
     # create the window
@@ -334,6 +348,8 @@ main() do app::Application
     # show the window, this realizes all widgets inside
     present!(window)
 end
+# output
+0
 ```
 
 At any point, we can call `close!`, which hides the window. This does not destroy the window permanently unless [`set_hide_on_close!`](@ref) was set to `false` previously, we can `present!` to show the window again. For an application to exit, all its windows only need to be hidden, not permanently destroyed. Therefore, calling `close!` on all windows may cause the application to attempt to exit.
@@ -700,7 +716,7 @@ We can manually emit this signal using `emit_signal_clicked`, or by calling `act
 ![](../assets/button_types.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
     main() do app::Application
         window = Window(app)
@@ -720,8 +736,10 @@ We can manually emit this signal using `emit_signal_clicked`, or by calling `act
         set_margin!(box, 75)
     
         set_child!(window, box)
-        pesent!(window)
+        present!(window)
     end
+    # output
+    0
     ```
 
 Where the above-shown buttons have the following properties:
@@ -776,7 +794,7 @@ Mousetrap.@signal_table(ToggleButton,
 ![](../assets/check_button_states.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
     main() do app::Application
     
@@ -804,6 +822,8 @@ Mousetrap.@signal_table(ToggleButton,
         set_child!(window, box)
         present!(window)
     end
+    # output
+    0 
     ```
 
 Note that `get_is_active` will only return `true` if the current state is specifically `CHECK_BUTTON_STATE_ACTIVE`. `toggled` is emitted whenever the state changes, regardless of which state the `CheckButton` was in.
@@ -824,7 +844,7 @@ Mousetrap.@signal_table(Switch,
 ![](../assets/switch_states.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
     
         window = Window(app)
@@ -850,6 +870,8 @@ Mousetrap.@signal_table(Switch,
         set_child!(window, box)
         present!(window)
     end
+    # output
+    0
     ```
 ---
 
@@ -908,7 +930,7 @@ spin_button = SpinButton(0, 2, 0.5)
 ![](../assets/spin_button.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
         window = Window(app)
     
@@ -933,7 +955,9 @@ spin_button = SpinButton(0, 2, 0.5)
     
         set_child!(window, box)
         present!(window)
-    end             
+    end   
+    # output
+    0          
     ```
 
 We set and access any property of spin button using `get_value`, `set_value!`, `get_lower`, `set_lower!`, etc. These work exactly as if we were modifying the underlying `Adjustment`, which we can also obtain using `get_adjustment`.
@@ -956,7 +980,7 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
 ![](../assets/scale_no_value.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
         window = Window(app)
 
@@ -980,6 +1004,8 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
         set_child!(window, box)
         present!(window)
     end
+    # output
+    0 
     ```
 
 [`Scale`](@ref), just like `SpinButton`, is a widget that allows a user to choose a value from the underlying `Adjustment`. This is done by click-dragging the knob of the scale or clicking anywhere on its rail. In this way, it is usually harder to pick an exact decimal value on a `Scale` as opposed to a `SpinButton`. We can aid in this task by displaying the exact value next to the scale, which is enabled with [`set_should_draw_value!`](@ref):
@@ -987,10 +1013,8 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
 ![](../assets/scale_with_value.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
-        window = Window(app)
-
         window = Window(app)
 
         horizontal = Scale(0, 2, 0.5)
@@ -1015,6 +1039,8 @@ The other signal is `wrapped`, which is emitted when [`set_should_wrap!`](@ref) 
         set_child!(window, box)
         present!(window)
     end
+    # output
+    0
     ```
 
 `Scale` supports most of `SpinButton`'s functions, including querying information about its underlying range, setting the orientation, and signal `value_changed`:
@@ -1046,7 +1072,7 @@ Once the bar reaches 75%, it changes color:
 ![](../assets/level_bar.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
         window = Window(app)
 
@@ -1075,6 +1101,8 @@ Once the bar reaches 75%, it changes color:
         set_child!(window, box)
         present!(window)
     end
+    # output
+    0
     ```
 
 `LevelBar` also supports displaying a discrete value, in which case it will be drawn segmented. To enable this, we set [`set_mode!`](@ref) to `LEVEL_BAR_DISPLAY_MODE_DISCRETE`, as opposed to `LEVEL_BAR_MODE_CONTINUOUS`, which is the default.
@@ -1092,7 +1120,7 @@ Using `set_show_text!`, we can make it so the current percentage is drawn along 
 ![](../assets/progress_bar.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
         window = Window(app)
 
@@ -1108,6 +1136,8 @@ Using `set_show_text!`, we can make it so the current percentage is drawn along 
         set_child!(window, progress_bar)
         present!(window)
     end
+    # output
+    0
     ```
 ---
 
@@ -1118,7 +1148,7 @@ To signal progress when we do not have an exact fraction, we use [`Spinner`](@re
 ![](../assets/spinner.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
 
         window = Window(app)
@@ -1129,7 +1159,9 @@ To signal progress when we do not have an exact fraction, we use [`Spinner`](@re
         set_child!(window, spinner)
         present!(window)
     end
-     ```
+    # output
+    0
+    ```
 
 ---
 
@@ -1148,7 +1180,7 @@ To enter password mode, we set [`set_text_visible!`](@ref) to `false`. Note that
 ![](../assets/entry.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
 
         window = Window(app)
@@ -1168,6 +1200,8 @@ To enter password mode, we set [`set_text_visible!`](@ref) to `false`. Note that
         set_child!(window, box)
         present!(window)
     end
+    # output
+    0
     ```
 
 Lastly, `Entry` is **activatable**, when the user presses the enter key while the cursor is inside the entries text area, it will emit signal `activate`. Its other signal, `text_changed`, is emitted whenever the internal text buffer changes: 
@@ -1283,7 +1317,7 @@ Where we had to first create a `Label` instance, then use it as the label widget
 ![](../assets/frame.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
 
         window = Window(app)
@@ -1306,6 +1340,8 @@ Where we had to first create a `Label` instance, then use it as the label widget
         set_child!(window, box)
         present!(window)
     end
+    # output
+    0
     ```
 
 Using [`set_label_widget!`](@ref), we can furthermore choose a widget to be displayed above the child widget of the frame. This will usually be a `Label`, though `set_label_widget!` accepts any kind of widget.
@@ -1347,7 +1383,6 @@ In which we use two nested `ClampFrame`s, such that `child_widget` can never exc
 
 ---
 
-
 ## Overlay
 
 So far, all widget containers have aligned their children such that they do not overlap. In cases where we do want this to happen, for example, if we want to render one widget in front of another, we have to use [`Overlay`](@ref).
@@ -1357,7 +1392,7 @@ So far, all widget containers have aligned their children such that they do not 
 ![](../assets/overlay_buttons.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
 
         window = Window(app)
@@ -1377,6 +1412,8 @@ So far, all widget containers have aligned their children such that they do not 
         set_child!(window, AspectFrame(1, overlay))
         present!(window)
     end
+    # output
+    0
     ```
 
 Where the position and size of overlayed widgets depend on their expansion and alignment properties.
@@ -1398,7 +1435,7 @@ add_overlay!(overlay, overlaid_widge; include_in_measurement = true)
 ![](../assets/paned.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     function generate_child(label::String)
         out = Frame(Overlay(Separator(), Label(label)))
         set_margin!(out, 10)
@@ -1419,6 +1456,8 @@ add_overlay!(overlay, overlaid_widge; include_in_measurement = true)
         set_child!(window, paned)
         present!(window)
     end
+    # output
+    0
     ```
 
 `Paned` has two per-child properties: whether a child is **resizable** and whether it is **shrinkable**.
@@ -1461,7 +1500,7 @@ Apart from the speed, we also have a choice of animation **type**, represented b
 ![](../assets/revealer.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
         window = Window(app)
 
@@ -1479,12 +1518,14 @@ Apart from the speed, we also have a choice of animation **type**, represented b
         # create a button that, when clicked, triggers the revealer animation
         button = Button()
         connect_signal_clicked!(button, revealer) do self::Button, revealer::Revealer
-            set_is_revealed!(revealer, !get_revealed(revealer))
+            set_is_revealed!(revealer, !get_is_revealed(revealer))
         end
     
         set_child!(window, vbox(button, revealer))
         present!(window)
     end
+    # output
+    0
     ```
 ---
 
@@ -1505,7 +1546,7 @@ Expander has two children, the label, set with `set_label_widget!`, and its chil
 ![](../assets/expander.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
         window = Window(app)
 
@@ -1522,6 +1563,8 @@ Expander has two children, the label, set with `set_label_widget!`, and its chil
         set_child!(window, expander_and_frame)
         present!(window)
     end
+    # output
+    0
     ```
 
 Note that `Expander` should not be used to create nested lists, as `ListView`, a widget we will learn about later in this chapter, is better suited for this purpose.
@@ -1539,7 +1582,7 @@ We set the viewport's singular child using `set_child!`, after which the user ca
 ![](../assets/viewport.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
 
         window = Window(app)
@@ -1553,6 +1596,8 @@ We set the viewport's singular child using `set_child!`, after which the user ca
         set_child!(window, viewport)
         present!(window)
     end
+    # output
+    0
     ```
 
 ### Size Propagation
@@ -1635,7 +1680,7 @@ Showing the popover is called **popup**, closing the popover is called **popdown
 ![](../assets/popover.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     using Mousetrap
 
     main() do app::Application
@@ -1658,6 +1703,8 @@ Showing the popover is called **popup**, closing the popover is called **popdown
         set_child!(window, vbox(popover, button))
         present!(window)
     end
+    # output
+    0
     ```
 
 Manually calling `popup!` or `popdown!` to show or hide the `Popover` can be bothersome. To address this, Mousetrap offers a widget that automatically manages the popover for us: [`PopoverButton`](@ref)
@@ -1737,7 +1784,7 @@ By default, `ListView` displays its children in a linear list, either horizontal
 ![](../assets/list_view_nested.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
 
         window = Window(app)
@@ -1757,6 +1804,8 @@ By default, `ListView` displays its children in a linear list, either horizontal
         set_child!(window, frame)
         present!(window)
     end
+    # output
+    0
     ```
 
 The user can click any item to hide or show its children. Items that do not have any children will appear just as with a non-nested `ListView`.
@@ -1799,7 +1848,7 @@ If we do not want a nested list, we can instead completely ignore the iterator. 
 *A vertical `GridView`*
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     function generate_child(label::String) ::Widget
 
         child = Frame(Overlay(Separator(), Label(label)))
@@ -1825,6 +1874,8 @@ If we do not want a nested list, we can instead completely ignore the iterator. 
         set_child!(window, vbox(separator, grid_view))
         present!(window)
     end
+    # output
+    0
     ```
 
 We can control the exact distribution of widgets more closely by using [`set_max_n_columns!`](@ref) and [`set_min_n_columns!`](@ref), which make it so the grid view will always have the given number of columns (or rows, for a horizontal `GridView`).
@@ -1861,10 +1912,8 @@ set_widget_at!(column_view, column_01, Label("03"))
 ![](../assets/column_view.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     main() do app::Application
-
-        println("called")
 
         window = Window(app)
         set_title!(window, "Mousetrap.jl")
@@ -1887,6 +1936,8 @@ set_widget_at!(column_view, column_01, Label("03"))
         set_child!(window, column_view)
         present!(window)
     end
+    # output
+    0
     ```
 
 Any rows that do not yet have widgets will be backfilled and appear empty. 
@@ -1946,7 +1997,7 @@ to provide another widget that modifies the stack, or we can use one of two pre-
 ![](../assets/stack_switcher.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     function generate_child(label::String) ::Widget
         child = Frame(Overlay(Separator(), Label(label)))
         set_size_request!(child, Vector2f(150, 150))
@@ -1971,6 +2022,8 @@ to provide another widget that modifies the stack, or we can use one of two pre-
         set_child!(window, vbox(stack, StackSwitcher(stack))) # create StackSwitcher from stack
         present!(window)
     end
+    # output
+    0
     ```
 
 `StackSwitcher` has no other methods or properties, though it provides the signals that all widgets share.
@@ -1980,7 +2033,7 @@ to provide another widget that modifies the stack, or we can use one of two pre-
 [`StackSidebar`](@ref) has the same purpose as `StackSwitcher`, except it displays the list of stack pages as a vertical list:
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     function generate_child(label::String) ::Widget
         child = Frame(Overlay(Separator(), Label(label)))
         set_size_request!(child, Vector2f(150, 150))
@@ -2005,6 +2058,8 @@ to provide another widget that modifies the stack, or we can use one of two pre-
         set_child!(window, vbox(stack, StackSwitcher(stack))) # Create StackSidebar from stack
         present!(window)
     end
+    # output
+    0
     ```
 
 Other than this visual component, its purpose is identical to that of `StackSwitcher`.
@@ -2030,7 +2085,7 @@ Not to be confused with `GridView`, [`Grid`](@ref) arranges its children in a **
 ![](../assets/grid.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     function generate_child(label::String) ::Widget
         child = Frame(Overlay(Separator(), Label(label)))
         set_size_request!(child, Vector2f(50, 50))
@@ -2055,6 +2110,9 @@ Not to be confused with `GridView`, [`Grid`](@ref) arranges its children in a **
         set_child!(window, grid)
         present!(window)
     end
+
+    # output
+    0
     ```
 
 Each widget in the grid has an x- and y-position, along with a widget and height, both measured in **number of cells** . 
@@ -2128,7 +2186,7 @@ push_back!(notebook, child_03, Label("Label #03"))
 ![](../assets/notebook.png)
 
 !!! details "How to generate this image"
-    ```julia
+    ```jldoctest; output = false
     function generate_child(label::String) ::Widget
         child = Frame(Overlay(Separator(), Label(label)))
         set_size_request!(child, Vector2f(150, 150))
@@ -2148,6 +2206,8 @@ push_back!(notebook, child_03, Label("Label #03"))
         set_child!(window, notebook)
         present!(window)
     end
+    # output
+    0
     ```
 
 We can allow the user to reorder the pages by setting [`set_tabs_reorderable!`](@ref) to `true`. This will make it so they can click drag-and-drop the label widget, moving the entire notebook page to that position.
@@ -2302,7 +2362,7 @@ Where the `Mousetrap.` prefix is necessary to tell the compiler that we are over
 
 With `Widget` subtyped and `get_top_level_widget` implemented, our `main.jl` now looks like this:
 
-```julia
+```jldoctest; output = false
 struct Placeholder <: Widget
     label::Label
     separator::Separator
@@ -2334,6 +2394,8 @@ main() do app::Application
     set_child!(window, Placeholder("TEST"))
     present!(window)
 end
+# output
+0
 ```
 
 ![](../assets/compound_widget_complete.png)
