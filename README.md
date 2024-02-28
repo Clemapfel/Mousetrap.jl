@@ -101,23 +101,6 @@ add_render_task!(render_area, RenderTask(rectangle))
 
 ---
 
-### Displaying a GLMakie Plot in a Mousetrap Window
-
-```julia
-using GLMakie, MousetrapMakie
-canvas = GLMakieArea()
-window = Mousetrap.Window()
-set_child!(window, canvas) # can be used like any other widget
-
-screen = create_glmakie_screen(canvas)
-display(screen, scatter(rand(123)))
-```
-![](docs/src/assets/makie_scatter.png)
-
-(**Note**: This feature is still experimental. See [here](https://github.com/Clemapfel/MousetrapMakie.jl) for more information)
-
----
-
 ## Supported Platforms
 
 Since `v0.3.0`, Mousetrap is fully portable. All features are available for all 64-bit versions of Linux, FreeBSD, macOS, and Windows.

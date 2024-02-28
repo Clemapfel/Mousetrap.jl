@@ -18,7 +18,7 @@ libcxxwrap_julia_jll = "3eaa8342-bff7-56a5-9981-c04077f7cee7"
 mousetrap_jll = "0e90efc8-2bbd-550f-bf3c-306a2edaaeef"
 
 [compat]
-CxxWrap = "^0.14.0"
-mousetrap_jll = "^0.3.0"
+CxxWrap = "0.14, 0.15"
+mousetrap_jll = "0.3.0"
 GTK4_jll = "4.10"
 Glib_jll = "2.76"
