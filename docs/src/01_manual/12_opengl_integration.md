@@ -125,4 +125,4 @@ end
 We see that we should make sure to bind the context using `make_current` before doing any OpenGL-related work and to manually request a redraw after the area was initialized or resized.
 
 !!! danger 
-    February, 2024: This section used to contain an example of how to get `GLMakie` to work with `Mousetrap.GLArea`. Recent changes to the internals of `GLMakie` have broken the old package, so it no longer works. `MousetrapMakie` is now unmaintained.
+    February, 2024: This section used to contain an example of how to get `GLMakie` to work with `Mousetrap.GLArea`. Recent changes to the internals of `GLMakie` have broken this example, and the corresponding experimental package `MousetrapMakie`. Both no longer work, and `MousetrapMakie` is now unmaintained.
